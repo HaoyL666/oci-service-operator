@@ -36,16 +36,18 @@ type PackageProfile struct {
 
 // ServiceConfig identifies one OCI SDK service and its OSOK output group.
 type ServiceConfig struct {
-	Service        string              `yaml:"service"`
-	SDKPackage     string              `yaml:"sdkPackage"`
-	Group          string              `yaml:"group"`
-	Version        string              `yaml:"version"`
-	Phase          string              `yaml:"phase"`
-	SampleOrder    int                 `yaml:"sampleOrder,omitempty"`
-	PackageProfile string              `yaml:"packageProfile"`
-	ParityFile     string              `yaml:"parityFile,omitempty"`
-	Compatibility  CompatibilityConfig `yaml:"compatibility,omitempty"`
-	Parity         *ParityConfig       `yaml:"-"`
+	Service                string              `yaml:"service"`
+	SDKPackage             string              `yaml:"sdkPackage"`
+	Group                  string              `yaml:"group"`
+	Version                string              `yaml:"version"`
+	Phase                  string              `yaml:"phase"`
+	SampleOrder            int                 `yaml:"sampleOrder,omitempty"`
+	PackageProfile         string              `yaml:"packageProfile"`
+	ParityFile             string              `yaml:"parityFile,omitempty"`
+	Compatibility          CompatibilityConfig `yaml:"compatibility,omitempty"`
+	DefaultControllerImage string              `yaml:"defaultControllerImage,omitempty"`
+	ManagerOverlay         string              `yaml:"managerOverlay,omitempty"`
+	Parity                 *ParityConfig       `yaml:"-"`
 }
 
 // CompatibilityConfig holds explicit backwards-compatibility hints for published kinds.

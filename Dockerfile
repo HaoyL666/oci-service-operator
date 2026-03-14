@@ -11,7 +11,8 @@ COPY go.mod go.sum ./
 COPY vendor/ vendor/
 COPY . ./
 
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 GOEXPERIMENT=boringcrypto go build -mod vendor -a -o manager main.go
+ARG CONTROLLER_MAIN=main.go
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 GOEXPERIMENT=boringcrypto go build -mod vendor -a -o manager ${CONTROLLER_MAIN}
 
 FROM oraclelinux:9-slim
 WORKDIR /

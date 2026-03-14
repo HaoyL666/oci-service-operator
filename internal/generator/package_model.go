@@ -98,6 +98,14 @@ func buildParityResources(service ServiceConfig, version string, discovered []Re
 }
 
 func buildPackageOutputModel(service ServiceConfig, resources []ResourceModel) PackageOutputModel {
+	defaultControllerImage := "iad.ocir.io/oracle/oci-service-operator:latest"
+	if strings.TrimSpace(service.DefaultControllerImage) != "" {
+		defaultControllerImage = service.DefaultControllerImage
+	}
+	managerOverlay := "../../../config/manager"
+	if strings.TrimSpace(service.ManagerOverlay) != "" {
+		managerOverlay = service.ManagerOverlay
+	}
 	output := PackageOutputModel{
 		Generate: true,
 		Metadata: PackageMetadataModel{
@@ -105,7 +113,7 @@ func buildPackageOutputModel(service ServiceConfig, resources []ResourceModel) P
 			PackageNamespace:       fmt.Sprintf("oci-service-operator-%s-system", service.Group),
 			PackageNamePrefix:      fmt.Sprintf("oci-service-operator-%s-", service.Group),
 			CRDPaths:               fmt.Sprintf("./api/%s/...", service.Group),
-			DefaultControllerImage: "iad.ocir.io/oracle/oci-service-operator:latest",
+			DefaultControllerImage: defaultControllerImage,
 		},
 	}
 
@@ -119,7 +127,7 @@ func buildPackageOutputModel(service ServiceConfig, resources []ResourceModel) P
 		output.Install.Resources = append(output.Install.Resources,
 			"generated/crd",
 			"generated/rbac",
-			"../../../config/manager",
+			managerOverlay,
 			"../../../config/rbac/role_binding.yaml",
 			"../../../config/rbac/leader_election_role.yaml",
 			"../../../config/rbac/leader_election_role_binding.yaml",

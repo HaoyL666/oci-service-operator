@@ -54,6 +54,8 @@ services:
     sampleOrder: 10
     packageProfile: controller-backed
     parityFile: parity/database.yaml
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-database:latest
+    managerOverlay: ../../../config/manager/database
     compatibility:
       existingKinds:
         - AutonomousDatabases
@@ -129,6 +131,8 @@ services:
     sampleOrder: 30
     packageProfile: controller-backed
     parityFile: parity/mysql.yaml
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-mysql:latest
+    managerOverlay: ../../../config/manager/mysql
     compatibility:
       existingKinds:
         - MySqlDbSystem
@@ -190,6 +194,8 @@ services:
     sampleOrder: 20
     packageProfile: controller-backed
     parityFile: parity/streaming.yaml
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-streaming:latest
+    managerOverlay: ../../../config/manager/streaming
     compatibility:
       existingKinds:
         - Stream
