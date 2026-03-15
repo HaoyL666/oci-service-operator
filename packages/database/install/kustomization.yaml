@@ -20,6 +20,3 @@ patches:
 - path: ../../../config/default/manager_config_patch.yaml
   target:
     kind: Deployment
-- path: ../../../config/manager/database/patch_leader_election.yaml
-  target:
-    kind: Deployment
