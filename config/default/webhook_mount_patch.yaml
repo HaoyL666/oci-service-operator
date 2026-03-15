@@ -1,0 +1,19 @@
+# Adds the webhook TLS serving certificate volume/mount to the controller deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-manager
+  namespace: system
+spec:
+  template:
+    spec:
+      volumes:
+      - name: webhook-cert
+        secret:
+          secretName: webhook-server-cert
+      containers:
+      - name: manager
+        volumeMounts:
+        - name: webhook-cert
+          mountPath: /tmp/k8s-webhook-server/serving-certs
+          readOnly: true

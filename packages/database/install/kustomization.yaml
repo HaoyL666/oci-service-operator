@@ -14,24 +14,6 @@ resources:
 - ../../../config/webhook
 - ../../../config/certmanager
 
-
 patches:
   - path: ../../../config/default/webhookcainjection_patch.yaml
-  - target:
-      group: apps
-      version: v1
-      kind: Deployment
-      name: controller-manager
-    patch: |-
-      - op: add
-        path: /spec/template/spec/volumes/-
-        value:
-          name: webhook-cert
-          secret:
-            secretName: webhook-server-cert
-      - op: add
-        path: /spec/template/spec/containers/0/volumeMounts/-
-        value:
-          name: webhook-cert
-          mountPath: /tmp/k8s-webhook-server/serving-certs
-          readOnly: true
+  - path: ../../../config/default/webhook_mount_patch.yaml
