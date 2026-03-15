@@ -16,4 +16,3 @@ resources:
 
 patchesStrategicMerge:
 - ../../../config/default/webhookcainjection_patch.yaml
-- ../../../config/default/manager_config_patch.yaml
