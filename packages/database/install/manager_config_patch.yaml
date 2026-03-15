@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oci-service-operator-database-controller-manager
+  namespace: oci-service-operator-database-system
+spec:
+  template:
+    spec:
+      volumes:
+      - name: manager-config
+        configMap:
+          name: oci-service-operator-database-manager-config
+      containers:
+      - name: manager
+        args:
+        - --leader-elect
+        - --config=/controller_manager_config.yaml
+        volumeMounts:
+        - name: manager-config
+          mountPath: /controller_manager_config.yaml
+          subPath: controller_manager_config.yaml
