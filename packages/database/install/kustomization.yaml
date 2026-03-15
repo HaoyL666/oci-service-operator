@@ -17,6 +17,4 @@ resources:
 patches:
   - path: ../../../config/default/webhookcainjection_patch.yaml
   - path: ../../../config/default/webhook_mount_patch.yaml
-  - path: ../../../config/default/webhookcainjection_patch.yaml
-  - path: ../../../config/default/webhook_mount_patch.yaml
-  - path: ../../../packages/database/install/manager_config_patch.yaml
+  - path: ../../../config/default/manager_config_patch.yaml
