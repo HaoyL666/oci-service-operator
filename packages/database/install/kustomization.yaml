@@ -16,3 +16,14 @@ resources:
 - ../../../config/webhook
 - ../../../config/certmanager
 
+
+patches:
+- path: ../../../config/default/webhookcainjection_patch.yaml
+  target:
+    kind: MutatingWebhookConfiguration
+- path: ../../../config/default/webhookcainjection_patch.yaml
+  target:
+    kind: ValidatingWebhookConfiguration
+- path: ../../../config/default/manager_config_patch.yaml
+  target:
+    kind: Deployment
