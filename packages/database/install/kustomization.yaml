@@ -16,7 +16,3 @@ resources:
 - ../../../config/webhook
 - ../../../config/certmanager
 
-patches:
-- path: ../../../config/default/manager_config_patch.yaml
-  target:
-    kind: Deployment
