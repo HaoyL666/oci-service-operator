@@ -25,6 +25,7 @@ func main() {
 		Scheme:             scheme,
 		MetricsServiceName: "streaming",
 		LeaderElectionID:   "40558063.oci.streaming",
+		SkipFIPS:           true,
 	}, managerservices.Streaming()); err != nil {
 		os.Exit(1)
 	}

@@ -45,6 +45,12 @@ OPERATOR_SDK_VERSION ?= v1.37.0
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
 SERVICE ?=
+SERVICES ?=
+PUBLISH_VERSION ?=
+PUBLISH_REGISTRY ?=
+PUBLISH_PLATFORMS ?= linux_amd64
+TARGETOS ?= linux
+TARGETARCH ?= amd64
 MANAGER_BIN ?= bin/manager
 CONTROLLER_MAIN ?= main.go
 SERVICE_IMG ?= $(IMAGE_TAG_BASE)-$(SERVICE):$(VERSION)
@@ -57,6 +63,7 @@ GROUP ?= database
 PACKAGES_DIR ?= packages
 PACKAGE_DIR ?= $(PACKAGES_DIR)/$(GROUP)
 PACKAGE_OUTPUT_DIR ?= dist/packages/$(GROUP)
+PACKAGE_OUT ?= $(PACKAGE_OUTPUT_DIR)/install.yaml
 PACKAGE_SCRIPT ?= hack/package.sh
 CONTROLLER_IMG ?=
 API_GENERATOR_CONFIG ?= internal/generator/config/services.yaml
@@ -196,6 +203,10 @@ docker-build-service: test bundle ## Build docker image for SERVICE using servic
 	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
 	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) -t $(SERVICE_IMG) .
 
+docker-build-service-raw: ## Build service image without running tests/bundle dependencies.
+	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
+	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) -t $(SERVICE_IMG) .
+
 docker-push: ## Push docker image with the manager.
 	docker push ${IMG}
 
@@ -210,7 +221,7 @@ package-generate: controller-gen ## Generate CRDs and optional controller RBAC f
 
 package-install: controller-gen kustomize ## Render a single install YAML for GROUP into dist/packages/<group>/install.yaml.
 	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
-	@CONTROLLER_GEN="$(CONTROLLER_GEN)" KUSTOMIZE="$(KUSTOMIZE)" CONTROLLER_IMG="$(CONTROLLER_IMG)" OUT="$(PACKAGE_OUTPUT_DIR)/install.yaml" \
+	@CONTROLLER_GEN="$(CONTROLLER_GEN)" KUSTOMIZE="$(KUSTOMIZE)" CONTROLLER_IMG="$(CONTROLLER_IMG)" OUT="$(PACKAGE_OUT)" \
 		"$(PACKAGE_SCRIPT)" render "$(GROUP)"
 
 ##@ Deployment
@@ -335,3 +346,28 @@ delete-crds-force:
 	kubectl patch crd/autonomousdatabases.oci.oracle.com -p '{"metadata":{"finalizers":[]}}' --type=merge &
 	kubectl patch crd/mysqldbsystems.oci.oracle.com -p '{"metadata":{"finalizers":[]}}' --type=merge &
 	kubectl patch crd/streams.oci.oracle.com -p '{"metadata":{"finalizers":[]}}' --type=merge
+
+publish-subpackages: ## Build, push, and render manifests for comma-separated SERVICES (e.g. SERVICES=database,mysql).
+	@[ -n "$(SERVICES)" ] || { echo "SERVICES must be set (comma-separated list)"; exit 1; }
+	@[ -n "$(PUBLISH_VERSION)" ] || { echo "PUBLISH_VERSION must be set (image tag)"; exit 1; }
+	@[ -n "$(PUBLISH_REGISTRY)" ] || { echo "PUBLISH_REGISTRY must be set (e.g. iad.ocir.io/org)"; exit 1; }
+	@set -euo pipefail; \
+	IFS=',' read -r -a services <<< "$(SERVICES)"; \
+	platform="$(PUBLISH_PLATFORMS)"; \
+	first_platform=$${platform%%,*}; \
+	os=$${first_platform%%_*}; \
+	arch=$${first_platform##*_}; \
+	for raw in "$${services[@]}"; do \
+		service=$$(echo "$$raw" | tr '[:upper:]' '[:lower:]' | xargs); \
+		[ -n "$$service" ] || continue; \
+		image="$(PUBLISH_REGISTRY)/oci-service-operator-$$service:$(PUBLISH_VERSION)"; \
+		echo ">>> Building $$image"; \
+		$(MAKE) --no-print-directory docker-build-service-raw SERVICE="$$service" SERVICE_IMG="$$image" TARGETOS="$$os" TARGETARCH="$$arch"; \
+		if [ -n "$(PUBLISH_PLATFORMS)" ] && [ "$(PUBLISH_PLATFORMS)" != "linux_amd64" ]; then \
+			echo "warning: publish-subpackages currently builds linux/amd64 only (requested: $(PUBLISH_PLATFORMS))" >&2; \
+		fi; \
+		echo ">>> Pushing $$image"; \
+		docker push "$$image"; \
+		output="dist/packages/$$service/install-$(PUBLISH_VERSION).yaml"; \
+		$(MAKE) --no-print-directory package-install GROUP="$$service" CONTROLLER_IMG="$$image" PACKAGE_OUT="$$output"; \
+	done

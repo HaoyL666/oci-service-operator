@@ -25,6 +25,7 @@ func main() {
 		Scheme:             scheme,
 		MetricsServiceName: "database",
 		LeaderElectionID:   "40558063.oci.database",
+		SkipFIPS:           true,
 	}, managerservices.Database()); err != nil {
 		os.Exit(1)
 	}

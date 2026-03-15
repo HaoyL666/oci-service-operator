@@ -25,6 +25,7 @@ func main() {
 		Scheme:             scheme,
 		MetricsServiceName: "mysql",
 		LeaderElectionID:   "40558063.oci.mysql",
+		SkipFIPS:           true,
 	}, managerservices.MySQL()); err != nil {
 		os.Exit(1)
 	}

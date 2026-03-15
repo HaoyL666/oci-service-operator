@@ -38,6 +38,8 @@ type Options struct {
 	MetricsServiceName string
 	// LeaderElectionID identifies the leader election record used by this manager.
 	LeaderElectionID string
+	// SkipFIPS disables FIPS checks when running without a BoringCrypto-enabled binary.
+	SkipFIPS bool
 }
 
 const (
@@ -57,7 +59,9 @@ func Run(opts Options, registrars ...RegisterFunc) error {
 		opts.MetricsServiceName = defaultMetricsService
 	}
 
-	go_ensurefips.Compliant()
+	if !opts.SkipFIPS {
+		go_ensurefips.Compliant()
+	}
 	common.EnableInstanceMetadataServiceLookup()
 
 	var (

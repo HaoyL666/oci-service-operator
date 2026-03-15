@@ -13,8 +13,10 @@ resources:
 - ../../../config/rbac/leader_election_role_binding.yaml
 - ../../../config/rbac/autonomousdatabases_editor_role.yaml
 - ../../../config/rbac/autonomousdatabases_viewer_role.yaml
+- ../../../config/webhook
+- ../../../config/certmanager
 
 patches:
-- path: ../../../config/default/manager_config_patch.yaml
+- path: ../../../config/manager/database/patch_leader_election.yaml
   target:
     kind: Deployment
