@@ -54,7 +54,7 @@ services:
     sampleOrder: 10
     packageProfile: controller-backed
     parityFile: parity/database.yaml
-    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-database:latest
+    defaultControllerImage: oci-service-operator-database:placeholder
     managerOverlay: ../../../config/manager/database
     compatibility:
       existingKinds:
@@ -131,7 +131,7 @@ services:
     sampleOrder: 30
     packageProfile: controller-backed
     parityFile: parity/mysql.yaml
-    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-mysql:latest
+    defaultControllerImage: oci-service-operator-mysql:placeholder
     managerOverlay: ../../../config/manager/mysql
     compatibility:
       existingKinds:
@@ -194,7 +194,7 @@ services:
     sampleOrder: 20
     packageProfile: controller-backed
     parityFile: parity/streaming.yaml
-    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-streaming:latest
+    defaultControllerImage: oci-service-operator-streaming:placeholder
     managerOverlay: ../../../config/manager/streaming
     compatibility:
       existingKinds:
