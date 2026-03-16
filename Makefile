@@ -153,7 +153,7 @@ schema-validator: ## Run OSOK schema validator and write report to SCHEMA_VALIDA
 
 BASH ?= /bin/bash
 ENVTEST_ASSETS_DIR ?= $(shell pwd)/testbin/$(shell uname)
-ENVTEST_HOME ?= $(shell pwd)/.envtest-home
+ENVTEST_HOME ?= $(HOME)/.cache/oci-service-operator/envtest-home
 ENVTEST_CACHE_DIR ?= $(ENVTEST_HOME)/.cache
 ENVTEST_CONFIG_DIR ?= $(ENVTEST_HOME)/.config
 ENVTEST_K8S_VERSION ?= 1.28.0
