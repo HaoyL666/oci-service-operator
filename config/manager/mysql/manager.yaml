@@ -9,14 +9,6 @@ metadata:
     control-plane: controller-manager
   name: system
 ---
-apiVersion: v1
-kind: Secret
-type: Opaque
-metadata:
-  name: osokconfig
-data:
-  useinstanceprincipal: dHJ1ZQ==
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
