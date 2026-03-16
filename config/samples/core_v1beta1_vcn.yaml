@@ -7,4 +7,19 @@ apiVersion: core.oracle.com/v1beta1
 kind: Vcn
 metadata:
   name: vcn-sample
-spec: {}
+spec:
+  # Create flow: provide the target compartment and CIDR information.
+  compartmentId: ocid1.compartment.oc1..aaaaaaaaXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  cidrBlock: 10.0.0.0/16
+  displayName: osok-core-vcn
+  dnsLabel: osokcore
+  freeformTags:
+    environment: dev
+
+  # Bind flow: uncomment id to bind this CR to an existing VCN instead of creating one.
+  # id: ocid1.vcn.oc1.iad.aaaaaaaaXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+  # Multi-CIDR create flow: prefer cidrBlocks over cidrBlock when you need more than one CIDR.
+  # cidrBlocks:
+  # - 10.0.0.0/16
+  # - 10.1.0.0/16
