@@ -6,6 +6,7 @@
 package controllers
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -31,6 +32,9 @@ var k8sClient client.Client
 var testEnv *envtest.Environment
 
 func TestAPIs(t *testing.T) {
+	if os.Getenv("RUN_ENVTEST") != "true" {
+		t.Skip("skipping envtest suite; set RUN_ENVTEST=true to run")
+	}
 	RegisterFailHandler(Fail)
 
 	RunSpecs(t, "Controller Suite")
@@ -67,7 +71,7 @@ var _ = BeforeSuite(func() {
 
 var _ = AfterSuite(func() {
 	By("tearing down the test environment")
-	if testEnv != nil {
+	if testEnv != nil && cfg != nil {
 		err := testEnv.Stop()
 		Expect(err).NotTo(HaveOccurred())
 	}

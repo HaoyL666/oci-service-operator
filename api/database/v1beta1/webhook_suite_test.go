@@ -10,6 +10,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"net"
+	"os"
 	"path/filepath"
 	"testing"
 	"time"
@@ -40,6 +41,9 @@ var ctx context.Context
 var cancel context.CancelFunc
 
 func TestAPIs(t *testing.T) {
+	if os.Getenv("RUN_ENVTEST") != "true" {
+		t.Skip("skipping webhook envtest suite; set RUN_ENVTEST=true to run")
+	}
 	RegisterFailHandler(Fail)
 
 	RunSpecs(t, "Webhook Suite")
@@ -116,9 +120,11 @@ var _ = BeforeSuite(func() {
 }, 60)
 
 var _ = AfterSuite(func() {
-	cancel()
+	if cancel != nil {
+		cancel()
+	}
 	By("tearing down the test environment")
-	if testEnv != nil {
+	if testEnv != nil && cfg != nil {
 		err := testEnv.Stop()
 		Expect(err).NotTo(HaveOccurred())
 	}
