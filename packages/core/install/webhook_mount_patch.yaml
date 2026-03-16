@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-manager
+  namespace: oci-service-operator-core-system
+spec:
+  template:
+    spec:
+      volumes:
+      - name: webhook-cert
+        secret:
+          secretName: webhook-server-cert
+      containers:
+      - name: manager
+        volumeMounts:
+        - name: webhook-cert
+          mountPath: /tmp/k8s-webhook-server/serving-certs
+          readOnly: true
