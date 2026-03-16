@@ -168,12 +168,10 @@ func buildCreateVcnDetails(vcn corev1beta1.Vcn) (ocicore.CreateVcnDetails, error
 		CompartmentId: common.String(string(vcn.Spec.CompartmentId)),
 	}
 
-	if vcn.Spec.CidrBlock != "" {
-		createDetails.CidrBlock = common.String(vcn.Spec.CidrBlock)
-	}
-
 	if len(vcn.Spec.CidrBlocks) > 0 {
 		createDetails.CidrBlocks = append([]string(nil), vcn.Spec.CidrBlocks...)
+	} else if vcn.Spec.CidrBlock != "" {
+		createDetails.CidrBlock = common.String(vcn.Spec.CidrBlock)
 	}
 
 	if len(vcn.Spec.Ipv6PrivateCidrBlocks) > 0 {
