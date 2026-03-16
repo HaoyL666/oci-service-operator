@@ -23,6 +23,7 @@ type VcnReconciler struct {
 // +kubebuilder:rbac:groups=core.oracle.com,resources=vcns,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=core.oracle.com,resources=vcns/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=core.oracle.com,resources=vcns/finalizers,verbs=update
+// +kubebuilder:rbac:groups="",resources=events,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
