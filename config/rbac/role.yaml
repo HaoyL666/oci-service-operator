@@ -18,6 +18,32 @@ rules:
   - update
   - watch
 - apiGroups:
+  - core.oracle.com
+  resources:
+  - vcns
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - core.oracle.com
+  resources:
+  - vcns/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - core.oracle.com
+  resources:
+  - vcns/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - database.oracle.com
   resources:
   - autonomousdatabases
