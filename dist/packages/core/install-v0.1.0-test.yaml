@@ -16362,18 +16362,6 @@ metadata:
   name: oci-service-operator-core-manager-config
   namespace: oci-service-operator-core-system
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: oci-service-operator-core-webhook-service
-  namespace: oci-service-operator-core-system
-spec:
-  ports:
-  - port: 443
-    targetPort: 9443
-  selector:
-    control-plane: controller-manager
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16467,9 +16455,6 @@ spec:
         - mountPath: /controller_manager_config.yaml
           name: manager-config
           subPath: controller_manager_config.yaml
-        - mountPath: /tmp/k8s-webhook-server/serving-certs
-          name: webhook-cert
-          readOnly: true
         - mountPath: /etc/pki
           name: pki
           readOnly: true
@@ -16480,87 +16465,6 @@ spec:
       - configMap:
           name: oci-service-operator-core-manager-config
         name: manager-config
-      - name: webhook-cert
-        secret:
-          secretName: webhook-server-cert
       - hostPath:
           path: /etc/pki
         name: pki
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: oci-service-operator-core-serving-cert
-  namespace: oci-service-operator-core-system
-spec:
-  dnsNames:
-  - $(SERVICE_NAME).$(SERVICE_NAMESPACE).svc
-  - $(SERVICE_NAME).$(SERVICE_NAMESPACE).svc.cluster.local
-  issuerRef:
-    kind: Issuer
-    name: oci-service-operator-core-selfsigned-issuer
-  secretName: webhook-server-cert
----
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: oci-service-operator-core-selfsigned-issuer
-  namespace: oci-service-operator-core-system
-spec:
-  selfSigned: {}
----
-apiVersion: admissionregistration.k8s.io/v1
-kind: MutatingWebhookConfiguration
-metadata:
-  annotations:
-    cert-manager.io/inject-ca-from: $(CERTIFICATE_NAMESPACE)/$(CERTIFICATE_NAME)
-  name: oci-service-operator-core-mutating-webhook-configuration
-webhooks:
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: oci-service-operator-core-webhook-service
-      namespace: oci-service-operator-core-system
-      path: /mutate-database-oracle-com-v1beta1-autonomousdatabases
-  failurePolicy: Ignore
-  name: mautonomousdatabases.kb.io
-  rules:
-  - apiGroups:
-    - database.oracle.com
-    apiVersions:
-    - v1beta1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - autonomousdatabases
-  sideEffects: None
----
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  annotations:
-    cert-manager.io/inject-ca-from: $(CERTIFICATE_NAMESPACE)/$(CERTIFICATE_NAME)
-  name: oci-service-operator-core-validating-webhook-configuration
-webhooks:
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: oci-service-operator-core-webhook-service
-      namespace: oci-service-operator-core-system
-      path: /validate-database-oracle-com-v1beta1-autonomousdatabases
-  failurePolicy: Fail
-  name: vautonomousdatabases.kb.io
-  rules:
-  - apiGroups:
-    - database.oracle.com
-    apiVersions:
-    - v1beta1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - autonomousdatabases
-  sideEffects: None

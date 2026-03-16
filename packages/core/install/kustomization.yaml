@@ -12,10 +12,6 @@ resources:
 - ../../../config/rbac/leader_election_role_binding.yaml
 - ../../../config/rbac/vcn_editor_role.yaml
 - ../../../config/rbac/vcn_viewer_role.yaml
-- ../../../config/webhook
-- ../../../config/certmanager
 
 patches:
-  - path: ../../../config/default/webhookcainjection_patch.yaml
-  - path: webhook_mount_patch.yaml
   - path: manager_config_patch.yaml
