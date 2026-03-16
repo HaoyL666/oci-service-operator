@@ -169,13 +169,13 @@ For EVERY task, check the acceptance criteria listed in the task description. Ea
 
 #### Pattern Compliance Checklist
 
-**CRD Types** (`api/v1beta1/*_types.go`):
+**CRD Types** (`api/<service>/v1beta1/*_types.go`):
 - [ ] Has `Spec` and `Status` structs
 - [ ] Has `+kubebuilder:object:root=true` markers
 - [ ] Has proper JSON tags on all fields
 - [ ] Registered in `groupversion_info.go`
 
-**Controllers** (`controllers/*_controller.go`):
+**Controllers** (`controllers/<service>/*_controller.go`):
 - [ ] Implements `Reconcile()` method
 - [ ] Has proper RBAC markers (`+kubebuilder:rbac:...`)
 - [ ] Handles create/update/delete lifecycle

@@ -200,10 +200,13 @@ make manifests          # Regenerate CRD YAML (after modifying *_types.go)
 ## Architecture Overview
 
 - **Language**: Go 1.25 | **Framework**: kubebuilder / controller-runtime v0.17 | **SDK**: `oci-go-sdk/v65`
+- **Manager entry points**: `cmd/manager/<service>/main.go` — per-service binaries; each service builds its own image and manifest set
+- **Shared bootstrap**: `pkg/manager/run.go` — common controller-runtime manager setup used by every service binary
+- **Service registration**: `pkg/manager/services/<service>.go` — registers only that service's controllers/webhooks with `manager.Run`
 - **CRD types**: `api/<service>/v1beta1/*_types.go` — Spec, Status, and kubebuilder markers (grouped by OCI service)
 - **Controllers**: `controllers/<service>/*_controller.go` — Reconcile loops (grouped by OCI service, 3 currently)
 - **Service Managers**: `pkg/servicemanager/*/` — OCI API client wrappers (3 currently)
-- **Registration**: `main.go` — Controller wiring
+- **Service manifests**: `config/manager/<service>/` and `dist/packages/<service>/` — per-service deployment packaging
 - **CRDs**: `config/crd/` — Generated manifests
 
 ### Reference Implementations (use these as templates)

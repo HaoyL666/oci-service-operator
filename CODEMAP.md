@@ -5,7 +5,9 @@ Quick-reference for agents. Read this instead of exploring the repo.
 ## Architecture
 
 ```
-main.go                                  ← Controller registration (3 reconcilers)
+cmd/manager/<service>/main.go            ← Per-service manager entry points (one service per binary/image)
+├── pkg/manager/run.go                   ← Shared controller-runtime bootstrap used by every service binary
+├── pkg/manager/services/<service>.go    ← Service-specific registration passed into manager.Run
 ├── api/<service>/v1beta1/*_types.go     ← CRD Spec/Status definitions (grouped by OCI service)
 ├── controllers/<service>/*_controller.go ← Reconcile loops (grouped by OCI service)
 ├── pkg/core/reconciler.go               ← BaseReconciler — shared reconciliation logic
@@ -17,6 +19,8 @@ main.go                                  ← Controller registration (3 reconcil
 ├── pkg/config/                          ← OSOK + user auth configuration
 ├── pkg/credhelper/                      ← Kubernetes secret-based credential helper
 ├── pkg/authhelper/                      ← OCI auth config provider
+├── config/manager/<service>/            ← Service-specific manager manifests
+├── dist/packages/<service>/             ← Per-service install bundles
 └── config/                              ← Generated CRD YAML, RBAC, samples
 ```
 
@@ -66,11 +70,11 @@ controllers/
 └── suite_test.go
 ```
 
-main.go imports them as namespaced packages:
+Per-service entry points call `manager.Run(...)` with exactly one service registrar:
 ```go
-databasecontrollers "...controllers/database"
-streamingcontrollers "...controllers/streaming"
-mysqlcontrollers "...controllers/mysql"
+managerservices.Database()   // cmd/manager/database/main.go
+managerservices.MySQL()      // cmd/manager/mysql/main.go
+managerservices.Streaming()  // cmd/manager/streaming/main.go
 ```
 
 ## Implemented Services (3 with controllers)
@@ -80,6 +84,8 @@ mysqlcontrollers "...controllers/mysql"
 | Autonomous DB | `api/database/v1beta1/` | `controllers/database/` | `autonomousdatabases/adb/` (5 files) | `adb.md` |
 | MySQL | `api/mysql/v1beta1/` | `controllers/mysql/` | `mysql/dbsystem/` (5 files) | `mysql.md` |
 | Streams | `api/streaming/v1beta1/` | `controllers/streaming/` | `streams/` (4 files) | `oss.md` |
+
+Each service is built from its own entry point in `cmd/manager/<service>/main.go` and packaged from `config/manager/<service>/` / `dist/packages/<service>/`.
 
 ## Service Manager Files
 
@@ -133,7 +139,7 @@ See `docs/validator-guide.md` for usage.
 | Secret generation | `pkg/servicemanager/mysql/dbsystem/dbsystem_secretgeneration.go` | GetCredentialMap pattern |
 | Tests | `pkg/servicemanager/autonomousdatabases/adb/adb_servicemanager_test.go` | Injected client, error paths |
 | RBAC roles | `config/rbac/stream_editor_role.yaml` | Minimal role template |
-| Sample manifest | `config/samples/oci_v1beta1_stream.yaml` | Simple sample |
+| Sample manifest | `config/samples/streaming_v1beta1_stream.yaml` | Simple sample |
 | Docs | `docs/oss.md` | Simple service documentation |
 
 ## File Naming Conventions
@@ -141,12 +147,14 @@ See `docs/validator-guide.md` for usage.
 ```
 api/<service>/v1beta1/<resource>_types.go             ← CRD types (grouped by service)
 controllers/<service>/<resource>_controller.go        ← Controller (grouped by service)
+pkg/manager/services/<service>.go                     ← Service-specific registration
+cmd/manager/<service>/main.go                         ← Per-service manager entry point
 pkg/servicemanager/<svc>/<svc>_serviceclient.go       ← OCI client interface
 pkg/servicemanager/<svc>/<svc>_servicemanager.go      ← Business logic
 pkg/servicemanager/<svc>/<svc>_secretgeneration.go    ← Secret payload
 pkg/servicemanager/<svc>/<svc>_servicemanager_test.go ← Tests
 pkg/servicemanager/<svc>/export_test.go               ← Test helpers
-config/samples/oci_v1beta1_<resource>.yaml            ← Sample manifest
+config/samples/<service>_v1beta1_<resource>.yaml      ← Sample manifest
 config/rbac/<resource>_editor_role.yaml               ← RBAC
 docs/<service>.md                                     ← Documentation
 ```
@@ -157,7 +165,7 @@ docs/<service>.md                                     ← Documentation
 2. **Lifecycle states** — FAILED → set failed status; ACTIVE → set active; other → requeue
 3. **Conditional fields** — `if spec.X != "" { details.X = common.String(spec.X) }` — never send zero-values
 4. **Secret generation** — `GetCredentialMap()` returns `map[string]string` after ACTIVE
-5. **Registration** — New controllers registered in `main.go` via `SetupWithManager` (use namespaced import)
+5. **Registration** — New controllers are wired in `pkg/manager/services/<service>.go` and exposed by `cmd/manager/<service>/main.go` via `manager.Run(...)`
 6. **Generated files** — Always commit `zz_generated.deepcopy.go` + CRD YAML after `make generate && make manifests`
 
 ## Webhooks

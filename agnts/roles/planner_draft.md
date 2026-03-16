@@ -66,10 +66,10 @@ The human gives you a high-level task. Before designing, you MUST deeply analyze
 
 1. **Read the project map** — `CODEMAP.md` for overall structure
 2. **Read existing implementations** that are similar to the requested work:
-   - CRD types: `api/v1beta1/stream_types.go`, `api/v1beta1/containerinstance_types.go`
-   - Service managers: `pkg/servicemanager/streams/`, `pkg/servicemanager/containerinstance/`
-   - Controllers: `controllers/stream_controller.go`, `controllers/containerinstance_controller.go`
-   - Registration: `main.go` (how controllers are wired)
+   - CRD types: `api/streaming/v1beta1/stream_types.go`, `api/database/v1beta1/autonomousdatabases_types.go`
+   - Service managers: `pkg/servicemanager/streams/`, `pkg/servicemanager/autonomousdatabases/adb/`
+   - Controllers: `controllers/streaming/stream_controller.go`, `controllers/database/autonomousdatabases_controller.go`
+   - Registration: `pkg/manager/services/streaming.go`, `cmd/manager/streaming/main.go`
 3. **Identify the pattern** — what files, interfaces, and registrations are needed:
    - Which existing service is the closest match to use as a template?
    - What new files will be created?
@@ -143,12 +143,12 @@ Read the feedback, revise your plan, change status back to `DRAFT`, and signal r
 
 | # | Task | Files | Depends on | Reference |
 |---|------|-------|-----------|-----------|
-| 1 | Define CRD types | `api/v1beta1/<svc>_types.go` | — | `stream_types.go` |
+| 1 | Define CRD types | `api/<service>/v1beta1/<resource>_types.go` | — | `api/streaming/v1beta1/stream_types.go` |
 | 2 | Implement service manager | `pkg/servicemanager/<svc>/` | #1 | `streams/` |
-| 3 | Add controller + main.go wiring | `controllers/<svc>_controller.go`, `main.go` | #1, #2 | `stream_controller.go` |
-| 4 | Add tests | `pkg/servicemanager/<svc>/*_test.go` | #2 | `containerinstance/*_test.go` |
+| 3 | Add controller + service entry point | `controllers/<service>/<resource>_controller.go`, `pkg/manager/services/<service>.go`, `cmd/manager/<service>/main.go` | #1, #2 | `controllers/streaming/stream_controller.go`, `pkg/manager/services/streaming.go` |
+| 4 | Add tests | `pkg/servicemanager/<svc>/*_test.go` | #2 | `pkg/servicemanager/autonomousdatabases/adb/adb_servicemanager_test.go` |
 | 5 | Add docs + sample manifest | `docs/`, `config/samples/` | #3 | `docs/oss.md` |
-| 6 | Regenerate + validate | `make generate/manifests`, all generated files | #3, #4, #5 | — |
+| 6 | Add service manifests + validate | `config/manager/<service>/`, `dist/packages/<service>/`, generated files | #3, #4, #5 | `config/manager/streaming/`, `dist/packages/streaming/` |
 
 ## Rules
 

@@ -110,14 +110,14 @@ Before writing ANY code, read the reference files mentioned in the task descript
 
 | What you're building | Reference to read first |
 |---------------------|------------------------|
-| CRD types | `api/v1beta1/stream_types.go` |
-| Controller | `controllers/containerinstance_controller.go` |
+| CRD types | `api/streaming/v1beta1/stream_types.go` |
+| Controller | `controllers/streaming/stream_controller.go` |
 | Service manager (simple) | `pkg/servicemanager/streams/` |
-| Service manager (complex) | `pkg/servicemanager/containerinstance/` |
+| Service manager (complex) | `pkg/servicemanager/autonomousdatabases/adb/` |
 | RBAC roles | `config/rbac/stream_editor_role.yaml` |
 | Secret generation | `pkg/servicemanager/streams/stream_secretgeneration.go` or `pkg/servicemanager/mysql/dbsystem/dbsystem_secretgeneration.go` |
-| Sample YAML | `config/samples/oci_v1beta1_stream.yaml` |
-| Docs | `docs/oss.md` or `docs/redis.md` |
+| Sample YAML | `config/samples/streaming_v1beta1_stream.yaml` |
+| Docs | `docs/oss.md` or `docs/adb.md` |
 
 ### Step 4: IMPLEMENT
 
@@ -127,7 +127,7 @@ Follow these project-specific patterns:
 - **Lifecycle state handling**: Always handle FAILED/ACTIVE/other states with requeue for non-terminal
 - **Conditional OCI fields**: Never send zero-value optional fields (`if spec.Port != 0 { ... }`)
 - **Secret generation**: After resource is ACTIVE, write connection info to a k8s Secret
-- **Registration**: New controllers must be registered in `main.go`
+- **Registration**: New controllers must be wired through `pkg/manager/services/<service>.go` and a per-service `cmd/manager/<service>/main.go`
 - Keep changes focused to the files mentioned in the task
 - One logical change per task
 

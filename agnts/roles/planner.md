@@ -116,10 +116,10 @@ Key interfaces: <interfaces to implement>
 bd create "Define CRD types" \
   --parent="<epic-id>" \
   --description="## What
-Create api/v1beta1/<svc>_types.go with Spec, Status, and resource structs.
+Create api/<service>/v1beta1/<resource>_types.go with Spec, Status, and resource structs.
 
 ## Reference
-Follow the pattern in: api/v1beta1/stream_types.go
+Follow the pattern in: api/streaming/v1beta1/stream_types.go
 
 ## Acceptance Criteria
 - [ ] Has Spec and Status structs
@@ -163,15 +163,15 @@ bd ready --json
 
 | # | Task | Files | Depends on | Reference |
 |---|------|-------|-----------|-----------|
-| 1 | Define CRD types | `api/v1beta1/<svc>_types.go` | — | `stream_types.go` |
+| 1 | Define CRD types | `api/<service>/v1beta1/<resource>_types.go` | — | `api/streaming/v1beta1/stream_types.go` |
 | 2 | Generate deepcopy + register | `make generate` | #1 | — |
-| 3 | Implement service manager | `pkg/servicemanager/<svc>/` | #1 | `streams/` or `containerinstance/` |
-| 4 | Implement controller | `controllers/<svc>_controller.go` | #2, #3 | `containerinstance_controller.go` |
-| 5 | Register in main.go | `main.go` | #4 | existing registration blocks |
+| 3 | Implement service manager | `pkg/servicemanager/<svc>/` | #1 | `streams/` or `autonomousdatabases/adb/` |
+| 4 | Implement controller | `controllers/<service>/<resource>_controller.go` | #2, #3 | `controllers/streaming/stream_controller.go` |
+| 5 | Wire service entry point | `pkg/manager/services/<service>.go`, `cmd/manager/<service>/main.go` | #4 | `pkg/manager/services/streaming.go`, `cmd/manager/streaming/main.go` |
 | 6 | Generate CRD manifests | `make manifests`, `config/crd/` | #1 | — |
 | 7 | Add RBAC roles | `config/rbac/<svc>_*.yaml` | #1 | `stream_editor_role.yaml` |
-| 8 | Update kustomization | `config/crd/kustomization.yaml` | #6 | existing entries |
-| 9 | Add sample YAML + docs | `config/samples/`, `docs/` | #4 | `oci_v1beta1_stream.yaml` |
+| 8 | Add service manifests | `config/manager/<service>/`, `dist/packages/<service>/` | #5, #6 | `config/manager/streaming/`, `dist/packages/streaming/` |
+| 9 | Add sample YAML + docs | `config/samples/`, `docs/` | #4 | `streaming_v1beta1_stream.yaml` |
 | 10 | Tests | `controllers/`, `pkg/` | #4 | existing tests |
 
 **Key patterns the coder MUST follow** (include in every task description):

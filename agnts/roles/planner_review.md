@@ -71,7 +71,7 @@ Go through EVERY item. ALL must pass for approval:
 **Codebase Alignment:**
 - [ ] File paths match actual project structure (check with `ls`)
 - [ ] Referenced patterns actually exist
-- [ ] New file naming follows existing conventions (see CODEMAP.md)
+- [ ] New file naming follows existing conventions (see `CODEMAP.md`)
 
 ### Step 3: DECIDE
 
@@ -153,7 +153,7 @@ The epic description must include the **design sketch** (reference pattern, file
 ```bash
 bd create "Epic: <title from plan>" \
   --description="## Design Sketch
-Reference pattern: <existing service used as template, e.g. streams/ or containerinstance/>
+Reference pattern: <existing service used as template, e.g. streams/ or autonomousdatabases/adb/>
 New files: <list of files to create>
 Modified files: <list of files to modify>
 Key interfaces: <interfaces to implement>
