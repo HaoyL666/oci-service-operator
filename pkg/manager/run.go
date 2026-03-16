@@ -107,7 +107,7 @@ func Run(opts Options, registrars ...RegisterFunc) error {
 	}
 
 	if configFile != "" {
-		setupLog.InfoLog("Loading the configuration from the ControllerManagerConfig configMap")
+		setupLog.InfoLog("Loading the configuration from the ControllerManagerConfiguration configMap")
 		options, err = options.AndFrom(ctrl.ConfigFile().AtPath(configFile))
 		if err != nil {
 			setupLog.ErrorLog(err, "unable to load the config file")
