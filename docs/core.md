@@ -55,7 +55,8 @@ OSOK updates `status.status.conditions` based on the OCI VCN lifecycle:
 
 - `Provisioning` while OCI reports a non-terminal state such as `PROVISIONING` or `UPDATING`
 - `Active` when OCI reports the VCN as `AVAILABLE`
-- `Failed` when OCI reports a failed lifecycle state
+
+OCI VCNs do not expose a dedicated failed lifecycle state. In the current controller implementation, non-terminal OCI states continue to surface as `Provisioning`, and `AVAILABLE` is surfaced as `Active`.
 
 The controller also records the resolved OCI VCN OCID in `status.status.ocid`.
 
