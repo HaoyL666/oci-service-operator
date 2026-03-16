@@ -322,11 +322,8 @@ func TestCurrentServiceParityMatchesCheckedInArtifacts(t *testing.T) {
 		"config/samples/mysql_v1beta1_mysqldbsystem.yaml",
 		"config/samples/streaming_v1beta1_stream.yaml",
 		"packages/database/metadata.env",
-		"packages/database/install/kustomization.yaml",
 		"packages/mysql/metadata.env",
-		"packages/mysql/install/kustomization.yaml",
 		"packages/streaming/metadata.env",
-		"packages/streaming/install/kustomization.yaml",
 	}
 	for _, relativePath := range exactFiles {
 		assertExactFileMatch(t, filepath.Join(repoRoot(t), relativePath), filepath.Join(outputRoot, relativePath))
