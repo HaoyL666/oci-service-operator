@@ -44,7 +44,25 @@ services:
     group: core
     version: v1beta1
     phase: networking-and-infrastructure
-    packageProfile: crd-only
+    packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-core:latest
+    managerOverlay: ../../../config/manager/core
+    controller:
+      registerFunc: Core
+      resources:
+        - kind: Vcn
+          controllerType: VcnReconciler
+          legacyFieldName: DisplayNameOld
+          controllerLogName: Vcn
+          recorderName: Vcn
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/core/vcn
+            alias: vcn
+            constructor: 'vcn.NewVcnServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("Vcn")}, deps.Metrics)'
 
   - service: database
     sdkPackage: github.com/oracle/oci-go-sdk/v65/database
