@@ -130,3 +130,8 @@ package:
   extraResources:
     - ../../../config/rbac/autonomousdatabases_editor_role.yaml
     - ../../../config/rbac/autonomousdatabases_viewer_role.yaml
+    - ../../../config/webhook
+    - ../../../config/certmanager
+  patches:
+    - path: ../../../config/default/webhookcainjection_patch.yaml
+    - path: ../../../config/default/webhook_mount_patch.yaml

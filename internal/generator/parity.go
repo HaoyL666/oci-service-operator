@@ -71,7 +71,14 @@ type SampleOverride struct {
 
 // PackageOverride defines parity package overlay details for a service.
 type PackageOverride struct {
-	ExtraResources []string `yaml:"extraResources,omitempty"`
+	ExtraResources []string        `yaml:"extraResources,omitempty"`
+	Patches        []PatchOverride `yaml:"patches,omitempty"`
+}
+
+// PatchOverride defines one package install patch entry in parity mode.
+type PatchOverride struct {
+	Path   string `yaml:"path"`
+	Target string `yaml:"target,omitempty"`
 }
 
 func loadParityConfig(path string) (*ParityConfig, error) {

@@ -97,11 +97,16 @@ type PackageMetadataModel struct {
 
 // InstallKustomizationModel renders to packages/<group>/install/kustomization.yaml.
 type InstallKustomizationModel struct {
-	Namespace   string
-	NamePrefix  string
-	Resources   []string
-	PatchPath   string
-	PatchTarget string
+	Namespace  string
+	NamePrefix string
+	Resources  []string
+	Patches    []InstallPatchModel
+}
+
+// InstallPatchModel describes one generated kustomize patch entry.
+type InstallPatchModel struct {
+	Path   string
+	Target string
 }
 
 // ResourceModel describes one generated top-level kind inside an OSOK API package.

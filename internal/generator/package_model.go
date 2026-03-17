@@ -128,8 +128,6 @@ func buildPackageOutputModel(service ServiceConfig, resources []ResourceModel) P
 		output.Metadata.RBACPaths = fmt.Sprintf("./controllers/%s/...", service.Group)
 		output.Install.Namespace = fmt.Sprintf("oci-service-operator-%s-system", service.Group)
 		output.Install.NamePrefix = fmt.Sprintf("oci-service-operator-%s-", service.Group)
-		output.Install.PatchPath = "../../../config/default/manager_config_patch.yaml"
-		output.Install.PatchTarget = "Deployment"
 		output.Install.Resources = append(output.Install.Resources,
 			"generated/crd",
 			"generated/rbac",
@@ -141,7 +139,19 @@ func buildPackageOutputModel(service ServiceConfig, resources []ResourceModel) P
 		output.Install.Resources = appendUniqueStrings(output.Install.Resources, packageRoleResources(resources)...)
 		if service.Parity != nil {
 			output.Install.Resources = appendUniqueStrings(output.Install.Resources, service.Parity.Package.ExtraResources...)
+			for _, patch := range service.Parity.Package.Patches {
+				if strings.TrimSpace(patch.Path) == "" {
+					continue
+				}
+				output.Install.Patches = append(output.Install.Patches, InstallPatchModel{
+					Path:   patch.Path,
+					Target: patch.Target,
+				})
+			}
 		}
+		output.Install.Patches = append(output.Install.Patches, InstallPatchModel{
+			Path: "../../../config/default/manager_config_patch.yaml",
+		})
 	case PackageProfileCRDOnly:
 		output.Install.Resources = append(output.Install.Resources, "generated/crd")
 	default:

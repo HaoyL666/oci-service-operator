@@ -204,6 +204,7 @@ func TestGenerateRendersPackageOutputsByProfile(t *testing.T) {
 				"- ../../../config/manager",
 				"- ../../../config/rbac/mysqldbsystem_editor_role.yaml",
 				"- ../../../config/rbac/mysqldbsystem_viewer_role.yaml",
+				"- path: ../../../config/default/manager_config_patch.yaml",
 			},
 		},
 		{
@@ -467,6 +468,10 @@ func testServiceConfig(profile string) ServiceConfig {
 		parity.Package.ExtraResources = []string{
 			"../../../config/rbac/mysqldbsystem_editor_role.yaml",
 			"../../../config/rbac/mysqldbsystem_viewer_role.yaml",
+		}
+		parity.Package.Patches = []PatchOverride{
+			{Path: "../../../config/default/webhookcainjection_patch.yaml"},
+			{Path: "../../../config/default/webhook_mount_patch.yaml"},
 		}
 	}
 

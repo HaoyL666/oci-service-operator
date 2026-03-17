@@ -681,25 +681,25 @@ DEFAULT_CONTROLLER_IMAGE={{ .DefaultControllerImage }}
 const installKustomizationTemplate = `apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 {{- if .Namespace }}
-
 namespace: {{ .Namespace }}
 {{- end }}
 {{- if .NamePrefix }}
 namePrefix: {{ .NamePrefix }}
 {{- end }}
-
 resources:
 {{- range .Resources }}
 - {{ . }}
 {{- end }}
-{{- if .PatchPath }}
-
+{{ if .Patches }}
 patches:
-- path: {{ .PatchPath }}
-  target:
-    kind: {{ .PatchTarget }}
+{{- range .Patches }}
+  - path: {{ .Path }}
+{{- if .Target }}
+    target:
+      kind: {{ .Target }}
 {{- end }}
-`
+{{- end }}
+{{ end }}`
 
 const controllerTemplate = `/*
   Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
