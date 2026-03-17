@@ -63,6 +63,84 @@ services:
             import: github.com/oracle/oci-service-operator/pkg/servicemanager/core/vcn
             alias: vcn
             constructor: 'vcn.NewVcnServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("Vcn")}, deps.Metrics)'
+        - kind: Subnet
+          controllerType: SubnetReconciler
+          legacyFieldName: DisplayNameOld
+          controllerLogName: Subnet
+          recorderName: Subnet
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/core/subnet
+            alias: subnet
+            constructor: 'subnet.NewSubnetServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("Subnet")}, deps.Metrics)'
+        - kind: RouteTable
+          controllerType: RouteTableReconciler
+          legacyFieldName: DisplayNameOld
+          controllerLogName: RouteTable
+          recorderName: RouteTable
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/core/routetable
+            alias: routetable
+            constructor: 'routetable.NewRouteTableServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("RouteTable")}, deps.Metrics)'
+        - kind: InternetGateway
+          controllerType: InternetGatewayReconciler
+          legacyFieldName: DisplayNameOld
+          controllerLogName: InternetGateway
+          recorderName: InternetGateway
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/core/internetgateway
+            alias: internetgateway
+            constructor: 'internetgateway.NewInternetGatewayServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("InternetGateway")}, deps.Metrics)'
+        - kind: NatGateway
+          controllerType: NatGatewayReconciler
+          legacyFieldName: DisplayNameOld
+          controllerLogName: NatGateway
+          recorderName: NatGateway
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/core/natgateway
+            alias: natgateway
+            constructor: 'natgateway.NewNatGatewayServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("NatGateway")}, deps.Metrics)'
+        - kind: SecurityList
+          controllerType: SecurityListReconciler
+          legacyFieldName: DisplayNameOld
+          controllerLogName: SecurityList
+          recorderName: SecurityList
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/core/securitylist
+            alias: securitylist
+            constructor: 'securitylist.NewSecurityListServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("SecurityList")}, deps.Metrics)'
+        - kind: NetworkSecurityGroup
+          controllerType: NetworkSecurityGroupReconciler
+          legacyFieldName: DisplayNameOld
+          controllerLogName: NetworkSecurityGroup
+          recorderName: NetworkSecurityGroup
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/core/networksecuritygroup
+            alias: networksecuritygroup
+            constructor: 'networksecuritygroup.NewNetworkSecurityGroupServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("NetworkSecurityGroup")}, deps.Metrics)'
 
   - service: database
     sdkPackage: github.com/oracle/oci-go-sdk/v65/database
