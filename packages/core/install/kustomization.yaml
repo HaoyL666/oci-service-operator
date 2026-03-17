@@ -14,4 +14,4 @@ resources:
 - ../../../config/rbac/vcn_viewer_role.yaml
 
 patches:
-  - path: manager_config_patch.yaml
+  - path: ../../../config/default/manager_config_patch.yaml
