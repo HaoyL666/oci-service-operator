@@ -47,7 +47,42 @@ type ServiceConfig struct {
 	Compatibility          CompatibilityConfig `yaml:"compatibility,omitempty"`
 	DefaultControllerImage string              `yaml:"defaultControllerImage,omitempty"`
 	ManagerOverlay         string              `yaml:"managerOverlay,omitempty"`
+	Controller             *ControllerConfig   `yaml:"controller,omitempty"`
 	Parity                 *ParityConfig       `yaml:"-"`
+}
+
+// ControllerConfig describes generated controller and service registrar outputs for one service.
+type ControllerConfig struct {
+	RegisterFunc string                     `yaml:"registerFunc"`
+	Resources    []ControllerResourceConfig `yaml:"resources"`
+}
+
+// ControllerResourceConfig describes one generated controller-backed kind.
+type ControllerResourceConfig struct {
+	Kind                    string               `yaml:"kind"`
+	ControllerType          string               `yaml:"controllerType,omitempty"`
+	LegacyFieldName         string               `yaml:"legacyFieldName,omitempty"`
+	LegacyFieldType         string               `yaml:"legacyFieldType,omitempty"`
+	MaxConcurrentReconciles *int                 `yaml:"maxConcurrentReconciles,omitempty"`
+	AdditionalRBAC          []RBACRuleConfig     `yaml:"additionalRBAC,omitempty"`
+	ServiceManager          ServiceManagerConfig `yaml:"serviceManager"`
+	ControllerLogName       string               `yaml:"controllerLogName,omitempty"`
+	RecorderName            string               `yaml:"recorderName,omitempty"`
+	Webhook                 bool                 `yaml:"webhook,omitempty"`
+}
+
+// ServiceManagerConfig describes how a generated registrar instantiates a service manager.
+type ServiceManagerConfig struct {
+	Import      string `yaml:"import"`
+	Alias       string `yaml:"alias,omitempty"`
+	Constructor string `yaml:"constructor"`
+}
+
+// RBACRuleConfig describes one extra kubebuilder RBAC marker required by a controller.
+type RBACRuleConfig struct {
+	Groups    string `yaml:"groups"`
+	Resources string `yaml:"resources"`
+	Verbs     string `yaml:"verbs"`
 }
 
 // CompatibilityConfig holds explicit backwards-compatibility hints for published kinds.
@@ -132,6 +167,33 @@ func (c *Config) Validate() error {
 		if _, exists := groupsByName[service.Group]; exists {
 			return fmt.Errorf("duplicate group %q", service.Group)
 		}
+		if service.Controller != nil {
+			if strings.TrimSpace(service.Controller.RegisterFunc) == "" {
+				return fmt.Errorf("service %q controller.registerFunc is required", service.Service)
+			}
+			if len(service.Controller.Resources) == 0 {
+				return fmt.Errorf("service %q controller.resources must contain at least one resource", service.Service)
+			}
+			for _, resource := range service.Controller.Resources {
+				if strings.TrimSpace(resource.Kind) == "" {
+					return fmt.Errorf("service %q controller resource kind is required", service.Service)
+				}
+				if resource.MaxConcurrentReconciles != nil && *resource.MaxConcurrentReconciles < 1 {
+					return fmt.Errorf("service %q controller resource %q maxConcurrentReconciles must be greater than zero", service.Service, resource.Kind)
+				}
+				if strings.TrimSpace(resource.ServiceManager.Import) == "" {
+					return fmt.Errorf("service %q controller resource %q serviceManager.import is required", service.Service, resource.Kind)
+				}
+				if strings.TrimSpace(resource.ServiceManager.Constructor) == "" {
+					return fmt.Errorf("service %q controller resource %q serviceManager.constructor is required", service.Service, resource.Kind)
+				}
+				for _, rule := range resource.AdditionalRBAC {
+					if strings.TrimSpace(rule.Resources) == "" || strings.TrimSpace(rule.Verbs) == "" {
+						return fmt.Errorf("service %q controller resource %q additionalRBAC entries require resources and verbs", service.Service, resource.Kind)
+					}
+				}
+			}
+		}
 		servicesByName[service.Service] = struct{}{}
 		groupsByName[service.Group] = struct{}{}
 	}
@@ -178,4 +240,9 @@ func (s ServiceConfig) GroupDNSName(domain string) string {
 // IsControllerBacked reports whether the service expects shared-manager controller assets.
 func (s ServiceConfig) IsControllerBacked() bool {
 	return s.PackageProfile == PackageProfileControllerBacked
+}
+
+// HasControllerConfig reports whether controller generation metadata is configured for the service.
+func (s ServiceConfig) HasControllerConfig() bool {
+	return s.Controller != nil && len(s.Controller.Resources) > 0
 }

@@ -13,6 +13,7 @@ type PackageModel struct {
 	GroupDNSName  string
 	SampleOrder   int
 	Resources     []ResourceModel
+	Controller    ControllerOutputModel
 	PackageOutput PackageOutputModel
 }
 
@@ -21,6 +22,67 @@ type PackageOutputModel struct {
 	Generate bool
 	Metadata PackageMetadataModel
 	Install  InstallKustomizationModel
+}
+
+// ControllerOutputModel describes generated controller and manager registration files.
+type ControllerOutputModel struct {
+	Generate    bool
+	Controllers []ControllerFileModel
+	Registrar   ServiceRegistrarModel
+}
+
+// ControllerFileModel describes one generated controllers/<service>/<resource>_controller.go file.
+type ControllerFileModel struct {
+	PackageName             string
+	GroupDNSName            string
+	Version                 string
+	APIImportPath           string
+	APIImportAlias          string
+	Kind                    string
+	KindPlural              string
+	FileStem                string
+	ControllerType          string
+	LegacyFieldName         string
+	LegacyFieldType         string
+	AdditionalRBAC          []RBACRuleModel
+	MaxConcurrentReconciles *int
+	UseAliasedCoreImport    bool
+}
+
+// ServiceRegistrarModel describes one generated pkg/manager/services/<service>.go file.
+type ServiceRegistrarModel struct {
+	FileStem              string
+	RegisterFuncName      string
+	APIImportPath         string
+	APIImportAlias        string
+	NeedsAPIImport        bool
+	ControllerImportPath  string
+	ControllerImportAlias string
+	ManagerImports        []ImportModel
+	Resources             []ServiceRegistrarResourceModel
+}
+
+// ImportModel describes one Go import and its optional alias.
+type ImportModel struct {
+	Alias string
+	Path  string
+}
+
+// ServiceRegistrarResourceModel describes one controller registration block inside a service registrar file.
+type ServiceRegistrarResourceModel struct {
+	ControllerType            string
+	Kind                      string
+	ServiceManagerConstructor string
+	ControllerLogName         string
+	RecorderName              string
+	Webhook                   bool
+}
+
+// RBACRuleModel renders one additional kubebuilder RBAC marker line.
+type RBACRuleModel struct {
+	Groups    string
+	Resources string
+	Verbs     string
 }
 
 // PackageMetadataModel renders to packages/<group>/metadata.env.

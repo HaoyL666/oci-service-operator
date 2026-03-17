@@ -118,3 +118,40 @@ func TestSelectServices(t *testing.T) {
 		})
 	}
 }
+
+func TestLoadConfigValidatesControllerSettings(t *testing.T) {
+	t.Parallel()
+
+	configPath := filepath.Join(t.TempDir(), "services.yaml")
+	content := `
+schemaVersion: v1alpha1
+domain: oracle.com
+defaultVersion: v1beta1
+generatorEntrypoint: ./cmd/osok-api-generator
+packageProfiles:
+  controller-backed:
+    description: manual controllers
+services:
+  - service: database
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/database
+    group: database
+    packageProfile: controller-backed
+    controller:
+      registerFunc: Database
+      resources:
+        - kind: AutonomousDatabases
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/autonomousdatabases/adb
+`
+	if err := os.WriteFile(configPath, []byte(content), 0o644); err != nil {
+		t.Fatalf("write temp config: %v", err)
+	}
+
+	_, err := LoadConfig(configPath)
+	if err == nil {
+		t.Fatal("LoadConfig() unexpectedly succeeded")
+	}
+	if !strings.Contains(err.Error(), "serviceManager.constructor") {
+		t.Fatalf("LoadConfig() error = %v, want serviceManager.constructor failure", err)
+	}
+}

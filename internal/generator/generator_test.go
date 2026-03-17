@@ -271,6 +271,43 @@ func TestGenerateRendersPackageOutputsByProfile(t *testing.T) {
 	}
 }
 
+func TestGenerateRendersControllerOutputs(t *testing.T) {
+	t.Parallel()
+
+	cfg := &Config{
+		Domain:         "oracle.com",
+		DefaultVersion: "v1beta1",
+	}
+	service := testServiceConfig(PackageProfileControllerBacked)
+	pipeline := newTestGenerator(t)
+
+	outputRoot := t.TempDir()
+	if _, err := pipeline.Generate(context.Background(), cfg, []ServiceConfig{service}, Options{
+		OutputRoot: outputRoot,
+	}); err != nil {
+		t.Fatalf("Generate() error = %v", err)
+	}
+
+	controllerContent := readFile(t, filepath.Join(outputRoot, "controllers", "mysql", "mysqldbsystem_controller.go"))
+	assertContains(t, controllerContent, []string{
+		"type MySqlDBsystemReconciler struct",
+		"DisplayNameOld string",
+		`resources=secrets,verbs=get;list;watch;create;update;patch;delete`,
+		`resources=events,verbs=get;list;watch;create;update;patch;delete`,
+		"MaxConcurrentReconciles: 3",
+	})
+
+	registrarContent := readFile(t, filepath.Join(outputRoot, "pkg", "manager", "services", "mysql.go"))
+	assertContains(t, registrarContent, []string{
+		"func MySQL() manager.RegisterFunc",
+		"dbsystem.NewDbSystemServiceManager(",
+		`mgr.GetEventRecorderFor("MySqlDbSystem")`,
+	})
+	assertNotContains(t, registrarContent, []string{
+		"SetupWebhookWithManager",
+	})
+}
+
 func TestCurrentServiceParityMatchesCheckedInArtifacts(t *testing.T) {
 	cfgPath := filepath.Join(repoRoot(t), "internal", "generator", "config", "services.yaml")
 	cfg, err := LoadConfig(cfgPath)
@@ -328,6 +365,17 @@ func TestCurrentServiceParityMatchesCheckedInArtifacts(t *testing.T) {
 	for _, relativePath := range exactFiles {
 		assertExactFileMatch(t, filepath.Join(repoRoot(t), relativePath), filepath.Join(outputRoot, relativePath))
 	}
+
+	assertContains(t, readFile(t, filepath.Join(outputRoot, "pkg", "manager", "services", "database.go")), []string{
+		"SetupWebhookWithManager",
+		"func Database() manager.RegisterFunc",
+	})
+	assertNotContains(t, readFile(t, filepath.Join(outputRoot, "pkg", "manager", "services", "mysql.go")), []string{
+		"SetupWebhookWithManager",
+	})
+	assertContains(t, readFile(t, filepath.Join(outputRoot, "controllers", "mysql", "mysqldbsystem_controller.go")), []string{
+		"MaxConcurrentReconciles: 3",
+	})
 
 	assertResourceOrderContainsSubset(
 		t,
@@ -422,7 +470,7 @@ func testServiceConfig(profile string) ServiceConfig {
 		}
 	}
 
-	return ServiceConfig{
+	service := ServiceConfig{
 		Service:        "mysql",
 		SDKPackage:     "example.com/test/sdk",
 		Group:          "mysql",
@@ -432,6 +480,32 @@ func testServiceConfig(profile string) ServiceConfig {
 			ExistingKinds: []string{"MySqlDbSystem"},
 		},
 	}
+	if profile == PackageProfileControllerBacked {
+		maxConcurrentReconciles := 3
+		service.Controller = &ControllerConfig{
+			RegisterFunc: "MySQL",
+			Resources: []ControllerResourceConfig{
+				{
+					Kind:                    "MySqlDbSystem",
+					ControllerType:          "MySqlDBsystemReconciler",
+					LegacyFieldName:         "DisplayNameOld",
+					MaxConcurrentReconciles: &maxConcurrentReconciles,
+					AdditionalRBAC: []RBACRuleConfig{
+						{Groups: "", Resources: "secrets", Verbs: "get;list;watch;create;update;patch;delete"},
+						{Groups: "", Resources: "events", Verbs: "get;list;watch;create;update;patch;delete"},
+					},
+					ServiceManager: ServiceManagerConfig{
+						Import:      "github.com/oracle/oci-service-operator/pkg/servicemanager/mysql/dbsystem",
+						Alias:       "dbsystem",
+						Constructor: `dbsystem.NewDbSystemServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("MySqlDbSystem")})`,
+					},
+					ControllerLogName: "MySqlDbSystem",
+					RecorderName:      "MySqlDbSystem",
+				},
+			},
+		}
+	}
+	return service
 }
 
 func readFile(t *testing.T, path string) string {

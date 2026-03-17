@@ -7,6 +7,7 @@ package generator
 
 import (
 	"fmt"
+	"path"
 	"sort"
 	"strings"
 )
@@ -23,6 +24,10 @@ func buildPackageModel(cfg *Config, service ServiceConfig, discovered []Resource
 	}
 	resources = assignStatusTypeNames(resources)
 	resources = applyDefaultSamples(service, version, resources)
+	controllerOutput, err := buildControllerOutputModel(service, cfg.Domain, version, resources)
+	if err != nil {
+		return nil, err
+	}
 
 	return &PackageModel{
 		Service:       service,
@@ -31,6 +36,7 @@ func buildPackageModel(cfg *Config, service ServiceConfig, discovered []Resource
 		GroupDNSName:  service.GroupDNSName(cfg.Domain),
 		SampleOrder:   service.SampleOrder,
 		Resources:     resources,
+		Controller:    controllerOutput,
 		PackageOutput: buildPackageOutputModel(service, resources),
 	}, nil
 }
@@ -145,6 +151,79 @@ func buildPackageOutputModel(service ServiceConfig, resources []ResourceModel) P
 	return output
 }
 
+func buildControllerOutputModel(service ServiceConfig, domain string, version string, resources []ResourceModel) (ControllerOutputModel, error) {
+	if !service.HasControllerConfig() {
+		return ControllerOutputModel{}, nil
+	}
+
+	resourceByKind := make(map[string]ResourceModel, len(resources))
+	for _, resource := range resources {
+		resourceByKind[resource.Kind] = resource
+	}
+
+	output := ControllerOutputModel{
+		Generate: true,
+		Registrar: ServiceRegistrarModel{
+			FileStem:              service.Group,
+			RegisterFuncName:      service.Controller.RegisterFunc,
+			APIImportPath:         fmt.Sprintf("github.com/oracle/oci-service-operator/api/%s/%s", service.Group, version),
+			APIImportAlias:        service.Group + version,
+			ControllerImportPath:  fmt.Sprintf("github.com/oracle/oci-service-operator/controllers/%s", service.Group),
+			ControllerImportAlias: service.Group + "controllers",
+		},
+	}
+
+	managerImports := make(map[string]ImportModel, len(service.Controller.Resources))
+	for _, controllerResource := range service.Controller.Resources {
+		resource, ok := resourceByKind[controllerResource.Kind]
+		if !ok {
+			return ControllerOutputModel{}, fmt.Errorf("controller resource %q for service %q was not found in generated resources", controllerResource.Kind, service.Service)
+		}
+
+		output.Controllers = append(output.Controllers, ControllerFileModel{
+			PackageName:             service.Group,
+			GroupDNSName:            service.GroupDNSName(domain),
+			Version:                 version,
+			APIImportPath:           output.Registrar.APIImportPath,
+			APIImportAlias:          output.Registrar.APIImportAlias,
+			Kind:                    resource.Kind,
+			KindPlural:              resource.KindPlural,
+			FileStem:                resource.FileStem,
+			ControllerType:          controllerResource.controllerTypeOrDefault(),
+			LegacyFieldName:         controllerResource.LegacyFieldName,
+			LegacyFieldType:         controllerResource.legacyFieldTypeOrDefault(),
+			AdditionalRBAC:          convertRBACRules(controllerResource.AdditionalRBAC),
+			MaxConcurrentReconciles: controllerResource.MaxConcurrentReconciles,
+			UseAliasedCoreImport:    service.Group == "core",
+		})
+
+		output.Registrar.Resources = append(output.Registrar.Resources, ServiceRegistrarResourceModel{
+			ControllerType:            controllerResource.controllerTypeOrDefault(),
+			Kind:                      resource.Kind,
+			ServiceManagerConstructor: controllerResource.ServiceManager.Constructor,
+			ControllerLogName:         controllerResource.controllerLogNameOrDefault(),
+			RecorderName:              controllerResource.recorderNameOrDefault(),
+			Webhook:                   controllerResource.Webhook,
+		})
+		if controllerResource.Webhook {
+			output.Registrar.NeedsAPIImport = true
+		}
+
+		importModel := ImportModel{
+			Alias: importAliasOrDefault(controllerResource.ServiceManager.Import, controllerResource.ServiceManager.Alias),
+			Path:  controllerResource.ServiceManager.Import,
+		}
+		managerImports[importModel.Alias+"|"+importModel.Path] = importModel
+	}
+
+	sort.Slice(output.Controllers, func(i, j int) bool {
+		return output.Controllers[i].FileStem < output.Controllers[j].FileStem
+	})
+	output.Registrar.ManagerImports = mapsToSortedImports(managerImports)
+
+	return output, nil
+}
+
 func applyDefaultSamples(service ServiceConfig, version string, resources []ResourceModel) []ResourceModel {
 	updated := make([]ResourceModel, 0, len(resources))
 	for _, resource := range resources {
@@ -191,6 +270,20 @@ func appendUniqueStrings(existing []string, extras ...string) []string {
 	return existing
 }
 
+func mapsToSortedImports(imports map[string]ImportModel) []ImportModel {
+	ordered := make([]ImportModel, 0, len(imports))
+	for _, value := range imports {
+		ordered = append(ordered, value)
+	}
+	sort.Slice(ordered, func(i, j int) bool {
+		if ordered[i].Path == ordered[j].Path {
+			return ordered[i].Alias < ordered[j].Alias
+		}
+		return ordered[i].Path < ordered[j].Path
+	})
+	return ordered
+}
+
 func convertHelperTypes(overrides []TypeOverride) []TypeModel {
 	types := make([]TypeModel, 0, len(overrides))
 	for _, override := range overrides {
@@ -232,8 +325,58 @@ func convertPrintColumns(overrides []PrintColumnOverride) []PrintColumnModel {
 	return printColumns
 }
 
+func convertRBACRules(rules []RBACRuleConfig) []RBACRuleModel {
+	converted := make([]RBACRuleModel, 0, len(rules))
+	for _, rule := range rules {
+		converted = append(converted, RBACRuleModel{
+			Groups:    rule.Groups,
+			Resources: rule.Resources,
+			Verbs:     rule.Verbs,
+		})
+	}
+	return converted
+}
+
 func sampleFileName(group string, version string, fileStem string) string {
 	return fmt.Sprintf("%s_%s_%s.yaml", group, version, fileStem)
+}
+
+func (c ControllerResourceConfig) controllerTypeOrDefault() string {
+	if strings.TrimSpace(c.ControllerType) != "" {
+		return c.ControllerType
+	}
+	return c.Kind + "Reconciler"
+}
+
+func (c ControllerResourceConfig) legacyFieldTypeOrDefault() string {
+	if strings.TrimSpace(c.LegacyFieldName) == "" {
+		return ""
+	}
+	if strings.TrimSpace(c.LegacyFieldType) != "" {
+		return c.LegacyFieldType
+	}
+	return "string"
+}
+
+func (c ControllerResourceConfig) controllerLogNameOrDefault() string {
+	if strings.TrimSpace(c.ControllerLogName) != "" {
+		return c.ControllerLogName
+	}
+	return c.Kind
+}
+
+func (c ControllerResourceConfig) recorderNameOrDefault() string {
+	if strings.TrimSpace(c.RecorderName) != "" {
+		return c.RecorderName
+	}
+	return c.Kind
+}
+
+func importAliasOrDefault(importPath string, alias string) string {
+	if strings.TrimSpace(alias) != "" {
+		return alias
+	}
+	return path.Base(importPath)
 }
 
 func defaultStatusFields() []FieldModel {

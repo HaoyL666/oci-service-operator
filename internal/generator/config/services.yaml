@@ -56,6 +56,26 @@ services:
     parityFile: parity/database.yaml
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-database:latest
     managerOverlay: ../../../config/manager/database
+    controller:
+      registerFunc: Database
+      resources:
+        - kind: AutonomousDatabases
+          controllerType: AutonomousDatabasesReconciler
+          legacyFieldName: DbNameOld
+          controllerLogName: AutonomousDatabases
+          recorderName: AutonomousDatabases
+          webhook: true
+          additionalRBAC:
+            - groups: ""
+              resources: secrets
+              verbs: get;list;watch;create;update;patch;delete
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/autonomousdatabases/adb
+            alias: adb
+            constructor: 'adb.NewAdbServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("AutonomousDatabases")})'
     compatibility:
       existingKinds:
         - AutonomousDatabases
@@ -133,6 +153,26 @@ services:
     parityFile: parity/mysql.yaml
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-mysql:latest
     managerOverlay: ../../../config/manager/mysql
+    controller:
+      registerFunc: MySQL
+      resources:
+        - kind: MySqlDbSystem
+          controllerType: MySqlDBsystemReconciler
+          legacyFieldName: DisplayNameOld
+          maxConcurrentReconciles: 3
+          controllerLogName: MySqlDbSystem
+          recorderName: MySqlDbSystem
+          additionalRBAC:
+            - groups: ""
+              resources: secrets
+              verbs: get;list;watch;create;update;patch;delete
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/mysql/dbsystem
+            alias: dbsystem
+            constructor: 'dbsystem.NewDbSystemServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("MySqlDbSystem")})'
     compatibility:
       existingKinds:
         - MySqlDbSystem
@@ -196,6 +236,18 @@ services:
     parityFile: parity/streaming.yaml
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-streaming:latest
     managerOverlay: ../../../config/manager/streaming
+    controller:
+      registerFunc: Streaming
+      resources:
+        - kind: Stream
+          controllerType: StreamReconciler
+          legacyFieldName: StreamNameOld
+          controllerLogName: Streams
+          recorderName: Streams
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/streams
+            alias: streams
+            constructor: 'streams.NewStreamServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("Streams")}, deps.Metrics)'
     compatibility:
       existingKinds:
         - Stream
