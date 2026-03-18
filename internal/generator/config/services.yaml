@@ -299,7 +299,60 @@ services:
     group: ons
     version: v1beta1
     phase: eventing-messaging-and-observability
-    packageProfile: crd-only
+    packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-ons:latest
+    managerOverlay: ../../../config/manager/ons
+    controller:
+      registerFunc: ONS
+      resources:
+        - kind: Topic
+          controllerType: TopicReconciler
+          controllerLogName: Topic
+          recorderName: Topic
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/ons/topic
+            alias: topic
+            constructor: 'topic.NewTopicServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("Topic")}, deps.Metrics)'
+        - kind: Subscription
+          controllerType: SubscriptionReconciler
+          controllerLogName: Subscription
+          recorderName: Subscription
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/ons/subscription
+            alias: subscription
+            constructor: 'subscription.NewSubscriptionServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("Subscription")}, deps.Metrics)'
+        - kind: ConfirmSubscription
+          controllerType: ConfirmSubscriptionReconciler
+          controllerLogName: ConfirmSubscription
+          recorderName: ConfirmSubscription
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/ons/confirmsubscription
+            alias: confirmsubscription
+            constructor: 'confirmsubscription.NewConfirmSubscriptionServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("ConfirmSubscription")}, deps.Metrics)'
+        - kind: Unsubscription
+          controllerType: UnsubscriptionReconciler
+          controllerLogName: Unsubscription
+          recorderName: Unsubscription
+          additionalRBAC:
+            - groups: ""
+              resources: events
+              verbs: get;list;watch;create;update;patch;delete
+          serviceManager:
+            import: github.com/oracle/oci-service-operator/pkg/servicemanager/ons/unsubscription
+            alias: unsubscription
+            constructor: 'unsubscription.NewUnsubscriptionServiceManager(deps.Provider, deps.CredClient, deps.Scheme, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("service-manager").WithName("Unsubscription")}, deps.Metrics)'
 
   - service: psql
     sdkPackage: github.com/oracle/oci-go-sdk/v65/psql
