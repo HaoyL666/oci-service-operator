@@ -1,5 +1,22 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
+namespace: oci-service-operator-ons-system
+namePrefix: oci-service-operator-ons-
 resources:
 - generated/crd
+- generated/rbac
+- ../../../config/manager/ons
+- ../../../config/rbac/role_binding.yaml
+- ../../../config/rbac/leader_election_role.yaml
+- ../../../config/rbac/leader_election_role_binding.yaml
+- ../../../config/rbac/confirmsubscription_editor_role.yaml
+- ../../../config/rbac/confirmsubscription_viewer_role.yaml
+- ../../../config/rbac/subscription_editor_role.yaml
+- ../../../config/rbac/subscription_viewer_role.yaml
+- ../../../config/rbac/topic_editor_role.yaml
+- ../../../config/rbac/topic_viewer_role.yaml
+- ../../../config/rbac/unsubscription_editor_role.yaml
+- ../../../config/rbac/unsubscription_viewer_role.yaml
+
+patches:
+  - path: ../../../config/default/manager_config_patch.yaml

@@ -753,14 +753,19 @@ func (r *{{ .ControllerType }}) Reconcile(ctx context.Context, req ctrl.Request)
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *{{ .ControllerType }}) SetupWithManager(mgr ctrl.Manager) error {
+{{- if .MaxConcurrentReconciles }}
 	builder := ctrl.NewControllerManagedBy(mgr).
 		For(&{{ .APIImportAlias }}.{{ .Kind }}{})
-{{- if .MaxConcurrentReconciles }}
 	builder = builder.WithOptions(controller.Options{MaxConcurrentReconciles: {{ derefInt .MaxConcurrentReconciles }}})
-{{- end }}
 	return builder.
 		WithEventFilter(predicate.GenerationChangedPredicate{}).
 		Complete(r)
+{{- else }}
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&{{ .APIImportAlias }}.{{ .Kind }}{}).
+		WithEventFilter(predicate.GenerationChangedPredicate{}).
+		Complete(r)
+{{- end }}
 }
 `
 
