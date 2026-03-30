@@ -1808,6 +1808,48 @@ func TestGenerateControllerBackedPackagesWithoutParityDoNotReferenceEditorViewer
 	})
 }
 
+func TestGenerateRendersServiceSpecificPackageOverrides(t *testing.T) {
+	t.Parallel()
+
+	cfg := &Config{
+		Domain:         "oracle.com",
+		DefaultVersion: "v1beta1",
+	}
+	service := testServiceConfig(PackageProfileControllerBacked)
+	service.DefaultControllerImage = "iad.ocir.io/oracle/oci-service-operator-mysql:latest"
+	service.ManagerOverlay = "../../../config/manager/mysql"
+	service.Parity.Package.Patches = []PatchOverride{
+		{
+			Path:   "../../../config/default/manager_webhook_patch.yaml",
+			Target: "Deployment",
+		},
+		{
+			Path: "../../../config/default/webhookcainjection_patch.yaml",
+		},
+	}
+	pipeline := newTestGenerator(t)
+
+	outputRoot := t.TempDir()
+	if _, err := pipeline.Generate(context.Background(), cfg, []ServiceConfig{service}, Options{
+		OutputRoot: outputRoot,
+	}); err != nil {
+		t.Fatalf("Generate() error = %v", err)
+	}
+
+	metadataContent := readFile(t, filepath.Join(outputRoot, "packages", "mysql", "metadata.env"))
+	assertContains(t, metadataContent, []string{
+		"DEFAULT_CONTROLLER_IMAGE=iad.ocir.io/oracle/oci-service-operator-mysql:latest",
+	})
+
+	installContent := readFile(t, filepath.Join(outputRoot, "packages", "mysql", "install", "kustomization.yaml"))
+	assertContains(t, installContent, []string{
+		"- ../../../config/manager/mysql",
+		"- path: ../../../config/default/manager_webhook_patch.yaml",
+		"- path: ../../../config/default/webhookcainjection_patch.yaml",
+		"- path: ../../../config/default/manager_config_patch.yaml",
+	})
+}
+
 func TestGeneratedControllerCompiles(t *testing.T) {
 	cfg := &Config{
 		Domain:         "oracle.com",

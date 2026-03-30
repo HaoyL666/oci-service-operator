@@ -79,19 +79,21 @@ type ServiceManagerGenerationOverride struct {
 
 // ServiceConfig identifies one OCI SDK service and its OSOK output group.
 type ServiceConfig struct {
-	Service        string              `yaml:"service"`
-	SDKPackage     string              `yaml:"sdkPackage"`
-	Group          string              `yaml:"group"`
-	Version        string              `yaml:"version"`
-	Phase          string              `yaml:"phase"`
-	SampleOrder    int                 `yaml:"sampleOrder,omitempty"`
-	PackageProfile string              `yaml:"packageProfile"`
-	FormalSpec     string              `yaml:"formalSpec,omitempty"`
-	ParityFile     string              `yaml:"parityFile,omitempty"`
-	Compatibility  CompatibilityConfig `yaml:"compatibility,omitempty"`
-	ObservedState  ObservedStateConfig `yaml:"observedState,omitempty"`
-	Generation     GenerationConfig    `yaml:"generation,omitempty"`
-	Parity         *ParityConfig       `yaml:"-"`
+	Service                string              `yaml:"service"`
+	SDKPackage             string              `yaml:"sdkPackage"`
+	Group                  string              `yaml:"group"`
+	Version                string              `yaml:"version"`
+	Phase                  string              `yaml:"phase"`
+	SampleOrder            int                 `yaml:"sampleOrder,omitempty"`
+	PackageProfile         string              `yaml:"packageProfile"`
+	FormalSpec             string              `yaml:"formalSpec,omitempty"`
+	ParityFile             string              `yaml:"parityFile,omitempty"`
+	Compatibility          CompatibilityConfig `yaml:"compatibility,omitempty"`
+	DefaultControllerImage string              `yaml:"defaultControllerImage,omitempty"`
+	ManagerOverlay         string              `yaml:"managerOverlay,omitempty"`
+	ObservedState          ObservedStateConfig `yaml:"observedState,omitempty"`
+	Generation             GenerationConfig    `yaml:"generation,omitempty"`
+	Parity                 *ParityConfig       `yaml:"-"`
 }
 
 // CompatibilityConfig holds explicit backwards-compatibility hints for published kinds.
