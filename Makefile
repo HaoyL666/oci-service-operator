@@ -311,11 +311,11 @@ build-service: generate fmt vet ## Build a service-scoped manager binary.
 
 docker-build-service: test bundle ## Build docker image for SERVICE using service manager entrypoint.
 	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
-	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) -t $(SERVICE_IMG) .
+	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) --build-arg CGO_ENABLED=0 --build-arg GOEXPERIMENT= -t $(SERVICE_IMG) .
 
 docker-build-service-raw: ## Build service image without running tests/bundle dependencies.
 	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
-	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) -t $(SERVICE_IMG) .
+	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) --build-arg CGO_ENABLED=0 --build-arg GOEXPERIMENT= -t $(SERVICE_IMG) .
 
 docker-push: ## Push docker image with the manager.
 	docker push ${IMG}

@@ -3,10 +3,8 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
 #
 
-# Build the manager binary on the native builder platform and cross-compile the target binary.
-ARG BUILDPLATFORM
-ARG TARGETPLATFORM
-FROM --platform=$BUILDPLATFORM golang:1.25 AS builder
+# Build the manager binary and cross-compile the target binary.
+FROM golang:1.25 AS builder
 
 WORKDIR /workspace
 COPY go.mod go.sum ./
