@@ -10,7 +10,6 @@ import (
 	"os"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
-	"github.com/oracle/oci-service-operator/go_ensurefips"
 	"github.com/oracle/oci-service-operator/internal/registrations"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 
@@ -50,9 +49,6 @@ func init() {
 }
 
 func main() {
-	// Check for fips compliance
-	go_ensurefips.Compliant()
-
 	// Allow OCI go sdk to use instance metadata service for region lookup
 	common.EnableInstanceMetadataServiceLookup()
 
