@@ -60,6 +60,45 @@ func TestAllExposesManualWebhooksSeparately(t *testing.T) {
 	if webhooks[0].Name != "AutonomousDatabases" {
 		t.Fatalf("ManualWebhooks()[0].Name = %q, want %q", webhooks[0].Name, "AutonomousDatabases")
 	}
+	if webhooks[0].Group != "database" {
+		t.Fatalf("ManualWebhooks()[0].Group = %q, want %q", webhooks[0].Group, "database")
+	}
+}
+
+func TestByGroupReturnsRegistrationWhenPresent(t *testing.T) {
+	t.Parallel()
+
+	registration, ok := ByGroup("mysql")
+	if !ok {
+		t.Fatal("ByGroup(mysql) = !ok, want ok")
+	}
+	if registration.Group != "mysql" {
+		t.Fatalf("ByGroup(mysql).Group = %q, want %q", registration.Group, "mysql")
+	}
+}
+
+func TestByGroupReturnsFalseWhenMissing(t *testing.T) {
+	t.Parallel()
+
+	if _, ok := ByGroup("not-a-group"); ok {
+		t.Fatal("ByGroup(not-a-group) = ok, want !ok")
+	}
+}
+
+func TestManualWebhooksByGroupFiltersToMatchingGroup(t *testing.T) {
+	t.Parallel()
+
+	webhooks := ManualWebhooksByGroup("database")
+	if len(webhooks) != 1 {
+		t.Fatalf("len(ManualWebhooksByGroup(database)) = %d, want 1", len(webhooks))
+	}
+	if webhooks[0].Name != "AutonomousDatabases" {
+		t.Fatalf("ManualWebhooksByGroup(database)[0].Name = %q, want %q", webhooks[0].Name, "AutonomousDatabases")
+	}
+
+	if other := ManualWebhooksByGroup("mysql"); len(other) != 0 {
+		t.Fatalf("len(ManualWebhooksByGroup(mysql)) = %d, want 0", len(other))
+	}
 }
 
 func TestNewBaseReconcilerUsesSharedRuntimeDeps(t *testing.T) {
