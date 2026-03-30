@@ -1877,7 +1877,7 @@ func TestGenerateRendersManagerOutputsForControllerBackedService(t *testing.T) {
 
 	controllerConfig := readFile(t, filepath.Join(outputRoot, "config", "manager", "mysql", "controller_manager_config.yaml"))
 	assertContains(t, controllerConfig, []string{
-		`kind: ControllerManagerConfig`,
+		`kind: ControllerManagerConfiguration`,
 		`resourceName: 40558063.oci.mysql`,
 	})
 }

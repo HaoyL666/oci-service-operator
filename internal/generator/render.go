@@ -1488,7 +1488,7 @@ const controllerManagerConfigTemplate = `#
 # Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
 #
 apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
-kind: ControllerManagerConfig
+kind: ControllerManagerConfiguration
 health:
   healthProbeBindAddress: :8081
 metrics:
