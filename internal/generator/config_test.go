@@ -259,8 +259,8 @@ services:
 	if got := mysqlService.RegistrationGenerationStrategy(); got != GenerationStrategyGenerated {
 		t.Fatalf("mysql registration strategy = %q, want %q", got, GenerationStrategyGenerated)
 	}
-	if got := mysqlService.WebhookGenerationStrategy(); got != GenerationStrategyManual {
-		t.Fatalf("mysql webhook strategy = %q, want %q", got, GenerationStrategyManual)
+	if got := mysqlService.WebhookGenerationStrategy(); got != GenerationStrategyNone {
+		t.Fatalf("mysql webhook strategy = %q, want %q", got, GenerationStrategyNone)
 	}
 	if len(mysqlService.Generation.Resources) != 1 {
 		t.Fatalf("len(mysql generation resources) = %d, want 1", len(mysqlService.Generation.Resources))
@@ -626,7 +626,20 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 		t.Fatal("expected database, mysql, streaming, and core services in services.yaml")
 	}
 
-	for _, service := range []*ServiceConfig{databaseService, mysqlService, streamingService} {
+	if got := databaseService.ControllerGenerationStrategy(); got != GenerationStrategyGenerated {
+		t.Fatalf("%s controller strategy = %q, want %q", databaseService.Service, got, GenerationStrategyGenerated)
+	}
+	if got := databaseService.ServiceManagerGenerationStrategy(); got != GenerationStrategyGenerated {
+		t.Fatalf("%s service-manager strategy = %q, want %q", databaseService.Service, got, GenerationStrategyGenerated)
+	}
+	if got := databaseService.RegistrationGenerationStrategy(); got != GenerationStrategyGenerated {
+		t.Fatalf("%s registration strategy = %q, want %q", databaseService.Service, got, GenerationStrategyGenerated)
+	}
+	if got := databaseService.WebhookGenerationStrategy(); got != GenerationStrategyManual {
+		t.Fatalf("%s webhook strategy = %q, want %q", databaseService.Service, got, GenerationStrategyManual)
+	}
+
+	for _, service := range []*ServiceConfig{mysqlService, streamingService} {
 		if got := service.ControllerGenerationStrategy(); got != GenerationStrategyGenerated {
 			t.Fatalf("%s controller strategy = %q, want %q", service.Service, got, GenerationStrategyGenerated)
 		}
@@ -636,8 +649,8 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 		if got := service.RegistrationGenerationStrategy(); got != GenerationStrategyGenerated {
 			t.Fatalf("%s registration strategy = %q, want %q", service.Service, got, GenerationStrategyGenerated)
 		}
-		if got := service.WebhookGenerationStrategy(); got != GenerationStrategyManual {
-			t.Fatalf("%s webhook strategy = %q, want %q", service.Service, got, GenerationStrategyManual)
+		if got := service.WebhookGenerationStrategy(); got != GenerationStrategyNone {
+			t.Fatalf("%s webhook strategy = %q, want %q", service.Service, got, GenerationStrategyNone)
 		}
 	}
 
