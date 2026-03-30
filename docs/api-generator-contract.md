@@ -225,7 +225,9 @@ one-off file edit under `api/`.
 - `PACKAGE_NAMESPACE=oci-service-operator-<group>-system`
 - `PACKAGE_NAME_PREFIX=oci-service-operator-<group>-`
 - `CRD_PATHS=./api/<group>/...`
-- `DEFAULT_CONTROLLER_IMAGE=iad.ocir.io/oracle/oci-service-operator:latest`
+- `DEFAULT_CONTROLLER_IMAGE` defaults to
+  `iad.ocir.io/oracle/oci-service-operator:latest` and may be overridden per
+  service in `services.yaml`
 
 `RBAC_PATHS` depends on the package profile:
 
@@ -251,9 +253,12 @@ Generated package scaffolding must include:
 - `packages/<group>/install/kustomization.yaml` referencing:
   - `generated/crd`
   - `generated/rbac`
-  - `../../../config/manager`
+  - the service-specific manager overlay from `services.yaml`
+    `managerOverlay` (for example `../../../config/manager/mysql`)
   - shared leader-election and role-binding manifests
   - group-specific editor and viewer roles when they exist
+  - parity package extras and patches when the service parity config declares
+    them, such as webhook and cert-manager resources for `database`
 
 ### `crd-only`
 
@@ -282,6 +287,16 @@ Generated package scaffolding must include:
 - `make generated-runtime-gate` uses that source-of-truth config by default. If
   future rollout work needs a pre-promotion snapshot, point
   `GENERATED_RUNTIME_CONFIG` at an alternate config explicitly.
+
+### Distribution note
+
+- Per-service controller-backed packages can now be distributed either as
+  rendered manifests (`make package-install GROUP=<group>`) or as direct OLM
+  bundles (`make package-bundle-olm` / `make publish-service-olm`).
+- The monolithic operator still supports direct manifest install, but the
+  all-services OLM bundle currently exceeds the OLM bundle size limit and
+  should not be treated as a supported publication target without additional
+  size reduction work.
 
 ### Formal onboarding and promotion flow
 
