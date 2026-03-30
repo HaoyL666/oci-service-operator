@@ -660,8 +660,8 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	if len(mysqlService.Generation.Resources) != 1 {
 		t.Fatalf("mysql generation overrides = %d, want 1", len(mysqlService.Generation.Resources))
 	}
-	if len(streamingService.Generation.Resources) != 5 {
-		t.Fatalf("streaming generation overrides = %d, want 5", len(streamingService.Generation.Resources))
+	if len(streamingService.Generation.Resources) != 7 {
+		t.Fatalf("streaming generation overrides = %d, want 7", len(streamingService.Generation.Resources))
 	}
 
 	if !slices.Equal(
@@ -794,7 +794,7 @@ func TestCheckedInConfigOptsOutEndpointBasedGeneratedRuntimeResources(t *testing
 
 	wantKinds := map[string][]string{
 		"keymanagement": {"Key", "KeyVersion", "ReplicationStatus", "WrappingKey"},
-		"streaming":     {"Cursor", "Group", "GroupCursor", "Message"},
+		"streaming":     {"ConnectHarness", "Cursor", "Group", "GroupCursor", "Message", "StreamPool"},
 	}
 
 	for serviceName, kinds := range wantKinds {

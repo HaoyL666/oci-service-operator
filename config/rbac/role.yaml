@@ -1818,8 +1818,6 @@ rules:
 - apiGroups:
   - streaming.oracle.com
   resources:
-  - connectharnesss
-  - streampools
   - streams
   verbs:
   - create
@@ -1832,16 +1830,12 @@ rules:
 - apiGroups:
   - streaming.oracle.com
   resources:
-  - connectharnesss/finalizers
-  - streampools/finalizers
   - streams/finalizers
   verbs:
   - update
 - apiGroups:
   - streaming.oracle.com
   resources:
-  - connectharnesss/status
-  - streampools/status
   - streams/status
   verbs:
   - get
