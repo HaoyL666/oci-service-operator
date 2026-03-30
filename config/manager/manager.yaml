@@ -72,6 +72,12 @@ spec:
                 name: ocicredentials
                 key: user
                 optional: true
+          - name: AUTH_TYPE
+            valueFrom:
+              secretKeyRef:
+                name: ocicredentials
+                key: auth_type
+                optional: true
           - name: TENANCY
             valueFrom:
               secretKeyRef:
@@ -102,16 +108,35 @@ spec:
                 name: ocicredentials
                 key: privatekey
                 optional: true
+          - name: OCI_CONFIG_FILE_PATH
+            valueFrom:
+              secretKeyRef:
+                name: ocicredentials
+                key: config_file_path
+                optional: true
+          - name: OCI_CONFIG_PROFILE
+            valueFrom:
+              secretKeyRef:
+                name: ocicredentials
+                key: config_file_profile
+                optional: true
           - name: USEINSTANCEPRINCIPAL
             valueFrom:
               secretKeyRef:
                 name: osokconfig
                 key: useinstanceprincipal
         volumeMounts:
+          - name: oci-credentials
+            mountPath: /etc/oci
+            readOnly: true
           - name: pki
             mountPath: /etc/pki
             readOnly: true
       volumes:
+        - name: oci-credentials
+          secret:
+            secretName: ocicredentials
+            optional: true
         - name: pki
           hostPath:
             path: /etc/pki
