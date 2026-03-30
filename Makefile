@@ -44,6 +44,12 @@ OPERATOR_SDK_VERSION ?= v1.37.0
 
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
+SERVICE ?=
+TARGETOS ?= linux
+TARGETARCH ?= amd64
+MANAGER_BIN ?= bin/manager
+CONTROLLER_MAIN ?= main.go
+SERVICE_IMG ?= $(IMAGE_TAG_BASE)-$(SERVICE):$(VERSION)
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:generateEmbeddedObjectMeta=true,allowDangerousTypes=true"
 GENERATED_CRD_ARTIFACTS ?= config/crd/bases/*.yaml
@@ -287,13 +293,28 @@ docker-build-sample: ## Build docker image with the manager.
 ##@ Build
 
 build: generate fmt vet ## Build manager binary.
-	go build -o bin/manager main.go
+	go build -o $(MANAGER_BIN) $(CONTROLLER_MAIN)
 
 run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./main.go
 
 docker-build: test bundle ## Build docker image with the manager and CRDs
-	docker build -t ${IMG} .
+	docker build --build-arg CONTROLLER_MAIN=$(CONTROLLER_MAIN) -t ${IMG} .
+
+docker-build-raw: ## Build docker image without running tests/bundle dependencies.
+	docker build --build-arg CONTROLLER_MAIN=$(CONTROLLER_MAIN) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) -t ${IMG} .
+
+build-service: generate fmt vet ## Build a service-scoped manager binary.
+	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
+	go build -o bin/manager-$(SERVICE) ./cmd/manager/$(SERVICE)
+
+docker-build-service: test bundle ## Build docker image for SERVICE using service manager entrypoint.
+	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
+	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) -t $(SERVICE_IMG) .
+
+docker-build-service-raw: ## Build service image without running tests/bundle dependencies.
+	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
+	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) -t $(SERVICE_IMG) .
 
 docker-push: ## Push docker image with the manager.
 	docker push ${IMG}
