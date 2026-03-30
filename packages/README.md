@@ -1,10 +1,9 @@
 This directory contains per-group packaging scaffolding.
 
-Each subdirectory under `packages/` stages a future package install overlay for one
-service-owned API group while the shared monolith remains authoritative.
-Runtime rollout for controllers, service managers, and generated registrations is
-declared in `internal/generator/config/services.yaml` under each service's
-`generation` block.
+Each subdirectory under `packages/` is an installable unit for one
+service-owned API group. Runtime rollout for controllers, service managers,
+generated registrations, default controller images, and manager overlays is
+declared in `internal/generator/config/services.yaml`.
 
 Expected layout:
 
@@ -36,6 +35,11 @@ Current workflow:
    RBAC into `packages/<group>/install/generated/`.
 4. `make package-install GROUP=<group>` renders a single install YAML into
    `dist/packages/<group>/install.yaml` for either package profile.
+5. `make package-bundle-olm GROUP=<group> VERSION=<tag> CONTROLLER_IMG=<image>`
+   generates an OLM bundle for one service package.
+6. `make publish-service-olm GROUP=<group> PUBLISH_REGISTRY=<registry> PUBLISH_VERSION=<tag>`
+   builds and pushes the controller image, generates the matching bundle, and
+   builds and pushes the bundle image for direct OLM installation.
 
 Compatibility aliases:
 
@@ -53,8 +57,7 @@ Runtime rollout defaults:
 Package profile behavior:
 
 - `controller-backed` overlays include generated CRDs, generated controller
-  RBAC, and the shared manager install overlay, regardless of whether the
-  runtime pieces are currently manual or generated.
+  RBAC, and a service-specific manager overlay under `config/manager/<group>/`.
 - `crd-only` overlays render only generated CRDs until controller support
   exists for that group.
 
@@ -70,15 +73,16 @@ Package profile transitions:
   pre-promotion runtime snapshot, use `GENERATED_RUNTIME_CONFIG` to point the
   runtime gate at an alternate config.
 
-Out of scope for this scaffold:
+Current distribution posture:
 
-- Per-group OLM bundles
-- Per-group bundle images
-- Per-group catalogs
-- Webhook generation
-- Direct `main.go` edits
-
-Those remain explicit follow-on work after the shared monolith package layout is proven.
+- Per-service direct manifest install is supported via `make package-install`.
+- Per-service OLM bundle generation and direct bundle install are supported.
+- Monolith direct manifest install remains supported.
+- Monolith OLM bundle publication is currently not recommended because the
+  generated all-services bundle exceeds the OLM bundle size limit.
+- Per-group catalogs remain out of scope.
+- Webhook generation remains out of scope.
+- Direct `main.go` edits remain out of scope.
 
 For the full generator-owned package and API contract, see
 `docs/api-generator-contract.md`.

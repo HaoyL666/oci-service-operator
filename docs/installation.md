@@ -167,6 +167,85 @@ Note: the <OCI_SERVICE_1>, <OCI_SERVICE_2> represents in the OCI Services like "
 
 ### Deploy OSOK
 
+There are now two supported install paths:
+
+- per-service controller install
+- monolithic controller install
+
+For new installs, prefer the per-service path when only a subset of OCI
+services is needed.
+
+### Deploy A Per-Service Controller
+
+Each controller-backed service package can be distributed either as a rendered
+manifest or as a direct OLM bundle.
+
+#### Per-Service Direct Bundle Install
+
+Prerequisites:
+
+- OLM installed in the cluster
+- `cert-manager` installed when the service package includes webhook and
+  certificate resources, such as `database`
+- registry access to both the controller image and the bundle image
+
+Install a per-service bundle:
+
+```bash
+$ operator-sdk run bundle <PER_SERVICE_BUNDLE_IMAGE>
+```
+
+Example for the database controller:
+
+```bash
+$ operator-sdk run bundle iad.ocir.io/<registry>/oci-service-operator-database-bundle:<VERSION>
+```
+
+Upgrade a per-service bundle:
+
+```bash
+$ operator-sdk run bundle-upgrade <PER_SERVICE_BUNDLE_IMAGE>
+```
+
+#### Per-Service Direct Manifest Install
+
+If OLM is not available or a direct manifest install is preferred, render the
+service package and apply the resulting YAML:
+
+```bash
+$ make package-install GROUP=<SERVICE> CONTROLLER_IMG=<CONTROLLER_IMAGE>
+$ kubectl apply -f dist/packages/<SERVICE>/install.yaml
+```
+
+### Deploy The Monolithic Controller
+
+The monolithic controller can still be installed with the shared manifest path.
+This remains the recommended path for the all-services operator.
+
+#### Monolithic Direct Manifest Install
+
+Build or publish the monolithic controller image, then deploy the shared
+manifest path:
+
+```bash
+$ make deploy IMG=<MONOLITH_CONTROLLER_IMAGE>
+```
+
+or render and apply the manifest flow used by the shared manager install path.
+
+#### Monolithic OLM Bundle Status
+
+The monolithic OLM bundle currently exceeds the OLM bundle size limit, so
+monolithic OLM publication is not a supported distribution path without further
+bundle size reduction work.
+
+### Legacy OLM Monolith Bundle Flow
+
+Historically the OCI Service Operator for Kubernetes was packaged as an OLM
+bundle for the full monolithic controller. That flow is shown below for
+reference, but the current all-services bundle is too large for reliable OLM
+publication.
+
 The OCI Service Operator for Kubernetes is packaged as Operator Lifecycle Manager (OLM) Bundle for making it easy to install in Kubernetes Clusters. The bundle can be downloaded as docker image using below command.
 
 ```bash
