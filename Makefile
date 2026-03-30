@@ -65,6 +65,7 @@ PACKAGE_DIR ?= $(PACKAGES_DIR)/$(GROUP)
 PACKAGE_OUTPUT_DIR ?= dist/packages/$(GROUP)
 PACKAGE_SCRIPT ?= hack/package.sh
 PACKAGE_OLM_SCRIPT ?= hack/package-olm.sh
+MONOLITH_SCRIPT ?= hack/monolith.sh
 CONTROLLER_IMG ?=
 GENERATOR_ENTRYPOINT ?= ./cmd/generator
 GENERATOR_CONFIG ?=
@@ -304,10 +305,10 @@ run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./main.go
 
 docker-build: test bundle ## Build docker image with the manager and CRDs
-	docker build --build-arg CONTROLLER_MAIN=$(CONTROLLER_MAIN) -t ${IMG} .
+	docker build --build-arg CONTROLLER_MAIN=$(CONTROLLER_MAIN) --build-arg CGO_ENABLED=0 --build-arg GOEXPERIMENT= -t ${IMG} .
 
 docker-build-raw: ## Build docker image without running tests/bundle dependencies.
-	docker build --build-arg CONTROLLER_MAIN=$(CONTROLLER_MAIN) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) -t ${IMG} .
+	docker build --build-arg CONTROLLER_MAIN=$(CONTROLLER_MAIN) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) --build-arg CGO_ENABLED=0 --build-arg GOEXPERIMENT= -t ${IMG} .
 
 build-service: generate fmt vet ## Build a service-scoped manager binary.
 	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
@@ -337,6 +338,10 @@ package-install: controller-gen kustomize ## Render a single install YAML for GR
 	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
 	@CONTROLLER_GEN_RUNNER="$(CONTROLLER_GEN_RUNNER)" CONTROLLER_GEN="$(CONTROLLER_GEN)" KUSTOMIZE="$(KUSTOMIZE)" CONTROLLER_IMG="$(CONTROLLER_IMG)" OUT="$(PACKAGE_OUTPUT_DIR)/install.yaml" \
 		"$(PACKAGE_SCRIPT)" render "$(GROUP)"
+
+monolith-install: kustomize ## Render the monolithic install YAML into dist/monolith/install.yaml.
+	@KUSTOMIZE="$(KUSTOMIZE)" CONTROLLER_IMG="$(CONTROLLER_IMG)" OUT="dist/monolith/install.yaml" \
+		"$(BASH)" "$(PWD)/$(MONOLITH_SCRIPT)" render
 
 ##@ Deployment
 
@@ -455,6 +460,19 @@ publish-monolith-olm: operator-sdk ## Build/push the monolithic controller image
 	echo ">>> Pushing $$bundle_image"; \
 	$(MAKE) --no-print-directory bundle-push BUNDLE_IMG="$$bundle_image"; \
 	echo ">>> Bundle image ready: $$bundle_image"
+
+publish-monolith: kustomize ## Build, push, and render the monolithic controller manifest.
+	@[ -n "$(PUBLISH_VERSION)" ] || { echo "PUBLISH_VERSION must be set (image tag)"; exit 1; }
+	@[ -n "$(PUBLISH_REGISTRY)" ] || { echo "PUBLISH_REGISTRY must be set (e.g. iad.ocir.io/org)"; exit 1; }
+	@set -euo pipefail; \
+	image="$(PUBLISH_REGISTRY)/oci-service-operator:$(PUBLISH_VERSION)"; \
+	echo ">>> Building $$image"; \
+	$(MAKE) --no-print-directory docker-build-raw IMG="$$image" CONTROLLER_MAIN="main.go"; \
+	echo ">>> Pushing $$image"; \
+	$(MAKE) --no-print-directory docker-push IMG="$$image"; \
+	output="dist/monolith/install-$(PUBLISH_VERSION).yaml"; \
+	KUSTOMIZE="$(KUSTOMIZE)" CONTROLLER_IMG="$$image" OUT="$$output" "$(BASH)" "$(PWD)/$(MONOLITH_SCRIPT)" render; \
+	echo ">>> Wrote $$output"
 
 install-service-olm: operator-sdk ## Install a per-service bundle into a cluster with OLM. Use GROUP=<service>.
 	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
