@@ -20,6 +20,8 @@ services:
     version: v1beta1
     phase: data-and-storage
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-artifacts:latest
+    managerOverlay: ../../../config/manager/artifacts
     generation:
       controller:
         strategy: generated
@@ -36,6 +38,8 @@ services:
     version: v1beta1
     phase: security-and-identity
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-certificates:latest
+    managerOverlay: ../../../config/manager/certificates
     generation:
       controller:
         strategy: generated
@@ -52,6 +56,8 @@ services:
     version: v1beta1
     phase: security-and-identity
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-certificatesmanagement:latest
+    managerOverlay: ../../../config/manager/certificatesmanagement
     generation:
       controller:
         strategy: generated
@@ -68,6 +74,8 @@ services:
     version: v1beta1
     phase: networking-and-infrastructure
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-containerengine:latest
+    managerOverlay: ../../../config/manager/containerengine
     generation:
       controller:
         strategy: generated
@@ -88,6 +96,8 @@ services:
     version: v1beta1
     phase: networking-and-infrastructure
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-core:latest
+    managerOverlay: ../../../config/manager/core
     generation:
       controller:
         strategy: generated
@@ -146,6 +156,8 @@ services:
     sampleOrder: 10
     packageProfile: controller-backed
     parityFile: parity/database.yaml
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-database:latest
+    managerOverlay: ../../../config/manager/database
     compatibility:
       existingKinds:
         - AutonomousDatabases
@@ -175,6 +187,8 @@ services:
     version: v1beta1
     phase: networking-and-infrastructure
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-dns:latest
+    managerOverlay: ../../../config/manager/dns
     generation:
       controller:
         strategy: generated
@@ -199,6 +213,8 @@ services:
     version: v1beta1
     phase: eventing-messaging-and-observability
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-events:latest
+    managerOverlay: ../../../config/manager/events
     generation:
       controller:
         strategy: generated
@@ -215,6 +231,8 @@ services:
     version: v1beta1
     phase: eventing-messaging-and-observability
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-functions:latest
+    managerOverlay: ../../../config/manager/functions
     generation:
       controller:
         strategy: generated
@@ -231,6 +249,8 @@ services:
     version: v1beta1
     phase: security-and-identity
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-identity:latest
+    managerOverlay: ../../../config/manager/identity
     generation:
       controller:
         strategy: generated
@@ -273,6 +293,8 @@ services:
     version: v1beta1
     phase: security-and-identity
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-keymanagement:latest
+    managerOverlay: ../../../config/manager/keymanagement
     generation:
       controller:
         strategy: generated
@@ -310,6 +332,8 @@ services:
     version: v1beta1
     phase: eventing-messaging-and-observability
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-limits:latest
+    managerOverlay: ../../../config/manager/limits
     generation:
       controller:
         strategy: generated
@@ -326,6 +350,8 @@ services:
     version: v1beta1
     phase: networking-and-infrastructure
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-loadbalancer:latest
+    managerOverlay: ../../../config/manager/loadbalancer
     generation:
       controller:
         strategy: generated
@@ -342,6 +368,8 @@ services:
     version: v1beta1
     phase: eventing-messaging-and-observability
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-logging:latest
+    managerOverlay: ../../../config/manager/logging
     generation:
       controller:
         strategy: generated
@@ -358,6 +386,8 @@ services:
     version: v1beta1
     phase: eventing-messaging-and-observability
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-monitoring:latest
+    managerOverlay: ../../../config/manager/monitoring
     generation:
       controller:
         strategy: generated
@@ -380,6 +410,8 @@ services:
     sampleOrder: 30
     packageProfile: controller-backed
     parityFile: parity/mysql.yaml
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-mysql:latest
+    managerOverlay: ../../../config/manager/mysql
     compatibility:
       existingKinds:
         - MySqlDbSystem
@@ -391,7 +423,7 @@ services:
       registration:
         strategy: generated
       webhooks:
-        strategy: manual
+        strategy: none
       resources:
         - kind: MySqlDbSystem
           controller:
@@ -408,6 +440,8 @@ services:
     version: v1beta1
     phase: networking-and-infrastructure
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-networkloadbalancer:latest
+    managerOverlay: ../../../config/manager/networkloadbalancer
     generation:
       controller:
         strategy: generated
@@ -428,6 +462,8 @@ services:
     version: v1beta1
     phase: data-and-storage
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-nosql:latest
+    managerOverlay: ../../../config/manager/nosql
     generation:
       controller:
         strategy: generated
@@ -448,6 +484,8 @@ services:
     version: v1beta1
     phase: data-and-storage
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-objectstorage:latest
+    managerOverlay: ../../../config/manager/objectstorage
     generation:
       controller:
         strategy: generated
@@ -468,6 +506,8 @@ services:
     version: v1beta1
     phase: eventing-messaging-and-observability
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-ons:latest
+    managerOverlay: ../../../config/manager/ons
     generation:
       controller:
         strategy: generated
@@ -488,6 +528,8 @@ services:
     version: v1beta1
     phase: data-and-storage
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-psql:latest
+    managerOverlay: ../../../config/manager/psql
     generation:
       controller:
         strategy: generated
@@ -510,6 +552,8 @@ services:
     version: v1beta1
     phase: eventing-messaging-and-observability
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-queue:latest
+    managerOverlay: ../../../config/manager/queue
     generation:
       controller:
         strategy: generated
@@ -530,6 +574,8 @@ services:
     version: v1beta1
     phase: security-and-identity
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-secrets:latest
+    managerOverlay: ../../../config/manager/secrets
     generation:
       controller:
         strategy: generated
@@ -552,6 +598,8 @@ services:
     sampleOrder: 20
     packageProfile: controller-backed
     parityFile: parity/streaming.yaml
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-streaming:latest
+    managerOverlay: ../../../config/manager/streaming
     compatibility:
       existingKinds:
         - Stream
@@ -563,7 +611,7 @@ services:
       registration:
         strategy: generated
       webhooks:
-        strategy: manual
+        strategy: none
       resources:
         - kind: Stream
           serviceManager:
@@ -595,6 +643,8 @@ services:
     version: v1beta1
     phase: security-and-identity
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-vault:latest
+    managerOverlay: ../../../config/manager/vault
     generation:
       controller:
         strategy: generated
@@ -611,6 +661,8 @@ services:
     version: v1beta1
     phase: networking-and-infrastructure
     packageProfile: controller-backed
+    defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-workrequests:latest
+    managerOverlay: ../../../config/manager/workrequests
     generation:
       controller:
         strategy: generated
