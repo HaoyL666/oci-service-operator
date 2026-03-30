@@ -670,8 +670,6 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 
 	var databaseService *ServiceConfig
 	var mysqlService *ServiceConfig
-	var opensearchService *ServiceConfig
-	var redisService *ServiceConfig
 	var streamingService *ServiceConfig
 	var coreService *ServiceConfig
 	for i := range cfg.Services {

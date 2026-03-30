@@ -697,6 +697,16 @@ services:
         - kind: Stream
           serviceManager:
             packagePath: streaming/stream
+        - kind: ConnectHarness
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: StreamPool
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
         - kind: Cursor
           controller:
             strategy: none
