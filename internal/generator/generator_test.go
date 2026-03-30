@@ -1850,6 +1850,38 @@ func TestGenerateRendersServiceSpecificPackageOverrides(t *testing.T) {
 	})
 }
 
+func TestGenerateRendersManagerOutputsForControllerBackedService(t *testing.T) {
+	t.Parallel()
+
+	cfg := &Config{
+		Domain:         "oracle.com",
+		DefaultVersion: "v1beta1",
+	}
+	service := testServiceConfig(PackageProfileControllerBacked)
+	pipeline := newTestGenerator(t)
+
+	outputRoot := t.TempDir()
+	if _, err := pipeline.Generate(context.Background(), cfg, []ServiceConfig{service}, Options{
+		OutputRoot: outputRoot,
+	}); err != nil {
+		t.Fatalf("Generate() error = %v", err)
+	}
+
+	managerMain := readFile(t, filepath.Join(outputRoot, "cmd", "manager", "mysql", "main.go"))
+	assertContains(t, managerMain, []string{
+		`package main`,
+		`mysqlv1beta1 "github.com/oracle/oci-service-operator/api/mysql/v1beta1"`,
+		`LeaderElectionID:   "40558063.oci.mysql",`,
+		`managerservices.ForGroup("mysql")`,
+	})
+
+	controllerConfig := readFile(t, filepath.Join(outputRoot, "config", "manager", "mysql", "controller_manager_config.yaml"))
+	assertContains(t, controllerConfig, []string{
+		`kind: ControllerManagerConfig`,
+		`resourceName: 40558063.oci.mysql`,
+	})
+}
+
 func TestGeneratedControllerCompiles(t *testing.T) {
 	cfg := &Config{
 		Domain:         "oracle.com",

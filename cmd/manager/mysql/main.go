@@ -26,7 +26,7 @@ func main() {
 		MetricsServiceName: "mysql",
 		LeaderElectionID:   "40558063.oci.mysql",
 		SkipFIPS:           true,
-	}, managerservices.MySQL()); err != nil {
+	}, managerservices.ForGroup("mysql")); err != nil {
 		os.Exit(1)
 	}
 }

@@ -36,17 +36,22 @@ func registerGroup(group string) manager.RegisterFunc {
 	}
 }
 
+// ForGroup registers one API group with the shared manager.
+func ForGroup(group string) manager.RegisterFunc {
+	return registerGroup(group)
+}
+
 // Database registers the database group with the shared manager.
 func Database() manager.RegisterFunc {
-	return registerGroup("database")
+	return ForGroup("database")
 }
 
 // MySQL registers the mysql group with the shared manager.
 func MySQL() manager.RegisterFunc {
-	return registerGroup("mysql")
+	return ForGroup("mysql")
 }
 
 // Streaming registers the streaming group with the shared manager.
 func Streaming() manager.RegisterFunc {
-	return registerGroup("streaming")
+	return ForGroup("streaming")
 }

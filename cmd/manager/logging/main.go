@@ -8,7 +8,7 @@ import (
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
-	streamingv1beta1 "github.com/oracle/oci-service-operator/api/streaming/v1beta1"
+	loggingv1beta1 "github.com/oracle/oci-service-operator/api/logging/v1beta1"
 	"github.com/oracle/oci-service-operator/pkg/manager"
 	managerservices "github.com/oracle/oci-service-operator/pkg/manager/services"
 )
@@ -17,16 +17,16 @@ var scheme = runtime.NewScheme()
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-	utilruntime.Must(streamingv1beta1.AddToScheme(scheme))
+	utilruntime.Must(loggingv1beta1.AddToScheme(scheme))
 }
 
 func main() {
 	if err := manager.Run(manager.Options{
 		Scheme:             scheme,
-		MetricsServiceName: "streaming",
-		LeaderElectionID:   "40558063.oci.streaming",
+		MetricsServiceName: "logging",
+		LeaderElectionID:   "40558063.oci.logging",
 		SkipFIPS:           true,
-	}, managerservices.ForGroup("streaming")); err != nil {
+	}, managerservices.ForGroup("logging")); err != nil {
 		os.Exit(1)
 	}
 }

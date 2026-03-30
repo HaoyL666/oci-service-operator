@@ -26,7 +26,7 @@ func main() {
 		MetricsServiceName: "database",
 		LeaderElectionID:   "40558063.oci.database",
 		SkipFIPS:           true,
-	}, managerservices.Database()); err != nil {
+	}, managerservices.ForGroup("database")); err != nil {
 		os.Exit(1)
 	}
 }
