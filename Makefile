@@ -44,6 +44,12 @@ OPERATOR_SDK_VERSION ?= v1.37.0
 
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
+SERVICE ?=
+TARGETOS ?= linux
+TARGETARCH ?= amd64
+MANAGER_BIN ?= bin/manager
+CONTROLLER_MAIN ?= main.go
+SERVICE_IMG ?= $(IMAGE_TAG_BASE)-$(SERVICE):$(VERSION)
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:generateEmbeddedObjectMeta=true,allowDangerousTypes=true"
 GENERATED_CRD_ARTIFACTS ?= config/crd/bases/*.yaml
@@ -54,6 +60,7 @@ PACKAGES_DIR ?= packages
 PACKAGE_DIR ?= $(PACKAGES_DIR)/$(GROUP)
 PACKAGE_OUTPUT_DIR ?= dist/packages/$(GROUP)
 PACKAGE_SCRIPT ?= hack/package.sh
+PACKAGE_OLM_SCRIPT ?= hack/package-olm.sh
 CONTROLLER_IMG ?=
 GENERATOR_ENTRYPOINT ?= ./cmd/generator
 GENERATOR_CONFIG ?=
@@ -293,13 +300,28 @@ docker-build-sample: ## Build docker image with the manager.
 ##@ Build
 
 build: generate fmt vet ## Build manager binary.
-	go build -o bin/manager main.go
+	go build -o $(MANAGER_BIN) $(CONTROLLER_MAIN)
 
 run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./main.go
 
 docker-build: test bundle ## Build docker image with the manager and CRDs
-	docker build -t ${IMG} .
+	docker build --build-arg CONTROLLER_MAIN=$(CONTROLLER_MAIN) -t ${IMG} .
+
+docker-build-raw: ## Build docker image without running tests/bundle dependencies.
+	docker build --build-arg CONTROLLER_MAIN=$(CONTROLLER_MAIN) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) -t ${IMG} .
+
+build-service: generate fmt vet ## Build a service-scoped manager binary.
+	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
+	go build -o bin/manager-$(SERVICE) ./cmd/manager/$(SERVICE)
+
+docker-build-service: test bundle ## Build docker image for SERVICE using service manager entrypoint.
+	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
+	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) --build-arg CGO_ENABLED=0 --build-arg GOEXPERIMENT= -t $(SERVICE_IMG) .
+
+docker-build-service-raw: ## Build service image without running tests/bundle dependencies.
+	@[ -n "$(SERVICE)" ] || { echo "SERVICE must be set"; exit 1; }
+	docker build --build-arg CONTROLLER_MAIN=./cmd/manager/$(SERVICE) --build-arg TARGETOS=$(TARGETOS) --build-arg TARGETARCH=$(TARGETARCH) --build-arg CGO_ENABLED=0 --build-arg GOEXPERIMENT= -t $(SERVICE_IMG) .
 
 docker-push: ## Push docker image with the manager.
 	docker push ${IMG}
@@ -386,6 +408,44 @@ update-bundle-image-version: ## Updates versioning info in bundle/manifests/oci-
 	sed -i "s/name: oci-service-operator.v1.0.0/name: oci-service-operator.v${VERSION}/g" bundle/manifests/oci-service-operator.clusterserviceversion.yaml
 	sed -i "s#iad.ocir.io/oracle/oci-service-operator:1.0.0#${IMAGE_TAG_BASE}:${VERSION}#g" bundle/manifests/oci-service-operator.clusterserviceversion.yaml
 	sed -i "s/version: 1.0.0/version: ${VERSION}/g" bundle/manifests/oci-service-operator.clusterserviceversion.yaml
+
+package-bundle-olm: controller-gen kustomize operator-sdk ## Generate an OLM bundle for GROUP from packages/<group>/install into bundle/.
+	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
+	@[ -n "$(VERSION)" ] || { echo "VERSION must be set"; exit 1; }
+	@CONTROLLER_GEN_RUNNER="$(CONTROLLER_GEN_RUNNER)" CONTROLLER_GEN="$(CONTROLLER_GEN)" KUSTOMIZE="$(KUSTOMIZE)" OPERATOR_SDK="$(OPERATOR_SDK)" CONTROLLER_IMG="$(CONTROLLER_IMG)" VERSION="$(VERSION)" \
+		"$(BASH)" "$(PWD)/$(PACKAGE_OLM_SCRIPT)" bundle "$(GROUP)"
+
+publish-service-olm: controller-gen kustomize operator-sdk ## Build/push a per-service controller image, generate the matching bundle, and build/push the bundle image. Use GROUP=<service>.
+	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
+	@test -f "cmd/manager/$(GROUP)/main.go" || { echo "GROUP '$(GROUP)' does not have a dedicated controller entrypoint under cmd/manager."; exit 1; }
+	@[ -n "$(PUBLISH_VERSION)" ] || { echo "PUBLISH_VERSION must be set (image tag)"; exit 1; }
+	@[ -n "$(PUBLISH_REGISTRY)" ] || { echo "PUBLISH_REGISTRY must be set (e.g. iad.ocir.io/org)"; exit 1; }
+	@set -euo pipefail; \
+	image="$(PUBLISH_REGISTRY)/oci-service-operator-$(GROUP):$(PUBLISH_VERSION)"; \
+	bundle_image="$(PUBLISH_REGISTRY)/oci-service-operator-$(GROUP)-bundle:$(PUBLISH_VERSION)"; \
+	echo ">>> Building $$image"; \
+	$(MAKE) --no-print-directory docker-build-service-raw SERVICE="$(GROUP)" SERVICE_IMG="$$image"; \
+	echo ">>> Pushing $$image"; \
+	$(MAKE) --no-print-directory docker-push IMG="$$image"; \
+	echo ">>> Generating $(GROUP) bundle for $$bundle_image"; \
+	$(MAKE) --no-print-directory package-bundle-olm GROUP="$(GROUP)" CONTROLLER_IMG="$$image" VERSION="$(PUBLISH_VERSION)"; \
+	echo ">>> Building $$bundle_image"; \
+	$(MAKE) --no-print-directory bundle-build BUNDLE_IMG="$$bundle_image"; \
+	echo ">>> Pushing $$bundle_image"; \
+	$(MAKE) --no-print-directory bundle-push BUNDLE_IMG="$$bundle_image"; \
+	echo ">>> Bundle image ready: $$bundle_image"
+
+install-service-olm: operator-sdk ## Install a per-service bundle into a cluster with OLM. Use GROUP=<service>.
+	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
+	@[ -n "$(PUBLISH_VERSION)" ] || { echo "PUBLISH_VERSION must be set (bundle tag)"; exit 1; }
+	@[ -n "$(PUBLISH_REGISTRY)" ] || { echo "PUBLISH_REGISTRY must be set (e.g. iad.ocir.io/org)"; exit 1; }
+	$(OPERATOR_SDK) run bundle "$(PUBLISH_REGISTRY)/oci-service-operator-$(GROUP)-bundle:$(PUBLISH_VERSION)"
+
+upgrade-service-olm: operator-sdk ## Upgrade a per-service bundle in a cluster with OLM. Use GROUP=<service>.
+	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
+	@[ -n "$(PUBLISH_VERSION)" ] || { echo "PUBLISH_VERSION must be set (bundle tag)"; exit 1; }
+	@[ -n "$(PUBLISH_REGISTRY)" ] || { echo "PUBLISH_REGISTRY must be set (e.g. iad.ocir.io/org)"; exit 1; }
+	$(OPERATOR_SDK) run bundle-upgrade "$(PUBLISH_REGISTRY)/oci-service-operator-$(GROUP)-bundle:$(PUBLISH_VERSION)"
 
 .PHONY: opm
 OPM = ./bin/opm
