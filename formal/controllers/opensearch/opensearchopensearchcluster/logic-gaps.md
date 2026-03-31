@@ -8,6 +8,35 @@ gaps: []
 
 # Logic Gaps
 
-This scaffold row tracks the published OpensearchOpensearchCluster API shape for opensearch. Replace this
-placeholder with repo-authored semantics and explicit stop conditions before
-adding formalSpec or promoting runtime ownership.
+## Current runtime path
+
+- `OpensearchOpensearchCluster` routes through the generated
+  `OpensearchOpensearchClusterServiceManager` and
+  `generatedruntime.ServiceClient`; there is no legacy handwritten adapter for
+  this resource.
+- The generated runtime uses the published OSOK kind
+  `OpensearchOpensearchCluster` while the OCI SDK continues to expose
+  `OpensearchCluster` request and response types.
+- Create or bind is explicit: the runtime first resolves a tracked OCI
+  identifier when one is present, otherwise it lists clusters in the requested
+  compartment and reuses a unique `displayName` match before issuing create.
+
+## Shared generated-runtime baseline
+
+- Use the [shared generated-runtime baseline](../../../shared/generated-runtime-baseline.md)
+  for the common bind, lifecycle, mutation, status, and delete semantics.
+- Keep delete confirmation explicit with
+  `finalizer_policy = retain-until-confirmed-delete`; the finalizer only clears
+  after OCI reports the cluster missing or in `DELETED`.
+- No Kubernetes secret reads or secret writes are part of this resource.
+
+## Repo-authored semantics
+
+- Bind lookup matches on `compartmentId` plus `displayName`; lifecycle `state`
+  remains a provider-fact filter so terminal or deleting clusters are not
+  rebound during create or delete flows.
+- Mutable drift remains narrow: only `displayName` is updated in place, while
+  `compartmentId` stays create-only drift.
+- Create, update, and delete all use read-after-write or confirm-delete
+  follow-up, so OCI lifecycle transitions are projected back into status and
+  condition state before the reconcile finishes.

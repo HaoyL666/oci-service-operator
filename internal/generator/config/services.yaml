@@ -467,6 +467,61 @@ services:
         WorkRequestLog:
           - WorkRequestLogEntry
 
+  - service: opensearch
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/opensearch
+    group: opensearch
+    version: v1beta1
+    phase: data-and-storage
+    packageProfile: controller-backed
+    compatibility:
+      existingKinds:
+        - OpensearchOpensearchCluster
+        - OpensearchOpensearchVersion
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+      resources:
+        - kind: OpensearchOpensearchCluster
+          formalSpec: opensearchopensearchcluster
+          promotionBlockers:
+            - oci-service-operator-fk9.6
+        - kind: Manifest
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: OpensearchClusterBackup
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: OpensearchOpensearchVersion
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: WorkRequest
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: WorkRequestError
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: WorkRequestLog
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+
   - service: ons
     sdkPackage: github.com/oracle/oci-go-sdk/v65/ons
     group: ons

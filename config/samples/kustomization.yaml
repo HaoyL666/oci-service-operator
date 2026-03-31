@@ -448,4 +448,11 @@ resources:
 - redis_v1beta1_workrequest.yaml
 - redis_v1beta1_workrequesterror.yaml
 - redis_v1beta1_workrequestlog.yaml
+- opensearch_v1beta1_manifest.yaml
+- opensearch_v1beta1_opensearchclusterbackup.yaml
+- opensearch_v1beta1_opensearchopensearchcluster.yaml
+- opensearch_v1beta1_opensearchopensearchversion.yaml
+- opensearch_v1beta1_workrequest.yaml
+- opensearch_v1beta1_workrequesterror.yaml
+- opensearch_v1beta1_workrequestlog.yaml
 # +kubebuilder:scaffold:manifestskustomizesamples

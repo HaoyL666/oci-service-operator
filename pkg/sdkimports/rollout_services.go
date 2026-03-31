@@ -25,6 +25,7 @@ import (
 	_ "github.com/oracle/oci-go-sdk/v65/nosql"
 	_ "github.com/oracle/oci-go-sdk/v65/objectstorage"
 	_ "github.com/oracle/oci-go-sdk/v65/ons"
+	_ "github.com/oracle/oci-go-sdk/v65/opensearch"
 	_ "github.com/oracle/oci-go-sdk/v65/psql"
 	_ "github.com/oracle/oci-go-sdk/v65/queue"
 	_ "github.com/oracle/oci-go-sdk/v65/secrets"

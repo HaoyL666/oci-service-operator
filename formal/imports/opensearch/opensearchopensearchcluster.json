@@ -106,6 +106,7 @@
     "responseItemsField": "Items",
     "filterFields": [
       "compartment_id",
+      "display_name",
       "state"
     ]
   },
@@ -114,12 +115,10 @@
     "repoAuthoredSpecPath": "controllers/opensearch/opensearchopensearchcluster/spec.cfg",
     "repoAuthoredLogicGapsPath": "controllers/opensearch/opensearchopensearchcluster/logic-gaps.md",
     "excludedSemantics": [
-      "bind-versus-create",
-      "secret-output",
-      "delete-confirmation"
+      "published-kind-alias"
     ]
   },
   "notes": [
-    "Scaffold placeholder for opensearch/opensearchopensearchcluster; replace imported facts before promoting this row beyond scaffold."
+    "Seeded published OpensearchOpensearchCluster row for opensearch; generatedruntime now preserves the published kind while binding through compartmentId and displayName before create."
   ]
 }
