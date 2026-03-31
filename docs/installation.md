@@ -106,7 +106,17 @@ The OCI Service Operator for Kubernetes needs OCI user credentials details to pr
 
 The users required to create a Kubernetes secret as detailed below.
 
-The OSOK will be deployed in `oci-service-operator-system` namespace. For enabling user principals, we need to create the namespace before deployment.
+Create the namespace that matches the controller install target before creating
+the credentials secret.
+
+Examples:
+
+- per-service `database` controller:
+  `oci-service-operator-database-system`
+- per-service `mysql` controller:
+  `oci-service-operator-mysql-system`
+- monolithic controller:
+  use the namespace created by the shared install path
 
 Create a yaml file using below details
 ```yaml
@@ -115,7 +125,7 @@ kind: Namespace
 metadata:
   labels:
     control-plane: controller-manager
-  name: oci-service-operator-system
+  name: <OSOK_NAMESPACE>
 ```
 
 Create the namespace in the kubernetes cluster using below command
@@ -137,7 +147,7 @@ The secret should have the below Keys and respective values for it:
 Run the below command to create Secret by name `ociCredentials`. (Replace values with your user credentials)
 
 ```bash
-$ kubectl -n oci-service-operator-system create secret generic ocicredentials \
+$ kubectl -n <OSOK_NAMESPACE> create secret generic ocicredentials \
 --from-literal=tenancy=<CUSTOMER_TENANCY_OCID> \
 --from-literal=user=<USER_OCID> \
 --from-literal=fingerprint=<USER_PUBLIC_API_KEY_FINGERPRINT> \
@@ -146,7 +156,7 @@ $ kubectl -n oci-service-operator-system create secret generic ocicredentials \
 --from-file=privatekey=<PATH_OF_USER_PRIVATE_API_KEY>
 ```
 
-The name of the secret will passed in the `osokConfig` config map which will be created as part of the OSOK deployment. By default the name of the user credential secret is `ocicredentials`. Also, the secret should be created in the `oci-service-operator-system` namespace.
+The name of the secret will passed in the `osokConfig` config map which will be created as part of the OSOK deployment. By default the name of the user credential secret is `ocicredentials`. The secret must be created in the same namespace as the controller installation.
 
 The customer should create a OSOK operator user and can add him to a IAM group `osok-operator-group`. Customer should create an OCI Policy that can be tenancy wide or in the compartment to manage the OCI Services
 
@@ -192,13 +202,18 @@ Prerequisites:
 Install a per-service bundle:
 
 ```bash
-$ operator-sdk run bundle <PER_SERVICE_BUNDLE_IMAGE>
+$ kubectl create namespace <SERVICE_NAMESPACE>
+$ operator-sdk run bundle <PER_SERVICE_BUNDLE_IMAGE> \
+  -n <SERVICE_NAMESPACE>
 ```
 
 Example for the database controller:
 
 ```bash
-$ operator-sdk run bundle iad.ocir.io/<registry>/oci-service-operator-database-bundle:<VERSION>
+$ kubectl create namespace oci-service-operator-database-system
+$ operator-sdk run bundle \
+  -n oci-service-operator-database-system \
+  iad.ocir.io/<registry>/oci-service-operator-database-bundle:<VERSION>
 ```
 
 Upgrade a per-service bundle:
@@ -206,6 +221,11 @@ Upgrade a per-service bundle:
 ```bash
 $ operator-sdk run bundle-upgrade <PER_SERVICE_BUNDLE_IMAGE>
 ```
+
+Create the `ocicredentials` secret in the same service namespace after the
+bundle install. For example, the `database` controller expects
+`oci-service-operator-database-system`, which is also published in
+`packages/database/metadata.env`.
 
 #### Per-Service Direct Manifest Install
 
@@ -236,15 +256,15 @@ or render and apply the manifest flow used by the shared manager install path.
 #### Monolithic OLM Bundle Status
 
 The monolithic OLM bundle currently exceeds the OLM bundle size limit, so
-monolithic OLM publication is not a supported distribution path without further
-bundle size reduction work.
+monolithic OLM publication is not a recommended distribution path without
+further bundle size reduction work.
 
 ### Legacy OLM Monolith Bundle Flow
 
 Historically the OCI Service Operator for Kubernetes was packaged as an OLM
 bundle for the full monolithic controller. That flow is shown below for
-reference, but the current all-services bundle is too large for reliable OLM
-publication.
+reference only. The repository still includes helper targets for it, but the
+current all-services bundle is too large for reliable OLM publication.
 
 The OCI Service Operator for Kubernetes is packaged as Operator Lifecycle Manager (OLM) Bundle for making it easy to install in Kubernetes Clusters. The bundle can be downloaded as docker image using below command.
 
