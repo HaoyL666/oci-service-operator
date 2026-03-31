@@ -77,23 +77,31 @@ type ServiceManagerGenerationOverride struct {
 	PackagePath string `yaml:"packagePath,omitempty"`
 }
 
+// PackageSplitConfig defines one package/runtime partition carved out of a generated service.
+type PackageSplitConfig struct {
+	Name                   string   `yaml:"name"`
+	IncludeKinds           []string `yaml:"includeKinds"`
+	DefaultControllerImage string   `yaml:"defaultControllerImage,omitempty"`
+}
+
 // ServiceConfig identifies one OCI SDK service and its OSOK output group.
 type ServiceConfig struct {
-	Service                string              `yaml:"service"`
-	SDKPackage             string              `yaml:"sdkPackage"`
-	Group                  string              `yaml:"group"`
-	Version                string              `yaml:"version"`
-	Phase                  string              `yaml:"phase"`
-	SampleOrder            int                 `yaml:"sampleOrder,omitempty"`
-	PackageProfile         string              `yaml:"packageProfile"`
-	FormalSpec             string              `yaml:"formalSpec,omitempty"`
-	ParityFile             string              `yaml:"parityFile,omitempty"`
-	Compatibility          CompatibilityConfig `yaml:"compatibility,omitempty"`
-	DefaultControllerImage string              `yaml:"defaultControllerImage,omitempty"`
-	ManagerOverlay         string              `yaml:"managerOverlay,omitempty"`
-	ObservedState          ObservedStateConfig `yaml:"observedState,omitempty"`
-	Generation             GenerationConfig    `yaml:"generation,omitempty"`
-	Parity                 *ParityConfig       `yaml:"-"`
+	Service                string               `yaml:"service"`
+	SDKPackage             string               `yaml:"sdkPackage"`
+	Group                  string               `yaml:"group"`
+	Version                string               `yaml:"version"`
+	Phase                  string               `yaml:"phase"`
+	SampleOrder            int                  `yaml:"sampleOrder,omitempty"`
+	PackageProfile         string               `yaml:"packageProfile"`
+	FormalSpec             string               `yaml:"formalSpec,omitempty"`
+	ParityFile             string               `yaml:"parityFile,omitempty"`
+	Compatibility          CompatibilityConfig  `yaml:"compatibility,omitempty"`
+	DefaultControllerImage string               `yaml:"defaultControllerImage,omitempty"`
+	ManagerOverlay         string               `yaml:"managerOverlay,omitempty"`
+	PackageSplits          []PackageSplitConfig `yaml:"packageSplits,omitempty"`
+	ObservedState          ObservedStateConfig  `yaml:"observedState,omitempty"`
+	Generation             GenerationConfig     `yaml:"generation,omitempty"`
+	Parity                 *ParityConfig        `yaml:"-"`
 }
 
 // CompatibilityConfig holds explicit backwards-compatibility hints for published kinds.
@@ -184,6 +192,9 @@ func (c *Config) Validate() error {
 		if err := service.Generation.Validate(service.Service); err != nil {
 			return err
 		}
+		if err := service.validatePackageSplits(); err != nil {
+			return err
+		}
 		for rawName, aliases := range service.ObservedState.SDKAliases {
 			if strings.TrimSpace(rawName) == "" {
 				return fmt.Errorf("service %q observedState sdkAliases contains a blank resource name", service.Service)
@@ -202,8 +213,50 @@ func (c *Config) Validate() error {
 		}
 		servicesByName[service.Service] = struct{}{}
 		groupsByName[service.Group] = struct{}{}
+		for _, split := range service.PackageSplits {
+			if _, exists := servicesByName[split.Name]; exists {
+				return fmt.Errorf("duplicate split name %q", split.Name)
+			}
+			if _, exists := groupsByName[split.Name]; exists {
+				return fmt.Errorf("duplicate split name %q", split.Name)
+			}
+			servicesByName[split.Name] = struct{}{}
+			groupsByName[split.Name] = struct{}{}
+		}
 	}
 
+	return nil
+}
+
+func (s ServiceConfig) validatePackageSplits() error {
+	seen := make(map[string]struct{}, len(s.PackageSplits))
+	for _, split := range s.PackageSplits {
+		name := strings.TrimSpace(split.Name)
+		if name == "" {
+			return fmt.Errorf("service %q packageSplits name is required", s.Service)
+		}
+		if filepath.Base(name) != name || path.Clean(name) != name {
+			return fmt.Errorf("service %q packageSplit %q must be a clean single path segment", s.Service, split.Name)
+		}
+		if _, ok := seen[name]; ok {
+			return fmt.Errorf("service %q packageSplit %q is duplicated", s.Service, split.Name)
+		}
+		seen[name] = struct{}{}
+		if len(split.IncludeKinds) == 0 {
+			return fmt.Errorf("service %q packageSplit %q must include at least one kind", s.Service, split.Name)
+		}
+		seenKinds := make(map[string]struct{}, len(split.IncludeKinds))
+		for _, rawKind := range split.IncludeKinds {
+			kind := strings.TrimSpace(rawKind)
+			if kind == "" {
+				return fmt.Errorf("service %q packageSplit %q contains a blank kind", s.Service, split.Name)
+			}
+			if _, ok := seenKinds[kind]; ok {
+				return fmt.Errorf("service %q packageSplit %q contains duplicate kind %q", s.Service, split.Name, kind)
+			}
+			seenKinds[kind] = struct{}{}
+		}
+	}
 	return nil
 }
 

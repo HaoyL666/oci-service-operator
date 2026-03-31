@@ -51,7 +51,7 @@ func preservePackageSpecSurfaces(root string, pkg *PackageModel) error {
 		return err
 	}
 	pkg.ServiceManagers = serviceManagers
-	registration, err := buildRegistrationOutputModel(pkg.Service, pkg.Version, pkg.Resources, pkg.Controller, pkg.ServiceManagers)
+	registration, err := buildRegistrationOutputModel(pkg.Service, pkg.Version, pkg.Resources, pkg.Controller, pkg.ServiceManagers, pkg.OutputName)
 	if err != nil {
 		return err
 	}

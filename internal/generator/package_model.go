@@ -8,6 +8,7 @@ package generator
 import (
 	"fmt"
 	"path"
+	"path/filepath"
 	"sort"
 	"strings"
 )
@@ -30,13 +31,14 @@ func buildPackageModel(cfg *Config, service ServiceConfig, discovered []Resource
 	if err != nil {
 		return nil, err
 	}
-	registrationOutput, err := buildRegistrationOutputModel(service, version, resources, controllerOutput, serviceManagers)
+	registrationOutput, err := buildRegistrationOutputModel(service, version, resources, controllerOutput, serviceManagers, service.Group)
 	if err != nil {
 		return nil, err
 	}
 
 	return &PackageModel{
 		Service:         service,
+		OutputName:      service.Group,
 		Domain:          cfg.Domain,
 		Version:         version,
 		GroupDNSName:    service.GroupDNSName(cfg.Domain),
@@ -47,6 +49,61 @@ func buildPackageModel(cfg *Config, service ServiceConfig, discovered []Resource
 		PackageOutput:   buildPackageOutputModel(service, resources),
 		ServiceManagers: serviceManagers,
 	}, nil
+}
+
+func buildPackageSplitModels(pkg *PackageModel) ([]*PackageModel, error) {
+	if len(pkg.Service.PackageSplits) == 0 {
+		return nil, nil
+	}
+
+	discoveredByKind := make(map[string]ResourceModel, len(pkg.Resources))
+	unassigned := make(map[string]struct{}, len(pkg.Resources))
+	for _, resource := range pkg.Resources {
+		discoveredByKind[resource.Kind] = resource
+		unassigned[resource.Kind] = struct{}{}
+	}
+
+	splitModels := make([]*PackageModel, 0, len(pkg.Service.PackageSplits))
+	for _, split := range pkg.Service.PackageSplits {
+		resources := make([]ResourceModel, 0, len(split.IncludeKinds))
+		for _, kind := range split.IncludeKinds {
+			resource, ok := discoveredByKind[kind]
+			if !ok {
+				return nil, fmt.Errorf("service %q package split %q references unknown kind %q", pkg.Service.Service, split.Name, kind)
+			}
+			if _, ok := unassigned[kind]; !ok {
+				return nil, fmt.Errorf("service %q package split %q reuses kind %q already claimed by another split", pkg.Service.Service, split.Name, kind)
+			}
+			delete(unassigned, kind)
+			resources = append(resources, resource)
+		}
+
+		controllerOutput := buildControllerOutputModel(pkg.Service, pkg.Domain, resources)
+		serviceManagers, err := buildServiceManagerModels(pkg.Service, pkg.Version, resources)
+		if err != nil {
+			return nil, err
+		}
+		registrationOutput, err := buildRegistrationOutputModel(pkg.Service, pkg.Version, resources, controllerOutput, serviceManagers, split.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		splitModels = append(splitModels, &PackageModel{
+			Service:         pkg.Service,
+			OutputName:      split.Name,
+			Domain:          pkg.Domain,
+			Version:         pkg.Version,
+			GroupDNSName:    pkg.GroupDNSName,
+			SampleOrder:     pkg.SampleOrder,
+			Resources:       resources,
+			Controller:      controllerOutput,
+			Registration:    registrationOutput,
+			PackageOutput:   buildSplitPackageOutputModel(pkg.Service, split),
+			ServiceManagers: serviceManagers,
+		})
+	}
+
+	return splitModels, nil
 }
 
 func buildParityResources(service ServiceConfig, version string, discovered []ResourceModel) ([]ResourceModel, error) {
@@ -124,22 +181,41 @@ func buildParityResourceModel(service ServiceConfig, version string, discoveredR
 }
 
 func buildPackageOutputModel(service ServiceConfig, resources []ResourceModel) PackageOutputModel {
+	return buildPackageOutputModelFor(service, service.Group, service.DefaultControllerImage, service.ManagerOverlay, "")
+}
+
+func buildSplitPackageOutputModel(service ServiceConfig, split PackageSplitConfig) PackageOutputModel {
+	return buildPackageOutputModelFor(
+		service,
+		split.Name,
+		split.DefaultControllerImage,
+		filepath.Join("../../../config/manager", split.Name),
+		strings.Join(split.IncludeKinds, ","),
+	)
+}
+
+func buildPackageOutputModelFor(service ServiceConfig, outputName string, controllerImage string, overlayPath string, crdKindFilter string) PackageOutputModel {
 	defaultControllerImage := "iad.ocir.io/oracle/oci-service-operator:latest"
-	if strings.TrimSpace(service.DefaultControllerImage) != "" {
+	if strings.TrimSpace(controllerImage) != "" {
+		defaultControllerImage = controllerImage
+	} else if strings.TrimSpace(service.DefaultControllerImage) != "" {
 		defaultControllerImage = service.DefaultControllerImage
 	}
 	managerOverlay := "../../../config/manager"
-	if strings.TrimSpace(service.ManagerOverlay) != "" {
+	if strings.TrimSpace(overlayPath) != "" {
+		managerOverlay = overlayPath
+	} else if strings.TrimSpace(service.ManagerOverlay) != "" {
 		managerOverlay = service.ManagerOverlay
 	}
 
 	output := PackageOutputModel{
 		Generate: true,
 		Metadata: PackageMetadataModel{
-			PackageName:            fmt.Sprintf("oci-service-operator-%s", service.Group),
-			PackageNamespace:       fmt.Sprintf("oci-service-operator-%s-system", service.Group),
-			PackageNamePrefix:      fmt.Sprintf("oci-service-operator-%s-", service.Group),
+			PackageName:            fmt.Sprintf("oci-service-operator-%s", outputName),
+			PackageNamespace:       fmt.Sprintf("oci-service-operator-%s-system", outputName),
+			PackageNamePrefix:      fmt.Sprintf("oci-service-operator-%s-", outputName),
 			CRDPaths:               fmt.Sprintf("./api/%s/...", service.Group),
+			CRDKindFilter:          crdKindFilter,
 			DefaultControllerImage: defaultControllerImage,
 		},
 	}
@@ -147,8 +223,8 @@ func buildPackageOutputModel(service ServiceConfig, resources []ResourceModel) P
 	switch service.PackageProfile {
 	case PackageProfileControllerBacked:
 		output.Metadata.RBACPaths = fmt.Sprintf("./controllers/%s/...", service.Group)
-		output.Install.Namespace = fmt.Sprintf("oci-service-operator-%s-system", service.Group)
-		output.Install.NamePrefix = fmt.Sprintf("oci-service-operator-%s-", service.Group)
+		output.Install.Namespace = fmt.Sprintf("oci-service-operator-%s-system", outputName)
+		output.Install.NamePrefix = fmt.Sprintf("oci-service-operator-%s-", outputName)
 		output.Install.Resources = append(output.Install.Resources,
 			"generated/crd",
 			"generated/rbac",
@@ -188,6 +264,7 @@ func buildRegistrationOutputModel(
 	resources []ResourceModel,
 	controllerOutput ControllerOutputModel,
 	serviceManagers []ServiceManagerModel,
+	registrationGroup string,
 ) (RegistrationOutputModel, error) {
 	if service.RegistrationGenerationStrategy() != GenerationStrategyGenerated {
 		return RegistrationOutputModel{}, nil
@@ -212,7 +289,7 @@ func buildRegistrationOutputModel(
 	}
 
 	output := RegistrationOutputModel{
-		Group:                 service.Group,
+		Group:                 registrationGroup,
 		APIImportPath:         fmt.Sprintf("github.com/oracle/oci-service-operator/api/%s/%s", service.Group, version),
 		APIImportAlias:        fmt.Sprintf("%s%s", service.Group, version),
 		ControllerImportPath:  fmt.Sprintf("github.com/oracle/oci-service-operator/controllers/%s", service.Group),

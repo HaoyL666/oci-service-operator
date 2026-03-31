@@ -1739,6 +1739,7 @@ func TestBuildRegistrationOutputSkipsKindsOptedOutOfGeneratedRuntime(t *testing.
 				WithDepsConstructor: "NewStreamServiceManagerWithDeps",
 			},
 		},
+		"streaming",
 	)
 	if err != nil {
 		t.Fatalf("buildRegistrationOutputModel() error = %v", err)
