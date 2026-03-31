@@ -129,6 +129,7 @@ bd dep cycles
 - **Include formal inputs in the task description when present** — `formal/controller_manifest.tsv`, matching `spec.cfg`, `logic-gaps.md`, import JSON, and `runtime-lifecycle.yaml`
 - **Use vendored SDK as current branch field truth** — do not base field-scope decisions on a newer SDK copy outside the repo unless the task is explicitly an SDK upgrade
 - **Mention Terraform provider source when useful** — for tasks that need deeper wait or CRUD semantics, reference `oracle/terraform-provider-oci` as a secondary source after the vendored SDK and local `formal/imports/...json` summary
+- **For `core` networking tasks, mention the `donoftime/oci-service-operator` networking fork when useful** — treat `pkg/servicemanager/networking/` and `docs/networking.md` there as a secondary implementation-pattern reference only, never as the source of truth for CRD names, package layout, or current-branch contract
 - **Do not assign handwritten edits to generator-owned files by default** — if the target file says `DO NOT EDIT`, plan generator/source-of-truth changes or use a non-generated extension seam instead
 - **If the generated package exposes an extension seam, use a separate non-generated file in that package**
 - **If the output itself is wrong structurally, plan generator source or source-of-truth changes**
@@ -157,6 +158,7 @@ This is a full example, not a mandatory file list. For existing generated groups
 - Secret generation after ACTIVE state
 - For generated resources, check `formal/` inputs before implementing runtime behavior
 - If deeper upstream behavior is needed, consult `oracle/terraform-provider-oci` after the local formal summary
+- For `core` networking runtime work, the `donoftime/oci-service-operator` networking fork may be cited as a secondary behavior reference, but coders must adapt behavior rather than copy its `Oci*` naming or package structure
 - Always commit generated files (`zz_generated.deepcopy.go`, CRD YAML)
 
 ## Rules

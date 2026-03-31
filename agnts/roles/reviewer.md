@@ -191,6 +191,7 @@ For EVERY task, check the acceptance criteria listed in the task description. Ea
 - [ ] Secret generation after ACTIVE state (if applicable)
 - [ ] If the resource has `formal/` metadata, behavior matches the intended requeue/delete/secret semantics closely enough for the task scope
 - [ ] Rejections about omitted fields are grounded in the vendored SDK and checked-in repo contracts for this branch, unless the task explicitly targets a newer SDK upgrade
+- [ ] For `core` networking runtime tasks, any use of the `donoftime/oci-service-operator` networking fork stays secondary and does not leak its `Oci*` naming or package layout into this repo
 
 **General Quality**:
 - [ ] `go build ./...` succeeds

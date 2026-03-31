@@ -105,6 +105,7 @@ Default reading order for a new real reconciler implementation:
 5. `pkg/servicemanager/<group>/<resource>/` ← implement or override the real runtime behavior here
 6. `formal/controller_manifest.tsv` row + `formal/controllers/<service>/<slug>/spec.cfg` + `logic-gaps.md` + `formal/imports/<service>/<slug>.json` + `formal/controllers/<service>/<slug>/diagrams/runtime-lifecycle.yaml` ← when present, treat these as the per-resource runtime contract and promotion metadata
 7. `oracle/terraform-provider-oci` source ← optional secondary reference when you need deeper CRUD, wait, datasource, or field-handling patterns beyond the repo-local formal summary
+8. `https://github.com/donoftime/oci-service-operator/tree/main/pkg/servicemanager/networking` and `https://github.com/donoftime/oci-service-operator/blob/main/docs/networking.md` ← optional secondary reference for handwritten `core` networking runtime behavior (`Vcn`, `Subnet`, gateways, route tables, security lists). Treat that fork as an implementation-pattern reference only, not as the source of truth for CRD names, package layout, or current-branch contract
 
 Generated service-manager packages usually provide:
 
@@ -187,6 +188,7 @@ See `docs/validator-guide.md` for usage.
 | Controller | `controllers/core/subnet_controller.go` | Typical BaseReconciler delegation |
 | Secret generation | `pkg/servicemanager/mysql/dbsystem/dbsystem_secretgeneration.go` | GetCredentialMap pattern |
 | Tests | `pkg/servicemanager/mysql/dbsystem/dbsystem_servicemanager_test.go` | Current handwritten logic tests |
+| Core networking runtime behavior | `donoftime/oci-service-operator` `pkg/servicemanager/networking/` + `docs/networking.md` | Secondary reference for handwritten VCN/subnet/gateway flows; adapt behavior, not naming or layout |
 | RBAC roles | `config/rbac/stream_editor_role.yaml` | Minimal role template |
 | Sample manifest | `config/samples/oci_v1beta1_stream.yaml` | Simple sample |
 | Docs | `docs/oss.md` | Simple service documentation |
