@@ -4,26 +4,22 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.0
-  name: streams.streaming.oracle.com
+  name: groups.streaming.oracle.com
 spec:
   group: streaming.oracle.com
   names:
-    kind: Stream
-    listKind: StreamList
-    plural: streams
-    singular: stream
+    kind: Group
+    listKind: GroupList
+    plural: groups
+    singular: group
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.name
-      name: Streamname
-      priority: 1
-      type: string
-    - description: status of the Stream
+    - description: status of the Group
       jsonPath: .status.status.conditions[-1].type
       name: Status
       type: string
-    - description: Ocid of the Stream
+    - description: Ocid of the Group
       jsonPath: .status.status.ocid
       name: Ocid
       priority: 1
@@ -34,7 +30,7 @@ spec:
     name: v1beta1
     schema:
       openAPIV3Schema:
-        description: Stream is the Schema for the streams API
+        description: Group is the Schema for the groups API.
         properties:
           apiVersion:
             description: |-
@@ -54,50 +50,44 @@ spec:
           metadata:
             type: object
           spec:
-            description: StreamSpec defines the desired state of Stream
+            description: GroupSpec defines the desired state of Group.
             properties:
-              Id:
-                description: |-
-                  INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-                  Important: Run "make" to regenerate code after modifying this file
-                maxLength: 255
-                minLength: 1
+              time:
+                description: The time to consume from if type is AT_TIME.
                 type: string
-              compartmentId:
-                maxLength: 255
-                minLength: 1
-                type: string
-              definedTags:
-                additionalProperties:
-                  additionalProperties:
-                    type: string
-                  type: object
-                type: object
-              freeformTags:
-                additionalProperties:
-                  type: string
-                type: object
-              name:
-                type: string
-              partitions:
-                minimum: 1
-                type: integer
-              retentionInHours:
-                maximum: 168
-                minimum: 24
-                type: integer
-              streamPoolId:
-                maxLength: 255
-                minLength: 1
+              type:
+                description: The type of the cursor.
                 type: string
             type: object
           status:
-            description: StreamStatus defines the observed state of Stream
+            description: GroupStatus defines the observed state of Group.
             properties:
+              groupName:
+                description: The name of the consumer group.
+                type: string
+              reservations:
+                description: An array of the partition reservations of a group.
+                items:
+                  description: GroupReservation defines nested fields for Group.Reservation.
+                  properties:
+                    committedOffset:
+                      description: The latest offset which has been committed for
+                        this partition.
+                      format: int64
+                      type: integer
+                    partition:
+                      description: The partition for which the reservation applies.
+                      type: string
+                    reservedInstance:
+                      description: The consumer instance which currently has the partition
+                        reserved.
+                      type: string
+                    timeReservedUntil:
+                      description: A timestamp when the current reservation expires.
+                      type: string
+                  type: object
+                type: array
               status:
-                description: |-
-                  INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-                  Important: Run "make" to regenerate code after modifying this file
                 properties:
                   conditions:
                     items:
@@ -139,6 +129,9 @@ spec:
                     format: date-time
                     type: string
                 type: object
+              streamId:
+                description: The streamId for which the group exists.
+                type: string
             required:
             - status
             type: object

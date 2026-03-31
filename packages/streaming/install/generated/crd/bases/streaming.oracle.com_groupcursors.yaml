@@ -4,26 +4,22 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.0
-  name: streams.streaming.oracle.com
+  name: groupcursors.streaming.oracle.com
 spec:
   group: streaming.oracle.com
   names:
-    kind: Stream
-    listKind: StreamList
-    plural: streams
-    singular: stream
+    kind: GroupCursor
+    listKind: GroupCursorList
+    plural: groupcursors
+    singular: groupcursor
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.name
-      name: Streamname
-      priority: 1
-      type: string
-    - description: status of the Stream
+    - description: status of the GroupCursor
       jsonPath: .status.status.conditions[-1].type
       name: Status
       type: string
-    - description: Ocid of the Stream
+    - description: Ocid of the GroupCursor
       jsonPath: .status.status.ocid
       name: Ocid
       priority: 1
@@ -34,7 +30,7 @@ spec:
     name: v1beta1
     schema:
       openAPIV3Schema:
-        description: Stream is the Schema for the streams API
+        description: GroupCursor is the Schema for the groupcursors API.
         properties:
           apiVersion:
             description: |-
@@ -54,50 +50,40 @@ spec:
           metadata:
             type: object
           spec:
-            description: StreamSpec defines the desired state of Stream
+            description: GroupCursorSpec defines the desired state of GroupCursor.
             properties:
-              Id:
+              commitOnGet:
                 description: |-
-                  INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-                  Important: Run "make" to regenerate code after modifying this file
-                maxLength: 255
-                minLength: 1
+                  When using consumer-groups, the default commit-on-get behaviour can be overriden by setting this value to false.
+                  If disabled, a consumer must manually commit their cursors.
+                type: boolean
+              groupName:
+                description: Name of the consumer group.
                 type: string
-              compartmentId:
-                maxLength: 255
-                minLength: 1
+              instanceName:
+                description: A unique identifier for the instance joining the consumer
+                  group. If an instanceName is not provided, a UUID will be generated
+                  and used.
                 type: string
-              definedTags:
-                additionalProperties:
-                  additionalProperties:
-                    type: string
-                  type: object
-                type: object
-              freeformTags:
-                additionalProperties:
-                  type: string
-                type: object
-              name:
+              time:
+                description: The time to consume from if type is AT_TIME.
                 type: string
-              partitions:
-                minimum: 1
+              timeoutInMs:
+                description: The amount of a consumer instance inactivity time, before
+                  partition reservations are released.
                 type: integer
-              retentionInHours:
-                maximum: 168
-                minimum: 24
-                type: integer
-              streamPoolId:
-                maxLength: 255
-                minLength: 1
+              type:
+                description: The type of the cursor. This value is only used when
+                  the group is created.
                 type: string
+            required:
+            - groupName
+            - type
             type: object
           status:
-            description: StreamStatus defines the observed state of Stream
+            description: GroupCursorStatus defines the observed state of GroupCursor.
             properties:
               status:
-                description: |-
-                  INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-                  Important: Run "make" to regenerate code after modifying this file
                 properties:
                   conditions:
                     items:
