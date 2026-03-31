@@ -441,6 +441,10 @@ resources:
 - bases/streaming.oracle.com_cursors.yaml
 - bases/streaming.oracle.com_groupcursors.yaml
 - bases/streaming.oracle.com_groups.yaml
+- bases/redis.oracle.com_redisclusters.yaml
+- bases/redis.oracle.com_workrequesterrors.yaml
+- bases/redis.oracle.com_workrequestlogs.yaml
+- bases/redis.oracle.com_workrequests.yaml
 - bases/streaming.oracle.com_messages.yaml
 - bases/streaming.oracle.com_streampools.yaml
 - bases/streaming.oracle.com_streams.yaml
