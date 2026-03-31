@@ -38,12 +38,9 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetBucket
 else tracked identity is missing
-ServiceManager -> OCI: ListBucket(filters: compartment_id,\nstate)
+ServiceManager -> OCI: ListBuckets(filters: name,\nnamespace, compartment_id)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateBucket
-loop create pending PROVISIONING
-ServiceManager -> OCI: GetBucket
-end
 else reusable OCI resource already exists
 ServiceManager -> OCI: GetBucket
 end
@@ -52,40 +49,35 @@ end
 alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteBucket
-ServiceManager -> OCI: confirm delete via GetBucket or\nListBucket
-loop delete pending DELETING
-ServiceManager -> OCI: GetBucket or ListBucket
-end
+ServiceManager -> OCI: confirm delete via GetBucket or\nListBuckets
 alt cleanup or finalizer release is blocked
 ServiceManager --> BaseReconciler: retain delete state and retry
 else delete completion observed
 ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
-else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: auto_tiering,
+compartment_id, defined_tags,
+freeform_tags (+7 more)
 Reject before mutate: force-new fields
+storage_tier
+Lookup filters: name, namespace,
 compartment_id
-Lookup filters: compartment_id, state
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateBucket only for mutable\nfields display_name
-loop update pending UPDATING
-ServiceManager -> OCI: GetBucket
+ServiceManager -> OCI: Apply UpdateBucket only for mutable\nfields auto_tiering, compartment_id,\ndefined_tags, freeform_tags (+7\nmore)
 end
-end
-ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
-BaseReconciler --> Controller: requeue on provisioning, updating,\nterminating
+BaseReconciler --> Controller: requeue on updating, terminating
 note right of ServiceManager
 shared diagram:
 shared/diagrams/shared-resolution-sequence.svg
@@ -107,18 +99,24 @@ kind: Bucket
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+requeue: updating, terminating
+provider states: create none; update none;
+delete none
+supported drift: auto_tiering, compartment_id,
+defined_tags, freeform_tags (+7 more)
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_objectstorage_bucket
-filters compartment_id, state
+storage_tier
+list lookup: oci_objectstorage_buckets filters
+name, namespace, compartment_id
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Generatedruntime resolves bucketName and
+namespaceName from observed status first, then
+falls back to the published Bucket spec.
+Successful create and update responses without
+lifecycle fields are treated as synchronous
+success and projected directly into status.
+Delete keeps the finalizer until DeleteBucket
+succeeds and GetBucket confirms NotFound.
 end note
 @enduml

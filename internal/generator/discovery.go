@@ -306,6 +306,7 @@ func runtimeRequestFields(pkg *ocisdk.Package, rawName string, operation string,
 				RequestName:      field.RequestName,
 				Contribution:     string(field.Contribution),
 				PreferResourceID: shouldPreferResourceID(operation, rawName, field, pathFieldCount),
+				LookupPaths:      requestLookupPaths(rawName, field),
 			})
 		}
 	}
@@ -325,13 +326,45 @@ func shouldPreferResourceID(operation string, rawName string, field ocisdk.Field
 	if operation == "Create" || field.Contribution != ocisdk.FieldContributionPath {
 		return false
 	}
+
+	requestName := strings.ToLower(strings.TrimSpace(field.RequestName))
+	if requestName == "" {
+		requestName = strings.ToLower(strings.TrimSpace(field.Name))
+	}
+	if !strings.HasSuffix(requestName, "id") {
+		return false
+	}
 	if pathFieldCount == 1 {
 		return true
 	}
 
-	requestName := strings.ToLower(strings.TrimSpace(field.RequestName))
 	rawName = strings.ToLower(strings.TrimSpace(rawName))
-	return requestName != "" && rawName != "" && strings.Contains(requestName, rawName) && strings.HasSuffix(requestName, "id")
+	return requestName != "" && rawName != "" && strings.Contains(requestName, rawName)
+}
+
+func requestLookupPaths(rawName string, field ocisdk.Field) []string {
+	requestName := strings.TrimSpace(field.RequestName)
+	if requestName == "" {
+		return nil
+	}
+
+	switch {
+	case strings.EqualFold(requestName, "namespaceName"):
+		return []string{"status.namespace", "spec.namespace", "namespaceName", "namespace"}
+	case requestNameMatchesResourceName(rawName, requestName):
+		return []string{"status.name", "spec.name", "name"}
+	default:
+		return nil
+	}
+}
+
+func requestNameMatchesResourceName(rawName string, requestName string) bool {
+	rawName = strings.TrimSpace(rawName)
+	requestName = strings.TrimSpace(requestName)
+	if rawName == "" || requestName == "" {
+		return false
+	}
+	return strings.EqualFold(requestName, lowerCamel(rawName)+"Name")
 }
 
 func hasField(fields []FieldModel, name string) bool {

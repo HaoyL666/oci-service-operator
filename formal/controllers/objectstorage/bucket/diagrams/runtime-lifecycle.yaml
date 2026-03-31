@@ -5,9 +5,10 @@ slug: bucket
 kind: Bucket
 archetype: generated-service-manager
 states:
-  - provisioning
   - active
   - updating
   - terminating
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - Generatedruntime resolves bucketName and namespaceName from observed status first, then falls back to the published Bucket spec.
+  - Successful create and update responses without lifecycle fields are treated as synchronous success and projected directly into status.
+  - Delete keeps the finalizer until DeleteBucket succeeds and GetBucket confirms NotFound.

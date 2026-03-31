@@ -5,7 +5,7 @@
   "slug": "bucket",
   "kind": "Bucket",
   "sourceRef": "terraform-provider-oci",
-  "providerResource": "scaffold_objectstorage_bucket",
+  "providerResource": "oci_objectstorage_bucket",
   "operations": {
     "create": [
       {
@@ -23,9 +23,9 @@
     ],
     "list": [
       {
-        "operation": "ListBucket",
-        "requestType": "objectstorage.ListBucketRequest",
-        "responseType": "objectstorage.ListBucketResponse"
+        "operation": "ListBuckets",
+        "requestType": "objectstorage.ListBucketsRequest",
+        "responseType": "objectstorage.ListBucketsResponse"
       }
     ],
     "update": [
@@ -45,17 +45,11 @@
   },
   "lifecycle": {
     "create": {
-      "pending": [
-        "PROVISIONING"
-      ],
       "target": [
         "ACTIVE"
       ]
     },
     "update": {
-      "pending": [
-        "UPDATING"
-      ],
       "target": [
         "ACTIVE"
       ]
@@ -63,10 +57,20 @@
   },
   "mutation": {
     "mutable": [
-      "display_name"
+      "auto_tiering",
+      "compartment_id",
+      "defined_tags",
+      "freeform_tags",
+      "kms_key_id",
+      "metadata",
+      "name",
+      "namespace",
+      "object_events_enabled",
+      "public_access_type",
+      "versioning"
     ],
     "forceNew": [
-      "compartment_id"
+      "storage_tier"
     ],
     "conflictsWith": {}
   },
@@ -74,11 +78,6 @@
     "create": [
       {
         "helper": "tfresource.CreateResource"
-      },
-      {
-        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
-        "entityType": "template",
-        "action": "CREATED"
       }
     ],
     "update": [
@@ -93,20 +92,18 @@
     ]
   },
   "deleteConfirmation": {
-    "pending": [
-      "DELETING"
-    ],
     "target": [
       "DELETED"
     ]
   },
   "listLookup": {
-    "datasource": "scaffold_objectstorage_bucket",
-    "collectionField": "bucket",
+    "datasource": "oci_objectstorage_buckets",
+    "collectionField": "buckets",
     "responseItemsField": "Items",
     "filterFields": [
-      "compartment_id",
-      "state"
+      "name",
+      "namespace",
+      "compartment_id"
     ]
   },
   "boundary": {
@@ -114,12 +111,11 @@
     "repoAuthoredSpecPath": "controllers/objectstorage/bucket/spec.cfg",
     "repoAuthoredLogicGapsPath": "controllers/objectstorage/bucket/logic-gaps.md",
     "excludedSemantics": [
-      "bind-versus-create",
-      "secret-output",
-      "delete-confirmation"
+      "published-surface-aliases",
+      "synchronous-write-success"
     ]
   },
   "notes": [
-    "Scaffold placeholder for objectstorage/bucket; replace imported facts before promoting this row beyond scaffold."
+    "Seeded published Bucket row for objectstorage; generatedruntime now resolves published-surface request aliases and treats successful create/update responses without lifecycle fields as synchronous success."
   ]
 }

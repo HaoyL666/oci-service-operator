@@ -163,6 +163,7 @@ type RuntimeRequestFieldModel struct {
 	RequestName      string
 	Contribution     string
 	PreferResourceID bool
+	LookupPaths      []string
 }
 
 // RuntimeSemanticsModel describes the explicit formal runtime semantics attached to one resource.

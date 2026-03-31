@@ -459,6 +459,9 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: Bucket
+          formalSpec: bucket
     observedState:
       sdkAliases:
         WorkRequestLog:
