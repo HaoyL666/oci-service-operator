@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ACTION="${1:-build}"
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+
+BIN_DIR="${BIN_DIR:-${REPO_ROOT}/bin}"
+KIND_VERSION="${KIND_VERSION:-v0.31.0}"
+KIND_BIN="${KIND_BIN:-${BIN_DIR}/kind}"
+
+K8S_VERSION="${K8S_VERSION:-v1.35.0}"
+KIND_BUILD_TYPE="${KIND_BUILD_TYPE:-release}"
+KIND_BUILD_SOURCE="${KIND_BUILD_SOURCE:-${K8S_VERSION}}"
+KIND_IMAGE="${KIND_IMAGE:-kindest/node:${K8S_VERSION}-osok}"
+KIND_BASE_IMAGE="${KIND_BASE_IMAGE:-}"
+KIND_ARCH="${KIND_ARCH:-}"
+OCIR_IMAGE="${OCIR_IMAGE:-}"
+
+HOST_OS=""
+HOST_ARCH=""
+
+log() {
+  printf '[build-kind-node-image] %s\n' "$*" >&2
+}
+
+die() {
+  printf '[build-kind-node-image] ERROR: %s\n' "$*" >&2
+  exit 1
+}
+
+usage() {
+  cat <<EOF
+Usage:
+  $(basename "$0") [build|push|build-push|help]
+
+Default action:
+  build       Build a Kind-compatible node image.
+
+Other actions:
+  push        Tag an existing local node image and push it to OCIR_IMAGE.
+  build-push  Build the node image and then push it to OCIR_IMAGE.
+  help        Show this message.
+
+Common environment overrides:
+  KIND_VERSION=${KIND_VERSION}
+  K8S_VERSION=${K8S_VERSION}
+  KIND_BUILD_TYPE=${KIND_BUILD_TYPE}
+  KIND_BUILD_SOURCE=${KIND_BUILD_SOURCE}
+  KIND_IMAGE=${KIND_IMAGE}
+  KIND_BASE_IMAGE=<kind base image mirror if Docker Hub is blocked>
+  KIND_ARCH=<optional target architecture>
+  OCIR_IMAGE=<required for push or build-push>
+
+Examples:
+  $(basename "$0")
+  KIND_IMAGE=kindest/node:v1.35.0-osok KIND_BASE_IMAGE=iad.ocir.io/mytenancy/osok/kindest-base:v20251215-d00590df $(basename "$0")
+  OCIR_IMAGE=iad.ocir.io/mytenancy/osok/kindest-node:v1.35.0-osok $(basename "$0") build-push
+EOF
+}
+
+need_cmd() {
+  command -v "$1" >/dev/null 2>&1 || die "missing required command: $1"
+}
+
+detect_platform() {
+  case "$(uname -s)" in
+    Darwin) HOST_OS="darwin" ;;
+    Linux) HOST_OS="linux" ;;
+    *) die "unsupported host OS: $(uname -s)" ;;
+  esac
+
+  case "$(uname -m)" in
+    x86_64|amd64) HOST_ARCH="amd64" ;;
+    arm64|aarch64) HOST_ARCH="arm64" ;;
+    *) die "unsupported host architecture: $(uname -m)" ;;
+  esac
+}
+
+ensure_dirs() {
+  mkdir -p "${BIN_DIR}"
+}
+
+install_kind() {
+  if [ -x "${KIND_BIN}" ]; then
+    return
+  fi
+
+  log "Installing kind ${KIND_VERSION} into ${KIND_BIN}"
+  curl -fsSL -o "${KIND_BIN}" "https://kind.sigs.k8s.io/dl/${KIND_VERSION}/kind-${HOST_OS}-${HOST_ARCH}"
+  chmod +x "${KIND_BIN}"
+}
+
+ensure_prereqs() {
+  detect_platform
+  ensure_dirs
+  need_cmd curl
+  need_cmd docker
+  docker info >/dev/null 2>&1 || die "docker is installed but not ready"
+  install_kind
+}
+
+build_node_image() {
+  local cmd
+  cmd=( "${KIND_BIN}" build node-image "${KIND_BUILD_SOURCE}" --type "${KIND_BUILD_TYPE}" --image "${KIND_IMAGE}" )
+
+  if [ -n "${KIND_BASE_IMAGE}" ]; then
+    cmd+=( --base-image "${KIND_BASE_IMAGE}" )
+  fi
+
+  if [ -n "${KIND_ARCH}" ]; then
+    cmd+=( --arch "${KIND_ARCH}" )
+  fi
+
+  log "Building Kind node image ${KIND_IMAGE} from ${KIND_BUILD_TYPE}:${KIND_BUILD_SOURCE}"
+  "${cmd[@]}"
+
+  docker image inspect "${KIND_IMAGE}" >/dev/null 2>&1 || die "built image was not found locally: ${KIND_IMAGE}"
+}
+
+push_node_image() {
+  [ -n "${OCIR_IMAGE}" ] || die "OCIR_IMAGE is required for ${ACTION}"
+  docker image inspect "${KIND_IMAGE}" >/dev/null 2>&1 || die "local image does not exist: ${KIND_IMAGE}"
+
+  log "Tagging ${KIND_IMAGE} as ${OCIR_IMAGE}"
+  docker tag "${KIND_IMAGE}" "${OCIR_IMAGE}"
+
+  log "Pushing ${OCIR_IMAGE}"
+  docker push "${OCIR_IMAGE}"
+
+  log "Use it with: KIND_NODE_IMAGE=${OCIR_IMAGE} ./e2e/e2e-lite-local"
+}
+
+case "${ACTION}" in
+  build)
+    ensure_prereqs
+    build_node_image
+    ;;
+  push)
+    ensure_prereqs
+    push_node_image
+    ;;
+  build-push)
+    ensure_prereqs
+    build_node_image
+    push_node_image
+    ;;
+  help|-h|--help)
+    usage
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

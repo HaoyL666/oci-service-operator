@@ -1,0 +1,734 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ACTION="up"
+if [ "${1:-}" = "up" ] || [ "${1:-}" = "down" ] || [ "${1:-}" = "status" ] || [ "${1:-}" = "render" ] || [ "${1:-}" = "help" ]; then
+  ACTION="$1"
+  shift
+fi
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+
+CLUSTER_NAME="${CLUSTER_NAME:-osok-lite-cloud}"
+OSOK_NAMESPACE="${OSOK_NAMESPACE:-oci-service-operator-system}"
+ARTIFACT_DIR="${ARTIFACT_DIR:-}"
+KUBECONFIG_PATH="${KUBECONFIG_PATH:-}"
+BIN_DIR="${BIN_DIR:-${REPO_ROOT}/bin}"
+CLONE_DIR="${CLONE_DIR:-}"
+REPO_URL="${REPO_URL:-}"
+REPO_BRANCH="${REPO_BRANCH:-}"
+GITHUB_USER="${GITHUB_USER:-}"
+KIND_VERSION="${KIND_VERSION:-v0.22.0}"
+KUBECTL_VERSION="${KUBECTL_VERSION:-}"
+OPERATOR_SDK_VERSION="${OPERATOR_SDK_VERSION:-v1.37.0}"
+OLM_VERSION="${OLM_VERSION:-}"
+KIND_WAIT="${KIND_WAIT:-5m}"
+OLM_TIMEOUT="${OLM_TIMEOUT:-10m}"
+OSOK_INSTALL_TIMEOUT="${OSOK_INSTALL_TIMEOUT:-10m}"
+OSOK_BUNDLE_IMAGE="${OSOK_BUNDLE_IMAGE:-iad.ocir.io/oracle/oci-service-operator-bundle:1.0.0}"
+SKIP_HOST_PREP="${SKIP_HOST_PREP:-false}"
+SKIP_OCI_CHECK="${SKIP_OCI_CHECK:-false}"
+SKIP_OLM="${SKIP_OLM:-false}"
+SKIP_OSOK_INSTALL="${SKIP_OSOK_INSTALL:-false}"
+FORCE_INSTANCE_PRINCIPAL="${FORCE_INSTANCE_PRINCIPAL:-true}"
+RECREATE_CLUSTER="${RECREATE_CLUSTER:-false}"
+AUTO_REBOOT="${AUTO_REBOOT:-false}"
+
+KIND_CONFIG_PATH=""
+INSTANCE_METADATA_PATH=""
+KUBECTL_BIN=""
+KIND_BIN=""
+OPERATOR_SDK_BIN=""
+
+export KIND_EXPERIMENTAL_PROVIDER=podman
+
+HOST_OS=""
+HOST_ARCH=""
+HOST_ID=""
+HOST_VERSION_ID=""
+HOST_REBOOT_REQUIRED="false"
+SUDO=""
+
+log() {
+  printf '[e2e-lite-cloud] %s\n' "$*" >&2
+}
+
+warn() {
+  printf '[e2e-lite-cloud] WARN: %s\n' "$*" >&2
+}
+
+die() {
+  printf '[e2e-lite-cloud] ERROR: %s\n' "$*" >&2
+  exit 1
+}
+
+usage() {
+  cat <<EOF
+Usage:
+  $(basename "$0") [up|down|status|render|help] [options]
+
+Default action:
+  up      Prepare an Oracle Linux OCI VM for rootless Podman + kind, create a
+          lightweight cluster, install operator-sdk and OLM, clone an OSOK repo,
+          and optionally install the published OSOK bundle with instance principal
+          settings.
+
+Other actions:
+  down    Delete the Kind cluster and the default artifact directory.
+  status  Show Kind, OLM, OSOK, clone, and OCI metadata status.
+  render  Render the Kind config and print the resolved runtime settings.
+  help    Show this message.
+
+Options:
+  --repo-url URL         Clone this repository URL.
+  --github-user USER     Clone https://github.com/USER/oci-service-operator.git.
+  --branch BRANCH        Clone or update the requested branch.
+  --clone-dir DIR        Clone destination. Default: ARTIFACT_DIR/src/oci-service-operator
+  --cluster-name NAME    Kind cluster name. Default: ${CLUSTER_NAME}
+  --namespace NAME       OSOK install namespace. Default: ${OSOK_NAMESPACE}
+  --bundle-image IMAGE   OSOK bundle image. Default: ${OSOK_BUNDLE_IMAGE}
+  --kind-version VER     kind version. Default: ${KIND_VERSION}
+  --operator-sdk-version VER
+                         operator-sdk version. Default: ${OPERATOR_SDK_VERSION}
+  --olm-version VER      OLM version for operator-sdk olm install.
+  --skip-host-prep       Skip Oracle Linux rootless Podman host tuning.
+  --skip-oci-check       Skip OCI Instance Metadata Service validation.
+  --skip-olm             Skip OLM installation.
+  --skip-osok-install    Skip OSOK bundle installation.
+  --auto-reboot          Reboot automatically if host-prep changes require it.
+  --help                 Show this message.
+
+Environment overrides:
+  BIN_DIR=${BIN_DIR}
+  KIND_WAIT=${KIND_WAIT}
+  OLM_TIMEOUT=${OLM_TIMEOUT}
+  OSOK_INSTALL_TIMEOUT=${OSOK_INSTALL_TIMEOUT}
+  RECREATE_CLUSTER=${RECREATE_CLUSTER}
+  FORCE_INSTANCE_PRINCIPAL=${FORCE_INSTANCE_PRINCIPAL}
+
+Examples:
+  $(basename "$0") up --github-user oracle --branch main
+  $(basename "$0") up --repo-url https://github.com/example/oci-service-operator.git --branch feature/x
+  $(basename "$0") up --repo-url https://github.com/example/oci-service-operator.git --skip-osok-install
+EOF
+}
+
+is_true() {
+  case "${1:-}" in
+    1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Yy]|[Oo][Nn]) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+need_cmd() {
+  command -v "$1" >/dev/null 2>&1 || die "missing required command: $1"
+}
+
+ensure_sudo() {
+  if [ "$(id -u)" -eq 0 ]; then
+    SUDO=""
+    return
+  fi
+
+  need_cmd sudo
+  SUDO="sudo"
+}
+
+run_as_root() {
+  if [ -n "${SUDO}" ]; then
+    "${SUDO}" "$@"
+    return
+  fi
+
+  "$@"
+}
+
+parse_args() {
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --repo-url)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        REPO_URL="$2"
+        shift 2
+        ;;
+      --github-user|--repo-user|--username)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        GITHUB_USER="$2"
+        shift 2
+        ;;
+      --branch)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        REPO_BRANCH="$2"
+        shift 2
+        ;;
+      --clone-dir)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        CLONE_DIR="$2"
+        shift 2
+        ;;
+      --cluster-name)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        CLUSTER_NAME="$2"
+        shift 2
+        ;;
+      --namespace)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        OSOK_NAMESPACE="$2"
+        shift 2
+        ;;
+      --bundle-image)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        OSOK_BUNDLE_IMAGE="$2"
+        shift 2
+        ;;
+      --kind-version)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        KIND_VERSION="$2"
+        shift 2
+        ;;
+      --operator-sdk-version)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        OPERATOR_SDK_VERSION="$2"
+        shift 2
+        ;;
+      --olm-version)
+        [ "$#" -ge 2 ] || die "missing value for $1"
+        OLM_VERSION="$2"
+        shift 2
+        ;;
+      --skip-host-prep)
+        SKIP_HOST_PREP="true"
+        shift
+        ;;
+      --skip-oci-check)
+        SKIP_OCI_CHECK="true"
+        shift
+        ;;
+      --skip-olm)
+        SKIP_OLM="true"
+        shift
+        ;;
+      --skip-osok-install)
+        SKIP_OSOK_INSTALL="true"
+        shift
+        ;;
+      --auto-reboot)
+        AUTO_REBOOT="true"
+        shift
+        ;;
+      --help|-h)
+        usage
+        exit 0
+        ;;
+      *)
+        die "unknown option: $1"
+        ;;
+    esac
+  done
+}
+
+detect_platform() {
+  case "$(uname -s)" in
+    Linux) HOST_OS="linux" ;;
+    *) die "unsupported host OS: $(uname -s). This script targets Oracle Linux instances." ;;
+  esac
+
+  case "$(uname -m)" in
+    x86_64|amd64) HOST_ARCH="amd64" ;;
+    arm64|aarch64) HOST_ARCH="arm64" ;;
+    *) die "unsupported host architecture: $(uname -m)" ;;
+  esac
+
+  if [ -r /etc/os-release ]; then
+    # shellcheck disable=SC1091
+    . /etc/os-release
+    HOST_ID="${ID:-}"
+    HOST_VERSION_ID="${VERSION_ID:-}"
+  fi
+}
+
+finalize_defaults() {
+  if [ -z "${ARTIFACT_DIR}" ]; then
+    ARTIFACT_DIR="${REPO_ROOT}/e2e/.e2e-lite-cloud-${CLUSTER_NAME}"
+  fi
+
+  if [ -z "${KUBECONFIG_PATH}" ]; then
+    KUBECONFIG_PATH="${ARTIFACT_DIR}/kubeconfig"
+  fi
+
+  if [ -z "${CLONE_DIR}" ]; then
+    CLONE_DIR="${ARTIFACT_DIR}/src/oci-service-operator"
+  fi
+
+  KIND_CONFIG_PATH="${ARTIFACT_DIR}/kind-config.yaml"
+  INSTANCE_METADATA_PATH="${ARTIFACT_DIR}/instance-metadata.json"
+  KUBECTL_BIN="${KUBECTL_BIN:-${BIN_DIR}/kubectl}"
+  KIND_BIN="${BIN_DIR}/kind"
+  OPERATOR_SDK_BIN="${BIN_DIR}/operator-sdk"
+
+  export KUBECONFIG="${KUBECONFIG_PATH}"
+}
+
+ensure_dirs() {
+  mkdir -p "${ARTIFACT_DIR}" "${BIN_DIR}" "$(dirname -- "${CLONE_DIR}")"
+}
+
+install_host_packages() {
+  local packages=()
+
+  command -v curl >/dev/null 2>&1 || packages+=("curl")
+  command -v git >/dev/null 2>&1 || packages+=("git")
+  command -v podman >/dev/null 2>&1 || packages+=("podman")
+
+  if [ "${#packages[@]}" -eq 0 ]; then
+    return
+  fi
+
+  ensure_sudo
+
+  if command -v dnf >/dev/null 2>&1; then
+    log "Installing host packages with dnf: ${packages[*]}"
+    run_as_root dnf install -y "${packages[@]}"
+    return
+  fi
+
+  if command -v yum >/dev/null 2>&1; then
+    log "Installing host packages with yum: ${packages[*]}"
+    run_as_root yum install -y "${packages[@]}"
+    return
+  fi
+
+  die "unable to install required host packages automatically; neither dnf nor yum is available"
+}
+
+ensure_cgroup_v2() {
+  if [ -f /sys/fs/cgroup/cgroup.controllers ] && mount | grep -q ' on /sys/fs/cgroup type cgroup2 '; then
+    return
+  fi
+
+  warn "cgroup v2 is not enabled; kind on rootless Podman requires it"
+  ensure_sudo
+  need_cmd grubby
+
+  log "Enabling cgroup v2 for the next boot"
+  run_as_root grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=1"
+  HOST_REBOOT_REQUIRED="true"
+}
+
+ensure_systemd_delegation() {
+  local path="/etc/systemd/system/user@.service.d/delegate.conf"
+  local wanted current
+
+  wanted=$'[Service]\nDelegate=yes'
+  current="$(run_as_root sh -c "cat '${path}' 2>/dev/null" || true)"
+  if [ "${current}" = "${wanted}" ]; then
+    return
+  fi
+
+  log "Configuring systemd delegation for rootless Podman"
+  run_as_root mkdir -p /etc/systemd/system/user@.service.d
+  printf '%s\n' '[Service]' 'Delegate=yes' | run_as_root tee "${path}" >/dev/null
+  run_as_root systemctl daemon-reload
+  HOST_REBOOT_REQUIRED="true"
+}
+
+ensure_iptables_modules() {
+  local path="/etc/modules-load.d/iptables.conf"
+  local wanted current
+
+  wanted=$'ip6_tables\nip6table_nat\nip_tables\niptable_nat'
+  current="$(run_as_root sh -c "cat '${path}' 2>/dev/null" || true)"
+  if [ "${current}" = "${wanted}" ]; then
+    return
+  fi
+
+  log "Configuring iptables modules for rootless Podman"
+  printf '%s\n' 'ip6_tables' 'ip6table_nat' 'ip_tables' 'iptable_nat' | run_as_root tee "${path}" >/dev/null
+  run_as_root systemctl restart systemd-modules-load.service
+  HOST_REBOOT_REQUIRED="true"
+}
+
+ensure_host_prep() {
+  if is_true "${SKIP_HOST_PREP}"; then
+    log "Skipping Oracle Linux host preparation because SKIP_HOST_PREP=${SKIP_HOST_PREP}"
+    return
+  fi
+
+  if [ -n "${HOST_ID}" ] && [ "${HOST_ID}" != "ol" ] && [ "${HOST_ID}" != "oracle" ] && [ "${HOST_ID}" != "oraclelinux" ]; then
+    warn "host OS ${HOST_ID:-unknown} is not Oracle Linux; proceeding with best-effort Podman preparation"
+  fi
+
+  install_host_packages
+  ensure_sudo
+  ensure_cgroup_v2
+  ensure_systemd_delegation
+  ensure_iptables_modules
+
+  if ! is_true "${HOST_REBOOT_REQUIRED}"; then
+    return
+  fi
+
+  if is_true "${AUTO_REBOOT}"; then
+    log "Rebooting to complete Podman host preparation"
+    run_as_root systemctl reboot
+    exit 0
+  fi
+
+  die "host preparation changed system settings and requires a reboot before continuing; rerun after reboot or set --auto-reboot"
+}
+
+install_kubectl() {
+  if [ -x "${KUBECTL_BIN}" ]; then
+    return
+  fi
+
+  local version
+
+  version="${KUBECTL_VERSION}"
+  if [ -z "${version}" ]; then
+    version="$(curl -fsSL https://dl.k8s.io/release/stable.txt)"
+  fi
+
+  log "Installing kubectl ${version} into ${KUBECTL_BIN}"
+  curl -fsSL -o "${KUBECTL_BIN}" "https://dl.k8s.io/release/${version}/bin/${HOST_OS}/${HOST_ARCH}/kubectl"
+  chmod +x "${KUBECTL_BIN}"
+}
+
+install_kind() {
+  if [ -x "${KIND_BIN}" ]; then
+    return
+  fi
+
+  log "Installing kind ${KIND_VERSION} into ${KIND_BIN}"
+  curl -fsSL -o "${KIND_BIN}" "https://kind.sigs.k8s.io/dl/${KIND_VERSION}/kind-${HOST_OS}-${HOST_ARCH}"
+  chmod +x "${KIND_BIN}"
+}
+
+install_operator_sdk() {
+  if [ -x "${OPERATOR_SDK_BIN}" ]; then
+    return
+  fi
+
+  log "Installing operator-sdk ${OPERATOR_SDK_VERSION} into ${OPERATOR_SDK_BIN}"
+  curl -fsSL -o "${OPERATOR_SDK_BIN}" "https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}/operator-sdk_${HOST_OS}_${HOST_ARCH}"
+  chmod +x "${OPERATOR_SDK_BIN}"
+}
+
+ensure_client_tools() {
+  install_host_packages
+  install_kubectl
+  install_kind
+  install_operator_sdk
+  need_cmd podman
+  podman info >/dev/null 2>&1 || die "podman is installed but not ready; fix Podman access and retry"
+}
+
+ensure_prereqs() {
+  detect_platform
+  finalize_defaults
+  ensure_dirs
+  ensure_host_prep
+  ensure_client_tools
+}
+
+cluster_exists() {
+  "${KIND_BIN}" get clusters 2>/dev/null | grep -Fxq "${CLUSTER_NAME}"
+}
+
+write_kind_config() {
+  cat > "${KIND_CONFIG_PATH}" <<EOF
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+EOF
+}
+
+export_kubeconfig() {
+  "${KIND_BIN}" export kubeconfig --name "${CLUSTER_NAME}" --kubeconfig "${KUBECONFIG_PATH}" >/dev/null
+}
+
+create_cluster() {
+  write_kind_config
+
+  if cluster_exists && is_true "${RECREATE_CLUSTER}"; then
+    log "Deleting existing Kind cluster ${CLUSTER_NAME}"
+    "${KIND_BIN}" delete cluster --name "${CLUSTER_NAME}"
+  fi
+
+  if ! cluster_exists; then
+    log "Creating Kind cluster ${CLUSTER_NAME}"
+    "${KIND_BIN}" create cluster \
+      --name "${CLUSTER_NAME}" \
+      --config "${KIND_CONFIG_PATH}" \
+      --wait "${KIND_WAIT}" \
+      --kubeconfig "${KUBECONFIG_PATH}"
+  else
+    log "Reusing existing Kind cluster ${CLUSTER_NAME}"
+  fi
+
+  export_kubeconfig
+  "${KUBECTL_BIN}" cluster-info >/dev/null
+}
+
+json_field() {
+  local file="$1"
+  local key="$2"
+
+  tr -d '\n' < "${file}" | sed -n "s/.*\"${key}\"[[:space:]]*:[[:space:]]*\"\\([^\"]*\\)\".*/\\1/p"
+}
+
+verify_oci_instance() {
+  if is_true "${SKIP_OCI_CHECK}"; then
+    log "Skipping OCI IMDS validation because SKIP_OCI_CHECK=${SKIP_OCI_CHECK}"
+    return
+  fi
+
+  log "Checking OCI Instance Metadata Service"
+  curl -fsSL \
+    --retry 3 \
+    --retry-delay 2 \
+    --connect-timeout 10 \
+    -H 'Authorization: Bearer Oracle' \
+    http://169.254.169.254/opc/v2/instance/ > "${INSTANCE_METADATA_PATH}"
+
+  local instance_id region compartment_id
+
+  instance_id="$(json_field "${INSTANCE_METADATA_PATH}" id)"
+  region="$(json_field "${INSTANCE_METADATA_PATH}" canonicalRegionName)"
+  if [ -z "${region}" ]; then
+    region="$(json_field "${INSTANCE_METADATA_PATH}" region)"
+  fi
+  compartment_id="$(json_field "${INSTANCE_METADATA_PATH}" compartmentId)"
+
+  [ -n "${instance_id}" ] || die "IMDS responded but instance OCID could not be parsed"
+
+  log "OCI instance detected: instance=${instance_id} region=${region:-unknown} compartment=${compartment_id:-unknown}"
+  warn "instance principal access still requires a matching OCI dynamic group and IAM policy for this instance"
+}
+
+install_olm() {
+  if is_true "${SKIP_OLM}"; then
+    log "Skipping OLM installation because SKIP_OLM=${SKIP_OLM}"
+    return
+  fi
+
+  if "${OPERATOR_SDK_BIN}" olm status >/dev/null 2>&1; then
+    log "OLM is already installed"
+    return
+  fi
+
+  log "Installing OLM"
+  if [ -n "${OLM_VERSION}" ]; then
+    "${OPERATOR_SDK_BIN}" olm install --timeout "${OLM_TIMEOUT}" --version "${OLM_VERSION}"
+  else
+    "${OPERATOR_SDK_BIN}" olm install --timeout "${OLM_TIMEOUT}"
+  fi
+
+  "${OPERATOR_SDK_BIN}" olm status >/dev/null
+}
+
+ensure_instance_principal_config() {
+  if ! is_true "${FORCE_INSTANCE_PRINCIPAL}"; then
+    return
+  fi
+
+  log "Configuring OSOK namespace ${OSOK_NAMESPACE} for instance principal auth"
+  "${KUBECTL_BIN}" create namespace "${OSOK_NAMESPACE}" --dry-run=client -o yaml | "${KUBECTL_BIN}" apply -f - >/dev/null
+  "${KUBECTL_BIN}" -n "${OSOK_NAMESPACE}" delete secret ocicredentials --ignore-not-found >/dev/null
+  "${KUBECTL_BIN}" -n "${OSOK_NAMESPACE}" create secret generic osokconfig \
+    --from-literal=useinstanceprincipal=true \
+    --dry-run=client \
+    -o yaml | "${KUBECTL_BIN}" apply -f - >/dev/null
+}
+
+osok_installed() {
+  "${KUBECTL_BIN}" -n "${OSOK_NAMESPACE}" get csv -o name 2>/dev/null | grep -q 'oci-service-operator'
+}
+
+install_osok_bundle() {
+  if is_true "${SKIP_OSOK_INSTALL}"; then
+    log "Skipping OSOK bundle installation because SKIP_OSOK_INSTALL=${SKIP_OSOK_INSTALL}"
+    return
+  fi
+
+  [ -n "${OSOK_BUNDLE_IMAGE}" ] || die "OSOK_BUNDLE_IMAGE is empty; pass --bundle-image or use --skip-osok-install"
+  "${KUBECTL_BIN}" create namespace "${OSOK_NAMESPACE}" --dry-run=client -o yaml | "${KUBECTL_BIN}" apply -f - >/dev/null
+  ensure_instance_principal_config
+
+  if osok_installed; then
+    log "OSOK bundle already appears to be installed in ${OSOK_NAMESPACE}"
+    return
+  fi
+
+  log "Installing OSOK bundle ${OSOK_BUNDLE_IMAGE}"
+  "${OPERATOR_SDK_BIN}" run bundle "${OSOK_BUNDLE_IMAGE}" \
+    -n "${OSOK_NAMESPACE}" \
+    --timeout "${OSOK_INSTALL_TIMEOUT}"
+}
+
+default_repo_url() {
+  local origin_url
+
+  if [ -n "${REPO_URL}" ]; then
+    printf '%s\n' "${REPO_URL}"
+    return
+  fi
+
+  if [ -n "${GITHUB_USER}" ]; then
+    printf 'https://github.com/%s/oci-service-operator.git\n' "${GITHUB_USER}"
+    return
+  fi
+
+  origin_url="$(git -C "${REPO_ROOT}" remote get-url origin 2>/dev/null || true)"
+  [ -n "${origin_url}" ] || die "set --repo-url or --github-user so the OSOK source can be cloned"
+  printf '%s\n' "${origin_url}"
+}
+
+default_repo_branch() {
+  local branch
+
+  if [ -n "${REPO_BRANCH}" ]; then
+    printf '%s\n' "${REPO_BRANCH}"
+    return
+  fi
+
+  branch="$(git -C "${REPO_ROOT}" branch --show-current 2>/dev/null || true)"
+  printf '%s\n' "${branch}"
+}
+
+clone_repo() {
+  local repo_url branch existing_origin
+
+  repo_url="$(default_repo_url)"
+  branch="$(default_repo_branch)"
+
+  if [ -d "${CLONE_DIR}/.git" ]; then
+    existing_origin="$(git -C "${CLONE_DIR}" remote get-url origin 2>/dev/null || true)"
+    [ -n "${existing_origin}" ] || die "unable to read origin from ${CLONE_DIR}"
+    [ "${existing_origin}" = "${repo_url}" ] || die "${CLONE_DIR} already points at ${existing_origin}; expected ${repo_url}"
+
+    log "Refreshing existing clone in ${CLONE_DIR}"
+    git -C "${CLONE_DIR}" fetch --all --prune
+    if [ -n "${branch}" ]; then
+      if git -C "${CLONE_DIR}" show-ref --verify --quiet "refs/remotes/origin/${branch}"; then
+        git -C "${CLONE_DIR}" checkout -B "${branch}" "origin/${branch}"
+      else
+        git -C "${CLONE_DIR}" checkout "${branch}"
+      fi
+    fi
+    return
+  fi
+
+  if [ -e "${CLONE_DIR}" ] && [ -n "$(ls -A "${CLONE_DIR}" 2>/dev/null)" ]; then
+    die "clone destination exists and is not an empty git repository: ${CLONE_DIR}"
+  fi
+
+  log "Cloning ${repo_url} into ${CLONE_DIR}"
+  if [ -n "${branch}" ]; then
+    git clone --branch "${branch}" --single-branch "${repo_url}" "${CLONE_DIR}"
+  else
+    git clone "${repo_url}" "${CLONE_DIR}"
+  fi
+}
+
+show_status() {
+  if cluster_exists; then
+    export_kubeconfig
+
+    log "Kind nodes"
+    "${KUBECTL_BIN}" get nodes
+
+    log "OLM status"
+    "${OPERATOR_SDK_BIN}" olm status 2>/dev/null || true
+
+    log "OSOK resources in ${OSOK_NAMESPACE}"
+    "${KUBECTL_BIN}" -n "${OSOK_NAMESPACE}" get csv,pods,deployments 2>/dev/null || true
+  else
+    log "Kind cluster ${CLUSTER_NAME} does not exist"
+  fi
+
+  if [ -f "${INSTANCE_METADATA_PATH}" ]; then
+    log "OCI metadata file: ${INSTANCE_METADATA_PATH}"
+  fi
+
+  if [ -d "${CLONE_DIR}/.git" ]; then
+    log "Cloned repo: ${CLONE_DIR}"
+    git -C "${CLONE_DIR}" status --short --branch
+  fi
+}
+
+teardown() {
+  if cluster_exists; then
+    log "Deleting Kind cluster ${CLUSTER_NAME}"
+    "${KIND_BIN}" delete cluster --name "${CLUSTER_NAME}"
+  else
+    log "Kind cluster ${CLUSTER_NAME} does not exist"
+  fi
+
+  if [ -d "${ARTIFACT_DIR}" ]; then
+    rm -rf "${ARTIFACT_DIR}"
+    log "Removed ${ARTIFACT_DIR}"
+  fi
+}
+
+render_only() {
+  detect_platform
+  finalize_defaults
+  ensure_dirs
+  write_kind_config
+
+  log "Kind config: ${KIND_CONFIG_PATH}"
+  log "Cluster name: ${CLUSTER_NAME}"
+  log "Namespace: ${OSOK_NAMESPACE}"
+  log "Clone dir: ${CLONE_DIR}"
+  log "Repo URL: $(default_repo_url)"
+  log "Repo branch: $(default_repo_branch)"
+  log "Bundle image: ${OSOK_BUNDLE_IMAGE}"
+}
+
+up() {
+  ensure_prereqs
+  verify_oci_instance
+  create_cluster
+  install_olm
+  clone_repo
+  install_osok_bundle
+  show_status
+}
+
+parse_args "$@"
+
+case "${ACTION}" in
+  up)
+    up
+    ;;
+  down)
+    detect_platform
+    finalize_defaults
+    ensure_dirs
+    install_kind
+    teardown
+    ;;
+  status)
+    detect_platform
+    finalize_defaults
+    ensure_dirs
+    install_kubectl
+    install_kind
+    install_operator_sdk
+    show_status
+    ;;
+  render)
+    render_only
+    ;;
+  help)
+    usage
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
