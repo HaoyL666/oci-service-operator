@@ -27,15 +27,15 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via GetVcn;
 else (no)
-:Resolve an existing OCI resource through\nListVcn using filters compartment_id, state;
+:Resolve an existing OCI resource through\nListVcn using filters compartment_id,\ndisplay_name, id, state;
 :Create the OCI resource via CreateVcn when no\nreusable match is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
 }
 if ("Delete requested?") then (yes)
 partition "Delete" {
-:Delete path uses DeleteVcn with required via\nGetVcn or ListVcn to DELETED confirmation;
-:Confirm deletion via GetVcn or ListVcn until\nOCI reaches DELETED;
+:Delete path uses DeleteVcn with required via\nGetVcn or ListVcn to NOT_FOUND confirmation;
+:Confirm deletion via GetVcn or ListVcn until\nOCI reaches NOT_FOUND;
 if ("Delete cleanup and finalizer release succeed?") then (yes)
 :Remove the finalizer after delete completion;
 else (no)
@@ -46,27 +46,28 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
+:Request requeue while OCI remains in\nPROVISIONING, UPDATING, TERMINATING,\nTERMINATED;
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
-:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE;
+:Return an unsuccessful reconcile result until\nOCI reaches AVAILABLE;
 stop
 endif
 }
 partition "Ready and Drift Handling" {
 :Compare live OCI state against the imported\nfield surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields byoipv6_cidr_details, cidr_block,\ncidr_blocks, compartment_id (+4 more) and\nconflicts cidr_block -> cidr_blocks,\ncidr_blocks -> cidr_block;
 stop
 endif
+:Enforce conflictsWith rules cidr_block ->\ncidr_blocks, cidr_blocks -> cidr_block before\nany OCI mutation;
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateVcn only for mutable fields\ndisplay_name;
+:Apply UpdateVcn only for mutable fields\ndefined_tags, display_name, freeform_tags;
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Return success for the ACTIVE success state;
+:Return success for the AVAILABLE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
 }
@@ -92,16 +93,24 @@ status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+UPDATING; delete TERMINATING, TERMINATED
+supported drift: defined_tags, display_name,
+freeform_tags
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_core_vcn filters
-compartment_id, state
-conflicts: none
+byoipv6_cidr_details, cidr_block, cidr_blocks,
+compartment_id (+4 more) and conflicts
+cidr_block -> cidr_blocks, cidr_blocks ->
+cidr_block
+list lookup: oci_core_vcns filters
+compartment_id, display_name, id, state
+conflicts: cidr_block -> cidr_blocks,
+cidr_blocks -> cidr_block
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Ready state maps to OCI AVAILABLE.
+Requeue continues while OCI reports
+PROVISIONING, UPDATING, or TERMINATING.
+Delete completes only after GetVcn returns not
+found; TERMINATED is an accepted observed
+pre-delete state.
 end note
 @enduml

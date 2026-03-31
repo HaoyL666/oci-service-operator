@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetVcn
 else tracked identity is missing
-ServiceManager -> OCI: ListVcn(filters: compartment_id,\nstate)
+ServiceManager -> OCI: ListVcn(filters: compartment_id,\ndisplay_name, id, state)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateVcn
 loop create pending PROVISIONING
@@ -53,7 +53,7 @@ alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteVcn
 ServiceManager -> OCI: confirm delete via GetVcn or ListVcn
-loop delete pending DELETING
+loop delete pending TERMINATING,\nTERMINATED
 ServiceManager -> OCI: GetVcn or ListVcn
 end
 alt cleanup or finalizer release is blocked
@@ -63,20 +63,27 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, TERMINATING,\nTERMINATED
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: defined_tags,
+display_name, freeform_tags
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+byoipv6_cidr_details, cidr_block,
+cidr_blocks, compartment_id (+4 more)
+and conflicts cidr_block -> cidr_blocks,
+cidr_blocks -> cidr_block
+Conflicts: cidr_block -> cidr_blocks,
+cidr_blocks -> cidr_block
+Lookup filters: compartment_id,
+display_name, id, state
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateVcn only for mutable\nfields display_name
+ServiceManager -> OCI: Apply UpdateVcn only for mutable\nfields defined_tags, display_name,\nfreeform_tags
 loop update pending UPDATING
 ServiceManager -> OCI: GetVcn
 end
@@ -109,16 +116,24 @@ status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+UPDATING; delete TERMINATING, TERMINATED
+supported drift: defined_tags, display_name,
+freeform_tags
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_core_vcn filters
-compartment_id, state
-conflicts: none
+byoipv6_cidr_details, cidr_block, cidr_blocks,
+compartment_id (+4 more) and conflicts
+cidr_block -> cidr_blocks, cidr_blocks ->
+cidr_block
+list lookup: oci_core_vcns filters
+compartment_id, display_name, id, state
+conflicts: cidr_block -> cidr_blocks,
+cidr_blocks -> cidr_block
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Ready state maps to OCI AVAILABLE.
+Requeue continues while OCI reports
+PROVISIONING, UPDATING, or TERMINATING.
+Delete completes only after GetVcn returns not
+found; TERMINATED is an accepted observed
+pre-delete state.
 end note
 @enduml

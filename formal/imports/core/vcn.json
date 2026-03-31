@@ -5,7 +5,7 @@
   "slug": "vcn",
   "kind": "Vcn",
   "sourceRef": "terraform-provider-oci",
-  "providerResource": "scaffold_core_vcn",
+  "providerResource": "oci_core_vcn",
   "operations": {
     "create": [
       {
@@ -49,7 +49,7 @@
         "PROVISIONING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     },
     "update": {
@@ -57,18 +57,34 @@
         "UPDATING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     }
   },
   "mutation": {
     "mutable": [
-      "display_name"
+      "defined_tags",
+      "display_name",
+      "freeform_tags"
     ],
     "forceNew": [
-      "compartment_id"
+      "byoipv6_cidr_details",
+      "cidr_block",
+      "cidr_blocks",
+      "compartment_id",
+      "dns_label",
+      "ipv6_private_cidr_blocks",
+      "is_ipv6_enabled",
+      "is_oracle_gua_allocation_enabled"
     ],
-    "conflictsWith": {}
+    "conflictsWith": {
+      "cidr_block": [
+        "cidr_blocks"
+      ],
+      "cidr_blocks": [
+        "cidr_block"
+      ]
+    }
   },
   "hooks": {
     "create": [
@@ -94,18 +110,21 @@
   },
   "deleteConfirmation": {
     "pending": [
-      "DELETING"
+      "TERMINATING",
+      "TERMINATED"
     ],
     "target": [
-      "DELETED"
+      "NOT_FOUND"
     ]
   },
   "listLookup": {
-    "datasource": "scaffold_core_vcn",
+    "datasource": "oci_core_vcns",
     "collectionField": "vcn",
     "responseItemsField": "Items",
     "filterFields": [
       "compartment_id",
+      "display_name",
+      "id",
       "state"
     ]
   },
@@ -115,11 +134,11 @@
     "repoAuthoredLogicGapsPath": "controllers/core/vcn/logic-gaps.md",
     "excludedSemantics": [
       "bind-versus-create",
-      "secret-output",
-      "delete-confirmation"
+      "secret-output"
     ]
   },
   "notes": [
-    "Scaffold placeholder for core/vcn; replace imported facts before promoting this row beyond scaffold."
+    "Pinned OCI SDK contract: UpdateVcnDetails only exposes defined_tags, display_name, and freeform_tags as in-place updates.",
+    "Repo-authored delete confirmation requires GetVcn to return not found; observed TERMINATED remains an accepted intermediate state."
   ]
 }

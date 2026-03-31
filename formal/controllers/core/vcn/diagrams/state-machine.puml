@@ -32,15 +32,15 @@ state "Deleted" as deleted
 state "DeleteCleanupBlocked" as delete_cleanup_blocked
 [*] --> observe : CreateVcn
 observe --> resolve_by_lookup : tracked identity missing
-resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE
-resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+resolve_by_lookup --> evaluate_ready : lookup or create reaches\nAVAILABLE
+resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, TERMINATING,\nTERMINATED
 resolve_by_lookup --> failed : unresolved OCI error or non-success state
-observe --> evaluate_ready : OCI state in ACTIVE
-observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+observe --> evaluate_ready : OCI state in AVAILABLE
+observe --> retryable : OCI state in PROVISIONING,\nUPDATING, TERMINATING,\nTERMINATED
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndisplay_name
+evaluate_ready --> apply_update : supported mutable drift for\ndefined_tags, display_name,\nfreeform_tags
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -70,21 +70,29 @@ status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+UPDATING; delete TERMINATING, TERMINATED
+supported drift: defined_tags, display_name,
+freeform_tags
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_core_vcn filters
-compartment_id, state
-conflicts: none
+byoipv6_cidr_details, cidr_block, cidr_blocks,
+compartment_id (+4 more) and conflicts
+cidr_block -> cidr_blocks, cidr_blocks ->
+cidr_block
+list lookup: oci_core_vcns filters
+compartment_id, display_name, id, state
+conflicts: cidr_block -> cidr_blocks,
+cidr_blocks -> cidr_block
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Ready state maps to OCI AVAILABLE.
+Requeue continues while OCI reports
+PROVISIONING, UPDATING, or TERMINATING.
+Delete completes only after GetVcn returns not
+found; TERMINATED is an accepted observed
+pre-delete state.
 end note
 note right of delete_pending
 delete policy: required
 delete observe: GetVcn or ListVcn
-delete targets: DELETED
+delete targets: NOT_FOUND
 end note
 @enduml

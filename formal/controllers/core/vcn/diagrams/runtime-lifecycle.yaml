@@ -9,5 +9,9 @@ states:
   - active
   - updating
   - terminating
+  - terminated
+  - deleted
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - Ready state maps to OCI AVAILABLE.
+  - Requeue continues while OCI reports PROVISIONING, UPDATING, or TERMINATING.
+  - Delete completes only after GetVcn returns not found; TERMINATED is an accepted observed pre-delete state.
