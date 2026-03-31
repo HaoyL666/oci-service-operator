@@ -394,6 +394,8 @@ services:
         strategy: manual
       resources:
         - kind: MySqlDbSystem
+          promotionBlockers:
+            - oci-service-operator-8xa.8
           controller:
             maxConcurrentReconciles: 3
             extraRBACMarkers:

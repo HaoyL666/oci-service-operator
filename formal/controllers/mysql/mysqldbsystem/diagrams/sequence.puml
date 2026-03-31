@@ -23,7 +23,7 @@ skinparam sequence {
 actor Kubernetes
 participant Controller
 participant BaseReconciler
-participant "LegacyAdapter" as ServiceManager
+participant "OSOKServiceManager" as ServiceManager
 participant OCI
 participant "Kubernetes Secret" as SecretStore
 note over BaseReconciler,ServiceManager
@@ -103,14 +103,14 @@ create-or-update dispatch.
 Layer the shared delete sequence when finalizer
 retention, delete confirmation, work-request
 polling, or Secret cleanup apply.
-archetype batch: Legacy-adapter controllers
-follow the shared resolution and delete
-sequences but preserve handwritten stop
-conditions until promotion is safe.
+archetype batch: Generated service-manager
+controllers follow the shared resolution and
+delete sequences with imported waits and
+controller-local policy.
 service: mysql
 slug: mysqldbsystem
 kind: MySqlDbSystem
-archetype: legacy-adapter
+archetype: generated-service-manager
 status/finalizer: manual / none
 requeue: provisioning, updating
 provider states: create CREATING, UPDATING;
@@ -128,7 +128,7 @@ database_management, db_system_id (+4 more)
 conflicts: none
 open gaps: bind-versus-create,
 delete-confirmation, endpoint-materialization,
-legacy-adapter, list-lookup (+3 more)
+list-lookup, mutation-policy (+2 more)
 Create reads username and password secrets
 before submitting the OCI request.
 Endpoint secret materialization only happens

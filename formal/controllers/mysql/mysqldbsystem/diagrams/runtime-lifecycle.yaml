@@ -3,7 +3,7 @@ surface: repo-authored-semantics
 service: mysql
 slug: mysqldbsystem
 kind: MySqlDbSystem
-archetype: legacy-adapter
+archetype: generated-service-manager
 states:
   - provisioning
   - active

@@ -57,11 +57,12 @@ type GenerationSurfaceConfig struct {
 
 // ResourceGenerationOverride captures per-kind rollout and override metadata.
 type ResourceGenerationOverride struct {
-	Kind           string                           `yaml:"kind"`
-	FormalSpec     string                           `yaml:"formalSpec,omitempty"`
-	Controller     ControllerGenerationOverride     `yaml:"controller,omitempty"`
-	ServiceManager ServiceManagerGenerationOverride `yaml:"serviceManager,omitempty"`
-	Webhooks       GenerationSurfaceConfig          `yaml:"webhooks,omitempty"`
+	Kind              string                           `yaml:"kind"`
+	FormalSpec        string                           `yaml:"formalSpec,omitempty"`
+	PromotionBlockers []string                         `yaml:"promotionBlockers,omitempty"`
+	Controller        ControllerGenerationOverride     `yaml:"controller,omitempty"`
+	ServiceManager    ServiceManagerGenerationOverride `yaml:"serviceManager,omitempty"`
+	Webhooks          GenerationSurfaceConfig          `yaml:"webhooks,omitempty"`
 }
 
 // ControllerGenerationOverride captures per-kind controller-specific settings.
@@ -267,6 +268,26 @@ func (g GenerationConfig) Validate(serviceName string) error {
 		); err != nil {
 			return err
 		}
+		blockers := make(map[string]struct{}, len(resource.PromotionBlockers))
+		for _, blocker := range resource.PromotionBlockers {
+			blocker = strings.TrimSpace(blocker)
+			if blocker == "" {
+				return fmt.Errorf(
+					"service %q generation.resources[%q].promotionBlockers contains a blank blocker id",
+					serviceName,
+					kind,
+				)
+			}
+			if _, exists := blockers[blocker]; exists {
+				return fmt.Errorf(
+					"service %q generation.resources[%q].promotionBlockers contains duplicate blocker %q",
+					serviceName,
+					kind,
+					blocker,
+				)
+			}
+			blockers[blocker] = struct{}{}
+		}
 		if resource.Controller.MaxConcurrentReconciles < 0 {
 			return fmt.Errorf(
 				"service %q generation.resources[%q].controller.maxConcurrentReconciles must be >= 0",
@@ -338,6 +359,7 @@ func validateWebhookStrategy(field string, strategy string) error {
 
 func (r ResourceGenerationOverride) hasOverrides() bool {
 	return strings.TrimSpace(r.FormalSpec) != "" ||
+		len(r.PromotionBlockers) > 0 ||
 		r.Controller.hasOverrides() ||
 		r.ServiceManager.hasOverrides() ||
 		strings.TrimSpace(r.Webhooks.Strategy) != ""
@@ -498,6 +520,27 @@ func (s ServiceConfig) FormalSpecFor(kind string) string {
 		return strings.TrimSpace(override.FormalSpec)
 	}
 	return strings.TrimSpace(s.FormalSpec)
+}
+
+// PromotionBlockersFor returns the checked-in issue IDs that still block one resource's promotion.
+func (s ServiceConfig) PromotionBlockersFor(kind string) []string {
+	override, ok := s.resourceGenerationOverride(kind)
+	if !ok || len(override.PromotionBlockers) == 0 {
+		return nil
+	}
+
+	blockers := make([]string, 0, len(override.PromotionBlockers))
+	for _, blocker := range override.PromotionBlockers {
+		blocker = strings.TrimSpace(blocker)
+		if blocker == "" {
+			continue
+		}
+		blockers = append(blockers, blocker)
+	}
+	if len(blockers) == 0 {
+		return nil
+	}
+	return blockers
 }
 
 // HasFormalSpecs reports whether the service or any resource override uses formal specs.

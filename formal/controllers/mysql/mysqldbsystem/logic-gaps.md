@@ -26,27 +26,37 @@ gaps:
     status: open
     stopCondition: "Delete is represented as an explicit unsupported path or replaced with a safe OCI delete plus confirmation flow before promotion."
   - category: legacy-adapter
-    status: open
-    stopCondition: "mysqldbsystem_generated_client_adapter.go is removable because the formal runtime covers the current DbSystemServiceManager behavior."
+    status: resolved
+    stopCondition: "mysqldbsystem_generated_runtime_client.go preserves the legacy DbSystemServiceManager secret, lookup, mutation, and delete behavior, so MySqlDbSystem no longer needs mysqldbsystem_generated_client_adapter.go."
 ---
 
 # Logic Gaps
 
 ## Current runtime path
 
-- The generated `MySqlDbSystemServiceManager` is overridden by `mysqldbsystem_generated_client_adapter.go`, so create, update, and delete still run through `DbSystemServiceManager`.
-- When `spec.id` is empty, the legacy manager lists DB systems by `compartmentId` and `displayName` before deciding whether to create a new system or bind to an existing one.
+- `MySqlDbSystem` now routes through the custom generated-runtime client in
+  `pkg/servicemanager/mysql/dbsystem/mysqldbsystem_generated_runtime_client.go`;
+  the repo no longer keeps a full `mysqldbsystem_generated_client_adapter.go`
+  delegate to `DbSystemServiceManager`.
+- The handwritten runtime hook still checks `spec.id` first; when no OCI ID is
+  tracked, it lists DB systems by `compartmentId` and `displayName` and only
+  binds to results in `ACTIVE`, `CREATING`, `UPDATING`, or `INACTIVE` before
+  falling back to create.
+- Create, update, and delete still preserve repo-authored mysql behavior, but
+  they now do it through generatedruntime callbacks instead of the standalone
+  legacy manager.
 
 ## Shared baseline alignment
 
 - Use the [shared generated-runtime baseline](../../../shared/generated-runtime-baseline.md)
   as the category map for bind, lookup, waiter, mutation, status, secret, and
   delete decisions.
-- `mysql/MySqlDbSystem` keeps the same category names as the shared baseline
-  but remains in the legacy-adapter batch in this issue.
-- `streaming/Stream` is the reference for naming bind, lookup, secret, and
-  delete categories; `identity/User` is the generated-runtime precedent that
-  mysql has not reached yet.
+- `mysql/MySqlDbSystem` keeps the same category names as the shared baseline,
+  but now expresses them through mysql-specific generatedruntime callbacks
+  instead of a full adapter handoff.
+- `streaming/Stream` remains the reference for naming bind, lookup, secret,
+  and delete categories, while `identity/User` remains the clean
+  formal-promotion precedent that mysql has not reached yet.
 
 ## Repo-authored semantics
 
@@ -56,7 +66,14 @@ gaps:
 - Update is intentionally narrow: the handwritten logic only mutates display name, description, configuration ID, and tags, even though imported provider facts expose a much broader mutable set.
 - Delete currently returns success without issuing an OCI delete request, so finalizer removal is not confirmation.
 
-## Why this stays on the legacy adapter
+## Why formal promotion still stays blocked
 
-- Secret reads and endpoint secret materialization are OSOK-only semantics that do not come from provider facts.
-- The bind-versus-create, mutation, and delete rules are more specific than the current generic runtime heuristics, so promotion must wait until the formal model can express them directly.
+- Promotion remains blocked by `oci-service-operator-8xa.8` until the
+  remaining mysql-only secret, mutation, and delete semantics move into the
+  formal model without another handwritten shim.
+- Secret reads and endpoint secret materialization are still OSOK-only
+  semantics layered on top of generatedruntime; they do not come from provider
+  facts alone.
+- The bind-versus-create, mutation, and delete rules remain more specific than
+  the generic runtime defaults, so promotion must still wait until the formal
+  model can express them directly even though the full adapter shim is gone.
