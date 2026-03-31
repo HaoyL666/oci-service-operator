@@ -133,6 +133,11 @@ For an existing generated group, verify the actual ownership path before editing
 
 Default assumption: real reconcile logic belongs in `pkg/servicemanager/<group>/<resource>/`; only change controller or registration code when custom watches, RBAC, predicates, or factory wiring are required.
 
+When the task targets a split package or split manager, the output name may differ from the base API group. `core-network` is the current example:
+
+- shared API/runtime code still lives under `api/core`, `controllers/core`, and `pkg/servicemanager/core`
+- split-package output paths live under `packages/core-network`, `cmd/manager/core-network`, `config/manager/core-network`, and `internal/registrations/core-network_generated.go`
+
 ### Step 4: IMPLEMENT
 
 Follow these project-specific patterns:

@@ -5,11 +5,14 @@ Quick-reference for agents. Read this instead of exploring the repo.
 ## Architecture
 
 ```
-main.go                                    ← Manager bootstrap; iterates group registrations
+main.go                                    ← Monolith manager bootstrap; iterates group registrations
 ├── api/<group>/v1beta1/*_types.go         ← CRD Spec/Status definitions (grouped by OCI API group)
 ├── controllers/<group>/*_controller.go    ← Reconcile loops, mostly generated
 ├── internal/registrations/*_generated.go  ← Generated scheme/controller wiring
 ├── internal/registrations/manual_groups.go← Handwritten registration overrides
+├── cmd/manager/<name>/main.go             ← Per-service or split-package manager entrypoint
+├── config/manager/<name>/                 ← Per-service or split-package manager overlay
+├── packages/<name>/                       ← Per-service or split-package install metadata + kustomization
 ├── pkg/core/reconciler.go                 ← BaseReconciler — shared reconciliation logic
 ├── pkg/servicemanager/<group>/<resource>/ ← OCI API client wrappers per resource
 │   ├── *_serviceclient.go                 ← OCI SDK interface or generated client wrapper
@@ -70,13 +73,15 @@ controllers/
 └── ... many other generated controllers
 ```
 
-Controllers are not hand-wired in `main.go` anymore. Startup goes through the registrations package:
+Controllers are not hand-wired in `main.go` anymore. The monolith startup goes through the registrations package:
 
 ```go
 for _, registration := range registrations.All() {
     _ = registration.SetupWithManager(registrationContext)
 }
 ```
+
+Per-service and split-package managers use generated entrypoints such as `cmd/manager/core-network/main.go`, which call `managerservices.ForGroup("<name>")`.
 
 ## Reconcile Logic Status
 
@@ -214,7 +219,7 @@ docs/<service>.md                                     ← Documentation
 2. **Lifecycle states** — FAILED → set failed status; ACTIVE → set active; other → requeue
 3. **Conditional fields** — `if spec.X != "" { details.X = common.String(spec.X) }` — never send zero-values
 4. **Secret generation** — `GetCredentialMap()` returns `map[string]string` after ACTIVE
-5. **Registration** — Controller and scheme wiring goes through `internal/registrations/`, with `main.go` iterating `registrations.All()`
+5. **Registration** — Controller and scheme wiring goes through `internal/registrations/`; monolith startup iterates `registrations.All()` in `main.go`, while per-service and split-package managers use `cmd/manager/<name>/main.go`
 6. **Generated files** — Always commit `zz_generated.deepcopy.go` + CRD YAML after `make generate && make manifests`
 
 ## Webhooks
@@ -254,3 +259,10 @@ agnts/
     ├── planner_draft.toml ← planner_draft sub-agent config
     └── planner_review.toml← planner_review sub-agent config
 ```
+
+## Split Package Note
+
+Some install/runtime slices can now have an output name distinct from the base API group. `core-network` is the current example:
+
+- shared API/runtime source still lives under `api/core`, `controllers/core`, and `pkg/servicemanager/core`
+- split-package outputs live under `packages/core-network`, `cmd/manager/core-network`, `config/manager/core-network`, and `internal/registrations/core-network_generated.go`

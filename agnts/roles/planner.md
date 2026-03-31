@@ -84,6 +84,11 @@ Spawn **planner_draft** to analyze the codebase and produce a **design sketch** 
 
 When the request is runtime behavior for an already generated group, confirm whether controller and registration wiring already exist before creating tasks for them. Default assumption: the real implementation work is in `pkg/servicemanager/<group>/<resource>/`, with `formal/` as the per-resource runtime reference when present.
 
+Some tasks may target a split package/output name rather than the base API group. `core-network` is the current example:
+
+- shared source/runtime code remains under `api/core`, `controllers/core`, and `pkg/servicemanager/core`
+- split-package outputs live under `packages/core-network`, `cmd/manager/core-network`, `config/manager/core-network`, and `internal/registrations/core-network_generated.go`
+
 planner_draft does NOT run any `bd create` commands — it only writes the plan file.
 
 ### Phase 2: Review + Approval Gate (planner_review sub-agent)

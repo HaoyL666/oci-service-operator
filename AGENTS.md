@@ -203,9 +203,10 @@ make manifests          # Regenerate CRD YAML (after modifying *_types.go)
 - **CRD types**: `api/<group>/v1beta1/*_types.go` — Spec, Status, and kubebuilder markers (grouped by OCI API group)
 - **Controllers**: `controllers/<group>/*_controller.go` — Reconcile loops, largely generated and grouped by OCI API group
 - **Service Managers**: `pkg/servicemanager/<group>/<resource>/` — One resource directory per service manager
-- **Registration**: `internal/registrations/*_generated.go` + `manual_groups.go` wire schemes/controllers; `main.go` iterates those registrations
+- **Registration**: `internal/registrations/*_generated.go` + `manual_groups.go` wire schemes/controllers. The monolith `main.go` iterates `registrations.All()`, while per-service and split-package managers use `cmd/manager/<name>/main.go` plus `managerservices.ForGroup("<name>")`
 - **Formal runtime metadata**: `formal/` — Per-resource runtime intent, provider-fact imports, logic gaps, and generated diagrams for promotion/scaffold tracking
 - **CRDs**: `config/crd/` — Generated manifests
+- **Split packages**: `packages/<name>/`, `cmd/manager/<name>/`, `config/manager/<name>/`, and `internal/registrations/<name>_generated.go` can emit a filtered runtime/install slice of a larger API group. `core-network` is the current example
 
 ### Reference Implementations (use these as templates)
 
@@ -267,6 +268,13 @@ Use this reading order:
 6. `formal/controller_manifest.tsv` and the matching `formal/controllers/<service>/<slug>/` + `formal/imports/<service>/<slug>.json` — When present, use them to understand intended lifecycle, requeue, delete, secret, and mutation semantics.
 7. `oracle/terraform-provider-oci` source — Optional secondary reference for deeper CRUD, wait, datasource, and field-handling details when the local formal summary is not enough.
 8. `https://github.com/donoftime/oci-service-operator/tree/main/pkg/servicemanager/networking` and `https://github.com/donoftime/oci-service-operator/blob/main/docs/networking.md` — Optional secondary reference for handwritten `core` networking runtime behavior such as `Vcn`, `Subnet`, gateways, route tables, and security lists. Use this fork for implementation ideas only; do not copy its `Oci*` CRD names or package layout directly into this repo.
+
+For split packages, keep the same reading order, but substitute the split output name where relevant:
+
+- `cmd/manager/<split>/main.go`
+- `config/manager/<split>/`
+- `packages/<split>/`
+- `internal/registrations/<split>_generated.go`
 
 In generated service-manager packages, look for the handwritten extension seam before rewriting generated files:
 
