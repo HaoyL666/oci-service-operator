@@ -170,6 +170,8 @@ services:
     parityFile: parity/database.yaml
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-database:latest
     managerOverlay: ../../../config/manager/database
+    releaseKinds:
+      - AutonomousDatabases
     compatibility:
       existingKinds:
         - AutonomousDatabases
