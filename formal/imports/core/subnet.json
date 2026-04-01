@@ -5,7 +5,7 @@
   "slug": "subnet",
   "kind": "Subnet",
   "sourceRef": "terraform-provider-oci",
-  "providerResource": "scaffold_core_subnet",
+  "providerResource": "oci_core_subnet",
   "operations": {
     "create": [
       {
@@ -23,9 +23,9 @@
     ],
     "list": [
       {
-        "operation": "ListSubnet",
-        "requestType": "core.ListSubnetRequest",
-        "responseType": "core.ListSubnetResponse"
+        "operation": "ListSubnets",
+        "requestType": "core.ListSubnetsRequest",
+        "responseType": "core.ListSubnetsResponse"
       }
     ],
     "update": [
@@ -49,7 +49,7 @@
         "PROVISIONING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     },
     "update": {
@@ -57,16 +57,29 @@
         "UPDATING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     }
   },
   "mutation": {
     "mutable": [
-      "display_name"
+      "cidr_block",
+      "defined_tags",
+      "dhcp_options_id",
+      "display_name",
+      "freeform_tags",
+      "ipv6_cidr_block",
+      "ipv6_cidr_blocks",
+      "route_table_id",
+      "security_list_ids"
     ],
     "forceNew": [
-      "compartment_id"
+      "availability_domain",
+      "compartment_id",
+      "dns_label",
+      "prohibit_internet_ingress",
+      "prohibit_public_ip_on_vnic",
+      "vcn_id"
     ],
     "conflictsWith": {}
   },
@@ -94,18 +107,22 @@
   },
   "deleteConfirmation": {
     "pending": [
-      "DELETING"
+      "TERMINATING",
+      "TERMINATED"
     ],
     "target": [
-      "DELETED"
+      "NOT_FOUND"
     ]
   },
   "listLookup": {
-    "datasource": "scaffold_core_subnet",
+    "datasource": "oci_core_subnets",
     "collectionField": "subnet",
     "responseItemsField": "Items",
     "filterFields": [
       "compartment_id",
+      "display_name",
+      "id",
+      "vcn_id",
       "state"
     ]
   },
@@ -115,11 +132,11 @@
     "repoAuthoredLogicGapsPath": "controllers/core/subnet/logic-gaps.md",
     "excludedSemantics": [
       "bind-versus-create",
-      "secret-output",
-      "delete-confirmation"
+      "secret-output"
     ]
   },
   "notes": [
-    "Scaffold placeholder for core/subnet; replace imported facts before promoting this row beyond scaffold."
+    "Pinned OCI SDK contract: UpdateSubnetDetails exposes cidr_block, defined_tags, dhcp_options_id, display_name, freeform_tags, ipv6_cidr_block, ipv6_cidr_blocks, route_table_id, and security_list_ids as in-place updates.",
+    "Repo-authored delete confirmation requires GetSubnet to return not found; observed TERMINATED remains an accepted intermediate state."
   ]
 }
