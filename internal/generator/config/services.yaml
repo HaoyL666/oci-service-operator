@@ -648,6 +648,8 @@ services:
     version: v1beta1
     phase: data-and-storage
     packageProfile: controller-backed
+    releaseKinds:
+      - RedisCluster
     generation:
       controller:
         strategy: generated
