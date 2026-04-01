@@ -606,6 +606,8 @@ services:
     packageProfile: controller-backed
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-psql:latest
     managerOverlay: ../../../config/manager/psql
+    releaseKinds:
+      - DbSystem
     generation:
       controller:
         strategy: generated
