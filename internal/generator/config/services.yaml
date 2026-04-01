@@ -480,6 +480,8 @@ services:
     packageProfile: controller-backed
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-nosql:latest
     managerOverlay: ../../../config/manager/nosql
+    releaseKinds:
+      - Table
     generation:
       controller:
         strategy: generated
