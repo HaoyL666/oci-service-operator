@@ -7,7 +7,12 @@ archetype: generated-service-manager
 states:
   - provisioning
   - active
-  - updating
   - terminating
+  - terminated
+  - deleted
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - Ready state maps to OCI AVAILABLE.
+  - Requeue continues while OCI reports PROVISIONING, TERMINATING, or TERMINATED.
+  - Delete completes only after GetServiceGateway returns not found; TERMINATING and TERMINATED are accepted observed pre-delete states.
+  - In-place updates are limited to blockTraffic, displayName, definedTags, freeformTags, routeTableId, and services.
+  - Service comparisons normalize by serviceId so ordering and response-only serviceName fields do not trigger updates.

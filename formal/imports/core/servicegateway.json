@@ -5,7 +5,7 @@
   "slug": "servicegateway",
   "kind": "ServiceGateway",
   "sourceRef": "terraform-provider-oci",
-  "providerResource": "scaffold_core_servicegateway",
+  "providerResource": "oci_core_service_gateway",
   "operations": {
     "create": [
       {
@@ -23,9 +23,9 @@
     ],
     "list": [
       {
-        "operation": "ListServiceGateway",
-        "requestType": "core.ListServiceGatewayRequest",
-        "responseType": "core.ListServiceGatewayResponse"
+        "operation": "ListServiceGateways",
+        "requestType": "core.ListServiceGatewaysRequest",
+        "responseType": "core.ListServiceGatewaysResponse"
       }
     ],
     "update": [
@@ -49,24 +49,28 @@
         "PROVISIONING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     },
     "update": {
-      "pending": [
-        "UPDATING"
-      ],
+      "pending": [],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     }
   },
   "mutation": {
     "mutable": [
-      "display_name"
+      "block_traffic",
+      "defined_tags",
+      "display_name",
+      "freeform_tags",
+      "route_table_id",
+      "services"
     ],
     "forceNew": [
-      "compartment_id"
+      "compartment_id",
+      "vcn_id"
     ],
     "conflictsWith": {}
   },
@@ -94,18 +98,22 @@
   },
   "deleteConfirmation": {
     "pending": [
-      "DELETING"
+      "TERMINATING",
+      "TERMINATED"
     ],
     "target": [
-      "DELETED"
+      "NOT_FOUND"
     ]
   },
   "listLookup": {
-    "datasource": "scaffold_core_servicegateway",
-    "collectionField": "servicegateway",
+    "datasource": "oci_core_service_gateways",
+    "collectionField": "service_gateway",
     "responseItemsField": "Items",
     "filterFields": [
       "compartment_id",
+      "display_name",
+      "id",
+      "vcn_id",
       "state"
     ]
   },
@@ -115,11 +123,14 @@
     "repoAuthoredLogicGapsPath": "controllers/core/servicegateway/logic-gaps.md",
     "excludedSemantics": [
       "bind-versus-create",
-      "secret-output",
-      "delete-confirmation"
+      "secret-output"
     ]
   },
   "notes": [
-    "Scaffold placeholder for core/servicegateway; replace imported facts before promoting this row beyond scaffold."
+    "Pinned OCI SDK contract: ServiceGateway lifecycle exposes PROVISIONING, AVAILABLE, TERMINATING, and TERMINATED; there is no distinct UPDATING, DELETING, or DELETED state in this branch.",
+    "Pinned OCI SDK contract: UpdateServiceGatewayDetails exposes block_traffic, defined_tags, display_name, freeform_tags, route_table_id, and services as in-place update fields; the handwritten runtime rejects create-only drift for compartment_id and vcn_id.",
+    "Pinned OCI SDK contract: CreateServiceGatewayDetails does not expose block_traffic, so the handwritten runtime only manages blockTraffic after creation via UpdateServiceGateway.",
+    "Repo-authored delete confirmation requires GetServiceGateway to return not found; observed TERMINATING and TERMINATED remain intermediate finalizer-holding states.",
+    "The handwritten runtime observes by tracked OCI identity rather than list-based bind semantics. Services are normalized by serviceId so ordering and response-only fields do not trigger spurious updates."
   ]
 }
