@@ -20,7 +20,18 @@ rules:
 - apiGroups:
   - mysql.oracle.com
   resources:
+  - backups
+  - channels
+  - configurations
+  - heatwaveclustermemoryestimates
+  - heatwaveclusters
   - mysqldbsystems
+  - replicas
+  - shapes
+  - versions
+  - workrequesterrors
+  - workrequestlogs
+  - workrequests
   verbs:
   - create
   - delete
@@ -32,13 +43,35 @@ rules:
 - apiGroups:
   - mysql.oracle.com
   resources:
+  - backups/finalizers
+  - channels/finalizers
+  - configurations/finalizers
+  - heatwaveclustermemoryestimates/finalizers
+  - heatwaveclusters/finalizers
   - mysqldbsystems/finalizers
+  - replicas/finalizers
+  - shapes/finalizers
+  - versions/finalizers
+  - workrequesterrors/finalizers
+  - workrequestlogs/finalizers
+  - workrequests/finalizers
   verbs:
   - update
 - apiGroups:
   - mysql.oracle.com
   resources:
+  - backups/status
+  - channels/status
+  - configurations/status
+  - heatwaveclustermemoryestimates/status
+  - heatwaveclusters/status
   - mysqldbsystems/status
+  - replicas/status
+  - shapes/status
+  - versions/status
+  - workrequesterrors/status
+  - workrequestlogs/status
+  - workrequests/status
   verbs:
   - get
   - patch

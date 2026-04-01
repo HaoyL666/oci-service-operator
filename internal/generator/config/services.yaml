@@ -424,6 +424,8 @@ services:
     parityFile: parity/mysql.yaml
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-mysql:latest
     managerOverlay: ../../../config/manager/mysql
+    releaseKinds:
+      - MySqlDbSystem
     compatibility:
       existingKinds:
         - MySqlDbSystem
