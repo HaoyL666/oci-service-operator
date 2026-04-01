@@ -5,7 +5,7 @@
   "slug": "routetable",
   "kind": "RouteTable",
   "sourceRef": "terraform-provider-oci",
-  "providerResource": "scaffold_core_routetable",
+  "providerResource": "oci_core_route_table",
   "operations": {
     "create": [
       {
@@ -23,9 +23,9 @@
     ],
     "list": [
       {
-        "operation": "ListRouteTable",
-        "requestType": "core.ListRouteTableRequest",
-        "responseType": "core.ListRouteTableResponse"
+        "operation": "ListRouteTables",
+        "requestType": "core.ListRouteTablesRequest",
+        "responseType": "core.ListRouteTablesResponse"
       }
     ],
     "update": [
@@ -49,7 +49,7 @@
         "PROVISIONING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     },
     "update": {
@@ -57,16 +57,20 @@
         "UPDATING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     }
   },
   "mutation": {
     "mutable": [
-      "display_name"
+      "defined_tags",
+      "display_name",
+      "freeform_tags",
+      "route_rules"
     ],
     "forceNew": [
-      "compartment_id"
+      "compartment_id",
+      "vcn_id"
     ],
     "conflictsWith": {}
   },
@@ -94,18 +98,22 @@
   },
   "deleteConfirmation": {
     "pending": [
-      "DELETING"
+      "TERMINATING",
+      "TERMINATED"
     ],
     "target": [
-      "DELETED"
+      "NOT_FOUND"
     ]
   },
   "listLookup": {
-    "datasource": "scaffold_core_routetable",
-    "collectionField": "routetable",
+    "datasource": "oci_core_route_tables",
+    "collectionField": "route_table",
     "responseItemsField": "Items",
     "filterFields": [
       "compartment_id",
+      "display_name",
+      "id",
+      "vcn_id",
       "state"
     ]
   },
@@ -115,11 +123,13 @@
     "repoAuthoredLogicGapsPath": "controllers/core/routetable/logic-gaps.md",
     "excludedSemantics": [
       "bind-versus-create",
-      "secret-output",
-      "delete-confirmation"
+      "secret-output"
     ]
   },
   "notes": [
-    "Scaffold placeholder for core/routetable; replace imported facts before promoting this row beyond scaffold."
+    "Pinned OCI SDK contract: UpdateRouteTableDetails exposes defined_tags, display_name, freeform_tags, and route_rules as in-place updates; the handwritten runtime rejects create-only drift for compartment_id and vcn_id.",
+    "Repo-authored route-rule comparison normalizes ordering and filters OCI-managed LOCAL rules so order-only diffs and implicit local rules do not trigger updates.",
+    "Repo-authored delete confirmation requires GetRouteTable to return not found; observed TERMINATING and TERMINATED remain intermediate finalizer-holding states.",
+    "formal/controllers/core/routetable/* is the authoritative formal path for this RouteTable runtime work; the separate coreroutetable manifest row is tracked as distinct cleanup, not folded into this row."
   ]
 }
