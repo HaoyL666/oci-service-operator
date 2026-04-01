@@ -1694,6 +1694,118 @@ func TestGenerateRendersRegistrationOutputs(t *testing.T) {
 	})
 }
 
+func TestBuildReleasePackageModelFiltersPackageArtifactsAndRegistration(t *testing.T) {
+	t.Parallel()
+
+	service := ServiceConfig{
+		Service:                "objectstorage",
+		SDKPackage:             "github.com/oracle/oci-go-sdk/v65/objectstorage",
+		Group:                  "objectstorage",
+		PackageProfile:         PackageProfileControllerBacked,
+		DefaultControllerImage: "iad.ocir.io/oracle/oci-service-operator-objectstorage:latest",
+		ManagerOverlay:         "../../../config/manager/objectstorage",
+		ReleaseKinds:           []string{"Bucket"},
+		Generation: GenerationConfig{
+			Controller:     GenerationSurfaceConfig{Strategy: GenerationStrategyGenerated},
+			ServiceManager: GenerationSurfaceConfig{Strategy: GenerationStrategyGenerated},
+			Registration:   GenerationSurfaceConfig{Strategy: GenerationStrategyGenerated},
+		},
+	}
+	resources := []ResourceModel{
+		{
+			SDKName:    "Bucket",
+			Kind:       "Bucket",
+			FileStem:   "bucket",
+			KindPlural: "buckets",
+			Runtime: &RuntimeModel{
+				ClientType:            "ObjectStorageClient",
+				ClientConstructor:     "NewObjectStorageClientWithConfigurationProvider",
+				ClientConstructorKind: "provider",
+			},
+		},
+		{
+			SDKName:    "Object",
+			Kind:       "Object",
+			FileStem:   "object",
+			KindPlural: "objects",
+			Runtime: &RuntimeModel{
+				ClientType:            "ObjectStorageClient",
+				ClientConstructor:     "NewObjectStorageClientWithConfigurationProvider",
+				ClientConstructorKind: "provider",
+			},
+		},
+	}
+	controllerOutput := buildControllerOutputModel(service, "oracle.com", resources)
+	serviceManagers, err := buildServiceManagerModels(service, "v1beta1", resources)
+	if err != nil {
+		t.Fatalf("buildServiceManagerModels() error = %v", err)
+	}
+	registrationOutput, err := buildRegistrationOutputModel(service, "v1beta1", resources, controllerOutput, serviceManagers, service.Group)
+	if err != nil {
+		t.Fatalf("buildRegistrationOutputModel() error = %v", err)
+	}
+	pkg := &PackageModel{
+		Service:         service,
+		OutputName:      service.Group,
+		Domain:          "oracle.com",
+		Version:         "v1beta1",
+		GroupDNSName:    service.GroupDNSName("oracle.com"),
+		Resources:       resources,
+		Controller:      controllerOutput,
+		Registration:    registrationOutput,
+		PackageOutput:   buildPackageOutputModel(service, resources),
+		ServiceManagers: serviceManagers,
+	}
+
+	releasePkg, err := buildReleasePackageModel(pkg)
+	if err != nil {
+		t.Fatalf("buildReleasePackageModel() error = %v", err)
+	}
+	if len(releasePkg.Resources) != 1 || releasePkg.Resources[0].Kind != "Bucket" {
+		t.Fatalf("release resources = %#v, want only Bucket", releasePkg.Resources)
+	}
+	if got := releasePkg.PackageOutput.Metadata.CRDKindFilter; got != "Bucket" {
+		t.Fatalf("CRDKindFilter = %q, want %q", got, "Bucket")
+	}
+	if len(releasePkg.Registration.Resources) != 1 || releasePkg.Registration.Resources[0].Kind != "Bucket" {
+		t.Fatalf("release registration resources = %#v, want only Bucket", releasePkg.Registration.Resources)
+	}
+
+	renderer := NewRenderer()
+	outputRoot := t.TempDir()
+	if err := renderer.RenderPackageOutputs(outputRoot, releasePkg); err != nil {
+		t.Fatalf("RenderPackageOutputs() error = %v", err)
+	}
+	if err := renderer.RenderRegistrations(outputRoot, releasePkg, true); err != nil {
+		t.Fatalf("RenderRegistrations() error = %v", err)
+	}
+	if err := renderer.RenderManagerOutputs(outputRoot, releasePkg, true); err != nil {
+		t.Fatalf("RenderManagerOutputs() error = %v", err)
+	}
+
+	metadataContent := readFile(t, filepath.Join(outputRoot, "packages", "objectstorage", "metadata.env"))
+	assertContains(t, metadataContent, []string{
+		"PACKAGE_NAME=oci-service-operator-objectstorage",
+		"CRD_PATHS=./api/objectstorage/...",
+		"CRD_KIND_FILTER=Bucket",
+	})
+
+	registrationContent := readFile(t, filepath.Join(outputRoot, "internal", "registrations", "objectstorage_generated.go"))
+	assertContains(t, registrationContent, []string{
+		`Group:       "objectstorage",`,
+		`"Bucket",`,
+	})
+	assertNotContains(t, registrationContent, []string{
+		`"Object",`,
+	})
+
+	managerMain := readFile(t, filepath.Join(outputRoot, "cmd", "manager", "objectstorage", "main.go"))
+	assertContains(t, managerMain, []string{
+		`managerservices.ForGroup("objectstorage")`,
+		`LeaderElectionID:   "40558063.oci.objectstorage",`,
+	})
+}
+
 func TestBuildRegistrationOutputSkipsKindsOptedOutOfGeneratedRuntime(t *testing.T) {
 	t.Parallel()
 

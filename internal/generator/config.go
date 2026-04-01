@@ -99,6 +99,7 @@ type ServiceConfig struct {
 	Compatibility          CompatibilityConfig  `yaml:"compatibility,omitempty"`
 	DefaultControllerImage string               `yaml:"defaultControllerImage,omitempty"`
 	ManagerOverlay         string               `yaml:"managerOverlay,omitempty"`
+	ReleaseKinds           []string             `yaml:"releaseKinds,omitempty"`
 	PackageSplits          []PackageSplitConfig `yaml:"packageSplits,omitempty"`
 	ObservedState          ObservedStateConfig  `yaml:"observedState,omitempty"`
 	Generation             GenerationConfig     `yaml:"generation,omitempty"`
@@ -193,6 +194,9 @@ func (c *Config) Validate() error {
 		if err := service.Generation.Validate(service.Service); err != nil {
 			return err
 		}
+		if err := service.validateReleaseKinds(); err != nil {
+			return err
+		}
 		if err := service.validatePackageSplits(); err != nil {
 			return err
 		}
@@ -258,6 +262,26 @@ func (s ServiceConfig) validatePackageSplits() error {
 			seenKinds[kind] = struct{}{}
 		}
 	}
+	return nil
+}
+
+func (s ServiceConfig) validateReleaseKinds() error {
+	if len(s.ReleaseKinds) == 0 {
+		return nil
+	}
+
+	seen := make(map[string]struct{}, len(s.ReleaseKinds))
+	for _, rawKind := range s.ReleaseKinds {
+		kind := strings.TrimSpace(rawKind)
+		if kind == "" {
+			return fmt.Errorf("service %q releaseKinds contains a blank kind", s.Service)
+		}
+		if _, ok := seen[kind]; ok {
+			return fmt.Errorf("service %q releaseKinds contains duplicate kind %q", s.Service, kind)
+		}
+		seen[kind] = struct{}{}
+	}
+
 	return nil
 }
 
@@ -519,6 +543,23 @@ func (s ServiceConfig) GroupDNSName(domain string) string {
 // IsControllerBacked reports whether the service expects shared-manager controller assets.
 func (s ServiceConfig) IsControllerBacked() bool {
 	return s.PackageProfile == PackageProfileControllerBacked
+}
+
+// ReleaseKindFilter returns the configured release-only kind list in a stable CSV form.
+func (s ServiceConfig) ReleaseKindFilter() string {
+	if len(s.ReleaseKinds) == 0 {
+		return ""
+	}
+
+	filter := make([]string, 0, len(s.ReleaseKinds))
+	for _, rawKind := range s.ReleaseKinds {
+		kind := strings.TrimSpace(rawKind)
+		if kind == "" {
+			continue
+		}
+		filter = append(filter, kind)
+	}
+	return strings.Join(filter, ",")
 }
 
 // ControllerGenerationStrategy returns the controller rollout strategy for the service.

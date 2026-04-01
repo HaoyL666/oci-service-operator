@@ -76,19 +76,23 @@ func (g *Generator) Generate(ctx context.Context, cfg *Config, services []Servic
 			}
 			return result, fmt.Errorf("render service %q: %w", service.Service, err)
 		}
-		if err := g.renderer.RenderPackageOutputs(options.OutputRoot, pkg); err != nil {
+		releasePkg, err := buildReleasePackageModel(pkg)
+		if err != nil {
+			return result, fmt.Errorf("build release package model for service %q: %w", service.Service, err)
+		}
+		if err := g.renderer.RenderPackageOutputs(options.OutputRoot, releasePkg); err != nil {
 			return result, fmt.Errorf("render package outputs for service %q: %w", service.Service, err)
 		}
 		if err := g.renderer.RenderControllers(options.OutputRoot, pkg, options.Overwrite); err != nil {
 			return result, fmt.Errorf("render controller outputs for service %q: %w", service.Service, err)
 		}
-		if err := g.renderer.RenderRegistrations(options.OutputRoot, pkg, options.Overwrite); err != nil {
+		if err := g.renderer.RenderRegistrations(options.OutputRoot, releasePkg, options.Overwrite); err != nil {
 			return result, fmt.Errorf("render registration outputs for service %q: %w", service.Service, err)
 		}
 		if err := g.renderer.RenderServiceManagers(options.OutputRoot, pkg, options.Overwrite); err != nil {
 			return result, fmt.Errorf("render service-manager outputs for service %q: %w", service.Service, err)
 		}
-		if err := g.renderer.RenderManagerOutputs(options.OutputRoot, pkg, options.Overwrite); err != nil {
+		if err := g.renderer.RenderManagerOutputs(options.OutputRoot, releasePkg, options.Overwrite); err != nil {
 			return result, fmt.Errorf("render manager outputs for service %q: %w", service.Service, err)
 		}
 		splitPackages, err := buildPackageSplitModels(pkg)

@@ -196,6 +196,36 @@ services:
 	}
 }
 
+func TestConfigValidateRejectsDuplicateReleaseKinds(t *testing.T) {
+	t.Parallel()
+
+	cfg := &Config{
+		SchemaVersion:  "v1alpha1",
+		Domain:         "oracle.com",
+		DefaultVersion: "v1beta1",
+		PackageProfiles: map[string]PackageProfile{
+			"controller-backed": {Description: "runtime-integrated groups"},
+		},
+		Services: []ServiceConfig{
+			{
+				Service:        "objectstorage",
+				SDKPackage:     "example/objectstorage",
+				Group:          "objectstorage",
+				PackageProfile: "controller-backed",
+				ReleaseKinds:   []string{"Bucket", "Bucket"},
+			},
+		},
+	}
+
+	err := cfg.Validate()
+	if err == nil {
+		t.Fatal("Validate() unexpectedly succeeded")
+	}
+	if !strings.Contains(err.Error(), `service "objectstorage" releaseKinds contains duplicate kind "Bucket"`) {
+		t.Fatalf("Validate() error = %v", err)
+	}
+}
+
 func TestLoadConfigIncludesGenerationRolloutAndOverrides(t *testing.T) {
 	t.Parallel()
 

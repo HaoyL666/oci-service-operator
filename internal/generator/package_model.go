@@ -106,6 +106,65 @@ func buildPackageSplitModels(pkg *PackageModel) ([]*PackageModel, error) {
 	return splitModels, nil
 }
 
+func buildReleasePackageModel(pkg *PackageModel) (*PackageModel, error) {
+	if len(pkg.Service.ReleaseKinds) == 0 {
+		return pkg, nil
+	}
+
+	resources, err := selectResourcesByKind(pkg.Resources, pkg.Service.ReleaseKinds, pkg.Service.Service, "releaseKinds")
+	if err != nil {
+		return nil, err
+	}
+
+	controllerOutput := buildControllerOutputModel(pkg.Service, pkg.Domain, resources)
+	serviceManagers, err := buildServiceManagerModels(pkg.Service, pkg.Version, resources)
+	if err != nil {
+		return nil, err
+	}
+	registrationOutput, err := buildRegistrationOutputModel(pkg.Service, pkg.Version, resources, controllerOutput, serviceManagers, pkg.OutputName)
+	if err != nil {
+		return nil, err
+	}
+
+	releasePkg := *pkg
+	releasePkg.Resources = resources
+	releasePkg.Controller = controllerOutput
+	releasePkg.Registration = registrationOutput
+	releasePkg.PackageOutput = buildPackageOutputModelFor(
+		pkg.Service,
+		pkg.OutputName,
+		pkg.Service.DefaultControllerImage,
+		pkg.Service.ManagerOverlay,
+		pkg.Service.ReleaseKindFilter(),
+	)
+	releasePkg.ServiceManagers = serviceManagers
+
+	return &releasePkg, nil
+}
+
+func selectResourcesByKind(resources []ResourceModel, includeKinds []string, serviceName string, source string) ([]ResourceModel, error) {
+	if len(includeKinds) == 0 {
+		return append([]ResourceModel(nil), resources...), nil
+	}
+
+	resourcesByKind := make(map[string]ResourceModel, len(resources))
+	for _, resource := range resources {
+		resourcesByKind[resource.Kind] = resource
+	}
+
+	selected := make([]ResourceModel, 0, len(includeKinds))
+	for _, rawKind := range includeKinds {
+		kind := strings.TrimSpace(rawKind)
+		resource, ok := resourcesByKind[kind]
+		if !ok {
+			return nil, fmt.Errorf("service %q %s references unknown kind %q", serviceName, source, kind)
+		}
+		selected = append(selected, resource)
+	}
+
+	return selected, nil
+}
+
 func buildParityResources(service ServiceConfig, version string, discovered []ResourceModel) ([]ResourceModel, error) {
 	discoveredBySource := make(map[string]ResourceModel, len(discovered))
 	for _, resource := range discovered {
