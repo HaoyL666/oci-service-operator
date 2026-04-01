@@ -265,6 +265,8 @@ services:
     packageProfile: controller-backed
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-identity:latest
     managerOverlay: ../../../config/manager/identity
+    releaseKinds:
+      - User
     generation:
       controller:
         strategy: generated
