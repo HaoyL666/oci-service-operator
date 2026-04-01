@@ -50,6 +50,7 @@ type configuredService struct {
 	Service string
 	Group   string
 	Version string
+	Config  generator.ServiceConfig
 }
 
 var (
@@ -112,8 +113,9 @@ func generateRegistryOutputs(root string, existingAPI map[string]specTarget, exi
 	if err != nil {
 		return nil, nil, err
 	}
+	trackedServices := servicesWithAPISpecs(services, apiSpecs)
 
-	targets, err := buildTargets(root, services, apiSpecs, existingAPI)
+	targets, err := buildTargets(root, trackedServices, apiSpecs, existingAPI)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -122,7 +124,7 @@ func generateRegistryOutputs(root string, existingAPI map[string]specTarget, exi
 		return nil, nil, err
 	}
 
-	sdkTargets := buildSDKTargets(targets, existingSDK, services)
+	sdkTargets := buildSDKTargets(targets, existingSDK, trackedServices)
 	sdkOut, err := renderSDKRegistry(sdkTargets)
 	if err != nil {
 		return nil, nil, err
@@ -404,6 +406,7 @@ func loadConfiguredServices(root string) ([]configuredService, error) {
 			Service: service.Service,
 			Group:   service.Group,
 			Version: service.VersionOrDefault(cfg.DefaultVersion),
+			Config:  service,
 		})
 	}
 
@@ -426,12 +429,52 @@ func scanConfiguredAPISpecs(root string, services []configuredService) (map[stri
 			return nil, fmt.Errorf("scan API specs for group %q: %w", service.Group, err)
 		}
 		if len(specs) == 0 {
+			if allowsMissingAPISpecs(service.Config) {
+				continue
+			}
 			return nil, fmt.Errorf("configured API group %q has no spec types under api/%s/%s", service.Group, service.Group, service.Version)
 		}
 		out[service.Group] = specs
 	}
 
 	return out, nil
+}
+
+func servicesWithAPISpecs(services []configuredService, apiSpecs map[string][]apiTypeInfo) []configuredService {
+	out := make([]configuredService, 0, len(apiSpecs))
+	for _, service := range services {
+		if len(apiSpecs[service.Group]) == 0 {
+			continue
+		}
+		out = append(out, service)
+	}
+	return out
+}
+
+func allowsMissingAPISpecs(service generator.ServiceConfig) bool {
+	blockedTrackedResources := 0
+	for _, resource := range service.Generation.Resources {
+		kind := strings.TrimSpace(resource.Kind)
+		if kind == "" || !requiresValidatorTarget(service, kind) {
+			continue
+		}
+		if len(service.PromotionBlockersFor(kind)) == 0 {
+			return false
+		}
+		blockedTrackedResources++
+	}
+
+	return blockedTrackedResources > 0
+}
+
+func requiresValidatorTarget(service generator.ServiceConfig, kind string) bool {
+	if service.ControllerGenerationStrategyFor(kind) != generator.GenerationStrategyNone {
+		return true
+	}
+	if service.ServiceManagerGenerationStrategyFor(kind) != generator.GenerationStrategyNone {
+		return true
+	}
+	return strings.TrimSpace(service.FormalSpecFor(kind)) != ""
 }
 
 func scanAPISpecDir(dir string) ([]apiTypeInfo, error) {
@@ -548,7 +591,7 @@ func buildTargets(root string, services []configuredService, apiSpecs map[string
 			key := service.Group + "." + specInfo.Spec
 			existingTarget, hasExisting := existing[key]
 			targetName := makeTargetName(service.Group, specInfo.Spec)
-			candidates := deriveSDKTypes(service.Service, specInfo.Spec, targetName, sdkStructs)
+			candidates := deriveSDKTypes(service.Service, service.Group, specInfo.Spec, targetName, sdkStructs)
 			if hasExisting {
 				for _, mapping := range existingTarget.SDKMappings {
 					parts := strings.Split(mapping.SDKStruct, ".")
@@ -566,10 +609,7 @@ func buildTargets(root string, services []configuredService, apiSpecs map[string
 				return candidates[i] < candidates[j]
 			})
 
-			name := targetName
-			if hasExisting && strings.TrimSpace(existingTarget.Name) != "" {
-				name = existingTarget.Name
-			}
+			name := resolvedTargetName(service.Group, specInfo.Spec, targetName, hasExisting, existingTarget.Name)
 			statusType := resolveStatusType(specInfo, hasExisting, existingTarget)
 			mappings := buildSDKMappings(service.Service, specInfo.Spec, candidates, hasExisting, existingTarget)
 			out = append(out, specTarget{
@@ -1503,6 +1543,23 @@ var explicitAPITargetOverrides = map[string]apiTargetOverride{
 		),
 	},
 	"ons.Unsubscription": {UseStatus: true},
+	"opensearch.OpensearchOpensearchCluster": {MappingOverrides: excludedMappingOverrides(
+		collectionResponseExcludedReason,
+		"OpensearchClusterCollection",
+	)},
+	"opensearch.OpensearchOpensearchVersion": {
+		SDKTypes: []string{
+			"OpensearchVersionsSummary",
+			"OpensearchVersionsCollection",
+		},
+		MappingOverrides: mergeMappingOverrides(
+			statusMappingOverrides("OpensearchVersionsSummary"),
+			excludedMappingOverrides(
+				collectionResponseExcludedReason,
+				"OpensearchVersionsCollection",
+			),
+		),
+	},
 	"psql.Backup": {MappingOverrides: mergeMappingOverrides(
 		statusMappingOverrides(
 			"Backup",
@@ -1627,13 +1684,13 @@ var explicitAPITargetOverrides = map[string]apiTargetOverride{
 	)},
 }
 
-func deriveSDKTypes(service, spec, targetName string, structs map[string]bool) []string {
+func deriveSDKTypes(service, group, spec, targetName string, structs map[string]bool) []string {
 	out := make([]string, 0)
 	for _, override := range explicitAPITargetOverrides[service+"."+spec].SDKTypes {
 		addIf(&out, structs, override)
 	}
 
-	bases := candidateBases(spec, targetName)
+	bases := candidateBases(group, spec, targetName)
 	for _, base := range bases {
 		for _, candidate := range primarySDKTypeCandidates(base) {
 			addIf(&out, structs, candidate)
@@ -1652,10 +1709,17 @@ func deriveSDKTypes(service, spec, targetName string, structs map[string]bool) [
 	return uniqueByOrder(out)
 }
 
-func candidateBases(spec, targetName string) []string {
+func candidateBases(group, spec, targetName string) []string {
 	inputs := []string{spec}
 	if targetName != "" && targetName != spec {
 		inputs = append(inputs, targetName)
+	}
+	for _, input := range append([]string(nil), inputs...) {
+		for _, prefix := range targetPrefixes(group) {
+			if stripped, ok := stripTargetPrefix(input, prefix); ok {
+				inputs = append(inputs, stripped)
+			}
+		}
 	}
 
 	out := make([]string, 0, len(inputs)*2)
@@ -1667,6 +1731,13 @@ func candidateBases(spec, targetName string) []string {
 	}
 
 	return uniqueByOrder(out)
+}
+
+func stripTargetPrefix(input, prefix string) (string, bool) {
+	if prefix == "" || !strings.HasPrefix(input, prefix) || len(input) <= len(prefix) {
+		return "", false
+	}
+	return strings.TrimPrefix(input, prefix), true
 }
 
 func primarySDKTypeCandidates(base string) []string {
@@ -1968,6 +2039,37 @@ func reportDiff(path string, next []byte) {
 }
 
 func makeTargetName(group, spec string) string {
+	p := targetPrefix(group)
+	if p == "" {
+		return spec
+	}
+	for _, prefix := range targetPrefixes(group) {
+		if strings.HasPrefix(spec, prefix) {
+			return spec
+		}
+	}
+	return p + spec
+}
+
+func resolvedTargetName(group, spec, targetName string, hasExisting bool, existingName string) string {
+	if !hasExisting || strings.TrimSpace(existingName) == "" {
+		return targetName
+	}
+	if existingName == legacyTargetName(group, spec) {
+		return targetName
+	}
+	return existingName
+}
+
+func legacyTargetName(group, spec string) string {
+	p := targetPrefix(group)
+	if p == "" {
+		return spec
+	}
+	return p + spec
+}
+
+func targetPrefix(group string) string {
 	prefix := map[string]string{
 		"database":               "",
 		"mysql":                  "MySql",
@@ -1997,12 +2099,13 @@ func makeTargetName(group, spec string) string {
 	}
 	p, ok := prefix[group]
 	if !ok {
-		p = pascal(group)
+		return pascal(group)
 	}
-	if p == "" {
-		return spec
-	}
-	return p + spec
+	return p
+}
+
+func targetPrefixes(group string) []string {
+	return uniqueByOrder([]string{targetPrefix(group), pascal(group)})
 }
 
 func pascal(s string) string {
