@@ -32,15 +32,15 @@ state "Deleted" as deleted
 state "DeleteCleanupBlocked" as delete_cleanup_blocked
 [*] --> observe : CreateServiceGateway
 observe --> resolve_by_lookup : tracked identity missing
-resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE
-resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+resolve_by_lookup --> evaluate_ready : lookup or create reaches\nAVAILABLE
+resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nTERMINATING, TERMINATED
 resolve_by_lookup --> failed : unresolved OCI error or non-success state
-observe --> evaluate_ready : OCI state in ACTIVE
-observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+observe --> evaluate_ready : OCI state in AVAILABLE
+observe --> retryable : OCI state in PROVISIONING,\nTERMINATING, TERMINATED
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndisplay_name
+evaluate_ready --> apply_update : supported mutable drift for\nblock_traffic, defined_tags,\ndisplay_name (+3 more)
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -68,24 +68,35 @@ kind: ServiceGateway
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
+requeue: provisioning, terminating
 provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+none; delete TERMINATING, TERMINATED
+supported drift: block_traffic, defined_tags,
+display_name, freeform_tags (+2 more)
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_core_servicegateway
-filters compartment_id, state
+compartment_id, vcn_id
+list lookup: oci_core_service_gateways filters
+compartment_id, display_name, id, vcn_id (+1
+more)
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Ready state maps to OCI AVAILABLE.
+Requeue continues while OCI reports
+PROVISIONING, TERMINATING, or TERMINATED.
+Delete completes only after GetServiceGateway
+returns not found; TERMINATING and TERMINATED
+are accepted observed pre-delete states.
+In-place updates are limited to blockTraffic,
+displayName, definedTags, freeformTags,
+routeTableId, and services.
+Service comparisons normalize by serviceId so
+ordering and response-only serviceName fields do
+not trigger updates.
 end note
 note right of delete_pending
 delete policy: required
 delete observe: GetServiceGateway or
-ListServiceGateway
-delete targets: DELETED
+ListServiceGateways
+delete targets: NOT_FOUND
 end note
 @enduml

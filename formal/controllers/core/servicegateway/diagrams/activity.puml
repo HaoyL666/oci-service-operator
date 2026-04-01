@@ -27,15 +27,15 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetServiceGateway;
 else (no)
-:Resolve an existing OCI resource through\nListServiceGateway using filters\ncompartment_id, state;
+:Resolve an existing OCI resource through\nListServiceGateways using filters\ncompartment_id, display_name, id, vcn_id (+1\nmore);
 :Create the OCI resource via\nCreateServiceGateway when no reusable match is\nfound;
 :Persist the resolved or created OCI identity\ninto status;
 endif
 }
 if ("Delete requested?") then (yes)
 partition "Delete" {
-:Delete path uses DeleteServiceGateway with\nrequired via GetServiceGateway or\nListServiceGateway to DELETED confirmation;
-:Confirm deletion via GetServiceGateway or\nListServiceGateway until OCI reaches DELETED;
+:Delete path uses DeleteServiceGateway with\nrequired via GetServiceGateway or\nListServiceGateways to NOT_FOUND confirmation;
+:Confirm deletion via GetServiceGateway or\nListServiceGateways until OCI reaches\nNOT_FOUND;
 if ("Delete cleanup and finalizer release succeed?") then (yes)
 :Remove the finalizer after delete completion;
 else (no)
@@ -46,29 +46,29 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
+:Request requeue while OCI remains in\nPROVISIONING, TERMINATING, TERMINATED;
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
-:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE;
+:Return an unsuccessful reconcile result until\nOCI reaches AVAILABLE;
 stop
 endif
 }
 partition "Ready and Drift Handling" {
 :Compare live OCI state against the imported\nfield surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields compartment_id, vcn_id;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateServiceGateway only for mutable\nfields display_name;
+:Apply UpdateServiceGateway only for mutable\nfields block_traffic, defined_tags,\ndisplay_name, freeform_tags (+2 more);
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Return success for the ACTIVE success state;
+:Return success for the AVAILABLE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
-:Requeue on provisioning, updating, terminating;
+:Requeue on provisioning, terminating;
 }
 endif
 stop
@@ -90,18 +90,29 @@ kind: ServiceGateway
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
+requeue: provisioning, terminating
 provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+none; delete TERMINATING, TERMINATED
+supported drift: block_traffic, defined_tags,
+display_name, freeform_tags (+2 more)
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_core_servicegateway
-filters compartment_id, state
+compartment_id, vcn_id
+list lookup: oci_core_service_gateways filters
+compartment_id, display_name, id, vcn_id (+1
+more)
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Ready state maps to OCI AVAILABLE.
+Requeue continues while OCI reports
+PROVISIONING, TERMINATING, or TERMINATED.
+Delete completes only after GetServiceGateway
+returns not found; TERMINATING and TERMINATED
+are accepted observed pre-delete states.
+In-place updates are limited to blockTraffic,
+displayName, definedTags, freeformTags,
+routeTableId, and services.
+Service comparisons normalize by serviceId so
+ordering and response-only serviceName fields do
+not trigger updates.
 end note
 @enduml
