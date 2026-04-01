@@ -2320,6 +2320,164 @@ func TestCheckedInIdentityUserRuntimeArtifactsMatchGenerator(t *testing.T) {
 	})
 }
 
+func TestCheckedInRedisClusterFormalBindingMatchesDiscovery(t *testing.T) {
+	t.Parallel()
+
+	cfgPath := filepath.Join(repoRoot(t), "internal", "generator", "config", "services.yaml")
+	cfg, err := LoadConfig(cfgPath)
+	if err != nil {
+		t.Fatalf("LoadConfig(%q) error = %v", cfgPath, err)
+	}
+
+	var redisService *ServiceConfig
+	for i := range cfg.Services {
+		if cfg.Services[i].Service == "redis" {
+			redisService = &cfg.Services[i]
+			break
+		}
+	}
+	if redisService == nil {
+		t.Fatal("redis service was not found in services.yaml")
+	}
+	if got := redisService.FormalSpecFor("RedisCluster"); got != "rediscluster" {
+		t.Fatalf("redis RedisCluster formalSpec = %q, want %q", got, "rediscluster")
+	}
+	if got := redisService.FormalSpecFor("RedisRedisCluster"); got != "" {
+		t.Fatalf("redis RedisRedisCluster formalSpec = %q, want empty", got)
+	}
+
+	pkg, err := NewDiscoverer().BuildPackageModel(context.Background(), cfg, *redisService)
+	if err != nil {
+		t.Fatalf("BuildPackageModel() error = %v", err)
+	}
+
+	redisCluster := findResource(t, pkg.Resources, "RedisCluster")
+	if redisCluster.SDKName != "RedisCluster" {
+		t.Fatalf("RedisCluster SDK name = %q, want %q", redisCluster.SDKName, "RedisCluster")
+	}
+	if redisCluster.Formal == nil {
+		t.Fatal("RedisCluster formal model was not attached")
+	}
+	if redisCluster.Formal.Reference.Service != "redis" {
+		t.Fatalf("RedisCluster formal service = %q, want %q", redisCluster.Formal.Reference.Service, "redis")
+	}
+	if redisCluster.Formal.Reference.Slug != "rediscluster" {
+		t.Fatalf("RedisCluster formal slug = %q, want %q", redisCluster.Formal.Reference.Slug, "rediscluster")
+	}
+	if redisCluster.Formal.Binding.Spec.Kind != "RedisCluster" {
+		t.Fatalf("RedisCluster formal kind = %q, want %q", redisCluster.Formal.Binding.Spec.Kind, "RedisCluster")
+	}
+	if redisCluster.Formal.Binding.Import.ProviderResource != "oci_redis_redis_cluster" {
+		t.Fatalf("RedisCluster provider resource = %q, want %q", redisCluster.Formal.Binding.Import.ProviderResource, "oci_redis_redis_cluster")
+	}
+	if redisCluster.Runtime == nil {
+		t.Fatal("RedisCluster runtime model was not attached")
+	}
+	if redisCluster.Runtime.Create == nil || redisCluster.Runtime.Create.MethodName != "CreateRedisCluster" {
+		t.Fatalf("RedisCluster create method = %#v, want CreateRedisCluster", redisCluster.Runtime.Create)
+	}
+	if redisCluster.Runtime.Get == nil || redisCluster.Runtime.Get.MethodName != "GetRedisCluster" {
+		t.Fatalf("RedisCluster get method = %#v, want GetRedisCluster", redisCluster.Runtime.Get)
+	}
+	if redisCluster.Runtime.List == nil || redisCluster.Runtime.List.MethodName != "ListRedisClusters" {
+		t.Fatalf("RedisCluster list method = %#v, want ListRedisClusters", redisCluster.Runtime.List)
+	}
+	if redisCluster.Runtime.Update == nil || redisCluster.Runtime.Update.MethodName != "UpdateRedisCluster" {
+		t.Fatalf("RedisCluster update method = %#v, want UpdateRedisCluster", redisCluster.Runtime.Update)
+	}
+	if redisCluster.Runtime.Delete == nil || redisCluster.Runtime.Delete.MethodName != "DeleteRedisCluster" {
+		t.Fatalf("RedisCluster delete method = %#v, want DeleteRedisCluster", redisCluster.Runtime.Delete)
+	}
+	if redisCluster.Runtime.Semantics == nil {
+		t.Fatal("RedisCluster runtime semantics were not attached")
+	}
+	if got := redisCluster.Runtime.Semantics.List; got == nil {
+		t.Fatal("RedisCluster list semantics were not attached")
+	} else if !slices.Equal(got.MatchFields, []string{"compartmentId", "displayName"}) {
+		t.Fatalf("RedisCluster list match fields = %v, want [compartmentId displayName]", got.MatchFields)
+	}
+	if got := redisCluster.Runtime.Semantics.Mutation.Mutable; !slices.Equal(got, []string{"definedTags", "displayName", "freeformTags", "nodeCount", "nodeMemoryInGbs"}) {
+		t.Fatalf("RedisCluster mutable fields = %v, want reviewed mutable surface", got)
+	}
+	if got := redisCluster.Runtime.Semantics.Mutation.ForceNew; !slices.Equal(got, []string{"compartmentId", "softwareVersion", "subnetId"}) {
+		t.Fatalf("RedisCluster force-new fields = %v, want [compartmentId softwareVersion subnetId]", got)
+	}
+	if len(redisCluster.Runtime.Semantics.AuxiliaryOperations) != 0 {
+		t.Fatalf("RedisCluster auxiliary operations = %v, want none", redisCluster.Runtime.Semantics.AuxiliaryOperations)
+	}
+	if len(redisCluster.Runtime.Semantics.OpenGaps) != 0 {
+		t.Fatalf("RedisCluster open gaps = %v, want none", redisCluster.Runtime.Semantics.OpenGaps)
+	}
+
+	for _, resource := range pkg.Resources {
+		if resource.Kind == "RedisRedisCluster" {
+			t.Fatal("discovered RedisRedisCluster resource kind, want published RedisCluster only")
+		}
+	}
+}
+
+func TestCheckedInOpensearchClusterFormalBindingMatchesDiscovery(t *testing.T) {
+	t.Parallel()
+
+	cfgPath := filepath.Join(repoRoot(t), "internal", "generator", "config", "services.yaml")
+	cfg, err := LoadConfig(cfgPath)
+	if err != nil {
+		t.Fatalf("LoadConfig(%q) error = %v", cfgPath, err)
+	}
+
+	var opensearchService *ServiceConfig
+	for i := range cfg.Services {
+		if cfg.Services[i].Service == "opensearch" {
+			opensearchService = &cfg.Services[i]
+			break
+		}
+	}
+	if opensearchService == nil {
+		t.Fatal("opensearch service was not found in services.yaml")
+	}
+	if got := opensearchService.FormalSpecFor("OpensearchOpensearchCluster"); got != "opensearchopensearchcluster" {
+		t.Fatalf("opensearch OpensearchOpensearchCluster formalSpec = %q, want %q", got, "opensearchopensearchcluster")
+	}
+
+	pkg, err := NewDiscoverer().BuildPackageModel(context.Background(), cfg, *opensearchService)
+	if err != nil {
+		t.Fatalf("BuildPackageModel() error = %v", err)
+	}
+
+	opensearchCluster := findResource(t, pkg.Resources, "OpensearchOpensearchCluster")
+	if opensearchCluster.SDKName != "OpensearchCluster" {
+		t.Fatalf("OpensearchOpensearchCluster SDK name = %q, want %q", opensearchCluster.SDKName, "OpensearchCluster")
+	}
+	if opensearchCluster.Formal == nil {
+		t.Fatal("OpensearchOpensearchCluster formal model was not attached")
+	}
+	if opensearchCluster.Runtime == nil || opensearchCluster.Runtime.Semantics == nil {
+		t.Fatal("OpensearchOpensearchCluster runtime semantics were not attached")
+	}
+	if got := opensearchCluster.Runtime.Semantics.List; got == nil {
+		t.Fatal("OpensearchOpensearchCluster list semantics were not attached")
+	} else if !slices.Equal(got.MatchFields, []string{"compartmentId", "displayName", "state"}) {
+		t.Fatalf("OpensearchOpensearchCluster list match fields = %v, want [compartmentId displayName state]", got.MatchFields)
+	}
+	if got := opensearchCluster.Runtime.Semantics.Delete.PendingStates; !slices.Equal(got, []string{"DELETING"}) {
+		t.Fatalf("OpensearchOpensearchCluster delete pending states = %v, want [DELETING]", got)
+	}
+	if got := opensearchCluster.Runtime.Semantics.Delete.TerminalStates; !slices.Equal(got, []string{"DELETED"}) {
+		t.Fatalf("OpensearchOpensearchCluster delete terminal states = %v, want [DELETED]", got)
+	}
+
+	serviceManager := findServiceManagerModel(t, pkg.ServiceManagers, "OpensearchOpensearchCluster")
+	if serviceManager.Semantics == nil {
+		t.Fatal("OpensearchOpensearchCluster service manager semantics were not attached")
+	}
+	if serviceManager.Semantics.FormalSlug != "opensearchopensearchcluster" {
+		t.Fatalf("OpensearchOpensearchCluster service manager formal slug = %q, want %q", serviceManager.Semantics.FormalSlug, "opensearchopensearchcluster")
+	}
+	if len(pkg.ServiceManagers) != 1 {
+		t.Fatalf("len(opensearch service managers) = %d, want 1", len(pkg.ServiceManagers))
+	}
+}
+
 func TestCheckedInConfigIncludesNetworkLoadBalancerObservedStateAlias(t *testing.T) {
 	cfgPath := filepath.Join(repoRoot(t), "internal", "generator", "config", "services.yaml")
 	cfg, err := LoadConfig(cfgPath)

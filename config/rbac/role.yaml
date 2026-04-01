@@ -1810,33 +1810,6 @@ rules:
   - patch
   - update
 - apiGroups:
-  - secrets.oracle.com
-  resources:
-  - secretbundlebynames
-  - secretbundles
-  - secretbundleversions
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - secrets.oracle.com
-  resources:
-  - secretbundlebynames/finalizers
-  - secretbundles/finalizers
-  - secretbundleversions/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - secrets.oracle.com
-  resources:
-  - secretbundlebynames/status
-  - secretbundles/status
-- apiGroups:
   - redis.oracle.com
   resources:
   - redisclusters
@@ -1870,6 +1843,34 @@ rules:
   verbs:
   - get
   - patch
+  - update
+- apiGroups:
+  - secrets.oracle.com
+  resources:
+  - secretbundlebynames
+  - secretbundles
+  - secretbundleversions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - secrets.oracle.com
+  resources:
+  - secretbundlebynames/finalizers
+  - secretbundles/finalizers
+  - secretbundleversions/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - secrets.oracle.com
+  resources:
+  - secretbundlebynames/status
+  - secretbundles/status
   - secretbundleversions/status
   verbs:
   - get

@@ -28,7 +28,7 @@ import (
 	_ "github.com/oracle/oci-go-sdk/v65/opensearch"
 	_ "github.com/oracle/oci-go-sdk/v65/psql"
 	_ "github.com/oracle/oci-go-sdk/v65/queue"
-	_ "github.com/oracle/oci-go-sdk/v65/secrets"
 	_ "github.com/oracle/oci-go-sdk/v65/redis"
+	_ "github.com/oracle/oci-go-sdk/v65/secrets"
 	_ "github.com/oracle/oci-go-sdk/v65/workrequests"
 )

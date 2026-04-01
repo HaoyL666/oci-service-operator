@@ -29,6 +29,7 @@ Each service record defines:
 | `generation.webhooks.strategy` | Webhook ownership seam: `manual` or `none`. |
 | `generation.resources[]` | Per-kind overrides keyed by the final OSOK kind after compatibility overrides are applied. |
 | `generation.resources[].formalSpec` | Optional per-kind controller slug from `formal/controller_manifest.tsv` when only selected resources are formally promoted. |
+| `generation.resources[].promotionBlockers` | Optional `bd` issue IDs that explicitly block promotion for one kind while rollout metadata lands ahead of generated API or validator surfaces. |
 | `generation.resources[].controller.maxConcurrentReconciles` | Optional controller concurrency override for one kind. |
 | `generation.resources[].controller.extraRBACMarkers` | Optional additional kubebuilder RBAC marker payloads for one kind. |
 | `generation.resources[].serviceManager.packagePath` | Optional existing package path relative to `pkg/servicemanager/` when a manual layout must be preserved. |
@@ -43,6 +44,9 @@ Rules:
   registration rollout `none`, with webhooks defaulting to `manual`.
 - `generation.resources[].kind` uses the final OSOK kind after compatibility
   overrides are applied.
+- `generation.resources[].promotionBlockers` values must be non-blank and
+  unique per kind, and they should name the open `bd` issues that explain why
+  rollout metadata is checked in before full promotion.
 - Service-specific compatibility or rollout behavior belongs in the mapping
   file, not in hardcoded generator branches.
 - The existing manual groups with locked compatibility kinds are:
@@ -296,7 +300,9 @@ from scaffold coverage into generated runtime:
    `internal/generator/config/services.yaml`. New services start as
    `packageProfile: crd-only`; add `formalSpec` at the service level or under
    `generation.resources[]` once the published OSOK kind has a matching formal
-   manifest row.
+   manifest row. When rollout metadata lands ahead of generated API or
+   validator surfaces, record the blocking `bd` issue IDs under
+   `generation.resources[].promotionBlockers`.
 2. Run `make formal-scaffold` to create or refresh scaffold-only rows for the
    published API inventory. Pass
    `FORMAL_PROVIDER_PATH=/path/to/terraform-provider-oci` when provider-wide

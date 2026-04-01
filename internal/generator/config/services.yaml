@@ -584,6 +584,27 @@ services:
         WorkRequestLog:
           - WorkRequestLogEntry
 
+  - service: redis
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/redis
+    group: redis
+    version: v1beta1
+    phase: data-and-storage
+    packageProfile: controller-backed
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+      resources:
+        - kind: RedisCluster
+          formalSpec: rediscluster
+          promotionBlockers:
+            - oci-service-operator-fk9.5
+
   - service: secrets
     sdkPackage: github.com/oracle/oci-go-sdk/v65/secrets
     group: secrets
@@ -639,27 +660,6 @@ services:
           serviceManager:
             strategy: none
         - kind: GroupCursor
-  - service: redis
-    sdkPackage: github.com/oracle/oci-go-sdk/v65/redis
-    group: redis
-    version: v1beta1
-    phase: data-and-storage
-    packageProfile: controller-backed
-    generation:
-      controller:
-        strategy: generated
-      serviceManager:
-        strategy: generated
-      registration:
-        strategy: generated
-      webhooks:
-        strategy: none
-      resources:
-        - kind: RedisCluster
-          formalSpec: rediscluster
-          promotionBlockers:
-            - oci-service-operator-fk9.5
-
           controller:
             strategy: none
           serviceManager:
