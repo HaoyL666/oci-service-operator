@@ -9,5 +9,10 @@ states:
   - active
   - updating
   - terminating
+  - terminated
+  - deleted
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - Ready state maps to OCI AVAILABLE.
+  - Requeue continues while OCI reports PROVISIONING, the defensive literal UPDATING, TERMINATING, or TERMINATED.
+  - Delete completes only after GetNetworkSecurityGroup returns not found; TERMINATING and TERMINATED are accepted observed pre-delete states.
+  - In-place updates are limited to displayName, definedTags, and freeformTags.
