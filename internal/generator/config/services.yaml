@@ -695,6 +695,8 @@ services:
     parityFile: parity/streaming.yaml
     defaultControllerImage: iad.ocir.io/oracle/oci-service-operator-streaming:latest
     managerOverlay: ../../../config/manager/streaming
+    releaseKinds:
+      - Stream
     compatibility:
       existingKinds:
         - Stream
