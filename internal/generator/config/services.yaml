@@ -531,6 +531,8 @@ services:
     version: v1beta1
     phase: data-and-storage
     packageProfile: controller-backed
+    releaseKinds:
+      - OpensearchOpensearchCluster
     compatibility:
       existingKinds:
         - OpensearchOpensearchCluster
