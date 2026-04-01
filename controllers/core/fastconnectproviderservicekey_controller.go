@@ -21,9 +21,9 @@ type FastConnectProviderServiceKeyReconciler struct {
 	Reconciler *core.BaseReconciler
 }
 
-// +kubebuilder:rbac:groups=core.oracle.com,resources=fastconnectproviderservicekeies,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core.oracle.com,resources=fastconnectproviderservicekeies/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=core.oracle.com,resources=fastconnectproviderservicekeies/finalizers,verbs=update
+// +kubebuilder:rbac:groups=core.oracle.com,resources=fastconnectproviderservicekeys,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.oracle.com,resources=fastconnectproviderservicekeys/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.oracle.com,resources=fastconnectproviderservicekeys/finalizers,verbs=update
 
 // Reconcile is part of the main Kubernetes reconciliation loop.
 func (r *FastConnectProviderServiceKeyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

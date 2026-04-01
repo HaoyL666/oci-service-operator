@@ -21,9 +21,9 @@ type BootVolumeKmsKeyReconciler struct {
 	Reconciler *core.BaseReconciler
 }
 
-// +kubebuilder:rbac:groups=core.oracle.com,resources=bootvolumekmskeies,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core.oracle.com,resources=bootvolumekmskeies/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=core.oracle.com,resources=bootvolumekmskeies/finalizers,verbs=update
+// +kubebuilder:rbac:groups=core.oracle.com,resources=bootvolumekmskeys,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.oracle.com,resources=bootvolumekmskeys/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.oracle.com,resources=bootvolumekmskeys/finalizers,verbs=update
 
 // Reconcile is part of the main Kubernetes reconciliation loop.
 func (r *BootVolumeKmsKeyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

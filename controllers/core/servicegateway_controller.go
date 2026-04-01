@@ -21,9 +21,9 @@ type ServiceGatewayReconciler struct {
 	Reconciler *core.BaseReconciler
 }
 
-// +kubebuilder:rbac:groups=core.oracle.com,resources=servicegatewaies,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core.oracle.com,resources=servicegatewaies/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=core.oracle.com,resources=servicegatewaies/finalizers,verbs=update
+// +kubebuilder:rbac:groups=core.oracle.com,resources=servicegateways,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.oracle.com,resources=servicegateways/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.oracle.com,resources=servicegateways/finalizers,verbs=update
 
 // Reconcile is part of the main Kubernetes reconciliation loop.
 func (r *ServiceGatewayReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

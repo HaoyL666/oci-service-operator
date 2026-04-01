@@ -21,9 +21,9 @@ type InternetGatewayReconciler struct {
 	Reconciler *core.BaseReconciler
 }
 
-// +kubebuilder:rbac:groups=core.oracle.com,resources=internetgatewaies,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core.oracle.com,resources=internetgatewaies/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=core.oracle.com,resources=internetgatewaies/finalizers,verbs=update
+// +kubebuilder:rbac:groups=core.oracle.com,resources=internetgateways,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.oracle.com,resources=internetgateways/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.oracle.com,resources=internetgateways/finalizers,verbs=update
 
 // Reconcile is part of the main Kubernetes reconciliation loop.
 func (r *InternetGatewayReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

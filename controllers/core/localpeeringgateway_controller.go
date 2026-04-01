@@ -21,9 +21,9 @@ type LocalPeeringGatewayReconciler struct {
 	Reconciler *core.BaseReconciler
 }
 
-// +kubebuilder:rbac:groups=core.oracle.com,resources=localpeeringgatewaies,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core.oracle.com,resources=localpeeringgatewaies/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=core.oracle.com,resources=localpeeringgatewaies/finalizers,verbs=update
+// +kubebuilder:rbac:groups=core.oracle.com,resources=localpeeringgateways,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.oracle.com,resources=localpeeringgateways/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.oracle.com,resources=localpeeringgateways/finalizers,verbs=update
 
 // Reconcile is part of the main Kubernetes reconciliation loop.
 func (r *LocalPeeringGatewayReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

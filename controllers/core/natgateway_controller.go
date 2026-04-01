@@ -21,9 +21,9 @@ type NatGatewayReconciler struct {
 	Reconciler *core.BaseReconciler
 }
 
-// +kubebuilder:rbac:groups=core.oracle.com,resources=natgatewaies,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core.oracle.com,resources=natgatewaies/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=core.oracle.com,resources=natgatewaies/finalizers,verbs=update
+// +kubebuilder:rbac:groups=core.oracle.com,resources=natgateways,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.oracle.com,resources=natgateways/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.oracle.com,resources=natgateways/finalizers,verbs=update
 
 // Reconcile is part of the main Kubernetes reconciliation loop.
 func (r *NatGatewayReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

@@ -17,7 +17,7 @@ rules:
   - blockvolumereplicas
   - bootvolumeattachments
   - bootvolumebackups
-  - bootvolumekmskeies
+  - bootvolumekmskeys
   - bootvolumereplicas
   - bootvolumes
   - byoipallocatedranges
@@ -61,7 +61,7 @@ rules:
   - drgrouterules
   - drgroutetables
   - drgs
-  - fastconnectproviderservicekeies
+  - fastconnectproviderservicekeys
   - fastconnectproviderservices
   - fastconnectprovidervirtualcircuitbandwidthshapes
   - images
@@ -74,7 +74,7 @@ rules:
   - instancepoolloadbalancerattachments
   - instancepools
   - instances
-  - internetgatewaies
+  - internetgateways
   - ipsecconnectiondeviceconfigs
   - ipsecconnectiondevicestatuses
   - ipsecconnections
@@ -85,22 +85,22 @@ rules:
   - ipsecconnectiontunnelsharedsecrets
   - ipseccpedeviceconfigcontents
   - ipv6s
-  - localpeeringgatewaies
+  - localpeeringgateways
   - measuredbootreports
-  - natgatewaies
+  - natgateways
   - networkingtopologies
   - networksecuritygroups
   - networksecuritygroupsecurityrules
   - networksecuritygroupvnics
   - privateips
-  - publicipbyipaddresss
+  - publicipbyipaddresses
   - publicipbyprivateipids
   - publicippools
   - publicips
   - remotepeeringconnections
   - routetables
   - securitylists
-  - servicegatewaies
+  - servicegateways
   - services
   - shapes
   - subnets
@@ -126,7 +126,7 @@ rules:
   - volumegroupbackups
   - volumegroupreplicas
   - volumegroups
-  - volumekmskeies
+  - volumekmskeys
   - volumes
   - vtaps
   - windowsinstanceinitialcredentials
@@ -151,7 +151,7 @@ rules:
   - blockvolumereplicas/finalizers
   - bootvolumeattachments/finalizers
   - bootvolumebackups/finalizers
-  - bootvolumekmskeies/finalizers
+  - bootvolumekmskeys/finalizers
   - bootvolumereplicas/finalizers
   - bootvolumes/finalizers
   - byoipallocatedranges/finalizers
@@ -195,7 +195,7 @@ rules:
   - drgrouterules/finalizers
   - drgroutetables/finalizers
   - drgs/finalizers
-  - fastconnectproviderservicekeies/finalizers
+  - fastconnectproviderservicekeys/finalizers
   - fastconnectproviderservices/finalizers
   - fastconnectprovidervirtualcircuitbandwidthshapes/finalizers
   - images/finalizers
@@ -208,7 +208,7 @@ rules:
   - instancepoolloadbalancerattachments/finalizers
   - instancepools/finalizers
   - instances/finalizers
-  - internetgatewaies/finalizers
+  - internetgateways/finalizers
   - ipsecconnectiondeviceconfigs/finalizers
   - ipsecconnectiondevicestatuses/finalizers
   - ipsecconnections/finalizers
@@ -219,22 +219,22 @@ rules:
   - ipsecconnectiontunnelsharedsecrets/finalizers
   - ipseccpedeviceconfigcontents/finalizers
   - ipv6s/finalizers
-  - localpeeringgatewaies/finalizers
+  - localpeeringgateways/finalizers
   - measuredbootreports/finalizers
-  - natgatewaies/finalizers
+  - natgateways/finalizers
   - networkingtopologies/finalizers
   - networksecuritygroups/finalizers
   - networksecuritygroupsecurityrules/finalizers
   - networksecuritygroupvnics/finalizers
   - privateips/finalizers
-  - publicipbyipaddresss/finalizers
+  - publicipbyipaddresses/finalizers
   - publicipbyprivateipids/finalizers
   - publicippools/finalizers
   - publicips/finalizers
   - remotepeeringconnections/finalizers
   - routetables/finalizers
   - securitylists/finalizers
-  - servicegatewaies/finalizers
+  - servicegateways/finalizers
   - services/finalizers
   - shapes/finalizers
   - subnets/finalizers
@@ -260,7 +260,7 @@ rules:
   - volumegroupbackups/finalizers
   - volumegroupreplicas/finalizers
   - volumegroups/finalizers
-  - volumekmskeies/finalizers
+  - volumekmskeys/finalizers
   - volumes/finalizers
   - vtaps/finalizers
   - windowsinstanceinitialcredentials/finalizers
@@ -279,7 +279,7 @@ rules:
   - blockvolumereplicas/status
   - bootvolumeattachments/status
   - bootvolumebackups/status
-  - bootvolumekmskeies/status
+  - bootvolumekmskeys/status
   - bootvolumereplicas/status
   - bootvolumes/status
   - byoipallocatedranges/status
@@ -323,7 +323,7 @@ rules:
   - drgrouterules/status
   - drgroutetables/status
   - drgs/status
-  - fastconnectproviderservicekeies/status
+  - fastconnectproviderservicekeys/status
   - fastconnectproviderservices/status
   - fastconnectprovidervirtualcircuitbandwidthshapes/status
   - images/status
@@ -336,7 +336,7 @@ rules:
   - instancepoolloadbalancerattachments/status
   - instancepools/status
   - instances/status
-  - internetgatewaies/status
+  - internetgateways/status
   - ipsecconnectiondeviceconfigs/status
   - ipsecconnectiondevicestatuses/status
   - ipsecconnections/status
@@ -347,22 +347,22 @@ rules:
   - ipsecconnectiontunnelsharedsecrets/status
   - ipseccpedeviceconfigcontents/status
   - ipv6s/status
-  - localpeeringgatewaies/status
+  - localpeeringgateways/status
   - measuredbootreports/status
-  - natgatewaies/status
+  - natgateways/status
   - networkingtopologies/status
   - networksecuritygroups/status
   - networksecuritygroupsecurityrules/status
   - networksecuritygroupvnics/status
   - privateips/status
-  - publicipbyipaddresss/status
+  - publicipbyipaddresses/status
   - publicipbyprivateipids/status
   - publicippools/status
   - publicips/status
   - remotepeeringconnections/status
   - routetables/status
   - securitylists/status
-  - servicegatewaies/status
+  - servicegateways/status
   - services/status
   - shapes/status
   - subnets/status
@@ -388,7 +388,7 @@ rules:
   - volumegroupbackups/status
   - volumegroupreplicas/status
   - volumegroups/status
-  - volumekmskeies/status
+  - volumekmskeys/status
   - volumes/status
   - vtaps/status
   - windowsinstanceinitialcredentials/status
