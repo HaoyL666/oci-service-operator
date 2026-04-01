@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetSubnet
 else tracked identity is missing
-ServiceManager -> OCI: ListSubnet(filters: compartment_id,\nstate)
+ServiceManager -> OCI: ListSubnets(filters: compartment_id,\ndisplay_name, id, vcn_id (+1 more))
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateSubnet
 loop create pending PROVISIONING
@@ -52,9 +52,9 @@ end
 alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteSubnet
-ServiceManager -> OCI: confirm delete via GetSubnet or\nListSubnet
-loop delete pending DELETING
-ServiceManager -> OCI: GetSubnet or ListSubnet
+ServiceManager -> OCI: confirm delete via GetSubnet or\nListSubnets
+loop delete pending TERMINATING,\nTERMINATED
+ServiceManager -> OCI: GetSubnet or ListSubnets
 end
 alt cleanup or finalizer release is blocked
 ServiceManager --> BaseReconciler: retain delete state and retry
@@ -63,20 +63,25 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, TERMINATING,\nTERMINATED
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: cidr_block,
+defined_tags, dhcp_options_id,
+display_name (+5 more)
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+availability_domain, compartment_id,
+dns_label, prohibit_internet_ingress (+2
+more)
+Lookup filters: compartment_id,
+display_name, id, vcn_id (+1 more)
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateSubnet only for mutable\nfields display_name
+ServiceManager -> OCI: Apply UpdateSubnet only for mutable\nfields cidr_block, defined_tags,\ndhcp_options_id, display_name (+5\nmore)
 loop update pending UPDATING
 ServiceManager -> OCI: GetSubnet
 end
@@ -109,16 +114,22 @@ status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+UPDATING; delete TERMINATING, TERMINATED
+supported drift: cidr_block, defined_tags,
+dhcp_options_id, display_name (+5 more)
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_core_subnet filters
-compartment_id, state
+availability_domain, compartment_id, dns_label,
+prohibit_internet_ingress (+2 more)
+list lookup: oci_core_subnets filters
+compartment_id, display_name, id, vcn_id (+1
+more)
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Ready state maps to OCI AVAILABLE.
+Requeue continues while OCI reports
+PROVISIONING, UPDATING, or TERMINATING.
+Delete completes only after GetSubnet returns
+not found; TERMINATED is an accepted observed
+pre-delete state.
 end note
 @enduml

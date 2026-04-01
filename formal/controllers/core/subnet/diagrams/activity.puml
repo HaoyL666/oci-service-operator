@@ -27,15 +27,15 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via GetSubnet;
 else (no)
-:Resolve an existing OCI resource through\nListSubnet using filters compartment_id, state;
+:Resolve an existing OCI resource through\nListSubnets using filters compartment_id,\ndisplay_name, id, vcn_id (+1 more);
 :Create the OCI resource via CreateSubnet when\nno reusable match is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
 }
 if ("Delete requested?") then (yes)
 partition "Delete" {
-:Delete path uses DeleteSubnet with required\nvia GetSubnet or ListSubnet to DELETED\nconfirmation;
-:Confirm deletion via GetSubnet or ListSubnet\nuntil OCI reaches DELETED;
+:Delete path uses DeleteSubnet with required\nvia GetSubnet or ListSubnets to NOT_FOUND\nconfirmation;
+:Confirm deletion via GetSubnet or ListSubnets\nuntil OCI reaches NOT_FOUND;
 if ("Delete cleanup and finalizer release succeed?") then (yes)
 :Remove the finalizer after delete completion;
 else (no)
@@ -46,27 +46,27 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
+:Request requeue while OCI remains in\nPROVISIONING, UPDATING, TERMINATING,\nTERMINATED;
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
-:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE;
+:Return an unsuccessful reconcile result until\nOCI reaches AVAILABLE;
 stop
 endif
 }
 partition "Ready and Drift Handling" {
 :Compare live OCI state against the imported\nfield surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields availability_domain, compartment_id,\ndns_label, prohibit_internet_ingress (+2 more);
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateSubnet only for mutable fields\ndisplay_name;
+:Apply UpdateSubnet only for mutable fields\ncidr_block, defined_tags, dhcp_options_id,\ndisplay_name (+5 more);
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Return success for the ACTIVE success state;
+:Return success for the AVAILABLE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
 }
@@ -92,16 +92,22 @@ status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+UPDATING; delete TERMINATING, TERMINATED
+supported drift: cidr_block, defined_tags,
+dhcp_options_id, display_name (+5 more)
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_core_subnet filters
-compartment_id, state
+availability_domain, compartment_id, dns_label,
+prohibit_internet_ingress (+2 more)
+list lookup: oci_core_subnets filters
+compartment_id, display_name, id, vcn_id (+1
+more)
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Ready state maps to OCI AVAILABLE.
+Requeue continues while OCI reports
+PROVISIONING, UPDATING, or TERMINATING.
+Delete completes only after GetSubnet returns
+not found; TERMINATED is an accepted observed
+pre-delete state.
 end note
 @enduml
