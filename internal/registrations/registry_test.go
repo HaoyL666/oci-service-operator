@@ -13,6 +13,7 @@ import (
 	corev1beta1 "github.com/oracle/oci-service-operator/api/core/v1beta1"
 	databasev1beta1 "github.com/oracle/oci-service-operator/api/database/v1beta1"
 	mysqlv1beta1 "github.com/oracle/oci-service-operator/api/mysql/v1beta1"
+	opensearchv1beta1 "github.com/oracle/oci-service-operator/api/opensearch/v1beta1"
 	streamingv1beta1 "github.com/oracle/oci-service-operator/api/streaming/v1beta1"
 	"github.com/oracle/oci-service-operator/pkg/credhelper"
 	"github.com/oracle/oci-service-operator/pkg/metrics"
@@ -38,6 +39,7 @@ func TestAllAddToSchemeRegistersManualGroupKinds(t *testing.T) {
 		&corev1beta1.Vcn{},
 		&databasev1beta1.AutonomousDatabases{},
 		&mysqlv1beta1.MySqlDbSystem{},
+		&opensearchv1beta1.OpensearchOpensearchCluster{},
 		&streamingv1beta1.Stream{},
 	} {
 		gvks, _, err := scheme.ObjectKinds(obj)

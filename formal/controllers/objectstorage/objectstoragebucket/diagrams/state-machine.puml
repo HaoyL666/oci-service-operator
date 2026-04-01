@@ -79,9 +79,8 @@ scaffold_objectstorage_objectstoragebucket
 filters compartment_id, state
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Provider scaffold alias only; the published OSOK
+controller target is objectstorage/Bucket.
 end note
 note right of delete_pending
 delete policy: required

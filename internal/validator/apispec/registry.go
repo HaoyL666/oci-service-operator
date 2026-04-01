@@ -23,8 +23,10 @@ import (
 	nosqlv1beta1 "github.com/oracle/oci-service-operator/api/nosql/v1beta1"
 	objectstoragev1beta1 "github.com/oracle/oci-service-operator/api/objectstorage/v1beta1"
 	onsv1beta1 "github.com/oracle/oci-service-operator/api/ons/v1beta1"
+	opensearchv1beta1 "github.com/oracle/oci-service-operator/api/opensearch/v1beta1"
 	psqlv1beta1 "github.com/oracle/oci-service-operator/api/psql/v1beta1"
 	queuev1beta1 "github.com/oracle/oci-service-operator/api/queue/v1beta1"
+	redisv1beta1 "github.com/oracle/oci-service-operator/api/redis/v1beta1"
 	secretsv1beta1 "github.com/oracle/oci-service-operator/api/secrets/v1beta1"
 	streamingv1beta1 "github.com/oracle/oci-service-operator/api/streaming/v1beta1"
 	vaultv1beta1 "github.com/oracle/oci-service-operator/api/vault/v1beta1"
@@ -1316,6 +1318,12 @@ var targets = []Target{
 			{
 				SDKStruct: "mysql.UpdateDbSystemDetails",
 			},
+			{
+				SDKStruct: "mysql.DbSystem",
+			},
+			{
+				SDKStruct: "mysql.DbSystemSummary",
+			},
 		},
 	},
 	{
@@ -1867,7 +1875,7 @@ var targets = []Target{
 		},
 	},
 	{
-		Name:       "ObjectStorageBucket",
+		Name:       "Bucket",
 		SpecType:   reflect.TypeOf(objectstoragev1beta1.BucketSpec{}),
 		StatusType: reflect.TypeOf(objectstoragev1beta1.BucketStatus{}),
 		SDKMappings: []SDKMapping{
@@ -1963,16 +1971,6 @@ var targets = []Target{
 		},
 	},
 	{
-		Name:       "ObjectStorageObjectStorageTier",
-		SpecType:   reflect.TypeOf(objectstoragev1beta1.ObjectStorageTierSpec{}),
-		StatusType: reflect.TypeOf(objectstoragev1beta1.ObjectStorageTierStatus{}),
-		SDKMappings: []SDKMapping{
-			{
-				SDKStruct: "objectstorage.UpdateObjectStorageTierDetails",
-			},
-		},
-	},
-	{
 		Name:       "ObjectStorageObjectVersion",
 		SpecType:   reflect.TypeOf(objectstoragev1beta1.ObjectVersionSpec{}),
 		StatusType: reflect.TypeOf(objectstoragev1beta1.ObjectVersionStatus{}),
@@ -2059,6 +2057,16 @@ var targets = []Target{
 			{
 				SDKStruct:  "objectstorage.RetentionRuleSummary",
 				APISurface: "status",
+			},
+		},
+	},
+	{
+		Name:       "ObjectStorageTier",
+		SpecType:   reflect.TypeOf(objectstoragev1beta1.ObjectStorageTierSpec{}),
+		StatusType: reflect.TypeOf(objectstoragev1beta1.ObjectStorageTierStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "objectstorage.UpdateObjectStorageTierDetails",
 			},
 		},
 	},
@@ -2878,6 +2886,19 @@ var targets = []Target{
 		},
 	},
 	{
+		Name:       "LoadBalancerHealth",
+		SpecType:   reflect.TypeOf(loadbalancerv1beta1.LoadBalancerHealthSpec{}),
+		StatusType: reflect.TypeOf(loadbalancerv1beta1.LoadBalancerHealthStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "loadbalancer.LoadBalancerHealth",
+			},
+			{
+				SDKStruct: "loadbalancer.LoadBalancerHealthSummary",
+			},
+		},
+	},
+	{
 		Name:       "LoadBalancerHealthChecker",
 		SpecType:   reflect.TypeOf(loadbalancerv1beta1.HealthCheckerSpec{}),
 		StatusType: reflect.TypeOf(loadbalancerv1beta1.HealthCheckerStatus{}),
@@ -2941,32 +2962,6 @@ var targets = []Target{
 		SDKMappings: []SDKMapping{
 			{
 				SDKStruct: "loadbalancer.ListenerRuleSummary",
-			},
-		},
-	},
-	{
-		Name:       "LoadBalancerLoadBalancerHealth",
-		SpecType:   reflect.TypeOf(loadbalancerv1beta1.LoadBalancerHealthSpec{}),
-		StatusType: reflect.TypeOf(loadbalancerv1beta1.LoadBalancerHealthStatus{}),
-		SDKMappings: []SDKMapping{
-			{
-				SDKStruct: "loadbalancer.LoadBalancerHealth",
-			},
-			{
-				SDKStruct: "loadbalancer.LoadBalancerHealthSummary",
-			},
-		},
-	},
-	{
-		Name:       "LoadBalancerLoadBalancerShape",
-		SpecType:   reflect.TypeOf(loadbalancerv1beta1.LoadBalancerShapeSpec{}),
-		StatusType: reflect.TypeOf(loadbalancerv1beta1.LoadBalancerShapeStatus{}),
-		SDKMappings: []SDKMapping{
-			{
-				SDKStruct: "loadbalancer.UpdateLoadBalancerShapeDetails",
-			},
-			{
-				SDKStruct: "loadbalancer.LoadBalancerShape",
 			},
 		},
 	},
@@ -3081,6 +3076,22 @@ var targets = []Target{
 			{
 				SDKStruct:  "loadbalancer.SslCipherSuite",
 				APISurface: "spec",
+			},
+		},
+	},
+	{
+		Name:       "LoadBalancerShape",
+		SpecType:   reflect.TypeOf(loadbalancerv1beta1.LoadBalancerShapeSpec{}),
+		StatusType: reflect.TypeOf(loadbalancerv1beta1.LoadBalancerShapeStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "loadbalancer.UpdateLoadBalancerShapeDetails",
+			},
+			{
+				SDKStruct: "loadbalancer.ShapeDetails",
+			},
+			{
+				SDKStruct: "loadbalancer.LoadBalancerShape",
 			},
 		},
 	},
@@ -3221,6 +3232,26 @@ var targets = []Target{
 		},
 	},
 	{
+		Name:       "NetworkLoadBalancerHealth",
+		SpecType:   reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancerHealthSpec{}),
+		StatusType: reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancerHealthStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct:  "networkloadbalancer.NetworkLoadBalancerHealth",
+				APISurface: "status",
+			},
+			{
+				SDKStruct: "networkloadbalancer.NetworkLoadBalancerHealthCollection",
+				Exclude:   true,
+				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
+			},
+			{
+				SDKStruct:  "networkloadbalancer.NetworkLoadBalancerHealthSummary",
+				APISurface: "status",
+			},
+		},
+	},
+	{
 		Name:       "NetworkLoadBalancerHealthChecker",
 		SpecType:   reflect.TypeOf(networkloadbalancerv1beta1.HealthCheckerSpec{}),
 		StatusType: reflect.TypeOf(networkloadbalancerv1beta1.HealthCheckerStatus{}),
@@ -3263,50 +3294,6 @@ var targets = []Target{
 			{
 				SDKStruct:  "networkloadbalancer.ListenerSummary",
 				APISurface: "spec",
-			},
-		},
-	},
-	{
-		Name:       "NetworkLoadBalancerNetworkLoadBalancerHealth",
-		SpecType:   reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancerHealthSpec{}),
-		StatusType: reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancerHealthStatus{}),
-		SDKMappings: []SDKMapping{
-			{
-				SDKStruct:  "networkloadbalancer.NetworkLoadBalancerHealth",
-				APISurface: "status",
-			},
-			{
-				SDKStruct: "networkloadbalancer.NetworkLoadBalancerHealthCollection",
-				Exclude:   true,
-				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
-			},
-			{
-				SDKStruct:  "networkloadbalancer.NetworkLoadBalancerHealthSummary",
-				APISurface: "status",
-			},
-		},
-	},
-	{
-		Name:       "NetworkLoadBalancerNetworkLoadBalancersPolicy",
-		SpecType:   reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancersPolicySpec{}),
-		StatusType: reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancersPolicyStatus{}),
-		SDKMappings: []SDKMapping{
-			{
-				SDKStruct: "networkloadbalancer.NetworkLoadBalancersPolicyCollection",
-				Exclude:   true,
-				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
-			},
-		},
-	},
-	{
-		Name:       "NetworkLoadBalancerNetworkLoadBalancersProtocol",
-		SpecType:   reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancersProtocolSpec{}),
-		StatusType: reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancersProtocolStatus{}),
-		SDKMappings: []SDKMapping{
-			{
-				SDKStruct: "networkloadbalancer.NetworkLoadBalancersProtocolCollection",
-				Exclude:   true,
-				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
 			},
 		},
 	},
@@ -3367,6 +3354,30 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "networkloadbalancer.WorkRequestLogEntryCollection",
+				Exclude:   true,
+				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
+			},
+		},
+	},
+	{
+		Name:       "NetworkLoadBalancersPolicy",
+		SpecType:   reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancersPolicySpec{}),
+		StatusType: reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancersPolicyStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "networkloadbalancer.NetworkLoadBalancersPolicyCollection",
+				Exclude:   true,
+				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
+			},
+		},
+	},
+	{
+		Name:       "NetworkLoadBalancersProtocol",
+		SpecType:   reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancersProtocolSpec{}),
+		StatusType: reflect.TypeOf(networkloadbalancerv1beta1.NetworkLoadBalancersProtocolStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "networkloadbalancer.NetworkLoadBalancersProtocolCollection",
 				Exclude:   true,
 				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
 			},
@@ -4215,27 +4226,6 @@ var targets = []Target{
 		},
 	},
 	{
-		Name:       "IdentityIdentityProvider",
-		SpecType:   reflect.TypeOf(identityv1beta1.IdentityProviderSpec{}),
-		StatusType: reflect.TypeOf(identityv1beta1.IdentityProviderStatus{}),
-		SDKMappings: []SDKMapping{
-			{
-				SDKStruct:  "identity.Saml2IdentityProvider",
-				APISurface: "status",
-			},
-		},
-	},
-	{
-		Name:       "IdentityIdentityProviderGroup",
-		SpecType:   reflect.TypeOf(identityv1beta1.IdentityProviderGroupSpec{}),
-		StatusType: reflect.TypeOf(identityv1beta1.IdentityProviderGroupStatus{}),
-		SDKMappings: []SDKMapping{
-			{
-				SDKStruct: "identity.IdentityProviderGroupSummary",
-			},
-		},
-	},
-	{
 		Name:       "IdentityIdpGroupMapping",
 		SpecType:   reflect.TypeOf(identityv1beta1.IdpGroupMappingSpec{}),
 		StatusType: reflect.TypeOf(identityv1beta1.IdpGroupMappingStatus{}),
@@ -4329,6 +4319,27 @@ var targets = []Target{
 			{
 				SDKStruct:  "identity.Policy",
 				APISurface: "status",
+			},
+		},
+	},
+	{
+		Name:       "IdentityProvider",
+		SpecType:   reflect.TypeOf(identityv1beta1.IdentityProviderSpec{}),
+		StatusType: reflect.TypeOf(identityv1beta1.IdentityProviderStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct:  "identity.Saml2IdentityProvider",
+				APISurface: "status",
+			},
+		},
+	},
+	{
+		Name:       "IdentityProviderGroup",
+		SpecType:   reflect.TypeOf(identityv1beta1.IdentityProviderGroupSpec{}),
+		StatusType: reflect.TypeOf(identityv1beta1.IdentityProviderGroupStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "identity.IdentityProviderGroupSummary",
 			},
 		},
 	},
@@ -6597,6 +6608,171 @@ var targets = []Target{
 			{
 				SDKStruct:  "core.InstanceCredentials",
 				APISurface: "status",
+			},
+		},
+	},
+	{
+		Name:       "OpensearchClusterBackup",
+		SpecType:   reflect.TypeOf(opensearchv1beta1.OpensearchClusterBackupSpec{}),
+		StatusType: reflect.TypeOf(opensearchv1beta1.OpensearchClusterBackupStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "opensearch.UpdateOpensearchClusterBackupDetails",
+			},
+			{
+				SDKStruct: "opensearch.OpensearchClusterBackup",
+			},
+			{
+				SDKStruct: "opensearch.OpensearchClusterBackupCollection",
+			},
+			{
+				SDKStruct: "opensearch.OpensearchClusterBackupSummary",
+			},
+		},
+	},
+	{
+		Name:        "OpensearchManifest",
+		SpecType:    reflect.TypeOf(opensearchv1beta1.ManifestSpec{}),
+		StatusType:  reflect.TypeOf(opensearchv1beta1.ManifestStatus{}),
+		SDKMappings: []SDKMapping{},
+	},
+	{
+		Name:       "OpensearchOpensearchCluster",
+		SpecType:   reflect.TypeOf(opensearchv1beta1.OpensearchOpensearchClusterSpec{}),
+		StatusType: reflect.TypeOf(opensearchv1beta1.OpensearchOpensearchClusterStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "opensearch.CreateOpensearchClusterDetails",
+			},
+			{
+				SDKStruct: "opensearch.UpdateOpensearchClusterDetails",
+			},
+			{
+				SDKStruct: "opensearch.OpensearchCluster",
+			},
+			{
+				SDKStruct: "opensearch.OpensearchClusterCollection",
+				Exclude:   true,
+				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
+			},
+			{
+				SDKStruct: "opensearch.OpensearchClusterSummary",
+			},
+		},
+	},
+	{
+		Name:       "OpensearchOpensearchVersion",
+		SpecType:   reflect.TypeOf(opensearchv1beta1.OpensearchOpensearchVersionSpec{}),
+		StatusType: reflect.TypeOf(opensearchv1beta1.OpensearchOpensearchVersionStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "opensearch.OpensearchVersionsCollection",
+				Exclude:   true,
+				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
+			},
+			{
+				SDKStruct:  "opensearch.OpensearchVersionsSummary",
+				APISurface: "status",
+			},
+		},
+	},
+	{
+		Name:       "OpensearchWorkRequest",
+		SpecType:   reflect.TypeOf(opensearchv1beta1.WorkRequestSpec{}),
+		StatusType: reflect.TypeOf(opensearchv1beta1.WorkRequestStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "opensearch.WorkRequest",
+			},
+			{
+				SDKStruct: "opensearch.WorkRequestCollection",
+			},
+		},
+	},
+	{
+		Name:       "OpensearchWorkRequestError",
+		SpecType:   reflect.TypeOf(opensearchv1beta1.WorkRequestErrorSpec{}),
+		StatusType: reflect.TypeOf(opensearchv1beta1.WorkRequestErrorStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "opensearch.WorkRequestError",
+			},
+			{
+				SDKStruct: "opensearch.WorkRequestErrorCollection",
+			},
+		},
+	},
+	{
+		Name:       "OpensearchWorkRequestLog",
+		SpecType:   reflect.TypeOf(opensearchv1beta1.WorkRequestLogSpec{}),
+		StatusType: reflect.TypeOf(opensearchv1beta1.WorkRequestLogStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "opensearch.WorkRequestLogEntry",
+			},
+			{
+				SDKStruct: "opensearch.WorkRequestLogEntryCollection",
+			},
+		},
+	},
+	{
+		Name:       "RedisCluster",
+		SpecType:   reflect.TypeOf(redisv1beta1.RedisClusterSpec{}),
+		StatusType: reflect.TypeOf(redisv1beta1.RedisClusterStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "redis.CreateRedisClusterDetails",
+			},
+			{
+				SDKStruct: "redis.UpdateRedisClusterDetails",
+			},
+			{
+				SDKStruct: "redis.RedisCluster",
+			},
+			{
+				SDKStruct: "redis.RedisClusterCollection",
+			},
+			{
+				SDKStruct: "redis.RedisClusterSummary",
+			},
+		},
+	},
+	{
+		Name:       "RedisWorkRequest",
+		SpecType:   reflect.TypeOf(redisv1beta1.WorkRequestSpec{}),
+		StatusType: reflect.TypeOf(redisv1beta1.WorkRequestStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "redis.WorkRequest",
+			},
+			{
+				SDKStruct: "redis.WorkRequestSummary",
+			},
+		},
+	},
+	{
+		Name:       "RedisWorkRequestError",
+		SpecType:   reflect.TypeOf(redisv1beta1.WorkRequestErrorSpec{}),
+		StatusType: reflect.TypeOf(redisv1beta1.WorkRequestErrorStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "redis.WorkRequestError",
+			},
+			{
+				SDKStruct: "redis.WorkRequestErrorCollection",
+			},
+		},
+	},
+	{
+		Name:       "RedisWorkRequestLog",
+		SpecType:   reflect.TypeOf(redisv1beta1.WorkRequestLogSpec{}),
+		StatusType: reflect.TypeOf(redisv1beta1.WorkRequestLogStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "redis.WorkRequestLogEntry",
+			},
+			{
+				SDKStruct: "redis.WorkRequestLogEntryCollection",
 			},
 		},
 	},

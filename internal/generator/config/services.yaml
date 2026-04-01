@@ -438,6 +438,8 @@ services:
         strategy: none
       resources:
         - kind: MySqlDbSystem
+          promotionBlockers:
+            - oci-service-operator-8xa.8
           controller:
             maxConcurrentReconciles: 3
             extraRBACMarkers:
@@ -507,10 +509,68 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: Bucket
+          formalSpec: bucket
     observedState:
       sdkAliases:
         WorkRequestLog:
           - WorkRequestLogEntry
+
+  - service: opensearch
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/opensearch
+    group: opensearch
+    version: v1beta1
+    phase: data-and-storage
+    packageProfile: controller-backed
+    compatibility:
+      existingKinds:
+        - OpensearchOpensearchCluster
+        - OpensearchOpensearchVersion
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+      resources:
+        - kind: OpensearchOpensearchCluster
+          formalSpec: opensearchopensearchcluster
+          promotionBlockers:
+            - oci-service-operator-fk9.6
+        - kind: Manifest
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: OpensearchClusterBackup
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: OpensearchOpensearchVersion
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: WorkRequest
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: WorkRequestError
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
+        - kind: WorkRequestLog
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
 
   - service: ons
     sdkPackage: github.com/oracle/oci-go-sdk/v65/ons
@@ -580,6 +640,27 @@ services:
         WorkRequestLog:
           - WorkRequestLogEntry
 
+  - service: redis
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/redis
+    group: redis
+    version: v1beta1
+    phase: data-and-storage
+    packageProfile: controller-backed
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+      resources:
+        - kind: RedisCluster
+          formalSpec: rediscluster
+          promotionBlockers:
+            - oci-service-operator-fk9.5
+
   - service: secrets
     sdkPackage: github.com/oracle/oci-go-sdk/v65/secrets
     group: secrets
@@ -633,6 +714,11 @@ services:
             strategy: none
           serviceManager:
             strategy: none
+        - kind: StreamPool
+          controller:
+            strategy: none
+          serviceManager:
+            strategy: none
         - kind: Cursor
           controller:
             strategy: none
@@ -649,11 +735,6 @@ services:
           serviceManager:
             strategy: none
         - kind: Message
-          controller:
-            strategy: none
-          serviceManager:
-            strategy: none
-        - kind: StreamPool
           controller:
             strategy: none
           serviceManager:

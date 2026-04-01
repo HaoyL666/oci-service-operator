@@ -12,7 +12,7 @@ func TestDeriveSDKTypesIncludesReadOnlyResponseOverrides(t *testing.T) {
 		"DrgAttachmentInfo": true,
 	}
 
-	got := deriveSDKTypes("core", "AllDrgAttachment", makeTargetName("core", "AllDrgAttachment"), structs)
+	got := deriveSDKTypes("core", "core", "AllDrgAttachment", makeTargetName("core", "AllDrgAttachment"), structs)
 	want := []string{"DrgAttachmentInfo"}
 	if !slices.Equal(got, want) {
 		t.Fatalf("deriveSDKTypes() = %v, want %v", got, want)

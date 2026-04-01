@@ -76,7 +76,7 @@ reject before mutate: force-new fields
 compartment_id
 list lookup:
 scaffold_opensearch_opensearchopensearchcluster
-filters compartment_id, state
+filters compartment_id, display_name, state
 conflicts: none
 open gaps: none
 Scaffold metadata only; replace with

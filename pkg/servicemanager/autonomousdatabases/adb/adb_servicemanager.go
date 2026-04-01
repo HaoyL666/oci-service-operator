@@ -28,6 +28,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
+const adbDeleteNotSupportedMessage = "AutonomousDatabases OCI delete is not supported; releasing the finalizer without an OCI delete request"
+
 type AdbServiceManager struct {
 	Provider         common.ConfigurationProvider
 	CredentialClient credhelper.CredentialClient
@@ -251,6 +253,26 @@ func recordLastAppliedSecretReferenceStatus(autonomousDatabases *databasev1beta1
 }
 
 func (c *AdbServiceManager) Delete(ctx context.Context, obj runtime.Object) (bool, error) {
+	autonomousDatabases, err := c.convert(obj)
+	if err != nil {
+		c.Log.ErrorLog(err, "Conversion of object failed")
+		return false, err
+	}
+
+	now := metav1.Now()
+	autonomousDatabases.Status.OsokStatus.DeletedAt = &now
+	autonomousDatabases.Status.OsokStatus.UpdatedAt = &now
+	autonomousDatabases.Status.OsokStatus.Message = adbDeleteNotSupportedMessage
+	autonomousDatabases.Status.OsokStatus.Reason = string(shared.Terminating)
+	autonomousDatabases.Status.OsokStatus = util.UpdateOSOKStatusCondition(
+		autonomousDatabases.Status.OsokStatus,
+		shared.Terminating,
+		v1.ConditionTrue,
+		"",
+		adbDeleteNotSupportedMessage,
+		c.Log,
+	)
+	c.Log.InfoLog(adbDeleteNotSupportedMessage)
 	return true, nil
 }
 

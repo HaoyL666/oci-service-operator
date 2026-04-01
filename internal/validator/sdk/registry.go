@@ -24,8 +24,10 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/nosql"
 	"github.com/oracle/oci-go-sdk/v65/objectstorage"
 	"github.com/oracle/oci-go-sdk/v65/ons"
+	"github.com/oracle/oci-go-sdk/v65/opensearch"
 	"github.com/oracle/oci-go-sdk/v65/psql"
 	"github.com/oracle/oci-go-sdk/v65/queue"
+	"github.com/oracle/oci-go-sdk/v65/redis"
 	"github.com/oracle/oci-go-sdk/v65/secrets"
 	"github.com/oracle/oci-go-sdk/v65/streaming"
 	"github.com/oracle/oci-go-sdk/v65/vault"
@@ -235,6 +237,7 @@ var seedTargets = []Target{
 	newTarget("mysql", "Backup", reflect.TypeOf(mysql.Backup{})),
 	newTarget("mysql", "Channel", reflect.TypeOf(mysql.Channel{})),
 	newTarget("mysql", "Configuration", reflect.TypeOf(mysql.Configuration{})),
+	newTarget("mysql", "DbSystem", reflect.TypeOf(mysql.DbSystem{})),
 	newTarget("mysql", "HeatWaveCluster", reflect.TypeOf(mysql.HeatWaveCluster{})),
 	newTarget("mysql", "HeatWaveClusterMemoryEstimate", reflect.TypeOf(mysql.HeatWaveClusterMemoryEstimate{})),
 	newTarget("mysql", "Replica", reflect.TypeOf(mysql.Replica{})),
@@ -246,6 +249,7 @@ var seedTargets = []Target{
 	newTarget("mysql", "BackupSummary", reflect.TypeOf(mysql.BackupSummary{})),
 	newTarget("mysql", "ChannelSummary", reflect.TypeOf(mysql.ChannelSummary{})),
 	newTarget("mysql", "ConfigurationSummary", reflect.TypeOf(mysql.ConfigurationSummary{})),
+	newTarget("mysql", "DbSystemSummary", reflect.TypeOf(mysql.DbSystemSummary{})),
 	newTarget("mysql", "HeatWaveClusterSummary", reflect.TypeOf(mysql.HeatWaveClusterSummary{})),
 	newTarget("mysql", "ReplicaSummary", reflect.TypeOf(mysql.ReplicaSummary{})),
 	newTarget("mysql", "ShapeSummary", reflect.TypeOf(mysql.ShapeSummary{})),
@@ -1073,6 +1077,38 @@ var seedTargets = []Target{
 	newTarget("core", "PublicIpPoolSummary", reflect.TypeOf(core.PublicIpPoolSummary{})),
 	newTarget("core", "TunnelRouteSummary", reflect.TypeOf(core.TunnelRouteSummary{})),
 	newTarget("core", "TunnelSecurityAssociationSummary", reflect.TypeOf(core.TunnelSecurityAssociationSummary{})),
+
+	// Opensearch CRD support
+	newTarget("opensearch", "CreateOpensearchClusterDetails", reflect.TypeOf(opensearch.CreateOpensearchClusterDetails{})),
+	newTarget("opensearch", "UpdateOpensearchClusterBackupDetails", reflect.TypeOf(opensearch.UpdateOpensearchClusterBackupDetails{})),
+	newTarget("opensearch", "UpdateOpensearchClusterDetails", reflect.TypeOf(opensearch.UpdateOpensearchClusterDetails{})),
+	newTarget("opensearch", "OpensearchCluster", reflect.TypeOf(opensearch.OpensearchCluster{})),
+	newTarget("opensearch", "OpensearchClusterBackup", reflect.TypeOf(opensearch.OpensearchClusterBackup{})),
+	newTarget("opensearch", "OpensearchClusterBackupCollection", reflect.TypeOf(opensearch.OpensearchClusterBackupCollection{})),
+	newTarget("opensearch", "OpensearchClusterCollection", reflect.TypeOf(opensearch.OpensearchClusterCollection{})),
+	newTarget("opensearch", "OpensearchVersionsCollection", reflect.TypeOf(opensearch.OpensearchVersionsCollection{})),
+	newTarget("opensearch", "WorkRequest", reflect.TypeOf(opensearch.WorkRequest{})),
+	newTarget("opensearch", "WorkRequestCollection", reflect.TypeOf(opensearch.WorkRequestCollection{})),
+	newTarget("opensearch", "WorkRequestError", reflect.TypeOf(opensearch.WorkRequestError{})),
+	newTarget("opensearch", "WorkRequestErrorCollection", reflect.TypeOf(opensearch.WorkRequestErrorCollection{})),
+	newTarget("opensearch", "WorkRequestLogEntry", reflect.TypeOf(opensearch.WorkRequestLogEntry{})),
+	newTarget("opensearch", "WorkRequestLogEntryCollection", reflect.TypeOf(opensearch.WorkRequestLogEntryCollection{})),
+	newTarget("opensearch", "OpensearchClusterBackupSummary", reflect.TypeOf(opensearch.OpensearchClusterBackupSummary{})),
+	newTarget("opensearch", "OpensearchClusterSummary", reflect.TypeOf(opensearch.OpensearchClusterSummary{})),
+	newTarget("opensearch", "OpensearchVersionsSummary", reflect.TypeOf(opensearch.OpensearchVersionsSummary{})),
+
+	// Redis CRD support
+	newTarget("redis", "CreateRedisClusterDetails", reflect.TypeOf(redis.CreateRedisClusterDetails{})),
+	newTarget("redis", "UpdateRedisClusterDetails", reflect.TypeOf(redis.UpdateRedisClusterDetails{})),
+	newTarget("redis", "RedisCluster", reflect.TypeOf(redis.RedisCluster{})),
+	newTarget("redis", "RedisClusterCollection", reflect.TypeOf(redis.RedisClusterCollection{})),
+	newTarget("redis", "WorkRequest", reflect.TypeOf(redis.WorkRequest{})),
+	newTarget("redis", "WorkRequestError", reflect.TypeOf(redis.WorkRequestError{})),
+	newTarget("redis", "WorkRequestErrorCollection", reflect.TypeOf(redis.WorkRequestErrorCollection{})),
+	newTarget("redis", "WorkRequestLogEntry", reflect.TypeOf(redis.WorkRequestLogEntry{})),
+	newTarget("redis", "WorkRequestLogEntryCollection", reflect.TypeOf(redis.WorkRequestLogEntryCollection{})),
+	newTarget("redis", "RedisClusterSummary", reflect.TypeOf(redis.RedisClusterSummary{})),
+	newTarget("redis", "WorkRequestSummary", reflect.TypeOf(redis.WorkRequestSummary{})),
 
 	// Workrequests CRD support
 	newTarget("workrequests", "WorkRequest", reflect.TypeOf(workrequests.WorkRequest{})),

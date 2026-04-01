@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetOpensearchOpensearchCluster
 else tracked identity is missing
-ServiceManager -> OCI: ListOpensearchOpensearchCluster(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListOpensearchOpensearchCluster(filters:\ncompartment_id, display_name, state)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateOpensearchOpensearchCluster
 loop create pending PROVISIONING
@@ -70,7 +70,8 @@ note over ServiceManager,OCI
 Supported update surface: display_name
 Reject before mutate: force-new fields
 compartment_id
-Lookup filters: compartment_id, state
+Lookup filters: compartment_id,
+display_name, state
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
@@ -115,7 +116,7 @@ reject before mutate: force-new fields
 compartment_id
 list lookup:
 scaffold_opensearch_opensearchopensearchcluster
-filters compartment_id, state
+filters compartment_id, display_name, state
 conflicts: none
 open gaps: none
 Scaffold metadata only; replace with

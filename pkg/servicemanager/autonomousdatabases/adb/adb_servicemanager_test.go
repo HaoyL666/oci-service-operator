@@ -305,6 +305,13 @@ func TestDelete_NoOcid(t *testing.T) {
 	done, err := mgr.Delete(context.Background(), adb)
 	assert.NoError(t, err)
 	assert.True(t, done)
+	assert.Contains(t, adb.Status.OsokStatus.Message, "delete is not supported")
+	assert.Equal(t, string(shared.Terminating), adb.Status.OsokStatus.Reason)
+	assert.NotNil(t, adb.Status.OsokStatus.DeletedAt)
+	assert.NotNil(t, adb.Status.OsokStatus.UpdatedAt)
+	if assert.NotEmpty(t, adb.Status.OsokStatus.Conditions) {
+		assert.Equal(t, shared.Terminating, adb.Status.OsokStatus.Conditions[len(adb.Status.OsokStatus.Conditions)-1].Type)
+	}
 }
 
 func TestCreateOrUpdate_BadType(t *testing.T) {

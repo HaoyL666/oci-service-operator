@@ -48,13 +48,17 @@ func requestFieldsLiteral(fields []RuntimeRequestFieldModel) string {
 
 	rendered := make([]string, 0, len(fields))
 	for _, field := range fields {
-		rendered = append(rendered, fmt.Sprintf(
+		entry := fmt.Sprintf(
 			`{FieldName: %q, RequestName: %q, Contribution: %q, PreferResourceID: %t}`,
 			field.FieldName,
 			field.RequestName,
 			field.Contribution,
 			field.PreferResourceID,
-		))
+		)
+		if len(field.LookupPaths) > 0 {
+			entry = strings.TrimSuffix(entry, "}") + fmt.Sprintf(`, LookupPaths: %s}`, goStringSliceLiteral(field.LookupPaths))
+		}
+		rendered = append(rendered, entry)
 	}
 	return "[]generatedruntime.RequestField{" + strings.Join(rendered, ", ") + "}"
 }

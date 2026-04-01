@@ -8,6 +8,7 @@ gaps: []
 
 # Logic Gaps
 
-This scaffold row tracks the published RedisRedisCluster API shape for redis. Replace this
-placeholder with repo-authored semantics and explicit stop conditions before
-adding formalSpec or promoting runtime ownership.
+This scaffold row is the provider-facing `RedisRedisCluster` alias, not the
+published OSOK controller target. The repo-owned controller path is
+`redis/RedisCluster`; keep this row scaffold-only unless the provider alias
+itself needs first-class formal coverage.

@@ -226,6 +226,8 @@ services:
         strategy: none
       resources:
         - kind: MySqlDbSystem
+          promotionBlockers:
+            - oci-service-operator-8xa.8
           controller:
             maxConcurrentReconciles: 3
             extraRBACMarkers:
@@ -275,6 +277,9 @@ services:
 	}
 	if !slices.Equal(override.Controller.ExtraRBACMarkers, []string{`groups="",resources=secrets,verbs=get;list;watch`}) {
 		t.Fatalf("mysql extra RBAC markers = %v, want secrets marker", override.Controller.ExtraRBACMarkers)
+	}
+	if got := mysqlService.PromotionBlockersFor("MySqlDbSystem"); !slices.Equal(got, []string{"oci-service-operator-8xa.8"}) {
+		t.Fatalf("mysql promotion blockers = %v, want [oci-service-operator-8xa.8]", got)
 	}
 	if override.ServiceManager.PackagePath != "mysql/dbsystem" {
 		t.Fatalf("mysql packagePath = %q, want %q", override.ServiceManager.PackagePath, "mysql/dbsystem")
@@ -472,6 +477,39 @@ func TestValidateAllowsResourceFormalSpecWithoutRuntimeOverride(t *testing.T) {
 	}
 }
 
+func TestValidateAllowsResourcePromotionBlockersWithoutRuntimeOverride(t *testing.T) {
+	t.Parallel()
+
+	cfg := &Config{
+		SchemaVersion:  "v1alpha1",
+		Domain:         "oracle.com",
+		DefaultVersion: "v1beta1",
+		PackageProfiles: map[string]PackageProfile{
+			"controller-backed": {Description: "runtime-integrated groups"},
+		},
+		Services: []ServiceConfig{
+			{
+				Service:        "opensearch",
+				SDKPackage:     "example/opensearch",
+				Group:          "opensearch",
+				PackageProfile: "controller-backed",
+				Generation: GenerationConfig{
+					Resources: []ResourceGenerationOverride{
+						{
+							Kind:              "OpensearchOpensearchCluster",
+							PromotionBlockers: []string{"oci-service-operator-fk9.6"},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	if err := cfg.Validate(); err != nil {
+		t.Fatalf("Validate() error = %v", err)
+	}
+}
+
 func TestValidateRejectsInvalidGenerationConfig(t *testing.T) {
 	t.Parallel()
 
@@ -560,6 +598,30 @@ func TestValidateRejectsInvalidGenerationConfig(t *testing.T) {
 			},
 			wantErr: `formalSpec "../dbsystem" must be a single formal slug`,
 		},
+		{
+			name: "blank promotion blocker",
+			mutate: func(cfg *Config) {
+				cfg.Services[0].Generation.Resources = []ResourceGenerationOverride{
+					{
+						Kind:              "MySqlDbSystem",
+						PromotionBlockers: []string{" "},
+					},
+				}
+			},
+			wantErr: "promotionBlockers contains a blank blocker id",
+		},
+		{
+			name: "duplicate promotion blocker",
+			mutate: func(cfg *Config) {
+				cfg.Services[0].Generation.Resources = []ResourceGenerationOverride{
+					{
+						Kind:              "MySqlDbSystem",
+						PromotionBlockers: []string{"oci-service-operator-8xa.8", "oci-service-operator-8xa.8"},
+					},
+				}
+			},
+			wantErr: `promotionBlockers contains duplicate blocker "oci-service-operator-8xa.8"`,
+		},
 	}
 
 	for _, test := range tests {
@@ -608,6 +670,8 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 
 	var databaseService *ServiceConfig
 	var mysqlService *ServiceConfig
+	var opensearchService *ServiceConfig
+	var redisService *ServiceConfig
 	var streamingService *ServiceConfig
 	var coreService *ServiceConfig
 	for i := range cfg.Services {
@@ -616,14 +680,18 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 			databaseService = &cfg.Services[i]
 		case "mysql":
 			mysqlService = &cfg.Services[i]
+		case "opensearch":
+			opensearchService = &cfg.Services[i]
+		case "redis":
+			redisService = &cfg.Services[i]
 		case "streaming":
 			streamingService = &cfg.Services[i]
 		case "core":
 			coreService = &cfg.Services[i]
 		}
 	}
-	if databaseService == nil || mysqlService == nil || streamingService == nil || coreService == nil {
-		t.Fatal("expected database, mysql, streaming, and core services in services.yaml")
+	if databaseService == nil || mysqlService == nil || opensearchService == nil || redisService == nil || streamingService == nil || coreService == nil {
+		t.Fatal("expected database, mysql, opensearch, redis, streaming, and core services in services.yaml")
 	}
 
 	if got := databaseService.ControllerGenerationStrategy(); got != GenerationStrategyGenerated {
@@ -695,6 +763,16 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	if mysqlService.Generation.Resources[0].ServiceManager.PackagePath != "mysql/dbsystem" {
 		t.Fatalf("mysql packagePath = %q, want %q", mysqlService.Generation.Resources[0].ServiceManager.PackagePath, "mysql/dbsystem")
 	}
+	if got := mysqlService.PromotionBlockersFor("MySqlDbSystem"); !slices.Equal(got, []string{"oci-service-operator-8xa.8"}) {
+		t.Fatalf("mysql promotion blockers = %v, want [oci-service-operator-8xa.8]", got)
+	}
+
+	if got := opensearchService.PromotionBlockersFor("OpensearchOpensearchCluster"); !slices.Equal(got, []string{"oci-service-operator-fk9.6"}) {
+		t.Fatalf("opensearch promotion blockers = %v, want [oci-service-operator-fk9.6]", got)
+	}
+	if got := redisService.PromotionBlockersFor("RedisCluster"); !slices.Equal(got, []string{"oci-service-operator-fk9.5"}) {
+		t.Fatalf("redis promotion blockers = %v, want [oci-service-operator-fk9.5]", got)
+	}
 
 	streamingOverrides := make(map[string]ResourceGenerationOverride, len(streamingService.Generation.Resources))
 	for _, override := range streamingService.Generation.Resources {
@@ -733,7 +811,7 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	}
 }
 
-func TestCheckedInConfigPromotesOnlyIdentityUserFormalSpec(t *testing.T) {
+func TestCheckedInConfigPromotesExpectedFormalSpecs(t *testing.T) {
 	t.Parallel()
 
 	cfgPath := filepath.Join(repoRoot(t), "internal", "generator", "config", "services.yaml")
@@ -745,6 +823,9 @@ func TestCheckedInConfigPromotesOnlyIdentityUserFormalSpec(t *testing.T) {
 	var identityService *ServiceConfig
 	var databaseService *ServiceConfig
 	var mysqlService *ServiceConfig
+	var opensearchService *ServiceConfig
+	var objectstorageService *ServiceConfig
+	var redisService *ServiceConfig
 	var streamingService *ServiceConfig
 	for i := range cfg.Services {
 		switch cfg.Services[i].Service {
@@ -754,12 +835,18 @@ func TestCheckedInConfigPromotesOnlyIdentityUserFormalSpec(t *testing.T) {
 			databaseService = &cfg.Services[i]
 		case "mysql":
 			mysqlService = &cfg.Services[i]
+		case "opensearch":
+			opensearchService = &cfg.Services[i]
+		case "objectstorage":
+			objectstorageService = &cfg.Services[i]
+		case "redis":
+			redisService = &cfg.Services[i]
 		case "streaming":
 			streamingService = &cfg.Services[i]
 		}
 	}
-	if identityService == nil || databaseService == nil || mysqlService == nil || streamingService == nil {
-		t.Fatal("expected identity, database, mysql, and streaming services in services.yaml")
+	if identityService == nil || databaseService == nil || mysqlService == nil || opensearchService == nil || objectstorageService == nil || redisService == nil || streamingService == nil {
+		t.Fatal("expected identity, database, mysql, opensearch, objectstorage, redis, and streaming services in services.yaml")
 	}
 
 	if got := identityService.FormalSpecFor("User"); got != "user" {
@@ -767,6 +854,24 @@ func TestCheckedInConfigPromotesOnlyIdentityUserFormalSpec(t *testing.T) {
 	}
 	if got := identityService.FormalSpecFor("Compartment"); got != "" {
 		t.Fatalf("identity Compartment formalSpec = %q, want empty", got)
+	}
+	if got := objectstorageService.FormalSpecFor("Bucket"); got != "bucket" {
+		t.Fatalf("objectstorage Bucket formalSpec = %q, want %q", got, "bucket")
+	}
+	if got := objectstorageService.FormalSpecFor("ObjectStorageBucket"); got != "" {
+		t.Fatalf("objectstorage ObjectStorageBucket formalSpec = %q, want empty", got)
+	}
+	if got := redisService.FormalSpecFor("RedisCluster"); got != "rediscluster" {
+		t.Fatalf("redis RedisCluster formalSpec = %q, want %q", got, "rediscluster")
+	}
+	if got := redisService.FormalSpecFor("RedisRedisCluster"); got != "" {
+		t.Fatalf("redis RedisRedisCluster formalSpec = %q, want empty", got)
+	}
+	if got := opensearchService.FormalSpecFor("OpensearchOpensearchCluster"); got != "opensearchopensearchcluster" {
+		t.Fatalf("opensearch OpensearchOpensearchCluster formalSpec = %q, want %q", got, "opensearchopensearchcluster")
+	}
+	if got := opensearchService.FormalSpecFor("Manifest"); got != "" {
+		t.Fatalf("opensearch Manifest formalSpec = %q, want empty", got)
 	}
 
 	for _, test := range []struct {
@@ -795,6 +900,7 @@ func TestCheckedInConfigOptsOutEndpointBasedGeneratedRuntimeResources(t *testing
 	wantKinds := map[string][]string{
 		"keymanagement": {"Key", "KeyVersion", "ReplicationStatus", "WrappingKey"},
 		"streaming":     {"ConnectHarness", "Cursor", "Group", "GroupCursor", "Message", "StreamPool"},
+		"opensearch":    {"Manifest", "OpensearchClusterBackup", "OpensearchOpensearchVersion", "WorkRequest", "WorkRequestError", "WorkRequestLog"},
 	}
 
 	for serviceName, kinds := range wantKinds {

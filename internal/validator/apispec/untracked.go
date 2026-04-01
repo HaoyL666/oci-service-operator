@@ -4,7 +4,9 @@ import "strings"
 
 const intentionalUntrackedPrefix = "Intentionally untracked: "
 
-var reviewedUntrackedReasons = map[string]string{}
+var reviewedUntrackedReasons = map[string]string{
+	"OpensearchManifest": intentionalUntrackedPrefix + "spec is empty and the OCI SDK does not expose a reusable Manifest payload for desired-state or status validation.",
+}
 
 func reviewedUntrackedReason(targetName string) string {
 	return reviewedUntrackedReasons[strings.TrimSpace(targetName)]

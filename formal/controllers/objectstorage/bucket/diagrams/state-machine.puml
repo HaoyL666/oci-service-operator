@@ -33,14 +33,12 @@ state "DeleteCleanupBlocked" as delete_cleanup_blocked
 [*] --> observe : CreateBucket
 observe --> resolve_by_lookup : tracked identity missing
 resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE
-resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
 resolve_by_lookup --> failed : unresolved OCI error or non-success state
 observe --> evaluate_ready : OCI state in ACTIVE
-observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndisplay_name
+evaluate_ready --> apply_update : supported mutable drift for\nauto_tiering,\ncompartment_id, defined_tags\n(+8 more)
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -68,23 +66,29 @@ kind: Bucket
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+requeue: updating, terminating
+provider states: create none; update none;
+delete none
+supported drift: auto_tiering, compartment_id,
+defined_tags, freeform_tags (+7 more)
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_objectstorage_bucket
-filters compartment_id, state
+storage_tier
+list lookup: oci_objectstorage_buckets filters
+name, namespace, compartment_id
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Generatedruntime resolves bucketName and
+namespaceName from observed status first, then
+falls back to the published Bucket spec.
+Successful create and update responses without
+lifecycle fields are treated as synchronous
+success and projected directly into status.
+Delete keeps the finalizer until DeleteBucket
+succeeds and GetBucket confirms NotFound.
 end note
 note right of delete_pending
 delete policy: required
-delete observe: GetBucket or ListBucket
+delete observe: GetBucket or ListBuckets
 delete targets: DELETED
 end note
 @enduml

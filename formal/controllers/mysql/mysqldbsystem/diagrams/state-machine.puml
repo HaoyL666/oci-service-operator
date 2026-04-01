@@ -63,14 +63,14 @@ shared/diagrams/shared-controller-state-machine.svg
 Start from the shared controller phase model and
 specialize imported provider states, delete
 targets, and failure exits here.
-archetype batch: Legacy-adapter controllers map
-provider states into the shared controller
-phases while open gaps keep additional
-transitions explicit.
+archetype batch: Generated service-manager
+controllers map provider states into the shared
+controller phases with explicit finalizer and
+requeue policies.
 service: mysql
 slug: mysqldbsystem
 kind: MySqlDbSystem
-archetype: legacy-adapter
+archetype: generated-service-manager
 status/finalizer: manual / none
 requeue: provisioning, updating
 provider states: create CREATING, UPDATING;
@@ -88,7 +88,7 @@ database_management, db_system_id (+4 more)
 conflicts: none
 open gaps: bind-versus-create,
 delete-confirmation, endpoint-materialization,
-legacy-adapter, list-lookup (+3 more)
+list-lookup, mutation-policy (+2 more)
 Create reads username and password secrets
 before submitting the OCI request.
 Endpoint secret materialization only happens

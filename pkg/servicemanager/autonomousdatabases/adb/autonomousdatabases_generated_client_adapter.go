@@ -14,6 +14,9 @@ import (
 )
 
 func init() {
+	// ADB intentionally stays on the handwritten runtime path until the
+	// remaining formal gaps around secret side effects and delete semantics are
+	// closed in generatedruntime.
 	newAutonomousDatabasesServiceClient = func(manager *AutonomousDatabasesServiceManager) AutonomousDatabasesServiceClient {
 		return legacyAutonomousDatabasesServiceClient{
 			delegate: NewAdbServiceManagerWithDeps(servicemanager.RuntimeDeps{

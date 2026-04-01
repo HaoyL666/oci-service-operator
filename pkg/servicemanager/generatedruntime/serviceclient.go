@@ -41,6 +41,7 @@ type RequestField struct {
 	RequestName      string
 	Contribution     string
 	PreferResourceID bool
+	LookupPaths      []string
 }
 
 type Hook struct {
@@ -53,6 +54,10 @@ type FollowUpSemantics struct {
 	Strategy string
 	Hooks    []Hook
 }
+
+type BodyBuilder[T any] func(context.Context, T, ctrl.Request) (any, error)
+
+type AfterSuccessFunc[T any] func(context.Context, T, ctrl.Request, any) error
 
 type HookSet struct {
 	Create []Hook
@@ -120,6 +125,10 @@ type Config[T any] struct {
 	InitError error
 	Semantics *Semantics
 
+	BuildCreateBody BodyBuilder[T]
+	BuildUpdateBody BodyBuilder[T]
+	AfterSuccess    AfterSuccessFunc[T]
+
 	Create *Operation
 	Get    *Operation
 	List   *Operation
@@ -138,7 +147,7 @@ func NewServiceClient[T any](cfg Config[T]) ServiceClient[T] {
 	return ServiceClient[T]{config: cfg}
 }
 
-func (c ServiceClient[T]) CreateOrUpdate(ctx context.Context, resource T, _ ctrl.Request) (servicemanager.OSOKResponse, error) {
+func (c ServiceClient[T]) CreateOrUpdate(ctx context.Context, resource T, req ctrl.Request) (servicemanager.OSOKResponse, error) {
 	if c.config.InitError != nil {
 		return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, c.config.InitError)
 	}
@@ -147,12 +156,24 @@ func (c ServiceClient[T]) CreateOrUpdate(ctx context.Context, resource T, _ ctrl
 	}
 
 	currentID := c.currentID(resource)
+	if currentID == "" {
+		boundResponse, boundID, err := c.bindExistingResource(ctx, resource)
+		if err != nil {
+			return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
+		}
+		if boundResponse != nil {
+			if err := mergeResponseIntoStatus(resource, boundResponse); err != nil {
+				return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
+			}
+			currentID = boundID
+		}
+	}
 	if err := c.validateMutationPolicy(resource, currentID != ""); err != nil {
 		return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
 	}
 	if currentID != "" {
 		if c.config.Update != nil {
-			response, err := c.invoke(ctx, c.config.Update, resource, currentID)
+			response, err := c.invoke(ctx, c.config.Update, resource, req, currentID, c.bodyForPhase(ctx, resource, req, "update"))
 			if err != nil {
 				return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
 			}
@@ -160,18 +181,18 @@ func (c ServiceClient[T]) CreateOrUpdate(ctx context.Context, resource T, _ ctrl
 			if err != nil {
 				return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
 			}
-			return c.applySuccess(resource, response, shared.Updating)
+			return c.applyAndFinalize(ctx, resource, req, response, shared.Updating)
 		}
 
 		response, err := c.readResource(ctx, resource, currentID)
 		if err != nil {
 			return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
 		}
-		return c.applySuccess(resource, response, shared.Active)
+		return c.applyAndFinalize(ctx, resource, req, response, shared.Active)
 	}
 
 	if c.config.Create != nil {
-		response, err := c.invoke(ctx, c.config.Create, resource, "")
+		response, err := c.invoke(ctx, c.config.Create, resource, req, "", c.bodyForPhase(ctx, resource, req, "create"))
 		if err != nil {
 			return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
 		}
@@ -180,14 +201,14 @@ func (c ServiceClient[T]) CreateOrUpdate(ctx context.Context, resource T, _ ctrl
 		if err != nil {
 			return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
 		}
-		return c.applySuccess(resource, followUp, shared.Provisioning)
+		return c.applyAndFinalize(ctx, resource, req, followUp, shared.Provisioning)
 	}
 
 	response, err := c.readResource(ctx, resource, "")
 	if err != nil {
 		return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
 	}
-	return c.applySuccess(resource, response, shared.Active)
+	return c.applyAndFinalize(ctx, resource, req, response, shared.Active)
 }
 
 func (c ServiceClient[T]) Delete(ctx context.Context, resource T) (bool, error) {
@@ -211,7 +232,7 @@ func (c ServiceClient[T]) Delete(ctx context.Context, resource T) (bool, error) 
 		return true, nil
 	}
 
-	if _, err := c.invoke(ctx, c.config.Delete, resource, currentID); err != nil {
+	if _, err := c.invoke(ctx, c.config.Delete, resource, ctrl.Request{}, currentID, nil); err != nil {
 		if isNotFound(err) {
 			c.markDeleted(resource, "OCI resource no longer exists")
 			return true, nil
@@ -278,7 +299,11 @@ func (c ServiceClient[T]) deleteWithSemantics(ctx context.Context, resource T) (
 	if semantics == nil {
 		return false, fmt.Errorf("%s formal semantics are not configured", c.config.Kind)
 	}
-	if c.config.Delete == nil || semantics.Delete.Policy == "not-supported" {
+	if semantics.Delete.Policy == "not-supported" {
+		c.markDeleted(resource, "OCI delete is not supported for this generated resource")
+		return true, nil
+	}
+	if c.config.Delete == nil {
 		return false, fmt.Errorf("%s formal semantics mark delete confirmation as %q", c.config.Kind, semantics.Delete.Policy)
 	}
 
@@ -291,7 +316,7 @@ func (c ServiceClient[T]) deleteWithSemantics(ctx context.Context, resource T) (
 		return false, err
 	}
 
-	if _, err := c.invoke(ctx, c.config.Delete, resource, currentID); err != nil {
+	if _, err := c.invoke(ctx, c.config.Delete, resource, ctrl.Request{}, currentID, nil); err != nil {
 		if isNotFound(err) {
 			c.markDeleted(resource, "OCI resource no longer exists")
 			return true, nil
@@ -342,6 +367,32 @@ func (c ServiceClient[T]) deleteWithSemantics(ctx context.Context, resource T) (
 	default:
 		return false, fmt.Errorf("%s formal delete confirmation policy %q is not supported", c.config.Kind, semantics.Delete.Policy)
 	}
+}
+
+func (c ServiceClient[T]) bindExistingResource(ctx context.Context, resource T) (any, string, error) {
+	if c.config.Create == nil || c.config.Semantics == nil || c.config.Semantics.List == nil {
+		return nil, "", nil
+	}
+	if len(c.config.Semantics.List.MatchFields) == 0 {
+		return nil, "", nil
+	}
+	if c.config.Get == nil && c.config.List == nil {
+		return nil, "", nil
+	}
+
+	response, err := c.readResource(ctx, resource, "")
+	if err != nil {
+		if errors.Is(err, errResourceNotFound) {
+			return nil, "", nil
+		}
+		return nil, "", err
+	}
+
+	currentID := responseID(response)
+	if currentID == "" {
+		return nil, "", fmt.Errorf("%s formal bind resolution did not expose a resource OCID", c.config.Kind)
+	}
+	return response, currentID, nil
 }
 
 func (c ServiceClient[T]) resolveDeleteID(ctx context.Context, resource T) (string, error) {
@@ -408,8 +459,8 @@ func (c ServiceClient[T]) validateMutationPolicy(resource T, existing bool) erro
 }
 
 func (c ServiceClient[T]) readResource(ctx context.Context, resource T, preferredID string) (any, error) {
-	if c.config.Get != nil {
-		response, err := c.invoke(ctx, c.config.Get, resource, preferredID)
+	if c.shouldTryGetBeforeList(preferredID) {
+		response, err := c.invoke(ctx, c.config.Get, resource, ctrl.Request{}, preferredID, nil)
 		if err == nil {
 			return response, nil
 		}
@@ -422,7 +473,7 @@ func (c ServiceClient[T]) readResource(ctx context.Context, resource T, preferre
 		return nil, fmt.Errorf("%s generated runtime has no readable OCI operation", c.config.Kind)
 	}
 
-	response, err := c.invoke(ctx, c.config.List, resource, preferredID)
+	response, err := c.invoke(ctx, c.config.List, resource, ctrl.Request{}, preferredID, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -439,7 +490,17 @@ func (c ServiceClient[T]) readResource(ctx context.Context, resource T, preferre
 	return item, nil
 }
 
-func (c ServiceClient[T]) invoke(ctx context.Context, op *Operation, resource T, preferredID string) (any, error) {
+func (c ServiceClient[T]) shouldTryGetBeforeList(preferredID string) bool {
+	if c.config.Get == nil {
+		return false
+	}
+	if preferredID != "" || c.config.List == nil {
+		return true
+	}
+	return !operationNeedsPreferredID(c.config.Get)
+}
+
+func (c ServiceClient[T]) invoke(ctx context.Context, op *Operation, resource T, req ctrl.Request, preferredID string, body any) (any, error) {
 	if op == nil {
 		return nil, fmt.Errorf("%s generated runtime does not define this OCI operation", c.config.Kind)
 	}
@@ -451,7 +512,7 @@ func (c ServiceClient[T]) invoke(ctx context.Context, op *Operation, resource T,
 	if request == nil {
 		return nil, fmt.Errorf("%s generated runtime did not create an OCI request value", c.config.Kind)
 	}
-	if err := buildRequest(request, resource, preferredID, op.Fields, c.idFieldAliases()); err != nil {
+	if err := buildRequest(request, resource, req, preferredID, op.Fields, c.idFieldAliases(), body); err != nil {
 		return nil, fmt.Errorf("build %s OCI request: %w", c.config.Kind, err)
 	}
 
@@ -460,6 +521,50 @@ func (c ServiceClient[T]) invoke(ctx context.Context, op *Operation, resource T,
 		return nil, normalizeOCIError(err)
 	}
 	return response, nil
+}
+
+func (c ServiceClient[T]) applyAndFinalize(
+	ctx context.Context,
+	resource T,
+	req ctrl.Request,
+	response any,
+	fallback shared.OSOKConditionType,
+) (servicemanager.OSOKResponse, error) {
+	result, err := c.applySuccess(resource, response, fallback)
+	if err != nil {
+		return servicemanager.OSOKResponse{IsSuccessful: false}, err
+	}
+	if !result.IsSuccessful || c.config.AfterSuccess == nil {
+		return result, nil
+	}
+	if c.config.AfterSuccess != nil {
+		if err := c.config.AfterSuccess(ctx, resource, req, response); err != nil {
+			return servicemanager.OSOKResponse{IsSuccessful: false}, c.markFailure(resource, err)
+		}
+	}
+	return result, nil
+}
+
+func (c ServiceClient[T]) bodyForPhase(ctx context.Context, resource T, req ctrl.Request, phase string) any {
+	switch phase {
+	case "create":
+		if c.config.BuildCreateBody != nil {
+			body, err := c.config.BuildCreateBody(ctx, resource, req)
+			if err != nil {
+				return bodyBuilderError{err: err}
+			}
+			return body
+		}
+	case "update":
+		if c.config.BuildUpdateBody != nil {
+			body, err := c.config.BuildUpdateBody(ctx, resource, req)
+			if err != nil {
+				return bodyBuilderError{err: err}
+			}
+			return body
+		}
+	}
+	return specValue(resource)
 }
 
 func (c ServiceClient[T]) applySuccess(resource T, response any, fallback shared.OSOKConditionType) (servicemanager.OSOKResponse, error) {
@@ -561,7 +666,15 @@ func (c ServiceClient[T]) idFieldAliases() []string {
 	return aliases
 }
 
-func buildRequest(request any, resource any, preferredID string, fields []RequestField, idAliases []string) error {
+type bodyBuilderError struct {
+	err error
+}
+
+func buildRequest(request any, resource any, _ ctrl.Request, preferredID string, fields []RequestField, idAliases []string, body any) error {
+	if builderErr, ok := body.(bodyBuilderError); ok {
+		return builderErr.err
+	}
+
 	requestValue := reflect.ValueOf(request)
 	if !requestValue.IsValid() || requestValue.Kind() != reflect.Pointer || requestValue.IsNil() {
 		return fmt.Errorf("expected pointer OCI request, got %T", request)
@@ -578,13 +691,13 @@ func buildRequest(request any, resource any, preferredID string, fields []Reques
 	}
 
 	if len(fields) > 0 {
-		return buildExplicitRequest(requestStruct, resource, values, preferredID, fields)
+		return buildExplicitRequest(requestStruct, resource, values, preferredID, fields, body)
 	}
 
-	return buildHeuristicRequest(requestStruct, requestStruct.Type(), resource, values, preferredID, idAliases)
+	return buildHeuristicRequest(requestStruct, requestStruct.Type(), resource, values, preferredID, idAliases, body)
 }
 
-func buildExplicitRequest(requestStruct reflect.Value, resource any, values map[string]any, preferredID string, fields []RequestField) error {
+func buildExplicitRequest(requestStruct reflect.Value, resource any, values map[string]any, preferredID string, fields []RequestField, body any) error {
 	for _, field := range fields {
 		fieldValue := requestStruct.FieldByName(field.FieldName)
 		if !fieldValue.IsValid() || !fieldValue.CanSet() {
@@ -595,7 +708,7 @@ func buildExplicitRequest(requestStruct reflect.Value, resource any, values map[
 		case "header", "binary":
 			continue
 		case "body":
-			if err := assignField(fieldValue, specValue(resource)); err != nil {
+			if err := assignField(fieldValue, body); err != nil {
 				return fmt.Errorf("set body field %s: %w", field.FieldName, err)
 			}
 			continue
@@ -620,6 +733,7 @@ func buildHeuristicRequest(
 	values map[string]any,
 	preferredID string,
 	idAliases []string,
+	body any,
 ) error {
 	for i := 0; i < requestStruct.NumField(); i++ {
 		fieldValue := requestStruct.Field(i)
@@ -635,7 +749,7 @@ func buildHeuristicRequest(
 		case "header", "binary":
 			continue
 		case "body":
-			if err := assignField(fieldValue, specValue(resource)); err != nil {
+			if err := assignField(fieldValue, body); err != nil {
 				return fmt.Errorf("set body field %s: %w", fieldType.Name, err)
 			}
 			continue
@@ -691,17 +805,8 @@ func explicitRequestValue(values map[string]any, field RequestField, preferredID
 		lookupKey = lowerCamel(field.FieldName)
 	}
 
-	if rawValue, ok := lookupValueByPaths(values, lookupKey); ok {
+	if rawValue, ok := lookupValueByPaths(values, requestLookupPaths(field, lookupKey)...); ok {
 		return rawValue, true
-	}
-	if lookupKey == "name" {
-		return lookupValueByPaths(values, "metadataName")
-	}
-	if lookupKey == "namespaceName" {
-		if value, ok := lookupValueByPaths(values, "namespaceName"); ok {
-			return value, true
-		}
-		return lookupValueByPaths(values, "namespace")
 	}
 
 	return nil, false
@@ -714,9 +819,17 @@ func lookupValues(resource any) (map[string]any, error) {
 	}
 
 	values := make(map[string]any)
+	spec := jsonMap(fieldInterface(resourceValue, "Spec"))
+	if len(spec) > 0 {
+		values["spec"] = spec
+	}
 	mergeJSONMap(values, fieldInterface(resourceValue, "Spec"))
-	mergeJSONMap(values, fieldInterface(resourceValue, "Status"))
 	if statusField, ok := fieldValue(resourceValue, "Status"); ok {
+		status := jsonMap(statusField.Interface())
+		if len(status) > 0 {
+			values["status"] = status
+		}
+		mergeJSONMap(values, statusField.Interface())
 		mergeJSONMap(values, fieldInterface(statusField, "OsokStatus"))
 	}
 
@@ -733,6 +846,16 @@ func lookupValues(resource any) (map[string]any, error) {
 		if _, exists := values["namespace"]; !exists {
 			values["namespace"] = namespaceName
 		}
+	}
+	if metadataName, metadataNamespace := lookupMetadataString(resourceValue, "Name"), lookupMetadataString(resourceValue, "Namespace"); metadataName != "" || metadataNamespace != "" {
+		metadata := make(map[string]any, 2)
+		if metadataName != "" {
+			metadata["name"] = metadataName
+		}
+		if metadataNamespace != "" {
+			metadata["namespace"] = metadataNamespace
+		}
+		values["metadata"] = metadata
 	}
 
 	return values, nil
@@ -869,7 +992,7 @@ func classifyLifecycleSemantics(response any, fallback shared.OSOKConditionType,
 
 	switch {
 	case lifecycleState == "":
-		return fallback, shouldRequeueForCondition(fallback), message
+		return classifyLifecycleWithoutState(fallback, message, semantics)
 	case containsString(semantics.Lifecycle.ProvisioningStates, lifecycleState):
 		return shared.Provisioning, true, message
 	case containsString(semantics.Lifecycle.UpdatingStates, lifecycleState):
@@ -882,6 +1005,20 @@ func classifyLifecycleSemantics(response any, fallback shared.OSOKConditionType,
 	default:
 		return shared.Failed, false, fmt.Sprintf("formal lifecycle state %q is not modeled: %s", lifecycleState, message)
 	}
+}
+
+func classifyLifecycleWithoutState(fallback shared.OSOKConditionType, message string, semantics *Semantics) (shared.OSOKConditionType, bool, string) {
+	switch fallback {
+	case shared.Provisioning:
+		if len(semantics.Lifecycle.ProvisioningStates) == 0 {
+			return shared.Active, false, message
+		}
+	case shared.Updating:
+		if len(semantics.Lifecycle.UpdatingStates) == 0 {
+			return shared.Active, false, message
+		}
+	}
+	return fallback, shouldRequeueForCondition(fallback), message
 }
 
 func classifyLifecycleHeuristics(response any, fallback shared.OSOKConditionType) (shared.OSOKConditionType, bool, string) {
@@ -980,7 +1117,7 @@ func validateFormalSemantics(kind string, semantics *Semantics) error {
 
 func supportedFormalHelper(helper string) bool {
 	switch strings.TrimSpace(helper) {
-	case "", "tfresource.CreateResource", "tfresource.UpdateResource", "tfresource.DeleteResource", "tfresource.WaitForUpdatedState":
+	case "", "tfresource.CreateResource", "tfresource.UpdateResource", "tfresource.DeleteResource", "tfresource.WaitForUpdatedState", "tfresource.WaitForWorkRequestWithErrorHandling":
 		return true
 	default:
 		return false
@@ -1294,6 +1431,33 @@ func responseLifecycleState(response any) string {
 		return ""
 	}
 	return firstNonEmpty(jsonMap(body), "lifecycleState", "status")
+}
+
+func requestLookupPaths(field RequestField, lookupKey string) []string {
+	if len(field.LookupPaths) > 0 {
+		return field.LookupPaths
+	}
+
+	switch lookupKey {
+	case "name":
+		return []string{"name", "metadataName"}
+	case "namespaceName":
+		return []string{"namespaceName", "namespace"}
+	default:
+		return []string{lookupKey}
+	}
+}
+
+func operationNeedsPreferredID(op *Operation) bool {
+	if op == nil {
+		return false
+	}
+	for _, field := range op.Fields {
+		if field.PreferResourceID {
+			return true
+		}
+	}
+	return false
 }
 
 func lookupValueByPaths(values map[string]any, paths ...string) (any, bool) {

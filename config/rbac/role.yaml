@@ -1684,6 +1684,32 @@ rules:
   - patch
   - update
 - apiGroups:
+  - opensearch.oracle.com
+  resources:
+  - opensearchopensearchclusters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - opensearch.oracle.com
+  resources:
+  - opensearchopensearchclusters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - opensearch.oracle.com
+  resources:
+  - opensearchopensearchclusters/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - psql.oracle.com
   resources:
   - backups
@@ -1776,6 +1802,41 @@ rules:
   - messages/status
   - queues/status
   - stats/status
+  - workrequesterrors/status
+  - workrequestlogs/status
+  - workrequests/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - redis.oracle.com
+  resources:
+  - redisclusters
+  - workrequesterrors
+  - workrequestlogs
+  - workrequests
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - redis.oracle.com
+  resources:
+  - redisclusters/finalizers
+  - workrequesterrors/finalizers
+  - workrequestlogs/finalizers
+  - workrequests/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - redis.oracle.com
+  resources:
+  - redisclusters/status
   - workrequesterrors/status
   - workrequestlogs/status
   - workrequests/status

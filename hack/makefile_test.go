@@ -8,6 +8,8 @@ import (
 	"testing"
 )
 
+const setupEnvtestVersion = "v0.0.0-20240812162837-9557f1031fe4"
+
 func TestMakeGenerateUsesScopedDeepcopyPaths(t *testing.T) {
 	output := runMakeDryRun(t, "generate", nil)
 
@@ -115,9 +117,18 @@ func TestMakeTestSetupEnvtestUsesIsolatedGoPath(t *testing.T) {
 		t.Fatalf("make -n test output did not unset inherited GOMODCACHE for setup-envtest:\n%s", output)
 	}
 
-	expectedGoPath := filepath.Join(tmpDir, "oci-service-operator-envtest", "gopath")
+	expectedGoPath := filepath.Join(tmpDir, "oci-service-operator-envtest", "gopath", setupEnvtestVersion)
 	if !strings.Contains(output, "GOPATH="+expectedGoPath) {
 		t.Fatalf("make -n test output did not use isolated setup-envtest GOPATH %q:\n%s", expectedGoPath, output)
+	}
+	if !strings.Contains(output, "GOBIN="+filepath.Join(expectedGoPath, "bin")) {
+		t.Fatalf("make -n test output did not use isolated setup-envtest GOBIN under %q:\n%s", filepath.Join(expectedGoPath, "bin"), output)
+	}
+	if !strings.Contains(output, "go install sigs.k8s.io/controller-runtime/tools/setup-envtest@"+setupEnvtestVersion) {
+		t.Fatalf("make -n test output did not install the pinned setup-envtest binary:\n%s", output)
+	}
+	if !strings.Contains(output, filepath.Join(expectedGoPath, "bin", "setup-envtest")+" use 1.28.0") {
+		t.Fatalf("make -n test output did not execute the installed setup-envtest binary:\n%s", output)
 	}
 }
 

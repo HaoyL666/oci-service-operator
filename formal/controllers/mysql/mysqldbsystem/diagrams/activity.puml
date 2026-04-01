@@ -70,7 +70,7 @@ else (no)
 endif
 :Project manual status and finalizer policy\nnone;
 :Requeue on provisioning, updating;
-:Keep promotion blocked on bind-versus-create,\ndelete-confirmation, endpoint-materialization,\nlegacy-adapter, list-lookup (+3 more);
+:Keep promotion blocked on bind-versus-create,\ndelete-confirmation, endpoint-materialization,\nlist-lookup, mutation-policy (+2 more);
 }
 endif
 stop
@@ -83,13 +83,13 @@ status-projection details here.
 Controller-local activity diagrams add
 list-lookup hints, secret policies, delete
 handling, and open formal gaps.
-archetype batch: Legacy-adapter controllers
-specialize the shared reconcile path while
-explicit gaps still block generated promotion.
+archetype batch: Generated service-manager
+controllers specialize the shared reconcile path
+with formal runtime ownership.
 service: mysql
 slug: mysqldbsystem
 kind: MySqlDbSystem
-archetype: legacy-adapter
+archetype: generated-service-manager
 status/finalizer: manual / none
 requeue: provisioning, updating
 provider states: create CREATING, UPDATING;
@@ -107,7 +107,7 @@ database_management, db_system_id (+4 more)
 conflicts: none
 open gaps: bind-versus-create,
 delete-confirmation, endpoint-materialization,
-legacy-adapter, list-lookup (+3 more)
+list-lookup, mutation-policy (+2 more)
 Create reads username and password secrets
 before submitting the OCI request.
 Endpoint secret materialization only happens

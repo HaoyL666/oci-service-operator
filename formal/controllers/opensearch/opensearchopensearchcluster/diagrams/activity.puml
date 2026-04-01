@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetOpensearchOpensearchCluster;
 else (no)
-:Resolve an existing OCI resource through\nListOpensearchOpensearchCluster using filters\ncompartment_id, state;
+:Resolve an existing OCI resource through\nListOpensearchOpensearchCluster using filters\ncompartment_id, display_name, state;
 :Create the OCI resource via\nCreateOpensearchOpensearchCluster when no\nreusable match is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -98,7 +98,7 @@ reject before mutate: force-new fields
 compartment_id
 list lookup:
 scaffold_opensearch_opensearchopensearchcluster
-filters compartment_id, state
+filters compartment_id, display_name, state
 conflicts: none
 open gaps: none
 Scaffold metadata only; replace with
