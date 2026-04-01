@@ -5,7 +5,7 @@
   "slug": "securitylist",
   "kind": "SecurityList",
   "sourceRef": "terraform-provider-oci",
-  "providerResource": "scaffold_core_securitylist",
+  "providerResource": "oci_core_security_list",
   "operations": {
     "create": [
       {
@@ -23,9 +23,9 @@
     ],
     "list": [
       {
-        "operation": "ListSecurityList",
-        "requestType": "core.ListSecurityListRequest",
-        "responseType": "core.ListSecurityListResponse"
+        "operation": "ListSecurityLists",
+        "requestType": "core.ListSecurityListsRequest",
+        "responseType": "core.ListSecurityListsResponse"
       }
     ],
     "update": [
@@ -49,7 +49,7 @@
         "PROVISIONING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     },
     "update": {
@@ -57,16 +57,21 @@
         "UPDATING"
       ],
       "target": [
-        "ACTIVE"
+        "AVAILABLE"
       ]
     }
   },
   "mutation": {
     "mutable": [
-      "display_name"
+      "defined_tags",
+      "display_name",
+      "egress_security_rules",
+      "freeform_tags",
+      "ingress_security_rules"
     ],
     "forceNew": [
-      "compartment_id"
+      "compartment_id",
+      "vcn_id"
     ],
     "conflictsWith": {}
   },
@@ -94,18 +99,22 @@
   },
   "deleteConfirmation": {
     "pending": [
-      "DELETING"
+      "TERMINATING",
+      "TERMINATED"
     ],
     "target": [
-      "DELETED"
+      "NOT_FOUND"
     ]
   },
   "listLookup": {
-    "datasource": "scaffold_core_securitylist",
-    "collectionField": "securitylist",
+    "datasource": "oci_core_security_lists",
+    "collectionField": "security_list",
     "responseItemsField": "Items",
     "filterFields": [
       "compartment_id",
+      "display_name",
+      "id",
+      "vcn_id",
       "state"
     ]
   },
@@ -115,11 +124,13 @@
     "repoAuthoredLogicGapsPath": "controllers/core/securitylist/logic-gaps.md",
     "excludedSemantics": [
       "bind-versus-create",
-      "secret-output",
-      "delete-confirmation"
+      "secret-output"
     ]
   },
   "notes": [
-    "Scaffold placeholder for core/securitylist; replace imported facts before promoting this row beyond scaffold."
+    "Pinned OCI SDK contract: UpdateSecurityListDetails exposes defined_tags, display_name, egress_security_rules, freeform_tags, and ingress_security_rules as in-place updates; the handwritten runtime rejects create-only drift for compartment_id and vcn_id.",
+    "Vendored SDK lifecycle success is AVAILABLE; the handwritten runtime requeues PROVISIONING, defensive literal UPDATING, TERMINATING, and TERMINATED states.",
+    "The handwritten runtime observes by tracked status.osokStatus.ocid and only recreates after confirmed OCI not-found clears the tracked identity.",
+    "Delete confirmation is absence-based rather than a terminal SDK DELETED state, so observed TERMINATING and TERMINATED keep the finalizer in place until GetSecurityList returns not found."
   ]
 }

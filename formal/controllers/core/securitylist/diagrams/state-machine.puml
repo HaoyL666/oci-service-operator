@@ -32,15 +32,15 @@ state "Deleted" as deleted
 state "DeleteCleanupBlocked" as delete_cleanup_blocked
 [*] --> observe : CreateSecurityList
 observe --> resolve_by_lookup : tracked identity missing
-resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE
-resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+resolve_by_lookup --> evaluate_ready : lookup or create reaches\nAVAILABLE
+resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, TERMINATING,\nTERMINATED
 resolve_by_lookup --> failed : unresolved OCI error or non-success state
-observe --> evaluate_ready : OCI state in ACTIVE
-observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+observe --> evaluate_ready : OCI state in AVAILABLE
+observe --> retryable : OCI state in PROVISIONING,\nUPDATING, TERMINATING,\nTERMINATED
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndisplay_name
+evaluate_ready --> apply_update : supported mutable drift for\ndefined_tags, display_name,\negress_security_rules (+2\nmore)
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -70,22 +70,31 @@ status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+UPDATING; delete TERMINATING, TERMINATED
+supported drift: defined_tags, display_name,
+egress_security_rules, freeform_tags (+1 more)
 reject before mutate: force-new fields
-compartment_id
-list lookup: scaffold_core_securitylist filters
-compartment_id, state
+compartment_id, vcn_id
+list lookup: oci_core_security_lists filters
+compartment_id, display_name, id, vcn_id (+1
+more)
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Ready state maps to OCI AVAILABLE.
+Requeue continues while OCI reports
+PROVISIONING, the defensive literal UPDATING,
+TERMINATING, or TERMINATED.
+Delete completes only after GetSecurityList
+returns not found; TERMINATING and TERMINATED
+are accepted observed pre-delete states.
+In-place updates are limited to displayName,
+definedTags, freeformTags, egressSecurityRules,
+and ingressSecurityRules.
 end note
 note right of delete_pending
 delete policy: required
 delete observe: GetSecurityList or
-ListSecurityList
-delete targets: DELETED
+ListSecurityLists
+delete targets: NOT_FOUND
 end note
 @enduml
