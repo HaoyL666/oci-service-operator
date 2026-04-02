@@ -3,6 +3,8 @@ package manager
 import (
 	"flag"
 	"fmt"
+	"os"
+	"strconv"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-service-operator/go_ensurefips"
@@ -45,6 +47,7 @@ type Options struct {
 const (
 	defaultLeaderElectionID = "40558063.oci"
 	defaultMetricsService   = "osok"
+	skipFIPSEnvVar          = "OSOK_SKIP_FIPS"
 )
 
 // Run bootstraps the shared controller-runtime manager and delegates controller registration to the supplied hooks.
@@ -59,7 +62,16 @@ func Run(opts Options, registrars ...RegisterFunc) error {
 		opts.MetricsServiceName = defaultMetricsService
 	}
 
-	if !opts.SkipFIPS {
+	skipFIPS := opts.SkipFIPS
+	if raw, ok := os.LookupEnv(skipFIPSEnvVar); ok {
+		parsed, err := strconv.ParseBool(raw)
+		if err != nil {
+			return fmt.Errorf("manager: parse %s: %w", skipFIPSEnvVar, err)
+		}
+		skipFIPS = parsed
+	}
+
+	if !skipFIPS {
 		go_ensurefips.Compliant()
 	}
 	common.EnableInstanceMetadataServiceLookup()
