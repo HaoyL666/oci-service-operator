@@ -1,0 +1,38 @@
+$ make schema-validator
+go run ./cmd/osok-schema-validator --provider-path .  --format json > validator-report.json
+-: # github.com/oracle/oci-service-operator/pkg/servicemanager/containerinstance
+pkg/servicemanager/containerinstance/containerinstance_serviceclient.go:363:62: undefined: containerinstancessdk.CreateContainerCommandHealthCheckDetails
+/private/var/folders/yt/0ldw39h13_jgzm0x_7wmkm440000gn/T/osok-sdk-preflight.xZymp0/pkg/servicemanager/containerinstance/containerinstance_serviceclient.go:363:62: undefined: containerinstancessdk.CreateContainerCommandHealthCheckDetails
+validator failed: failed to load OSOK packages from .
+exit status 1
+make: *** [schema-validator] Error 1
+exit: 2
+
+$ go build ./...
+# github.com/oracle/oci-service-operator/pkg/servicemanager/containerinstance
+pkg/servicemanager/containerinstance/containerinstance_serviceclient.go:363:62: undefined: containerinstancessdk.CreateContainerCommandHealthCheckDetails
+exit: 1
+
+$ go vet ./...
+# github.com/oracle/oci-service-operator/pkg/servicemanager/containerinstance
+pkg/servicemanager/containerinstance/containerinstance_serviceclient.go:363:62: undefined: containerinstancessdk.CreateContainerCommandHealthCheckDetails
+# github.com/oracle/oci-service-operator/pkg/servicemanager/containerinstance [github.com/oracle/oci-service-operator/pkg/servicemanager/containerinstance.test]
+pkg/servicemanager/containerinstance/containerinstance_serviceclient.go:363:62: undefined: containerinstancessdk.CreateContainerCommandHealthCheckDetails
+exit: 1
+
+$ make test
+rm -f config/crd/bases/*.yaml
+"/var/folders/yt/0ldw39h13_jgzm0x_7wmkm440000gn/T/osok-sdk-preflight.xZymp0/hack/with-controller-gen-godebug.sh" "/Users/ethan/Desktop/projects/oci-service-operator/bin/controller-gen" "crd:generateEmbeddedObjectMeta=true,allowDangerousTypes=true" paths="./api/..." output:crd:artifacts:config=config/crd/bases
+go run ./cmd/osok-crd-sync --kustomization config/crd/kustomization.yaml --bases-dir config/crd/bases
+"/var/folders/yt/0ldw39h13_jgzm0x_7wmkm440000gn/T/osok-sdk-preflight.xZymp0/hack/with-controller-gen-godebug.sh" "/Users/ethan/Desktop/projects/oci-service-operator/bin/controller-gen" rbac:roleName=manager-role paths="./controllers/..." output:rbac:artifacts:config=config/rbac
+"/var/folders/yt/0ldw39h13_jgzm0x_7wmkm440000gn/T/osok-sdk-preflight.xZymp0/hack/with-controller-gen-godebug.sh" "/Users/ethan/Desktop/projects/oci-service-operator/bin/controller-gen" webhook paths="./api/..." output:webhook:artifacts:config=config/webhook
+"/var/folders/yt/0ldw39h13_jgzm0x_7wmkm440000gn/T/osok-sdk-preflight.xZymp0/hack/with-controller-gen-godebug.sh" "/Users/ethan/Desktop/projects/oci-service-operator/bin/controller-gen" object:headerFile="hack/boilerplate.go.txt" paths="./api/...;./pkg/shared"
+go fmt ./...
+go vet ./...
+# github.com/oracle/oci-service-operator/pkg/servicemanager/containerinstance
+pkg/servicemanager/containerinstance/containerinstance_serviceclient.go:363:62: undefined: containerinstancessdk.CreateContainerCommandHealthCheckDetails
+# github.com/oracle/oci-service-operator/pkg/servicemanager/containerinstance [github.com/oracle/oci-service-operator/pkg/servicemanager/containerinstance.test]
+pkg/servicemanager/containerinstance/containerinstance_serviceclient.go:363:62: undefined: containerinstancessdk.CreateContainerCommandHealthCheckDetails
+make: *** [vet] Error 1
+exit: 2
+

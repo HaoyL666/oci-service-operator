@@ -99,6 +99,33 @@ func TestLoadConfiguredServicesAllowsExplicitDisabledService(t *testing.T) {
 	}
 }
 
+func TestLoadSDKModuleVersion(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	goModPath := filepath.Join(root, "go.mod")
+	const goMod = `module example.com/test
+
+go 1.25
+
+require (
+	github.com/oracle/oci-go-sdk/v65 v65.110.0
+	github.com/stretchr/testify v1.9.0
+)
+`
+	if err := os.WriteFile(goModPath, []byte(goMod), 0o644); err != nil {
+		t.Fatalf("WriteFile(%q) error = %v", goModPath, err)
+	}
+
+	got, err := loadSDKModuleVersion(root)
+	if err != nil {
+		t.Fatalf("loadSDKModuleVersion() error = %v", err)
+	}
+	if got != "v65.110.0" {
+		t.Fatalf("loadSDKModuleVersion() = %q, want %q", got, "v65.110.0")
+	}
+}
+
 func TestDeriveSDKTypes(t *testing.T) {
 	t.Parallel()
 
