@@ -25,7 +25,40 @@ func applyClusterRuntimeHooks(hooks *ClusterRuntimeHooks) {
 		return
 	}
 
+	hooks.Semantics = reviewedClusterRuntimeSemantics()
 	hooks.Identity.GuardExistingBeforeCreate = guardClusterExistingBeforeCreate
+}
+
+func reviewedClusterRuntimeSemantics() *generatedruntime.Semantics {
+	semantics := newClusterRuntimeSemantics()
+	semantics.Mutation = generatedruntime.MutationSemantics{
+		Mutable: []string{
+			"clusterByolAllocationDetails",
+			"definedTags",
+			"displayName",
+			"esxiSoftwareVersion",
+			"freeformTags",
+			"networkConfiguration",
+			"vmwareSoftwareVersion",
+		},
+		ForceNew: []string{
+			"capacityReservationId",
+			"computeAvailabilityDomain",
+			"datastoreClusterIds",
+			"datastores",
+			"esxiHostsCount",
+			"initialCommitment",
+			"initialHostOcpuCount",
+			"initialHostShapeName",
+			"initialVcfByolAllocationId",
+			"instanceDisplayNamePrefix",
+			"isShieldedInstanceEnabled",
+			"sddcId",
+			"workloadNetworkCidr",
+		},
+		ConflictsWith: map[string][]string{},
+	}
+	return semantics
 }
 
 func guardClusterExistingBeforeCreate(

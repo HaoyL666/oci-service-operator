@@ -261,6 +261,34 @@ func TestClusterCreateOrUpdateUpdatesMutableFields(t *testing.T) {
 	requireClusterCondition(t, resource, shared.Active)
 }
 
+func TestReviewedClusterRuntimeSemanticsClassifyByolAndTopologyFields(t *testing.T) {
+	t.Parallel()
+
+	hooks := ClusterRuntimeHooks{Semantics: newClusterRuntimeSemantics()}
+	applyClusterRuntimeHooks(&hooks)
+	if hooks.Semantics == nil {
+		t.Fatal("hooks.Semantics = nil, want reviewed cluster semantics")
+	}
+
+	hasPath := func(paths []string, want string) bool {
+		for _, path := range paths {
+			if path == want {
+				return true
+			}
+		}
+		return false
+	}
+
+	if !hasPath(hooks.Semantics.Mutation.Mutable, "clusterByolAllocationDetails") {
+		t.Fatalf("mutable paths %v do not include %q", hooks.Semantics.Mutation.Mutable, "clusterByolAllocationDetails")
+	}
+	for _, path := range []string{"datastoreClusterIds", "initialVcfByolAllocationId"} {
+		if !hasPath(hooks.Semantics.Mutation.ForceNew, path) {
+			t.Fatalf("force-new paths %v do not include %q", hooks.Semantics.Mutation.ForceNew, path)
+		}
+	}
+}
+
 func TestClusterCreateOrUpdateRejectsCreateOnlyDrift(t *testing.T) {
 	t.Parallel()
 

@@ -97,3 +97,33 @@ func TestCreateOpensearchClusterRequestUsesSDKGBKeys(t *testing.T) {
 		}
 	}
 }
+
+func TestReviewedOpensearchClusterRuntimeSemanticsClassifyExpandedFields(t *testing.T) {
+	t.Parallel()
+
+	hooks := newOpensearchClusterDefaultRuntimeHooks(opensearchsdk.OpensearchClusterClient{})
+	applyOpensearchClusterRuntimeHooks(&OpensearchClusterServiceManager{}, &hooks)
+	if hooks.Semantics == nil {
+		t.Fatal("hooks.Semantics = nil, want reviewed opensearch semantics")
+	}
+
+	hasPath := func(paths []string, want string) bool {
+		for _, path := range paths {
+			if path == want {
+				return true
+			}
+		}
+		return false
+	}
+
+	for _, path := range []string{"backupPolicy", "certificateConfig", "securityAttributes"} {
+		if !hasPath(hooks.Semantics.Mutation.Mutable, path) {
+			t.Fatalf("mutable paths %v do not include %q", hooks.Semantics.Mutation.Mutable, path)
+		}
+	}
+	for _, path := range []string{"searchNodeCount", "mlNodeCount", "nsgId"} {
+		if !hasPath(hooks.Semantics.Mutation.ForceNew, path) {
+			t.Fatalf("force-new paths %v do not include %q", hooks.Semantics.Mutation.ForceNew, path)
+		}
+	}
+}

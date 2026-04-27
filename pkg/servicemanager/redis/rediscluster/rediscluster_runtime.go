@@ -16,6 +16,7 @@ import (
 	redissdk "github.com/oracle/oci-go-sdk/v65/redis"
 	redisv1beta1 "github.com/oracle/oci-service-operator/api/redis/v1beta1"
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
 	"github.com/oracle/oci-service-operator/pkg/util"
 )
@@ -77,6 +78,7 @@ func applyRedisClusterRuntimeHooks(
 		return
 	}
 
+	hooks.Semantics = reviewedRedisClusterRuntimeSemantics()
 	hooks.BuildCreateBody = func(_ context.Context, resource *redisv1beta1.RedisCluster, _ string) (any, error) {
 		if resource == nil {
 			return nil, fmt.Errorf("RedisCluster resource is nil")
@@ -107,6 +109,31 @@ func applyRedisClusterRuntimeHooks(
 	}
 }
 
+func reviewedRedisClusterRuntimeSemantics() *generatedruntime.Semantics {
+	semantics := newRedisClusterRuntimeSemantics()
+	semantics.Mutation = generatedruntime.MutationSemantics{
+		Mutable: []string{
+			"definedTags",
+			"displayName",
+			"freeformTags",
+			"nodeCount",
+			"nodeMemoryInGbs",
+			"nsgIds",
+			"ociCacheConfigSetId",
+			"securityAttributes",
+			"shardCount",
+			"softwareVersion",
+		},
+		ForceNew: []string{
+			"clusterMode",
+			"compartmentId",
+			"subnetId",
+		},
+		ConflictsWith: map[string][]string{},
+	}
+	return semantics
+}
+
 func buildRedisUpdateBody(
 	resource *redisv1beta1.RedisCluster,
 	currentResponse any,
@@ -134,6 +161,33 @@ func buildRedisUpdateBody(
 	if !float32PtrEqual(current.NodeMemoryInGBs, resource.Spec.NodeMemoryInGBs) {
 		updateDetails.NodeMemoryInGBs = common.Float32(resource.Spec.NodeMemoryInGBs)
 		updateNeeded = true
+	}
+	if strings.TrimSpace(resource.Spec.OciCacheConfigSetId) != "" &&
+		!stringPtrEqual(current.OciCacheConfigSetId, resource.Spec.OciCacheConfigSetId) {
+		updateDetails.OciCacheConfigSetId = common.String(resource.Spec.OciCacheConfigSetId)
+		updateNeeded = true
+	}
+	if resource.Spec.ShardCount != 0 && !intPtrEqual(current.ShardCount, resource.Spec.ShardCount) {
+		updateDetails.ShardCount = common.Int(resource.Spec.ShardCount)
+		updateNeeded = true
+	}
+	if resource.Spec.SoftwareVersion != "" && string(current.SoftwareVersion) != resource.Spec.SoftwareVersion {
+		updateDetails.SoftwareVersion = redissdk.RedisClusterSoftwareVersionEnum(resource.Spec.SoftwareVersion)
+		updateNeeded = true
+	}
+	if resource.Spec.NsgIds != nil {
+		desiredNsgIds := cloneStringSlice(resource.Spec.NsgIds)
+		if !reflect.DeepEqual(current.NsgIds, desiredNsgIds) {
+			updateDetails.NsgIds = desiredNsgIds
+			updateNeeded = true
+		}
+	}
+	if resource.Spec.SecurityAttributes != nil {
+		desiredSecurityAttributes := *util.ConvertToOciDefinedTags(&resource.Spec.SecurityAttributes)
+		if !reflect.DeepEqual(current.SecurityAttributes, desiredSecurityAttributes) {
+			updateDetails.SecurityAttributes = desiredSecurityAttributes
+			updateNeeded = true
+		}
 	}
 
 	desiredFreeformTags := desiredRedisFreeformTagsForUpdate(resource.Spec.FreeformTags, current.FreeformTags)
@@ -164,26 +218,33 @@ func projectRedisClusterStatus(resource *redisv1beta1.RedisCluster, response any
 	}
 
 	resource.Status = redisv1beta1.RedisClusterStatus{
-		OsokStatus:                resource.Status.OsokStatus,
-		Id:                        stringValue(current.Id),
-		DisplayName:               stringValue(current.DisplayName),
-		CompartmentId:             stringValue(current.CompartmentId),
-		NodeCount:                 intValue(current.NodeCount),
-		NodeMemoryInGBs:           float32Value(current.NodeMemoryInGBs),
-		PrimaryFqdn:               stringValue(current.PrimaryFqdn),
-		PrimaryEndpointIpAddress:  stringValue(current.PrimaryEndpointIpAddress),
-		ReplicasFqdn:              stringValue(current.ReplicasFqdn),
-		ReplicasEndpointIpAddress: stringValue(current.ReplicasEndpointIpAddress),
-		SoftwareVersion:           string(current.SoftwareVersion),
-		SubnetId:                  stringValue(current.SubnetId),
-		NodeCollection:            convertRedisNodeCollection(current.NodeCollection),
-		LifecycleState:            string(current.LifecycleState),
-		LifecycleDetails:          stringValue(current.LifecycleDetails),
-		TimeCreated:               sdkTimeString(current.TimeCreated),
-		TimeUpdated:               sdkTimeString(current.TimeUpdated),
-		FreeformTags:              cloneStringMap(current.FreeformTags),
-		DefinedTags:               convertOCIToStatusDefinedTags(current.DefinedTags),
-		SystemTags:                convertOCIToStatusDefinedTags(current.SystemTags),
+		OsokStatus:                 resource.Status.OsokStatus,
+		Id:                         stringValue(current.Id),
+		DisplayName:                stringValue(current.DisplayName),
+		CompartmentId:              stringValue(current.CompartmentId),
+		NodeCount:                  intValue(current.NodeCount),
+		NodeMemoryInGBs:            float32Value(current.NodeMemoryInGBs),
+		PrimaryFqdn:                stringValue(current.PrimaryFqdn),
+		PrimaryEndpointIpAddress:   stringValue(current.PrimaryEndpointIpAddress),
+		ReplicasFqdn:               stringValue(current.ReplicasFqdn),
+		ReplicasEndpointIpAddress:  stringValue(current.ReplicasEndpointIpAddress),
+		SoftwareVersion:            string(current.SoftwareVersion),
+		SubnetId:                   stringValue(current.SubnetId),
+		NodeCollection:             convertRedisNodeCollection(current.NodeCollection),
+		LifecycleState:             string(current.LifecycleState),
+		LifecycleDetails:           stringValue(current.LifecycleDetails),
+		DiscoveryFqdn:              stringValue(current.DiscoveryFqdn),
+		DiscoveryEndpointIpAddress: stringValue(current.DiscoveryEndpointIpAddress),
+		TimeCreated:                sdkTimeString(current.TimeCreated),
+		TimeUpdated:                sdkTimeString(current.TimeUpdated),
+		OciCacheConfigSetId:        stringValue(current.OciCacheConfigSetId),
+		ClusterMode:                string(current.ClusterMode),
+		ShardCount:                 intValue(current.ShardCount),
+		NsgIds:                     cloneStringSlice(current.NsgIds),
+		SecurityAttributes:         convertOCIToStatusDefinedTags(current.SecurityAttributes),
+		FreeformTags:               cloneStringMap(current.FreeformTags),
+		DefinedTags:                convertOCIToStatusDefinedTags(current.DefinedTags),
+		SystemTags:                 convertOCIToStatusDefinedTags(current.SystemTags),
 	}
 	return nil
 }
@@ -225,24 +286,31 @@ func redisClusterFromResponse(response any) (redissdk.RedisCluster, bool) {
 
 func redisClusterFromSummary(summary redissdk.RedisClusterSummary) redissdk.RedisCluster {
 	return redissdk.RedisCluster{
-		Id:                        summary.Id,
-		DisplayName:               summary.DisplayName,
-		CompartmentId:             summary.CompartmentId,
-		NodeCount:                 summary.NodeCount,
-		NodeMemoryInGBs:           summary.NodeMemoryInGBs,
-		PrimaryFqdn:               summary.PrimaryFqdn,
-		PrimaryEndpointIpAddress:  summary.PrimaryEndpointIpAddress,
-		ReplicasFqdn:              summary.ReplicasFqdn,
-		ReplicasEndpointIpAddress: summary.ReplicasEndpointIpAddress,
-		SoftwareVersion:           summary.SoftwareVersion,
-		SubnetId:                  summary.SubnetId,
-		LifecycleState:            summary.LifecycleState,
-		LifecycleDetails:          summary.LifecycleDetails,
-		TimeCreated:               summary.TimeCreated,
-		TimeUpdated:               summary.TimeUpdated,
-		FreeformTags:              summary.FreeformTags,
-		DefinedTags:               summary.DefinedTags,
-		SystemTags:                summary.SystemTags,
+		Id:                         summary.Id,
+		DisplayName:                summary.DisplayName,
+		CompartmentId:              summary.CompartmentId,
+		NodeCount:                  summary.NodeCount,
+		NodeMemoryInGBs:            summary.NodeMemoryInGBs,
+		PrimaryFqdn:                summary.PrimaryFqdn,
+		PrimaryEndpointIpAddress:   summary.PrimaryEndpointIpAddress,
+		ReplicasFqdn:               summary.ReplicasFqdn,
+		ReplicasEndpointIpAddress:  summary.ReplicasEndpointIpAddress,
+		SoftwareVersion:            summary.SoftwareVersion,
+		SubnetId:                   summary.SubnetId,
+		LifecycleState:             summary.LifecycleState,
+		LifecycleDetails:           summary.LifecycleDetails,
+		DiscoveryFqdn:              summary.DiscoveryFqdn,
+		DiscoveryEndpointIpAddress: summary.DiscoveryEndpointIpAddress,
+		TimeCreated:                summary.TimeCreated,
+		TimeUpdated:                summary.TimeUpdated,
+		OciCacheConfigSetId:        summary.OciCacheConfigSetId,
+		ClusterMode:                summary.ClusterMode,
+		ShardCount:                 summary.ShardCount,
+		NsgIds:                     cloneStringSlice(summary.NsgIds),
+		SecurityAttributes:         summary.SecurityAttributes,
+		FreeformTags:               summary.FreeformTags,
+		DefinedTags:                summary.DefinedTags,
+		SystemTags:                 summary.SystemTags,
 	}
 }
 
@@ -341,6 +409,21 @@ func buildCreateRedisClusterDetails(spec redisv1beta1.RedisClusterSpec) redissdk
 		NodeMemoryInGBs: common.Float32(spec.NodeMemoryInGBs),
 		SubnetId:        common.String(spec.SubnetId),
 	}
+	if strings.TrimSpace(spec.OciCacheConfigSetId) != "" {
+		createDetails.OciCacheConfigSetId = common.String(spec.OciCacheConfigSetId)
+	}
+	if strings.TrimSpace(spec.ClusterMode) != "" {
+		createDetails.ClusterMode = redissdk.RedisClusterClusterModeEnum(spec.ClusterMode)
+	}
+	if spec.ShardCount != 0 {
+		createDetails.ShardCount = common.Int(spec.ShardCount)
+	}
+	if len(spec.NsgIds) > 0 {
+		createDetails.NsgIds = cloneStringSlice(spec.NsgIds)
+	}
+	if len(spec.SecurityAttributes) > 0 {
+		createDetails.SecurityAttributes = *util.ConvertToOciDefinedTags(&spec.SecurityAttributes)
+	}
 	if spec.FreeformTags != nil {
 		createDetails.FreeformTags = cloneStringMap(spec.FreeformTags)
 	}
@@ -434,7 +517,8 @@ func redisWorkRequestPhaseFromOperationType(operationType redissdk.OperationType
 	switch operationType {
 	case redissdk.OperationTypeCreateRedisCluster:
 		return shared.OSOKAsyncPhaseCreate, true
-	case redissdk.OperationTypeUpdateRedisCluster:
+	case redissdk.OperationTypeUpdateRedisCluster,
+		redissdk.OperationTypePatchOciCacheCluster:
 		return shared.OSOKAsyncPhaseUpdate, true
 	case redissdk.OperationTypeDeleteRedisCluster:
 		return shared.OSOKAsyncPhaseDelete, true
@@ -552,6 +636,15 @@ func cloneStringMap(input map[string]string) map[string]string {
 	for key, value := range input {
 		cloned[key] = value
 	}
+	return cloned
+}
+
+func cloneStringSlice(input []string) []string {
+	if input == nil {
+		return nil
+	}
+	cloned := make([]string, len(input))
+	copy(cloned, input)
 	return cloned
 }
 
