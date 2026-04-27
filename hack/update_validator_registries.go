@@ -53,10 +53,14 @@ type configuredService struct {
 	SelectedKinds []string
 }
 
+const sdkModulePath = "github.com/oracle/oci-go-sdk/v65"
+
 var (
 	reSDKStruct = regexp.MustCompile(`(?m)^type\s+([A-Za-z0-9]+)\s+struct\b`)
 
 	reSDKTarget = regexp.MustCompile(`newTarget\("([a-z0-9]+)",\s*"([A-Za-z0-9]+)"`)
+
+	reSDKModuleVersion = regexp.MustCompile(`(?m)^\s*` + regexp.QuoteMeta(sdkModulePath) + `\s+(v\S+)\s*(?://.*)?$`)
 )
 
 func main() {
@@ -110,6 +114,10 @@ func generateRegistryOutputs(root string, serviceName string, all bool, existing
 	if err != nil {
 		return nil, nil, err
 	}
+	sdkModuleVersion, err := loadSDKModuleVersion(root)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	apiSpecs, err := scanConfiguredAPISpecs(root, services)
 	if err != nil {
@@ -126,7 +134,7 @@ func generateRegistryOutputs(root string, serviceName string, all bool, existing
 	}
 
 	sdkTargets := buildSDKTargets(targets, existingSDK, services)
-	sdkOut, err := renderSDKRegistry(sdkTargets)
+	sdkOut, err := renderSDKRegistry(sdkTargets, sdkModuleVersion)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -162,6 +170,19 @@ func rel(root, p string) string {
 		return p
 	}
 	return r
+}
+
+func loadSDKModuleVersion(root string) (string, error) {
+	goModPath := filepath.Join(root, "go.mod")
+	contents, err := os.ReadFile(goModPath)
+	if err != nil {
+		return "", err
+	}
+	matches := reSDKModuleVersion.FindSubmatch(contents)
+	if len(matches) == 2 {
+		return string(matches[1]), nil
+	}
+	return "", fmt.Errorf("module %q not found in %s", sdkModulePath, rel(root, goModPath))
 }
 
 func parseExistingAPITargets(path string) (map[string]specTarget, error) {
@@ -2073,11 +2094,11 @@ func renderAPIRegistryClone(b *strings.Builder) {
 	b.WriteString("}\n")
 }
 
-func renderSDKRegistry(targets []sdkTarget) ([]byte, error) {
+func renderSDKRegistry(targets []sdkTarget, moduleVersion string) ([]byte, error) {
 	sdkGroups := sdkRegistryGroups(targets)
 	byGroup := sdkTargetsByGroup(targets)
 	var b strings.Builder
-	renderSDKRegistryPreamble(&b, sdkGroups)
+	renderSDKRegistryPreamble(&b, sdkGroups, moduleVersion)
 	renderSDKSeedTargets(&b, sdkGroups, byGroup)
 	renderSDKRegistryHelpers(&b)
 
@@ -2118,16 +2139,16 @@ func sdkTargetsByGroup(targets []sdkTarget) map[string][]string {
 	return byGroup
 }
 
-func renderSDKRegistryPreamble(b *strings.Builder, sdkGroups []string) {
+func renderSDKRegistryPreamble(b *strings.Builder, sdkGroups []string, moduleVersion string) {
 	b.WriteString("package sdk\n\n")
 	b.WriteString("import (\n")
 	b.WriteString("\t\"path\"\n")
 	b.WriteString("\t\"reflect\"\n\n")
 	for _, g := range sdkGroups {
-		fmt.Fprintf(b, "\t\"github.com/oracle/oci-go-sdk/v65/%s\"\n", g)
+		fmt.Fprintf(b, "\t%q\n", sdkModulePath+"/"+g)
 	}
 	b.WriteString(")\n\n")
-	b.WriteString("const (\n\tmodulePath    = \"github.com/oracle/oci-go-sdk/v65\"\n\tmoduleVersion = \"v65.61.1\"\n)\n\n")
+	fmt.Fprintf(b, "const (\n\tmodulePath    = %q\n\tmoduleVersion = %q\n)\n\n", sdkModulePath, moduleVersion)
 	b.WriteString("var seedTargets = []Target{\n")
 }
 
