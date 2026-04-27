@@ -70,7 +70,7 @@ func applySubnetRuntimeHooks(
 	runtimeClient := newSubnetRuntimeClient(manager, nil, client)
 
 	hooks.BuildCreateBody = func(_ context.Context, resource *corev1beta1.Subnet, _ string) (any, error) {
-		return buildCreateSubnetDetails(resource.Spec), nil
+		return buildCreateSubnetDetails(resource.Spec)
 	}
 	hooks.BuildUpdateBody = func(_ context.Context, resource *corev1beta1.Subnet, _ string, currentResponse any) (any, bool, error) {
 		current, ok := subnetFromResponse(currentResponse)
@@ -239,8 +239,13 @@ func (c *subnetRuntimeClient) Delete(ctx context.Context, resource *corev1beta1.
 }
 
 func (c *subnetRuntimeClient) create(ctx context.Context, resource *corev1beta1.Subnet) (servicemanager.OSOKResponse, error) {
+	createDetails, err := buildCreateSubnetDetails(resource.Spec)
+	if err != nil {
+		return c.fail(resource, err)
+	}
+
 	request := coresdk.CreateSubnetRequest{
-		CreateSubnetDetails: buildCreateSubnetDetails(resource.Spec),
+		CreateSubnetDetails: createDetails,
 	}
 
 	response, err := c.client.CreateSubnet(ctx, request)
@@ -359,13 +364,23 @@ func (c *subnetRuntimeClient) buildUpdateRequest(resource *corev1beta1.Subnet, c
 	}, true, nil
 }
 
-func buildCreateSubnetDetails(spec corev1beta1.SubnetSpec) coresdk.CreateSubnetDetails {
+func buildCreateSubnetDetails(spec corev1beta1.SubnetSpec) (coresdk.CreateSubnetDetails, error) {
+	ipv4CidrBlocks := normalizeStringSlice(spec.Ipv4CidrBlocks)
+	if strings.TrimSpace(spec.CidrBlock) == "" && len(ipv4CidrBlocks) == 0 {
+		return coresdk.CreateSubnetDetails{}, fmt.Errorf("Subnet create requires spec.cidrBlock or spec.ipv4CidrBlocks")
+	}
+
 	createDetails := coresdk.CreateSubnetDetails{
-		CidrBlock:     common.String(spec.CidrBlock),
 		CompartmentId: common.String(spec.CompartmentId),
 		VcnId:         common.String(spec.VcnId),
 	}
 
+	if spec.CidrBlock != "" {
+		createDetails.CidrBlock = common.String(spec.CidrBlock)
+	}
+	if len(ipv4CidrBlocks) > 0 {
+		createDetails.Ipv4CidrBlocks = ipv4CidrBlocks
+	}
 	if spec.AvailabilityDomain != "" {
 		createDetails.AvailabilityDomain = common.String(spec.AvailabilityDomain)
 	}
@@ -403,7 +418,7 @@ func buildCreateSubnetDetails(spec corev1beta1.SubnetSpec) coresdk.CreateSubnetD
 		createDetails.SecurityListIds = normalizeStringSlice(spec.SecurityListIds)
 	}
 
-	return createDetails
+	return createDetails, nil
 }
 
 func validateSubnetCreateOnlyDrift(spec corev1beta1.SubnetSpec, current coresdk.Subnet) error {
@@ -426,6 +441,9 @@ func validateSubnetCreateOnlyDrift(spec corev1beta1.SubnetSpec, current coresdk.
 	}
 	if !subnetProhibitPublicIPOnVNICCreateOnlyMatches(spec, current) {
 		unsupported = append(unsupported, "prohibitPublicIpOnVnic")
+	}
+	if len(spec.Ipv4CidrBlocks) > 0 && !normalizedStringSlicesEqual(current.Ipv4CidrBlocks, spec.Ipv4CidrBlocks) {
+		unsupported = append(unsupported, "ipv4CidrBlocks")
 	}
 
 	if len(unsupported) == 0 {
@@ -559,6 +577,7 @@ func (c *subnetRuntimeClient) projectStatus(resource *corev1beta1.Subnet, curren
 		VirtualRouterIp:         stringValue(current.VirtualRouterIp),
 		VirtualRouterMac:        stringValue(current.VirtualRouterMac),
 		AvailabilityDomain:      stringValue(current.AvailabilityDomain),
+		Ipv4CidrBlocks:          append([]string(nil), current.Ipv4CidrBlocks...),
 		DefinedTags:             convertOCIToStatusDefinedTags(current.DefinedTags),
 		DhcpOptionsId:           stringValue(current.DhcpOptionsId),
 		DisplayName:             stringValue(current.DisplayName),

@@ -72,8 +72,7 @@ defined_tags, dhcp_options_id,
 display_name (+5 more)
 Reject before mutate: force-new fields
 availability_domain, compartment_id,
-dns_label, prohibit_internet_ingress (+2
-more)
+dns_label, ipv4_cidr_blocks (+3 more)
 Lookup filters: compartment_id,
 display_name, id, vcn_id (+1 more)
 end note
@@ -119,7 +118,7 @@ supported drift: cidr_block, defined_tags,
 dhcp_options_id, display_name (+5 more)
 reject before mutate: force-new fields
 availability_domain, compartment_id, dns_label,
-prohibit_internet_ingress (+2 more)
+ipv4_cidr_blocks (+3 more)
 create-only fields: none
 list lookup: oci_core_subnets filters
 compartment_id, display_name, id, vcn_id (+1

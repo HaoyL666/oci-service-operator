@@ -56,7 +56,7 @@ spec:
             description: WorkRequestStatus defines the observed state of WorkRequest.
             properties:
               compartmentId:
-                description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment containing the load balancer.
                 type: string
               errorDetails:
@@ -71,7 +71,7 @@ spec:
                   type: object
                 type: array
               id:
-                description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the work request.
                 type: string
               lifecycleState:
@@ -79,7 +79,7 @@ spec:
                 type: string
               loadBalancerId:
                 description: |-
-                  The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm) of the load balancer with which the work request
+                  The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the load balancer with which the work request
                   is associated.
                 type: string
               message:

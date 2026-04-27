@@ -357,6 +357,55 @@ func TestCreateOrUpdate_MutableDriftTriggersUpdate(t *testing.T) {
 	assert.Equal(t, 3, getCalls)
 }
 
+func TestCreateOrUpdate_MutableSecurityAttributesAndZprOnlyTriggerUpdate(t *testing.T) {
+	var captured coresdk.UpdateVcnRequest
+	getCalls := 0
+	updatedSecurityAttributes := map[string]shared.MapValue{
+		"Oracle-DataSecurity-ZPR": {"MaxEgressCount": "42"},
+	}
+	manager := newTestManager(&fakeVcnOCIClient{
+		getFn: func(_ context.Context, _ coresdk.GetVcnRequest) (coresdk.GetVcnResponse, error) {
+			getCalls++
+			current := makeSDKVcn("ocid1.vcn.oc1..existing", "test-vcn", coresdk.VcnLifecycleStateAvailable)
+			if getCalls >= 3 {
+				current.IsZprOnly = common.Bool(true)
+				current.SecurityAttributes = map[string]map[string]interface{}{
+					"Oracle-DataSecurity-ZPR": {"MaxEgressCount": "42"},
+				}
+			}
+			return coresdk.GetVcnResponse{Vcn: current}, nil
+		},
+		updateFn: func(_ context.Context, req coresdk.UpdateVcnRequest) (coresdk.UpdateVcnResponse, error) {
+			captured = req
+			updated := makeSDKVcn("ocid1.vcn.oc1..existing", "test-vcn", coresdk.VcnLifecycleStateAvailable)
+			updated.IsZprOnly = common.Bool(true)
+			updated.SecurityAttributes = map[string]map[string]interface{}{
+				"Oracle-DataSecurity-ZPR": {"MaxEgressCount": "42"},
+			}
+			return coresdk.UpdateVcnResponse{Vcn: updated}, nil
+		},
+	})
+
+	resource := makeSpecVcn()
+	resource.Status.OsokStatus.Ocid = shared.OCID("ocid1.vcn.oc1..existing")
+	resource.Spec.IsZprOnly = true
+	resource.Spec.SecurityAttributes = updatedSecurityAttributes
+
+	resp, err := manager.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+
+	assert.NoError(t, err)
+	assert.True(t, resp.IsSuccessful)
+	if assert.NotNil(t, captured.IsZprOnly) {
+		assert.True(t, *captured.IsZprOnly)
+	}
+	assert.Equal(t, map[string]map[string]interface{}{
+		"Oracle-DataSecurity-ZPR": {"MaxEgressCount": "42"},
+	}, captured.SecurityAttributes)
+	assert.True(t, resource.Status.IsZprOnly)
+	assert.Equal(t, updatedSecurityAttributes, resource.Status.SecurityAttributes)
+	assert.Equal(t, 3, getCalls)
+}
+
 func TestCreateOrUpdate_DoesNotUpdateDuringRetryableLiveStates(t *testing.T) {
 	tests := []struct {
 		name  string
@@ -452,7 +501,7 @@ func TestCreateOrUpdate_RejectsUnsupportedCreateOnlyDrift(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.False(t, resp.IsSuccessful)
-	assert.Contains(t, err.Error(), "create-only field drift")
+	assert.Contains(t, err.Error(), "require replacement when cidrBlocks changes")
 	assert.Equal(t, 0, updateCalls)
 }
 

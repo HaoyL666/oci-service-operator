@@ -51,6 +51,13 @@
         "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
       },
       {
+        "fieldPath": "ipv4CidrBlocks",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
         "fieldPath": "prohibitInternetIngress",
         "decision": "replacementRequired",
         "mergeCase": "replacementRequired",
