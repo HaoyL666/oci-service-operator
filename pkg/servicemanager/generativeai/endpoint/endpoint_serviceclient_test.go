@@ -77,68 +77,32 @@ func (f *fakeEndpointOCIClient) DeleteEndpoint(
 	return generativeaisdk.DeleteEndpointResponse{}, nil
 }
 
-func testEndpointClient(fake *fakeEndpointOCIClient) defaultEndpointServiceClient {
-	return defaultEndpointServiceClient{
-		ServiceClient: generatedruntime.NewServiceClient[*generativeaiv1beta1.Endpoint](generatedruntime.Config[*generativeaiv1beta1.Endpoint]{
-			Kind:      "Endpoint",
-			SDKName:   "Endpoint",
-			Log:       loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("test")},
-			Semantics: newEndpointRuntimeSemantics(),
-			Create: &generatedruntime.Operation{
-				NewRequest: func() any { return &generativeaisdk.CreateEndpointRequest{} },
-				Call: func(ctx context.Context, request any) (any, error) {
-					return fake.CreateEndpoint(ctx, *request.(*generativeaisdk.CreateEndpointRequest))
-				},
-				Fields: []generatedruntime.RequestField{
-					{FieldName: "CreateEndpointDetails", RequestName: "CreateEndpointDetails", Contribution: "body", PreferResourceID: false},
-				},
-			},
-			Get: &generatedruntime.Operation{
-				NewRequest: func() any { return &generativeaisdk.GetEndpointRequest{} },
-				Call: func(ctx context.Context, request any) (any, error) {
-					return fake.GetEndpoint(ctx, *request.(*generativeaisdk.GetEndpointRequest))
-				},
-				Fields: []generatedruntime.RequestField{
-					{FieldName: "EndpointId", RequestName: "endpointId", Contribution: "path", PreferResourceID: true},
-				},
-			},
-			List: &generatedruntime.Operation{
-				NewRequest: func() any { return &generativeaisdk.ListEndpointsRequest{} },
-				Call: func(ctx context.Context, request any) (any, error) {
-					return fake.ListEndpoints(ctx, *request.(*generativeaisdk.ListEndpointsRequest))
-				},
-				Fields: []generatedruntime.RequestField{
-					{FieldName: "CompartmentId", RequestName: "compartmentId", Contribution: "query", PreferResourceID: false},
-					{FieldName: "LifecycleState", RequestName: "lifecycleState", Contribution: "query", PreferResourceID: false},
-					{FieldName: "DisplayName", RequestName: "displayName", Contribution: "query", PreferResourceID: false},
-					{FieldName: "Id", RequestName: "id", Contribution: "query", PreferResourceID: false},
-					{FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false},
-					{FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false},
-					{FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false},
-					{FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false},
-				},
-			},
-			Update: &generatedruntime.Operation{
-				NewRequest: func() any { return &generativeaisdk.UpdateEndpointRequest{} },
-				Call: func(ctx context.Context, request any) (any, error) {
-					return fake.UpdateEndpoint(ctx, *request.(*generativeaisdk.UpdateEndpointRequest))
-				},
-				Fields: []generatedruntime.RequestField{
-					{FieldName: "EndpointId", RequestName: "endpointId", Contribution: "path", PreferResourceID: true},
-					{FieldName: "UpdateEndpointDetails", RequestName: "UpdateEndpointDetails", Contribution: "body", PreferResourceID: false},
-				},
-			},
-			Delete: &generatedruntime.Operation{
-				NewRequest: func() any { return &generativeaisdk.DeleteEndpointRequest{} },
-				Call: func(ctx context.Context, request any) (any, error) {
-					return fake.DeleteEndpoint(ctx, *request.(*generativeaisdk.DeleteEndpointRequest))
-				},
-				Fields: []generatedruntime.RequestField{
-					{FieldName: "EndpointId", RequestName: "endpointId", Contribution: "path", PreferResourceID: true},
-				},
-			},
-		}),
+func testEndpointClient(fake *fakeEndpointOCIClient) EndpointServiceClient {
+	manager := &EndpointServiceManager{
+		Log: loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("test")},
 	}
+	hooks := newEndpointDefaultRuntimeHooks(generativeaisdk.GenerativeAiClient{})
+	hooks.Create.Call = func(ctx context.Context, req generativeaisdk.CreateEndpointRequest) (generativeaisdk.CreateEndpointResponse, error) {
+		return fake.CreateEndpoint(ctx, req)
+	}
+	hooks.Get.Call = func(ctx context.Context, req generativeaisdk.GetEndpointRequest) (generativeaisdk.GetEndpointResponse, error) {
+		return fake.GetEndpoint(ctx, req)
+	}
+	hooks.List.Call = func(ctx context.Context, req generativeaisdk.ListEndpointsRequest) (generativeaisdk.ListEndpointsResponse, error) {
+		return fake.ListEndpoints(ctx, req)
+	}
+	hooks.Update.Call = func(ctx context.Context, req generativeaisdk.UpdateEndpointRequest) (generativeaisdk.UpdateEndpointResponse, error) {
+		return fake.UpdateEndpoint(ctx, req)
+	}
+	hooks.Delete.Call = func(ctx context.Context, req generativeaisdk.DeleteEndpointRequest) (generativeaisdk.DeleteEndpointResponse, error) {
+		return fake.DeleteEndpoint(ctx, req)
+	}
+	applyEndpointRuntimeHooks(&hooks)
+
+	delegate := defaultEndpointServiceClient{
+		ServiceClient: generatedruntime.NewServiceClient[*generativeaiv1beta1.Endpoint](buildEndpointGeneratedRuntimeConfig(manager, hooks)),
+	}
+	return wrapEndpointGeneratedClient(hooks, delegate)
 }
 
 func makeEndpointResource() *generativeaiv1beta1.Endpoint {
@@ -170,6 +134,8 @@ func makeSDKEndpoint(
 		LifecycleState:       state,
 		ContentModerationConfig: &generativeaisdk.ContentModerationConfig{
 			IsEnabled: boolPtr(spec.ContentModerationConfig.IsEnabled),
+			Mode:      generativeaisdk.ContentModerationConfigModeEnum(spec.ContentModerationConfig.Mode),
+			ModelId:   stringPtrOrNil(spec.ContentModerationConfig.ModelId),
 		},
 		FreeformTags: map[string]string{},
 		DefinedTags:  map[string]map[string]interface{}{},
@@ -180,6 +146,23 @@ func makeSDKEndpoint(
 	}
 	if spec.Description != "" {
 		endpoint.Description = common.String(spec.Description)
+	}
+	if spec.GenerativeAiPrivateEndpointId != "" {
+		endpoint.GenerativeAiPrivateEndpointId = common.String(spec.GenerativeAiPrivateEndpointId)
+	}
+	if spec.PromptInjectionConfig.IsEnabled || spec.PromptInjectionConfig.Mode != "" || spec.PromptInjectionConfig.ModelId != "" {
+		endpoint.PromptInjectionConfig = &generativeaisdk.PromptInjectionConfig{
+			IsEnabled: boolPtr(spec.PromptInjectionConfig.IsEnabled),
+			Mode:      generativeaisdk.ContentModerationConfigModeEnum(spec.PromptInjectionConfig.Mode),
+			ModelId:   stringPtrOrNil(spec.PromptInjectionConfig.ModelId),
+		}
+	}
+	if spec.PiiDetectionConfig.IsEnabled || spec.PiiDetectionConfig.Mode != "" || spec.PiiDetectionConfig.ModelId != "" {
+		endpoint.PiiDetectionConfig = &generativeaisdk.PiiDetectionConfig{
+			IsEnabled: boolPtr(spec.PiiDetectionConfig.IsEnabled),
+			Mode:      generativeaisdk.ContentModerationConfigModeEnum(spec.PiiDetectionConfig.Mode),
+			ModelId:   stringPtrOrNil(spec.PiiDetectionConfig.ModelId),
+		}
 	}
 	if spec.FreeformTags != nil {
 		endpoint.FreeformTags = spec.FreeformTags
@@ -200,6 +183,8 @@ func makeSDKEndpointSummary(
 		LifecycleState:       state,
 		ContentModerationConfig: &generativeaisdk.ContentModerationConfig{
 			IsEnabled: boolPtr(spec.ContentModerationConfig.IsEnabled),
+			Mode:      generativeaisdk.ContentModerationConfigModeEnum(spec.ContentModerationConfig.Mode),
+			ModelId:   stringPtrOrNil(spec.ContentModerationConfig.ModelId),
 		},
 	}
 	if spec.DisplayName != "" {
@@ -207,6 +192,23 @@ func makeSDKEndpointSummary(
 	}
 	if spec.Description != "" {
 		summary.Description = common.String(spec.Description)
+	}
+	if spec.GenerativeAiPrivateEndpointId != "" {
+		summary.GenerativeAiPrivateEndpointId = common.String(spec.GenerativeAiPrivateEndpointId)
+	}
+	if spec.PromptInjectionConfig.IsEnabled || spec.PromptInjectionConfig.Mode != "" || spec.PromptInjectionConfig.ModelId != "" {
+		summary.PromptInjectionConfig = &generativeaisdk.PromptInjectionConfig{
+			IsEnabled: boolPtr(spec.PromptInjectionConfig.IsEnabled),
+			Mode:      generativeaisdk.ContentModerationConfigModeEnum(spec.PromptInjectionConfig.Mode),
+			ModelId:   stringPtrOrNil(spec.PromptInjectionConfig.ModelId),
+		}
+	}
+	if spec.PiiDetectionConfig.IsEnabled || spec.PiiDetectionConfig.Mode != "" || spec.PiiDetectionConfig.ModelId != "" {
+		summary.PiiDetectionConfig = &generativeaisdk.PiiDetectionConfig{
+			IsEnabled: boolPtr(spec.PiiDetectionConfig.IsEnabled),
+			Mode:      generativeaisdk.ContentModerationConfigModeEnum(spec.PiiDetectionConfig.Mode),
+			ModelId:   stringPtrOrNil(spec.PiiDetectionConfig.ModelId),
+		}
 	}
 	if spec.FreeformTags != nil {
 		summary.FreeformTags = spec.FreeformTags
@@ -216,6 +218,13 @@ func makeSDKEndpointSummary(
 
 func boolPtr(value bool) *bool {
 	return &value
+}
+
+func stringPtrOrNil(value string) *string {
+	if value == "" {
+		return nil
+	}
+	return common.String(value)
 }
 
 func TestEndpointServiceClientCreatesAndProjectsStatus(t *testing.T) {
@@ -426,6 +435,105 @@ func TestEndpointServiceClientUpdatesContentModerationConfig(t *testing.T) {
 	}
 	if !resource.Status.ContentModerationConfig.IsEnabled {
 		t.Fatal("status.contentModerationConfig.isEnabled = false, want true")
+	}
+}
+
+func TestEndpointServiceClientUpdatesPrivateEndpointAndSafetyConfigs(t *testing.T) {
+	t.Parallel()
+
+	var updateRequest generativeaisdk.UpdateEndpointRequest
+	getCalls := 0
+	updateCalls := 0
+
+	currentSpec := makeEndpointResource().Spec
+	currentSpec.GenerativeAiPrivateEndpointId = "ocid1.generativeaiprivateendpoint.oc1..old"
+
+	desiredSpec := currentSpec
+	desiredSpec.GenerativeAiPrivateEndpointId = "ocid1.generativeaiprivateendpoint.oc1..new"
+	desiredSpec.PromptInjectionConfig = generativeaiv1beta1.EndpointPromptInjectionConfig{
+		IsEnabled: true,
+		Mode:      string(generativeaisdk.ContentModerationConfigModeBlock),
+		ModelId:   "ocid1.generativeaimodel.oc1..guard",
+	}
+	desiredSpec.PiiDetectionConfig = generativeaiv1beta1.EndpointPiiDetectionConfig{
+		IsEnabled: true,
+		Mode:      string(generativeaisdk.ContentModerationConfigModeInform),
+		ModelId:   "ocid1.generativeaimodel.oc1..pii",
+	}
+
+	client := testEndpointClient(&fakeEndpointOCIClient{
+		getEndpointFn: func(_ context.Context, req generativeaisdk.GetEndpointRequest) (generativeaisdk.GetEndpointResponse, error) {
+			getCalls++
+			if req.EndpointId == nil || *req.EndpointId != "ocid1.endpoint.oc1..existing" {
+				t.Fatalf("get endpointId = %v, want existing endpoint OCID", req.EndpointId)
+			}
+
+			spec := currentSpec
+			if getCalls > 1 {
+				spec = desiredSpec
+			}
+			return generativeaisdk.GetEndpointResponse{
+				Endpoint: makeSDKEndpoint("ocid1.endpoint.oc1..existing", spec, generativeaisdk.EndpointLifecycleStateActive),
+			}, nil
+		},
+		updateEndpointFn: func(_ context.Context, req generativeaisdk.UpdateEndpointRequest) (generativeaisdk.UpdateEndpointResponse, error) {
+			updateCalls++
+			updateRequest = req
+			return generativeaisdk.UpdateEndpointResponse{
+				Endpoint:     makeSDKEndpoint("ocid1.endpoint.oc1..existing", desiredSpec, generativeaisdk.EndpointLifecycleStateActive),
+				OpcRequestId: common.String("opc-update-2"),
+			}, nil
+		},
+	})
+
+	resource := makeEndpointResource()
+	resource.Status.OsokStatus.Ocid = shared.OCID("ocid1.endpoint.oc1..existing")
+	resource.Spec = desiredSpec
+
+	response, err := client.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	if err != nil {
+		t.Fatalf("CreateOrUpdate() error = %v", err)
+	}
+	if !response.IsSuccessful {
+		t.Fatal("CreateOrUpdate() should report success after updating private-endpoint and safety config fields")
+	}
+	if response.ShouldRequeue {
+		t.Fatal("CreateOrUpdate() should not requeue once update follow-up GetEndpoint reports ACTIVE")
+	}
+	if updateCalls != 1 {
+		t.Fatalf("UpdateEndpoint() calls = %d, want 1", updateCalls)
+	}
+	if getCalls != 2 {
+		t.Fatalf("GetEndpoint() calls = %d, want 2 (observe + follow-up)", getCalls)
+	}
+	if updateRequest.UpdateEndpointDetails.GenerativeAiPrivateEndpointId == nil ||
+		*updateRequest.UpdateEndpointDetails.GenerativeAiPrivateEndpointId != desiredSpec.GenerativeAiPrivateEndpointId {
+		t.Fatalf("update generativeAiPrivateEndpointId = %#v, want %q", updateRequest.UpdateEndpointDetails.GenerativeAiPrivateEndpointId, desiredSpec.GenerativeAiPrivateEndpointId)
+	}
+	if updateRequest.UpdateEndpointDetails.PromptInjectionConfig == nil ||
+		updateRequest.UpdateEndpointDetails.PromptInjectionConfig.IsEnabled == nil ||
+		!*updateRequest.UpdateEndpointDetails.PromptInjectionConfig.IsEnabled ||
+		updateRequest.UpdateEndpointDetails.PromptInjectionConfig.Mode != generativeaisdk.ContentModerationConfigModeBlock ||
+		updateRequest.UpdateEndpointDetails.PromptInjectionConfig.ModelId == nil ||
+		*updateRequest.UpdateEndpointDetails.PromptInjectionConfig.ModelId != desiredSpec.PromptInjectionConfig.ModelId {
+		t.Fatalf("update promptInjectionConfig = %#v, want enabled BLOCK config", updateRequest.UpdateEndpointDetails.PromptInjectionConfig)
+	}
+	if updateRequest.UpdateEndpointDetails.PiiDetectionConfig == nil ||
+		updateRequest.UpdateEndpointDetails.PiiDetectionConfig.IsEnabled == nil ||
+		!*updateRequest.UpdateEndpointDetails.PiiDetectionConfig.IsEnabled ||
+		updateRequest.UpdateEndpointDetails.PiiDetectionConfig.Mode != generativeaisdk.ContentModerationConfigModeInform ||
+		updateRequest.UpdateEndpointDetails.PiiDetectionConfig.ModelId == nil ||
+		*updateRequest.UpdateEndpointDetails.PiiDetectionConfig.ModelId != desiredSpec.PiiDetectionConfig.ModelId {
+		t.Fatalf("update piiDetectionConfig = %#v, want enabled INFORM config", updateRequest.UpdateEndpointDetails.PiiDetectionConfig)
+	}
+	if got := resource.Status.GenerativeAiPrivateEndpointId; got != desiredSpec.GenerativeAiPrivateEndpointId {
+		t.Fatalf("status.generativeAiPrivateEndpointId = %q, want %q", got, desiredSpec.GenerativeAiPrivateEndpointId)
+	}
+	if !resource.Status.PromptInjectionConfig.IsEnabled {
+		t.Fatal("status.promptInjectionConfig.isEnabled = false, want true")
+	}
+	if !resource.Status.PiiDetectionConfig.IsEnabled {
+		t.Fatal("status.piiDetectionConfig.isEnabled = false, want true")
 	}
 }
 

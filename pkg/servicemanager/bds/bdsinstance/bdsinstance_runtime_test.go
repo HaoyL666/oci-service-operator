@@ -295,6 +295,12 @@ func TestBdsInstanceCreateOrUpdate_UpdatesOnlyMutableFields(t *testing.T) {
 	current := makeSDKBdsInstance(ocid, bdssdk.BdsInstanceLifecycleStateActive)
 	current.DisplayName = common.String("old-bds")
 	current.BootstrapScriptUrl = common.String("https://example.com/bootstrap.sh")
+	current.SecretId = common.String("ocid1.secret.oc1..old")
+	current.IsSecretReused = boolPtr(true)
+	current.NetworkConfig = &bdssdk.NetworkConfig{
+		IsNatGatewayRequired: boolPtr(false),
+		CidrBlock:            common.String("10.0.0.0/24"),
+	}
 	current.FreeformTags = map[string]string{"run": "1", "stale": "true"}
 	current.DefinedTags = map[string]map[string]interface{}{
 		"team": {"env": "dev"},
@@ -304,6 +310,12 @@ func TestBdsInstanceCreateOrUpdate_UpdatesOnlyMutableFields(t *testing.T) {
 	refreshed := current
 	refreshed.DisplayName = common.String("new-bds")
 	refreshed.BootstrapScriptUrl = common.String("")
+	refreshed.SecretId = common.String("ocid1.secret.oc1..new")
+	refreshed.IsSecretReused = boolPtr(false)
+	refreshed.NetworkConfig = &bdssdk.NetworkConfig{
+		IsNatGatewayRequired: boolPtr(true),
+		CidrBlock:            common.String("10.0.0.0/16"),
+	}
 	refreshed.FreeformTags = map[string]string{}
 	refreshed.DefinedTags = map[string]map[string]interface{}{}
 	refreshed.KmsKeyId = common.String("")
@@ -335,6 +347,12 @@ func TestBdsInstanceCreateOrUpdate_UpdatesOnlyMutableFields(t *testing.T) {
 	resource.Status.OsokStatus.Ocid = shared.OCID(ocid)
 	resource.Spec.DisplayName = "new-bds"
 	resource.Spec.BootstrapScriptUrl = ""
+	resource.Spec.SecretId = "ocid1.secret.oc1..new"
+	resource.Spec.IsSecretReused = false
+	resource.Spec.NetworkConfig = bdsv1beta1.BdsInstanceNetworkConfig{
+		IsNatGatewayRequired: true,
+		CidrBlock:            "10.0.0.0/16",
+	}
 	resource.Spec.FreeformTags = map[string]string{}
 	resource.Spec.DefinedTags = map[string]shared.MapValue{}
 	resource.Spec.KmsKeyId = ""
@@ -354,6 +372,18 @@ func TestBdsInstanceCreateOrUpdate_UpdatesOnlyMutableFields(t *testing.T) {
 	}
 	if assert.NotNil(t, capturedUpdate.BootstrapScriptUrl) {
 		assert.Equal(t, "", *capturedUpdate.BootstrapScriptUrl)
+	}
+	if assert.NotNil(t, capturedUpdate.SecretId) {
+		assert.Equal(t, "ocid1.secret.oc1..new", *capturedUpdate.SecretId)
+	}
+	if assert.NotNil(t, capturedUpdate.IsSecretReused) {
+		assert.False(t, *capturedUpdate.IsSecretReused)
+	}
+	if assert.NotNil(t, capturedUpdate.NetworkConfig) {
+		assert.NotNil(t, capturedUpdate.NetworkConfig.IsNatGatewayRequired)
+		assert.True(t, *capturedUpdate.NetworkConfig.IsNatGatewayRequired)
+		assert.NotNil(t, capturedUpdate.NetworkConfig.CidrBlock)
+		assert.Equal(t, "10.0.0.0/16", *capturedUpdate.NetworkConfig.CidrBlock)
 	}
 	if assert.NotNil(t, capturedUpdate.KmsKeyId) {
 		assert.Equal(t, "", *capturedUpdate.KmsKeyId)
@@ -401,6 +431,47 @@ func TestBdsInstanceCreateOrUpdate_NodeDriftRequiresReplacement(t *testing.T) {
 	assert.Error(t, err)
 	assert.False(t, response.IsSuccessful)
 	assert.Contains(t, err.Error(), "nodes")
+	assert.Equal(t, 0, updateCalls)
+	assert.Equal(t, shared.Failed, trailingBdsCondition(resource))
+}
+
+func TestBdsInstanceCreateOrUpdate_BdsClusterVersionSummaryDriftRequiresReplacement(t *testing.T) {
+	t.Parallel()
+
+	ocid := "ocid1.bdsinstance.oc1..version"
+	updateCalls := 0
+
+	manager := newBdsInstanceTestManager(&fakeBdsInstanceOCIClient{
+		getFn: func(_ context.Context, req bdssdk.GetBdsInstanceRequest) (bdssdk.GetBdsInstanceResponse, error) {
+			if !assert.NotNil(t, req.BdsInstanceId) {
+				return bdssdk.GetBdsInstanceResponse{}, nil
+			}
+			assert.Equal(t, ocid, *req.BdsInstanceId)
+			current := makeSDKBdsInstance(ocid, bdssdk.BdsInstanceLifecycleStateActive)
+			current.BdsClusterVersionSummary = &bdssdk.BdsClusterVersionSummary{
+				BdsVersion: common.String("3.5.1"),
+				OdhVersion: common.String("4.15"),
+			}
+			return bdssdk.GetBdsInstanceResponse{BdsInstance: current}, nil
+		},
+		updateFn: func(_ context.Context, _ bdssdk.UpdateBdsInstanceRequest) (bdssdk.UpdateBdsInstanceResponse, error) {
+			updateCalls++
+			return bdssdk.UpdateBdsInstanceResponse{}, nil
+		},
+	})
+
+	resource := makeSpecBdsInstance()
+	resource.Status.Id = ocid
+	resource.Status.OsokStatus.Ocid = shared.OCID(ocid)
+	resource.Spec.BdsClusterVersionSummary = bdsv1beta1.BdsInstanceBdsClusterVersionSummary{
+		BdsVersion: "3.6.0",
+		OdhVersion: "4.16",
+	}
+
+	response, err := manager.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	assert.Error(t, err)
+	assert.False(t, response.IsSuccessful)
+	assert.Contains(t, err.Error(), "bdsClusterVersionSummary")
 	assert.Equal(t, 0, updateCalls)
 	assert.Equal(t, shared.Failed, trailingBdsCondition(resource))
 }

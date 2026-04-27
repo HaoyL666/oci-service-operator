@@ -59,12 +59,15 @@ func reviewedBdsInstanceRuntimeSemantics() *generatedruntime.Semantics {
 			"isHighAvailability",
 			"isSecure",
 			"nodes",
+			"secretId",
+			"isSecretReused",
 			"networkConfig",
 			"bootstrapScriptUrl",
 			"freeformTags",
 			"definedTags",
 			"kmsKeyId",
 			"clusterProfile",
+			"bdsClusterVersionSummary",
 		},
 		ConflictsWith: map[string][]string{},
 	}
@@ -96,6 +99,18 @@ func buildBdsInstanceUpdateBody(
 	}
 	if resource.Spec.BootstrapScriptUrl != stringValue(current.BootstrapScriptUrl) {
 		updateDetails.BootstrapScriptUrl = common.String(resource.Spec.BootstrapScriptUrl)
+		updateNeeded = true
+	}
+	if desired, ok := bdsDesiredSecretIDUpdate(resource.Spec.SecretId, current.SecretId); ok {
+		updateDetails.SecretId = desired
+		updateNeeded = true
+	}
+	if desired, ok := bdsDesiredSecretReuseUpdate(resource.Spec.IsSecretReused, current.IsSecretReused); ok {
+		updateDetails.IsSecretReused = desired
+		updateNeeded = true
+	}
+	if desired, ok := bdsDesiredNetworkConfigUpdate(resource.Spec.NetworkConfig, current.NetworkConfig); ok {
+		updateDetails.NetworkConfig = desired
 		updateNeeded = true
 	}
 
@@ -182,13 +197,52 @@ func validateBdsInstanceObservedCreateOnlyDrift(spec bdsv1beta1.BdsInstanceSpec,
 	if spec.ClusterProfile != "" && spec.ClusterProfile != string(current.ClusterProfile) {
 		return fmt.Errorf("BdsInstance requires replacement when clusterProfile changes")
 	}
-	if !matchesBdsNetworkConfig(spec.NetworkConfig, current.NetworkConfig) {
-		return fmt.Errorf("BdsInstance requires replacement when networkConfig changes")
+	if !matchesBdsClusterVersionSummary(spec.BdsClusterVersionSummary, current.BdsClusterVersionSummary) {
+		return fmt.Errorf("BdsInstance requires replacement when bdsClusterVersionSummary changes")
 	}
 	if !matchesBdsNodes(spec.Nodes, current.Nodes) {
 		return fmt.Errorf("BdsInstance requires replacement when nodes change")
 	}
 	return nil
+}
+
+func bdsDesiredSecretIDUpdate(spec string, current *string) (*string, bool) {
+	currentValue := stringValue(current)
+	if spec == currentValue {
+		return nil, false
+	}
+	if spec == "" && current == nil {
+		return nil, false
+	}
+	return common.String(spec), true
+}
+
+func bdsDesiredSecretReuseUpdate(spec bool, current *bool) (*bool, bool) {
+	if current == nil && !spec {
+		return nil, false
+	}
+	if current != nil && spec == *current {
+		return nil, false
+	}
+	return common.Bool(spec), true
+}
+
+func bdsDesiredNetworkConfigUpdate(
+	spec bdsv1beta1.BdsInstanceNetworkConfig,
+	current *bdssdk.NetworkConfig,
+) (*bdssdk.NetworkConfig, bool) {
+	if matchesBdsNetworkConfig(spec, current) {
+		return nil, false
+	}
+
+	details := &bdssdk.NetworkConfig{}
+	if spec.CidrBlock != "" {
+		details.CidrBlock = common.String(spec.CidrBlock)
+	}
+	if spec.IsNatGatewayRequired || (current != nil && current.IsNatGatewayRequired != nil && boolValue(current.IsNatGatewayRequired)) {
+		details.IsNatGatewayRequired = common.Bool(spec.IsNatGatewayRequired)
+	}
+	return details, true
 }
 
 func matchesBdsNetworkConfig(
@@ -205,6 +259,25 @@ func matchesBdsNetworkConfig(
 		return false
 	}
 	if spec.IsNatGatewayRequired && spec.IsNatGatewayRequired != boolValue(current.IsNatGatewayRequired) {
+		return false
+	}
+	return true
+}
+
+func matchesBdsClusterVersionSummary(
+	spec bdsv1beta1.BdsInstanceBdsClusterVersionSummary,
+	current *bdssdk.BdsClusterVersionSummary,
+) bool {
+	if spec.BdsVersion == "" && spec.OdhVersion == "" {
+		return true
+	}
+	if current == nil {
+		return false
+	}
+	if spec.BdsVersion != "" && spec.BdsVersion != stringValue(current.BdsVersion) {
+		return false
+	}
+	if spec.OdhVersion != "" && spec.OdhVersion != stringValue(current.OdhVersion) {
 		return false
 	}
 	return true

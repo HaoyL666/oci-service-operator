@@ -56,11 +56,11 @@ spec:
             description: WorkRequestStatus defines the observed state of WorkRequest.
             properties:
               compartmentId:
-                description: The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment that contains the work request.
                 type: string
               id:
-                description: The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the work request.
                 type: string
               operationType:
@@ -91,7 +91,7 @@ spec:
                         to access the resource metadata.
                       type: string
                     identifier:
-                      description: An OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                      description: An OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                         or other unique identifier for the resource.
                       type: string
                     metadata:
