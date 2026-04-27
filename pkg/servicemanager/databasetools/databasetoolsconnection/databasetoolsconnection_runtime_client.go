@@ -165,6 +165,7 @@ func databaseToolsConnectionRuntimeSemantics() *generatedruntime.Semantics {
 				"relatedResource.identifier",
 				"userName",
 				"privateEndpointId",
+				"runtimeIdentity",
 				"runtimeSupport",
 			},
 		},
@@ -183,7 +184,7 @@ func databaseToolsConnectionRuntimeSemantics() *generatedruntime.Semantics {
 				"userName",
 				"userPassword",
 			},
-			ForceNew:      []string{"compartmentId", "runtimeSupport", "type"},
+			ForceNew:      []string{"compartmentId", "runtimeIdentity", "runtimeSupport", "type"},
 			ConflictsWith: map[string][]string{},
 		},
 		Hooks: generatedruntime.HookSet{
