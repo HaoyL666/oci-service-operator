@@ -48,8 +48,8 @@ func reviewedAnalyticsInstanceRuntimeSemantics() *generatedruntime.Semantics {
 		ActiveStates:       []string{"ACTIVE", "INACTIVE"},
 	}
 	semantics.Mutation = generatedruntime.MutationSemantics{
-		Mutable:       []string{"definedTags", "description", "emailNotification", "freeformTags", "licenseType"},
-		ForceNew:      []string{"capacity.capacityType", "featureSet", "name", "networkEndpointDetails.networkEndpointType"},
+		Mutable:       []string{"definedTags", "description", "emailNotification", "freeformTags", "licenseType", "updateChannel"},
+		ForceNew:      []string{"adminUser", "capacity.capacityType", "domainId", "featureBundle", "featureSet", "name", "networkEndpointDetails.networkEndpointType"},
 		ConflictsWith: map[string][]string{},
 	}
 	semantics.AuxiliaryOperations = nil
@@ -123,6 +123,10 @@ func buildAnalyticsInstanceUpdateBody(
 		details.LicenseType = desired
 		updateNeeded = true
 	}
+	if desired, ok := analyticsDesiredUpdateChannelUpdate(resource.Spec.UpdateChannel, current.UpdateChannel); ok {
+		details.UpdateChannel = desired
+		updateNeeded = true
+	}
 	if desired, ok := analyticsDesiredFreeformTagsUpdate(resource.Spec.FreeformTags, current.FreeformTags); ok {
 		details.FreeformTags = desired
 		updateNeeded = true
@@ -158,6 +162,9 @@ func analyticsInstanceRuntimeBody(currentResponse any) (analyticssdk.AnalyticsIn
 			LicenseType:            current.LicenseType,
 			EmailNotification:      current.EmailNotification,
 			ServiceUrl:             current.ServiceUrl,
+			DefinedTags:            current.DefinedTags,
+			FreeformTags:           current.FreeformTags,
+			SystemTags:             current.SystemTags,
 			TimeUpdated:            current.TimeUpdated,
 		}, nil
 	case *analyticssdk.AnalyticsInstanceSummary:
@@ -213,6 +220,16 @@ func analyticsDesiredLicenseTypeUpdate(
 		return "", false
 	}
 	return analyticssdk.LicenseTypeEnum(spec), true
+}
+
+func analyticsDesiredUpdateChannelUpdate(
+	spec string,
+	current analyticssdk.UpdateChannelEnum,
+) (analyticssdk.UpdateChannelEnum, bool) {
+	if spec == "" || spec == string(current) {
+		return "", false
+	}
+	return analyticssdk.UpdateChannelEnum(spec), true
 }
 
 func analyticsDesiredFreeformTagsUpdate(

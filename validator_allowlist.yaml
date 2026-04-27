@@ -299,6 +299,21 @@ structs:
       Status:
         status: intentionally_omitted
         reason: The SDK field collides with the CRD's existing `status.status` envelope and cannot be exposed as a sibling status field.
+  generativeai.DedicatedAiCluster:
+    fields:
+      PreviousState:
+        status: intentionally_omitted
+        reason: PreviousState is a recursive copy of the full resource and would balloon CR status with nested self-references.
+  generativeai.Endpoint:
+    fields:
+      PreviousState:
+        status: intentionally_omitted
+        reason: PreviousState is a recursive copy of the full resource and would balloon CR status with nested self-references.
+  generativeai.Model:
+    fields:
+      PreviousState:
+        status: intentionally_omitted
+        reason: PreviousState is a recursive copy of the full resource and would balloon CR status with nested self-references.
   streaming.CreateStreamDetails:
     fields:
       DefinedTags:

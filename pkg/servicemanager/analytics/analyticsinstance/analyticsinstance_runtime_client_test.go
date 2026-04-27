@@ -104,12 +104,21 @@ func TestApplyAnalyticsInstanceRuntimeHooksOverridesGeneratedDefaults(t *testing
 	if len(hooks.Semantics.Lifecycle.UpdatingStates) != 1 || hooks.Semantics.Lifecycle.UpdatingStates[0] != "UPDATING" {
 		t.Fatalf("hooks.Semantics.Lifecycle.UpdatingStates = %#v, want [\"UPDATING\"]", hooks.Semantics.Lifecycle.UpdatingStates)
 	}
+	if !analyticsStringSliceContains(hooks.Semantics.Mutation.Mutable, "updateChannel") {
+		t.Fatalf("hooks.Semantics.Mutation.Mutable = %#v, want updateChannel to be mutable", hooks.Semantics.Mutation.Mutable)
+	}
+	for _, field := range []string{"adminUser", "domainId", "featureBundle"} {
+		if !analyticsStringSliceContains(hooks.Semantics.Mutation.ForceNew, field) {
+			t.Fatalf("hooks.Semantics.Mutation.ForceNew = %#v, want %q to require replacement", hooks.Semantics.Mutation.ForceNew, field)
+		}
+	}
 	if hooks.BuildUpdateBody == nil {
 		t.Fatal("hooks.BuildUpdateBody = nil, want reviewed update builder")
 	}
 
 	resource := newAnalyticsInstanceTestResource()
 	resource.Spec.Description = "updated analytics description"
+	resource.Spec.UpdateChannel = string(analyticssdk.UpdateChannelEarly)
 
 	body, updateNeeded, err := hooks.BuildUpdateBody(
 		context.Background(),
@@ -134,6 +143,9 @@ func TestApplyAnalyticsInstanceRuntimeHooksOverridesGeneratedDefaults(t *testing
 	}
 	if details.Description == nil || *details.Description != resource.Spec.Description {
 		t.Fatalf("hooks.BuildUpdateBody() description = %#v, want %q", details.Description, resource.Spec.Description)
+	}
+	if details.UpdateChannel != analyticssdk.UpdateChannelEarly {
+		t.Fatalf("hooks.BuildUpdateBody() updateChannel = %q, want %q", details.UpdateChannel, analyticssdk.UpdateChannelEarly)
 	}
 }
 
@@ -633,7 +645,7 @@ func observedAnalyticsInstanceFromSpec(
 ) analyticssdk.AnalyticsInstance {
 	now := &common.SDKTime{Time: time.Unix(1713240000, 0).UTC()}
 
-	return analyticssdk.AnalyticsInstance{
+	instance := analyticssdk.AnalyticsInstance{
 		Id:                     common.String(id),
 		Name:                   common.String(spec.Name),
 		CompartmentId:          common.String(spec.CompartmentId),
@@ -650,6 +662,21 @@ func observedAnalyticsInstanceFromSpec(
 		ServiceUrl:             common.String("https://analytics.example.com"),
 		TimeUpdated:            now,
 	}
+
+	if spec.UpdateChannel != "" {
+		instance.UpdateChannel = analyticssdk.UpdateChannelEnum(spec.UpdateChannel)
+	}
+	if spec.KmsKeyId != "" {
+		instance.KmsKeyId = common.String(spec.KmsKeyId)
+	}
+	if spec.FeatureBundle != "" {
+		instance.FeatureBundle = analyticssdk.FeatureBundleEnum(spec.FeatureBundle)
+	}
+	if spec.DomainId != "" {
+		instance.DomainId = common.String(spec.DomainId)
+	}
+
+	return instance
 }
 
 func observedAnalyticsInstanceSummaryFromSpec(
@@ -671,8 +698,13 @@ func observedAnalyticsInstanceSummaryFromSpec(
 		Description:            pointerOrNil(spec.Description),
 		LicenseType:            analyticssdk.LicenseTypeEnum(spec.LicenseType),
 		EmailNotification:      pointerOrNil(spec.EmailNotification),
-		ServiceUrl:             common.String("https://analytics.example.com"),
-		TimeUpdated:            now,
+		DefinedTags:            analyticsDefinedTagsFromSpec(spec.DefinedTags),
+		FreeformTags:           cloneStringMap(spec.FreeformTags),
+		SystemTags: map[string]map[string]interface{}{
+			"orcl-cloud": {"managed-by": "osok"},
+		},
+		ServiceUrl:  common.String("https://analytics.example.com"),
+		TimeUpdated: now,
 	}
 }
 
@@ -774,6 +806,15 @@ func cloneStringMap(values map[string]string) map[string]string {
 		cloned[key] = value
 	}
 	return cloned
+}
+
+func analyticsStringSliceContains(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
 }
 
 func contains(haystack string, needle string) bool {

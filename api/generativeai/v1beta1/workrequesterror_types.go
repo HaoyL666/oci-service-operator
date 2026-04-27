@@ -20,7 +20,7 @@ type WorkRequestErrorSpec struct {
 type WorkRequestErrorStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
 	// A machine-usable code for the error that occurred. For a list of error codes, see
-	// API Errors (https://docs.cloud.oracle.com/iaas/Content/API/References/apierrors.htm).
+	// API Errors (https://docs.oracle.com/iaas/Content/API/References/apierrors.htm).
 	Code string `json:"code,omitempty"`
 	// A human-readable error message.
 	Message string `json:"message,omitempty"`

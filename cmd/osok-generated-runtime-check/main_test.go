@@ -98,7 +98,7 @@ func TestCollectBuildPlanFindsGeneratedRuntimePackages(t *testing.T) {
 		filepath.Join(root, "internal", "registrations", "functions_generated.go"):                                generatedRegistrationSource(),
 	})
 
-	build, err := collectBuildPlan(root, []string{"functions"}, []string{"functions"}, []string{"functions"})
+	build, err := collectBuildPlan(root, []string{"functions"}, []string{"functions"}, []string{"functions"}, true)
 	if err != nil {
 		t.Fatalf("collectBuildPlan() error = %v", err)
 	}
@@ -129,7 +129,7 @@ func TestCollectBuildPlanFindsDatabaseGeneratedRuntimePackages(t *testing.T) {
 		filepath.Join(root, "internal", "registrations", "database_generated.go"):                                              generatedRegistrationSource(),
 	})
 
-	build, err := collectBuildPlan(root, []string{"database"}, []string{"database"}, []string{"database"})
+	build, err := collectBuildPlan(root, []string{"database"}, []string{"database"}, []string{"database"}, true)
 	if err != nil {
 		t.Fatalf("collectBuildPlan() error = %v", err)
 	}
@@ -145,7 +145,7 @@ func TestCollectBuildPlanRejectsMissingRuntimePackages(t *testing.T) {
 	root := t.TempDir()
 	mustRuntimeCheckMkdirAll(t, filepath.Join(root, "internal", "registrations"))
 
-	if _, err := collectBuildPlan(root, []string{"functions"}, []string{"functions"}, []string{"functions"}); err == nil {
+	if _, err := collectBuildPlan(root, []string{"functions"}, []string{"functions"}, []string{"functions"}, true); err == nil {
 		t.Fatal("collectBuildPlan() error = nil, want missing package error")
 	}
 }
@@ -165,12 +165,41 @@ func TestCollectBuildPlanRejectsLegacyOnlyServiceManagerPackages(t *testing.T) {
 		filepath.Join(root, "internal", "registrations", "database_generated.go"):                                  generatedRegistrationSource(),
 	})
 
-	_, err := collectBuildPlan(root, []string{"database"}, []string{"database"}, []string{"database"})
+	_, err := collectBuildPlan(root, []string{"database"}, []string{"database"}, []string{"database"}, true)
 	if err == nil {
 		t.Fatal("collectBuildPlan() error = nil, want missing generated service-manager packages error")
 	}
 	if err.Error() != "no generated service-manager packages detected in snapshot" {
 		t.Fatalf("collectBuildPlan() error = %v, want %q", err, "no generated service-manager packages detected in snapshot")
+	}
+}
+
+func TestCollectBuildPlanAllowsControllerOnlySurfaceForManualServiceManagers(t *testing.T) {
+	t.Helper()
+
+	root := t.TempDir()
+	mustRuntimeCheckMkdirAll(t, filepath.Join(root, "controllers", "functions"))
+	mustRuntimeCheckMkdirAll(t, filepath.Join(root, "pkg", "servicemanager", "functions"))
+	mustRuntimeCheckMkdirAll(t, filepath.Join(root, "internal", "registrations"))
+
+	writeRuntimeCheckFiles(t, map[string]string{
+		filepath.Join(root, "controllers", "functions", "application_controller.go"):  "package functions\n",
+		filepath.Join(root, "pkg", "servicemanager", "functions", "manual_helper.go"): "package functions\n",
+		filepath.Join(root, "internal", "registrations", "functions_generated.go"):    generatedRegistrationSource(),
+	})
+
+	build, err := collectBuildPlan(root, []string{"functions"}, []string{"functions"}, []string{"functions"}, false)
+	if err != nil {
+		t.Fatalf("collectBuildPlan() error = %v", err)
+	}
+	if !slices.Equal(build.ControllerPackages, []string{"./controllers/functions"}) {
+		t.Fatalf("ControllerPackages = %v, want %v", build.ControllerPackages, []string{"./controllers/functions"})
+	}
+	if len(build.ServiceManagerPackages) != 0 {
+		t.Fatalf("ServiceManagerPackages = %v, want empty slice for manual service managers", build.ServiceManagerPackages)
+	}
+	if !slices.Equal(build.RegistrationPackages, []string{"./internal/registrations"}) {
+		t.Fatalf("RegistrationPackages = %v, want %v", build.RegistrationPackages, []string{"./internal/registrations"})
 	}
 }
 
@@ -189,7 +218,7 @@ func TestCollectBuildPlanRejectsMissingSelectedRegistrationOutputs(t *testing.T)
 		filepath.Join(root, "internal", "registrations", "events_generated.go"):                                   generatedRegistrationSource(),
 	})
 
-	_, err := collectBuildPlan(root, []string{"functions"}, []string{"functions"}, []string{"functions"})
+	_, err := collectBuildPlan(root, []string{"functions"}, []string{"functions"}, []string{"functions"}, true)
 	if err == nil {
 		t.Fatal("collectBuildPlan() error = nil, want missing selected registration output error")
 	}

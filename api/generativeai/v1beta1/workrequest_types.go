@@ -25,7 +25,7 @@ type WorkRequestResource struct {
 	// work is complete for that resource, at which point it transitions to CREATED, UPDATED,
 	// or DELETED, respectively.
 	ActionType string `json:"actionType,omitempty"`
-	// An OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) or other unique identifier for the resource.
+	// An OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) or other unique identifier for the resource.
 	Identifier string `json:"identifier,omitempty"`
 	// The URI path that you can use for a GET request to access the resource metadata.
 	EntityUri string `json:"entityUri,omitempty"`
@@ -41,9 +41,9 @@ type WorkRequestStatus struct {
 	// The status of the work request.
 	// This uses a distinct JSON name so it can coexist with the OSOK status envelope.
 	Status string `json:"sdkStatus,omitempty"`
-	// The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the work request.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the work request.
 	Id string `json:"id,omitempty"`
-	// The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the work request.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the work request.
 	CompartmentId string `json:"compartmentId,omitempty"`
 	// The resources that are affected by the work request.
 	Resources []WorkRequestResource `json:"resources,omitempty"`
