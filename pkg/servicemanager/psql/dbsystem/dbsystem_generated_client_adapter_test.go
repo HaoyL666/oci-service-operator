@@ -193,6 +193,18 @@ func TestManualDbSystemServiceClientCreatesUsingAdminSecrets(t *testing.T) {
 	}
 }
 
+func TestBuildCreateDbSystemDetailsRejectsMissingCredentials(t *testing.T) {
+	t.Parallel()
+
+	resource := testDbSystemResource()
+	resource.Spec.Credentials = psqlv1beta1.DbSystemCredentials{}
+
+	_, err := buildCreateDbSystemDetails(context.Background(), resource, nil)
+	if err == nil || !strings.Contains(err.Error(), "requires either admin secret references or spec.credentials") {
+		t.Fatalf("buildCreateDbSystemDetails() error = %v, want missing credential failure", err)
+	}
+}
+
 func TestManualDbSystemServiceClientRejectsImmutableShapeDrift(t *testing.T) {
 	t.Parallel()
 
