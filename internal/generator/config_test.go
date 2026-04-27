@@ -2298,8 +2298,11 @@ func assertPSQLRuntimeRolloutMetadata(t *testing.T, service *ServiceConfig) {
 	) {
 		t.Fatalf("psql extra RBAC markers = %v, want secret read markers only", override.Controller.ExtraRBACMarkers)
 	}
-	if len(override.SpecFields) != 2 {
-		t.Fatalf("psql specFields = %#v, want 2 secret-backed overrides", override.SpecFields)
+	if len(override.SpecFields) != 3 {
+		t.Fatalf("psql specFields = %#v, want credentials plus 2 secret-backed overrides", override.SpecFields)
+	}
+	if override.SpecFields[0].Name != "Credentials" || override.SpecFields[0].Tag != `json:"credentials,omitempty"` {
+		t.Fatalf("psql first specField = %#v, want optional credentials override", override.SpecFields[0])
 	}
 	if len(override.StatusFields) != 2 {
 		t.Fatalf("psql statusFields = %#v, want 2 secret-source tracking overrides", override.StatusFields)
