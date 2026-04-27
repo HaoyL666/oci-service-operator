@@ -3220,10 +3220,12 @@ func TestCheckedInPSQLDbSystemUsesSecretBackedAdminCredentials(t *testing.T) {
 
 	apiContent := readFile(t, filepath.Join(outputRoot, "api", "psql", "v1beta1", "dbsystem_types.go"))
 	assertContains(t, apiContent, []string{
+		`Credentials DbSystemCredentials ` + "`json:\"credentials,omitempty\"`",
 		`AdminUsername shared.UsernameSource ` + "`json:\"adminUsername,omitempty,omitzero\"`",
 		`AdminPassword shared.PasswordSource ` + "`json:\"adminPassword,omitempty,omitzero\"`",
 		`AdminUsernameSource shared.UsernameSource ` + "`json:\"adminUsernameSource,omitempty,omitzero\"`",
 		`AdminPasswordSource shared.PasswordSource ` + "`json:\"adminPasswordSource,omitempty,omitzero\"`",
+		"// The database system administrator credentials.\n\t// If omitted, `adminUsername` and `adminPassword` secret references remain available for secret-backed credential input.\n\t// +kubebuilder:validation:Optional\n\tCredentials DbSystemCredentials `json:\"credentials,omitempty\"`",
 		"// The administrative username sourced from a Kubernetes Secret in the same namespace.\n\t// The referenced Secret must contain a `username` key. If omitted, `spec.credentials.username` remains available for direct credential input.\n\t// +kubebuilder:validation:Optional\n\tAdminUsername shared.UsernameSource `json:\"adminUsername,omitempty,omitzero\"`",
 		"// The administrative password sourced from a Kubernetes Secret in the same namespace.\n\t// The referenced Secret must contain a `password` key. If omitted, `spec.credentials.passwordDetails` remains available for plaintext or OCI Vault secret input.\n\t// +kubebuilder:validation:Optional\n\tAdminPassword shared.PasswordSource `json:\"adminPassword,omitempty,omitzero\"`",
 		"// The last applied secret reference for the administrative username.\n\tAdminUsernameSource shared.UsernameSource `json:\"adminUsernameSource,omitempty,omitzero\"`",
@@ -3231,6 +3233,7 @@ func TestCheckedInPSQLDbSystemUsesSecretBackedAdminCredentials(t *testing.T) {
 		`AdminUsername string ` + "`json:\"adminUsername,omitempty\"`",
 	})
 	assertNotContains(t, apiContent, []string{
+		"// +kubebuilder:validation:Required\n\tCredentials DbSystemCredentials `json:\"credentials\"`",
 		`AdminPassword string ` + "`json:\"adminPassword,omitempty\"`",
 	})
 

@@ -210,6 +210,71 @@ func TestBuildDbSystemCreateDetailsPreservesStandaloneFalse(t *testing.T) {
 	}
 }
 
+func TestBuildDbSystemCreateDetailsProjectsExpandedParityFields(t *testing.T) {
+	t.Parallel()
+
+	details, err := buildDbSystemCreateDetails(
+		context.Background(),
+		nil,
+		&fakeCredentialClient{
+			secrets: map[string]map[string][]byte{
+				"admin-secret": {
+					"username": []byte("admin"),
+					"password": []byte("ChangeMe123!!"),
+				},
+			},
+		},
+		&mysqlv1beta1.DbSystem{
+			ObjectMeta: metav1.ObjectMeta{Namespace: "default"},
+			Spec: mysqlv1beta1.DbSystemSpec{
+				CompartmentId: "ocid1.compartment.oc1..example",
+				DisplayName:   "mysql-dbsystem-sample",
+				ShapeName:     "MySQL.VM.Standard.E3.1.8GB",
+				SubnetId:      "ocid1.subnet.oc1..example",
+				AdminUsername: usernameSecretSource("admin-secret"),
+				AdminPassword: passwordSecretSource("admin-secret"),
+				AccessMode:    "RESTRICTED",
+				DatabaseMode:  "READ_ONLY",
+				DataStorage: mysqlv1beta1.DbSystemDataStorage{
+					IsAutoExpandStorageEnabled: true,
+					MaxStorageSizeInGBs:        1024,
+				},
+				NsgIds: []string{
+					"ocid1.nsg.oc1..example",
+				},
+				CustomerContacts: []mysqlv1beta1.DbSystemCustomerContact{
+					{Email: "db-ops@example.com"},
+				},
+			},
+		},
+		"default",
+	)
+	if err != nil {
+		t.Fatalf("buildDbSystemCreateDetails() error = %v", err)
+	}
+	if details.AccessMode != mysqlsdk.DbSystemAccessModeRestricted {
+		t.Fatalf("AccessMode = %q, want %q", details.AccessMode, mysqlsdk.DbSystemAccessModeRestricted)
+	}
+	if details.DatabaseMode != mysqlsdk.DbSystemDatabaseModeOnly {
+		t.Fatalf("DatabaseMode = %q, want %q", details.DatabaseMode, mysqlsdk.DbSystemDatabaseModeOnly)
+	}
+	if details.DataStorage == nil {
+		t.Fatal("DataStorage = nil, want projected storage settings")
+	}
+	if details.DataStorage.IsAutoExpandStorageEnabled == nil || !*details.DataStorage.IsAutoExpandStorageEnabled {
+		t.Fatalf("DataStorage.IsAutoExpandStorageEnabled = %v, want true", details.DataStorage.IsAutoExpandStorageEnabled)
+	}
+	if details.DataStorage.MaxStorageSizeInGBs == nil || *details.DataStorage.MaxStorageSizeInGBs != 1024 {
+		t.Fatalf("DataStorage.MaxStorageSizeInGBs = %v, want 1024", details.DataStorage.MaxStorageSizeInGBs)
+	}
+	if !reflect.DeepEqual(details.NsgIds, []string{"ocid1.nsg.oc1..example"}) {
+		t.Fatalf("NsgIds = %#v, want projected NSG slice", details.NsgIds)
+	}
+	if len(details.CustomerContacts) != 1 || details.CustomerContacts[0].Email == nil || *details.CustomerContacts[0].Email != "db-ops@example.com" {
+		t.Fatalf("CustomerContacts = %#v, want projected customer contact", details.CustomerContacts)
+	}
+}
+
 func TestBuildDbSystemCreateDetailsExpandsSuffixOnlyAvailabilityDomainAgainstCompartmentTenancy(t *testing.T) {
 	fakeClient := &fakeDbSystemAvailabilityDomainClient{
 		response: identity.ListAvailabilityDomainsResponse{

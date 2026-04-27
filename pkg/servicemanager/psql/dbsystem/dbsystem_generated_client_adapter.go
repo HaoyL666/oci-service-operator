@@ -317,14 +317,13 @@ func buildCreateDbSystemDetails(
 	if err != nil {
 		return psqlsdk.CreateDbSystemDetails{}, err
 	}
+	if credentials == nil {
+		return psqlsdk.CreateDbSystemDetails{}, fmt.Errorf("DbSystem create resolved no credentials")
+	}
 	if isZeroValue(spec.ManagementPolicy) {
 		details.ManagementPolicy = nil
 	}
-	if credentials == nil {
-		details.Credentials = nil
-	} else {
-		details.Credentials = credentials
-	}
+	details.Credentials = credentials
 	if isZeroValue(spec.Source) {
 		details.Source = nil
 	}
