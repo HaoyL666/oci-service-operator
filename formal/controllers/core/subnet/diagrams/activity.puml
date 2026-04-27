@@ -57,7 +57,7 @@ endif
 partition "Ready and Drift Handling" {
 :Compare live OCI state against the imported\nfield surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields availability_domain, compartment_id,\ndns_label, ipv4_cidr_blocks (+3 more);
+:Reject drift before OCI mutation for force-new\nfields availability_domain, compartment_id,\ndns_label, prohibit_internet_ingress (+2 more);
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
@@ -97,7 +97,7 @@ supported drift: cidr_block, defined_tags,
 dhcp_options_id, display_name (+5 more)
 reject before mutate: force-new fields
 availability_domain, compartment_id, dns_label,
-ipv4_cidr_blocks (+3 more)
+prohibit_internet_ingress (+2 more)
 create-only fields: none
 list lookup: oci_core_subnets filters
 compartment_id, display_name, id, vcn_id (+1

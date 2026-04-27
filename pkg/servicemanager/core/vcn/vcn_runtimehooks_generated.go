@@ -77,7 +77,7 @@ func newVcnRuntimeSemantics() *generatedruntime.Semantics {
 			MatchFields:        []string{"compartmentId", "displayName", "id", "state"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{"definedTags", "displayName", "freeformTags", "isZprOnly", "securityAttributes"},
+			Mutable:       []string{"definedTags", "displayName", "freeformTags"},
 			ForceNew:      []string{"byoipv6CidrDetails", "cidrBlock", "cidrBlocks", "compartmentId", "dnsLabel", "ipv6PrivateCidrBlocks", "isIpv6Enabled", "isOracleGuaAllocationEnabled"},
 			ConflictsWith: map[string][]string{"cidrBlock": []string{"cidrBlocks"}, "cidrBlocks": []string{"cidrBlock"}},
 		},

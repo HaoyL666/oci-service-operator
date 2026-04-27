@@ -125,9 +125,7 @@ func newTestBackendSetRuntimeClientWithLookup(client *fakeGeneratedBackendSetOCI
 func TestBackendSetRuntimeSemanticsEncodesBaselineLifecycle(t *testing.T) {
 	t.Parallel()
 
-	hooks := newBackendSetRuntimeHooksWithOCIClient(&fakeGeneratedBackendSetOCIClient{})
-	applyBackendSetRuntimeHooks(&hooks)
-	got := hooks.Semantics
+	got := newBackendSetRuntimeSemantics()
 	if got == nil {
 		t.Fatal("newBackendSetRuntimeSemantics() = nil")
 	}
@@ -157,7 +155,6 @@ func TestBackendSetRuntimeSemanticsEncodesBaselineLifecycle(t *testing.T) {
 	assertBackendSetStringSliceEqual(t, "Delete.TerminalStates", got.Delete.TerminalStates, []string{"DELETED"})
 	assertBackendSetStringSliceEqual(t, "List.MatchFields", got.List.MatchFields, []string{"name"})
 	assertBackendSetStringSliceEqual(t, "Mutation.Mutable", got.Mutation.Mutable, []string{
-		"backendMaxConnections",
 		"backends",
 		"healthChecker",
 		"lbCookieSessionPersistenceConfiguration",
@@ -509,84 +506,6 @@ func TestCreateOrUpdatePreservesNestedFalseBackendSetHealthCheckerBool(t *testin
 	}
 }
 
-func TestCreateOrUpdateUpdatesBackendSetBackendMaxConnections(t *testing.T) {
-	t.Parallel()
-
-	resource := makeTrackedBackendSetResource()
-	resource.Spec.BackendMaxConnections = 512
-
-	getCalls := 0
-	var updateRequest loadbalancersdk.UpdateBackendSetRequest
-
-	client := newTestBackendSetRuntimeClient(&fakeGeneratedBackendSetOCIClient{
-		getFn: func(_ context.Context, req loadbalancersdk.GetBackendSetRequest) (loadbalancersdk.GetBackendSetResponse, error) {
-			getCalls++
-			assertBackendSetPathIdentity(t, req.LoadBalancerId, req.BackendSetName, backendSetLoadBalancerID, backendSetNameValue)
-			if getCalls == 1 {
-				return loadbalancersdk.GetBackendSetResponse{BackendSet: sdkBackendSetWithMaxConnections(resource.Status.Policy, 0)}, nil
-			}
-			return loadbalancersdk.GetBackendSetResponse{BackendSet: sdkBackendSetWithMaxConnections(resource.Status.Policy, resource.Spec.BackendMaxConnections)}, nil
-		},
-		updateFn: func(_ context.Context, req loadbalancersdk.UpdateBackendSetRequest) (loadbalancersdk.UpdateBackendSetResponse, error) {
-			updateRequest = req
-			assertBackendSetPathIdentity(t, req.LoadBalancerId, req.BackendSetName, backendSetLoadBalancerID, backendSetNameValue)
-			return loadbalancersdk.UpdateBackendSetResponse{}, nil
-		},
-	})
-
-	response, err := client.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
-	if err != nil {
-		t.Fatalf("CreateOrUpdate() error = %v", err)
-	}
-	if !response.IsSuccessful {
-		t.Fatalf("CreateOrUpdate() response = %#v, want successful update response", response)
-	}
-	if updateRequest.UpdateBackendSetDetails.BackendMaxConnections == nil || *updateRequest.UpdateBackendSetDetails.BackendMaxConnections != resource.Spec.BackendMaxConnections {
-		t.Fatalf("UpdateBackendSetDetails.BackendMaxConnections = %#v, want %d", updateRequest.UpdateBackendSetDetails.BackendMaxConnections, resource.Spec.BackendMaxConnections)
-	}
-	if got := resource.Status.BackendMaxConnections; got != resource.Spec.BackendMaxConnections {
-		t.Fatalf("status.backendMaxConnections = %d, want %d", got, resource.Spec.BackendMaxConnections)
-	}
-}
-
-func TestCreateOrUpdateClearsBackendSetBackendMaxConnectionsToUnlimited(t *testing.T) {
-	t.Parallel()
-
-	resource := makeTrackedBackendSetResource()
-	resource.Spec.BackendMaxConnections = 0
-	resource.Status.BackendMaxConnections = 512
-
-	getCalls := 0
-	var updateRequest loadbalancersdk.UpdateBackendSetRequest
-
-	client := newTestBackendSetRuntimeClient(&fakeGeneratedBackendSetOCIClient{
-		getFn: func(_ context.Context, req loadbalancersdk.GetBackendSetRequest) (loadbalancersdk.GetBackendSetResponse, error) {
-			getCalls++
-			assertBackendSetPathIdentity(t, req.LoadBalancerId, req.BackendSetName, backendSetLoadBalancerID, backendSetNameValue)
-			if getCalls == 1 {
-				return loadbalancersdk.GetBackendSetResponse{BackendSet: sdkBackendSetWithMaxConnections(resource.Status.Policy, 512)}, nil
-			}
-			return loadbalancersdk.GetBackendSetResponse{BackendSet: sdkBackendSetWithMaxConnections(resource.Status.Policy, 0)}, nil
-		},
-		updateFn: func(_ context.Context, req loadbalancersdk.UpdateBackendSetRequest) (loadbalancersdk.UpdateBackendSetResponse, error) {
-			updateRequest = req
-			assertBackendSetPathIdentity(t, req.LoadBalancerId, req.BackendSetName, backendSetLoadBalancerID, backendSetNameValue)
-			return loadbalancersdk.UpdateBackendSetResponse{}, nil
-		},
-	})
-
-	response, err := client.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
-	if err != nil {
-		t.Fatalf("CreateOrUpdate() error = %v", err)
-	}
-	if !response.IsSuccessful {
-		t.Fatalf("CreateOrUpdate() response = %#v, want successful update response", response)
-	}
-	if updateRequest.UpdateBackendSetDetails.BackendMaxConnections == nil || *updateRequest.UpdateBackendSetDetails.BackendMaxConnections != 0 {
-		t.Fatalf("UpdateBackendSetDetails.BackendMaxConnections = %#v, want explicit 0", updateRequest.UpdateBackendSetDetails.BackendMaxConnections)
-	}
-}
-
 func TestCreateOrUpdateRejectsForceNewBackendSetDrift(t *testing.T) {
 	t.Parallel()
 
@@ -831,11 +750,7 @@ func makeTrackedBackendSetResource() *loadbalancerv1beta1.BackendSet {
 }
 
 func sdkBackendSet(policy string) loadbalancersdk.BackendSet {
-	return sdkBackendSetWithMaxConnections(policy, 0)
-}
-
-func sdkBackendSetWithMaxConnections(policy string, backendMaxConnections int) loadbalancersdk.BackendSet {
-	backendSet := loadbalancersdk.BackendSet{
+	return loadbalancersdk.BackendSet{
 		Name:   common.String(backendSetNameValue),
 		Policy: common.String(policy),
 		HealthChecker: &loadbalancersdk.HealthChecker{
@@ -853,10 +768,6 @@ func sdkBackendSetWithMaxConnections(policy string, backendMaxConnections int) l
 			},
 		},
 	}
-	if backendMaxConnections != 0 {
-		backendSet.BackendMaxConnections = common.Int(backendMaxConnections)
-	}
-	return backendSet
 }
 
 func sdkBackendSetWithHealthCheckerForcePlainText(policy string, isForcePlainText bool) loadbalancersdk.BackendSet {

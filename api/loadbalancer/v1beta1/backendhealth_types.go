@@ -18,7 +18,7 @@ type BackendHealthSpec struct {
 
 // BackendHealthHealthCheckResult defines nested fields for BackendHealth.HealthCheckResult.
 type BackendHealthHealthCheckResult struct {
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet hosting the load balancer that reported this health check status.
+	// The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm) of the subnet hosting the load balancer that reported this health check status.
 	SubnetId string `json:"subnetId,omitempty"`
 	// The IP address of the health check status report provider. This identifier helps you differentiate same-subnet
 	// load balancers that report health check status.

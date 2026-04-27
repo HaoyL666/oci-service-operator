@@ -198,7 +198,6 @@ func makeSDKSubnet(id, displayName string, state coresdk.SubnetLifecycleStateEnu
 		VirtualRouterIp:         common.String("10.0.1.1"),
 		VirtualRouterMac:        common.String("00:00:00:00:00:01"),
 		AvailabilityDomain:      common.String("AD-1"),
-		Ipv4CidrBlocks:          []string{"10.0.1.0/24"},
 		DhcpOptionsId:           common.String("ocid1.dhcp.oc1..example"),
 		DisplayName:             common.String(displayName),
 		DnsLabel:                common.String("subnet123"),
@@ -255,58 +254,6 @@ func TestCreateOrUpdate_CreateSuccessAndStatusProjection(t *testing.T) {
 	assert.Equal(t, "AVAILABLE", resource.Status.LifecycleState)
 	assert.Equal(t, "test-subnet", resource.Status.DisplayName)
 	assert.Equal(t, "subnet123", resource.Status.DnsLabel)
-	assert.Equal(t, []string{"10.0.1.0/24"}, resource.Status.Ipv4CidrBlocks)
-}
-
-func TestCreateOrUpdate_CreatesSubnetFromIpv4CidrBlocksWithoutSingularCidrBlock(t *testing.T) {
-	var captured coresdk.CreateSubnetRequest
-	created := makeSDKSubnet("ocid1.subnet.oc1..create", "test-subnet", coresdk.SubnetLifecycleStateAvailable)
-	created.Ipv4CidrBlocks = []string{"10.0.2.0/24", "10.0.1.0/24"}
-
-	manager := newTestManager(&fakeSubnetOCIClient{
-		createFn: func(_ context.Context, req coresdk.CreateSubnetRequest) (coresdk.CreateSubnetResponse, error) {
-			captured = req
-			return coresdk.CreateSubnetResponse{Subnet: created}, nil
-		},
-		getFn: func(_ context.Context, req coresdk.GetSubnetRequest) (coresdk.GetSubnetResponse, error) {
-			assert.Equal(t, "ocid1.subnet.oc1..create", *req.SubnetId)
-			return coresdk.GetSubnetResponse{Subnet: created}, nil
-		},
-	})
-
-	resource := makeSpecSubnet()
-	resource.Spec.CidrBlock = ""
-	resource.Spec.Ipv4CidrBlocks = []string{"10.0.2.0/24", "10.0.1.0/24"}
-
-	resp, err := manager.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
-
-	assert.NoError(t, err)
-	assert.True(t, resp.IsSuccessful)
-	assert.Nil(t, captured.CidrBlock)
-	assert.Equal(t, []string{"10.0.1.0/24", "10.0.2.0/24"}, captured.Ipv4CidrBlocks)
-	assert.Equal(t, "10.0.1.0/24", resource.Status.CidrBlock)
-	assert.Equal(t, []string{"10.0.2.0/24", "10.0.1.0/24"}, resource.Status.Ipv4CidrBlocks)
-}
-
-func TestCreateOrUpdate_RejectsCreateWithoutIpv4CIDRInput(t *testing.T) {
-	createCalls := 0
-	manager := newTestManager(&fakeSubnetOCIClient{
-		createFn: func(_ context.Context, req coresdk.CreateSubnetRequest) (coresdk.CreateSubnetResponse, error) {
-			createCalls++
-			return coresdk.CreateSubnetResponse{}, nil
-		},
-	})
-
-	resource := makeSpecSubnet()
-	resource.Spec.CidrBlock = ""
-	resource.Spec.Ipv4CidrBlocks = nil
-
-	resp, err := manager.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
-
-	assert.Error(t, err)
-	assert.False(t, resp.IsSuccessful)
-	assert.Contains(t, err.Error(), "spec.cidrBlock or spec.ipv4CidrBlocks")
-	assert.Equal(t, 0, createCalls)
 }
 
 func TestCreateOrUpdate_AllowsDerivedProhibitPublicIPOnVNICAfterOmittedCreate(t *testing.T) {
@@ -527,35 +474,6 @@ func TestCreateOrUpdate_RejectsUnsupportedCreateOnlyDrift(t *testing.T) {
 	assert.Contains(t, err.Error(), "dnsLabel")
 	assert.Contains(t, err.Error(), "prohibitInternetIngress")
 	assert.Contains(t, err.Error(), "prohibitPublicIpOnVnic")
-	assert.Equal(t, 0, updateCalls)
-}
-
-func TestCreateOrUpdate_RejectsIpv4CidrBlocksCreateOnlyDrift(t *testing.T) {
-	updateCalls := 0
-	manager := newTestManager(&fakeSubnetOCIClient{
-		getFn: func(_ context.Context, _ coresdk.GetSubnetRequest) (coresdk.GetSubnetResponse, error) {
-			current := makeSDKSubnet("ocid1.subnet.oc1..existing", "test-subnet", coresdk.SubnetLifecycleStateAvailable)
-			current.CidrBlock = common.String("10.0.1.0/24")
-			current.Ipv4CidrBlocks = []string{"10.0.1.0/24"}
-			return coresdk.GetSubnetResponse{Subnet: current}, nil
-		},
-		updateFn: func(_ context.Context, _ coresdk.UpdateSubnetRequest) (coresdk.UpdateSubnetResponse, error) {
-			updateCalls++
-			return coresdk.UpdateSubnetResponse{}, nil
-		},
-	})
-
-	resource := makeSpecSubnet()
-	resource.Status.OsokStatus.Ocid = shared.OCID("ocid1.subnet.oc1..existing")
-	resource.Spec.CidrBlock = ""
-	resource.Spec.Ipv4CidrBlocks = []string{"10.0.2.0/24"}
-
-	resp, err := manager.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
-
-	assert.Error(t, err)
-	assert.False(t, resp.IsSuccessful)
-	assert.Contains(t, err.Error(), "create-only field drift")
-	assert.Contains(t, err.Error(), "ipv4CidrBlocks")
 	assert.Equal(t, 0, updateCalls)
 }
 

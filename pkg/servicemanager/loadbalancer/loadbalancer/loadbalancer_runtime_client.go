@@ -8,16 +8,12 @@ package loadbalancer
 import (
 	"context"
 	"fmt"
-	"reflect"
-	"strings"
 
-	"github.com/oracle/oci-go-sdk/v65/common"
 	loadbalancersdk "github.com/oracle/oci-go-sdk/v65/loadbalancer"
 	loadbalancerv1beta1 "github.com/oracle/oci-service-operator/api/loadbalancer/v1beta1"
 	"github.com/oracle/oci-service-operator/pkg/credhelper"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
-	"github.com/oracle/oci-service-operator/pkg/util"
 )
 
 type loadBalancerRuntimeOCIClient interface {
@@ -40,13 +36,6 @@ func applyLoadBalancerRuntimeHooks(hooks *LoadBalancerRuntimeHooks) {
 	}
 
 	hooks.Semantics = newReviewedLoadBalancerRuntimeSemantics()
-	hooks.BuildUpdateBody = func(_ context.Context, resource *loadbalancerv1beta1.LoadBalancer, _ string, currentResponse any) (any, bool, error) {
-		current, ok := loadBalancerFromResponse(currentResponse)
-		if !ok {
-			return nil, false, fmt.Errorf("unexpected LoadBalancer current response type %T", currentResponse)
-		}
-		return buildLoadBalancerUpdateDetails(resource, current)
-	}
 	hooks.Create.Fields = loadBalancerCreateFields()
 	hooks.Get.Fields = loadBalancerGetFields()
 	hooks.List.Fields = loadBalancerListFields()
@@ -149,18 +138,13 @@ func newReviewedLoadBalancerRuntimeSemantics() *generatedruntime.Semantics {
 				"definedTags",
 				"displayName",
 				"freeformTags",
-				"ipMode",
-				"isDeleteProtectionEnabled",
-				"isRequestIdEnabled",
-				"requestIdHeader",
-				"securityAttributes",
 			},
 			ForceNew: []string{
 				"backendSets",
 				"certificates",
 				"compartmentId",
 				"hostnames",
-				"ipv6SubnetCidr",
+				"ipMode",
 				"isPrivate",
 				"listeners",
 				"networkSecurityGroupIds",
@@ -236,84 +220,6 @@ func loadBalancerDeleteFields() []generatedruntime.RequestField {
 	}
 }
 
-func buildLoadBalancerUpdateDetails(resource *loadbalancerv1beta1.LoadBalancer, current loadbalancersdk.LoadBalancer) (loadbalancersdk.UpdateLoadBalancerDetails, bool, error) {
-	if resource == nil {
-		return loadbalancersdk.UpdateLoadBalancerDetails{}, false, fmt.Errorf("load balancer resource is nil")
-	}
-
-	update := loadbalancersdk.UpdateLoadBalancerDetails{}
-	updateNeeded := false
-
-	if resource.Spec.DisplayName != "" && stringPointerValue(current.DisplayName) != resource.Spec.DisplayName {
-		update.DisplayName = common.String(resource.Spec.DisplayName)
-		updateNeeded = true
-	}
-	if resource.Spec.FreeformTags != nil && !reflect.DeepEqual(current.FreeformTags, resource.Spec.FreeformTags) {
-		update.FreeformTags = resource.Spec.FreeformTags
-		updateNeeded = true
-	}
-	if resource.Spec.DefinedTags != nil {
-		desiredDefinedTags := *util.ConvertToOciDefinedTags(&resource.Spec.DefinedTags)
-		if !reflect.DeepEqual(current.DefinedTags, desiredDefinedTags) {
-			update.DefinedTags = desiredDefinedTags
-			updateNeeded = true
-		}
-	}
-	if resource.Spec.IpMode != "" && string(current.IpMode) != resource.Spec.IpMode {
-		update.IpMode = loadbalancersdk.UpdateLoadBalancerDetailsIpModeEnum(resource.Spec.IpMode)
-		updateNeeded = true
-	}
-	if boolPointerValue(current.IsDeleteProtectionEnabled) != resource.Spec.IsDeleteProtectionEnabled {
-		update.IsDeleteProtectionEnabled = common.Bool(resource.Spec.IsDeleteProtectionEnabled)
-		updateNeeded = true
-	}
-	if boolPointerValue(current.IsRequestIdEnabled) != resource.Spec.IsRequestIdEnabled {
-		update.IsRequestIdEnabled = common.Bool(resource.Spec.IsRequestIdEnabled)
-		updateNeeded = true
-	}
-	if shouldUpdateLoadBalancerRequestIDHeader(resource.Spec.RequestIdHeader, current.RequestIdHeader) {
-		update.RequestIdHeader = common.String(resource.Spec.RequestIdHeader)
-		updateNeeded = true
-	}
-	if resource.Spec.SecurityAttributes != nil {
-		desiredSecurityAttributes := *util.ConvertToOciDefinedTags(&resource.Spec.SecurityAttributes)
-		if !reflect.DeepEqual(current.SecurityAttributes, desiredSecurityAttributes) {
-			update.SecurityAttributes = desiredSecurityAttributes
-			updateNeeded = true
-		}
-	}
-
-	return update, updateNeeded, nil
-}
-
-func loadBalancerFromResponse(response any) (loadbalancersdk.LoadBalancer, bool) {
-	switch typed := response.(type) {
-	case loadbalancersdk.LoadBalancer:
-		return typed, true
-	case *loadbalancersdk.LoadBalancer:
-		if typed == nil {
-			return loadbalancersdk.LoadBalancer{}, false
-		}
-		return *typed, true
-	case loadbalancersdk.GetLoadBalancerResponse:
-		return typed.LoadBalancer, true
-	case *loadbalancersdk.GetLoadBalancerResponse:
-		if typed == nil {
-			return loadbalancersdk.LoadBalancer{}, false
-		}
-		return typed.LoadBalancer, true
-	default:
-		return loadbalancersdk.LoadBalancer{}, false
-	}
-}
-
-func shouldUpdateLoadBalancerRequestIDHeader(desired string, current *string) bool {
-	if strings.TrimSpace(desired) != "" {
-		return stringPointerValue(current) != desired
-	}
-	return current != nil && *current != ""
-}
-
 func loadBalancerIDField() generatedruntime.RequestField {
 	return generatedruntime.RequestField{
 		FieldName:        "LoadBalancerId",
@@ -347,15 +253,4 @@ func newLoadBalancerClientInitError(err error) error {
 		return nil
 	}
 	return fmt.Errorf("initialize LoadBalancer OCI client: %w", err)
-}
-
-func stringPointerValue(value *string) string {
-	if value == nil {
-		return ""
-	}
-	return *value
-}
-
-func boolPointerValue(value *bool) bool {
-	return value != nil && *value
 }

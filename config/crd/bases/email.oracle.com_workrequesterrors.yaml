@@ -56,9 +56,9 @@ spec:
             description: WorkRequestErrorStatus defines the observed state of WorkRequestError.
             properties:
               code:
-                description: A machine-usable code for the error that occurred. Refer
-                  to API Errors (https://docs.oracle.com/iaas/Content/API/References/apierrors.htm)
-                  for a list of error codes.
+                description: |-
+                  A machine-usable code for the error that occured. Error codes are listed on
+                  (https://docs.cloud.oracle.com/Content/API/References/apierrors.htm)
                 type: string
               message:
                 description: A human readable description of the issue encountered.
@@ -164,7 +164,7 @@ spec:
                     type: string
                 type: object
               timestamp:
-                description: The time the error occurred. An RFC3339 formatted datetime
+                description: The time the error occured. An RFC3339 formatted datetime
                   string.
                 type: string
             required:

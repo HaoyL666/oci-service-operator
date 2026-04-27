@@ -251,33 +251,6 @@
       }
     },
     {
-      "astFieldPath": "ipv4CidrBlocks",
-      "terraformFieldPath": "ipv4CidrBlocks",
-      "canonicalJoinKey": "ipv4CidrBlocks",
-      "pathShape": "scalar",
-      "ast": {
-        "updateCandidateState": "notUpdateCandidate",
-        "forceNew": true,
-        "conflictsWith": null
-      },
-      "docs": {
-        "evidenceState": "notDocumented",
-        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
-      },
-      "merge": {
-        "joinStatus": "matched",
-        "mergeCase": "replacementRequired",
-        "finalPolicy": "replacementRequired"
-      },
-      "provenance": {
-        "formalImportPath": "imports/core/subnet.json",
-        "formalSourceRef": "terraform-provider-oci",
-        "astSourceBucket": "mutation.forceNew",
-        "terraformDocsPage": "core_subnet#argument-reference",
-        "terraformDocsSection": "Argument Reference"
-      }
-    },
-    {
       "astFieldPath": "ipv6CidrBlock",
       "terraformFieldPath": "ipv6cidr_block",
       "canonicalJoinKey": "ipv6CidrBlock",

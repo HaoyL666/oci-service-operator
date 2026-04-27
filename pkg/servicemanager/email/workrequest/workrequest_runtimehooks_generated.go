@@ -63,7 +63,7 @@ func newWorkRequestDefaultRuntimeHooks(sdkClient emailsdk.EmailClient) WorkReque
 			},
 		},
 		List: runtimeOperationHooks[emailsdk.ListWorkRequestsRequest, emailsdk.ListWorkRequestsResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "CompartmentId", RequestName: "compartmentId", Contribution: "query", PreferResourceID: false}, {FieldName: "WorkRequestId", RequestName: "workRequestId", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "Status", RequestName: "status", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "OperationType", RequestName: "operationType", Contribution: "query", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "CompartmentId", RequestName: "compartmentId", Contribution: "query", PreferResourceID: false}, {FieldName: "WorkRequestId", RequestName: "workRequestId", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}},
 			Call: func(ctx context.Context, request emailsdk.ListWorkRequestsRequest) (emailsdk.ListWorkRequestsResponse, error) {
 				return sdkClient.ListWorkRequests(ctx, request)
 			},

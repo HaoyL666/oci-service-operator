@@ -108,21 +108,6 @@ func (f *fakeGeneratedLoadBalancerOCIClient) UpdateLoadBalancer(_ context.Contex
 	if request.UpdateLoadBalancerDetails.DefinedTags != nil {
 		resource.DefinedTags = request.UpdateLoadBalancerDetails.DefinedTags
 	}
-	if request.UpdateLoadBalancerDetails.IpMode != "" {
-		resource.IpMode = loadbalancersdk.LoadBalancerIpModeEnum(request.UpdateLoadBalancerDetails.IpMode)
-	}
-	if request.UpdateLoadBalancerDetails.IsDeleteProtectionEnabled != nil {
-		resource.IsDeleteProtectionEnabled = request.UpdateLoadBalancerDetails.IsDeleteProtectionEnabled
-	}
-	if request.UpdateLoadBalancerDetails.IsRequestIdEnabled != nil {
-		resource.IsRequestIdEnabled = request.UpdateLoadBalancerDetails.IsRequestIdEnabled
-	}
-	if request.UpdateLoadBalancerDetails.RequestIdHeader != nil {
-		resource.RequestIdHeader = request.UpdateLoadBalancerDetails.RequestIdHeader
-	}
-	if request.UpdateLoadBalancerDetails.SecurityAttributes != nil {
-		resource.SecurityAttributes = copyNestedAnyMap(request.UpdateLoadBalancerDetails.SecurityAttributes)
-	}
 	f.loadBalancers[stringValue(request.LoadBalancerId)] = resource
 	return loadbalancersdk.UpdateLoadBalancerResponse{}, nil
 }
@@ -172,18 +157,13 @@ func TestLoadBalancerRuntimeSemanticsEncodesBaselineLifecycle(t *testing.T) {
 		"definedTags",
 		"displayName",
 		"freeformTags",
-		"ipMode",
-		"isDeleteProtectionEnabled",
-		"isRequestIdEnabled",
-		"requestIdHeader",
-		"securityAttributes",
 	})
 	assertLoadBalancerStringSliceEqual(t, "Mutation.ForceNew", got.Mutation.ForceNew, []string{
 		"backendSets",
 		"certificates",
 		"compartmentId",
 		"hostnames",
-		"ipv6SubnetCidr",
+		"ipMode",
 		"isPrivate",
 		"listeners",
 		"networkSecurityGroupIds",
@@ -325,7 +305,6 @@ func TestCreateOrUpdateUpdatesMutableLoadBalancerFields(t *testing.T) {
 
 	existing := baseLoadBalancerResource()
 	existing.Spec.DisplayName = "existing_load_balancer"
-	existing.Spec.IpMode = "IPV4"
 
 	client := &fakeGeneratedLoadBalancerOCIClient{
 		loadBalancers: map[string]loadbalancersdk.LoadBalancer{
@@ -335,18 +314,9 @@ func TestCreateOrUpdateUpdatesMutableLoadBalancerFields(t *testing.T) {
 	serviceClient := newGeneratedLoadBalancerServiceClient(client, loggerutil.OSOKLogger{}, nil, nil)
 
 	resource := baseLoadBalancerResource()
-	resource.Spec.DisplayName = "new-name"
-	resource.Spec.IpMode = "IPV6"
-	resource.Spec.IsDeleteProtectionEnabled = true
-	resource.Spec.IsRequestIdEnabled = true
-	resource.Spec.RequestIdHeader = "X-Request-Id"
-	resource.Spec.SecurityAttributes = map[string]shared.MapValue{
-		"Oracle-ZPR": {"mode": "audit"},
-	}
 	resource.Status.Id = loadBalancerExistingID
 	resource.Status.CompartmentId = loadBalancerCompartmentID
 	resource.Status.DisplayName = "existing_load_balancer"
-	resource.Status.IpMode = "IPV4"
 	resource.Status.OsokStatus.Ocid = loadBalancerExistingID
 
 	response, err := serviceClient.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
@@ -359,100 +329,14 @@ func TestCreateOrUpdateUpdatesMutableLoadBalancerFields(t *testing.T) {
 	if len(client.updateRequests) != 1 {
 		t.Fatalf("update requests = %d, want 1", len(client.updateRequests))
 	}
-	if got := stringValue(client.updateRequests[0].UpdateLoadBalancerDetails.DisplayName); got != "new-name" {
-		t.Fatalf("update request displayName = %q, want %q", got, "new-name")
-	}
-	if got := string(client.updateRequests[0].UpdateLoadBalancerDetails.IpMode); got != "IPV6" {
-		t.Fatalf("update request ipMode = %q, want %q", got, "IPV6")
-	}
-	if got := boolValue(client.updateRequests[0].UpdateLoadBalancerDetails.IsDeleteProtectionEnabled); !got {
-		t.Fatalf("update request isDeleteProtectionEnabled = %t, want true", got)
-	}
-	if got := boolValue(client.updateRequests[0].UpdateLoadBalancerDetails.IsRequestIdEnabled); !got {
-		t.Fatalf("update request isRequestIdEnabled = %t, want true", got)
-	}
-	if got := stringValue(client.updateRequests[0].UpdateLoadBalancerDetails.RequestIdHeader); got != "X-Request-Id" {
-		t.Fatalf("update request requestIdHeader = %q, want %q", got, "X-Request-Id")
-	}
-	if got := client.updateRequests[0].UpdateLoadBalancerDetails.SecurityAttributes; !reflect.DeepEqual(got, map[string]map[string]interface{}{
-		"Oracle-ZPR": {"mode": "audit"},
-	}) {
-		t.Fatalf("update request securityAttributes = %#v, want %#v", got, map[string]map[string]interface{}{"Oracle-ZPR": {"mode": "audit"}})
+	if got := stringValue(client.updateRequests[0].UpdateLoadBalancerDetails.DisplayName); got != loadBalancerDisplayName {
+		t.Fatalf("update request displayName = %q, want %q", got, loadBalancerDisplayName)
 	}
 	if got := stringValue(client.updateRequests[0].LoadBalancerId); got != loadBalancerExistingID {
 		t.Fatalf("update request loadBalancerId = %q, want %q", got, loadBalancerExistingID)
 	}
-	if got := resource.Status.DisplayName; got != "new-name" {
-		t.Fatalf("status.displayName = %q, want %q", got, "new-name")
-	}
-	if got := resource.Status.IpMode; got != "IPV6" {
-		t.Fatalf("status.ipMode = %q, want %q", got, "IPV6")
-	}
-	if !resource.Status.IsDeleteProtectionEnabled {
-		t.Fatal("status.isDeleteProtectionEnabled = false, want true")
-	}
-	if !resource.Status.IsRequestIdEnabled {
-		t.Fatal("status.isRequestIdEnabled = false, want true")
-	}
-	if got := resource.Status.RequestIdHeader; got != "X-Request-Id" {
-		t.Fatalf("status.requestIdHeader = %q, want %q", got, "X-Request-Id")
-	}
-	if got := resource.Status.SecurityAttributes; !reflect.DeepEqual(got, map[string]shared.MapValue{
-		"Oracle-ZPR": {"mode": "audit"},
-	}) {
-		t.Fatalf("status.securityAttributes = %#v, want %#v", got, map[string]shared.MapValue{"Oracle-ZPR": {"mode": "audit"}})
-	}
-}
-
-func TestCreateOrUpdateClearsLoadBalancerRequestIDHeaderAndSecurityAttributes(t *testing.T) {
-	t.Parallel()
-
-	existing := baseLoadBalancerResource()
-	existing.Spec.IsRequestIdEnabled = true
-	existing.Spec.RequestIdHeader = "X-Custom-Id"
-	existing.Spec.SecurityAttributes = map[string]shared.MapValue{
-		"Oracle-ZPR": {"mode": "audit"},
-	}
-
-	client := &fakeGeneratedLoadBalancerOCIClient{
-		loadBalancers: map[string]loadbalancersdk.LoadBalancer{
-			loadBalancerExistingID: loadBalancerFromResource(loadBalancerExistingID, existing),
-		},
-	}
-	serviceClient := newGeneratedLoadBalancerServiceClient(client, loggerutil.OSOKLogger{}, nil, nil)
-
-	resource := baseLoadBalancerResource()
-	resource.Spec.IsRequestIdEnabled = true
-	resource.Spec.RequestIdHeader = ""
-	resource.Spec.SecurityAttributes = map[string]shared.MapValue{}
-	resource.Status.Id = loadBalancerExistingID
-	resource.Status.CompartmentId = loadBalancerCompartmentID
-	resource.Status.DisplayName = loadBalancerDisplayName
-	resource.Status.IsRequestIdEnabled = true
-	resource.Status.RequestIdHeader = "X-Custom-Id"
-	resource.Status.SecurityAttributes = map[string]shared.MapValue{
-		"Oracle-ZPR": {"mode": "audit"},
-	}
-	resource.Status.OsokStatus.Ocid = loadBalancerExistingID
-
-	response, err := serviceClient.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
-	if err != nil {
-		t.Fatalf("CreateOrUpdate() error = %v", err)
-	}
-	if !response.IsSuccessful {
-		t.Fatalf("CreateOrUpdate() response = %+v, want successful response", response)
-	}
-	if len(client.updateRequests) != 1 {
-		t.Fatalf("update requests = %d, want 1", len(client.updateRequests))
-	}
-	if got := client.updateRequests[0].UpdateLoadBalancerDetails.RequestIdHeader; got == nil || *got != "" {
-		t.Fatalf("update request requestIdHeader = %#v, want explicit empty string", got)
-	}
-	if got := client.updateRequests[0].UpdateLoadBalancerDetails.SecurityAttributes; got == nil || len(got) != 0 {
-		t.Fatalf("update request securityAttributes = %#v, want explicit empty map", got)
-	}
-	if got := resource.Status.RequestIdHeader; got != "" {
-		t.Fatalf("status.requestIdHeader = %q, want empty string", got)
+	if got := resource.Status.DisplayName; got != loadBalancerDisplayName {
+		t.Fatalf("status.displayName = %q, want %q", got, loadBalancerDisplayName)
 	}
 }
 
@@ -543,36 +427,26 @@ func loadBalancerFromResource(id string, resource *loadbalancerv1beta1.LoadBalan
 			MinimumBandwidthInMbps: common.Int(resource.Spec.ShapeDetails.MinimumBandwidthInMbps),
 			MaximumBandwidthInMbps: common.Int(resource.Spec.ShapeDetails.MaximumBandwidthInMbps),
 		},
-		IsPrivate:                 common.Bool(resource.Spec.IsPrivate),
-		IsDeleteProtectionEnabled: common.Bool(resource.Spec.IsDeleteProtectionEnabled),
-		IsRequestIdEnabled:        common.Bool(resource.Spec.IsRequestIdEnabled),
-		RequestIdHeader:           common.String(resource.Spec.RequestIdHeader),
-		NetworkSecurityGroupIds:   append([]string(nil), resource.Spec.NetworkSecurityGroupIds...),
-		FreeformTags:              copyStringMap(resource.Spec.FreeformTags),
-		DefinedTags:               copyDefinedTags(resource.Spec.DefinedTags),
-		SecurityAttributes:        copyDefinedTags(resource.Spec.SecurityAttributes),
-		IpMode:                    loadbalancersdk.LoadBalancerIpModeEnum(resource.Spec.IpMode),
+		IsPrivate:               common.Bool(resource.Spec.IsPrivate),
+		NetworkSecurityGroupIds: append([]string(nil), resource.Spec.NetworkSecurityGroupIds...),
+		FreeformTags:            copyStringMap(resource.Spec.FreeformTags),
+		DefinedTags:             copyDefinedTags(resource.Spec.DefinedTags),
 	}
 }
 
 func loadBalancerFromCreateDetails(id string, details loadbalancersdk.CreateLoadBalancerDetails) loadbalancersdk.LoadBalancer {
 	return loadbalancersdk.LoadBalancer{
-		Id:                        common.String(id),
-		CompartmentId:             details.CompartmentId,
-		DisplayName:               details.DisplayName,
-		LifecycleState:            loadbalancersdk.LoadBalancerLifecycleStateActive,
-		ShapeName:                 details.ShapeName,
-		SubnetIds:                 append([]string(nil), details.SubnetIds...),
-		ShapeDetails:              details.ShapeDetails,
-		IsPrivate:                 details.IsPrivate,
-		IsDeleteProtectionEnabled: details.IsDeleteProtectionEnabled,
-		IsRequestIdEnabled:        details.IsRequestIdEnabled,
-		RequestIdHeader:           details.RequestIdHeader,
-		NetworkSecurityGroupIds:   append([]string(nil), details.NetworkSecurityGroupIds...),
-		FreeformTags:              copyStringMap(details.FreeformTags),
-		DefinedTags:               copyNestedAnyMap(details.DefinedTags),
-		SecurityAttributes:        copyNestedAnyMap(details.SecurityAttributes),
-		IpMode:                    loadbalancersdk.LoadBalancerIpModeEnum(details.IpMode),
+		Id:                      common.String(id),
+		CompartmentId:           details.CompartmentId,
+		DisplayName:             details.DisplayName,
+		LifecycleState:          loadbalancersdk.LoadBalancerLifecycleStateActive,
+		ShapeName:               details.ShapeName,
+		SubnetIds:               append([]string(nil), details.SubnetIds...),
+		ShapeDetails:            details.ShapeDetails,
+		IsPrivate:               details.IsPrivate,
+		NetworkSecurityGroupIds: append([]string(nil), details.NetworkSecurityGroupIds...),
+		FreeformTags:            copyStringMap(details.FreeformTags),
+		DefinedTags:             copyNestedAnyMap(details.DefinedTags),
 	}
 }
 
@@ -627,13 +501,6 @@ func copyAnyMap(input map[string]interface{}) map[string]interface{} {
 func stringValue(value *string) string {
 	if value == nil {
 		return ""
-	}
-	return *value
-}
-
-func boolValue(value *bool) bool {
-	if value == nil {
-		return false
 	}
 	return *value
 }

@@ -65,7 +65,6 @@ func buildDbSystemCreateDetails(
 	if err := json.Unmarshal(payload, &details); err != nil {
 		return mysqlsdk.CreateDbSystemDetails{}, fmt.Errorf("decode mysql create request body: %w", err)
 	}
-	normalizeDbSystemCreateDetails(&details)
 
 	normalizedAD, err := normalizeDbSystemAvailabilityDomain(ctx, provider, resource.Spec.CompartmentId, resource.Spec.AvailabilityDomain)
 	if err != nil {
@@ -83,47 +82,6 @@ func buildDbSystemCreateDetails(
 	details.IsHighlyAvailable = common.Bool(resource.Spec.IsHighlyAvailable)
 
 	return details, nil
-}
-
-func normalizeDbSystemCreateDetails(details *mysqlsdk.CreateDbSystemDetails) {
-	if details == nil {
-		return
-	}
-
-	// The v65 SDK unmarshal helpers rehydrate absent slices as empty slices.
-	// Preserve legacy nil/omitted behavior so create payloads stay stable unless
-	// the user actually sets the new list-valued fields.
-	if len(details.NsgIds) == 0 {
-		details.NsgIds = nil
-	}
-	if len(details.CustomerContacts) == 0 {
-		details.CustomerContacts = nil
-	}
-	if details.BackupPolicy != nil && len(details.BackupPolicy.CopyPolicies) == 0 {
-		details.BackupPolicy.CopyPolicies = nil
-	}
-	if details.Maintenance != nil && len(details.Maintenance.MaintenanceDisabledWindows) == 0 {
-		details.Maintenance.MaintenanceDisabledWindows = nil
-	}
-	if details.ReadEndpoint != nil && len(details.ReadEndpoint.ExcludeIps) == 0 {
-		details.ReadEndpoint.ExcludeIps = nil
-	}
-	if details.TelemetryConfiguration == nil {
-		return
-	}
-	if len(details.TelemetryConfiguration.Logs) == 0 {
-		details.TelemetryConfiguration.Logs = nil
-		return
-	}
-	for i := range details.TelemetryConfiguration.Logs {
-		logging := &details.TelemetryConfiguration.Logs[i]
-		if len(logging.DestinationConfigurations) == 0 {
-			logging.DestinationConfigurations = nil
-		}
-		if len(logging.LogTypes) == 0 {
-			logging.LogTypes = nil
-		}
-	}
 }
 
 func normalizeDbSystemAvailabilityDomain(

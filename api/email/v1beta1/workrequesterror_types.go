@@ -19,11 +19,12 @@ type WorkRequestErrorSpec struct {
 // WorkRequestErrorStatus defines the observed state of WorkRequestError.
 type WorkRequestErrorStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// A machine-usable code for the error that occurred. Refer to API Errors (https://docs.oracle.com/iaas/Content/API/References/apierrors.htm) for a list of error codes.
+	// A machine-usable code for the error that occured. Error codes are listed on
+	// (https://docs.cloud.oracle.com/Content/API/References/apierrors.htm)
 	Code string `json:"code,omitempty"`
 	// A human readable description of the issue encountered.
 	Message string `json:"message,omitempty"`
-	// The time the error occurred. An RFC3339 formatted datetime string.
+	// The time the error occured. An RFC3339 formatted datetime string.
 	Timestamp string `json:"timestamp,omitempty"`
 }
 

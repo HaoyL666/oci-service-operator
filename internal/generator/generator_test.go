@@ -2386,7 +2386,7 @@ func TestExplicitCoreRuntimeArtifactsGenerateFromConfig(t *testing.T) {
 		`TerminalStates: []string{"NOT_FOUND"}`,
 		`ResponseItemsField: "Items"`,
 		`MatchFields: []string{"compartmentId", "displayName", "id", "state"}`,
-		`Mutable: []string{"definedTags", "displayName", "freeformTags", "isZprOnly", "securityAttributes"}`,
+		`Mutable: []string{"definedTags", "displayName", "freeformTags"}`,
 		`ForceNew: []string{"byoipv6CidrDetails", "cidrBlock", "cidrBlocks", "compartmentId", "dnsLabel", "ipv6PrivateCidrBlocks", "isIpv6Enabled", "isOracleGuaAllocationEnabled"}`,
 		`ConflictsWith: map[string][]string{"cidrBlock": []string{"cidrBlocks"}, "cidrBlocks": []string{"cidrBlock"}}`,
 		`AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},`,
@@ -2476,7 +2476,7 @@ func TestExplicitCoreRuntimeArtifactsGenerateFromConfig(t *testing.T) {
 				`UpdatingStates: []string{"UPDATING"}`,
 				`MatchFields: []string{"compartmentId", "displayName", "id", "state", "vcnId"}`,
 				`Mutable: []string{"cidrBlock", "definedTags", "dhcpOptionsId", "displayName", "freeformTags", "ipv6CidrBlock", "ipv6CidrBlocks", "routeTableId", "securityListIds"}`,
-				`ForceNew: []string{"availabilityDomain", "compartmentId", "dnsLabel", "ipv4CidrBlocks", "prohibitInternetIngress", "prohibitPublicIpOnVnic", "vcnId"}`,
+				`ForceNew: []string{"availabilityDomain", "compartmentId", "dnsLabel", "prohibitInternetIngress", "prohibitPublicIpOnVnic", "vcnId"}`,
 				`Fields: []generatedruntime.RequestField{{FieldName: "CreateSubnetDetails", RequestName: "CreateSubnetDetails", Contribution: "body", PreferResourceID: false}},`,
 				`Fields: []generatedruntime.RequestField{{FieldName: "SubnetId", RequestName: "subnetId", Contribution: "path", PreferResourceID: true}},`,
 			},
@@ -3220,12 +3220,10 @@ func TestCheckedInPSQLDbSystemUsesSecretBackedAdminCredentials(t *testing.T) {
 
 	apiContent := readFile(t, filepath.Join(outputRoot, "api", "psql", "v1beta1", "dbsystem_types.go"))
 	assertContains(t, apiContent, []string{
-		`Credentials DbSystemCredentials ` + "`json:\"credentials,omitempty\"`",
 		`AdminUsername shared.UsernameSource ` + "`json:\"adminUsername,omitempty,omitzero\"`",
 		`AdminPassword shared.PasswordSource ` + "`json:\"adminPassword,omitempty,omitzero\"`",
 		`AdminUsernameSource shared.UsernameSource ` + "`json:\"adminUsernameSource,omitempty,omitzero\"`",
 		`AdminPasswordSource shared.PasswordSource ` + "`json:\"adminPasswordSource,omitempty,omitzero\"`",
-		"// The database system administrator credentials.\n\t// If omitted, `adminUsername` and `adminPassword` secret references remain available for secret-backed credential input.\n\t// +kubebuilder:validation:Optional\n\tCredentials DbSystemCredentials `json:\"credentials,omitempty\"`",
 		"// The administrative username sourced from a Kubernetes Secret in the same namespace.\n\t// The referenced Secret must contain a `username` key. If omitted, `spec.credentials.username` remains available for direct credential input.\n\t// +kubebuilder:validation:Optional\n\tAdminUsername shared.UsernameSource `json:\"adminUsername,omitempty,omitzero\"`",
 		"// The administrative password sourced from a Kubernetes Secret in the same namespace.\n\t// The referenced Secret must contain a `password` key. If omitted, `spec.credentials.passwordDetails` remains available for plaintext or OCI Vault secret input.\n\t// +kubebuilder:validation:Optional\n\tAdminPassword shared.PasswordSource `json:\"adminPassword,omitempty,omitzero\"`",
 		"// The last applied secret reference for the administrative username.\n\tAdminUsernameSource shared.UsernameSource `json:\"adminUsernameSource,omitempty,omitzero\"`",
@@ -3233,7 +3231,6 @@ func TestCheckedInPSQLDbSystemUsesSecretBackedAdminCredentials(t *testing.T) {
 		`AdminUsername string ` + "`json:\"adminUsername,omitempty\"`",
 	})
 	assertNotContains(t, apiContent, []string{
-		"// +kubebuilder:validation:Required\n\tCredentials DbSystemCredentials `json:\"credentials\"`",
 		`AdminPassword string ` + "`json:\"adminPassword,omitempty\"`",
 	})
 
@@ -3451,7 +3448,7 @@ func TestCheckedInAILanguageSDKDiscoveryFindsProjectAndAuxiliaryFamilies(t *test
 		gotKinds = append(gotKinds, candidate.rawName)
 	}
 
-	wantKinds := []string{"Endpoint", "EvaluationResult", "Job", "Model", "ModelType", "Project", "WorkRequest", "WorkRequestError", "WorkRequestLog"}
+	wantKinds := []string{"Endpoint", "EvaluationResult", "Model", "ModelType", "Project", "WorkRequest", "WorkRequestError", "WorkRequestLog"}
 	if !slices.Equal(gotKinds, wantKinds) {
 		t.Fatalf("ailanguage discovered kinds = %v, want %v", gotKinds, wantKinds)
 	}
@@ -3504,7 +3501,7 @@ func TestCheckedInAIVisionSDKDiscoveryFindsProjectAndAuxiliaryFamilies(t *testin
 		gotKinds = append(gotKinds, candidate.rawName)
 	}
 
-	wantKinds := []string{"DocumentJob", "ImageJob", "Model", "Project", "StreamGroup", "StreamJob", "StreamSource", "VideoJob", "VisionPrivateEndpoint", "WorkRequest", "WorkRequestError", "WorkRequestLog"}
+	wantKinds := []string{"DocumentJob", "ImageJob", "Model", "Project", "WorkRequest", "WorkRequestError", "WorkRequestLog"}
 	if !slices.Equal(gotKinds, wantKinds) {
 		t.Fatalf("aivision discovered kinds = %v, want %v", gotKinds, wantKinds)
 	}
@@ -3557,7 +3554,7 @@ func TestCheckedInAIDocumentSDKDiscoveryFindsProjectAndAuxiliaryFamilies(t *test
 		gotKinds = append(gotKinds, candidate.rawName)
 	}
 
-	wantKinds := []string{"Model", "ModelType", "ProcessorJob", "Project", "WorkRequest", "WorkRequestError", "WorkRequestLog"}
+	wantKinds := []string{"Model", "ProcessorJob", "Project", "WorkRequest", "WorkRequestError", "WorkRequestLog"}
 	if !slices.Equal(gotKinds, wantKinds) {
 		t.Fatalf("aidocument discovered kinds = %v, want %v", gotKinds, wantKinds)
 	}
@@ -3703,21 +3700,12 @@ func TestCheckedInBDSSDKDiscoveryFindsBdsInstanceAndAuxiliaryFamilies(t *testing
 	wantKinds := []string{
 		"AutoScalingConfiguration",
 		"BdsApiKey",
-		"BdsCapacityReport",
-		"BdsCertificateConfiguration",
-		"BdsClusterVersion",
 		"BdsInstance",
 		"BdsMetastoreConfiguration",
-		"IdentityConfiguration",
-		"NodeBackup",
-		"NodeBackupConfiguration",
-		"NodeReplaceConfiguration",
 		"OsPatch",
 		"OsPatchDetail",
 		"Patch",
 		"PatchHistory",
-		"ResourcePrincipalConfiguration",
-		"SoftwareUpdate",
 		"WorkRequest",
 		"WorkRequestError",
 		"WorkRequestLog",

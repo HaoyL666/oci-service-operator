@@ -59,19 +59,14 @@
     "mutable": [
       "defined_tags",
       "display_name",
-      "freeform_tags",
-      "ip_mode",
-      "is_delete_protection_enabled",
-      "is_request_id_enabled",
-      "request_id_header",
-      "security_attributes"
+      "freeform_tags"
     ],
     "forceNew": [
       "backend_sets",
       "certificates",
       "compartment_id",
       "hostnames",
-      "ipv6_subnet_cidr",
+      "ip_mode",
       "is_private",
       "listeners",
       "network_security_group_ids",
@@ -130,7 +125,6 @@
   "notes": [
     "Seed stub; run formal-import to refresh provider facts.",
     "The published LoadBalancer runtime keeps exact compartmentId plus displayName bind lookup, read-after-write follow-up, and confirm-delete behavior in the loadbalancer/loadbalancer package instead of relying on undeclared shared generatedruntime defaults.",
-    "Pinned OCI SDK contract: UpdateLoadBalancerDetails now exposes ip_mode, is_delete_protection_enabled, is_request_id_enabled, request_id_header, and security_attributes in addition to tags and display_name.",
-    "Repo-authored semantics keep ipv6_subnet_cidr and reserved_ips create-only because the observed LoadBalancer shape still does not round-trip those request-only fields through GetLoadBalancer status projection."
+    "Only display_name, defined_tags, and freeform_tags are mutable through UpdateLoadBalancer; the remaining desired-state fields stay create-only and are rejected before OCI mutation."
   ]
 }

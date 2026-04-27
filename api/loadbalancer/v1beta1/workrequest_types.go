@@ -26,9 +26,9 @@ type WorkRequestErrorDetail struct {
 // WorkRequestStatus defines the observed state of WorkRequest.
 type WorkRequestStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the work request.
+	// The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm) of the work request.
 	Id string `json:"id,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the load balancer with which the work request
+	// The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm) of the load balancer with which the work request
 	// is associated.
 	LoadBalancerId string `json:"loadBalancerId,omitempty"`
 	// The type of action the work request represents.
@@ -48,7 +48,7 @@ type WorkRequestStatus struct {
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeAccepted string                   `json:"timeAccepted,omitempty"`
 	ErrorDetails []WorkRequestErrorDetail `json:"errorDetails,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment containing the load balancer.
+	// The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm) of the compartment containing the load balancer.
 	CompartmentId string `json:"compartmentId,omitempty"`
 	// The date and time the work request was completed, in the format defined by RFC3339.
 	// Example: `2016-08-25T21:10:29.600Z`
