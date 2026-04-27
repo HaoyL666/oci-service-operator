@@ -16,7 +16,8 @@ gaps: []
   reports `TERMINATED` before the resource disappears, that state is accepted
   as an observed pre-terminal step, but it is not the final delete confirmation.
 - Supported in-place updates are limited to `displayName`, `definedTags`, and
-  `freeformTags`, matching the pinned `UpdateVcnDetails` SDK surface.
+  `freeformTags`, `securityAttributes`, and `isZprOnly`, matching the pinned
+  `UpdateVcnDetails` SDK surface.
 - Create-only drift stays out of scope for the first handwritten runtime:
   `compartmentId`, `dnsLabel`, IPv4 CIDR shape (`cidrBlock` and `cidrBlocks`),
   and IPv6 shape inputs (`ipv6PrivateCidrBlocks`, `isIpv6Enabled`,

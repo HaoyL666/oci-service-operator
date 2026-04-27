@@ -22,7 +22,7 @@ type LoadBalancerShapeSpec struct {
 	//   *  8000Mbps
 	//   *  Flexible
 	//   Example: `flexible`
-	//   * NOTE: Fixed shapes 10Mbps, 100Mbps, 400Mbps, 8000Mbps will be deprecated from May 2023. This api
+	//   * NOTE: Fixed shapes 10Mbps, 100Mbps, 400Mbps, 8000Mbps will be deprecated after May 2023. This api
 	//   * will only support `Flexible` shape after that date.
 	// +kubebuilder:validation:Required
 	ShapeName string `json:"shapeName"`

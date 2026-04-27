@@ -17,5 +17,16 @@ gaps: []
 ## Repo-authored semantics
 
 - Create or bind is explicit. `LoadBalancer` reuses an existing load balancer addressed by the same compartment and display name instead of issuing a duplicate create, and the bind path records the resolved OCI ID into status for later observe, update, and delete retries.
-- Supported in-place updates are limited to `displayName`, `freeformTags`, and `definedTags`, matching `UpdateLoadBalancerDetails`. Drift on `compartmentId`, `shapeName`, `subnetIds`, `shapeDetails`, `isPrivate`, `ipMode`, `reservedIps`, `listeners`, `hostnames`, `backendSets`, `networkSecurityGroupIds`, `certificates`, `sslCipherSuites`, `pathRouteSets`, and `ruleSets` remains create-only and is rejected before OCI mutation.
+- Supported in-place updates are limited to `displayName`, `freeformTags`,
+  `definedTags`, `ipMode`, `isDeleteProtectionEnabled`,
+  `isRequestIdEnabled`, `requestIdHeader`, and `securityAttributes`, matching
+  the observed `UpdateLoadBalancerDetails` surface that still round-trips
+  through `GetLoadBalancer`. `ipv6SubnetCidr` and `reservedIps` remain
+  create-only in the reviewed runtime because the live `LoadBalancer` payload
+  does not project those request-only fields back into status for parity
+  comparison. Drift on `compartmentId`, `shapeName`, `subnetIds`,
+  `shapeDetails`, `isPrivate`, `listeners`, `hostnames`, `backendSets`,
+  `networkSecurityGroupIds`, `certificates`, `sslCipherSuites`,
+  `pathRouteSets`, and `ruleSets` also remains create-only and is rejected
+  before OCI mutation.
 - The generated runtime follows create and update with `GetLoadBalancer` until OCI reports `ACTIVE`. Delete keeps the finalizer until `GetLoadBalancer` or the list fallback confirms the resource is gone or terminally `DELETED`. No Kubernetes secret reads or writes are part of this path.

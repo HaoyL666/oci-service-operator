@@ -44,6 +44,11 @@ func applyBackendRuntimeHooks(hooks *BackendRuntimeHooks) {
 
 	getCall := hooks.Get.Call
 	hooks.Semantics = newBackendRuntimeSemantics()
+	if hooks.Semantics != nil {
+		semantics := *hooks.Semantics
+		semantics.Mutation.Mutable = []string{"backup", "drain", "maxConnections", "offline", "weight"}
+		hooks.Semantics = &semantics
+	}
 	hooks.Identity = generatedruntime.IdentityHooks[*loadbalancerv1beta1.Backend]{
 		Resolve: func(resource *loadbalancerv1beta1.Backend) (any, error) {
 			return resolveBackendIdentity(resource)

@@ -57,6 +57,7 @@
   },
   "mutation": {
     "mutable": [
+      "backend_max_connections",
       "backends",
       "health_checker",
       "lb_cookie_session_persistence_configuration",
@@ -122,6 +123,7 @@
   "notes": [
     "Seed stub; run formal-import to refresh provider facts.",
     "The published BackendSet runtime must keep loadBalancerId mirroring and BackendSetName path resolution in the loadbalancer/backendset package instead of shared generatedruntime.",
-    "SessionPersistenceConfiguration and LbCookieSessionPersistenceConfiguration stay mutually exclusive in the reviewed runtime contract."
+    "SessionPersistenceConfiguration and LbCookieSessionPersistenceConfiguration stay mutually exclusive in the reviewed runtime contract.",
+    "Pinned OCI SDK contract: UpdateBackendSetDetails now exposes backend_max_connections alongside the earlier policy, backend, and session persistence fields."
   ]
 }

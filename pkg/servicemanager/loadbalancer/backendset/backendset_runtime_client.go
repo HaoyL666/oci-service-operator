@@ -45,6 +45,19 @@ func applyBackendSetRuntimeHooks(hooks *BackendSetRuntimeHooks) {
 
 	getCall := hooks.Get.Call
 	hooks.Semantics = newBackendSetRuntimeSemantics()
+	if hooks.Semantics != nil {
+		semantics := *hooks.Semantics
+		semantics.Mutation.Mutable = []string{
+			"backendMaxConnections",
+			"backends",
+			"healthChecker",
+			"lbCookieSessionPersistenceConfiguration",
+			"policy",
+			"sessionPersistenceConfiguration",
+			"sslConfiguration",
+		}
+		hooks.Semantics = &semantics
+	}
 	hooks.BuildUpdateBody = func(
 		ctx context.Context,
 		resource *loadbalancerv1beta1.BackendSet,

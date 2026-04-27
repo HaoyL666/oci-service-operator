@@ -14,7 +14,7 @@ import (
 
 // NetworkSecurityGroupSpec defines the desired state of NetworkSecurityGroup.
 type NetworkSecurityGroupSpec struct {
-	// An array of NSG OCIDs (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm) associated with the load
+	// An array of NSG OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) associated with the load
 	// balancer.
 	// During the load balancer's creation, the service adds the new load balancer to the specified NSGs.
 	// The benefits of associating the load balancer with NSGs include:

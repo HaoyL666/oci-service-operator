@@ -61,9 +61,23 @@ func applyVcnRuntimeHooks(
 
 	if hooks.Semantics != nil {
 		semantics := *hooks.Semantics
-		mutation := semantics.Mutation
-		mutation.ForceNew = nil
-		semantics.Mutation = mutation
+		semantics.Mutation.Mutable = []string{
+			"definedTags",
+			"displayName",
+			"freeformTags",
+			"securityAttributes",
+			"isZprOnly",
+		}
+		semantics.Mutation.ForceNew = []string{
+			"byoipv6CidrDetails",
+			"cidrBlock",
+			"cidrBlocks",
+			"compartmentId",
+			"dnsLabel",
+			"ipv6PrivateCidrBlocks",
+			"isIpv6Enabled",
+			"isOracleGuaAllocationEnabled",
+		}
 		hooks.Semantics = &semantics
 	}
 
@@ -81,6 +95,17 @@ func applyVcnRuntimeHooks(
 			return fmt.Errorf("unexpected Vcn current response type %T", currentResponse)
 		}
 		return validateCreateOnlyDrift(resource.Spec, current)
+	}
+	hooks.BuildUpdateBody = func(_ context.Context, resource *corev1beta1.Vcn, _ string, currentResponse any) (any, bool, error) {
+		current, ok := vcnFromResponse(currentResponse)
+		if !ok {
+			return nil, false, fmt.Errorf("unexpected Vcn current response type %T", currentResponse)
+		}
+		request, updateNeeded, err := buildUpdateRequest(resource, current)
+		if err != nil {
+			return nil, false, err
+		}
+		return request.UpdateVcnDetails, updateNeeded, nil
 	}
 	hooks.WrapGeneratedClient = append(hooks.WrapGeneratedClient, func(delegate VcnServiceClient) VcnServiceClient {
 		return newVcnTrackedRecreateClient(manager, delegate, client)
@@ -295,6 +320,55 @@ func validateCreateOnlyDrift(spec corev1beta1.VcnSpec, current coresdk.Vcn) erro
 	return fmt.Errorf("Vcn create-only field drift is not supported: %s", strings.Join(unsupported, ", "))
 }
 
+func buildUpdateRequest(resource *corev1beta1.Vcn, current coresdk.Vcn) (coresdk.UpdateVcnRequest, bool, error) {
+	if current.Id == nil || strings.TrimSpace(*current.Id) == "" {
+		return coresdk.UpdateVcnRequest{}, false, fmt.Errorf("current Vcn does not expose an OCI identifier")
+	}
+
+	if err := validateCreateOnlyDrift(resource.Spec, current); err != nil {
+		return coresdk.UpdateVcnRequest{}, false, err
+	}
+
+	updateDetails := coresdk.UpdateVcnDetails{}
+	updateNeeded := false
+
+	if resource.Spec.DisplayName != "" && !stringPtrEqual(current.DisplayName, resource.Spec.DisplayName) {
+		updateDetails.DisplayName = common.String(resource.Spec.DisplayName)
+		updateNeeded = true
+	}
+	if resource.Spec.FreeformTags != nil && !reflect.DeepEqual(current.FreeformTags, resource.Spec.FreeformTags) {
+		updateDetails.FreeformTags = resource.Spec.FreeformTags
+		updateNeeded = true
+	}
+	if resource.Spec.DefinedTags != nil {
+		desiredDefinedTags := *util.ConvertToOciDefinedTags(&resource.Spec.DefinedTags)
+		if !reflect.DeepEqual(current.DefinedTags, desiredDefinedTags) {
+			updateDetails.DefinedTags = desiredDefinedTags
+			updateNeeded = true
+		}
+	}
+	if resource.Spec.SecurityAttributes != nil {
+		desiredSecurityAttributes := *util.ConvertToOciDefinedTags(&resource.Spec.SecurityAttributes)
+		if !reflect.DeepEqual(current.SecurityAttributes, desiredSecurityAttributes) {
+			updateDetails.SecurityAttributes = desiredSecurityAttributes
+			updateNeeded = true
+		}
+	}
+	if boolValue(current.IsZprOnly) != resource.Spec.IsZprOnly {
+		updateDetails.IsZprOnly = common.Bool(resource.Spec.IsZprOnly)
+		updateNeeded = true
+	}
+
+	if !updateNeeded {
+		return coresdk.UpdateVcnRequest{}, false, nil
+	}
+
+	return coresdk.UpdateVcnRequest{
+		VcnId:            current.Id,
+		UpdateVcnDetails: updateDetails,
+	}, true, nil
+}
+
 func reorderByoipv6Details(details []corev1beta1.VcnByoipv6CidrDetail, currentBlocks []string) []corev1beta1.VcnByoipv6CidrDetail {
 	if len(details) == 0 {
 		return nil
@@ -375,4 +449,8 @@ func stringPtrEqual(actual *string, expected string) bool {
 		return strings.TrimSpace(expected) == ""
 	}
 	return *actual == expected
+}
+
+func boolValue(value *bool) bool {
+	return value != nil && *value
 }

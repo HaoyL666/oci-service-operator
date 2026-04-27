@@ -100,6 +100,7 @@ func TestCreateOrUpdateExecutesMutableBackendUpdate(t *testing.T) {
 
 	resource := makeTrackedBackendResource()
 	resource.Spec.Weight = 5
+	resource.Spec.MaxConnections = 300
 	resource.Spec.Backup = true
 	resource.Spec.Drain = true
 	resource.Spec.Offline = true
@@ -112,9 +113,9 @@ func TestCreateOrUpdateExecutesMutableBackendUpdate(t *testing.T) {
 			getCalls++
 			assertBackendPathIdentity(t, req.LoadBalancerId, req.BackendSetName, req.BackendName)
 			if getCalls == 1 {
-				return loadbalancersdk.GetBackendResponse{Backend: sdkBackend(1, false, false, false)}, nil
+				return loadbalancersdk.GetBackendResponse{Backend: sdkBackendWithMaxConnections(1, false, false, false, 0)}, nil
 			}
-			return loadbalancersdk.GetBackendResponse{Backend: sdkBackend(resource.Spec.Weight, resource.Spec.Backup, resource.Spec.Drain, resource.Spec.Offline)}, nil
+			return loadbalancersdk.GetBackendResponse{Backend: sdkBackendWithMaxConnections(resource.Spec.Weight, resource.Spec.Backup, resource.Spec.Drain, resource.Spec.Offline, resource.Spec.MaxConnections)}, nil
 		},
 		updateFn: func(_ context.Context, req loadbalancersdk.UpdateBackendRequest) (loadbalancersdk.UpdateBackendResponse, error) {
 			updateRequest = req
@@ -133,6 +134,9 @@ func TestCreateOrUpdateExecutesMutableBackendUpdate(t *testing.T) {
 	if got := intValue(updateRequest.UpdateBackendDetails.Weight); got != resource.Spec.Weight {
 		t.Fatalf("UpdateBackendRequest.Weight = %d, want %d", got, resource.Spec.Weight)
 	}
+	if got := intValue(updateRequest.UpdateBackendDetails.MaxConnections); got != resource.Spec.MaxConnections {
+		t.Fatalf("UpdateBackendRequest.MaxConnections = %d, want %d", got, resource.Spec.MaxConnections)
+	}
 	if got := boolValue(updateRequest.UpdateBackendDetails.Backup); got != resource.Spec.Backup {
 		t.Fatalf("UpdateBackendRequest.Backup = %t, want %t", got, resource.Spec.Backup)
 	}
@@ -144,6 +148,9 @@ func TestCreateOrUpdateExecutesMutableBackendUpdate(t *testing.T) {
 	}
 	if got := resource.Status.Weight; got != resource.Spec.Weight {
 		t.Fatalf("status.weight = %d, want %d", got, resource.Spec.Weight)
+	}
+	if got := resource.Status.MaxConnections; got != resource.Spec.MaxConnections {
+		t.Fatalf("status.maxConnections = %d, want %d", got, resource.Spec.MaxConnections)
 	}
 	if got := resource.Status.Backup; got != resource.Spec.Backup {
 		t.Fatalf("status.backup = %t, want %t", got, resource.Spec.Backup)
@@ -334,7 +341,11 @@ func makeTrackedBackendResource() *loadbalancerv1beta1.Backend {
 }
 
 func sdkBackend(weight int, backup, drain, offline bool) loadbalancersdk.Backend {
-	return loadbalancersdk.Backend{
+	return sdkBackendWithMaxConnections(weight, backup, drain, offline, 0)
+}
+
+func sdkBackendWithMaxConnections(weight int, backup, drain, offline bool, maxConnections int) loadbalancersdk.Backend {
+	backend := loadbalancersdk.Backend{
 		Name:      common.String(backendName),
 		IpAddress: common.String(backendIP),
 		Port:      common.Int(backendPort),
@@ -343,6 +354,10 @@ func sdkBackend(weight int, backup, drain, offline bool) loadbalancersdk.Backend
 		Drain:     common.Bool(drain),
 		Offline:   common.Bool(offline),
 	}
+	if maxConnections != 0 {
+		backend.MaxConnections = common.Int(maxConnections)
+	}
+	return backend
 }
 
 func assertBackendPathIdentity(t *testing.T, loadBalancer, backendSet, backendNameValue *string) {
