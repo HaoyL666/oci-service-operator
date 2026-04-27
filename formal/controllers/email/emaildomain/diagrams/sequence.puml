@@ -68,7 +68,8 @@ else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
 Supported update surface: defined_tags,
-description, freeform_tags
+description, domain_verification_id,
+freeform_tags
 Reject before mutate: force-new fields
 compartment_id, name
 Lookup filters: compartment_id, id,
@@ -78,7 +79,7 @@ opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateEmailDomain only for\nmutable fields defined_tags,\ndescription, freeform_tags
+ServiceManager -> OCI: Apply UpdateEmailDomain only for\nmutable fields defined_tags,\ndescription, domain_verification_id,\nfreeform_tags
 loop update pending UPDATING
 ServiceManager -> OCI: GetEmailDomain
 end
@@ -113,7 +114,7 @@ requeue: provisioning, updating, terminating
 provider states: create CREATING; update
 UPDATING; delete DELETING
 supported drift: defined_tags, description,
-freeform_tags
+domain_verification_id, freeform_tags
 reject before mutate: force-new fields
 compartment_id, name
 create-only fields: none
@@ -129,6 +130,10 @@ Requeue continues while OCI reports CREATING,
 UPDATING, or DELETING, and ACTIVE is the
 steady-state success target for create or
 update.
+In-place updates include description,
+domainVerificationId, freeformTags, and
+definedTags; compartmentId and name still
+require replacement.
 Delete retains the finalizer until
 GetEmailDomain or list fallback confirms DELETED
 or not found, and no Kubernetes secret side

@@ -77,7 +77,7 @@ func newEmailDomainRuntimeSemantics() *generatedruntime.Semantics {
 			MatchFields:        []string{"compartmentId", "id", "lifecycleState", "name"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{"definedTags", "description", "freeformTags"},
+			Mutable:       []string{"definedTags", "description", "domainVerificationId", "freeformTags"},
 			ForceNew:      []string{"compartmentId", "name"},
 			ConflictsWith: map[string][]string{},
 		},

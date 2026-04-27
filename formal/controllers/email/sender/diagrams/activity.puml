@@ -55,13 +55,13 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
 :Reject drift before OCI mutation for force-new\nfields compartment_id, email_address;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateSender only for mutable fields\ndefined_tags, freeform_tags;
+:Apply UpdateSender only for mutable fields\ndefined_tags, email_ip_pool_id, freeform_tags;
 else (no)
 :Skip the no-op mutation path;
 endif
@@ -93,7 +93,8 @@ retain-until-confirmed-delete
 requeue: provisioning, terminating
 provider states: create CREATING; update none;
 delete DELETING
-supported drift: defined_tags, freeform_tags
+supported drift: defined_tags, email_ip_pool_id,
+freeform_tags
 reject before mutate: force-new fields
 compartment_id, email_address
 create-only fields: none
@@ -105,9 +106,9 @@ The generated runtime reuses an existing sender
 by exact compartmentId plus emailAddress match
 before create.
 Ready state maps to OCI ACTIVE.
-In-place updates are limited to freeformTags and
-definedTags; compartmentId and emailAddress
-require replacement.
+In-place updates are limited to freeformTags,
+definedTags, and emailIpPoolId; compartmentId
+and emailAddress require replacement.
 Create and update use read-after-write follow-up
 through GetSender before the controller reports
 steady state.

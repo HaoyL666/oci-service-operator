@@ -77,7 +77,7 @@ func newSenderRuntimeSemantics() *generatedruntime.Semantics {
 			MatchFields:        []string{"compartmentId", "emailAddress", "lifecycleState"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{"definedTags", "freeformTags"},
+			Mutable:       []string{"definedTags", "emailIpPoolId", "freeformTags"},
 			ForceNew:      []string{"compartmentId", "emailAddress"},
 			ConflictsWith: map[string][]string{},
 		},

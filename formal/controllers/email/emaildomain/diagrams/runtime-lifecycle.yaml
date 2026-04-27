@@ -10,7 +10,18 @@ states:
   - updating
   - terminating
   - failed
+repoAuthored:
+  mutation:
+    mutable:
+      - defined_tags
+      - description
+      - domain_verification_id
+      - freeform_tags
+    forceNew:
+      - compartment_id
+      - name
 notes:
   - The generated runtime binds through ListEmailDomains on compartmentId plus name before create when no OCI identifier is already recorded.
   - Requeue continues while OCI reports CREATING, UPDATING, or DELETING, and ACTIVE is the steady-state success target for create or update.
+  - In-place updates include description, domainVerificationId, freeformTags, and definedTags; compartmentId and name still require replacement.
   - Delete retains the finalizer until GetEmailDomain or list fallback confirms DELETED or not found, and no Kubernetes secret side effects are part of this path.

@@ -68,7 +68,7 @@ else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
 Supported update surface: defined_tags,
-freeform_tags
+email_ip_pool_id, freeform_tags
 Reject before mutate: force-new fields
 compartment_id, email_address
 Lookup filters: compartment_id,
@@ -78,7 +78,7 @@ opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateSender only for mutable\nfields defined_tags, freeform_tags
+ServiceManager -> OCI: Apply UpdateSender only for mutable\nfields defined_tags,\nemail_ip_pool_id, freeform_tags
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
 end
@@ -109,7 +109,8 @@ retain-until-confirmed-delete
 requeue: provisioning, terminating
 provider states: create CREATING; update none;
 delete DELETING
-supported drift: defined_tags, freeform_tags
+supported drift: defined_tags, email_ip_pool_id,
+freeform_tags
 reject before mutate: force-new fields
 compartment_id, email_address
 create-only fields: none
@@ -121,9 +122,9 @@ The generated runtime reuses an existing sender
 by exact compartmentId plus emailAddress match
 before create.
 Ready state maps to OCI ACTIVE.
-In-place updates are limited to freeformTags and
-definedTags; compartmentId and emailAddress
-require replacement.
+In-place updates are limited to freeformTags,
+definedTags, and emailIpPoolId; compartmentId
+and emailAddress require replacement.
 Create and update use read-after-write follow-up
 through GetSender before the controller reports
 steady state.

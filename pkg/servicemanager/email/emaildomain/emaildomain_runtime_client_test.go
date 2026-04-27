@@ -344,6 +344,76 @@ func TestEmailDomainCreateOrUpdateUpdatesMutableDescription(t *testing.T) {
 	}
 }
 
+func TestEmailDomainCreateOrUpdateUpdatesMutableDomainVerificationID(t *testing.T) {
+	t.Parallel()
+
+	const existingID = "ocid1.emaildomain.oc1..existing"
+
+	resource := makeSpecEmailDomain()
+	resource.Spec.DomainVerificationId = "ocid1.domainverification.oc1..new"
+	resource.Status.Id = existingID
+	resource.Status.OsokStatus.Ocid = shared.OCID(existingID)
+
+	getCalls := 0
+	updateCalls := 0
+
+	manager := newTestEmailDomainManager(&fakeEmailDomainOCIClient{
+		getFn: func(_ context.Context, req emailsdk.GetEmailDomainRequest) (emailsdk.GetEmailDomainResponse, error) {
+			getCalls++
+			if req.EmailDomainId == nil || *req.EmailDomainId != existingID {
+				t.Fatalf("GetEmailDomainRequest.EmailDomainId = %v, want %q", req.EmailDomainId, existingID)
+			}
+			emailDomain := makeSDKEmailDomain(existingID, resource.Spec.Name, resource.Spec.CompartmentId, resource.Spec.Description, emailsdk.EmailDomainLifecycleStateActive)
+			if getCalls > 1 {
+				emailDomain.DomainVerificationId = common.String(resource.Spec.DomainVerificationId)
+			}
+			return emailsdk.GetEmailDomainResponse{EmailDomain: emailDomain}, nil
+		},
+		updateFn: func(_ context.Context, req emailsdk.UpdateEmailDomainRequest) (emailsdk.UpdateEmailDomainResponse, error) {
+			updateCalls++
+			if req.EmailDomainId == nil || *req.EmailDomainId != existingID {
+				t.Fatalf("UpdateEmailDomainRequest.EmailDomainId = %v, want %q", req.EmailDomainId, existingID)
+			}
+			if req.DomainVerificationId == nil || *req.DomainVerificationId != resource.Spec.DomainVerificationId {
+				t.Fatalf("UpdateEmailDomainRequest.DomainVerificationId = %v, want %q", req.DomainVerificationId, resource.Spec.DomainVerificationId)
+			}
+			if req.Description != nil {
+				t.Fatalf("UpdateEmailDomainRequest.Description = %v, want nil when unchanged", req.Description)
+			}
+			if req.FreeformTags != nil {
+				t.Fatalf("UpdateEmailDomainRequest.FreeformTags = %#v, want nil when unchanged", req.FreeformTags)
+			}
+			if req.DefinedTags != nil {
+				t.Fatalf("UpdateEmailDomainRequest.DefinedTags = %#v, want nil when unchanged", req.DefinedTags)
+			}
+			return emailsdk.UpdateEmailDomainResponse{}, nil
+		},
+	})
+
+	response, err := manager.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	if err != nil {
+		t.Fatalf("CreateOrUpdate() error = %v", err)
+	}
+	if !response.IsSuccessful {
+		t.Fatalf("CreateOrUpdate() response = %#v, want success", response)
+	}
+	if response.ShouldRequeue {
+		t.Fatalf("CreateOrUpdate() response = %#v, want no requeue after ACTIVE update follow-up", response)
+	}
+	if updateCalls != 1 {
+		t.Fatalf("UpdateEmailDomain() calls = %d, want 1", updateCalls)
+	}
+	if getCalls != 2 {
+		t.Fatalf("GetEmailDomain() calls = %d, want 2", getCalls)
+	}
+	if got := resource.Status.DomainVerificationId; got != resource.Spec.DomainVerificationId {
+		t.Fatalf("status.domainVerificationId = %q, want %q", got, resource.Spec.DomainVerificationId)
+	}
+	if got := resource.Status.LifecycleState; got != "ACTIVE" {
+		t.Fatalf("status.lifecycleState = %q, want ACTIVE", got)
+	}
+}
+
 func TestEmailDomainCreateOrUpdateRejectsForceNewNameDrift(t *testing.T) {
 	t.Parallel()
 
