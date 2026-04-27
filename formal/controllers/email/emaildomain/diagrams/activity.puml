@@ -55,13 +55,13 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
 :Reject drift before OCI mutation for force-new\nfields compartment_id, name;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateEmailDomain only for mutable\nfields defined_tags, description,\nfreeform_tags;
+:Apply UpdateEmailDomain only for mutable\nfields defined_tags, description,\ndomain_verification_id, freeform_tags;
 else (no)
 :Skip the no-op mutation path;
 endif
@@ -94,7 +94,7 @@ requeue: provisioning, updating, terminating
 provider states: create CREATING; update
 UPDATING; delete DELETING
 supported drift: defined_tags, description,
-freeform_tags
+domain_verification_id, freeform_tags
 reject before mutate: force-new fields
 compartment_id, name
 create-only fields: none
@@ -110,6 +110,10 @@ Requeue continues while OCI reports CREATING,
 UPDATING, or DELETING, and ACTIVE is the
 steady-state success target for create or
 update.
+In-place updates include description,
+domainVerificationId, freeformTags, and
+definedTags; compartmentId and name still
+require replacement.
 Delete retains the finalizer until
 GetEmailDomain or list fallback confirms DELETED
 or not found, and no Kubernetes secret side

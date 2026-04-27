@@ -40,7 +40,7 @@ observe --> retryable : OCI state in CREATING,\nDELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndefined_tags, freeform_tags
+evaluate_ready --> apply_update : supported mutable drift for\ndefined_tags,\nemail_ip_pool_id,\nfreeform_tags
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -71,7 +71,8 @@ retain-until-confirmed-delete
 requeue: provisioning, terminating
 provider states: create CREATING; update none;
 delete DELETING
-supported drift: defined_tags, freeform_tags
+supported drift: defined_tags, email_ip_pool_id,
+freeform_tags
 reject before mutate: force-new fields
 compartment_id, email_address
 create-only fields: none
@@ -83,9 +84,9 @@ The generated runtime reuses an existing sender
 by exact compartmentId plus emailAddress match
 before create.
 Ready state maps to OCI ACTIVE.
-In-place updates are limited to freeformTags and
-definedTags; compartmentId and emailAddress
-require replacement.
+In-place updates are limited to freeformTags,
+definedTags, and emailIpPoolId; compartmentId
+and emailAddress require replacement.
 Create and update use read-after-write follow-up
 through GetSender before the controller reports
 steady state.

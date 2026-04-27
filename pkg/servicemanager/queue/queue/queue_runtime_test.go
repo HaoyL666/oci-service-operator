@@ -230,6 +230,28 @@ func makeSDKQueue(id, displayName string, state queuesdk.QueueLifecycleStateEnum
 	}
 }
 
+func makeQueueSpecCapabilities() []queuev1beta1.QueueCapability {
+	return []queuev1beta1.QueueCapability{
+		{
+			Type:                            string(queuesdk.QueueCapabilityConsumerGroups),
+			IsPrimaryConsumerGroupEnabled:   true,
+			PrimaryConsumerGroupDisplayName: "primary-consumer-group",
+			PrimaryConsumerGroupFilter:      "priority = 'high'",
+			PrimaryConsumerGroupDeadLetterQueueDeliveryCount: 7,
+		},
+		{
+			Type: string(queuesdk.QueueCapabilityLargeMessages),
+		},
+	}
+}
+
+func makeSDKQueueCapabilities() []queuesdk.CapabilityDetails {
+	return []queuesdk.CapabilityDetails{
+		queuesdk.ConsumerGroupsCapabilityDetails{},
+		queuesdk.LargeMessagesCapabilityDetails{},
+	}
+}
+
 func makeWorkRequest(id string, status queuesdk.OperationStatusEnum, action queuesdk.ActionTypeEnum, queueID string) queuesdk.WorkRequest {
 	operationType := queuesdk.OperationTypeCreateQueue
 	switch action {
@@ -716,7 +738,10 @@ func TestQueueRuntime_ProjectStatusPreservesWorkRequestIDs(t *testing.T) {
 	resource.Status.UpdateWorkRequestId = "wr-update-status"
 	resource.Status.DeleteWorkRequestId = "wr-delete-status"
 
-	err := projectQueueStatus(resource, makeSDKQueue("ocid1.queue.oc1..existing", "queue-sample", queuesdk.QueueLifecycleStateUpdating))
+	current := makeSDKQueue("ocid1.queue.oc1..existing", "queue-sample", queuesdk.QueueLifecycleStateUpdating)
+	current.Capabilities = makeSDKQueueCapabilities()
+
+	err := projectQueueStatus(resource, current)
 
 	assert.NoError(t, err)
 	assert.Equal(t, "wr-create-status", resource.Status.CreateWorkRequestId)
@@ -726,12 +751,76 @@ func TestQueueRuntime_ProjectStatusPreservesWorkRequestIDs(t *testing.T) {
 	assert.Equal(t, "queue-sample", resource.Status.DisplayName)
 	assert.Equal(t, "UPDATING", resource.Status.LifecycleState)
 	assert.Equal(t, "https://cell-1.queue.messaging.us-phoenix-1.oci.oraclecloud.com", resource.Status.MessagesEndpoint)
+	if assert.Len(t, resource.Status.Capabilities, 2) {
+		assert.Equal(t, string(queuesdk.QueueCapabilityConsumerGroups), resource.Status.Capabilities[0].Type)
+		assert.Equal(t, string(queuesdk.QueueCapabilityLargeMessages), resource.Status.Capabilities[1].Type)
+	}
 	assert.Equal(t, string(shared.Updating), resource.Status.OsokStatus.Reason)
 	assert.Equal(t, "queue update work request is IN_PROGRESS", resource.Status.OsokStatus.Message)
 	if assert.NotNil(t, resource.Status.OsokStatus.Async.Current) {
 		assert.Equal(t, "wr-update-status", resource.Status.OsokStatus.Async.Current.WorkRequestID)
 		assert.Equal(t, shared.OSOKAsyncPhaseUpdate, resource.Status.OsokStatus.Async.Current.Phase)
 	}
+}
+
+func TestQueueRuntime_BuildCreateDetailsIncludesCapabilities(t *testing.T) {
+	resource := makeSpecQueue()
+	resource.Spec.Capabilities = makeQueueSpecCapabilities()
+
+	details, err := buildCreateQueueDetails(resource.Spec)
+	if !assert.NoError(t, err) {
+		return
+	}
+	if !assert.Len(t, details.Capabilities, 2) {
+		return
+	}
+
+	consumerGroups, ok := details.Capabilities[0].(queuesdk.ConsumerGroupsCapabilityDetails)
+	if assert.True(t, ok) {
+		if assert.NotNil(t, consumerGroups.IsPrimaryConsumerGroupEnabled) {
+			assert.True(t, *consumerGroups.IsPrimaryConsumerGroupEnabled)
+		}
+		if assert.NotNil(t, consumerGroups.PrimaryConsumerGroupDisplayName) {
+			assert.Equal(t, "primary-consumer-group", *consumerGroups.PrimaryConsumerGroupDisplayName)
+		}
+		if assert.NotNil(t, consumerGroups.PrimaryConsumerGroupFilter) {
+			assert.Equal(t, "priority = 'high'", *consumerGroups.PrimaryConsumerGroupFilter)
+		}
+		if assert.NotNil(t, consumerGroups.PrimaryConsumerGroupDeadLetterQueueDeliveryCount) {
+			assert.Equal(t, 7, *consumerGroups.PrimaryConsumerGroupDeadLetterQueueDeliveryCount)
+		}
+	}
+	_, ok = details.Capabilities[1].(queuesdk.LargeMessagesCapabilityDetails)
+	assert.True(t, ok)
+}
+
+func TestQueueRuntime_BuildUpdateBodyAddsCapabilitiesWhenMissing(t *testing.T) {
+	resource := makeSpecQueue()
+	resource.Spec.Capabilities = makeQueueSpecCapabilities()
+	current := makeSDKQueue("ocid1.queue.oc1..existing", "queue-sample", queuesdk.QueueLifecycleStateActive)
+
+	details, updateNeeded, err := buildQueueUpdateBody(resource, current)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.True(t, updateNeeded)
+	assert.Len(t, details.Capabilities, 2)
+}
+
+func TestQueueRuntime_BuildUpdateBodyTreatsMatchingCapabilityTypesAsInSync(t *testing.T) {
+	resource := makeSpecQueue()
+	resource.Spec.Capabilities = makeQueueSpecCapabilities()
+	current := makeSDKQueue("ocid1.queue.oc1..existing", "queue-sample", queuesdk.QueueLifecycleStateActive)
+	current.Capabilities = makeSDKQueueCapabilities()
+
+	details, updateNeeded, err := buildQueueUpdateBody(resource, current)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.False(t, updateNeeded)
+	assert.Empty(t, details.Capabilities)
 }
 
 func TestQueueRuntime_ObserveNoOpWhenStateMatches(t *testing.T) {

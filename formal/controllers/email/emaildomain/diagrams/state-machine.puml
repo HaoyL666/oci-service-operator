@@ -40,7 +40,7 @@ observe --> retryable : OCI state in CREATING,\nUPDATING, DELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndefined_tags, description,\nfreeform_tags
+evaluate_ready --> apply_update : supported mutable drift for\ndefined_tags, description,\ndomain_verification_id (+1\nmore)
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -72,7 +72,7 @@ requeue: provisioning, updating, terminating
 provider states: create CREATING; update
 UPDATING; delete DELETING
 supported drift: defined_tags, description,
-freeform_tags
+domain_verification_id, freeform_tags
 reject before mutate: force-new fields
 compartment_id, name
 create-only fields: none
@@ -88,6 +88,10 @@ Requeue continues while OCI reports CREATING,
 UPDATING, or DELETING, and ACTIVE is the
 steady-state success target for create or
 update.
+In-place updates include description,
+domainVerificationId, freeformTags, and
+definedTags; compartmentId and name still
+require replacement.
 Delete retains the finalizer until
 GetEmailDomain or list fallback confirms DELETED
 or not found, and no Kubernetes secret side

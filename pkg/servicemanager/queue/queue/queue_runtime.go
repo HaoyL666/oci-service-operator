@@ -7,8 +7,10 @@ package queue
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 	"time"
 
@@ -81,7 +83,7 @@ func applyQueueRuntimeHooks(
 		if resource == nil {
 			return nil, fmt.Errorf("Queue resource is nil")
 		}
-		return buildCreateQueueDetails(resource.Spec), nil
+		return buildCreateQueueDetails(resource.Spec)
 	}
 	hooks.BuildUpdateBody = func(
 		_ context.Context,
@@ -154,6 +156,19 @@ func buildQueueUpdateBody(
 		updateDetails.CustomEncryptionKeyId = common.String(resource.Spec.CustomEncryptionKeyId)
 		updateNeeded = true
 	}
+	if len(resource.Spec.Capabilities) > 0 {
+		capabilitiesMatch, err := queueCapabilityTypesMatch(resource.Spec.Capabilities, current.Capabilities)
+		if err != nil {
+			return queuesdk.UpdateQueueDetails{}, false, err
+		}
+		if !capabilitiesMatch {
+			updateDetails.Capabilities, err = buildQueueCapabilityDetails(resource.Spec.Capabilities)
+			if err != nil {
+				return queuesdk.UpdateQueueDetails{}, false, err
+			}
+			updateNeeded = true
+		}
+	}
 
 	desiredFreeformTags := desiredQueueFreeformTagsForUpdate(resource.Spec.FreeformTags, current.FreeformTags)
 	if !reflect.DeepEqual(current.FreeformTags, desiredFreeformTags) {
@@ -181,6 +196,10 @@ func projectQueueStatus(resource *queuev1beta1.Queue, response any) error {
 	if !ok {
 		return nil
 	}
+	capabilities, err := queueStatusCapabilities(current.Capabilities)
+	if err != nil {
+		return err
+	}
 
 	resource.Status = queuev1beta1.QueueStatus{
 		OsokStatus:                   resource.Status.OsokStatus,
@@ -201,6 +220,7 @@ func projectQueueStatus(resource *queuev1beta1.Queue, response any) error {
 		DefinedTags:                  convertOCIToStatusDefinedTags(current.DefinedTags),
 		SystemTags:                   convertOCIToStatusDefinedTags(current.SystemTags),
 		ChannelConsumptionLimit:      intValue(current.ChannelConsumptionLimit),
+		Capabilities:                 capabilities,
 		CreateWorkRequestId:          resource.Status.CreateWorkRequestId,
 		UpdateWorkRequestId:          resource.Status.UpdateWorkRequestId,
 		DeleteWorkRequestId:          resource.Status.DeleteWorkRequestId,
@@ -372,10 +392,11 @@ func queueFromSummary(summary queuesdk.QueueSummary) queuesdk.Queue {
 		FreeformTags:     summary.FreeformTags,
 		DefinedTags:      summary.DefinedTags,
 		SystemTags:       summary.SystemTags,
+		Capabilities:     queueCapabilitiesFromSummary(summary.Capabilities),
 	}
 }
 
-func buildCreateQueueDetails(spec queuev1beta1.QueueSpec) queuesdk.CreateQueueDetails {
+func buildCreateQueueDetails(spec queuev1beta1.QueueSpec) (queuesdk.CreateQueueDetails, error) {
 	createDetails := queuesdk.CreateQueueDetails{
 		DisplayName:   common.String(spec.DisplayName),
 		CompartmentId: common.String(spec.CompartmentId),
@@ -399,6 +420,15 @@ func buildCreateQueueDetails(spec queuev1beta1.QueueSpec) queuesdk.CreateQueueDe
 	if spec.CustomEncryptionKeyId != "" {
 		createDetails.CustomEncryptionKeyId = common.String(spec.CustomEncryptionKeyId)
 	}
+	if len(spec.Capabilities) > 0 {
+		capabilities, err := buildQueueCapabilityDetails(spec.Capabilities)
+		if err != nil {
+			return queuesdk.CreateQueueDetails{}, err
+		}
+		if len(capabilities) > 0 {
+			createDetails.Capabilities = capabilities
+		}
+	}
 	if spec.FreeformTags != nil {
 		createDetails.FreeformTags = cloneStringMap(spec.FreeformTags)
 	}
@@ -406,7 +436,270 @@ func buildCreateQueueDetails(spec queuev1beta1.QueueSpec) queuesdk.CreateQueueDe
 		createDetails.DefinedTags = *util.ConvertToOciDefinedTags(&spec.DefinedTags)
 	}
 
-	return createDetails
+	return createDetails, nil
+}
+
+func queueCapabilitiesFromSummary(capabilities []queuesdk.QueueCapabilityEnum) []queuesdk.CapabilityDetails {
+	if len(capabilities) == 0 {
+		return nil
+	}
+
+	result := make([]queuesdk.CapabilityDetails, 0, len(capabilities))
+	for _, capability := range capabilities {
+		switch capability {
+		case queuesdk.QueueCapabilityConsumerGroups:
+			result = append(result, queuesdk.ConsumerGroupsCapabilityDetails{})
+		case queuesdk.QueueCapabilityLargeMessages:
+			result = append(result, queuesdk.LargeMessagesCapabilityDetails{})
+		}
+	}
+	return result
+}
+
+func buildQueueCapabilityDetails(specCapabilities []queuev1beta1.QueueCapability) ([]queuesdk.CapabilityDetails, error) {
+	if len(specCapabilities) == 0 {
+		return nil, nil
+	}
+
+	result := make([]queuesdk.CapabilityDetails, 0, len(specCapabilities))
+	for _, specCapability := range specCapabilities {
+		capability, err := buildQueueCapabilityDetail(specCapability)
+		if err != nil {
+			return nil, err
+		}
+		if capability != nil {
+			result = append(result, capability)
+		}
+	}
+	return result, nil
+}
+
+func buildQueueCapabilityDetail(specCapability queuev1beta1.QueueCapability) (queuesdk.CapabilityDetails, error) {
+	capabilityType, err := queueCapabilityTypeFromSpec(specCapability)
+	if err != nil {
+		return nil, err
+	}
+
+	switch capabilityType {
+	case "":
+		return nil, nil
+	case string(queuesdk.QueueCapabilityConsumerGroups):
+		details := queuesdk.ConsumerGroupsCapabilityDetails{}
+		if rawJSON := strings.TrimSpace(specCapability.JsonData); rawJSON != "" {
+			if err := json.Unmarshal([]byte(rawJSON), &details); err != nil {
+				return nil, fmt.Errorf("decode Queue consumer groups capability jsonData: %w", err)
+			}
+		}
+		if specCapability.IsPrimaryConsumerGroupEnabled {
+			details.IsPrimaryConsumerGroupEnabled = common.Bool(specCapability.IsPrimaryConsumerGroupEnabled)
+		}
+		if specCapability.PrimaryConsumerGroupDisplayName != "" {
+			details.PrimaryConsumerGroupDisplayName = common.String(specCapability.PrimaryConsumerGroupDisplayName)
+		}
+		if specCapability.PrimaryConsumerGroupFilter != "" {
+			details.PrimaryConsumerGroupFilter = common.String(specCapability.PrimaryConsumerGroupFilter)
+		}
+		if specCapability.PrimaryConsumerGroupDeadLetterQueueDeliveryCount != 0 {
+			details.PrimaryConsumerGroupDeadLetterQueueDeliveryCount = common.Int(specCapability.PrimaryConsumerGroupDeadLetterQueueDeliveryCount)
+		}
+		return details, nil
+	case string(queuesdk.QueueCapabilityLargeMessages):
+		if rawJSON := strings.TrimSpace(specCapability.JsonData); rawJSON != "" {
+			var details queuesdk.LargeMessagesCapabilityDetails
+			if err := json.Unmarshal([]byte(rawJSON), &details); err != nil {
+				return nil, fmt.Errorf("decode Queue large messages capability jsonData: %w", err)
+			}
+			return details, nil
+		}
+		return queuesdk.LargeMessagesCapabilityDetails{}, nil
+	default:
+		return nil, fmt.Errorf("unsupported Queue capability type %q", capabilityType)
+	}
+}
+
+func queueCapabilityTypeFromSpec(specCapability queuev1beta1.QueueCapability) (string, error) {
+	if rawJSON := strings.TrimSpace(specCapability.JsonData); rawJSON != "" {
+		var payload struct {
+			Type string `json:"type"`
+		}
+		if err := json.Unmarshal([]byte(rawJSON), &payload); err != nil {
+			return "", fmt.Errorf("decode Queue capability jsonData type: %w", err)
+		}
+		if normalizedType, err := normalizeQueueCapabilityType(payload.Type); err != nil || normalizedType != "" {
+			return normalizedType, err
+		}
+	}
+
+	if normalizedType, err := normalizeQueueCapabilityType(specCapability.Type); err != nil || normalizedType != "" {
+		return normalizedType, err
+	}
+
+	if specCapability.IsPrimaryConsumerGroupEnabled ||
+		specCapability.PrimaryConsumerGroupDisplayName != "" ||
+		specCapability.PrimaryConsumerGroupFilter != "" ||
+		specCapability.PrimaryConsumerGroupDeadLetterQueueDeliveryCount != 0 {
+		return string(queuesdk.QueueCapabilityConsumerGroups), nil
+	}
+
+	return "", nil
+}
+
+func normalizeQueueCapabilityType(capabilityType string) (string, error) {
+	trimmed := strings.TrimSpace(capabilityType)
+	if trimmed == "" {
+		return "", nil
+	}
+
+	if normalized, ok := queuesdk.GetMappingQueueCapabilityEnum(trimmed); ok {
+		return string(normalized), nil
+	}
+	return "", fmt.Errorf("unsupported Queue capability type %q", capabilityType)
+}
+
+func queueCapabilityTypesMatch(
+	desiredCapabilities []queuev1beta1.QueueCapability,
+	currentCapabilities []queuesdk.CapabilityDetails,
+) (bool, error) {
+	desiredTypes, err := queueCapabilityTypesFromSpec(desiredCapabilities)
+	if err != nil {
+		return false, err
+	}
+	currentTypes, err := queueCapabilityTypesFromSDK(currentCapabilities)
+	if err != nil {
+		return false, err
+	}
+	return reflect.DeepEqual(desiredTypes, currentTypes), nil
+}
+
+func queueCapabilityTypesFromSpec(specCapabilities []queuev1beta1.QueueCapability) ([]string, error) {
+	if len(specCapabilities) == 0 {
+		return nil, nil
+	}
+
+	result := make([]string, 0, len(specCapabilities))
+	for _, specCapability := range specCapabilities {
+		capabilityType, err := queueCapabilityTypeFromSpec(specCapability)
+		if err != nil {
+			return nil, err
+		}
+		if capabilityType != "" {
+			result = append(result, capabilityType)
+		}
+	}
+	sort.Strings(result)
+	return result, nil
+}
+
+func queueCapabilityTypesFromSDK(currentCapabilities []queuesdk.CapabilityDetails) ([]string, error) {
+	if len(currentCapabilities) == 0 {
+		return nil, nil
+	}
+
+	result := make([]string, 0, len(currentCapabilities))
+	for _, capability := range currentCapabilities {
+		capabilityType, err := queueCapabilityTypeFromSDK(capability)
+		if err != nil {
+			return nil, err
+		}
+		if capabilityType != "" {
+			result = append(result, capabilityType)
+		}
+	}
+	sort.Strings(result)
+	return result, nil
+}
+
+func queueCapabilityTypeFromSDK(capability queuesdk.CapabilityDetails) (string, error) {
+	switch current := capability.(type) {
+	case queuesdk.ConsumerGroupsCapabilityDetails:
+		return string(queuesdk.QueueCapabilityConsumerGroups), nil
+	case *queuesdk.ConsumerGroupsCapabilityDetails:
+		if current == nil {
+			return "", nil
+		}
+		return string(queuesdk.QueueCapabilityConsumerGroups), nil
+	case queuesdk.LargeMessagesCapabilityDetails:
+		return string(queuesdk.QueueCapabilityLargeMessages), nil
+	case *queuesdk.LargeMessagesCapabilityDetails:
+		if current == nil {
+			return "", nil
+		}
+		return string(queuesdk.QueueCapabilityLargeMessages), nil
+	default:
+		payload, err := json.Marshal(current)
+		if err != nil {
+			return "", fmt.Errorf("marshal Queue capability %T: %w", capability, err)
+		}
+		var helper struct {
+			Type string `json:"type"`
+		}
+		if err := json.Unmarshal(payload, &helper); err != nil {
+			return "", fmt.Errorf("decode Queue capability %T: %w", capability, err)
+		}
+		return normalizeQueueCapabilityType(helper.Type)
+	}
+}
+
+func queueStatusCapabilities(currentCapabilities []queuesdk.CapabilityDetails) ([]queuev1beta1.QueueCapability, error) {
+	if len(currentCapabilities) == 0 {
+		return nil, nil
+	}
+
+	result := make([]queuev1beta1.QueueCapability, 0, len(currentCapabilities))
+	for _, capability := range currentCapabilities {
+		projected, err := queueStatusCapability(capability)
+		if err != nil {
+			return nil, err
+		}
+		if projected.Type != "" || projected.JsonData != "" {
+			result = append(result, projected)
+		}
+	}
+	return result, nil
+}
+
+func queueStatusCapability(capability queuesdk.CapabilityDetails) (queuev1beta1.QueueCapability, error) {
+	switch current := capability.(type) {
+	case queuesdk.ConsumerGroupsCapabilityDetails:
+		return queuev1beta1.QueueCapability{
+			Type:                            string(queuesdk.QueueCapabilityConsumerGroups),
+			IsPrimaryConsumerGroupEnabled:   current.IsPrimaryConsumerGroupEnabled != nil && *current.IsPrimaryConsumerGroupEnabled,
+			PrimaryConsumerGroupDisplayName: stringValue(current.PrimaryConsumerGroupDisplayName),
+			PrimaryConsumerGroupFilter:      stringValue(current.PrimaryConsumerGroupFilter),
+			PrimaryConsumerGroupDeadLetterQueueDeliveryCount: intValue(current.PrimaryConsumerGroupDeadLetterQueueDeliveryCount),
+		}, nil
+	case *queuesdk.ConsumerGroupsCapabilityDetails:
+		if current == nil {
+			return queuev1beta1.QueueCapability{}, nil
+		}
+		return queueStatusCapability(*current)
+	case queuesdk.LargeMessagesCapabilityDetails:
+		return queuev1beta1.QueueCapability{Type: string(queuesdk.QueueCapabilityLargeMessages)}, nil
+	case *queuesdk.LargeMessagesCapabilityDetails:
+		if current == nil {
+			return queuev1beta1.QueueCapability{}, nil
+		}
+		return queueStatusCapability(*current)
+	default:
+		payload, err := json.Marshal(current)
+		if err != nil {
+			return queuev1beta1.QueueCapability{}, fmt.Errorf("marshal Queue capability %T: %w", capability, err)
+		}
+		var projected queuev1beta1.QueueCapability
+		if err := json.Unmarshal(payload, &projected); err != nil {
+			return queuev1beta1.QueueCapability{}, fmt.Errorf("decode Queue capability %T: %w", capability, err)
+		}
+		if projected.Type == "" {
+			projected.Type, err = queueCapabilityTypeFromSDK(capability)
+			if err != nil {
+				return queuev1beta1.QueueCapability{}, err
+			}
+		}
+		if projected.JsonData == "" && len(payload) > 0 && string(payload) != "null" {
+			projected.JsonData = string(payload)
+		}
+		return projected, nil
+	}
 }
 
 func validateQueueCreateOnlyDrift(spec queuev1beta1.QueueSpec, current queuesdk.Queue) error {

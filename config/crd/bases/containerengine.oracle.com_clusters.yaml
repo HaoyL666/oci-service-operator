@@ -78,7 +78,7 @@ spec:
                   type: object
                 description: |-
                   Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                  For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Operations": {"CostCenter": "42"}}`
                 type: object
               endpointConfig:
@@ -107,7 +107,7 @@ spec:
                   type: string
                 description: |-
                   Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                  For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
               imagePolicyConfig:
@@ -193,7 +193,7 @@ spec:
                           type: object
                         description: |-
                           Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                          For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                          For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                           Example: `{"Operations": {"CostCenter": "42"}}`
                         type: object
                       freeformTags:
@@ -201,7 +201,7 @@ spec:
                           type: string
                         description: |-
                           Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                          For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                          For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                           Example: `{"Department": "Finance"}`
                         type: object
                     type: object
@@ -216,7 +216,7 @@ spec:
                           type: object
                         description: |-
                           Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                          For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                          For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                           Example: `{"Operations": {"CostCenter": "42"}}`
                         type: object
                       freeformTags:
@@ -224,7 +224,7 @@ spec:
                           type: string
                         description: |-
                           Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                          For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                          For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                           Example: `{"Department": "Finance"}`
                         type: object
                     type: object
@@ -279,7 +279,7 @@ spec:
                   type: object
                 description: |-
                   Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                  For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Operations": {"CostCenter": "42"}}`
                 type: object
               endpointConfig:
@@ -328,7 +328,7 @@ spec:
                   type: string
                 description: |-
                   Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                  For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
               id:
@@ -367,7 +367,8 @@ spec:
                 description: Details about the state of the cluster masters.
                 type: string
               lifecycleState:
-                description: The state of the cluster masters.
+                description: The state of the cluster masters. For more information,
+                  see Monitoring Clusters (https://docs.oracle.com/iaas/Content/ContEng/Tasks/contengmonitoringclusters.htm)
                 type: string
               metadata:
                 description: Metadata about the cluster.
@@ -405,6 +406,13 @@ spec:
                 type: object
               name:
                 description: The name of the cluster.
+                type: string
+              openIdConnectDiscoveryEndpoint:
+                description: The cluster-specific OpenID Connect Discovery endpoint
+                type: string
+              openIdConnectDiscoveryKey:
+                description: The cluster-specific OpenID Connect Discovery Key to
+                  derive the DiscoveryEndpoint
                 type: string
               options:
                 description: Optional attributes for the cluster.
@@ -451,7 +459,7 @@ spec:
                           type: object
                         description: |-
                           Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                          For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                          For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                           Example: `{"Operations": {"CostCenter": "42"}}`
                         type: object
                       freeformTags:
@@ -459,7 +467,7 @@ spec:
                           type: string
                         description: |-
                           Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                          For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                          For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                           Example: `{"Department": "Finance"}`
                         type: object
                     type: object
@@ -474,7 +482,7 @@ spec:
                           type: object
                         description: |-
                           Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                          For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                          For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                           Example: `{"Operations": {"CostCenter": "42"}}`
                         type: object
                       freeformTags:
@@ -482,7 +490,7 @@ spec:
                           type: string
                         description: |-
                           Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                          For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                          For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                           Example: `{"Department": "Finance"}`
                         type: object
                     type: object

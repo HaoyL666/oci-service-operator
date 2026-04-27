@@ -113,6 +113,33 @@
       }
     },
     {
+      "astFieldPath": "domainVerificationId",
+      "terraformFieldPath": "domainVerificationId",
+      "canonicalJoinKey": "domainVerificationId",
+      "pathShape": "scalar",
+      "ast": {
+        "updateCandidateState": "updateCandidate",
+        "forceNew": false,
+        "conflictsWith": null
+      },
+      "docs": {
+        "evidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      "merge": {
+        "joinStatus": "matched",
+        "mergeCase": "astOnlyCandidate",
+        "finalPolicy": "unknown"
+      },
+      "provenance": {
+        "formalImportPath": "imports/email/emaildomain.json",
+        "formalSourceRef": "terraform-provider-oci",
+        "astSourceBucket": "mutation.mutable",
+        "terraformDocsPage": "email_email_domain#argument-reference",
+        "terraformDocsSection": "Argument Reference"
+      }
+    },
+    {
       "astFieldPath": "freeformTags",
       "terraformFieldPath": "freeform_tags",
       "canonicalJoinKey": "freeformTags",

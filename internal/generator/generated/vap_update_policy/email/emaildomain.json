@@ -31,6 +31,13 @@
         "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
       },
       {
+        "fieldPath": "domainVerificationId",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
         "fieldPath": "name",
         "decision": "replacementRequired",
         "mergeCase": "replacementRequired",

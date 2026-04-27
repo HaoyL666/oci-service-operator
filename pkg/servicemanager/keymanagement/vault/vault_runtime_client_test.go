@@ -460,3 +460,14 @@ func TestVaultRuntimeDelete_ConflictWithPendingDeletionReturnsSuccess(t *testing
 		assert.WithinDuration(t, deletionTime.UTC(), recordedDeletion, time.Second)
 	}
 }
+
+func TestVaultRuntimeSyncStatusIncludesIsVaultReplicable(t *testing.T) {
+	resource := makeSpecVault()
+	current := makeSDKVault("ocid1.vault.oc1..replicable", keymanagementsdk.VaultLifecycleStateActive, nil, "vault-sample", map[string]string{"env": "dev"})
+	current.IsVaultReplicable = common.Bool(true)
+
+	client := &vaultRuntimeClient{}
+	client.syncVaultStatus(resource, current)
+
+	assert.True(t, resource.Status.IsVaultReplicable)
+}

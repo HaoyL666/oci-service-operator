@@ -336,6 +336,70 @@ func TestSenderServiceClientUpdatesFreeformTags(t *testing.T) {
 	}
 }
 
+func TestSenderServiceClientUpdatesEmailIPPoolID(t *testing.T) {
+	t.Parallel()
+
+	var updateRequest emailsdk.UpdateSenderRequest
+	getCalls := 0
+	updateCalls := 0
+	client := testSenderClient(&fakeSenderOCIClient{
+		getSenderFn: func(_ context.Context, req emailsdk.GetSenderRequest) (emailsdk.GetSenderResponse, error) {
+			getCalls++
+			if req.SenderId == nil || *req.SenderId != "ocid1.sender.oc1..existing" {
+				t.Fatalf("get senderId = %v, want existing sender OCID", req.SenderId)
+			}
+			current := makeSDKSender("ocid1.sender.oc1..existing", emailsdk.SenderLifecycleStateActive, nil)
+			if getCalls > 1 {
+				current.EmailIpPoolId = common.String("ocid1.emailippool.oc1..new")
+			}
+			return emailsdk.GetSenderResponse{Sender: current}, nil
+		},
+		updateSenderFn: func(_ context.Context, req emailsdk.UpdateSenderRequest) (emailsdk.UpdateSenderResponse, error) {
+			updateCalls++
+			updateRequest = req
+			current := makeSDKSender("ocid1.sender.oc1..existing", emailsdk.SenderLifecycleStateActive, nil)
+			current.EmailIpPoolId = common.String("ocid1.emailippool.oc1..new")
+			return emailsdk.UpdateSenderResponse{
+				Sender:       current,
+				OpcRequestId: common.String("opc-update-2"),
+			}, nil
+		},
+	})
+
+	resource := makeSenderResource()
+	resource.Status.OsokStatus.Ocid = shared.OCID("ocid1.sender.oc1..existing")
+	resource.Spec.EmailIpPoolId = "ocid1.emailippool.oc1..new"
+
+	response, err := client.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	if err != nil {
+		t.Fatalf("CreateOrUpdate() error = %v", err)
+	}
+	if !response.IsSuccessful {
+		t.Fatal("CreateOrUpdate() should report success after updating emailIpPoolId")
+	}
+	if response.ShouldRequeue {
+		t.Fatal("CreateOrUpdate() should not requeue once update follow-up GetSender reports ACTIVE")
+	}
+	if updateCalls != 1 {
+		t.Fatalf("UpdateSender() calls = %d, want 1", updateCalls)
+	}
+	if getCalls != 2 {
+		t.Fatalf("GetSender() calls = %d, want 2 (observe + follow-up)", getCalls)
+	}
+	if updateRequest.SenderId == nil || *updateRequest.SenderId != "ocid1.sender.oc1..existing" {
+		t.Fatalf("update senderId = %v, want existing sender OCID", updateRequest.SenderId)
+	}
+	if updateRequest.EmailIpPoolId == nil || *updateRequest.EmailIpPoolId != resource.Spec.EmailIpPoolId {
+		t.Fatalf("update emailIpPoolId = %v, want %q", updateRequest.EmailIpPoolId, resource.Spec.EmailIpPoolId)
+	}
+	if got := resource.Status.OsokStatus.OpcRequestID; got != "opc-update-2" {
+		t.Fatalf("status.opcRequestId = %q, want %q", got, "opc-update-2")
+	}
+	if got := resource.Status.EmailIpPoolId; got != resource.Spec.EmailIpPoolId {
+		t.Fatalf("status.emailIpPoolId = %q, want %q", got, resource.Spec.EmailIpPoolId)
+	}
+}
+
 func TestSenderServiceClientRejectsReplacementOnlyEmailAddressDrift(t *testing.T) {
 	t.Parallel()
 

@@ -35,6 +35,13 @@
         "mergeCase": "replacementRequired",
         "docsEvidenceState": "notDocumented",
         "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "emailIpPoolId",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
       }
     ]
   }
