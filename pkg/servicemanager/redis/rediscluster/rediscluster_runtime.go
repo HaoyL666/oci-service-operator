@@ -434,7 +434,8 @@ func redisWorkRequestPhaseFromOperationType(operationType redissdk.OperationType
 	switch operationType {
 	case redissdk.OperationTypeCreateRedisCluster:
 		return shared.OSOKAsyncPhaseCreate, true
-	case redissdk.OperationTypeUpdateRedisCluster:
+	case redissdk.OperationTypeUpdateRedisCluster,
+		redissdk.OperationTypePatchOciCacheCluster:
 		return shared.OSOKAsyncPhaseUpdate, true
 	case redissdk.OperationTypeDeleteRedisCluster:
 		return shared.OSOKAsyncPhaseDelete, true

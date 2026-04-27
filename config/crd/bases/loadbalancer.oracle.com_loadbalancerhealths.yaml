@@ -65,7 +65,7 @@ spec:
                   type: string
                 type: array
               loadBalancerId:
-                description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the load balancer the health status is associated with.
                 type: string
               sdkStatus:

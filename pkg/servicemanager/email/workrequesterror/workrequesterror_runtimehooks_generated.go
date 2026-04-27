@@ -56,7 +56,7 @@ func newWorkRequestErrorDefaultRuntimeHooks(sdkClient emailsdk.EmailClient) Work
 		Async:           generatedruntime.AsyncHooks[*emailv1beta1.WorkRequestError]{},
 		DeleteHooks:     generatedruntime.DeleteHooks[*emailv1beta1.WorkRequestError]{},
 		List: runtimeOperationHooks[emailsdk.ListWorkRequestErrorsRequest, emailsdk.ListWorkRequestErrorsResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "WorkRequestId", RequestName: "workRequestId", Contribution: "path", PreferResourceID: true}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "WorkRequestId", RequestName: "workRequestId", Contribution: "path", PreferResourceID: true}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}},
 			Call: func(ctx context.Context, request emailsdk.ListWorkRequestErrorsRequest) (emailsdk.ListWorkRequestErrorsResponse, error) {
 				return sdkClient.ListWorkRequestErrors(ctx, request)
 			},

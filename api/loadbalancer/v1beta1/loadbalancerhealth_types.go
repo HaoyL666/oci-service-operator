@@ -47,7 +47,7 @@ type LoadBalancerHealthStatus struct {
 	// The total number of backend sets associated with this load balancer.
 	// Example: `4`
 	TotalBackendSetCount int `json:"totalBackendSetCount,omitempty"`
-	// The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm) of the load balancer the health status is associated with.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the load balancer the health status is associated with.
 	LoadBalancerId string `json:"loadBalancerId,omitempty"`
 }
 

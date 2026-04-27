@@ -346,30 +346,19 @@ func buildHealthChecks(specChecks []containerinstancesv1beta1.ContainerInstanceC
 		checkType := strings.ToUpper(strings.TrimSpace(check.HealthCheckType))
 		if checkType == "" {
 			switch {
-			case len(check.Command) > 0:
-				checkType = "COMMAND"
 			case check.Path != "" || len(check.Headers) > 0:
 				checkType = "HTTP"
 			case check.Port != 0:
 				checkType = "TCP"
 			default:
-				return nil, fmt.Errorf("container healthCheckType is required")
+				return nil, fmt.Errorf("container healthCheckType is required; OCI SDK v65.110.0 supports HTTP and TCP create health checks")
 			}
 		}
 
 		base := healthCheckBase(check)
 		switch checkType {
 		case "COMMAND":
-			healthChecks = append(healthChecks, containerinstancessdk.CreateContainerCommandHealthCheckDetails{
-				Command:               append([]string(nil), check.Command...),
-				Name:                  base.Name,
-				InitialDelayInSeconds: base.InitialDelayInSeconds,
-				IntervalInSeconds:     base.IntervalInSeconds,
-				FailureThreshold:      base.FailureThreshold,
-				SuccessThreshold:      base.SuccessThreshold,
-				TimeoutInSeconds:      base.TimeoutInSeconds,
-				FailureAction:         base.FailureAction,
-			})
+			return nil, fmt.Errorf("unsupported container healthCheckType %q: OCI SDK v65.110.0 only supports HTTP and TCP create health checks", checkType)
 		case "HTTP":
 			headers := make([]containerinstancessdk.HealthCheckHttpHeader, 0, len(check.Headers))
 			for _, header := range check.Headers {

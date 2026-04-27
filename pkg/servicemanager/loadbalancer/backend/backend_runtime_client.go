@@ -44,6 +44,18 @@ func applyBackendRuntimeHooks(hooks *BackendRuntimeHooks) {
 
 	getCall := hooks.Get.Call
 	hooks.Semantics = newBackendRuntimeSemantics()
+	if hooks.Semantics != nil {
+		semantics := *hooks.Semantics
+		semantics.Mutation.Mutable = []string{"backup", "drain", "maxConnections", "offline", "weight"}
+		hooks.Semantics = &semantics
+	}
+	hooks.BuildUpdateBody = func(_ context.Context, resource *loadbalancerv1beta1.Backend, _ string, currentResponse any) (any, bool, error) {
+		current, ok := backendFromResponse(currentResponse)
+		if !ok {
+			return nil, false, fmt.Errorf("unexpected Backend current response type %T", currentResponse)
+		}
+		return buildBackendUpdateDetails(resource, current)
+	}
 	hooks.Identity = generatedruntime.IdentityHooks[*loadbalancerv1beta1.Backend]{
 		Resolve: func(resource *loadbalancerv1beta1.Backend) (any, error) {
 			return resolveBackendIdentity(resource)
@@ -186,6 +198,77 @@ func lookupExistingBackend(
 		BackendSetName: common.String(identity.backendSetName),
 		BackendName:    common.String(identity.backendName),
 	})
+}
+
+func buildBackendUpdateDetails(resource *loadbalancerv1beta1.Backend, current loadbalancersdk.Backend) (loadbalancersdk.UpdateBackendDetails, bool, error) {
+	if resource == nil {
+		return loadbalancersdk.UpdateBackendDetails{}, false, fmt.Errorf("backend resource is nil")
+	}
+
+	update := loadbalancersdk.UpdateBackendDetails{}
+	updateNeeded := false
+
+	if resource.Spec.Weight != 0 && intPointerValue(current.Weight) != resource.Spec.Weight {
+		update.Weight = common.Int(resource.Spec.Weight)
+		updateNeeded = true
+	}
+	if shouldUpdateBackendMaxConnections(resource.Spec.MaxConnections, current.MaxConnections) {
+		update.MaxConnections = common.Int(resource.Spec.MaxConnections)
+		updateNeeded = true
+	}
+	if boolPointerValue(current.Backup) != resource.Spec.Backup {
+		update.Backup = common.Bool(resource.Spec.Backup)
+		updateNeeded = true
+	}
+	if boolPointerValue(current.Drain) != resource.Spec.Drain {
+		update.Drain = common.Bool(resource.Spec.Drain)
+		updateNeeded = true
+	}
+	if boolPointerValue(current.Offline) != resource.Spec.Offline {
+		update.Offline = common.Bool(resource.Spec.Offline)
+		updateNeeded = true
+	}
+
+	return update, updateNeeded, nil
+}
+
+func backendFromResponse(response any) (loadbalancersdk.Backend, bool) {
+	switch typed := response.(type) {
+	case loadbalancersdk.Backend:
+		return typed, true
+	case *loadbalancersdk.Backend:
+		if typed == nil {
+			return loadbalancersdk.Backend{}, false
+		}
+		return *typed, true
+	case loadbalancersdk.GetBackendResponse:
+		return typed.Backend, true
+	case *loadbalancersdk.GetBackendResponse:
+		if typed == nil {
+			return loadbalancersdk.Backend{}, false
+		}
+		return typed.Backend, true
+	default:
+		return loadbalancersdk.Backend{}, false
+	}
+}
+
+func shouldUpdateBackendMaxConnections(desired int, current *int) bool {
+	if desired != 0 {
+		return intPointerValue(current) != desired
+	}
+	return current != nil && *current != 0
+}
+
+func intPointerValue(value *int) int {
+	if value == nil {
+		return 0
+	}
+	return *value
+}
+
+func boolPointerValue(value *bool) bool {
+	return value != nil && *value
 }
 
 func resolveBackendIdentity(resource *loadbalancerv1beta1.Backend) (backendIdentity, error) {

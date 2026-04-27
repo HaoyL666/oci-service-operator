@@ -59,6 +59,7 @@
     "mutable": [
       "backup",
       "drain",
+      "max_connections",
       "offline",
       "weight"
     ],
@@ -115,6 +116,7 @@
   },
   "notes": [
     "Seed stub; run formal-import to refresh provider facts.",
-    "The published Backend runtime must keep path identity and backendName derivation in the loadbalancer/backend package instead of shared generatedruntime."
+    "The published Backend runtime must keep path identity and backendName derivation in the loadbalancer/backend package instead of shared generatedruntime.",
+    "Pinned OCI SDK contract: UpdateBackendDetails now exposes max_connections in addition to the earlier weight and traffic-shaping fields."
   ]
 }

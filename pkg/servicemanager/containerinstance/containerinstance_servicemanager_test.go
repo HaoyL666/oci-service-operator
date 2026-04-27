@@ -611,3 +611,85 @@ func TestCreateContainerInstanceWithImagePullSecrets(t *testing.T) {
 		}
 	}
 }
+
+func TestCreateContainerInstanceWithHTTPHealthCheck(t *testing.T) {
+	ociClient := &fakeOciClient{}
+	mgr := newTestManager(ociClient)
+	ci := makeContainerInstanceSpec("test-ci")
+	ci.Spec.Containers[0].HealthChecks = []containerinstancesv1beta1.ContainerInstanceContainerHealthCheck{
+		{
+			HealthCheckType:       "HTTP",
+			Name:                  "http-health",
+			Path:                  "/ready",
+			Port:                  8080,
+			InitialDelayInSeconds: 5,
+			IntervalInSeconds:     10,
+			FailureThreshold:      3,
+			SuccessThreshold:      1,
+			TimeoutInSeconds:      2,
+			FailureAction:         string(ocicontainerinstances.ContainerHealthCheckFailureActionKill),
+			Headers: []containerinstancesv1beta1.ContainerInstanceContainerHealthCheckHeader{
+				{Name: "Host", Value: "example.internal"},
+			},
+		},
+	}
+
+	_, err := mgr.CreateContainerInstance(context.Background(), *ci)
+	assert.NoError(t, err)
+	if assert.NotNil(t, ociClient.createRequest) {
+		assert.Len(t, ociClient.createRequest.CreateContainerInstanceDetails.Containers, 1)
+		assert.Len(t, ociClient.createRequest.CreateContainerInstanceDetails.Containers[0].HealthChecks, 1)
+		httpCheck, ok := ociClient.createRequest.CreateContainerInstanceDetails.Containers[0].HealthChecks[0].(ocicontainerinstances.CreateContainerHttpHealthCheckDetails)
+		if assert.True(t, ok) {
+			assert.Equal(t, "/ready", *httpCheck.Path)
+			assert.Equal(t, 8080, *httpCheck.Port)
+			if assert.Len(t, httpCheck.Headers, 1) {
+				assert.Equal(t, "Host", *httpCheck.Headers[0].Name)
+				assert.Equal(t, "example.internal", *httpCheck.Headers[0].Value)
+			}
+		}
+	}
+}
+
+func TestCreateContainerInstanceWithTCPHealthCheck(t *testing.T) {
+	ociClient := &fakeOciClient{}
+	mgr := newTestManager(ociClient)
+	ci := makeContainerInstanceSpec("test-ci")
+	ci.Spec.Containers[0].HealthChecks = []containerinstancesv1beta1.ContainerInstanceContainerHealthCheck{
+		{
+			Port:                  1521,
+			InitialDelayInSeconds: 5,
+			IntervalInSeconds:     10,
+			FailureThreshold:      3,
+			SuccessThreshold:      1,
+			TimeoutInSeconds:      2,
+		},
+	}
+
+	_, err := mgr.CreateContainerInstance(context.Background(), *ci)
+	assert.NoError(t, err)
+	if assert.NotNil(t, ociClient.createRequest) {
+		assert.Len(t, ociClient.createRequest.CreateContainerInstanceDetails.Containers, 1)
+		assert.Len(t, ociClient.createRequest.CreateContainerInstanceDetails.Containers[0].HealthChecks, 1)
+		tcpCheck, ok := ociClient.createRequest.CreateContainerInstanceDetails.Containers[0].HealthChecks[0].(ocicontainerinstances.CreateContainerTcpHealthCheckDetails)
+		if assert.True(t, ok) {
+			assert.Equal(t, 1521, *tcpCheck.Port)
+		}
+	}
+}
+
+func TestCreateContainerInstanceRejectsCommandHealthCheck(t *testing.T) {
+	ociClient := &fakeOciClient{}
+	mgr := newTestManager(ociClient)
+	ci := makeContainerInstanceSpec("test-ci")
+	ci.Spec.Containers[0].HealthChecks = []containerinstancesv1beta1.ContainerInstanceContainerHealthCheck{
+		{
+			HealthCheckType: "COMMAND",
+		},
+	}
+
+	_, err := mgr.CreateContainerInstance(context.Background(), *ci)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), `unsupported container healthCheckType "COMMAND"`)
+	assert.False(t, ociClient.createCalled)
+}

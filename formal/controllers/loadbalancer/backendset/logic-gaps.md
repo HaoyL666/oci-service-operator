@@ -17,7 +17,12 @@ gaps: []
 ## Repo-authored semantics
 
 - Create or bind is explicit. `BackendSet` reuses an existing backend set addressed by the same load balancer and backend set name instead of issuing a duplicate create, and create or bind persists a synthetic tracked ID so later update and delete retries stay on the same bound path even though OCI does not expose a distinct BackendSet OCID.
-- Supported in-place updates are limited to `policy`, `backends`, `healthChecker`, `sslConfiguration`, `sessionPersistenceConfiguration`, and `lbCookieSessionPersistenceConfiguration`, matching `UpdateBackendSetDetails`. Drift on `loadBalancerId` or `name` remains create-only and is rejected before OCI mutation.
+- Supported in-place updates are limited to `policy`, `backendMaxConnections`,
+  `backends`, `healthChecker`, `sslConfiguration`,
+  `sessionPersistenceConfiguration`, and
+  `lbCookieSessionPersistenceConfiguration`, matching
+  `UpdateBackendSetDetails`. Drift on `loadBalancerId` or `name` remains
+  create-only and is rejected before OCI mutation.
 - `sessionPersistenceConfiguration` and `lbCookieSessionPersistenceConfiguration` remain mutually exclusive and are rejected before OCI mutation when both are set.
 - The generated runtime follows create and update with read-based observation. Because the live `BackendSet` payload has no lifecycle field, the write path may requeue once before the next observe settles `Active`.
 - Delete keeps the finalizer until `GetBackendSet` or the list fallback confirms the backend set is gone. No Kubernetes secret reads or writes are part of this path.

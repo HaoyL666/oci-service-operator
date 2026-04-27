@@ -2408,6 +2408,14 @@ services:
             extraRBACMarkers:
               - groups="",resources=secrets,verbs=get;list;watch
           specFields:
+            - name: Credentials
+              type: DbSystemCredentials
+              tag: 'json:"credentials,omitempty"'
+              comments:
+                - The database system administrator credentials.
+                - If omitted, `adminUsername` and `adminPassword` secret references remain available for secret-backed credential input.
+              markers:
+                - +kubebuilder:validation:Optional
             - name: AdminUsername
               type: shared.UsernameSource
               tag: 'json:"adminUsername,omitempty,omitzero"'

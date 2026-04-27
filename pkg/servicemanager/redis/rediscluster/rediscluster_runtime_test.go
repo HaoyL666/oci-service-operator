@@ -383,7 +383,8 @@ func TestRedisWorkRequestOperationTypeCoverage(t *testing.T) {
 			phase, ok := redisWorkRequestPhaseFromOperationType(operation)
 			assert.True(t, ok)
 			assert.Equal(t, shared.OSOKAsyncPhaseCreate, phase)
-		case redissdk.OperationTypeUpdateRedisCluster:
+		case redissdk.OperationTypeUpdateRedisCluster,
+			redissdk.OperationTypePatchOciCacheCluster:
 			phase, ok := redisWorkRequestPhaseFromOperationType(operation)
 			assert.True(t, ok)
 			assert.Equal(t, shared.OSOKAsyncPhaseUpdate, phase)
@@ -393,10 +394,23 @@ func TestRedisWorkRequestOperationTypeCoverage(t *testing.T) {
 			assert.Equal(t, shared.OSOKAsyncPhaseDelete, phase)
 		case redissdk.OperationTypeMoveRedisCluster,
 			redissdk.OperationTypeFailoverRedisCluster,
+			redissdk.OperationTypeMigrateCluster,
+			redissdk.OperationTypeClusterRollback,
+			redissdk.OperationTypeAttachOciCacheUsers,
+			redissdk.OperationTypeDetachOciCacheUsers,
+			redissdk.OperationTypeCreateOciCacheUser,
+			redissdk.OperationTypeUpdateOciCacheUser,
+			redissdk.OperationTypeDeleteOciCacheUser,
 			redissdk.OperationTypeCreateRedisConfigSet,
 			redissdk.OperationTypeUpdateRedisConfigSet,
 			redissdk.OperationTypeDeleteRedisConfigSet,
-			redissdk.OperationTypeMoveRedisConfigSet:
+			redissdk.OperationTypeMoveRedisConfigSet,
+			redissdk.OperationTypeCreateOciCacheConfigSet,
+			redissdk.OperationTypeUpdateOciCacheConfigSet,
+			redissdk.OperationTypeDeleteOciCacheConfigSet,
+			redissdk.OperationTypeChangeOciCacheConfigSetCompartment,
+			redissdk.OperationTypeChangeOciCacheUserCompartment,
+			redissdk.OperationTypeReplaceOciCacheNode:
 			phase, ok := redisWorkRequestPhaseFromOperationType(operation)
 			assert.False(t, ok)
 			assert.Equal(t, shared.OSOKAsyncPhase(""), phase)
