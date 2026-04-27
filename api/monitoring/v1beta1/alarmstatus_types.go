@@ -36,7 +36,7 @@ type AlarmStatusSuppression struct {
 // AlarmStatusObservedState defines the observed state of AlarmStatus.
 type AlarmStatusObservedState struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the alarm.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the alarm.
 	Id string `json:"id,omitempty"`
 	// The configured name of the alarm.
 	// Example: `High CPU Utilization`
@@ -44,10 +44,20 @@ type AlarmStatusObservedState struct {
 	// The perceived type of response required when the alarm is in the "FIRING" state.
 	// Example: `CRITICAL`
 	Severity string `json:"severity,omitempty"`
+	// Identifier of the alarm's base values for alarm evaluation, for use when the alarm contains overrides.
+	// Default value is `BASE`. For information about alarm overrides, see AlarmOverride.
+	RuleName string `json:"ruleName,omitempty"`
 	// Timestamp for the transition of the alarm state. For example, the time when the alarm transitioned from OK to Firing.
 	// Note: A three-minute lag for this value accounts for any late-arriving metrics.
 	// Example: `2023-02-01T01:02:29.600Z`
 	TimestampTriggered string `json:"timestampTriggered,omitempty"`
+	// Customizable alarm summary (`alarmSummary` alarm message parameter (https://docs.oracle.com/iaas/Content/Monitoring/alarm-message-format.htm)).
+	// Optionally include dynamic variables (https://docs.oracle.com/iaas/Content/Monitoring/Tasks/update-alarm-dynamic-variables.htm).
+	// The alarm summary appears within the body of the alarm message and in responses to
+	// ListAlarmsStatus
+	// GetAlarmHistory and
+	// RetrieveDimensionStates.
+	AlarmSummary string `json:"alarmSummary,omitempty"`
 	// The status of this alarm.
 	// Status is collective, across all metric streams in the alarm.
 	// To list alarm status for each metric stream, use RetrieveDimensionStates.

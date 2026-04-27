@@ -18,6 +18,13 @@ type AlarmHistorySpec struct {
 
 // AlarmHistoryEntry defines nested fields for AlarmHistory.Entry.
 type AlarmHistoryEntry struct {
+	// Customizable alarm summary (`alarmSummary` alarm message parameter (https://docs.oracle.com/iaas/Content/Monitoring/alarm-message-format.htm)).
+	// Optionally include dynamic variables (https://docs.oracle.com/iaas/Content/Monitoring/Tasks/update-alarm-dynamic-variables.htm).
+	// The alarm summary appears within the body of the alarm message and in responses to
+	// ListAlarmsStatus
+	// GetAlarmHistory and
+	// RetrieveDimensionStates.
+	AlarmSummary string `json:"alarmSummary,omitempty"`
 	// Description for this alarm history entry.
 	// Example 1 - alarm state history entry: `The alarm state is FIRING`
 	// Example 2 - alarm state transition history entry: `State transitioned from OK to Firing`
@@ -34,7 +41,7 @@ type AlarmHistoryEntry struct {
 // AlarmHistoryStatus defines the observed state of AlarmHistory.
 type AlarmHistoryStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the alarm to retrieve history for.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the alarm to retrieve history for.
 	AlarmId string `json:"alarmId,omitempty"`
 	// Whether the alarm is enabled.
 	// Example: `true`

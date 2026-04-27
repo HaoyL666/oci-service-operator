@@ -55,14 +55,28 @@ spec:
           status:
             description: AlarmStatusObservedState defines the observed state of AlarmStatus.
             properties:
+              alarmSummary:
+                description: |-
+                  Customizable alarm summary (`alarmSummary` alarm message parameter (https://docs.oracle.com/iaas/Content/Monitoring/alarm-message-format.htm)).
+                  Optionally include dynamic variables (https://docs.oracle.com/iaas/Content/Monitoring/Tasks/update-alarm-dynamic-variables.htm).
+                  The alarm summary appears within the body of the alarm message and in responses to
+                  ListAlarmsStatus
+                  GetAlarmHistory and
+                  RetrieveDimensionStates.
+                type: string
               displayName:
                 description: |-
                   The configured name of the alarm.
                   Example: `High CPU Utilization`
                 type: string
               id:
-                description: The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the alarm.
+                type: string
+              ruleName:
+                description: |-
+                  Identifier of the alarm's base values for alarm evaluation, for use when the alarm contains overrides.
+                  Default value is `BASE`. For information about alarm overrides, see AlarmOverride.
                 type: string
               sdkStatus:
                 description: |-

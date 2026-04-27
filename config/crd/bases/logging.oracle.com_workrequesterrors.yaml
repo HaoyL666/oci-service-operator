@@ -58,7 +58,7 @@ spec:
               code:
                 description: |-
                   A machine-usable code for the error that occured. Error codes are listed at
-                  https://docs.cloud.oracle.com/Content/API/References/apierrors.htm.
+                  https://docs.oracle.com/iaas/Content/API/References/apierrors.htm.
                 type: string
               message:
                 description: A human readable description of the issue encountered.

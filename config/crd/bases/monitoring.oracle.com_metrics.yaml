@@ -107,7 +107,7 @@ spec:
             properties:
               compartmentId:
                 description: |-
-                  The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment containing
+                  The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment containing
                   the resources monitored by the metric.
                 type: string
               dimensions:
