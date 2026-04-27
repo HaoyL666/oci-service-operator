@@ -279,6 +279,35 @@ func TestSddcCreateOrUpdateUpdatesMutableFields(t *testing.T) {
 	requireSddcCondition(t, resource, shared.Active)
 }
 
+func TestReviewedSddcRuntimeSemanticsClassifyByolFields(t *testing.T) {
+	t.Parallel()
+
+	hooks := SddcRuntimeHooks{Semantics: newSddcRuntimeSemantics()}
+	applySddcRuntimeHooks(&hooks)
+	if hooks.Semantics == nil {
+		t.Fatal("hooks.Semantics = nil, want reviewed sddc semantics")
+	}
+
+	hasPath := func(paths []string, want string) bool {
+		for _, path := range paths {
+			if path == want {
+				return true
+			}
+		}
+		return false
+	}
+
+	if !hasPath(hooks.Semantics.Mutation.Mutable, "sddcByolAllocationDetails") {
+		t.Fatalf("mutable paths %v do not include %q", hooks.Semantics.Mutation.Mutable, "sddcByolAllocationDetails")
+	}
+	if !hasPath(hooks.Semantics.Mutation.Mutable, "initialConfiguration") {
+		t.Fatalf("mutable paths %v do not include %q", hooks.Semantics.Mutation.Mutable, "initialConfiguration")
+	}
+	if hooks.ParityHooks.ValidateCreateOnlyDrift == nil {
+		t.Fatal("hooks.ParityHooks.ValidateCreateOnlyDrift = nil, want custom initialConfiguration replacement check")
+	}
+}
+
 func TestSddcCreateOrUpdateRejectsCreateOnlyDrift(t *testing.T) {
 	t.Parallel()
 
@@ -575,40 +604,42 @@ func newSddcInitialConfiguration() ocvpv1beta1.SddcInitialConfiguration {
 
 func observedSddcFromSpec(id string, spec ocvpv1beta1.SddcSpec, lifecycleState string) ocvpsdk.Sddc {
 	return ocvpsdk.Sddc{
-		Id:                    common.String(id),
-		DisplayName:           common.String(spec.DisplayName),
-		VmwareSoftwareVersion: common.String(spec.VmwareSoftwareVersion),
-		CompartmentId:         common.String(spec.CompartmentId),
-		ClustersCount:         common.Int(len(spec.InitialConfiguration.InitialClusterConfigurations)),
-		VcenterFqdn:           common.String("vcenter-sddc.example.oraclecloud.com"),
-		NsxManagerFqdn:        common.String("nsx-sddc.example.oraclecloud.com"),
-		VcenterPrivateIpId:    common.String("ocid1.privateip.oc1..vcenter"),
-		NsxManagerPrivateIpId: common.String("ocid1.privateip.oc1..nsx"),
-		SshAuthorizedKeys:     common.String(spec.SshAuthorizedKeys),
-		HcxMode:               ocvpsdk.HcxModesEnum(spec.HcxMode),
-		InitialConfiguration:  sdkInitialConfigurationFromSpec(spec.InitialConfiguration),
-		FreeformTags:          map[string]string{"env": "dev"},
-		DefinedTags:           map[string]map[string]interface{}{"Operations": {"CostCenter": "42"}},
-		EsxiSoftwareVersion:   common.String(spec.EsxiSoftwareVersion),
-		IsSingleHostSddc:      common.Bool(spec.IsSingleHostSddc),
-		LifecycleState:        ocvpsdk.LifecycleStatesEnum(lifecycleState),
+		Id:                        common.String(id),
+		DisplayName:               common.String(spec.DisplayName),
+		VmwareSoftwareVersion:     common.String(spec.VmwareSoftwareVersion),
+		CompartmentId:             common.String(spec.CompartmentId),
+		ClustersCount:             common.Int(len(spec.InitialConfiguration.InitialClusterConfigurations)),
+		VcenterFqdn:               common.String("vcenter-sddc.example.oraclecloud.com"),
+		NsxManagerFqdn:            common.String("nsx-sddc.example.oraclecloud.com"),
+		VcenterPrivateIpId:        common.String("ocid1.privateip.oc1..vcenter"),
+		NsxManagerPrivateIpId:     common.String("ocid1.privateip.oc1..nsx"),
+		SshAuthorizedKeys:         common.String(spec.SshAuthorizedKeys),
+		HcxMode:                   ocvpsdk.HcxModesEnum(spec.HcxMode),
+		InitialConfiguration:      sdkInitialConfigurationFromSpec(spec.InitialConfiguration),
+		FreeformTags:              map[string]string{"env": "dev"},
+		DefinedTags:               map[string]map[string]interface{}{"Operations": {"CostCenter": "42"}},
+		EsxiSoftwareVersion:       common.String(spec.EsxiSoftwareVersion),
+		IsSingleHostSddc:          common.Bool(spec.IsSingleHostSddc),
+		LifecycleState:            ocvpsdk.LifecycleStatesEnum(lifecycleState),
+		SddcByolAllocationDetails: sdkSddcByolAllocationDetailsFromSpec(spec.SddcByolAllocationDetails),
 	}
 }
 
 func observedSddcSummaryFromSpec(id string, spec ocvpv1beta1.SddcSpec, lifecycleState string) ocvpsdk.SddcSummary {
 	return ocvpsdk.SddcSummary{
-		Id:                    common.String(id),
-		DisplayName:           common.String(spec.DisplayName),
-		VmwareSoftwareVersion: common.String(spec.VmwareSoftwareVersion),
-		CompartmentId:         common.String(spec.CompartmentId),
-		ClustersCount:         common.Int(len(spec.InitialConfiguration.InitialClusterConfigurations)),
-		FreeformTags:          map[string]string{"env": "dev"},
-		DefinedTags:           map[string]map[string]interface{}{"Operations": {"CostCenter": "42"}},
-		HcxMode:               ocvpsdk.HcxModesEnum(spec.HcxMode),
-		VcenterFqdn:           common.String("vcenter-sddc.example.oraclecloud.com"),
-		NsxManagerFqdn:        common.String("nsx-sddc.example.oraclecloud.com"),
-		LifecycleState:        ocvpsdk.LifecycleStatesEnum(lifecycleState),
-		IsSingleHostSddc:      common.Bool(spec.IsSingleHostSddc),
+		Id:                        common.String(id),
+		DisplayName:               common.String(spec.DisplayName),
+		VmwareSoftwareVersion:     common.String(spec.VmwareSoftwareVersion),
+		CompartmentId:             common.String(spec.CompartmentId),
+		ClustersCount:             common.Int(len(spec.InitialConfiguration.InitialClusterConfigurations)),
+		FreeformTags:              map[string]string{"env": "dev"},
+		DefinedTags:               map[string]map[string]interface{}{"Operations": {"CostCenter": "42"}},
+		HcxMode:                   ocvpsdk.HcxModesEnum(spec.HcxMode),
+		VcenterFqdn:               common.String("vcenter-sddc.example.oraclecloud.com"),
+		NsxManagerFqdn:            common.String("nsx-sddc.example.oraclecloud.com"),
+		LifecycleState:            ocvpsdk.LifecycleStatesEnum(lifecycleState),
+		IsSingleHostSddc:          common.Bool(spec.IsSingleHostSddc),
+		SddcByolAllocationDetails: sdkSddcByolAllocationDetailsFromSpec(spec.SddcByolAllocationDetails),
 	}
 }
 
@@ -624,10 +655,11 @@ func sdkInitialConfigurationFromSpec(spec ocvpv1beta1.SddcInitialConfiguration) 
 
 func sdkInitialClusterConfigurationFromSpec(spec ocvpv1beta1.SddcInitialConfigurationInitialClusterConfiguration) ocvpsdk.InitialClusterConfiguration {
 	cluster := ocvpsdk.InitialClusterConfiguration{
-		VsphereType:               ocvpsdk.VsphereTypesEnum(spec.VsphereType),
-		ComputeAvailabilityDomain: common.String(spec.ComputeAvailabilityDomain),
-		EsxiHostsCount:            common.Int(spec.EsxiHostsCount),
-		NetworkConfiguration:      sdkNetworkConfigurationFromSpec(spec.NetworkConfiguration),
+		VsphereType:                  ocvpsdk.VsphereTypesEnum(spec.VsphereType),
+		ComputeAvailabilityDomain:    common.String(spec.ComputeAvailabilityDomain),
+		EsxiHostsCount:               common.Int(spec.EsxiHostsCount),
+		NetworkConfiguration:         sdkNetworkConfigurationFromSpec(spec.NetworkConfiguration),
+		ClusterByolAllocationDetails: sdkClusterByolAllocationDetailsFromSpec(spec.ClusterByolAllocationDetails),
 	}
 	if spec.DisplayName != "" {
 		cluster.DisplayName = common.String(spec.DisplayName)
@@ -662,7 +694,26 @@ func sdkInitialClusterConfigurationFromSpec(spec ocvpv1beta1.SddcInitialConfigur
 			})
 		}
 	}
+	if len(spec.DatastoreClusterIds) > 0 {
+		cluster.DatastoreClusterIds = append([]string(nil), spec.DatastoreClusterIds...)
+	}
+	if spec.InitialVcfByolAllocationId != "" {
+		cluster.InitialVcfByolAllocationId = common.String(spec.InitialVcfByolAllocationId)
+	}
 	return cluster
+}
+
+func sdkClusterByolAllocationDetailsFromSpec(
+	spec ocvpv1beta1.SddcInitialConfigurationInitialClusterConfigurationClusterByolAllocationDetails,
+) *ocvpsdk.ClusterByolAllocationDetails {
+	details := &ocvpsdk.ClusterByolAllocationDetails{}
+	if spec.VsanByolAllocationId != "" {
+		details.VsanByolAllocationId = common.String(spec.VsanByolAllocationId)
+	}
+	if spec.FirewallByolAllocationId != "" {
+		details.FirewallByolAllocationId = common.String(spec.FirewallByolAllocationId)
+	}
+	return details
 }
 
 func sdkNetworkConfigurationFromSpec(spec ocvpv1beta1.SddcInitialConfigurationInitialClusterConfigurationNetworkConfiguration) *ocvpsdk.NetworkConfiguration {

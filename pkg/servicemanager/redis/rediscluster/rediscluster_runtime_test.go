@@ -183,6 +183,36 @@ func TestRedisRuntimeHooksKeepDeleteGuardWrapper(t *testing.T) {
 	}
 }
 
+func TestRedisRuntimeHooksClassifyExpandedMutationFields(t *testing.T) {
+	t.Parallel()
+
+	hooks := RedisClusterRuntimeHooks{Semantics: newRedisClusterRuntimeSemantics()}
+	applyRedisClusterRuntimeHooks(nil, &hooks, nil, nil)
+	if hooks.Semantics == nil {
+		t.Fatal("hooks.Semantics = nil, want reviewed redis semantics")
+	}
+
+	hasPath := func(paths []string, want string) bool {
+		for _, path := range paths {
+			if path == want {
+				return true
+			}
+		}
+		return false
+	}
+
+	for _, path := range []string{"ociCacheConfigSetId", "securityAttributes", "softwareVersion"} {
+		if !hasPath(hooks.Semantics.Mutation.Mutable, path) {
+			t.Fatalf("mutable paths %v do not include %q", hooks.Semantics.Mutation.Mutable, path)
+		}
+	}
+	for _, path := range []string{"clusterMode", "subnetId"} {
+		if !hasPath(hooks.Semantics.Mutation.ForceNew, path) {
+			t.Fatalf("force-new paths %v do not include %q", hooks.Semantics.Mutation.ForceNew, path)
+		}
+	}
+}
+
 func makeSpecRedisCluster() *redisv1beta1.RedisCluster {
 	return &redisv1beta1.RedisCluster{
 		Spec: redisv1beta1.RedisClusterSpec{
@@ -383,7 +413,8 @@ func TestRedisWorkRequestOperationTypeCoverage(t *testing.T) {
 			phase, ok := redisWorkRequestPhaseFromOperationType(operation)
 			assert.True(t, ok)
 			assert.Equal(t, shared.OSOKAsyncPhaseCreate, phase)
-		case redissdk.OperationTypeUpdateRedisCluster:
+		case redissdk.OperationTypeUpdateRedisCluster,
+			redissdk.OperationTypePatchOciCacheCluster:
 			phase, ok := redisWorkRequestPhaseFromOperationType(operation)
 			assert.True(t, ok)
 			assert.Equal(t, shared.OSOKAsyncPhaseUpdate, phase)
@@ -393,10 +424,23 @@ func TestRedisWorkRequestOperationTypeCoverage(t *testing.T) {
 			assert.Equal(t, shared.OSOKAsyncPhaseDelete, phase)
 		case redissdk.OperationTypeMoveRedisCluster,
 			redissdk.OperationTypeFailoverRedisCluster,
+			redissdk.OperationTypeMigrateCluster,
+			redissdk.OperationTypeClusterRollback,
+			redissdk.OperationTypeAttachOciCacheUsers,
+			redissdk.OperationTypeDetachOciCacheUsers,
+			redissdk.OperationTypeCreateOciCacheUser,
+			redissdk.OperationTypeUpdateOciCacheUser,
+			redissdk.OperationTypeDeleteOciCacheUser,
 			redissdk.OperationTypeCreateRedisConfigSet,
 			redissdk.OperationTypeUpdateRedisConfigSet,
 			redissdk.OperationTypeDeleteRedisConfigSet,
-			redissdk.OperationTypeMoveRedisConfigSet:
+			redissdk.OperationTypeMoveRedisConfigSet,
+			redissdk.OperationTypeCreateOciCacheConfigSet,
+			redissdk.OperationTypeUpdateOciCacheConfigSet,
+			redissdk.OperationTypeDeleteOciCacheConfigSet,
+			redissdk.OperationTypeChangeOciCacheConfigSetCompartment,
+			redissdk.OperationTypeChangeOciCacheUserCompartment,
+			redissdk.OperationTypeReplaceOciCacheNode:
 			phase, ok := redisWorkRequestPhaseFromOperationType(operation)
 			assert.False(t, ok)
 			assert.Equal(t, shared.OSOKAsyncPhase(""), phase)
@@ -404,6 +448,90 @@ func TestRedisWorkRequestOperationTypeCoverage(t *testing.T) {
 			t.Fatalf("unhandled Redis operation type enum %q", operation)
 		}
 	}
+}
+
+func TestBuildCreateRedisClusterDetailsIncludesExpandedFields(t *testing.T) {
+	t.Parallel()
+
+	spec := makeSpecRedisCluster().Spec
+	spec.OciCacheConfigSetId = "ocid1.redisset.oc1..config"
+	spec.ClusterMode = string(redissdk.RedisClusterClusterModeSharded)
+	spec.ShardCount = 2
+	spec.NsgIds = []string{"ocid1.nsg.oc1..first", "ocid1.nsg.oc1..second"}
+	spec.SecurityAttributes = map[string]shared.MapValue{
+		"Oracle-ZPR": {"MaxEgressCount": "42"},
+	}
+
+	details := buildCreateRedisClusterDetails(spec)
+
+	assert.Equal(t, spec.OciCacheConfigSetId, stringValue(details.OciCacheConfigSetId))
+	assert.Equal(t, redissdk.RedisClusterClusterModeSharded, details.ClusterMode)
+	assert.Equal(t, spec.ShardCount, intValue(details.ShardCount))
+	assert.Equal(t, spec.NsgIds, details.NsgIds)
+	assert.Equal(t, map[string]map[string]interface{}{
+		"Oracle-ZPR": {"MaxEgressCount": "42"},
+	}, details.SecurityAttributes)
+}
+
+func TestBuildRedisUpdateBodyIncludesExpandedMutableFields(t *testing.T) {
+	t.Parallel()
+
+	resource := makeSpecRedisCluster()
+	resource.Spec.OciCacheConfigSetId = "ocid1.redisset.oc1..new"
+	resource.Spec.ShardCount = 3
+	resource.Spec.SoftwareVersion = string(redissdk.RedisClusterSoftwareVersionValkey72)
+	resource.Spec.NsgIds = []string{"ocid1.nsg.oc1..new"}
+	resource.Spec.SecurityAttributes = map[string]shared.MapValue{
+		"Oracle-ZPR": {"MaxEgressCount": "84"},
+	}
+
+	current := makeSDKRedisCluster("ocid1.rediscluster.oc1..existing", resource.Spec.DisplayName, redissdk.RedisClusterLifecycleStateActive)
+	current.OciCacheConfigSetId = common.String("ocid1.redisset.oc1..old")
+	current.ShardCount = common.Int(1)
+	current.SoftwareVersion = redissdk.RedisClusterSoftwareVersionV705
+	current.NsgIds = []string{"ocid1.nsg.oc1..old"}
+	current.SecurityAttributes = map[string]map[string]interface{}{
+		"Oracle-ZPR": {"MaxEgressCount": "21"},
+	}
+
+	body, updateNeeded, err := buildRedisUpdateBody(resource, redissdk.GetRedisClusterResponse{RedisCluster: current})
+	assert.NoError(t, err)
+	assert.True(t, updateNeeded)
+	assert.Equal(t, "ocid1.redisset.oc1..new", stringValue(body.OciCacheConfigSetId))
+	assert.Equal(t, 3, intValue(body.ShardCount))
+	assert.Equal(t, redissdk.RedisClusterSoftwareVersionValkey72, body.SoftwareVersion)
+	assert.Equal(t, []string{"ocid1.nsg.oc1..new"}, body.NsgIds)
+	assert.Equal(t, map[string]map[string]interface{}{
+		"Oracle-ZPR": {"MaxEgressCount": "84"},
+	}, body.SecurityAttributes)
+}
+
+func TestProjectRedisClusterStatusIncludesExpandedFields(t *testing.T) {
+	t.Parallel()
+
+	resource := makeSpecRedisCluster()
+	current := makeSDKRedisCluster("ocid1.rediscluster.oc1..existing", resource.Spec.DisplayName, redissdk.RedisClusterLifecycleStateActive)
+	current.DiscoveryFqdn = common.String("redis-discovery.example.internal")
+	current.DiscoveryEndpointIpAddress = common.String("10.0.0.12")
+	current.OciCacheConfigSetId = common.String("ocid1.redisset.oc1..config")
+	current.ClusterMode = redissdk.RedisClusterClusterModeSharded
+	current.ShardCount = common.Int(2)
+	current.NsgIds = []string{"ocid1.nsg.oc1..first"}
+	current.SecurityAttributes = map[string]map[string]interface{}{
+		"Oracle-ZPR": {"MaxEgressCount": "42"},
+	}
+
+	err := projectRedisClusterStatus(resource, redissdk.GetRedisClusterResponse{RedisCluster: current})
+	assert.NoError(t, err)
+	assert.Equal(t, "redis-discovery.example.internal", resource.Status.DiscoveryFqdn)
+	assert.Equal(t, "10.0.0.12", resource.Status.DiscoveryEndpointIpAddress)
+	assert.Equal(t, "ocid1.redisset.oc1..config", resource.Status.OciCacheConfigSetId)
+	assert.Equal(t, string(redissdk.RedisClusterClusterModeSharded), resource.Status.ClusterMode)
+	assert.Equal(t, 2, resource.Status.ShardCount)
+	assert.Equal(t, []string{"ocid1.nsg.oc1..first"}, resource.Status.NsgIds)
+	assert.Equal(t, map[string]shared.MapValue{
+		"Oracle-ZPR": {"MaxEgressCount": "42"},
+	}, resource.Status.SecurityAttributes)
 }
 
 func TestRedisCreateCapturesWorkRequestInSharedAsyncStatus(t *testing.T) {

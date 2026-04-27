@@ -38,10 +38,49 @@ func applyOpensearchClusterRuntimeHooks(
 		credentialClient = manager.CredentialClient
 	}
 
-	hooks.Semantics = newOpensearchClusterRuntimeSemantics()
+	hooks.Semantics = reviewedOpensearchClusterRuntimeSemantics()
 	hooks.BuildCreateBody = func(ctx context.Context, resource *opensearchv1beta1.OpensearchCluster, namespace string) (any, error) {
 		return buildOpensearchCreateDetails(ctx, credentialClient, resource, namespace)
 	}
+}
+
+func reviewedOpensearchClusterRuntimeSemantics() *generatedruntime.Semantics {
+	semantics := newOpensearchClusterRuntimeSemantics()
+	semantics.Mutation = generatedruntime.MutationSemantics{
+		Mutable: []string{
+			"displayName",
+			"backupPolicy",
+			"certificateConfig",
+			"loadBalancerConfig",
+			"maintenanceDetails",
+			"outboundClusterConfig",
+			"reverseConnectionEndpointCustomerIps",
+			"securityAttributes",
+			"securitySamlConfig",
+		},
+		ForceNew: []string{
+			"compartmentId",
+			"dataNodeHostShape",
+			"inboundClusterIds",
+			"masterNodeHostShape",
+			"mlNodeCount",
+			"mlNodeHostMemoryGB",
+			"mlNodeHostOcpuCount",
+			"mlNodeHostShape",
+			"mlNodeHostType",
+			"mlNodeStorageGB",
+			"nsgId",
+			"opendashboardNodeHostShape",
+			"searchNodeCount",
+			"searchNodeHostMemoryGB",
+			"searchNodeHostOcpuCount",
+			"searchNodeHostShape",
+			"searchNodeHostType",
+			"searchNodeStorageGB",
+		},
+		ConflictsWith: map[string][]string{},
+	}
+	return semantics
 }
 
 func buildOpensearchCreateDetails(ctx context.Context, credentialClient credhelper.CredentialClient, resource *opensearchv1beta1.OpensearchCluster, namespace string) (opensearchsdk.CreateOpensearchClusterDetails, error) {
