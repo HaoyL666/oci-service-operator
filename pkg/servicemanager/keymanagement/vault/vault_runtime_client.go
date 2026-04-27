@@ -557,6 +557,7 @@ func (c *vaultRuntimeClient) syncVaultStatus(resource *keymanagementv1beta1.Vaul
 	resource.Status.RestoredFromVaultId = stringValue(vault.RestoredFromVaultId)
 	resource.Status.ReplicaDetails = convertVaultReplicaDetails(vault.ReplicaDetails)
 	resource.Status.IsPrimary = boolValue(vault.IsPrimary)
+	resource.Status.IsVaultReplicable = boolValue(vault.IsVaultReplicable)
 	resource.Status.ExternalKeyManagerMetadataSummary = convertVaultExternalKeyManagerMetadataSummary(vault.ExternalKeyManagerMetadataSummary)
 	if resource.Status.Id != "" {
 		resource.Status.OsokStatus.Ocid = shared.OCID(resource.Status.Id)

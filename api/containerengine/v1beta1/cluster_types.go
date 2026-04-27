@@ -34,12 +34,12 @@ type ClusterSpec struct {
 	// +kubebuilder:validation:Optional
 	KmsKeyId string `json:"kmsKeyId,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-	// For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
 	// +kubebuilder:validation:Optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
 	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
-	// For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
@@ -102,12 +102,12 @@ type ClusterOptionsAdmissionControllerOptions struct {
 // ClusterOptionsPersistentVolumeConfig defines nested fields for Cluster.Options.PersistentVolumeConfig.
 type ClusterOptionsPersistentVolumeConfig struct {
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-	// For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
 	// +kubebuilder:validation:Optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
 	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
-	// For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
@@ -116,12 +116,12 @@ type ClusterOptionsPersistentVolumeConfig struct {
 // ClusterOptionsServiceLbConfig defines nested fields for Cluster.Options.ServiceLbConfig.
 type ClusterOptionsServiceLbConfig struct {
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-	// For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
 	// +kubebuilder:validation:Optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
 	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
-	// For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
@@ -227,11 +227,11 @@ type ClusterStatus struct {
 	// The OCID of the KMS key to be used as the master encryption key for Kubernetes secret encryption.
 	KmsKeyId string `json:"kmsKeyId,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-	// For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
 	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
-	// For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 	// Usage of system tag keys. These predefined keys are scoped to namespaces.
@@ -241,7 +241,7 @@ type ClusterStatus struct {
 	Options ClusterOptions `json:"options,omitempty"`
 	// Metadata about the cluster.
 	Metadata ClusterMetadata `json:"metadata,omitempty"`
-	// The state of the cluster masters.
+	// The state of the cluster masters. For more information, see Monitoring Clusters (https://docs.oracle.com/iaas/Content/ContEng/Tasks/contengmonitoringclusters.htm)
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Details about the state of the cluster masters.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
@@ -255,6 +255,10 @@ type ClusterStatus struct {
 	ClusterPodNetworkOptions []ClusterPodNetworkOption `json:"clusterPodNetworkOptions,omitempty"`
 	// Type of cluster
 	Type string `json:"type,omitempty"`
+	// The cluster-specific OpenID Connect Discovery endpoint
+	OpenIdConnectDiscoveryEndpoint string `json:"openIdConnectDiscoveryEndpoint,omitempty"`
+	// The cluster-specific OpenID Connect Discovery Key to derive the DiscoveryEndpoint
+	OpenIdConnectDiscoveryKey string `json:"openIdConnectDiscoveryKey,omitempty"`
 }
 
 // +kubebuilder:object:root=true
