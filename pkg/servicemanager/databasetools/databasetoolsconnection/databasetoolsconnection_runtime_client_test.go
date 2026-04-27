@@ -115,7 +115,8 @@ func makeGenericJDBCResource() *databasetoolsv1beta1.DatabaseToolsConnection {
 			DefinedTags: map[string]shared.MapValue{
 				"Operations": {"CostCenter": "42"},
 			},
-			RuntimeSupport: "SUPPORTED",
+			RuntimeSupport:  "SUPPORTED",
+			RuntimeIdentity: "RESOURCE_PRINCIPAL",
 		},
 	}
 }
@@ -138,6 +139,7 @@ func makePostgresqlResource() *databasetoolsv1beta1.DatabaseToolsConnection {
 			},
 			PrivateEndpointId: "ocid1.databasetoolsprivateendpoint.oc1..example",
 			RuntimeSupport:    "SUPPORTED",
+			RuntimeIdentity:   "AUTHENTICATED_PRINCIPAL",
 		},
 	}
 }
@@ -173,7 +175,8 @@ func makeOracleResource() *databasetoolsv1beta1.DatabaseToolsConnection {
 			DefinedTags: map[string]shared.MapValue{
 				"Operations": {"CostCenter": "24"},
 			},
-			RuntimeSupport: "SUPPORTED",
+			RuntimeSupport:  "SUPPORTED",
+			RuntimeIdentity: "AUTHENTICATED_PRINCIPAL",
 		},
 	}
 }
@@ -186,6 +189,8 @@ func makeGenericJDBCSDKConnection(
 		Id:                 common.String(id),
 		DisplayName:        common.String("jdbc-primary"),
 		CompartmentId:      common.String("ocid1.compartment.oc1..example"),
+		RuntimeEndpoint:    common.String("https://runtime.example.com/generic-jdbc"),
+		RuntimeIdentity:    databasetoolssdk.RuntimeIdentityResourcePrincipal,
 		Url:                common.String("jdbc:oracle:thin:@tcp://db.example.com:1521/service"),
 		UserName:           common.String("app-user"),
 		UserPassword:       databasetoolssdk.DatabaseToolsUserPasswordSecretId{SecretId: common.String("ocid1.secret.oc1..db-password")},
@@ -210,12 +215,15 @@ func makePostgresqlSDKConnectionSummary(
 	id string,
 	connectionString string,
 	relatedIdentifier string,
+	runtimeIdentity databasetoolssdk.RuntimeIdentityEnum,
 	state databasetoolssdk.LifecycleStateEnum,
 ) databasetoolssdk.DatabaseToolsConnectionPostgresqlSummary {
 	return databasetoolssdk.DatabaseToolsConnectionPostgresqlSummary{
 		Id:               common.String(id),
 		DisplayName:      common.String("shared-display-name"),
 		CompartmentId:    common.String("ocid1.compartment.oc1..example"),
+		RuntimeEndpoint:  common.String("https://runtime.example.com/postgresql"),
+		RuntimeIdentity:  runtimeIdentity,
 		ConnectionString: common.String(connectionString),
 		RelatedResource: &databasetoolssdk.DatabaseToolsRelatedResourcePostgresql{
 			EntityType: databasetoolssdk.RelatedResourceEntityTypePostgresqlPostgresqldbsystem,
@@ -236,6 +244,8 @@ func makePostgresqlSDKConnection(
 		Id:               common.String(id),
 		DisplayName:      common.String("shared-display-name"),
 		CompartmentId:    common.String("ocid1.compartment.oc1..example"),
+		RuntimeEndpoint:  common.String("https://runtime.example.com/postgresql"),
+		RuntimeIdentity:  databasetoolssdk.RuntimeIdentityAuthenticatedPrincipal,
 		ConnectionString: common.String("postgresql://db.example.com:5432/service_a"),
 		RelatedResource: &databasetoolssdk.DatabaseToolsRelatedResourcePostgresql{
 			EntityType: databasetoolssdk.RelatedResourceEntityTypePostgresqlPostgresqldbsystem,
@@ -259,6 +269,8 @@ func makeOracleSDKConnection(
 		Id:               common.String(id),
 		DisplayName:      common.String("oracle-primary"),
 		CompartmentId:    common.String("ocid1.compartment.oc1..example"),
+		RuntimeEndpoint:  common.String("https://runtime.example.com/oracle"),
+		RuntimeIdentity:  databasetoolssdk.RuntimeIdentityAuthenticatedPrincipal,
 		ConnectionString: common.String(connectionString),
 		RelatedResource: &databasetoolssdk.DatabaseToolsRelatedResource{
 			EntityType: databasetoolssdk.RelatedResourceEntityTypeDatabase,
@@ -346,6 +358,9 @@ func TestDatabaseToolsConnectionServiceClientCreateOrUpdateCreatesGenericJDBCAnd
 	if details.Url == nil || *details.Url != resource.Spec.Url {
 		t.Fatalf("create url = %v, want %q", details.Url, resource.Spec.Url)
 	}
+	if details.RuntimeIdentity != databasetoolssdk.RuntimeIdentityResourcePrincipal {
+		t.Fatalf("create runtimeIdentity = %q, want %q", details.RuntimeIdentity, databasetoolssdk.RuntimeIdentityResourcePrincipal)
+	}
 	if _, ok := details.UserPassword.(databasetoolssdk.DatabaseToolsUserPasswordSecretIdDetails); !ok {
 		t.Fatalf("create userPassword type = %T, want DatabaseToolsUserPasswordSecretIdDetails", details.UserPassword)
 	}
@@ -371,6 +386,12 @@ func TestDatabaseToolsConnectionServiceClientCreateOrUpdateCreatesGenericJDBCAnd
 	requireAsyncCurrent(t, resource, shared.OSOKAsyncPhaseCreate, "wr-create-1")
 	if resource.Status.OsokStatus.Async.Current.RawStatus != "CREATING" {
 		t.Fatalf("status.async.current.rawStatus = %q, want %q", resource.Status.OsokStatus.Async.Current.RawStatus, "CREATING")
+	}
+	if resource.Status.RuntimeEndpoint != "https://runtime.example.com/generic-jdbc" {
+		t.Fatalf("status.runtimeEndpoint = %q, want %q", resource.Status.RuntimeEndpoint, "https://runtime.example.com/generic-jdbc")
+	}
+	if resource.Status.RuntimeIdentity != "RESOURCE_PRINCIPAL" {
+		t.Fatalf("status.runtimeIdentity = %q, want %q", resource.Status.RuntimeIdentity, "RESOURCE_PRINCIPAL")
 	}
 }
 
@@ -403,19 +424,24 @@ func TestDatabaseToolsConnectionServiceClientCreateOrUpdateResolvesExistingUsing
 			if len(req.RuntimeSupport) != 0 {
 				t.Fatalf("list runtimeSupport = %#v, want omitted reviewed request field", req.RuntimeSupport)
 			}
+			if len(req.RuntimeIdentity) != 0 {
+				t.Fatalf("list runtimeIdentity = %#v, want omitted reviewed request field", req.RuntimeIdentity)
+			}
 			return databasetoolssdk.ListDatabaseToolsConnectionsResponse{
 				DatabaseToolsConnectionCollection: databasetoolssdk.DatabaseToolsConnectionCollection{
 					Items: []databasetoolssdk.DatabaseToolsConnectionSummary{
 						makePostgresqlSDKConnectionSummary(
 							"ocid1.databasetoolsconnection.oc1..wrong",
-							"postgresql://db.example.com:5432/service_b",
-							"ocid1.postgresqldbsystem.oc1..service-b",
+							"postgresql://db.example.com:5432/service_a",
+							"ocid1.postgresqldbsystem.oc1..service-a",
+							databasetoolssdk.RuntimeIdentityResourcePrincipal,
 							databasetoolssdk.LifecycleStateActive,
 						),
 						makePostgresqlSDKConnectionSummary(
 							"ocid1.databasetoolsconnection.oc1..existing",
 							"postgresql://db.example.com:5432/service_a",
 							"ocid1.postgresqldbsystem.oc1..service-a",
+							databasetoolssdk.RuntimeIdentityAuthenticatedPrincipal,
 							databasetoolssdk.LifecycleStateInactive,
 						),
 					},
@@ -461,6 +487,12 @@ func TestDatabaseToolsConnectionServiceClientCreateOrUpdateResolvesExistingUsing
 	}
 	if resource.Status.LifecycleState != "INACTIVE" {
 		t.Fatalf("status.lifecycleState = %q, want %q", resource.Status.LifecycleState, "INACTIVE")
+	}
+	if resource.Status.RuntimeEndpoint != "https://runtime.example.com/postgresql" {
+		t.Fatalf("status.runtimeEndpoint = %q, want %q", resource.Status.RuntimeEndpoint, "https://runtime.example.com/postgresql")
+	}
+	if resource.Status.RuntimeIdentity != "AUTHENTICATED_PRINCIPAL" {
+		t.Fatalf("status.runtimeIdentity = %q, want %q", resource.Status.RuntimeIdentity, "AUTHENTICATED_PRINCIPAL")
 	}
 	if resource.Status.OsokStatus.Async.Current != nil {
 		t.Fatalf("status.async.current = %#v, want nil for steady INACTIVE lifecycle", resource.Status.OsokStatus.Async.Current)
@@ -559,6 +591,12 @@ func TestDatabaseToolsConnectionServiceClientCreateOrUpdateUpdatesOracleConnecti
 
 	if resource.Status.ConnectionString != resource.Spec.ConnectionString {
 		t.Fatalf("status.connectionString = %q, want %q", resource.Status.ConnectionString, resource.Spec.ConnectionString)
+	}
+	if resource.Status.RuntimeEndpoint != "https://runtime.example.com/oracle" {
+		t.Fatalf("status.runtimeEndpoint = %q, want %q", resource.Status.RuntimeEndpoint, "https://runtime.example.com/oracle")
+	}
+	if resource.Status.RuntimeIdentity != "AUTHENTICATED_PRINCIPAL" {
+		t.Fatalf("status.runtimeIdentity = %q, want %q", resource.Status.RuntimeIdentity, "AUTHENTICATED_PRINCIPAL")
 	}
 	if resource.Status.OsokStatus.OpcRequestID != "opc-update-1" {
 		t.Fatalf("status.opcRequestId = %q, want %q", resource.Status.OsokStatus.OpcRequestID, "opc-update-1")
