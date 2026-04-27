@@ -63,7 +63,7 @@ type MetricStatus struct {
 	// A valid resourceGroup value starts with an alphabetical character and includes only alphanumeric characters, periods (.), underscores (_), hyphens (-), and dollar signs ($).
 	// Example: `frontend-fleet`
 	ResourceGroup string `json:"resourceGroup,omitempty"`
-	// The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment containing
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment containing
 	// the resources monitored by the metric.
 	CompartmentId string `json:"compartmentId,omitempty"`
 	// Qualifiers provided in a metric definition. Available dimensions vary by metric namespace.

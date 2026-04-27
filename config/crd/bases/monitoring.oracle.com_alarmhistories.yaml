@@ -56,7 +56,7 @@ spec:
             description: AlarmHistoryStatus defines the observed state of AlarmHistory.
             properties:
               alarmId:
-                description: The OCID (https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the alarm to retrieve history for.
                 type: string
               entries:
@@ -64,6 +64,15 @@ spec:
                 items:
                   description: AlarmHistoryEntry defines nested fields for AlarmHistory.Entry.
                   properties:
+                    alarmSummary:
+                      description: |-
+                        Customizable alarm summary (`alarmSummary` alarm message parameter (https://docs.oracle.com/iaas/Content/Monitoring/alarm-message-format.htm)).
+                        Optionally include dynamic variables (https://docs.oracle.com/iaas/Content/Monitoring/Tasks/update-alarm-dynamic-variables.htm).
+                        The alarm summary appears within the body of the alarm message and in responses to
+                        ListAlarmsStatus
+                        GetAlarmHistory and
+                        RetrieveDimensionStates.
+                      type: string
                     summary:
                       description: |-
                         Description for this alarm history entry.

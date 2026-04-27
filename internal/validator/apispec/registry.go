@@ -1182,6 +1182,8 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "logging.UnifiedAgentConfigurationCollection",
+				Exclude:   true,
+				Reason:    "Intentionally untracked: collection responses do not map to a singular resource status surface.",
 			},
 			{
 				SDKStruct: "logging.UnifiedAgentConfigurationSummary",
