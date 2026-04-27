@@ -195,6 +195,15 @@ func buildBackendSetUpdateBody(
 	if err != nil {
 		return loadbalancersdk.UpdateBackendSetDetails{}, false, fmt.Errorf("build desired BackendSet update details: %w", err)
 	}
+	currentBackendSet, _ := backendSetFromResponse(currentResponse)
+	if resource.Spec.BackendMaxConnections == 0 {
+		switch {
+		case currentBackendSet.BackendMaxConnections == nil:
+			desired.BackendMaxConnections = nil
+		case *currentBackendSet.BackendMaxConnections != 0:
+			desired.BackendMaxConnections = common.Int(0)
+		}
+	}
 
 	currentSource, err := backendSetUpdateSource(resource, currentResponse)
 	if err != nil {
@@ -325,6 +334,27 @@ func backendSetUpdateSource(resource *loadbalancerv1beta1.BackendSet, currentRes
 		return current.BackendSet, nil
 	default:
 		return currentResponse, nil
+	}
+}
+
+func backendSetFromResponse(response any) (loadbalancersdk.BackendSet, bool) {
+	switch typed := response.(type) {
+	case loadbalancersdk.BackendSet:
+		return typed, true
+	case *loadbalancersdk.BackendSet:
+		if typed == nil {
+			return loadbalancersdk.BackendSet{}, false
+		}
+		return *typed, true
+	case loadbalancersdk.GetBackendSetResponse:
+		return typed.BackendSet, true
+	case *loadbalancersdk.GetBackendSetResponse:
+		if typed == nil {
+			return loadbalancersdk.BackendSet{}, false
+		}
+		return typed.BackendSet, true
+	default:
+		return loadbalancersdk.BackendSet{}, false
 	}
 }
 

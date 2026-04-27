@@ -404,6 +404,58 @@ func TestCreateOrUpdateUpdatesMutableLoadBalancerFields(t *testing.T) {
 	}
 }
 
+func TestCreateOrUpdateClearsLoadBalancerRequestIDHeaderAndSecurityAttributes(t *testing.T) {
+	t.Parallel()
+
+	existing := baseLoadBalancerResource()
+	existing.Spec.IsRequestIdEnabled = true
+	existing.Spec.RequestIdHeader = "X-Custom-Id"
+	existing.Spec.SecurityAttributes = map[string]shared.MapValue{
+		"Oracle-ZPR": {"mode": "audit"},
+	}
+
+	client := &fakeGeneratedLoadBalancerOCIClient{
+		loadBalancers: map[string]loadbalancersdk.LoadBalancer{
+			loadBalancerExistingID: loadBalancerFromResource(loadBalancerExistingID, existing),
+		},
+	}
+	serviceClient := newGeneratedLoadBalancerServiceClient(client, loggerutil.OSOKLogger{}, nil, nil)
+
+	resource := baseLoadBalancerResource()
+	resource.Spec.IsRequestIdEnabled = true
+	resource.Spec.RequestIdHeader = ""
+	resource.Spec.SecurityAttributes = map[string]shared.MapValue{}
+	resource.Status.Id = loadBalancerExistingID
+	resource.Status.CompartmentId = loadBalancerCompartmentID
+	resource.Status.DisplayName = loadBalancerDisplayName
+	resource.Status.IsRequestIdEnabled = true
+	resource.Status.RequestIdHeader = "X-Custom-Id"
+	resource.Status.SecurityAttributes = map[string]shared.MapValue{
+		"Oracle-ZPR": {"mode": "audit"},
+	}
+	resource.Status.OsokStatus.Ocid = loadBalancerExistingID
+
+	response, err := serviceClient.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	if err != nil {
+		t.Fatalf("CreateOrUpdate() error = %v", err)
+	}
+	if !response.IsSuccessful {
+		t.Fatalf("CreateOrUpdate() response = %+v, want successful response", response)
+	}
+	if len(client.updateRequests) != 1 {
+		t.Fatalf("update requests = %d, want 1", len(client.updateRequests))
+	}
+	if got := client.updateRequests[0].UpdateLoadBalancerDetails.RequestIdHeader; got == nil || *got != "" {
+		t.Fatalf("update request requestIdHeader = %#v, want explicit empty string", got)
+	}
+	if got := client.updateRequests[0].UpdateLoadBalancerDetails.SecurityAttributes; got == nil || len(got) != 0 {
+		t.Fatalf("update request securityAttributes = %#v, want explicit empty map", got)
+	}
+	if got := resource.Status.RequestIdHeader; got != "" {
+		t.Fatalf("status.requestIdHeader = %q, want empty string", got)
+	}
+}
+
 func TestDeleteConfirmsLoadBalancerRemoval(t *testing.T) {
 	t.Parallel()
 

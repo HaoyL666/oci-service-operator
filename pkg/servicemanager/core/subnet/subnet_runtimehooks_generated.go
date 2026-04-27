@@ -78,7 +78,7 @@ func newSubnetRuntimeSemantics() *generatedruntime.Semantics {
 		},
 		Mutation: generatedruntime.MutationSemantics{
 			Mutable:       []string{"cidrBlock", "definedTags", "dhcpOptionsId", "displayName", "freeformTags", "ipv6CidrBlock", "ipv6CidrBlocks", "routeTableId", "securityListIds"},
-			ForceNew:      []string{"availabilityDomain", "compartmentId", "dnsLabel", "prohibitInternetIngress", "prohibitPublicIpOnVnic", "vcnId"},
+			ForceNew:      []string{"availabilityDomain", "compartmentId", "dnsLabel", "ipv4CidrBlocks", "prohibitInternetIngress", "prohibitPublicIpOnVnic", "vcnId"},
 			ConflictsWith: map[string][]string{},
 		},
 		Hooks: generatedruntime.HookSet{

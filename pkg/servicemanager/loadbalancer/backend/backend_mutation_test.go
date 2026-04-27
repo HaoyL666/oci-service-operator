@@ -172,6 +172,43 @@ func TestCreateOrUpdateExecutesMutableBackendUpdate(t *testing.T) {
 	}
 }
 
+func TestCreateOrUpdateClearsBackendMaxConnectionsToUnlimited(t *testing.T) {
+	t.Parallel()
+
+	resource := makeTrackedBackendResource()
+	resource.Spec.MaxConnections = 0
+	resource.Status.MaxConnections = 300
+
+	getCalls := 0
+	var updateRequest loadbalancersdk.UpdateBackendRequest
+
+	client := newTestBackendRuntimeClient(&fakeGeneratedBackendOCIClient{
+		getFn: func(_ context.Context, req loadbalancersdk.GetBackendRequest) (loadbalancersdk.GetBackendResponse, error) {
+			getCalls++
+			assertBackendPathIdentity(t, req.LoadBalancerId, req.BackendSetName, req.BackendName)
+			if getCalls == 1 {
+				return loadbalancersdk.GetBackendResponse{Backend: sdkBackendWithMaxConnections(resource.Spec.Weight, resource.Spec.Backup, resource.Spec.Drain, resource.Spec.Offline, 300)}, nil
+			}
+			return loadbalancersdk.GetBackendResponse{Backend: sdkBackendWithMaxConnections(resource.Spec.Weight, resource.Spec.Backup, resource.Spec.Drain, resource.Spec.Offline, 0)}, nil
+		},
+		updateFn: func(_ context.Context, req loadbalancersdk.UpdateBackendRequest) (loadbalancersdk.UpdateBackendResponse, error) {
+			updateRequest = req
+			return loadbalancersdk.UpdateBackendResponse{}, nil
+		},
+	})
+
+	response, err := client.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	if err != nil {
+		t.Fatalf("CreateOrUpdate() error = %v", err)
+	}
+	if !response.IsSuccessful {
+		t.Fatalf("CreateOrUpdate() response = %#v, want successful update response", response)
+	}
+	if updateRequest.UpdateBackendDetails.MaxConnections == nil || *updateRequest.UpdateBackendDetails.MaxConnections != 0 {
+		t.Fatalf("UpdateBackendRequest.MaxConnections = %#v, want explicit 0", updateRequest.UpdateBackendDetails.MaxConnections)
+	}
+}
+
 func TestCreateOrUpdateRejectsForceNewBackendDrift(t *testing.T) {
 	t.Parallel()
 

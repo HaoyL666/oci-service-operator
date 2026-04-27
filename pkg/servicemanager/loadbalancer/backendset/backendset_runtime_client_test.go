@@ -549,6 +549,44 @@ func TestCreateOrUpdateUpdatesBackendSetBackendMaxConnections(t *testing.T) {
 	}
 }
 
+func TestCreateOrUpdateClearsBackendSetBackendMaxConnectionsToUnlimited(t *testing.T) {
+	t.Parallel()
+
+	resource := makeTrackedBackendSetResource()
+	resource.Spec.BackendMaxConnections = 0
+	resource.Status.BackendMaxConnections = 512
+
+	getCalls := 0
+	var updateRequest loadbalancersdk.UpdateBackendSetRequest
+
+	client := newTestBackendSetRuntimeClient(&fakeGeneratedBackendSetOCIClient{
+		getFn: func(_ context.Context, req loadbalancersdk.GetBackendSetRequest) (loadbalancersdk.GetBackendSetResponse, error) {
+			getCalls++
+			assertBackendSetPathIdentity(t, req.LoadBalancerId, req.BackendSetName, backendSetLoadBalancerID, backendSetNameValue)
+			if getCalls == 1 {
+				return loadbalancersdk.GetBackendSetResponse{BackendSet: sdkBackendSetWithMaxConnections(resource.Status.Policy, 512)}, nil
+			}
+			return loadbalancersdk.GetBackendSetResponse{BackendSet: sdkBackendSetWithMaxConnections(resource.Status.Policy, 0)}, nil
+		},
+		updateFn: func(_ context.Context, req loadbalancersdk.UpdateBackendSetRequest) (loadbalancersdk.UpdateBackendSetResponse, error) {
+			updateRequest = req
+			assertBackendSetPathIdentity(t, req.LoadBalancerId, req.BackendSetName, backendSetLoadBalancerID, backendSetNameValue)
+			return loadbalancersdk.UpdateBackendSetResponse{}, nil
+		},
+	})
+
+	response, err := client.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	if err != nil {
+		t.Fatalf("CreateOrUpdate() error = %v", err)
+	}
+	if !response.IsSuccessful {
+		t.Fatalf("CreateOrUpdate() response = %#v, want successful update response", response)
+	}
+	if updateRequest.UpdateBackendSetDetails.BackendMaxConnections == nil || *updateRequest.UpdateBackendSetDetails.BackendMaxConnections != 0 {
+		t.Fatalf("UpdateBackendSetDetails.BackendMaxConnections = %#v, want explicit 0", updateRequest.UpdateBackendSetDetails.BackendMaxConnections)
+	}
+}
+
 func TestCreateOrUpdateRejectsForceNewBackendSetDrift(t *testing.T) {
 	t.Parallel()
 
