@@ -96,6 +96,19 @@ packages:
         kind: BdsInstance
         summary: Manage OCI Big Data Service instances.
 
+  - package: budget
+    displayName: Budget
+    summary: Manage OCI Budgets from Kubernetes with an initial controller-backed Budget rollout.
+    supportStatus: preview
+    customerVisible: false
+    guidePath: docs/installation.md
+    packageNotes:
+      - Current package scope is intentionally limited to Budget while the remaining Budget resource families stay unpublished.
+    kindOverrides:
+      - group: budget
+        kind: Budget
+        summary: Manage OCI Budgets.
+
   - package: containerengine
     displayName: Container Engine for Kubernetes
     summary: Manage OCI Container Engine for Kubernetes clusters and node pools from Kubernetes.
