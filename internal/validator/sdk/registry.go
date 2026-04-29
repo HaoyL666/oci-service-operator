@@ -10,6 +10,7 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/aivision"
 	"github.com/oracle/oci-go-sdk/v65/analytics"
 	"github.com/oracle/oci-go-sdk/v65/bds"
+	"github.com/oracle/oci-go-sdk/v65/budget"
 	"github.com/oracle/oci-go-sdk/v65/containerengine"
 	"github.com/oracle/oci-go-sdk/v65/containerinstances"
 	"github.com/oracle/oci-go-sdk/v65/core"
@@ -400,6 +401,12 @@ var seedTargets = []Target{
 	newTarget("bds", "UpdateBdsInstanceDetails", reflect.TypeOf(bds.UpdateBdsInstanceDetails{})),
 	newTarget("bds", "BdsInstance", reflect.TypeOf(bds.BdsInstance{})),
 	newTarget("bds", "BdsInstanceSummary", reflect.TypeOf(bds.BdsInstanceSummary{})),
+
+	// Budget CRD support
+	newTarget("budget", "CreateBudgetDetails", reflect.TypeOf(budget.CreateBudgetDetails{})),
+	newTarget("budget", "UpdateBudgetDetails", reflect.TypeOf(budget.UpdateBudgetDetails{})),
+	newTarget("budget", "Budget", reflect.TypeOf(budget.Budget{})),
+	newTarget("budget", "BudgetSummary", reflect.TypeOf(budget.BudgetSummary{})),
 
 	// Containerinstances CRD support
 	newTarget("containerinstances", "CreateContainerInstanceDetails", reflect.TypeOf(containerinstances.CreateContainerInstanceDetails{})),

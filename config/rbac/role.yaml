@@ -166,6 +166,32 @@ rules:
   - patch
   - update
 - apiGroups:
+  - budget.oracle.com
+  resources:
+  - budgets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - budget.oracle.com
+  resources:
+  - budgets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - budget.oracle.com
+  resources:
+  - budgets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - containerengine.oracle.com
   resources:
   - clusters

@@ -9,6 +9,7 @@ import (
 	aivisionv1beta1 "github.com/oracle/oci-service-operator/api/aivision/v1beta1"
 	analyticsv1beta1 "github.com/oracle/oci-service-operator/api/analytics/v1beta1"
 	bdsv1beta1 "github.com/oracle/oci-service-operator/api/bds/v1beta1"
+	budgetv1beta1 "github.com/oracle/oci-service-operator/api/budget/v1beta1"
 	containerenginev1beta1 "github.com/oracle/oci-service-operator/api/containerengine/v1beta1"
 	containerinstancesv1beta1 "github.com/oracle/oci-service-operator/api/containerinstances/v1beta1"
 	corev1beta1 "github.com/oracle/oci-service-operator/api/core/v1beta1"
@@ -1525,6 +1526,25 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "bds.BdsInstanceSummary",
+			},
+		},
+	},
+	{
+		Name:       "BudgetBudget",
+		SpecType:   reflect.TypeOf(budgetv1beta1.BudgetSpec{}),
+		StatusType: reflect.TypeOf(budgetv1beta1.BudgetStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "budget.CreateBudgetDetails",
+			},
+			{
+				SDKStruct: "budget.UpdateBudgetDetails",
+			},
+			{
+				SDKStruct: "budget.Budget",
+			},
+			{
+				SDKStruct: "budget.BudgetSummary",
 			},
 		},
 	},
