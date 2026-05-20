@@ -18,7 +18,243 @@ No customer-visible package currently exposes `disasterrecovery.oracle.com/v1bet
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
+| [DrPlan](#kind-drplan) | Namespaced | [Sample](../../../samples/disasterrecovery/v1beta1/drplan.md) | - |
 | [DrProtectionGroup](#kind-drprotectiongroup) | Namespaced | [Sample](../../../samples/disasterrecovery/v1beta1/drprotectiongroup.md) | - |
+
+<a id="kind-drplan"></a>
+## DrPlan
+
+DrPlan is the Schema for the drplans API.
+
+- `Plural`: `drplans`
+- `Scope`: `Namespaced`
+- `APIVersion`: `disasterrecovery.oracle.com/v1beta1`
+- `Sample`: [Sample](../../../samples/disasterrecovery/v1beta1/drplan.md) (`config/samples/disasterrecovery_v1beta1_drplan.yaml`)
+- `Packages`: Not currently exposed by a customer-visible package.
+
+<a id="kind-drplan-spec"></a>
+### Spec
+
+DrPlanSpec defines the desired state of DrPlan.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `displayName` | The display name of the DR plan being created. Example: `EBS Switchover PHX to IAD` | `string` | Yes | - | - |
+| `drProtectionGroupId` | The OCID of the DR protection group to which this DR plan belongs. Example: `ocid1.drprotectiongroup.oc1..uniqueID` | `string` | Yes | - | - |
+| `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| [`planGroups`](#kind-drplan-spec-plangroups) | An ordered list of groups in a DR plan. | `list[object]` | No | - | - |
+| `sourcePlanId` | The OCID of the source DR plan that should be cloned. Example: `ocid1.drplan.oc1..uniqueID` | `string` | No | - | - |
+| `type` | The type of DR plan to be created. | `string` | Yes | - | - |
+
+<a id="kind-drplan-spec-plangroups"></a>
+#### Spec.planGroups[]
+
+[Back to DrPlan spec](#kind-drplan-spec)
+
+DrPlanPlanGroup defines nested fields for DrPlan.PlanGroup.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `displayName` | The display name of the group. Example: `My_GROUP_3 - EBS Start` | `string` | No | - | - |
+| `id` | The unique id of the group. Must not be modified by user. Example: `sgid1.group..uniqueID` | `string` | No | - | - |
+| `isPauseEnabled` | A flag indicating whether this group should be enabled for execution. This flag is only applicable to the `USER_DEFINED_PAUSE` group. The flag should be null for the remaining group types. Example: `true` | `boolean` | No | - | - |
+| [`steps`](#kind-drplan-spec-plangroups-steps) | The list of steps in this group. | `list[object]` | No | - | - |
+| `type` | The group type. Example: `BUILT_IN` | `string` | No | - | - |
+
+<a id="kind-drplan-spec-plangroups-steps"></a>
+##### Spec.planGroups[].steps[]
+
+[Back to DrPlan spec](#kind-drplan-spec)
+
+DrPlanPlanGroupStep defines nested fields for DrPlan.PlanGroup.Step.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `displayName` | The display name of the step in a group. Example: `My_STEP_3A - EBS Start - STAGE A` | `string` | No | - | - |
+| `errorMode` | The error mode for this step. The default error mode for the step is `STOP_ON_ERROR`. | `string` | No | - | - |
+| `id` | The unique id of the step. Example: `sgid1.step..uniqueID` | `string` | No | - | - |
+| `isEnabled` | A flag indicating whether this step should be enabled for execution. The default value for the isEnabled flag is `true`. Example: `true` | `boolean` | No | - | - |
+| `timeout` | The timeout in seconds for executing this step. When creating a new step, if no timeout is specified, the default timeout is set to `3600` seconds. Example: `600` | `integer` | No | - | - |
+| [`userDefinedStep`](#kind-drplan-spec-plangroups-steps-userdefinedstep) | DrPlanPlanGroupStepUserDefinedStep defines nested fields for DrPlan.PlanGroup.Step.UserDefinedStep. | `object` | No | - | - |
+
+<a id="kind-drplan-spec-plangroups-steps-userdefinedstep"></a>
+###### Spec.planGroups[].steps[].userDefinedStep
+
+[Back to DrPlan spec](#kind-drplan-spec)
+
+DrPlanPlanGroupStepUserDefinedStep defines nested fields for DrPlan.PlanGroup.Step.UserDefinedStep.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `functionId` | The OCID of function to be invoked. Example: `ocid1.fnfunc.oc1..uniqueID` | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| [`objectStorageScriptLocation`](#kind-drplan-spec-plangroups-steps-userdefinedstep-objectstoragescriptlocation) | DrPlanPlanGroupStepUserDefinedStepObjectStorageScriptLocation defines nested fields for DrPlan.PlanGroup.Step.UserDefinedStep.ObjectStorageScriptLocation. | `object` | No | - | - |
+| `requestBody` | The request body for the function. Example: `{ "FnParam1", "FnParam2" }` | `string` | No | - | - |
+| `runAsUser` | The userid on the instance to be used for executing the script or command. Example: `opc` | `string` | No | - | - |
+| `runOnInstanceId` | The OCID of the instance on which this precheck script or command should be executed. **For moving instances:** *runOnInstanceId* must be the OCID of the instance in the region where the instance is currently present. **For non-moving instances:** *runOnInstanceId* must be the OCID of the non-moving instance. Example: `ocid1.instance.oc1..uniqueID` | `string` | No | - | - |
+| `scriptCommand` | The script name and arguments. Example: `/usr/bin/python3 /home/opc/scripts/my_app_script.py arg1 arg2 arg3` | `string` | No | - | - |
+| `stepType` | - | `string` | No | - | - |
+
+<a id="kind-drplan-spec-plangroups-steps-userdefinedstep-objectstoragescriptlocation"></a>
+###### Spec.planGroups[].steps[].userDefinedStep.objectStorageScriptLocation
+
+[Back to DrPlan spec](#kind-drplan-spec)
+
+DrPlanPlanGroupStepUserDefinedStepObjectStorageScriptLocation defines nested fields for DrPlan.PlanGroup.Step.UserDefinedStep.ObjectStorageScriptLocation.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucket` | The bucket name inside the object storage namespace. Example: `custom_dr_scripts` | `string` | Yes | - | - |
+| `namespace` | The namespace in object storage (Note - this is usually the tenancy name). Example: `myocitenancy` | `string` | Yes | - | - |
+| `object` | The object name inside the object storage bucket. Example: `validate_app_start.sh` | `string` | Yes | - | - |
+
+<a id="kind-drplan-status"></a>
+### Status
+
+DrPlanStatus defines the observed state of DrPlan.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `compartmentId` | The OCID of the compartment containing the DR plan. Example: `ocid1.compartment.oc1..uniqueID` | `string` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `displayName` | The display name of the DR plan. Example: `EBS Switchover PHX to IAD` | `string` | No | - | - |
+| `drProtectionGroupId` | The OCID of the DR protection group to which this DR plan belongs. Example: `ocid1.drplan.oc1..uniqueID` | `string` | No | - | - |
+| `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `id` | The OCID of the DR plan. Example: `ocid1.drplan.oc1..uniqueID` | `string` | No | - | - |
+| `lifeCycleDetails` | A message describing the DR plan's current state in more detail. | `string` | No | - | - |
+| `lifecycleState` | The current state of the DR plan. | `string` | No | - | - |
+| `lifecycleSubState` | The current state of the DR plan. | `string` | No | - | - |
+| `peerDrProtectionGroupId` | The OCID of the peer DR protection group associated with this plan's DR protection group. Example: `ocid1.drprotectiongroup.oc1..uniqueID` | `string` | No | - | - |
+| `peerRegion` | The region of the peer DR protection group associated with this plan's DR protection group. Example: `us-ashburn-1` | `string` | No | - | - |
+| [`planGroups`](#kind-drplan-status-plangroups) | The list of groups in this DR plan. | `list[object]` | No | - | - |
+| `sourcePlanId` | If this is a cloned DR plan, the OCID of the source DR plan that was used to clone this DR plan. If this DR plan was not cloned, then the value for this will be `null`. Example: `ocid1.drplan.oc1..uniqueID` | `string` | No | - | - |
+| [`status`](#kind-drplan-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
+| `timeCreated` | The date and time the DR plan was created. An RFC3339 formatted datetime string. Example: `2019-03-29T09:36:42Z` | `string` | No | - | - |
+| `timeUpdated` | The date and time the DR plan was updated. An RFC3339 formatted datetime string. Example: `2019-03-29T09:36:42Z` | `string` | No | - | - |
+| `type` | The type of the DR plan. | `string` | No | - | - |
+
+<a id="kind-drplan-status-plangroups"></a>
+#### Status.planGroups[]
+
+[Back to DrPlan status](#kind-drplan-status)
+
+DrPlanPlanGroup defines nested fields for DrPlan.PlanGroup.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `displayName` | The display name of the group. Example: `My_GROUP_3 - EBS Start` | `string` | No | - | - |
+| `id` | The unique id of the group. Must not be modified by user. Example: `sgid1.group..uniqueID` | `string` | No | - | - |
+| `isPauseEnabled` | A flag indicating whether this group should be enabled for execution. This flag is only applicable to the `USER_DEFINED_PAUSE` group. The flag should be null for the remaining group types. Example: `true` | `boolean` | No | - | - |
+| [`steps`](#kind-drplan-status-plangroups-steps) | The list of steps in this group. | `list[object]` | No | - | - |
+| `type` | The group type. Example: `BUILT_IN` | `string` | No | - | - |
+
+<a id="kind-drplan-status-plangroups-steps"></a>
+##### Status.planGroups[].steps[]
+
+[Back to DrPlan status](#kind-drplan-status)
+
+DrPlanPlanGroupStep defines nested fields for DrPlan.PlanGroup.Step.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `displayName` | The display name of the step in a group. Example: `My_STEP_3A - EBS Start - STAGE A` | `string` | No | - | - |
+| `errorMode` | The error mode for this step. The default error mode for the step is `STOP_ON_ERROR`. | `string` | No | - | - |
+| `id` | The unique id of the step. Example: `sgid1.step..uniqueID` | `string` | No | - | - |
+| `isEnabled` | A flag indicating whether this step should be enabled for execution. The default value for the isEnabled flag is `true`. Example: `true` | `boolean` | No | - | - |
+| `timeout` | The timeout in seconds for executing this step. When creating a new step, if no timeout is specified, the default timeout is set to `3600` seconds. Example: `600` | `integer` | No | - | - |
+| [`userDefinedStep`](#kind-drplan-status-plangroups-steps-userdefinedstep) | DrPlanPlanGroupStepUserDefinedStep defines nested fields for DrPlan.PlanGroup.Step.UserDefinedStep. | `object` | No | - | - |
+
+<a id="kind-drplan-status-plangroups-steps-userdefinedstep"></a>
+###### Status.planGroups[].steps[].userDefinedStep
+
+[Back to DrPlan status](#kind-drplan-status)
+
+DrPlanPlanGroupStepUserDefinedStep defines nested fields for DrPlan.PlanGroup.Step.UserDefinedStep.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `functionId` | The OCID of function to be invoked. Example: `ocid1.fnfunc.oc1..uniqueID` | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| [`objectStorageScriptLocation`](#kind-drplan-status-plangroups-steps-userdefinedstep-objectstoragescriptlocation) | DrPlanPlanGroupStepUserDefinedStepObjectStorageScriptLocation defines nested fields for DrPlan.PlanGroup.Step.UserDefinedStep.ObjectStorageScriptLocation. | `object` | No | - | - |
+| `requestBody` | The request body for the function. Example: `{ "FnParam1", "FnParam2" }` | `string` | No | - | - |
+| `runAsUser` | The userid on the instance to be used for executing the script or command. Example: `opc` | `string` | No | - | - |
+| `runOnInstanceId` | The OCID of the instance on which this precheck script or command should be executed. **For moving instances:** *runOnInstanceId* must be the OCID of the instance in the region where the instance is currently present. **For non-moving instances:** *runOnInstanceId* must be the OCID of the non-moving instance. Example: `ocid1.instance.oc1..uniqueID` | `string` | No | - | - |
+| `scriptCommand` | The script name and arguments. Example: `/usr/bin/python3 /home/opc/scripts/my_app_script.py arg1 arg2 arg3` | `string` | No | - | - |
+| `stepType` | - | `string` | No | - | - |
+
+<a id="kind-drplan-status-plangroups-steps-userdefinedstep-objectstoragescriptlocation"></a>
+###### Status.planGroups[].steps[].userDefinedStep.objectStorageScriptLocation
+
+[Back to DrPlan status](#kind-drplan-status)
+
+DrPlanPlanGroupStepUserDefinedStepObjectStorageScriptLocation defines nested fields for DrPlan.PlanGroup.Step.UserDefinedStep.ObjectStorageScriptLocation.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucket` | The bucket name inside the object storage namespace. Example: `custom_dr_scripts` | `string` | Yes | - | - |
+| `namespace` | The namespace in object storage (Note - this is usually the tenancy name). Example: `myocitenancy` | `string` | Yes | - | - |
+| `object` | The object name inside the object storage bucket. Example: `validate_app_start.sh` | `string` | Yes | - | - |
+
+<a id="kind-drplan-status-status"></a>
+#### Status.status
+
+[Back to DrPlan status](#kind-drplan-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`async`](#kind-drplan-status-status-async) | Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first. | `object` | No | - | - |
+| [`conditions`](#kind-drplan-status-status-conditions) | - | `list[object]` | No | - | - |
+| `createdAt` | - | `string (date-time)` | No | - | - |
+| `deletedAt` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `ocid` | - | `string` | No | - | - |
+| `opcRequestId` | OpcRequestID is the latest non-empty OCI request ID from a mutating OCI response or surfaced OCI service error that materially contributed to the current shared status projection. Headerless follow-up observations keep the last non-empty value intact. | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `requestedAt` | - | `string (date-time)` | No | - | - |
+| `updatedAt` | - | `string (date-time)` | No | - | - |
+
+<a id="kind-drplan-status-status-async"></a>
+##### Status.status.async
+
+[Back to DrPlan status](#kind-drplan-status)
+
+Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`current`](#kind-drplan-status-status-async-current) | - | `object` | No | - | - |
+
+<a id="kind-drplan-status-status-async-current"></a>
+###### Status.status.async.current
+
+[Back to DrPlan status](#kind-drplan-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `message` | - | `string` | No | - | - |
+| `normalizedClass` | - | `string` | Yes | - | `attention`, `canceled`, `failed`, `pending`, `succeeded`, `unknown` |
+| `percentComplete` | - | `number` | No | - | - |
+| `phase` | - | `string` | Yes | - | `create`, `delete`, `update` |
+| `rawOperationType` | - | `string` | No | - | - |
+| `rawStatus` | - | `string` | No | - | - |
+| `source` | - | `string` | Yes | - | `lifecycle`, `none`, `workrequest` |
+| `updatedAt` | - | `string (date-time)` | Yes | - | - |
+| `workRequestId` | - | `string` | No | - | - |
+
+<a id="kind-drplan-status-status-conditions"></a>
+##### Status.status.conditions[]
+
+[Back to DrPlan status](#kind-drplan-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `lastTransitionTime` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `status` | - | `string` | Yes | - | - |
+| `type` | - | `string` | Yes | - | - |
 
 <a id="kind-drprotectiongroup"></a>
 ## DrProtectionGroup

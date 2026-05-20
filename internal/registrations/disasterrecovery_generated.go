@@ -13,6 +13,7 @@ import (
 	disasterrecoveryv1beta1 "github.com/oracle/oci-service-operator/api/disasterrecovery/v1beta1"
 	disasterrecoverycontrollers "github.com/oracle/oci-service-operator/controllers/disasterrecovery"
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
+	disasterrecoverydrplanservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/disasterrecovery/drplan"
 	disasterrecoverydrprotectiongroupservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/disasterrecovery/drprotectiongroup"
 )
 
@@ -21,6 +22,17 @@ func init() {
 		Group:       "disasterrecovery",
 		AddToScheme: disasterrecoveryv1beta1.AddToScheme,
 		SetupWithManager: func(ctx Context) error {
+			if err := (&disasterrecoverycontrollers.DrPlanReconciler{
+				Reconciler: NewBaseReconciler(
+					ctx,
+					"DrPlan",
+					func(deps servicemanager.RuntimeDeps) servicemanager.OSOKServiceManager {
+						return disasterrecoverydrplanservicemanager.NewDrPlanServiceManagerWithDeps(deps)
+					},
+				),
+			}).SetupWithManager(ctx.Manager); err != nil {
+				return fmt.Errorf("setup DrPlan controller: %w", err)
+			}
 			if err := (&disasterrecoverycontrollers.DrProtectionGroupReconciler{
 				Reconciler: NewBaseReconciler(
 					ctx,

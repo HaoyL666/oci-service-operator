@@ -14,6 +14,7 @@ rules:
 - apiGroups:
   - disasterrecovery.oracle.com
   resources:
+  - drplans
   - drprotectiongroups
   verbs:
   - create
@@ -26,12 +27,14 @@ rules:
 - apiGroups:
   - disasterrecovery.oracle.com
   resources:
+  - drplans/finalizers
   - drprotectiongroups/finalizers
   verbs:
   - update
 - apiGroups:
   - disasterrecovery.oracle.com
   resources:
+  - drplans/status
   - drprotectiongroups/status
   verbs:
   - get

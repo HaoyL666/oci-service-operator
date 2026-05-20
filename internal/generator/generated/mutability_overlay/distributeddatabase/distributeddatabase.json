@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-mutability-overlay",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "sourceContract": {
+    "astPrimaryFacts": [
+      "forceNew",
+      "conflictsWith",
+      "lifecycle",
+      "hooks",
+      "crud",
+      "listLookup"
+    ],
+    "astMutableAlias": "updateCandidate",
+    "docsOverlayScope": "terraform-argument-reference-for-ast-update-candidate-fields",
+    "docsEvidenceSource": "terraform-argument-reference"
+  },
+  "resource": {
+    "service": "distributeddatabase",
+    "kind": "DistributedDatabase",
+    "formalSlug": "distributeddatabase",
+    "providerResource": "oci_distributeddatabase_distributed_database",
+    "repoAuthoredSpecPath": "controllers/distributeddatabase/distributeddatabase/spec.cfg",
+    "formalImportPath": "imports/distributeddatabase/distributeddatabase.json"
+  },
+  "fields": [
+    {
+      "astFieldPath": "compartmentId",
+      "terraformFieldPath": "compartmentId",
+      "canonicalJoinKey": "compartmentId",
+      "pathShape": "scalar",
+      "ast": {
+        "updateCandidateState": "notUpdateCandidate",
+        "forceNew": true,
+        "conflictsWith": null
+      },
+      "docs": {
+        "evidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      "merge": {
+        "joinStatus": "matched",
+        "mergeCase": "replacementRequired",
+        "finalPolicy": "replacementRequired"
+      },
+      "provenance": {
+        "formalImportPath": "imports/distributeddatabase/distributeddatabase.json",
+        "formalSourceRef": "terraform-provider-oci",
+        "astSourceBucket": "mutation.forceNew",
+        "terraformDocsPage": "distributeddatabase_distributed_database",
+        "terraformDocsSection": "Argument Reference"
+      }
+    }
+  ]
+}

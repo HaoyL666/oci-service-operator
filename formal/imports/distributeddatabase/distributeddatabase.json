@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "distributeddatabase",
+  "slug": "distributeddatabase",
+  "kind": "DistributedDatabase",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_distributeddatabase_distributed_database",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateDistributedDatabase",
+        "requestType": "distributeddatabase.CreateDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.CreateDistributedDatabaseResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetDistributedDatabase",
+        "requestType": "distributeddatabase.GetDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.GetDistributedDatabaseResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListDistributedDatabase",
+        "requestType": "distributeddatabase.ListDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.ListDistributedDatabaseResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateDistributedDatabase",
+        "requestType": "distributeddatabase.UpdateDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.UpdateDistributedDatabaseResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteDistributedDatabase",
+        "requestType": "distributeddatabase.DeleteDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.DeleteDistributedDatabaseResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_distributeddatabase_distributed_database",
+    "collectionField": "distributeddatabase",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/distributeddatabase/distributeddatabase/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/distributeddatabase/distributeddatabase/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for distributeddatabase/distributeddatabase; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

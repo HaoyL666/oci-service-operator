@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "tenantmanagercontrolplane",
+  "slug": "domaingovernance",
+  "kind": "DomainGovernance",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_tenantmanagercontrolplane_domain_governance",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateDomainGovernance",
+        "requestType": "tenantmanagercontrolplane.CreateDomainGovernanceRequest",
+        "responseType": "tenantmanagercontrolplane.CreateDomainGovernanceResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetDomainGovernance",
+        "requestType": "tenantmanagercontrolplane.GetDomainGovernanceRequest",
+        "responseType": "tenantmanagercontrolplane.GetDomainGovernanceResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListDomainGovernance",
+        "requestType": "tenantmanagercontrolplane.ListDomainGovernanceRequest",
+        "responseType": "tenantmanagercontrolplane.ListDomainGovernanceResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateDomainGovernance",
+        "requestType": "tenantmanagercontrolplane.UpdateDomainGovernanceRequest",
+        "responseType": "tenantmanagercontrolplane.UpdateDomainGovernanceResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteDomainGovernance",
+        "requestType": "tenantmanagercontrolplane.DeleteDomainGovernanceRequest",
+        "responseType": "tenantmanagercontrolplane.DeleteDomainGovernanceResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_tenantmanagercontrolplane_domain_governance",
+    "collectionField": "domaingovernance",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/tenantmanagercontrolplane/domaingovernance/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/tenantmanagercontrolplane/domaingovernance/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for tenantmanagercontrolplane/domaingovernance; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

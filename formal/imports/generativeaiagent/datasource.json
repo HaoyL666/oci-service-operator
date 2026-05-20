@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "generativeaiagent",
+  "slug": "datasource",
+  "kind": "DataSource",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_generative_ai_agent_data_source",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateDataSource",
+        "requestType": "generativeaiagent.CreateDataSourceRequest",
+        "responseType": "generativeaiagent.CreateDataSourceResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetDataSource",
+        "requestType": "generativeaiagent.GetDataSourceRequest",
+        "responseType": "generativeaiagent.GetDataSourceResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListDataSource",
+        "requestType": "generativeaiagent.ListDataSourceRequest",
+        "responseType": "generativeaiagent.ListDataSourceResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateDataSource",
+        "requestType": "generativeaiagent.UpdateDataSourceRequest",
+        "responseType": "generativeaiagent.UpdateDataSourceResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteDataSource",
+        "requestType": "generativeaiagent.DeleteDataSourceRequest",
+        "responseType": "generativeaiagent.DeleteDataSourceResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_generative_ai_agent_data_source",
+    "collectionField": "datasource",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/generativeaiagent/datasource/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/generativeaiagent/datasource/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for generativeaiagent/datasource; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

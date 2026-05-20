@@ -25,4 +25,5 @@ Manage OCI Disaster Recovery protection groups from Kubernetes with an initial c
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
+| `disasterrecovery/DrPlan` | `disasterrecovery.oracle.com/v1beta1` | — | — | [Sample](../../samples/disasterrecovery/v1beta1/drplan.md) | [Reference](../../api/disasterrecovery/v1beta1/index.md#kind-drplan) |
 | `disasterrecovery/DrProtectionGroup` | `disasterrecovery.oracle.com/v1beta1` | Manage OCI Disaster Recovery protection groups. | — | [Sample](../../samples/disasterrecovery/v1beta1/drprotectiongroup.md) | [Reference](../../api/disasterrecovery/v1beta1/index.md#kind-drprotectiongroup) |

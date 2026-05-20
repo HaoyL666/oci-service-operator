@@ -1,0 +1,699 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.0
+  name: migrations.databasemigration.oracle.com
+spec:
+  group: databasemigration.oracle.com
+  names:
+    kind: Migration
+    listKind: MigrationList
+    plural: migrations
+    singular: migration
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.displayName
+      name: DisplayName
+      priority: 1
+      type: string
+    - description: status of the Migration
+      jsonPath: .status.status.conditions[-1].type
+      name: Status
+      type: string
+    - description: Ocid of the Migration
+      jsonPath: .status.status.ocid
+      name: Ocid
+      priority: 1
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: Migration is the Schema for the migrations API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: MigrationSpec defines the desired state of Migration.
+            properties:
+              advancedParameters:
+                description: List of Migration Parameter objects.
+                items:
+                  description: MigrationAdvancedParameter defines nested fields for
+                    Migration.AdvancedParameter.
+                  properties:
+                    dataType:
+                      description: Parameter data type.
+                      type: string
+                    name:
+                      description: Parameter name.
+                      type: string
+                    value:
+                      description: |-
+                        If a STRING data type then the value should be an array of characters,
+                        if a INTEGER data type then the value should be an integer value,
+                        if a FLOAT data type then the value should be an float value,
+                        if a BOOLEAN data type then the value should be TRUE or FALSE.
+                      type: string
+                  required:
+                  - dataType
+                  - name
+                  - value
+                  type: object
+                type: array
+              advisorSettings:
+                description: MigrationAdvisorSettings defines nested fields for Migration.AdvisorSettings.
+                properties:
+                  isIgnoreErrors:
+                    description: True to not interrupt migration execution due to
+                      Pre-Migration Advisor errors. Default is false.
+                    type: boolean
+                  isSkipAdvisor:
+                    description: True to skip the Pre-Migration Advisor execution.
+                      Default is false.
+                    type: boolean
+                type: object
+              assessmentId:
+                description: The OCID of the resource being referenced.
+                type: string
+              bulkIncludeExcludeData:
+                description: |-
+                  Specifies the database objects to be excluded from the migration in bulk.
+                  The definition accepts input in a CSV format, newline separated for each entry.
+                  More details can be found in the documentation.
+                type: string
+              compartmentId:
+                description: The OCID of the resource being referenced.
+                type: string
+              dataTransferMediumDetails:
+                description: MigrationDataTransferMediumDetails defines nested fields
+                  for Migration.DataTransferMediumDetails.
+                properties:
+                  jsonData:
+                    type: string
+                  objectStorageBucket:
+                    description: MigrationDataTransferMediumDetailsObjectStorageBucket
+                      defines nested fields for Migration.DataTransferMediumDetails.ObjectStorageBucket.
+                    properties:
+                      bucketName:
+                        description: Bucket name.
+                        type: string
+                      namespaceName:
+                        description: Namespace name of the object store bucket.
+                        type: string
+                    required:
+                    - bucketName
+                    - namespaceName
+                    type: object
+                  type:
+                    type: string
+                type: object
+              databaseCombination:
+                type: string
+              definedTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Defined tags for this resource. Each key is predefined and scoped to a namespace.
+                  Example: `{"foo-namespace": {"bar-key": "value"}}`
+                type: object
+              description:
+                description: |-
+                  A user-friendly description. Does not have to be unique, and it's changeable.
+                  Avoid entering confidential information.
+                type: string
+              displayName:
+                description: |-
+                  A user-friendly name. Does not have to be unique, and it's changeable.
+                  Avoid entering confidential information.
+                type: string
+              excludeObjects:
+                description: Database objects to exclude from migration, cannot be
+                  specified alongside 'includeObjects'
+                items:
+                  description: MigrationExcludeObject defines nested fields for Migration.ExcludeObject.
+                  properties:
+                    objectName:
+                      description: Name of the object (regular expression is allowed)
+                      type: string
+                    schema:
+                      description: Schema of the object (regular expression is allowed)
+                      type: string
+                    type:
+                      description: |-
+                        Type of object to exclude.
+                        If not specified, matching owners and object names of type TABLE would be excluded.
+                      type: string
+                  required:
+                  - objectName
+                  - schema
+                  type: object
+                type: array
+              freeformTags:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
+                  For more information, see Resource Tags. Example: {"Department": "Finance"}
+                type: object
+              ggsDetails:
+                description: MigrationGgsDetails defines nested fields for Migration.GgsDetails.
+                properties:
+                  acceptableLag:
+                    description: ODMS will monitor GoldenGate end-to-end latency until
+                      the lag time is lower than the specified value in seconds.
+                    type: integer
+                  replicat:
+                    description: MigrationGgsDetailsReplicat defines nested fields
+                      for Migration.GgsDetails.Replicat.
+                    properties:
+                      performanceProfile:
+                        description: Replicat performance.
+                        type: string
+                    type: object
+                type: object
+              hubDetails:
+                description: MigrationHubDetails defines nested fields for Migration.HubDetails.
+                properties:
+                  acceptableLag:
+                    description: ODMS will monitor GoldenGate end-to-end latency until
+                      the lag time is lower than the specified value in seconds.
+                    type: integer
+                  computeId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                  extract:
+                    description: MigrationHubDetailsExtract defines nested fields
+                      for Migration.HubDetails.Extract.
+                    properties:
+                      longTransDuration:
+                        description: |-
+                          Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running.
+                          If not specified, Extract will not generate a warning on long-running transactions.
+                        type: integer
+                      performanceProfile:
+                        description: Extract performance.
+                        type: string
+                    type: object
+                  keyId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                  replicat:
+                    description: MigrationHubDetailsReplicat defines nested fields
+                      for Migration.HubDetails.Replicat.
+                    properties:
+                      performanceProfile:
+                        description: Replicat performance.
+                        type: string
+                    type: object
+                  restAdminCredentials:
+                    description: MigrationHubDetailsRestAdminCredentials defines nested
+                      fields for Migration.HubDetails.RestAdminCredentials.
+                    properties:
+                      password:
+                        description: Administrator password
+                        type: string
+                      username:
+                        description: Administrator username
+                        type: string
+                    required:
+                    - password
+                    - username
+                    type: object
+                  url:
+                    description: Endpoint URL.
+                    type: string
+                  vaultId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                required:
+                - keyId
+                - restAdminCredentials
+                - url
+                - vaultId
+                type: object
+              includeObjects:
+                description: Database objects to include from migration, cannot be
+                  specified alongside 'excludeObjects'
+                items:
+                  description: MigrationIncludeObject defines nested fields for Migration.IncludeObject.
+                  properties:
+                    objectName:
+                      description: Name of the object (regular expression is allowed)
+                      type: string
+                    schema:
+                      description: Schema of the object (regular expression is allowed)
+                      type: string
+                    type:
+                      description: |-
+                        Type of object to exclude.
+                        If not specified, matching owners and object names of type TABLE would be excluded.
+                      type: string
+                  required:
+                  - objectName
+                  - schema
+                  type: object
+                type: array
+              initialLoadSettings:
+                description: MigrationInitialLoadSettings defines nested fields for
+                  Migration.InitialLoadSettings.
+                properties:
+                  compatibility:
+                    description: |-
+                      Apply the specified requirements for compatibility with MySQL Database Service for all tables in the dump
+                      output, altering the dump files as necessary.
+                    items:
+                      type: string
+                    type: array
+                  handleGrantErrors:
+                    description: The action taken in the event of errors related to
+                      GRANT or REVOKE errors.
+                    type: string
+                  isConsistent:
+                    description: Enable (true) or disable (false) consistent data
+                      dumps by locking the instance for backup during the dump.
+                    type: boolean
+                  isIgnoreExistingObjects:
+                    description: Import the dump even if it contains objects that
+                      already exist in the target schema in the MySQL instance.
+                    type: boolean
+                  isTzUtc:
+                    description: Include a statement at the start of the dump to set
+                      the time zone to UTC.
+                    type: boolean
+                  jobMode:
+                    description: MySql Job Mode
+                    type: string
+                  primaryKeyCompatibility:
+                    description: Primary key compatibility option
+                    type: string
+                required:
+                - jobMode
+                type: object
+              jsonData:
+                type: string
+              sourceContainerDatabaseConnectionId:
+                description: The OCID of the resource being referenced.
+                type: string
+              sourceDatabaseConnectionId:
+                description: The OCID of the resource being referenced.
+                type: string
+              sourceStandbyDatabaseConnectionId:
+                description: The OCID of the resource being referenced.
+                type: string
+              targetDatabaseConnectionId:
+                description: The OCID of the resource being referenced.
+                type: string
+              type:
+                description: |-
+                  The type of the migration to be performed.
+                  Example: ONLINE if no downtime is preferred for a migration. This method uses Oracle GoldenGate for replication.
+                type: string
+            required:
+            - compartmentId
+            - type
+            type: object
+          status:
+            description: MigrationStatus defines the observed state of Migration.
+            properties:
+              advancedParameters:
+                description: List of Migration Parameter objects.
+                items:
+                  description: MigrationAdvancedParameter defines nested fields for
+                    Migration.AdvancedParameter.
+                  properties:
+                    dataType:
+                      description: Parameter data type.
+                      type: string
+                    name:
+                      description: Parameter name.
+                      type: string
+                    value:
+                      description: |-
+                        If a STRING data type then the value should be an array of characters,
+                        if a INTEGER data type then the value should be an integer value,
+                        if a FLOAT data type then the value should be an float value,
+                        if a BOOLEAN data type then the value should be TRUE or FALSE.
+                      type: string
+                  required:
+                  - dataType
+                  - name
+                  - value
+                  type: object
+                type: array
+              advisorSettings:
+                description: MigrationAdvisorSettings defines nested fields for Migration.AdvisorSettings.
+                properties:
+                  isIgnoreErrors:
+                    description: True to not interrupt migration execution due to
+                      Pre-Migration Advisor errors. Default is false.
+                    type: boolean
+                  isSkipAdvisor:
+                    description: True to skip the Pre-Migration Advisor execution.
+                      Default is false.
+                    type: boolean
+                type: object
+              assessmentId:
+                description: The OCID of the resource being referenced.
+                type: string
+              compartmentId:
+                description: The OCID of the resource being referenced.
+                type: string
+              dataTransferMediumDetails:
+                description: MigrationDataTransferMediumDetails defines nested fields
+                  for Migration.DataTransferMediumDetails.
+                properties:
+                  jsonData:
+                    type: string
+                  objectStorageBucket:
+                    description: MigrationDataTransferMediumDetailsObjectStorageBucket
+                      defines nested fields for Migration.DataTransferMediumDetails.ObjectStorageBucket.
+                    properties:
+                      bucketName:
+                        description: Bucket name.
+                        type: string
+                      namespaceName:
+                        description: Namespace name of the object store bucket.
+                        type: string
+                    required:
+                    - bucketName
+                    - namespaceName
+                    type: object
+                  type:
+                    type: string
+                type: object
+              databaseCombination:
+                type: string
+              definedTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Defined tags for this resource. Each key is predefined and scoped to a namespace.
+                  Example: `{"foo-namespace": {"bar-key": "value"}}`
+                type: object
+              description:
+                description: |-
+                  A user-friendly description. Does not have to be unique, and it's changeable.
+                  Avoid entering confidential information.
+                type: string
+              displayName:
+                description: |-
+                  A user-friendly name. Does not have to be unique, and it's changeable.
+                  Avoid entering confidential information.
+                type: string
+              executingJobId:
+                description: The OCID of the resource being referenced.
+                type: string
+              freeformTags:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
+                  For more information, see Resource Tags. Example: {"Department": "Finance"}
+                type: object
+              ggsDetails:
+                description: MigrationGgsDetails defines nested fields for Migration.GgsDetails.
+                properties:
+                  acceptableLag:
+                    description: ODMS will monitor GoldenGate end-to-end latency until
+                      the lag time is lower than the specified value in seconds.
+                    type: integer
+                  replicat:
+                    description: MigrationGgsDetailsReplicat defines nested fields
+                      for Migration.GgsDetails.Replicat.
+                    properties:
+                      performanceProfile:
+                        description: Replicat performance.
+                        type: string
+                    type: object
+                type: object
+              hubDetails:
+                description: MigrationHubDetailsObservedState defines nested fields
+                  for Migration.HubDetails.
+                properties:
+                  acceptableLag:
+                    description: ODMS will monitor GoldenGate end-to-end latency until
+                      the lag time is lower than the specified value in seconds.
+                    type: integer
+                  computeId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                  extract:
+                    description: MigrationHubDetailsExtract defines nested fields
+                      for Migration.HubDetails.Extract.
+                    properties:
+                      longTransDuration:
+                        description: |-
+                          Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running.
+                          If not specified, Extract will not generate a warning on long-running transactions.
+                        type: integer
+                      performanceProfile:
+                        description: Extract performance.
+                        type: string
+                    type: object
+                  keyId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                  replicat:
+                    description: MigrationHubDetailsReplicat defines nested fields
+                      for Migration.HubDetails.Replicat.
+                    properties:
+                      performanceProfile:
+                        description: Replicat performance.
+                        type: string
+                    type: object
+                  restAdminCredentials:
+                    description: MigrationHubDetailsRestAdminCredentialsObservedState
+                      defines nested fields for Migration.HubDetails.RestAdminCredentials.
+                    properties:
+                      username:
+                        description: Administrator username
+                        type: string
+                    type: object
+                  url:
+                    description: Endpoint URL.
+                    type: string
+                  vaultId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                type: object
+              id:
+                description: The OCID of the resource being referenced.
+                type: string
+              initialLoadSettings:
+                description: MigrationInitialLoadSettings defines nested fields for
+                  Migration.InitialLoadSettings.
+                properties:
+                  compatibility:
+                    description: |-
+                      Apply the specified requirements for compatibility with MySQL Database Service for all tables in the dump
+                      output, altering the dump files as necessary.
+                    items:
+                      type: string
+                    type: array
+                  handleGrantErrors:
+                    description: The action taken in the event of errors related to
+                      GRANT or REVOKE errors.
+                    type: string
+                  isConsistent:
+                    description: Enable (true) or disable (false) consistent data
+                      dumps by locking the instance for backup during the dump.
+                    type: boolean
+                  isIgnoreExistingObjects:
+                    description: Import the dump even if it contains objects that
+                      already exist in the target schema in the MySQL instance.
+                    type: boolean
+                  isTzUtc:
+                    description: Include a statement at the start of the dump to set
+                      the time zone to UTC.
+                    type: boolean
+                  jobMode:
+                    description: MySql Job Mode
+                    type: string
+                  primaryKeyCompatibility:
+                    description: Primary key compatibility option
+                    type: string
+                required:
+                - jobMode
+                type: object
+              jsonData:
+                type: string
+              lifecycleDetails:
+                description: Additional status related to the execution and current
+                  state of the Migration.
+                type: string
+              lifecycleState:
+                description: The current state of the Migration resource.
+                type: string
+              sourceContainerDatabaseConnectionId:
+                description: The OCID of the resource being referenced.
+                type: string
+              sourceDatabaseConnectionId:
+                description: The OCID of the resource being referenced.
+                type: string
+              sourceStandbyDatabaseConnectionId:
+                description: The OCID of the resource being referenced.
+                type: string
+              status:
+                properties:
+                  async:
+                    description: |-
+                      Async is the canonical controller-owned async contract. Resource-local
+                      legacy work-request fields may remain as compatibility mirrors while
+                      follow-on migrations land, but new async state should project here first.
+                    properties:
+                      current:
+                        properties:
+                          message:
+                            type: string
+                          normalizedClass:
+                            enum:
+                            - pending
+                            - succeeded
+                            - failed
+                            - canceled
+                            - attention
+                            - unknown
+                            type: string
+                          percentComplete:
+                            maximum: 100
+                            minimum: 0
+                            type: number
+                          phase:
+                            enum:
+                            - create
+                            - update
+                            - delete
+                            type: string
+                          rawOperationType:
+                            type: string
+                          rawStatus:
+                            type: string
+                          source:
+                            enum:
+                            - none
+                            - lifecycle
+                            - workrequest
+                            type: string
+                          updatedAt:
+                            format: date-time
+                            type: string
+                          workRequestId:
+                            type: string
+                        required:
+                        - normalizedClass
+                        - phase
+                        - source
+                        - updatedAt
+                        type: object
+                    type: object
+                  conditions:
+                    items:
+                      properties:
+                        lastTransitionTime:
+                          format: date-time
+                          type: string
+                        message:
+                          type: string
+                        reason:
+                          type: string
+                        status:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - status
+                      - type
+                      type: object
+                    type: array
+                  createdAt:
+                    format: date-time
+                    type: string
+                  deletedAt:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  ocid:
+                    maxLength: 255
+                    minLength: 1
+                    type: string
+                  opcRequestId:
+                    description: |-
+                      OpcRequestID is the latest non-empty OCI request ID from a mutating OCI
+                      response or surfaced OCI service error that materially contributed to the
+                      current shared status projection. Headerless follow-up observations keep
+                      the last non-empty value intact.
+                    type: string
+                  reason:
+                    type: string
+                  requestedAt:
+                    format: date-time
+                    type: string
+                  updatedAt:
+                    format: date-time
+                    type: string
+                type: object
+              systemTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Usage of system tag keys. These predefined keys are scoped to namespaces.
+                  Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
+                type: object
+              targetDatabaseConnectionId:
+                description: The OCID of the resource being referenced.
+                type: string
+              timeCreated:
+                description: An RFC3339 formatted datetime string such as `2016-08-25T21:10:29.600Z`.
+                type: string
+              timeLastMigration:
+                description: An RFC3339 formatted datetime string such as `2016-08-25T21:10:29.600Z`.
+                type: string
+              timeUpdated:
+                description: An RFC3339 formatted datetime string such as `2016-08-25T21:10:29.600Z`.
+                type: string
+              type:
+                description: |-
+                  The type of the migration to be performed.
+                  Example: ONLINE if no downtime is preferred for a migration. This method uses Oracle GoldenGate for replication.
+                type: string
+              waitAfter:
+                description: |-
+                  You can optionally pause a migration after a job phase.
+                  This property allows you to optionally specify the phase after which you can pause the migration.
+                type: string
+            required:
+            - status
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -26,3 +26,4 @@ Manage OCI Java Management Service fleets from Kubernetes with a reviewed contro
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
 | `jms/Fleet` | `jms.oracle.com/v1beta1` | Manage OCI Java Management Service fleets. | — | [Sample](../../samples/jms/v1beta1/fleet.md) | [Reference](../../api/jms/v1beta1/index.md#kind-fleet) |
+| `jms/JmsPlugin` | `jms.oracle.com/v1beta1` | — | — | [Sample](../../samples/jms/v1beta1/jmsplugin.md) | [Reference](../../api/jms/v1beta1/index.md#kind-jmsplugin) |

@@ -25,4 +25,5 @@ Manage OCI Distributed Database private endpoints from Kubernetes with a reviewe
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
+| `distributeddatabase/DistributedDatabase` | `distributeddatabase.oracle.com/v1beta1` | — | — | [Sample](../../samples/distributeddatabase/v1beta1/distributeddatabase.md) | [Reference](../../api/distributeddatabase/v1beta1/index.md#kind-distributeddatabase) |
 | `distributeddatabase/DistributedDatabasePrivateEndpoint` | `distributeddatabase.oracle.com/v1beta1` | Manage OCI Distributed Database private endpoints. | — | [Sample](../../samples/distributeddatabase/v1beta1/distributeddatabaseprivateendpoint.md) | [Reference](../../api/distributeddatabase/v1beta1/index.md#kind-distributeddatabaseprivateendpoint) |

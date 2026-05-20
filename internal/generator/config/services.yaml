@@ -2127,6 +2127,7 @@ services:
       includeKinds:
         - Connection
         - Assessment
+        - Migration
     observedState:
       excludedFieldPaths:
         Connection:
@@ -2229,6 +2230,18 @@ services:
                 description: Sample Database Migration assessment
                 freeformTags:
                   managed-by: oci-service-operator
+        - kind: Migration
+          formalSpec: migration
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
 
   - service: databasetools
     sdkPackage: github.com/oracle/oci-go-sdk/v65/databasetools
@@ -3187,6 +3200,7 @@ services:
       mode: explicit
       includeKinds:
         - DrProtectionGroup
+        - DrPlan
     generation:
       controller:
         strategy: generated
@@ -3258,6 +3272,17 @@ services:
                     memberId: ocid1.instance.oc1..exampleuniqueID
                 freeformTags:
                   managed-by: oci-service-operator
+        - kind: DrPlan
+          formalSpec: drplan
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
 
   - service: distributeddatabase
     sdkPackage: github.com/oracle/oci-go-sdk/v65/distributeddatabase
@@ -3270,6 +3295,7 @@ services:
       mode: explicit
       includeKinds:
         - DistributedDatabasePrivateEndpoint
+        - DistributedDatabase
     generation:
       controller:
         strategy: generated
@@ -3282,6 +3308,12 @@ services:
       resources:
         - kind: DistributedDatabasePrivateEndpoint
           formalSpec: distributeddatabaseprivateendpoint
+          async:
+            strategy: lifecycle
+            runtime: generatedruntime
+            formalClassification: lifecycle
+        - kind: DistributedDatabase
+          formalSpec: distributeddatabase
           async:
             strategy: lifecycle
             runtime: generatedruntime
@@ -3801,6 +3833,8 @@ services:
       includeKinds:
         - KnowledgeBase
         - Agent
+        - AgentEndpoint
+        - DataSource
     generation:
       controller:
         strategy: generated
@@ -3874,15 +3908,29 @@ services:
                 freeformTags:
                   managed-by: oci-service-operator
         - kind: AgentEndpoint
-          controller:
-            strategy: none
-          serviceManager:
-            strategy: none
+          formalSpec: agentendpoint
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
         - kind: DataSource
-          controller:
-            strategy: none
-          serviceManager:
-            strategy: none
+          formalSpec: datasource
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
         - kind: DataIngestionJob
           controller:
             strategy: none
@@ -4262,6 +4310,7 @@ services:
       mode: explicit
       includeKinds:
         - Fleet
+        - JmsPlugin
     generation:
       controller:
         strategy: generated
@@ -4305,6 +4354,12 @@ services:
                   workload: java
           serviceManager:
             packagePath: jms/fleet
+        - kind: JmsPlugin
+          formalSpec: jmsplugin
+          async:
+            strategy: lifecycle
+            runtime: generatedruntime
+            formalClassification: lifecycle
 
   - service: jmsjavadownloads
     sdkPackage: github.com/oracle/oci-go-sdk/v65/jmsjavadownloads
@@ -5112,6 +5167,7 @@ services:
       includeKinds:
         - MediaAsset
         - MediaWorkflow
+        - MediaWorkflowConfiguration
     generation:
       controller:
         strategy: generated
@@ -5138,6 +5194,12 @@ services:
             formalClassification: lifecycle
           serviceManager:
             packagePath: mediaservices/mediaworkflow
+        - kind: MediaWorkflowConfiguration
+          formalSpec: mediaworkflowconfiguration
+          async:
+            strategy: lifecycle
+            runtime: generatedruntime
+            formalClassification: lifecycle
 
   - service: mngdmac
     sdkPackage: github.com/oracle/oci-go-sdk/v65/mngdmac
@@ -7031,6 +7093,7 @@ services:
       includeKinds:
         - Domain
         - Organization
+        - DomainGovernance
     observedState:
       excludedFieldPaths:
         Domain:
@@ -7162,6 +7225,12 @@ services:
               spec:
                 organizationId: ocid1.organization.oc1..exampleuniqueID
                 defaultUcmSubscriptionId: ocid1.subscription.oc1..exampleuniqueID
+        - kind: DomainGovernance
+          formalSpec: domaingovernance
+          async:
+            strategy: lifecycle
+            runtime: generatedruntime
+            formalClassification: lifecycle
 
   - service: usageapi
     sdkPackage: github.com/oracle/oci-go-sdk/v65/usageapi

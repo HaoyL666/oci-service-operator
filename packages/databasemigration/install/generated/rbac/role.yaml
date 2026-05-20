@@ -16,6 +16,7 @@ rules:
   resources:
   - assessments
   - connections
+  - migrations
   verbs:
   - create
   - delete
@@ -29,6 +30,7 @@ rules:
   resources:
   - assessments/finalizers
   - connections/finalizers
+  - migrations/finalizers
   verbs:
   - update
 - apiGroups:
@@ -36,6 +38,7 @@ rules:
   resources:
   - assessments/status
   - connections/status
+  - migrations/status
   verbs:
   - get
   - patch
