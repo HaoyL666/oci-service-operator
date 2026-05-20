@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "disasterrecovery",
+  "slug": "drplan",
+  "kind": "DrPlan",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_disaster_recovery_dr_plan",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateDrPlan",
+        "requestType": "disasterrecovery.CreateDrPlanRequest",
+        "responseType": "disasterrecovery.CreateDrPlanResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetDrPlan",
+        "requestType": "disasterrecovery.GetDrPlanRequest",
+        "responseType": "disasterrecovery.GetDrPlanResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListDrPlan",
+        "requestType": "disasterrecovery.ListDrPlanRequest",
+        "responseType": "disasterrecovery.ListDrPlanResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateDrPlan",
+        "requestType": "disasterrecovery.UpdateDrPlanRequest",
+        "responseType": "disasterrecovery.UpdateDrPlanResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteDrPlan",
+        "requestType": "disasterrecovery.DeleteDrPlanRequest",
+        "responseType": "disasterrecovery.DeleteDrPlanResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_disaster_recovery_dr_plan",
+    "collectionField": "drplan",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/disasterrecovery/drplan/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/disasterrecovery/drplan/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for disasterrecovery/drplan; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

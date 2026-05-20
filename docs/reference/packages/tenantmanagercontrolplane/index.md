@@ -26,4 +26,5 @@ Manage OCI domains and existing organizations from Kubernetes with truthful serv
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
 | `tenantmanagercontrolplane/Domain` | `tenantmanagercontrolplane.oracle.com/v1beta1` | Manage OCI domains with workrequest-aware create behavior and confirmed OCI delete semantics. | — | [Sample](../../samples/tenantmanagercontrolplane/v1beta1/domain.md) | [Reference](../../api/tenantmanagercontrolplane/v1beta1/index.md#kind-domain) |
+| `tenantmanagercontrolplane/DomainGovernance` | `tenantmanagercontrolplane.oracle.com/v1beta1` | — | — | [Sample](../../samples/tenantmanagercontrolplane/v1beta1/domaingovernance.md) | [Reference](../../api/tenantmanagercontrolplane/v1beta1/index.md#kind-domaingovernance) |
 | `tenantmanagercontrolplane/Organization` | `tenantmanagercontrolplane.oracle.com/v1beta1` | Manage existing OCI organizations with an update-only default subscription contract. | — | [Sample](../../samples/tenantmanagercontrolplane/v1beta1/organization.md) | [Reference](../../api/tenantmanagercontrolplane/v1beta1/index.md#kind-organization) |

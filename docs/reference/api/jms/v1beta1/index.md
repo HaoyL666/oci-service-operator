@@ -19,6 +19,7 @@ No customer-visible package currently exposes `jms.oracle.com/v1beta1`.
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
 | [Fleet](#kind-fleet) | Namespaced | [Sample](../../../samples/jms/v1beta1/fleet.md) | - |
+| [JmsPlugin](#kind-jmsplugin) | Namespaced | [Sample](../../../samples/jms/v1beta1/jmsplugin.md) | - |
 
 <a id="kind-fleet"></a>
 ## Fleet
@@ -174,6 +175,116 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 ##### Status.status.conditions[]
 
 [Back to Fleet status](#kind-fleet-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `lastTransitionTime` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `status` | - | `string` | Yes | - | - |
+| `type` | - | `string` | Yes | - | - |
+
+<a id="kind-jmsplugin"></a>
+## JmsPlugin
+
+JmsPlugin is the Schema for the jmsplugins API.
+
+- `Plural`: `jmsplugins`
+- `Scope`: `Namespaced`
+- `APIVersion`: `jms.oracle.com/v1beta1`
+- `Sample`: [Sample](../../../samples/jms/v1beta1/jmsplugin.md) (`config/samples/jms_v1beta1_jmsplugin.yaml`)
+- `Packages`: Not currently exposed by a customer-visible package.
+
+<a id="kind-jmsplugin-spec"></a>
+### Spec
+
+JmsPluginSpec defines the desired state of JmsPlugin.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `agentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Management Agent (OMA), the Oracle Cloud Agent (OCA), or the Oracle Container Management Agent (OCMA) instance where the JMS plugin is deployed. | `string` | Yes | - | - |
+| `agentType` | The agent type. | `string` | No | - | - |
+| `compartmentId` | The OMA/OCA/OCMA agent's compartment OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm). | `string` | Yes | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}`. (See Understanding Free-form Tags (https://docs.oracle.com/iaas/Content/Tagging/Tasks/managingtagsandtagnamespaces.htm)). | `map[string, map[string, string]]` | No | - | - |
+| `fleetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the fleet. | `string` | No | - | - |
+| `freeformTags` | Simple key-value pair that is applied without any predefined name, type, or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}`. (See Managing Tags and Tag Namespaces (https://docs.oracle.com/iaas/Content/Tagging/Concepts/understandingfreeformtags.htm).) | `map[string, string]` | No | - | - |
+
+<a id="kind-jmsplugin-status"></a>
+### Status
+
+JmsPluginStatus defines the observed state of JmsPlugin.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `agentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Management Agent (OMA), the Oracle Cloud Agent (OCA), or the Oracle Container Management Agent (OCMA) instance where the JMS plugin is deployed. | `string` | No | - | - |
+| `agentType` | The agent type. | `string` | No | - | - |
+| `availabilityStatus` | The availability status. | `string` | No | - | - |
+| `compartmentId` | The OMA/OCA/OCMA agent's compartment OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm). | `string` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}`. (See Understanding Free-form Tags (https://docs.oracle.com/iaas/Content/Tagging/Tasks/managingtagsandtagnamespaces.htm)). | `map[string, map[string, string]]` | No | - | - |
+| `fleetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the fleet. | `string` | No | - | - |
+| `freeformTags` | Simple key-value pair that is applied without any predefined name, type, or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}`. (See Managing Tags and Tag Namespaces (https://docs.oracle.com/iaas/Content/Tagging/Concepts/understandingfreeformtags.htm).) | `map[string, string]` | No | - | - |
+| `hostname` | The hostname of the agent. | `string` | No | - | - |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) to identify this JmsPlugin. | `string` | No | - | - |
+| `lifecycleState` | The lifecycle state. | `string` | No | - | - |
+| `osArchitecture` | The architecture of the operating system of the plugin. | `string` | No | - | - |
+| `osDistribution` | The distribution of the operating system of the plugin. | `string` | No | - | - |
+| `osFamily` | The operating system family for the plugin. | `string` | No | - | - |
+| `pluginVersion` | The version of the plugin. | `string` | No | - | - |
+| [`status`](#kind-jmsplugin-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). System tags can be viewed by users, but can only be created by the system. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
+| `timeLastSeen` | The date and time the resource was _last_ reported to JMS. This is potentially _after_ the specified time period provided by the filters. For example, a resource can be last reported to JMS before the start of a specified time period, if it is also reported during the time period. | `string` | No | - | - |
+| `timeRegistered` | The date and time the plugin was registered. | `string` | No | - | - |
+
+<a id="kind-jmsplugin-status-status"></a>
+#### Status.status
+
+[Back to JmsPlugin status](#kind-jmsplugin-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`async`](#kind-jmsplugin-status-status-async) | Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first. | `object` | No | - | - |
+| [`conditions`](#kind-jmsplugin-status-status-conditions) | - | `list[object]` | No | - | - |
+| `createdAt` | - | `string (date-time)` | No | - | - |
+| `deletedAt` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `ocid` | - | `string` | No | - | - |
+| `opcRequestId` | OpcRequestID is the latest non-empty OCI request ID from a mutating OCI response or surfaced OCI service error that materially contributed to the current shared status projection. Headerless follow-up observations keep the last non-empty value intact. | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `requestedAt` | - | `string (date-time)` | No | - | - |
+| `updatedAt` | - | `string (date-time)` | No | - | - |
+
+<a id="kind-jmsplugin-status-status-async"></a>
+##### Status.status.async
+
+[Back to JmsPlugin status](#kind-jmsplugin-status)
+
+Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`current`](#kind-jmsplugin-status-status-async-current) | - | `object` | No | - | - |
+
+<a id="kind-jmsplugin-status-status-async-current"></a>
+###### Status.status.async.current
+
+[Back to JmsPlugin status](#kind-jmsplugin-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `message` | - | `string` | No | - | - |
+| `normalizedClass` | - | `string` | Yes | - | `attention`, `canceled`, `failed`, `pending`, `succeeded`, `unknown` |
+| `percentComplete` | - | `number` | No | - | - |
+| `phase` | - | `string` | Yes | - | `create`, `delete`, `update` |
+| `rawOperationType` | - | `string` | No | - | - |
+| `rawStatus` | - | `string` | No | - | - |
+| `source` | - | `string` | Yes | - | `lifecycle`, `none`, `workrequest` |
+| `updatedAt` | - | `string (date-time)` | Yes | - | - |
+| `workRequestId` | - | `string` | No | - | - |
+
+<a id="kind-jmsplugin-status-status-conditions"></a>
+##### Status.status.conditions[]
+
+[Back to JmsPlugin status](#kind-jmsplugin-status)
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |

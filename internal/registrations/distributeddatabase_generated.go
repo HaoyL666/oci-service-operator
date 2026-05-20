@@ -13,6 +13,7 @@ import (
 	distributeddatabasev1beta1 "github.com/oracle/oci-service-operator/api/distributeddatabase/v1beta1"
 	distributeddatabasecontrollers "github.com/oracle/oci-service-operator/controllers/distributeddatabase"
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
+	distributeddatabasedistributeddatabaseservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/distributeddatabase/distributeddatabase"
 	distributeddatabasedistributeddatabaseprivateendpointservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/distributeddatabase/distributeddatabaseprivateendpoint"
 )
 
@@ -21,6 +22,17 @@ func init() {
 		Group:       "distributeddatabase",
 		AddToScheme: distributeddatabasev1beta1.AddToScheme,
 		SetupWithManager: func(ctx Context) error {
+			if err := (&distributeddatabasecontrollers.DistributedDatabaseReconciler{
+				Reconciler: NewBaseReconciler(
+					ctx,
+					"DistributedDatabase",
+					func(deps servicemanager.RuntimeDeps) servicemanager.OSOKServiceManager {
+						return distributeddatabasedistributeddatabaseservicemanager.NewDistributedDatabaseServiceManagerWithDeps(deps)
+					},
+				),
+			}).SetupWithManager(ctx.Manager); err != nil {
+				return fmt.Errorf("setup DistributedDatabase controller: %w", err)
+			}
 			if err := (&distributeddatabasecontrollers.DistributedDatabasePrivateEndpointReconciler{
 				Reconciler: NewBaseReconciler(
 					ctx,

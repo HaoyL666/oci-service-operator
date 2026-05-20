@@ -27,4 +27,6 @@ Manage OCI Generative AI Agent agents and knowledge bases from Kubernetes with r
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
 | `generativeaiagent/Agent` | `generativeaiagent.oracle.com/v1beta1` | Manage OCI Generative AI Agents. | — | [Sample](../../samples/generativeaiagent/v1beta1/agent.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-agent) |
+| `generativeaiagent/AgentEndpoint` | `generativeaiagent.oracle.com/v1beta1` | — | — | [Sample](../../samples/generativeaiagent/v1beta1/agentendpoint.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-agentendpoint) |
+| `generativeaiagent/DataSource` | `generativeaiagent.oracle.com/v1beta1` | — | — | [Sample](../../samples/generativeaiagent/v1beta1/datasource.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-datasource) |
 | `generativeaiagent/KnowledgeBase` | `generativeaiagent.oracle.com/v1beta1` | Manage OCI Generative AI Agent knowledge bases. | — | [Sample](../../samples/generativeaiagent/v1beta1/knowledgebase.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-knowledgebase) |

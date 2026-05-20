@@ -14,6 +14,7 @@ import (
 	jmscontrollers "github.com/oracle/oci-service-operator/controllers/jms"
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
 	jmsfleetservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/jms/fleet"
+	jmsjmspluginservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/jms/jmsplugin"
 )
 
 func init() {
@@ -31,6 +32,17 @@ func init() {
 				),
 			}).SetupWithManager(ctx.Manager); err != nil {
 				return fmt.Errorf("setup Fleet controller: %w", err)
+			}
+			if err := (&jmscontrollers.JmsPluginReconciler{
+				Reconciler: NewBaseReconciler(
+					ctx,
+					"JmsPlugin",
+					func(deps servicemanager.RuntimeDeps) servicemanager.OSOKServiceManager {
+						return jmsjmspluginservicemanager.NewJmsPluginServiceManagerWithDeps(deps)
+					},
+				),
+			}).SetupWithManager(ctx.Manager); err != nil {
+				return fmt.Errorf("setup JmsPlugin controller: %w", err)
 			}
 			return nil
 		},

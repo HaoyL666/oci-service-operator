@@ -15,6 +15,7 @@ rules:
   - jms.oracle.com
   resources:
   - fleets
+  - jmsplugins
   verbs:
   - create
   - delete
@@ -27,12 +28,14 @@ rules:
   - jms.oracle.com
   resources:
   - fleets/finalizers
+  - jmsplugins/finalizers
   verbs:
   - update
 - apiGroups:
   - jms.oracle.com
   resources:
   - fleets/status
+  - jmsplugins/status
   verbs:
   - get
   - patch

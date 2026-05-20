@@ -3226,6 +3226,16 @@ var targets = []Target{
 		},
 	},
 	{
+		Name:       "DatabasemigrationMigration",
+		SpecType:   reflect.TypeOf(databasemigrationv1beta1.MigrationSpec{}),
+		StatusType: reflect.TypeOf(databasemigrationv1beta1.MigrationStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "databasemigration.MigrationCollection",
+			},
+		},
+	},
+	{
 		Name:       "DatabasetoolsDatabaseToolsConnection",
 		SpecType:   reflect.TypeOf(databasetoolsv1beta1.DatabaseToolsConnectionSpec{}),
 		StatusType: reflect.TypeOf(databasetoolsv1beta1.DatabaseToolsConnectionStatus{}),
@@ -5297,6 +5307,28 @@ var targets = []Target{
 		},
 	},
 	{
+		Name:       "DisasterrecoveryDrPlan",
+		SpecType:   reflect.TypeOf(disasterrecoveryv1beta1.DrPlanSpec{}),
+		StatusType: reflect.TypeOf(disasterrecoveryv1beta1.DrPlanStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "disasterrecovery.CreateDrPlanDetails",
+			},
+			{
+				SDKStruct: "disasterrecovery.UpdateDrPlanDetails",
+			},
+			{
+				SDKStruct: "disasterrecovery.DrPlan",
+			},
+			{
+				SDKStruct: "disasterrecovery.DrPlanCollection",
+			},
+			{
+				SDKStruct: "disasterrecovery.DrPlanSummary",
+			},
+		},
+	},
+	{
 		Name:       "DisasterrecoveryDrProtectionGroup",
 		SpecType:   reflect.TypeOf(disasterrecoveryv1beta1.DrProtectionGroupSpec{}),
 		StatusType: reflect.TypeOf(disasterrecoveryv1beta1.DrProtectionGroupStatus{}),
@@ -5315,6 +5347,28 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "disasterrecovery.DrProtectionGroupSummary",
+			},
+		},
+	},
+	{
+		Name:       "DistributeddatabaseDistributedDatabase",
+		SpecType:   reflect.TypeOf(distributeddatabasev1beta1.DistributedDatabaseSpec{}),
+		StatusType: reflect.TypeOf(distributeddatabasev1beta1.DistributedDatabaseStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "distributeddatabase.CreateDistributedDatabaseDetails",
+			},
+			{
+				SDKStruct: "distributeddatabase.UpdateDistributedDatabaseDetails",
+			},
+			{
+				SDKStruct: "distributeddatabase.DistributedDatabase",
+			},
+			{
+				SDKStruct: "distributeddatabase.DistributedDatabaseCollection",
+			},
+			{
+				SDKStruct: "distributeddatabase.DistributedDatabaseSummary",
 			},
 		},
 	},
@@ -6054,6 +6108,50 @@ var targets = []Target{
 		},
 	},
 	{
+		Name:       "GenerativeaiagentAgentEndpoint",
+		SpecType:   reflect.TypeOf(generativeaiagentv1beta1.AgentEndpointSpec{}),
+		StatusType: reflect.TypeOf(generativeaiagentv1beta1.AgentEndpointStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "generativeaiagent.CreateAgentEndpointDetails",
+			},
+			{
+				SDKStruct: "generativeaiagent.UpdateAgentEndpointDetails",
+			},
+			{
+				SDKStruct: "generativeaiagent.AgentEndpoint",
+			},
+			{
+				SDKStruct: "generativeaiagent.AgentEndpointCollection",
+			},
+			{
+				SDKStruct: "generativeaiagent.AgentEndpointSummary",
+			},
+		},
+	},
+	{
+		Name:       "GenerativeaiagentDataSource",
+		SpecType:   reflect.TypeOf(generativeaiagentv1beta1.DataSourceSpec{}),
+		StatusType: reflect.TypeOf(generativeaiagentv1beta1.DataSourceStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "generativeaiagent.CreateDataSourceDetails",
+			},
+			{
+				SDKStruct: "generativeaiagent.UpdateDataSourceDetails",
+			},
+			{
+				SDKStruct: "generativeaiagent.DataSource",
+			},
+			{
+				SDKStruct: "generativeaiagent.DataSourceCollection",
+			},
+			{
+				SDKStruct: "generativeaiagent.DataSourceSummary",
+			},
+		},
+	},
+	{
 		Name:       "GenerativeaiagentKnowledgeBase",
 		SpecType:   reflect.TypeOf(generativeaiagentv1beta1.KnowledgeBaseSpec{}),
 		StatusType: reflect.TypeOf(generativeaiagentv1beta1.KnowledgeBaseStatus{}),
@@ -6483,6 +6581,28 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "jms.FleetSummary",
+			},
+		},
+	},
+	{
+		Name:       "JmsJmsPlugin",
+		SpecType:   reflect.TypeOf(jmsv1beta1.JmsPluginSpec{}),
+		StatusType: reflect.TypeOf(jmsv1beta1.JmsPluginStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "jms.CreateJmsPluginDetails",
+			},
+			{
+				SDKStruct: "jms.UpdateJmsPluginDetails",
+			},
+			{
+				SDKStruct: "jms.JmsPlugin",
+			},
+			{
+				SDKStruct: "jms.JmsPluginCollection",
+			},
+			{
+				SDKStruct: "jms.JmsPluginSummary",
 			},
 		},
 	},
@@ -7164,6 +7284,28 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "mediaservices.MediaWorkflowSummary",
+			},
+		},
+	},
+	{
+		Name:       "MediaservicesMediaWorkflowConfiguration",
+		SpecType:   reflect.TypeOf(mediaservicesv1beta1.MediaWorkflowConfigurationSpec{}),
+		StatusType: reflect.TypeOf(mediaservicesv1beta1.MediaWorkflowConfigurationStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "mediaservices.CreateMediaWorkflowConfigurationDetails",
+			},
+			{
+				SDKStruct: "mediaservices.UpdateMediaWorkflowConfigurationDetails",
+			},
+			{
+				SDKStruct: "mediaservices.MediaWorkflowConfiguration",
+			},
+			{
+				SDKStruct: "mediaservices.MediaWorkflowConfigurationCollection",
+			},
+			{
+				SDKStruct: "mediaservices.MediaWorkflowConfigurationSummary",
 			},
 		},
 	},
@@ -8610,6 +8752,28 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "tenantmanagercontrolplane.DomainSummary",
+			},
+		},
+	},
+	{
+		Name:       "TenantmanagercontrolplaneDomainGovernance",
+		SpecType:   reflect.TypeOf(tenantmanagercontrolplanev1beta1.DomainGovernanceSpec{}),
+		StatusType: reflect.TypeOf(tenantmanagercontrolplanev1beta1.DomainGovernanceStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "tenantmanagercontrolplane.CreateDomainGovernanceDetails",
+			},
+			{
+				SDKStruct: "tenantmanagercontrolplane.UpdateDomainGovernanceDetails",
+			},
+			{
+				SDKStruct: "tenantmanagercontrolplane.DomainGovernance",
+			},
+			{
+				SDKStruct: "tenantmanagercontrolplane.DomainGovernanceCollection",
+			},
+			{
+				SDKStruct: "tenantmanagercontrolplane.DomainGovernanceSummary",
 			},
 		},
 	},

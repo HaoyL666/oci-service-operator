@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "generativeaiagent",
+  "slug": "agentendpoint",
+  "kind": "AgentEndpoint",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_generative_ai_agent_agent_endpoint",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateAgentEndpoint",
+        "requestType": "generativeaiagent.CreateAgentEndpointRequest",
+        "responseType": "generativeaiagent.CreateAgentEndpointResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetAgentEndpoint",
+        "requestType": "generativeaiagent.GetAgentEndpointRequest",
+        "responseType": "generativeaiagent.GetAgentEndpointResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListAgentEndpoint",
+        "requestType": "generativeaiagent.ListAgentEndpointRequest",
+        "responseType": "generativeaiagent.ListAgentEndpointResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateAgentEndpoint",
+        "requestType": "generativeaiagent.UpdateAgentEndpointRequest",
+        "responseType": "generativeaiagent.UpdateAgentEndpointResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteAgentEndpoint",
+        "requestType": "generativeaiagent.DeleteAgentEndpointRequest",
+        "responseType": "generativeaiagent.DeleteAgentEndpointResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_generative_ai_agent_agent_endpoint",
+    "collectionField": "agentendpoint",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/generativeaiagent/agentendpoint/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/generativeaiagent/agentendpoint/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for generativeaiagent/agentendpoint; replace imported facts before promoting this row beyond scaffold."
+  ]
+}
