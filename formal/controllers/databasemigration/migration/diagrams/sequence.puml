@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetMigration
 else tracked identity is missing
-ServiceManager -> OCI: ListMigration(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListMigrations(filters:\ncompartment_id, display_name,\nlifecycle_details, lifecycle_state)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateMigration
-loop create pending PROVISIONING
+loop create pending ACCEPTED, CREATING,\nIN_PROGRESS, WAITING
 ServiceManager -> OCI: GetMigration
 end
 else reusable OCI resource already exists
@@ -52,9 +52,9 @@ end
 alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteMigration
-ServiceManager -> OCI: confirm delete via GetMigration or\nListMigration
+ServiceManager -> OCI: confirm delete via GetMigration or\nListMigrations
 loop delete pending DELETING
-ServiceManager -> OCI: GetMigration or ListMigration
+ServiceManager -> OCI: GetMigration or ListMigrations
 end
 alt cleanup or finalizer release is blocked
 ServiceManager --> BaseReconciler: retain delete state and retry
@@ -63,19 +63,31 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nACCEPTED, CREATING, IN_PROGRESS,\nWAITING (+2 more)
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: none
+Supported update surface:
+advanced_parameters, advisor_settings,
+data_transfer_medium_details,
+defined_tags (+11 more)
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+assessment_id, compartment_id,
+database_combination
+Lookup filters: compartment_id,
+display_name, lifecycle_details,
+lifecycle_state
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
-ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+opt supported mutable drift is detected
+ServiceManager -> OCI: Apply UpdateMigration only for\nmutable fields advanced_parameters,\nadvisor_settings,\ndata_transfer_medium_details,\ndefined_tags (+11 more)
+loop update pending UPDATING
+ServiceManager -> OCI: GetMigration
+end
+end
+ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=migration action=CREATED;\nupdate=tfresource.UpdateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=migration action=UPDATED;\ndelete=tfresource.DeleteResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=migration action=DELETED
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -102,18 +114,25 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: none
+provider states: create ACCEPTED, CREATING,
+IN_PROGRESS, WAITING; update UPDATING; delete
+DELETING
+supported drift: advanced_parameters,
+advisor_settings, data_transfer_medium_details,
+defined_tags (+11 more)
 reject before mutate: force-new fields
-compartment_id
+assessment_id, compartment_id,
+database_combination
 create-only fields: none
-list lookup: oci_database_migration_migration
-filters compartment_id, state
+list lookup: oci_database_migration_migrations
+filters compartment_id, display_name,
+lifecycle_details, lifecycle_state
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Work-request-backed generatedruntime overlay
+with explicit MYSQL/ORACLE request builders,
+conservative bind-before-create lookup,
+helper-surface rejection, and required delete
+confirmation.
 end note
 @enduml

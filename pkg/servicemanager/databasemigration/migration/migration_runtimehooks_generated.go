@@ -67,9 +67,9 @@ func newMigrationRuntimeSemantics() *generatedruntime.Semantics {
 		SecretSideEffects: "none",
 		FinalizerPolicy:   "retain-until-confirmed-delete",
 		Lifecycle: generatedruntime.LifecycleSemantics{
-			ProvisioningStates: []string{"PROVISIONING"},
+			ProvisioningStates: []string{"ACCEPTED", "CREATING", "IN_PROGRESS", "WAITING"},
 			UpdatingStates:     []string{"UPDATING"},
-			ActiveStates:       []string{"ACTIVE"},
+			ActiveStates:       []string{"ACTIVE", "INACTIVE", "SUCCEEDED"},
 		},
 		Delete: generatedruntime.DeleteSemantics{
 			Policy:         "required",
@@ -78,31 +78,31 @@ func newMigrationRuntimeSemantics() *generatedruntime.Semantics {
 		},
 		List: &generatedruntime.ListSemantics{
 			ResponseItemsField: "Items",
-			MatchFields:        []string{"compartmentId", "state"},
+			MatchFields:        []string{"compartmentId", "displayName", "lifecycleDetails", "lifecycleState"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{},
-			ForceNew:      []string{"compartmentId"},
+			Mutable:       []string{"advancedParameters", "advisorSettings", "dataTransferMediumDetails", "definedTags", "description", "displayName", "freeformTags", "ggsDetails", "hubDetails", "initialLoadSettings", "sourceContainerDatabaseConnectionId", "sourceDatabaseConnectionId", "sourceStandbyDatabaseConnectionId", "targetDatabaseConnectionId", "type"},
+			ForceNew:      []string{"assessmentId", "compartmentId", "databaseCombination"},
 			ConflictsWith: map[string][]string{},
 		},
 		Hooks: generatedruntime.HookSet{
-			Create: []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "template", Action: "CREATED"}},
-			Update: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}},
-			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
+			Create: []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "migration", Action: "CREATED"}},
+			Update: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "migration", Action: "UPDATED"}},
+			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "migration", Action: "DELETED"}},
 		},
 		CreateFollowUp: generatedruntime.FollowUpSemantics{
 			Strategy: "read-after-write",
-			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "template", Action: "CREATED"}},
+			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "migration", Action: "CREATED"}},
 		},
 		UpdateFollowUp: generatedruntime.FollowUpSemantics{
 			Strategy: "read-after-write",
-			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}},
+			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "migration", Action: "UPDATED"}},
 		},
 		DeleteFollowUp: generatedruntime.FollowUpSemantics{
 			Strategy: "confirm-delete",
-			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
+			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "migration", Action: "DELETED"}},
 		},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "list", MethodName: "ListMigration", RequestTypeName: "databasemigration.ListMigrationRequest", ResponseTypeName: "databasemigration.ListMigrationResponse"}},
+		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }
