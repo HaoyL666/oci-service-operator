@@ -17,10 +17,40 @@
     "specPathPrefix": "spec"
   },
   "update": {
-    "allowInPlacePaths": null,
+    "allowInPlacePaths": [
+      "advancedParameters",
+      "advisorSettings",
+      "dataTransferMediumDetails",
+      "definedTags",
+      "description",
+      "displayName",
+      "freeformTags",
+      "ggsDetails",
+      "hubDetails",
+      "initialLoadSettings",
+      "sourceContainerDatabaseConnectionId",
+      "sourceDatabaseConnectionId",
+      "sourceStandbyDatabaseConnectionId",
+      "targetDatabaseConnectionId",
+      "type"
+    ],
     "denyRules": [
       {
+        "fieldPath": "assessmentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
         "fieldPath": "compartmentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "databaseCombination",
         "decision": "replacementRequired",
         "mergeCase": "replacementRequired",
         "docsEvidenceState": "notDocumented",

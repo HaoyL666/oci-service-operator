@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2 id="argument-reference">Argument Reference</h2>
+    <p>The following arguments are supported:</p>
+    <ul>
+      <li><code>display_name</code> - (Optional) (Updatable) A user-friendly display name for the migration.</li>
+      <li><code>description</code> - (Optional) (Updatable) A user-friendly description for the migration.</li>
+      <li><code>freeform_tags</code> - (Optional) (Updatable) Free-form tags for this migration.</li>
+      <li><code>defined_tags</code> - (Optional) (Updatable) Defined tags for this migration.</li>
+      <li><code>source_database_connection_id</code> - (Optional) (Updatable) The source connection reference for the migration.</li>
+      <li><code>target_database_connection_id</code> - (Optional) (Updatable) The target connection reference for the migration.</li>
+      <li><code>type</code> - (Required) (Updatable) The migration type.</li>
+      <li><code>data_transfer_medium_details</code> - (Optional) (Updatable) The published controller-backed Migration rollout only supports the OBJECT_STORAGE variant from the checked-in CRD surface.</li>
+      <li><code>initial_load_settings</code> - (Optional) (Updatable) Initial-load configuration for the migration.</li>
+      <li><code>advisor_settings</code> - (Optional) (Updatable) Advisor configuration for the migration.</li>
+      <li><code>hub_details</code> - (Optional) (Updatable) GoldenGate hub configuration for the migration.</li>
+      <li><code>ggs_details</code> - (Optional) (Updatable) GoldenGate deployment settings for the migration.</li>
+      <li><code>advanced_parameters</code> - (Optional) (Updatable) Advanced Oracle-only migration parameters.</li>
+      <li><code>source_container_database_connection_id</code> - (Optional) (Updatable) Oracle container database connection reference.</li>
+      <li><code>source_standby_database_connection_id</code> - (Optional) (Updatable) Oracle standby database connection reference.</li>
+      <li><code>compartment_id</code> - (Required) Updating this field after creation is not supported.</li>
+      <li><code>assessment_id</code> - (Optional) Updating this field after creation is not supported.</li>
+      <li><code>database_combination</code> - (Required) Updating this field after creation is not supported.</li>
+      <li><code>include_objects</code> - (Optional) The published controller-backed Migration rollout does not support the object-helper families behind this field.</li>
+      <li><code>exclude_objects</code> - (Optional) The published controller-backed Migration rollout does not support the object-helper families behind this field.</li>
+      <li><code>bulk_include_exclude_data</code> - (Optional) The published controller-backed Migration rollout does not support the object-helper families behind this field.</li>
+    </ul>
+  </body>
+</html>

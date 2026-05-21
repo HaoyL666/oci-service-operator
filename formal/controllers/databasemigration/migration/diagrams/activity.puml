@@ -27,15 +27,15 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via GetMigration;
 else (no)
-:Resolve an existing OCI resource through\nListMigration using filters compartment_id,\nstate;
+:Resolve an existing OCI resource through\nListMigrations using filters compartment_id,\ndisplay_name, lifecycle_details,\nlifecycle_state;
 :Create the OCI resource via CreateMigration\nwhen no reusable match is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
 }
 if ("Delete requested?") then (yes)
 partition "Delete" {
-:Delete path uses DeleteMigration with required\nvia GetMigration or ListMigration to DELETED\nconfirmation;
-:Confirm deletion via GetMigration or\nListMigration until OCI reaches DELETED;
+:Delete path uses DeleteMigration with required\nvia GetMigration or ListMigrations to DELETED\nconfirmation;
+:Confirm deletion via GetMigration or\nListMigrations until OCI reaches DELETED;
 if ("Delete cleanup and finalizer release succeed?") then (yes)
 :Remove the finalizer after delete completion;
 else (no)
@@ -46,23 +46,27 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
+:Request requeue while OCI remains in ACCEPTED,\nCREATING, IN_PROGRESS, WAITING (+2 more);
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
-:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE;
+:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE, INACTIVE, SUCCEEDED;
 stop
 endif
 }
 partition "Ready and Drift Handling" {
 :Compare live OCI state against the imported\nfield surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields assessment_id, compartment_id,\ndatabase_combination;
 stop
 endif
-:No imported mutable field surface opens\nUpdateMigration;
-:Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Return success for the ACTIVE success state;
+if ("Supported mutable drift detected?") then (yes)
+:Apply UpdateMigration only for mutable fields\nadvanced_parameters, advisor_settings,\ndata_transfer_medium_details, defined_tags\n(+11 more);
+else (no)
+:Skip the no-op mutation path;
+endif
+:Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=migration action=CREATED;\nupdate=tfresource.UpdateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=migration action=UPDATED;\ndelete=tfresource.DeleteResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=migration action=DELETED when the\nmatching field-driven path executes;
+:Return success for the ACTIVE, INACTIVE,\nSUCCEEDED success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
 }
@@ -87,18 +91,25 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: none
+provider states: create ACCEPTED, CREATING,
+IN_PROGRESS, WAITING; update UPDATING; delete
+DELETING
+supported drift: advanced_parameters,
+advisor_settings, data_transfer_medium_details,
+defined_tags (+11 more)
 reject before mutate: force-new fields
-compartment_id
+assessment_id, compartment_id,
+database_combination
 create-only fields: none
-list lookup: oci_database_migration_migration
-filters compartment_id, state
+list lookup: oci_database_migration_migrations
+filters compartment_id, display_name,
+lifecycle_details, lifecycle_state
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Work-request-backed generatedruntime overlay
+with explicit MYSQL/ORACLE request builders,
+conservative bind-before-create lookup,
+helper-surface rejection, and required delete
+confirmation.
 end note
 @enduml
