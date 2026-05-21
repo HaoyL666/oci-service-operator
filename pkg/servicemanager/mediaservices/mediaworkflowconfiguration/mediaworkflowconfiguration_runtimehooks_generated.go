@@ -63,21 +63,21 @@ func newMediaWorkflowConfigurationRuntimeSemantics() *generatedruntime.Semantics
 		SecretSideEffects: "none",
 		FinalizerPolicy:   "retain-until-confirmed-delete",
 		Lifecycle: generatedruntime.LifecycleSemantics{
-			ProvisioningStates: []string{"PROVISIONING"},
-			UpdatingStates:     []string{"UPDATING"},
+			ProvisioningStates: []string{},
+			UpdatingStates:     []string{},
 			ActiveStates:       []string{"ACTIVE"},
 		},
 		Delete: generatedruntime.DeleteSemantics{
 			Policy:         "required",
-			PendingStates:  []string{"DELETING"},
-			TerminalStates: []string{"DELETED"},
+			PendingStates:  []string{},
+			TerminalStates: []string{"DELETED", "NOT_FOUND"},
 		},
 		List: &generatedruntime.ListSemantics{
 			ResponseItemsField: "Items",
-			MatchFields:        []string{"compartmentId", "state"},
+			MatchFields:        []string{"compartmentId", "displayName"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{},
+			Mutable:       []string{"definedTags", "displayName", "freeformTags", "parameters"},
 			ForceNew:      []string{"compartmentId"},
 			ConflictsWith: map[string][]string{},
 		},
@@ -98,7 +98,7 @@ func newMediaWorkflowConfigurationRuntimeSemantics() *generatedruntime.Semantics
 			Strategy: "confirm-delete",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
 		},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "list", MethodName: "ListMediaWorkflowConfiguration", RequestTypeName: "mediaservices.ListMediaWorkflowConfigurationRequest", ResponseTypeName: "mediaservices.ListMediaWorkflowConfigurationResponse"}},
+		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }

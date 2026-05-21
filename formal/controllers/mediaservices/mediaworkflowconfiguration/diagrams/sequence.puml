@@ -38,12 +38,9 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetMediaWorkflowConfiguration
 else tracked identity is missing
-ServiceManager -> OCI: ListMediaWorkflowConfiguration(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListMediaWorkflowConfigurations(filters:\ncompartmentId, displayName)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateMediaWorkflowConfiguration
-loop create pending PROVISIONING
-ServiceManager -> OCI: GetMediaWorkflowConfiguration
-end
 else reusable OCI resource already exists
 ServiceManager -> OCI: GetMediaWorkflowConfiguration
 end
@@ -52,34 +49,40 @@ end
 alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteMediaWorkflowConfiguration
-ServiceManager -> OCI: confirm delete via\nGetMediaWorkflowConfiguration or\nListMediaWorkflowConfiguration
-loop delete pending DELETING
-ServiceManager -> OCI: GetMediaWorkflowConfiguration or\nListMediaWorkflowConfiguration
-end
+ServiceManager -> OCI: confirm delete via\nGetMediaWorkflowConfiguration or\nListMediaWorkflowConfigurations
 alt cleanup or finalizer release is blocked
 ServiceManager --> BaseReconciler: retain delete state and retry
 else delete completion observed
 ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
-else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: none
+Supported update surface: definedTags,
+displayName, freeformTags, parameters
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+compartmentId
+Create-only fields: locks
+Lookup filters: compartmentId,
+displayName
+Lookup matching: exact compartmentId
+plus displayName unique match; empty
+displayName skips pre-create lookup;
+duplicate matches fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
-ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+opt supported mutable drift is detected
+ServiceManager -> OCI: Apply\nUpdateMediaWorkflowConfiguration\nonly for mutable fields definedTags,\ndisplayName, freeformTags,\nparameters
+end
+ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
-BaseReconciler --> Controller: requeue on provisioning, updating,\nterminating
+BaseReconciler --> Controller: requeue on terminating
 note right of ServiceManager
 shared diagram:
 shared/diagrams/shared-resolution-sequence.svg
@@ -101,20 +104,47 @@ kind: MediaWorkflowConfiguration
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: none
+requeue: terminating
+provider states: create none; update none;
+delete none
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: definedTags, displayName,
+freeformTags, parameters
 reject before mutate: force-new fields
-compartment_id
-create-only fields: none
+compartmentId
+create-only fields: locks
 list lookup:
-oci_media_services_media_workflow_configuration
-filters compartment_id, state
+oci_media_services_media_workflow_configurations
+filters compartmentId, displayName; exact
+compartmentId plus displayName unique match;
+empty displayName skips pre-create lookup;
+duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+MediaWorkflowConfiguration create and update are
+synchronous reread flows. OCI returns the body
+immediately and the resource exposes only ACTIVE
+and DELETED, so the reviewed runtime does not
+publish provisioning or updating lifecycle
+buckets.
+The published runtime excludes isLockOverride
+from update and delete, so lock overrides stay
+out of scope for the controller-backed surface.
+Delete confirmation treats either a DELETED
+lifecycle reread or OCI NotFound as terminal; a
+reread that still returns ACTIVE after delete is
+treated as delete pending and keeps the
+finalizer until OCI stops returning the
+resource.
+Matching create-time locks are normalized by
+ignoring OCI-populated timeCreated metadata so
+steady-state reconcile does not fail after a
+successful create that requested locks, but
+omitting spec.locks later still counts as
+create-only drift while OCI reports locks.
+Promotion to a seeded formal row is deferred to
+the convergence story that updates
+manifest-owned catalog metadata.
 end note
 @enduml
