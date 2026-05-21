@@ -67,7 +67,7 @@ func newAgentEndpointRuntimeSemantics() *generatedruntime.Semantics {
 		SecretSideEffects: "none",
 		FinalizerPolicy:   "retain-until-confirmed-delete",
 		Lifecycle: generatedruntime.LifecycleSemantics{
-			ProvisioningStates: []string{"PROVISIONING"},
+			ProvisioningStates: []string{"CREATING"},
 			UpdatingStates:     []string{"UPDATING"},
 			ActiveStates:       []string{"ACTIVE"},
 		},
@@ -78,17 +78,17 @@ func newAgentEndpointRuntimeSemantics() *generatedruntime.Semantics {
 		},
 		List: &generatedruntime.ListSemantics{
 			ResponseItemsField: "Items",
-			MatchFields:        []string{"compartmentId", "state"},
+			MatchFields:        []string{"agentId", "compartmentId", "displayName", "lifecycleState"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{},
-			ForceNew:      []string{"compartmentId"},
+			Mutable:       []string{"compartmentId", "contentModerationConfig", "definedTags", "description", "displayName", "freeformTags", "guardrailConfig", "humanInputConfig", "metadata", "outputConfig", "provisionedCapacityConfig", "sessionConfig", "shouldEnableCitation", "shouldEnableMultiLanguage", "shouldEnableTrace"},
+			ForceNew:      []string{},
 			ConflictsWith: map[string][]string{},
 		},
 		Hooks: generatedruntime.HookSet{
 			Create: []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "template", Action: "CREATED"}},
-			Update: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}},
-			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
+			Update: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "agentEndpoint", Action: "UPDATED"}},
+			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "agentEndpoint", Action: "DELETED"}},
 		},
 		CreateFollowUp: generatedruntime.FollowUpSemantics{
 			Strategy: "read-after-write",
@@ -96,13 +96,13 @@ func newAgentEndpointRuntimeSemantics() *generatedruntime.Semantics {
 		},
 		UpdateFollowUp: generatedruntime.FollowUpSemantics{
 			Strategy: "read-after-write",
-			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}},
+			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "agentEndpoint", Action: "UPDATED"}},
 		},
 		DeleteFollowUp: generatedruntime.FollowUpSemantics{
 			Strategy: "confirm-delete",
-			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
+			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "agentEndpoint", Action: "DELETED"}},
 		},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "list", MethodName: "ListAgentEndpoint", RequestTypeName: "generativeaiagent.ListAgentEndpointRequest", ResponseTypeName: "generativeaiagent.ListAgentEndpointResponse"}},
+		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "update", MethodName: "ChangeAgentEndpointCompartment", RequestTypeName: "generativeaiagent.ChangeAgentEndpointCompartmentRequest", ResponseTypeName: "generativeaiagent.ChangeAgentEndpointCompartmentResponse"}},
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }
