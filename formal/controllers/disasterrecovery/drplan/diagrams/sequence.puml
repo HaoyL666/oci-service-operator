@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetDrPlan
 else tracked identity is missing
-ServiceManager -> OCI: ListDrPlan(filters: compartment_id,\nstate)
+ServiceManager -> OCI: ListDrPlans(filters:\ndrProtectionGroupId, displayName,\ntype, drPlanId)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateDrPlan
-loop create pending PROVISIONING
+loop create pending CREATING
 ServiceManager -> OCI: GetDrPlan
 end
 else reusable OCI resource already exists
@@ -52,9 +52,9 @@ end
 alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteDrPlan
-ServiceManager -> OCI: confirm delete via GetDrPlan or\nListDrPlan
+ServiceManager -> OCI: confirm delete via GetDrPlan or\nListDrPlans
 loop delete pending DELETING
-ServiceManager -> OCI: GetDrPlan or ListDrPlan
+ServiceManager -> OCI: GetDrPlan or ListDrPlans
 end
 alt cleanup or finalizer release is blocked
 ServiceManager --> BaseReconciler: retain delete state and retry
@@ -63,19 +63,33 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nCREATING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: none
+Supported update surface: definedTags,
+displayName, freeformTags, planGroups
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+drProtectionGroupId, sourcePlanId, type
+Lookup filters: drProtectionGroupId,
+displayName, type, drPlanId
+Lookup matching: exact
+drProtectionGroupId plus displayName and
+type unique match; tracked rereads and
+delete confirmation can additionally
+narrow by drPlanId
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
-ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+opt supported mutable drift is detected
+ServiceManager -> OCI: Apply UpdateDrPlan only for mutable\nfields definedTags, displayName,\nfreeformTags, planGroups
+loop update pending UPDATING
+ServiceManager -> OCI: GetDrPlan
+end
+end
+ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=drplan action=CREATED;\nupdate=tfresource.UpdateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=drplan action=UPDATED;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=GetWorkRequest -> GetDrPlan;\nupdate=GetWorkRequest -> GetDrPlan;\ndelete=GetDrPlan/ListDrPlans\nconfirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -102,18 +116,41 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: none
+follow-up: create=GetWorkRequest -> GetDrPlan;
+update=GetWorkRequest -> GetDrPlan;
+delete=GetDrPlan/ListDrPlans confirm-delete
+supported drift: definedTags, displayName,
+freeformTags, planGroups
 reject before mutate: force-new fields
-compartment_id
+drProtectionGroupId, sourcePlanId, type
 create-only fields: none
-list lookup: oci_disaster_recovery_dr_plan
-filters compartment_id, state
+list lookup: oci_disaster_recovery_dr_plans
+filters drProtectionGroupId, displayName, type,
+drPlanId; exact drProtectionGroupId plus
+displayName and type unique match; tracked
+rereads and delete confirmation can additionally
+narrow by drPlanId
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+DrPlan create and update are work-request-backed
+and resume through status.async.current as the
+canonical in-flight tracker.
+List responses expose DrPlanSummary items only,
+so the runtime rereads GetDrPlan before status
+projection or mutable drift checks that depend
+on planGroups or sourcePlanId.
+Create ignores spec.planGroups because
+CreateDrPlanDetails does not accept planGroups;
+in-place plan group edits are published only
+through UpdateDrPlanDetails.
+The resource-local update builder strips
+read-only group and step fields from GetDrPlan
+before diffing so service-owned metadata does
+not cause perpetual updates.
+Refresh, verify, plan execution, and other
+disaster recovery helper families remain out of
+scope for this controller-backed runtime.
 end note
 @enduml
