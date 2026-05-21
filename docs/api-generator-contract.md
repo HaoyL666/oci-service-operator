@@ -43,6 +43,7 @@ Each service record defines:
 | `generation.resources[].controller.strategy` | Optional per-kind controller rollout override: `none`, `manual`, or `generated`. When omitted, the kind inherits the service-level controller strategy. |
 | `generation.resources[].controller.maxConcurrentReconciles` | Optional controller concurrency override for one kind. |
 | `generation.resources[].controller.extraRBACMarkers` | Optional non-default additional kubebuilder RBAC marker payloads for one kind. Generated controllers already include their API resource verbs plus `events create;patch`. |
+| `generation.resources[].controller.reconcilePredicate` | Optional per-kind generated controller predicate function or selector. When omitted, generated controllers use `core.ReconcilePredicate`. |
 | `generation.resources[].serviceManager.strategy` | Optional per-kind service-manager rollout override: `none`, `manual`, or `generated`. When omitted, the kind inherits the service-level service-manager strategy. |
 | `generation.resources[].serviceManager.packagePath` | Optional existing package path relative to `pkg/servicemanager/` when a manual layout must be preserved. |
 | `generation.resources[].serviceManager.needsCredentialClient` | Optional flag that threads credential-client plumbing into a generated service-manager seam when repo-authored secret-backed fields need it. |

@@ -4049,6 +4049,131 @@ services:
                 freeformTags:
                   managed-by: oci-service-operator
 
+  - service: genericartifactscontent
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/genericartifactscontent
+    group: genericartifactscontent
+    version: v1beta1
+    phase: data-and-storage
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - GenericArtifactContent
+        - GenericArtifactContentByPath
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+      resources:
+        - kind: GenericArtifactContentByPath
+          controller:
+            extraRBACMarkers:
+              - groups="",resources=secrets,verbs=get;list;watch
+          serviceManager:
+            needsCredentialClient: true
+          specFields:
+            - name: CompartmentId
+              type: string
+              tag: 'json:"compartmentId,omitempty"'
+              comments:
+                - The OCID of the compartment that contains the artifact repository.
+            - name: RepositoryId
+              type: string
+              tag: 'json:"repositoryId,omitempty"'
+              comments:
+                - The OCID of the repository that owns the artifact content.
+            - name: ArtifactPath
+              type: string
+              tag: 'json:"artifactPath,omitempty"'
+              comments:
+                - A user-defined artifact path within the repository.
+            - name: Version
+              type: string
+              tag: 'json:"version,omitempty"'
+              comments:
+                - A user-defined artifact version string.
+            - name: Content
+              type: shared.SecretSource
+              tag: 'json:"content,omitempty,omitzero"'
+              comments:
+                - A Kubernetes Secret reference containing the artifact bytes to upload.
+            - name: ContentKey
+              type: string
+              tag: 'json:"contentKey,omitempty"'
+              comments:
+                - The key inside spec.content.secretName that contains the artifact bytes. Defaults to content.
+          statusFields:
+            - name: Id
+              type: string
+              tag: 'json:"id,omitempty"'
+              comments:
+                - The OCID of the artifact returned by OCI after upload.
+            - name: RepositoryId
+              type: string
+              tag: 'json:"repositoryId,omitempty"'
+              comments:
+                - The observed repository OCID used to address the artifact content.
+            - name: ArtifactPath
+              type: string
+              tag: 'json:"artifactPath,omitempty"'
+              comments:
+                - The observed artifact path used to address the artifact content.
+            - name: Version
+              type: string
+              tag: 'json:"version,omitempty"'
+              comments:
+                - The observed artifact version used to address the artifact content.
+            - name: DisplayName
+              type: string
+              tag: 'json:"displayName,omitempty"'
+              comments:
+                - The observed artifact display name returned by OCI.
+            - name: CompartmentId
+              type: string
+              tag: 'json:"compartmentId,omitempty"'
+              comments:
+                - The observed compartment OCID returned by OCI.
+            - name: Sha256
+              type: string
+              tag: 'json:"sha256,omitempty"'
+              comments:
+                - The observed SHA256 digest for the artifact content.
+            - name: SizeInBytes
+              type: int64
+              tag: 'json:"sizeInBytes,omitempty"'
+              comments:
+                - The observed artifact size in bytes.
+            - name: LifecycleState
+              type: string
+              tag: 'json:"lifecycleState,omitempty"'
+              comments:
+                - The observed artifact lifecycle state returned by OCI.
+            - name: Etag
+              type: string
+              tag: 'json:"etag,omitempty"'
+              comments:
+                - The latest observed entity tag for optimistic overwrite checks.
+          sample:
+            metadataName: genericartifactcontentbypath-sample
+            spec: |2-
+                compartmentId: ocid1.compartment.oc1..exampleuniqueID
+                repositoryId: ocid1.repository.oc1..exampleuniqueID
+                artifactPath: project01/my-web-app/artifact-abc
+                version: 1.0.0
+                content:
+                  secretName: generic-artifact-content
+                contentKey: content
+
   - service: goldengate
     sdkPackage: github.com/oracle/oci-go-sdk/v65/goldengate
     group: goldengate
@@ -4364,6 +4489,84 @@ services:
       excludedFieldPaths:
         JavaDownloadToken:
           - Value
+
+  - service: jmsutils
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/jmsutils
+    group: jmsutils
+    version: v1beta1
+    phase: eventing-messaging-and-observability
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - AnalyzeApplicationsConfiguration
+        - JavaMigrationAnalysis
+        - PerformanceTuningAnalysis
+        - SubscriptionAcknowledgmentConfiguration
+        - WorkItem
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+      resources:
+        - kind: JavaMigrationAnalysis
+          specFields:
+            - name: CompartmentId
+              type: string
+              tag: 'json:"compartmentId"'
+              comments:
+                - The OCID of the compartment where the Java Migration Analysis will be requested.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: AnalysisProjectName
+              type: string
+              tag: 'json:"analysisProjectName"'
+              comments:
+                - Name of the analysis project.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: InputApplicationsObjectStoragePaths
+              type: '[]string'
+              tag: 'json:"inputApplicationsObjectStoragePaths"'
+              comments:
+                - Object Storage paths to the input application files to analyze.
+              markers:
+                - +kubebuilder:validation:Required
+                - +kubebuilder:validation:MinItems=1
+            - name: TargetJdkVersion
+              type: string
+              tag: 'json:"targetJdkVersion"'
+              comments:
+                - Target JDK version for this Java Migration Analysis.
+              markers:
+                - +kubebuilder:validation:Required
+          sample:
+            body: |-
+              #
+              # Replace the OCI identifiers and Object Storage paths below before running e2e.
+              # Update metadata.name or spec.analysisProjectName if you want to request a fresh
+              # Java Migration Analysis instead of binding to a matching analysis in the compartment.
+              #
+              apiVersion: jmsutils.oracle.com/v1beta1
+              kind: JavaMigrationAnalysis
+              metadata:
+                name: javamigrationanalysis-sample
+              spec:
+                compartmentId: ocid1.compartment.oc1..exampleuniqueID
+                analysisProjectName: javamigrationanalysis-sample
+                inputApplicationsObjectStoragePaths:
+                  - oci://example-bucket/path/to/application.jar
+                targetJdkVersion: "17"
 
   - service: keymanagement
     sdkPackage: github.com/oracle/oci-go-sdk/v65/keymanagement
@@ -5302,6 +5505,57 @@ services:
         AlarmHistory:
           - AlarmHistoryCollection
 
+  - service: multicloud
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/multicloud
+    group: multicloud
+    version: v1beta1
+    phase: networking-and-infrastructure
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - ExternalLocationDetailsMetadata
+        - ExternalLocationMappingMetadata
+        - ExternalLocationSummariesMetadata
+        - MultiCloudMetadata
+        - MulticloudResource
+        - MulticloudSubscription
+        - NetworkAnchor
+        - ResourceAnchor
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+      resources:
+        - kind: ExternalLocationSummariesMetadata
+          controller:
+            reconcilePredicate: externalLocationSummariesMetadataReconcilePredicate
+          sample:
+            body: |-
+              #
+              # Replace the multicloud base compartment OCID below before applying.
+              # The list-only OCI metadata API requires query filters; this CRD carries
+              # them as annotations because the generated spec has no request fields.
+              #
+              apiVersion: multicloud.oracle.com/v1beta1
+              kind: ExternalLocationSummariesMetadata
+              metadata:
+                name: externallocationsummariesmetadata-sample
+                annotations:
+                  multicloud.oracle.com/subscription-service-name: ORACLEDBATAZURE
+                  multicloud.oracle.com/compartment-id: ocid1.compartment.oc1..exampleuniqueID
+              spec: {}
+
   - service: mysql
     sdkPackage: github.com/oracle/oci-go-sdk/v65/mysql
     group: mysql
@@ -5605,6 +5859,32 @@ services:
                 - delete
           serviceManager:
             packagePath: oce/oceinstance
+
+  - service: ocicontrolcenter
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/ocicontrolcenter
+    group: ocicontrolcenter
+    version: v1beta1
+    phase: eventing-messaging-and-observability
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - MetricProperty
+        - Namespace
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
 
   - service: ocvp
     sdkPackage: github.com/oracle/oci-go-sdk/v65/ocvp
@@ -6151,6 +6431,56 @@ services:
         - Profile
         - ScheduledJob
         - SoftwareSource
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+
+  - service: osubbillingschedule
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/osubbillingschedule
+    group: osubbillingschedule
+    version: v1beta1
+    phase: data-and-storage
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - BillingSchedule
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+
+  - service: osuborganizationsubscription
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/osuborganizationsubscription
+    group: osuborganizationsubscription
+    version: v1beta1
+    phase: data-and-storage
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - OrganizationSubscription
     async:
       strategy: lifecycle
       runtime: generatedruntime

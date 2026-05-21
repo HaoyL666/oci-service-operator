@@ -593,6 +593,25 @@ func TestPackageResourceOperations(t *testing.T) {
 			},
 		},
 		{
+			name:       "jmsutils Analysis keeps uncountable suffix",
+			importPath: "github.com/oracle/oci-go-sdk/v65/jmsutils",
+			rawName:    "JavaMigrationAnalysis",
+			assert: func(t *testing.T, operations map[string]OperationMethod) {
+				get := operations["Get"]
+				if get.MethodName != "GetJavaMigrationAnalysis" {
+					t.Fatalf("JavaMigrationAnalysis get method = %q, want GetJavaMigrationAnalysis", get.MethodName)
+				}
+				list := operations["List"]
+				if list.MethodName != "ListJavaMigrationAnalysis" {
+					t.Fatalf("JavaMigrationAnalysis list method = %q, want ListJavaMigrationAnalysis", list.MethodName)
+				}
+				deleteOp := operations["Delete"]
+				if deleteOp.MethodName != "DeleteJavaMigrationAnalysis" {
+					t.Fatalf("JavaMigrationAnalysis delete method = %q, want DeleteJavaMigrationAnalysis", deleteOp.MethodName)
+				}
+			},
+		},
+		{
 			name:       "queue Message prefers exact singular operations",
 			importPath: "github.com/oracle/oci-go-sdk/v65/queue",
 			rawName:    "Message",

@@ -1,16 +1,16 @@
 {
   "aggregate": {
-    "specs": 446,
-    "mappings": 1863,
-    "trackedMappings": 1854,
-    "untrackedMappings": 9,
-    "presentFields": 18041,
-    "missingFields": 363,
-    "mandatoryPresentFields": 5972,
-    "mandatoryMissingFields": 284,
+    "specs": 465,
+    "mappings": 1899,
+    "trackedMappings": 1884,
+    "untrackedMappings": 15,
+    "presentFields": 18239,
+    "missingFields": 373,
+    "mandatoryPresentFields": 6083,
+    "mandatoryMissingFields": 294,
     "extraSpecFields": 1312,
-    "overallCoveragePercent": 98.02760269506628,
-    "mandatoryCoveragePercent": 95.46035805626599
+    "overallCoveragePercent": 97.99591661293789,
+    "mandatoryCoveragePercent": 95.38968166849617
   },
   "services": [
     {
@@ -952,6 +952,20 @@
       "mandatoryCoveragePercent": 92.3076923076923
     },
     {
+      "service": "genericartifactscontent",
+      "specs": 2,
+      "mappings": 2,
+      "trackedMappings": 0,
+      "untrackedMappings": 2,
+      "presentFields": 0,
+      "missingFields": 0,
+      "mandatoryPresentFields": 0,
+      "mandatoryMissingFields": 0,
+      "extraSpecFields": 0,
+      "overallCoveragePercent": 100,
+      "mandatoryCoveragePercent": 100
+    },
+    {
       "service": "goldengate",
       "specs": 7,
       "mappings": 26,
@@ -1062,6 +1076,20 @@
       "extraSpecFields": 2,
       "overallCoveragePercent": 94.54545454545455,
       "mandatoryCoveragePercent": 88.88888888888889
+    },
+    {
+      "service": "jmsutils",
+      "specs": 5,
+      "mappings": 12,
+      "trackedMappings": 12,
+      "untrackedMappings": 0,
+      "presentFields": 68,
+      "missingFields": 3,
+      "mandatoryPresentFields": 60,
+      "mandatoryMissingFields": 3,
+      "extraSpecFields": 0,
+      "overallCoveragePercent": 95.77464788732394,
+      "mandatoryCoveragePercent": 95.23809523809523
     },
     {
       "service": "keymanagement",
@@ -1316,6 +1344,20 @@
       "mandatoryCoveragePercent": 100
     },
     {
+      "service": "multicloud",
+      "specs": 8,
+      "mappings": 16,
+      "trackedMappings": 13,
+      "untrackedMappings": 3,
+      "presentFields": 115,
+      "missingFields": 5,
+      "mandatoryPresentFields": 49,
+      "mandatoryMissingFields": 5,
+      "extraSpecFields": 0,
+      "overallCoveragePercent": 95.83333333333334,
+      "mandatoryCoveragePercent": 90.74074074074075
+    },
+    {
       "service": "mysql",
       "specs": 1,
       "mappings": 4,
@@ -1398,6 +1440,20 @@
       "extraSpecFields": 11,
       "overallCoveragePercent": 100,
       "mandatoryCoveragePercent": 100
+    },
+    {
+      "service": "ocicontrolcenter",
+      "specs": 2,
+      "mappings": 4,
+      "trackedMappings": 4,
+      "untrackedMappings": 0,
+      "presentFields": 3,
+      "missingFields": 2,
+      "mandatoryPresentFields": 2,
+      "mandatoryMissingFields": 2,
+      "extraSpecFields": 0,
+      "overallCoveragePercent": 60,
+      "mandatoryCoveragePercent": 50
     },
     {
       "service": "ocvp",
@@ -1538,6 +1594,34 @@
       "extraSpecFields": 33,
       "overallCoveragePercent": 96.81978798586573,
       "mandatoryCoveragePercent": 92.04545454545455
+    },
+    {
+      "service": "osubbillingschedule",
+      "specs": 1,
+      "mappings": 1,
+      "trackedMappings": 1,
+      "untrackedMappings": 0,
+      "presentFields": 12,
+      "missingFields": 0,
+      "mandatoryPresentFields": 0,
+      "mandatoryMissingFields": 0,
+      "extraSpecFields": 0,
+      "overallCoveragePercent": 100,
+      "mandatoryCoveragePercent": 100
+    },
+    {
+      "service": "osuborganizationsubscription",
+      "specs": 1,
+      "mappings": 1,
+      "trackedMappings": 0,
+      "untrackedMappings": 1,
+      "presentFields": 0,
+      "missingFields": 0,
+      "mandatoryPresentFields": 0,
+      "mandatoryMissingFields": 0,
+      "extraSpecFields": 0,
+      "overallCoveragePercent": 100,
+      "mandatoryCoveragePercent": 100
     },
     {
       "service": "osubsubscription",

@@ -1,0 +1,60 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - multicloud.oracle.com
+  resources:
+  - externallocationdetailsmetadata
+  - externallocationmappingmetadata
+  - externallocationsummariesmetadata
+  - multicloudmetadata
+  - multicloudresources
+  - multicloudsubscriptions
+  - networkanchors
+  - resourceanchors
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - multicloud.oracle.com
+  resources:
+  - externallocationdetailsmetadata/finalizers
+  - externallocationmappingmetadata/finalizers
+  - externallocationsummariesmetadata/finalizers
+  - multicloudmetadata/finalizers
+  - multicloudresources/finalizers
+  - multicloudsubscriptions/finalizers
+  - networkanchors/finalizers
+  - resourceanchors/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - multicloud.oracle.com
+  resources:
+  - externallocationdetailsmetadata/status
+  - externallocationmappingmetadata/status
+  - externallocationsummariesmetadata/status
+  - multicloudmetadata/status
+  - multicloudresources/status
+  - multicloudsubscriptions/status
+  - networkanchors/status
+  - resourceanchors/status
+  verbs:
+  - get
+  - patch
+  - update

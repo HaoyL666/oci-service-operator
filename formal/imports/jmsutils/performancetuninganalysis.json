@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "jmsutils",
+  "slug": "performancetuninganalysis",
+  "kind": "PerformanceTuningAnalysis",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "scaffold_jmsutils_performancetuninganalysis",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreatePerformanceTuningAnalysis",
+        "requestType": "jmsutils.CreatePerformanceTuningAnalysisRequest",
+        "responseType": "jmsutils.CreatePerformanceTuningAnalysisResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetPerformanceTuningAnalysis",
+        "requestType": "jmsutils.GetPerformanceTuningAnalysisRequest",
+        "responseType": "jmsutils.GetPerformanceTuningAnalysisResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListPerformanceTuningAnalysis",
+        "requestType": "jmsutils.ListPerformanceTuningAnalysisRequest",
+        "responseType": "jmsutils.ListPerformanceTuningAnalysisResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdatePerformanceTuningAnalysis",
+        "requestType": "jmsutils.UpdatePerformanceTuningAnalysisRequest",
+        "responseType": "jmsutils.UpdatePerformanceTuningAnalysisResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeletePerformanceTuningAnalysis",
+        "requestType": "jmsutils.DeletePerformanceTuningAnalysisRequest",
+        "responseType": "jmsutils.DeletePerformanceTuningAnalysisResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "display_name"
+    ],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "scaffold_jmsutils_performancetuninganalysis",
+    "collectionField": "performancetuninganalysis",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/jmsutils/performancetuninganalysis/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/jmsutils/performancetuninganalysis/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for jmsutils/performancetuninganalysis; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

@@ -70,6 +70,7 @@ import (
 	generativeaiagentv1beta1 "github.com/oracle/oci-service-operator/api/generativeaiagent/v1beta1"
 	generativeaiagentruntimev1beta1 "github.com/oracle/oci-service-operator/api/generativeaiagentruntime/v1beta1"
 	generativeaidatav1beta1 "github.com/oracle/oci-service-operator/api/generativeaidata/v1beta1"
+	genericartifactscontentv1beta1 "github.com/oracle/oci-service-operator/api/genericartifactscontent/v1beta1"
 	goldengatev1beta1 "github.com/oracle/oci-service-operator/api/goldengate/v1beta1"
 	governancerulescontrolplanev1beta1 "github.com/oracle/oci-service-operator/api/governancerulescontrolplane/v1beta1"
 	healthchecksv1beta1 "github.com/oracle/oci-service-operator/api/healthchecks/v1beta1"
@@ -78,6 +79,7 @@ import (
 	iotv1beta1 "github.com/oracle/oci-service-operator/api/iot/v1beta1"
 	jmsv1beta1 "github.com/oracle/oci-service-operator/api/jms/v1beta1"
 	jmsjavadownloadsv1beta1 "github.com/oracle/oci-service-operator/api/jmsjavadownloads/v1beta1"
+	jmsutilsv1beta1 "github.com/oracle/oci-service-operator/api/jmsutils/v1beta1"
 	keymanagementv1beta1 "github.com/oracle/oci-service-operator/api/keymanagement/v1beta1"
 	licensemanagerv1beta1 "github.com/oracle/oci-service-operator/api/licensemanager/v1beta1"
 	limitsv1beta1 "github.com/oracle/oci-service-operator/api/limits/v1beta1"
@@ -96,12 +98,14 @@ import (
 	mediaservicesv1beta1 "github.com/oracle/oci-service-operator/api/mediaservices/v1beta1"
 	mngdmacv1beta1 "github.com/oracle/oci-service-operator/api/mngdmac/v1beta1"
 	monitoringv1beta1 "github.com/oracle/oci-service-operator/api/monitoring/v1beta1"
+	multicloudv1beta1 "github.com/oracle/oci-service-operator/api/multicloud/v1beta1"
 	mysqlv1beta1 "github.com/oracle/oci-service-operator/api/mysql/v1beta1"
 	networkfirewallv1beta1 "github.com/oracle/oci-service-operator/api/networkfirewall/v1beta1"
 	networkloadbalancerv1beta1 "github.com/oracle/oci-service-operator/api/networkloadbalancer/v1beta1"
 	nosqlv1beta1 "github.com/oracle/oci-service-operator/api/nosql/v1beta1"
 	objectstoragev1beta1 "github.com/oracle/oci-service-operator/api/objectstorage/v1beta1"
 	ocev1beta1 "github.com/oracle/oci-service-operator/api/oce/v1beta1"
+	ocicontrolcenterv1beta1 "github.com/oracle/oci-service-operator/api/ocicontrolcenter/v1beta1"
 	ocvpv1beta1 "github.com/oracle/oci-service-operator/api/ocvp/v1beta1"
 	odav1beta1 "github.com/oracle/oci-service-operator/api/oda/v1beta1"
 	onesubscriptionv1beta1 "github.com/oracle/oci-service-operator/api/onesubscription/v1beta1"
@@ -112,6 +116,8 @@ import (
 	opsiv1beta1 "github.com/oracle/oci-service-operator/api/opsi/v1beta1"
 	optimizerv1beta1 "github.com/oracle/oci-service-operator/api/optimizer/v1beta1"
 	osmanagementhubv1beta1 "github.com/oracle/oci-service-operator/api/osmanagementhub/v1beta1"
+	osubbillingschedulev1beta1 "github.com/oracle/oci-service-operator/api/osubbillingschedule/v1beta1"
+	osuborganizationsubscriptionv1beta1 "github.com/oracle/oci-service-operator/api/osuborganizationsubscription/v1beta1"
 	osubsubscriptionv1beta1 "github.com/oracle/oci-service-operator/api/osubsubscription/v1beta1"
 	psav1beta1 "github.com/oracle/oci-service-operator/api/psa/v1beta1"
 	psqlv1beta1 "github.com/oracle/oci-service-operator/api/psql/v1beta1"
@@ -6108,6 +6114,18 @@ var targets = []Target{
 		},
 	},
 	{
+		Name:        "GenericartifactscontentGenericArtifactContent",
+		SpecType:    reflect.TypeOf(genericartifactscontentv1beta1.GenericArtifactContentSpec{}),
+		StatusType:  reflect.TypeOf(genericartifactscontentv1beta1.GenericArtifactContentStatus{}),
+		SDKMappings: []SDKMapping{},
+	},
+	{
+		Name:        "GenericartifactscontentGenericArtifactContentByPath",
+		SpecType:    reflect.TypeOf(genericartifactscontentv1beta1.GenericArtifactContentByPathSpec{}),
+		StatusType:  reflect.TypeOf(genericartifactscontentv1beta1.GenericArtifactContentByPathStatus{}),
+		SDKMappings: []SDKMapping{},
+	},
+	{
 		Name:       "GoldengateCertificate",
 		SpecType:   reflect.TypeOf(goldengatev1beta1.CertificateSpec{}),
 		StatusType: reflect.TypeOf(goldengatev1beta1.CertificateStatus{}),
@@ -6505,6 +6523,77 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "jmsjavadownloads.JavaDownloadTokenSummary",
+			},
+		},
+	},
+	{
+		Name:       "JmsutilsAnalyzeApplicationsConfiguration",
+		SpecType:   reflect.TypeOf(jmsutilsv1beta1.AnalyzeApplicationsConfigurationSpec{}),
+		StatusType: reflect.TypeOf(jmsutilsv1beta1.AnalyzeApplicationsConfigurationStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "jmsutils.UpdateAnalyzeApplicationsConfigurationDetails",
+			},
+			{
+				SDKStruct: "jmsutils.AnalyzeApplicationsConfiguration",
+			},
+		},
+	},
+	{
+		Name:       "JmsutilsJavaMigrationAnalysis",
+		SpecType:   reflect.TypeOf(jmsutilsv1beta1.JavaMigrationAnalysisSpec{}),
+		StatusType: reflect.TypeOf(jmsutilsv1beta1.JavaMigrationAnalysisStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "jmsutils.JavaMigrationAnalysis",
+			},
+			{
+				SDKStruct: "jmsutils.JavaMigrationAnalysisCollection",
+			},
+			{
+				SDKStruct: "jmsutils.JavaMigrationAnalysisSummary",
+			},
+		},
+	},
+	{
+		Name:       "JmsutilsPerformanceTuningAnalysis",
+		SpecType:   reflect.TypeOf(jmsutilsv1beta1.PerformanceTuningAnalysisSpec{}),
+		StatusType: reflect.TypeOf(jmsutilsv1beta1.PerformanceTuningAnalysisStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "jmsutils.PerformanceTuningAnalysis",
+			},
+			{
+				SDKStruct: "jmsutils.PerformanceTuningAnalysisCollection",
+			},
+			{
+				SDKStruct: "jmsutils.PerformanceTuningAnalysisSummary",
+			},
+		},
+	},
+	{
+		Name:       "JmsutilsSubscriptionAcknowledgmentConfiguration",
+		SpecType:   reflect.TypeOf(jmsutilsv1beta1.SubscriptionAcknowledgmentConfigurationSpec{}),
+		StatusType: reflect.TypeOf(jmsutilsv1beta1.SubscriptionAcknowledgmentConfigurationStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "jmsutils.UpdateSubscriptionAcknowledgmentConfigurationDetails",
+			},
+			{
+				SDKStruct: "jmsutils.SubscriptionAcknowledgmentConfiguration",
+			},
+		},
+	},
+	{
+		Name:       "JmsutilsWorkItem",
+		SpecType:   reflect.TypeOf(jmsutilsv1beta1.WorkItemSpec{}),
+		StatusType: reflect.TypeOf(jmsutilsv1beta1.WorkItemStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "jmsutils.WorkItemCollection",
+			},
+			{
+				SDKStruct: "jmsutils.WorkItemSummary",
 			},
 		},
 	},
@@ -7206,6 +7295,98 @@ var targets = []Target{
 		},
 	},
 	{
+		Name:        "MulticloudExternalLocationDetailsMetadata",
+		SpecType:    reflect.TypeOf(multicloudv1beta1.ExternalLocationDetailsMetadataSpec{}),
+		StatusType:  reflect.TypeOf(multicloudv1beta1.ExternalLocationDetailsMetadataStatus{}),
+		SDKMappings: []SDKMapping{},
+	},
+	{
+		Name:        "MulticloudExternalLocationMappingMetadata",
+		SpecType:    reflect.TypeOf(multicloudv1beta1.ExternalLocationMappingMetadataSpec{}),
+		StatusType:  reflect.TypeOf(multicloudv1beta1.ExternalLocationMappingMetadataStatus{}),
+		SDKMappings: []SDKMapping{},
+	},
+	{
+		Name:        "MulticloudExternalLocationSummariesMetadata",
+		SpecType:    reflect.TypeOf(multicloudv1beta1.ExternalLocationSummariesMetadataSpec{}),
+		StatusType:  reflect.TypeOf(multicloudv1beta1.ExternalLocationSummariesMetadataStatus{}),
+		SDKMappings: []SDKMapping{},
+	},
+	{
+		Name:       "MulticloudMultiCloudMetadata",
+		SpecType:   reflect.TypeOf(multicloudv1beta1.MultiCloudMetadataSpec{}),
+		StatusType: reflect.TypeOf(multicloudv1beta1.MultiCloudMetadataStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "multicloud.MultiCloudMetadata",
+			},
+			{
+				SDKStruct: "multicloud.MultiCloudMetadataCollection",
+			},
+			{
+				SDKStruct: "multicloud.MultiCloudMetadataSummary",
+			},
+		},
+	},
+	{
+		Name:       "MulticloudMulticloudResource",
+		SpecType:   reflect.TypeOf(multicloudv1beta1.MulticloudResourceSpec{}),
+		StatusType: reflect.TypeOf(multicloudv1beta1.MulticloudResourceStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "multicloud.MulticloudResourceCollection",
+			},
+			{
+				SDKStruct: "multicloud.MulticloudResourceSummary",
+			},
+		},
+	},
+	{
+		Name:       "MulticloudMulticloudSubscription",
+		SpecType:   reflect.TypeOf(multicloudv1beta1.MulticloudSubscriptionSpec{}),
+		StatusType: reflect.TypeOf(multicloudv1beta1.MulticloudSubscriptionStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "multicloud.MulticloudSubscriptionCollection",
+			},
+			{
+				SDKStruct: "multicloud.MulticloudSubscriptionSummary",
+			},
+		},
+	},
+	{
+		Name:       "MulticloudNetworkAnchor",
+		SpecType:   reflect.TypeOf(multicloudv1beta1.NetworkAnchorSpec{}),
+		StatusType: reflect.TypeOf(multicloudv1beta1.NetworkAnchorStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "multicloud.NetworkAnchor",
+			},
+			{
+				SDKStruct: "multicloud.NetworkAnchorCollection",
+			},
+			{
+				SDKStruct: "multicloud.NetworkAnchorSummary",
+			},
+		},
+	},
+	{
+		Name:       "MulticloudResourceAnchor",
+		SpecType:   reflect.TypeOf(multicloudv1beta1.ResourceAnchorSpec{}),
+		StatusType: reflect.TypeOf(multicloudv1beta1.ResourceAnchorStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "multicloud.ResourceAnchor",
+			},
+			{
+				SDKStruct: "multicloud.ResourceAnchorCollection",
+			},
+			{
+				SDKStruct: "multicloud.ResourceAnchorSummary",
+			},
+		},
+	},
+	{
 		Name:       "NetworkfirewallAddressList",
 		SpecType:   reflect.TypeOf(networkfirewallv1beta1.AddressListSpec{}),
 		StatusType: reflect.TypeOf(networkfirewallv1beta1.AddressListStatus{}),
@@ -7425,6 +7606,32 @@ var targets = []Target{
 			},
 			{
 				SDKStruct: "oce.OceInstanceSummary",
+			},
+		},
+	},
+	{
+		Name:       "OcicontrolcenterMetricProperty",
+		SpecType:   reflect.TypeOf(ocicontrolcenterv1beta1.MetricPropertySpec{}),
+		StatusType: reflect.TypeOf(ocicontrolcenterv1beta1.MetricPropertyStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "ocicontrolcenter.MetricPropertyCollection",
+			},
+			{
+				SDKStruct: "ocicontrolcenter.MetricPropertySummary",
+			},
+		},
+	},
+	{
+		Name:       "OcicontrolcenterNamespace",
+		SpecType:   reflect.TypeOf(ocicontrolcenterv1beta1.NamespaceSpec{}),
+		StatusType: reflect.TypeOf(ocicontrolcenterv1beta1.NamespaceStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "ocicontrolcenter.NamespaceCollection",
+			},
+			{
+				SDKStruct: "ocicontrolcenter.NamespaceSummary",
 			},
 		},
 	},
@@ -7919,6 +8126,22 @@ var targets = []Target{
 				SDKStruct: "osmanagementhub.SoftwareSourceCollection",
 			},
 		},
+	},
+	{
+		Name:       "OsubbillingscheduleBillingSchedule",
+		SpecType:   reflect.TypeOf(osubbillingschedulev1beta1.BillingScheduleSpec{}),
+		StatusType: reflect.TypeOf(osubbillingschedulev1beta1.BillingScheduleStatus{}),
+		SDKMappings: []SDKMapping{
+			{
+				SDKStruct: "osubbillingschedule.BillingScheduleSummary",
+			},
+		},
+	},
+	{
+		Name:        "OsuborganizationsubscriptionOrganizationSubscription",
+		SpecType:    reflect.TypeOf(osuborganizationsubscriptionv1beta1.OrganizationSubscriptionSpec{}),
+		StatusType:  reflect.TypeOf(osuborganizationsubscriptionv1beta1.OrganizationSubscriptionStatus{}),
+		SDKMappings: []SDKMapping{},
 	},
 	{
 		Name:       "OsubsubscriptionSubscription",

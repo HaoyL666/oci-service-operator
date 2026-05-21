@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- bases/multicloud.oracle.com_externallocationdetailsmetadata.yaml
+- bases/multicloud.oracle.com_externallocationmappingmetadata.yaml
+- bases/multicloud.oracle.com_externallocationsummariesmetadata.yaml
+- bases/multicloud.oracle.com_multicloudmetadata.yaml
+- bases/multicloud.oracle.com_multicloudresources.yaml
+- bases/multicloud.oracle.com_multicloudsubscriptions.yaml
+- bases/multicloud.oracle.com_networkanchors.yaml
+- bases/multicloud.oracle.com_resourceanchors.yaml

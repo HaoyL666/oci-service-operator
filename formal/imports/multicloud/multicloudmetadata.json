@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "multicloud",
+  "slug": "multicloudmetadata",
+  "kind": "MultiCloudMetadata",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "scaffold_multicloud_multicloudmetadata",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateMultiCloudMetadata",
+        "requestType": "multicloud.CreateMultiCloudMetadataRequest",
+        "responseType": "multicloud.CreateMultiCloudMetadataResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetMultiCloudMetadata",
+        "requestType": "multicloud.GetMultiCloudMetadataRequest",
+        "responseType": "multicloud.GetMultiCloudMetadataResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListMultiCloudMetadata",
+        "requestType": "multicloud.ListMultiCloudMetadataRequest",
+        "responseType": "multicloud.ListMultiCloudMetadataResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateMultiCloudMetadata",
+        "requestType": "multicloud.UpdateMultiCloudMetadataRequest",
+        "responseType": "multicloud.UpdateMultiCloudMetadataResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteMultiCloudMetadata",
+        "requestType": "multicloud.DeleteMultiCloudMetadataRequest",
+        "responseType": "multicloud.DeleteMultiCloudMetadataResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "display_name"
+    ],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "scaffold_multicloud_multicloudmetadata",
+    "collectionField": "multicloudmetadata",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/multicloud/multicloudmetadata/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/multicloud/multicloudmetadata/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for multicloud/multicloudmetadata; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

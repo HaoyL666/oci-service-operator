@@ -1,0 +1,377 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.0
+  name: networkanchors.multicloud.oracle.com
+spec:
+  group: multicloud.oracle.com
+  names:
+    kind: NetworkAnchor
+    listKind: NetworkAnchorList
+    plural: networkanchors
+    singular: networkanchor
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: status of the NetworkAnchor
+      jsonPath: .status.status.conditions[-1].type
+      name: Status
+      type: string
+    - description: Ocid of the NetworkAnchor
+      jsonPath: .status.status.ocid
+      name: Ocid
+      priority: 1
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: NetworkAnchor is the Schema for the networkanchors API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: NetworkAnchorSpec defines the desired state of NetworkAnchor.
+            type: object
+          status:
+            description: NetworkAnchorStatus defines the observed state of NetworkAnchor.
+            properties:
+              cloudServiceProviderMetadataItem:
+                description: NetworkAnchorCloudServiceProviderMetadataItem defines
+                  nested fields for NetworkAnchor.CloudServiceProviderMetadataItem.
+                properties:
+                  cidrBlocks:
+                    description: An Azure/GCP/AWS cidrBlocks
+                    items:
+                      type: string
+                    type: array
+                  cspAdditionalProperties:
+                    additionalProperties:
+                      type: string
+                    description: CSP Specific Additional Properties, AzureSubnetId
+                      for Azure
+                    type: object
+                  dnsForwardingConfig:
+                    description: DNS domain ip mapping forwarding configuration
+                    items:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    type: array
+                  networkAnchorUri:
+                    description: CSP network anchor Uri
+                    type: string
+                  odbNetworkId:
+                    description: CSP oracle database network anchor unique ID/name
+                    type: string
+                  region:
+                    description: Azure/GCP/AWS region
+                    type: string
+                type: object
+              clusterPlacementGroupId:
+                description: The CPG ID in which Network Anchor will be created.
+                type: string
+              compartmentId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the compartment.
+                type: string
+              cspAdditionalProperties:
+                additionalProperties:
+                  type: string
+                description: CSP Specific Additional Properties, AzureSubnetId for
+                  Azure
+                type: object
+              cspNetworkAnchorId:
+                description: Network Anchor Id in the Cloud Service Provider.
+                type: string
+              definedTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Defined tags for this resource. Each key is predefined and scoped to a namespace.
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                  Example: `{"Operations": {"CostCenter": "42"}}`
+                type: object
+              displayName:
+                description: A user-friendly name. Does not have to be unique, and
+                  it's changeable.
+                type: string
+              freeformTags:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                  Example: `{"Department": "Finance"}`
+                type: object
+              id:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the NetworkAnchor.
+                type: string
+              lifecycleDetails:
+                description: |-
+                  A message that describes the current state of the NetworkAnchor in more detail. For example,
+                  can be used to provide actionable information for a resource in the Failed state.
+                type: string
+              networkAnchorConnectionStatus:
+                description: Defines status of the Network Anchor.
+                type: string
+              networkAnchorLifecycleState:
+                description: The current state of the NetworkAnchor.
+                type: string
+              networkAnchorUri:
+                description: CSP network anchor Uri
+                type: string
+              ociMetadataItem:
+                description: NetworkAnchorOciMetadataItem defines nested fields for
+                  NetworkAnchor.OciMetadataItem.
+                properties:
+                  dns:
+                    description: NetworkAnchorOciMetadataItemDns defines nested fields
+                      for NetworkAnchor.OciMetadataItem.Dns.
+                    properties:
+                      customDomainName:
+                        description: Full custom domain name. If this field is passed
+                          dnsLabel will be ignored
+                        type: string
+                    type: object
+                  dnsForwardingConfig:
+                    description: DNS forward configuration
+                    items:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    type: array
+                  dnsForwardingEndpointIpAddress:
+                    description: The DNS Listener Forwarding Address.
+                    type: string
+                  dnsListeningEndpointIpAddress:
+                    description: The DNS Listener Endpoint Address.
+                    type: string
+                  networkAnchorConnectionStatus:
+                    description: Defines status of the Network Anchor.
+                    type: string
+                  subnets:
+                    description: Network subnets
+                    items:
+                      description: NetworkAnchorOciMetadataItemSubnet defines nested
+                        fields for NetworkAnchor.OciMetadataItem.Subnet.
+                      properties:
+                        label:
+                          description: Subnet label. CSP can set this property
+                          type: string
+                        subnetId:
+                          description: OCID for existing the subnet. CSP can not set
+                            this property.
+                          type: string
+                        type:
+                          description: Defines if the subnet is the primary or backup
+                            for the network
+                          type: string
+                      type: object
+                    type: array
+                  vcn:
+                    description: NetworkAnchorOciMetadataItemVcn defines nested fields
+                      for NetworkAnchor.OciMetadataItem.Vcn.
+                    properties:
+                      backupCidrBlocks:
+                        description: |-
+                          Oracle Cloud Infrastructure backup cidr block. CSP can set this property
+                          It's optional only if disconnect anchor is allowed.
+                          IPv4 CIDR blocks for the VCN that meet the following criteria
+                          Type: [string (length: 1–32), ...]
+                          The CIDR blocks must be valid.
+                          They must not overlap with each other or with the on-premises network CIDR block.
+                        items:
+                          type: string
+                        type: array
+                      cidrBlocks:
+                        description: |-
+                          Oracle Cloud Infrastructure primary cidr block. CSP can set this property
+                          It's optional only if disconnect anchor is allowed
+                          IPv4 CIDR blocks for the VCN that meet the following criteria
+                          Type: [string (length: 1–32), ...]
+                          The CIDR blocks must be valid.
+                          They must not overlap with each other or with the on-premises network CIDR block.
+                        items:
+                          type: string
+                        type: array
+                      dnsLabel:
+                        description: Oracle Cloud Infrastructure DNS label. This is
+                          optional if DNS config is provided.
+                        type: string
+                      vcnId:
+                        description: Oracle Cloud Infrastructure VCN OCID. CSP can
+                          not set this property.
+                        type: string
+                      vcnName:
+                        description: Name of the VCN associated to the Network Anchor.
+                        type: string
+                    type: object
+                type: object
+              resourceAnchorId:
+                description: OCI resource anchor Id (OCID).
+                type: string
+              setupMode:
+                description: |-
+                  AUTO_BIND - when passed compartment will be created on-behalf of customer and bind to this resource anchor
+                  NO_AUTO_BIND - compartment will not be created and later customer can bind existing compartment.
+                  to this resource anchor. This is for future use only
+                type: string
+              status:
+                properties:
+                  async:
+                    description: |-
+                      Async is the canonical controller-owned async contract. Resource-local
+                      legacy work-request fields may remain as compatibility mirrors while
+                      follow-on migrations land, but new async state should project here first.
+                    properties:
+                      current:
+                        properties:
+                          message:
+                            type: string
+                          normalizedClass:
+                            enum:
+                            - pending
+                            - succeeded
+                            - failed
+                            - canceled
+                            - attention
+                            - unknown
+                            type: string
+                          percentComplete:
+                            maximum: 100
+                            minimum: 0
+                            type: number
+                          phase:
+                            enum:
+                            - create
+                            - update
+                            - delete
+                            type: string
+                          rawOperationType:
+                            type: string
+                          rawStatus:
+                            type: string
+                          source:
+                            enum:
+                            - none
+                            - lifecycle
+                            - workrequest
+                            type: string
+                          updatedAt:
+                            format: date-time
+                            type: string
+                          workRequestId:
+                            type: string
+                        required:
+                        - normalizedClass
+                        - phase
+                        - source
+                        - updatedAt
+                        type: object
+                    type: object
+                  conditions:
+                    items:
+                      properties:
+                        lastTransitionTime:
+                          format: date-time
+                          type: string
+                        message:
+                          type: string
+                        reason:
+                          type: string
+                        status:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - status
+                      - type
+                      type: object
+                    type: array
+                  createdAt:
+                    format: date-time
+                    type: string
+                  deletedAt:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  ocid:
+                    maxLength: 255
+                    minLength: 1
+                    type: string
+                  opcRequestId:
+                    description: |-
+                      OpcRequestID is the latest non-empty OCI request ID from a mutating OCI
+                      response or surfaced OCI service error that materially contributed to the
+                      current shared status projection. Headerless follow-up observations keep
+                      the last non-empty value intact.
+                    type: string
+                  reason:
+                    type: string
+                  requestedAt:
+                    format: date-time
+                    type: string
+                  updatedAt:
+                    format: date-time
+                    type: string
+                type: object
+              subscriptionType:
+                description: Oracle Cloud Infrastructure Subscription Type.
+                type: string
+              systemTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  System tags for this resource. Each key is predefined and scoped to a namespace.
+                  Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
+                type: object
+              timeCreated:
+                description: |-
+                  The date and time the NetworkAnchor was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+                  Example: `2016-08-25T21:10:29.600Z`
+                type: string
+              timeUpdated:
+                description: |-
+                  The date and time the NetworkAnchor was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+                  Example: `2016-08-25T21:10:29.600Z`
+                type: string
+              vcnId:
+                description: OCI resource Id of VCN.
+                type: string
+              vcnName:
+                description: Name of the VCN associated to the Network Anchor.
+                type: string
+            required:
+            - status
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

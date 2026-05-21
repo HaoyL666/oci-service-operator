@@ -254,6 +254,8 @@ resources:
 - bases/generativeaiagent.oracle.com_knowledgebases.yaml
 - bases/generativeaiagentruntime.oracle.com_sessions.yaml
 - bases/generativeaidata.oracle.com_enrichmentjobs.yaml
+- bases/genericartifactscontent.oracle.com_genericartifactcontentbypaths.yaml
+- bases/genericartifactscontent.oracle.com_genericartifactcontents.yaml
 - bases/goldengate.oracle.com_certificates.yaml
 - bases/goldengate.oracle.com_connectionassignments.yaml
 - bases/goldengate.oracle.com_connections.yaml
@@ -275,6 +277,11 @@ resources:
 - bases/iot.oracle.com_iotdomains.yaml
 - bases/jms.oracle.com_fleets.yaml
 - bases/jmsjavadownloads.oracle.com_javadownloadtokens.yaml
+- bases/jmsutils.oracle.com_analyzeapplicationsconfigurations.yaml
+- bases/jmsutils.oracle.com_javamigrationanalyses.yaml
+- bases/jmsutils.oracle.com_performancetuninganalyses.yaml
+- bases/jmsutils.oracle.com_subscriptionacknowledgmentconfigurations.yaml
+- bases/jmsutils.oracle.com_workitems.yaml
 - bases/keymanagement.oracle.com_ekmsprivateendpoints.yaml
 - bases/keymanagement.oracle.com_vaults.yaml
 - bases/licensemanager.oracle.com_licenserecords.yaml
@@ -331,6 +338,14 @@ resources:
 - bases/mngdmac.oracle.com_macorders.yaml
 - bases/monitoring.oracle.com_alarms.yaml
 - bases/monitoring.oracle.com_alarmsuppressions.yaml
+- bases/multicloud.oracle.com_externallocationdetailsmetadata.yaml
+- bases/multicloud.oracle.com_externallocationmappingmetadata.yaml
+- bases/multicloud.oracle.com_externallocationsummariesmetadata.yaml
+- bases/multicloud.oracle.com_multicloudmetadata.yaml
+- bases/multicloud.oracle.com_multicloudresources.yaml
+- bases/multicloud.oracle.com_multicloudsubscriptions.yaml
+- bases/multicloud.oracle.com_networkanchors.yaml
+- bases/multicloud.oracle.com_resourceanchors.yaml
 - bases/mysql.oracle.com_dbsystems.yaml
 - bases/networkfirewall.oracle.com_addresslists.yaml
 - bases/networkfirewall.oracle.com_applicationgroups.yaml
@@ -353,6 +368,8 @@ resources:
 - bases/nosql.oracle.com_tables.yaml
 - bases/objectstorage.oracle.com_buckets.yaml
 - bases/oce.oracle.com_oceinstances.yaml
+- bases/ocicontrolcenter.oracle.com_metricproperties.yaml
+- bases/ocicontrolcenter.oracle.com_namespaces.yaml
 - bases/ocvp.oracle.com_clusters.yaml
 - bases/ocvp.oracle.com_esxihosts.yaml
 - bases/ocvp.oracle.com_sddcs.yaml
@@ -395,6 +412,8 @@ resources:
 - bases/osmanagementhub.oracle.com_profiles.yaml
 - bases/osmanagementhub.oracle.com_scheduledjobs.yaml
 - bases/osmanagementhub.oracle.com_softwaresources.yaml
+- bases/osubbillingschedule.oracle.com_billingschedules.yaml
+- bases/osuborganizationsubscription.oracle.com_organizationsubscriptions.yaml
 - bases/osubsubscription.oracle.com_subscriptions.yaml
 - bases/psa.oracle.com_privateserviceaccesses.yaml
 - bases/psql.oracle.com_dbsystems.yaml

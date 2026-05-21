@@ -2251,6 +2251,35 @@ rules:
   - patch
   - update
 - apiGroups:
+  - genericartifactscontent.oracle.com
+  resources:
+  - genericartifactcontentbypaths
+  - genericartifactcontents
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - genericartifactscontent.oracle.com
+  resources:
+  - genericartifactcontentbypaths/finalizers
+  - genericartifactcontents/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - genericartifactscontent.oracle.com
+  resources:
+  - genericartifactcontentbypaths/status
+  - genericartifactcontents/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - goldengate.oracle.com
   resources:
   - certificates
@@ -2493,6 +2522,44 @@ rules:
   - jmsjavadownloads.oracle.com
   resources:
   - javadownloadtokens/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - jmsutils.oracle.com
+  resources:
+  - analyzeapplicationsconfigurations
+  - javamigrationanalysis
+  - performancetuninganalysis
+  - subscriptionacknowledgmentconfigurations
+  - workitems
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - jmsutils.oracle.com
+  resources:
+  - analyzeapplicationsconfigurations/finalizers
+  - javamigrationanalysis/finalizers
+  - performancetuninganalysis/finalizers
+  - subscriptionacknowledgmentconfigurations/finalizers
+  - workitems/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - jmsutils.oracle.com
+  resources:
+  - analyzeapplicationsconfigurations/status
+  - javamigrationanalysis/status
+  - performancetuninganalysis/status
+  - subscriptionacknowledgmentconfigurations/status
+  - workitems/status
   verbs:
   - get
   - patch
@@ -3080,6 +3147,53 @@ rules:
   - patch
   - update
 - apiGroups:
+  - multicloud.oracle.com
+  resources:
+  - externallocationdetailsmetadata
+  - externallocationmappingmetadata
+  - externallocationsummariesmetadata
+  - multicloudmetadata
+  - multicloudresources
+  - multicloudsubscriptions
+  - networkanchors
+  - resourceanchors
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - multicloud.oracle.com
+  resources:
+  - externallocationdetailsmetadata/finalizers
+  - externallocationmappingmetadata/finalizers
+  - externallocationsummariesmetadata/finalizers
+  - multicloudmetadata/finalizers
+  - multicloudresources/finalizers
+  - multicloudsubscriptions/finalizers
+  - networkanchors/finalizers
+  - resourceanchors/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - multicloud.oracle.com
+  resources:
+  - externallocationdetailsmetadata/status
+  - externallocationmappingmetadata/status
+  - externallocationsummariesmetadata/status
+  - multicloudmetadata/status
+  - multicloudresources/status
+  - multicloudsubscriptions/status
+  - networkanchors/status
+  - resourceanchors/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - mysql.oracle.com
   - psql.oracle.com
   resources:
@@ -3282,6 +3396,35 @@ rules:
   - oce.oracle.com
   resources:
   - oceinstances/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ocicontrolcenter.oracle.com
+  resources:
+  - metricproperties
+  - namespaces
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ocicontrolcenter.oracle.com
+  resources:
+  - metricproperties/finalizers
+  - namespaces/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - ocicontrolcenter.oracle.com
+  resources:
+  - metricproperties/status
+  - namespaces/status
   verbs:
   - get
   - patch
@@ -3644,6 +3787,58 @@ rules:
   - profiles/status
   - scheduledjobs/status
   - softwaresources/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - osubbillingschedule.oracle.com
+  resources:
+  - billingschedules
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - osubbillingschedule.oracle.com
+  resources:
+  - billingschedules/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - osubbillingschedule.oracle.com
+  resources:
+  - billingschedules/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - osuborganizationsubscription.oracle.com
+  resources:
+  - organizationsubscriptions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - osuborganizationsubscription.oracle.com
+  resources:
+  - organizationsubscriptions/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - osuborganizationsubscription.oracle.com
+  resources:
+  - organizationsubscriptions/status
   verbs:
   - get
   - patch

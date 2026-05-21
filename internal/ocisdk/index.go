@@ -1068,6 +1068,8 @@ func namedType(expr ast.Expr) (string, bool) {
 
 func sdkSingularize(name string) string {
 	switch {
+	case strings.HasSuffix(name, "Analysis") || strings.HasSuffix(name, "analysis"):
+		return name
 	case strings.HasSuffix(name, "Statuses") && len(name) > len("Statuses"):
 		return strings.TrimSuffix(name, "Statuses") + "Status"
 	case strings.HasSuffix(name, "statuses") && len(name) > len("statuses"):

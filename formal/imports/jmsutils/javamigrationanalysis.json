@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "jmsutils",
+  "slug": "javamigrationanalysis",
+  "kind": "JavaMigrationAnalysis",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "scaffold_jmsutils_javamigrationanalysis",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateJavaMigrationAnalysis",
+        "requestType": "jmsutils.CreateJavaMigrationAnalysisRequest",
+        "responseType": "jmsutils.CreateJavaMigrationAnalysisResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetJavaMigrationAnalysis",
+        "requestType": "jmsutils.GetJavaMigrationAnalysisRequest",
+        "responseType": "jmsutils.GetJavaMigrationAnalysisResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListJavaMigrationAnalysis",
+        "requestType": "jmsutils.ListJavaMigrationAnalysisRequest",
+        "responseType": "jmsutils.ListJavaMigrationAnalysisResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateJavaMigrationAnalysis",
+        "requestType": "jmsutils.UpdateJavaMigrationAnalysisRequest",
+        "responseType": "jmsutils.UpdateJavaMigrationAnalysisResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteJavaMigrationAnalysis",
+        "requestType": "jmsutils.DeleteJavaMigrationAnalysisRequest",
+        "responseType": "jmsutils.DeleteJavaMigrationAnalysisResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "display_name"
+    ],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "scaffold_jmsutils_javamigrationanalysis",
+    "collectionField": "javamigrationanalysis",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/jmsutils/javamigrationanalysis/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/jmsutils/javamigrationanalysis/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for jmsutils/javamigrationanalysis; replace imported facts before promoting this row beyond scaffold."
+  ]
+}
