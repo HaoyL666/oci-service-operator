@@ -26,19 +26,22 @@ state "Failed" as failed
 observe : read spec, tracked status, delete intent,\nand current OCI lifecycle
 state "ResolveByLookup" as resolve_by_lookup
 state "RejectUnsupportedDrift" as reject_unsupported_drift
+state "ApplyUpdate" as apply_update
 state "DeletePending" as delete_pending
 state "Deleted" as deleted
 state "DeleteCleanupBlocked" as delete_cleanup_blocked
 [*] --> observe : CreateDataSource
 observe --> resolve_by_lookup : tracked identity missing
-resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE
-resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE, INACTIVE
+resolve_by_lookup --> retryable : OCI state in CREATING,\nUPDATING, DELETING
 resolve_by_lookup --> failed : unresolved OCI error or non-success state
-observe --> evaluate_ready : OCI state in ACTIVE
-observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+observe --> evaluate_ready : OCI state in ACTIVE,\nINACTIVE
+observe --> retryable : OCI state in CREATING,\nUPDATING, DELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
+evaluate_ready --> apply_update : supported mutable drift for\ndataSourceConfig,\ndefinedTags, description (+3\nmore)
+apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
 retryable --> retryable : OCI remains retryable
@@ -66,23 +69,56 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: none
+follow-up: create=GetWorkRequest ->
+GetDataSource; update=GetWorkRequest ->
+GetDataSource; delete=GetWorkRequest ->
+GetDataSource/ListDataSources confirm-delete
+supported drift: dataSourceConfig, definedTags,
+description, displayName (+2 more)
 reject before mutate: force-new fields
-compartment_id
+compartmentId, knowledgeBaseId
 create-only fields: none
-list lookup: oci_generative_ai_agent_data_source
-filters compartment_id, state
+list lookup:
+oci_generative_ai_agent_data_sources filters
+compartmentId, knowledgeBaseId, displayName;
+exact compartmentId plus knowledgeBaseId plus
+displayName unique match in ACTIVE, INACTIVE,
+CREATING, or UPDATING; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Reviewed lifecycle mapping treats CREATING as
+provisioning, UPDATING as updating, ACTIVE and
+INACTIVE as success, and DELETING as
+terminating; FAILED is terminal and DELETED is
+only a delete-confirmation target.
+CreateDataSource returns a DataSource body plus
+opc-work-request-id, while UpdateDataSource and
+DeleteDataSource return work-request headers
+without a resource body. The runtime prefers the
+create response identifier and otherwise
+recovers the DataSource OCID from work-request
+resources before rereading GetDataSource.
+Pre-create reuse only runs when spec.displayName
+is present and keeps exact compartmentId plus
+knowledgeBaseId plus displayName matching
+bounded to ACTIVE, INACTIVE, CREATING, or
+UPDATING summaries.
+Only displayName, description, dataSourceConfig,
+metadata, freeformTags, and definedTags
+reconcile in place; compartmentId and
+knowledgeBaseId remain replacement-only.
+Delete keeps the finalizer until the work
+request is terminal and GetDataSource or
+fallback ListDataSources confirms the resource
+is gone.
+Shared manifest promotion for this row is
+intentionally deferred to the convergence story.
 end note
 note right of delete_pending
 delete policy: required
-delete observe: GetDataSource or ListDataSource
+delete observe: GetDataSource or ListDataSources
 delete targets: DELETED
 end note
 @enduml

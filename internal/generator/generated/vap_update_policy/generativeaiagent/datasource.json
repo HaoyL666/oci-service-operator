@@ -17,10 +17,24 @@
     "specPathPrefix": "spec"
   },
   "update": {
-    "allowInPlacePaths": null,
+    "allowInPlacePaths": [
+      "dataSourceConfig",
+      "definedTags",
+      "description",
+      "displayName",
+      "freeformTags",
+      "metadata"
+    ],
     "denyRules": [
       {
         "fieldPath": "compartmentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "knowledgeBaseId",
         "decision": "replacementRequired",
         "mergeCase": "replacementRequired",
         "docsEvidenceState": "notDocumented",

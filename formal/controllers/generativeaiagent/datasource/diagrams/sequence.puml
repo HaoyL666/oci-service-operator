@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetDataSource
 else tracked identity is missing
-ServiceManager -> OCI: ListDataSource(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListDataSources(filters:\ncompartmentId, knowledgeBaseId,\ndisplayName)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateDataSource
-loop create pending PROVISIONING
+loop create pending CREATING
 ServiceManager -> OCI: GetDataSource
 end
 else reusable OCI resource already exists
@@ -52,9 +52,9 @@ end
 alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteDataSource
-ServiceManager -> OCI: confirm delete via GetDataSource or\nListDataSource
+ServiceManager -> OCI: confirm delete via GetDataSource or\nListDataSources
 loop delete pending DELETING
-ServiceManager -> OCI: GetDataSource or ListDataSource
+ServiceManager -> OCI: GetDataSource or ListDataSources
 end
 alt cleanup or finalizer release is blocked
 ServiceManager --> BaseReconciler: retain delete state and retry
@@ -63,19 +63,34 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nCREATING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: none
+Supported update surface:
+dataSourceConfig, definedTags,
+description, displayName (+2 more)
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+compartmentId, knowledgeBaseId
+Lookup filters: compartmentId,
+knowledgeBaseId, displayName
+Lookup matching: exact compartmentId
+plus knowledgeBaseId plus displayName
+unique match in ACTIVE, INACTIVE,
+CREATING, or UPDATING; duplicate matches
+fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
-ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+opt supported mutable drift is detected
+ServiceManager -> OCI: Apply UpdateDataSource only for\nmutable fields dataSourceConfig,\ndefinedTags, description,\ndisplayName (+2 more)
+loop update pending UPDATING
+ServiceManager -> OCI: GetDataSource
+end
+end
+ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=datasource action=CREATED;\nupdate=tfresource.UpdateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=datasource action=UPDATED;\ndelete=tfresource.DeleteResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=datasource action=DELETED
+ServiceManager -> OCI: apply follow-up strategy\ncreate=GetWorkRequest ->\nGetDataSource; update=GetWorkRequest\n-> GetDataSource;\ndelete=GetWorkRequest ->\nGetDataSource/ListDataSources\nconfirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -102,18 +117,51 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: none
+follow-up: create=GetWorkRequest ->
+GetDataSource; update=GetWorkRequest ->
+GetDataSource; delete=GetWorkRequest ->
+GetDataSource/ListDataSources confirm-delete
+supported drift: dataSourceConfig, definedTags,
+description, displayName (+2 more)
 reject before mutate: force-new fields
-compartment_id
+compartmentId, knowledgeBaseId
 create-only fields: none
-list lookup: oci_generative_ai_agent_data_source
-filters compartment_id, state
+list lookup:
+oci_generative_ai_agent_data_sources filters
+compartmentId, knowledgeBaseId, displayName;
+exact compartmentId plus knowledgeBaseId plus
+displayName unique match in ACTIVE, INACTIVE,
+CREATING, or UPDATING; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Reviewed lifecycle mapping treats CREATING as
+provisioning, UPDATING as updating, ACTIVE and
+INACTIVE as success, and DELETING as
+terminating; FAILED is terminal and DELETED is
+only a delete-confirmation target.
+CreateDataSource returns a DataSource body plus
+opc-work-request-id, while UpdateDataSource and
+DeleteDataSource return work-request headers
+without a resource body. The runtime prefers the
+create response identifier and otherwise
+recovers the DataSource OCID from work-request
+resources before rereading GetDataSource.
+Pre-create reuse only runs when spec.displayName
+is present and keeps exact compartmentId plus
+knowledgeBaseId plus displayName matching
+bounded to ACTIVE, INACTIVE, CREATING, or
+UPDATING summaries.
+Only displayName, description, dataSourceConfig,
+metadata, freeformTags, and definedTags
+reconcile in place; compartmentId and
+knowledgeBaseId remain replacement-only.
+Delete keeps the finalizer until the work
+request is terminal and GetDataSource or
+fallback ListDataSources confirms the resource
+is gone.
+Shared manifest promotion for this row is
+intentionally deferred to the convergence story.
 end note
 @enduml
