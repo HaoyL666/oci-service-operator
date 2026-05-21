@@ -26,19 +26,20 @@ state "Failed" as failed
 observe : read spec, tracked status, delete intent,\nand current OCI lifecycle
 state "ResolveByLookup" as resolve_by_lookup
 state "RejectUnsupportedDrift" as reject_unsupported_drift
+state "ApplyUpdate" as apply_update
 state "DeletePending" as delete_pending
 state "Deleted" as deleted
 state "DeleteCleanupBlocked" as delete_cleanup_blocked
 [*] --> observe : CreateJmsPlugin
 observe --> resolve_by_lookup : tracked identity missing
-resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE
-resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE, INACTIVE
 resolve_by_lookup --> failed : unresolved OCI error or non-success state
-observe --> evaluate_ready : OCI state in ACTIVE
-observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+observe --> evaluate_ready : OCI state in ACTIVE,\nINACTIVE
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
+evaluate_ready --> apply_update : supported mutable drift for\ndefinedTags, fleetId,\nfreeformTags
+apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
 retryable --> retryable : OCI remains retryable
@@ -65,24 +66,48 @@ kind: JmsPlugin
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: none
-reject before mutate: force-new fields
-compartment_id
+requeue: terminating
+provider states: create none; update none;
+delete none
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: definedTags, fleetId,
+freeformTags
+reject before mutate: force-new fields agentId,
+agentType, compartmentId
 create-only fields: none
-list lookup: oci_jms_jms_plugin filters
-compartment_id, state
+list lookup: oci_jms_jms_plugins filters
+compartmentId, agentId, id; exact compartmentId
+plus agentId unique match in ACTIVE or INACTIVE;
+paginated list rereads are exhausted before
+concluding absent; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+JmsPlugin create and update are synchronous
+reread flows. OCI returns the resource body
+directly, and fleet-less registration settles in
+INACTIVE rather than a provisioning bucket.
+ACTIVE and INACTIVE are the only published
+steady success states. NEEDS_ATTENTION stays
+outside the success set, and DELETED is only a
+delete-confirmation target.
+Pre-create reuse scopes by exact compartmentId
+plus agentId and exhausts paginated
+ListJmsPlugins responses before concluding
+absent. Only ACTIVE and INACTIVE summaries are
+reusable.
+Mutable drift is limited to fleetId,
+freeformTags, and definedTags. agentId,
+agentType, and compartmentId remain
+replacement-only. Fleet detachment stays out of
+scope because the published spec cannot
+distinguish omission from clear.
+Delete keeps the finalizer until rereads return
+DELETED or NotFound.
 end note
 note right of delete_pending
 delete policy: required
 delete observe: GetJmsPlugin or ListJmsPlugin
-delete targets: DELETED
+delete targets: DELETED, NOT_FOUND
 end note
 @enduml
