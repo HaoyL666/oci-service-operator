@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2 id="argument-reference">Argument Reference</h2>
+    <p>The following arguments are supported:</p>
+    <ul>
+      <li><code>compartment_id</code> - (Required) (Updatable) Compartment Identifier.</li>
+      <li><code>defined_tags</code> - (Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: <code>{&#34;foo-namespace.bar-key&#34;: &#34;value&#34;}</code></li>
+      <li><code>display_name</code> - (Required) (Updatable) MediaWorkflowConfiguration identifier. Avoid entering confidential information.</li>
+      <li><code>freeform_tags</code> - (Optional) (Updatable) Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: <code>{&#34;bar-key&#34;: &#34;value&#34;}</code></li>
+      <li><code>locks</code> - (Optional) Locks associated with this resource.
+        <ul>
+          <li><code>compartment_id</code> - (Required) (Updatable) The compartment ID of the lock.</li>
+          <li><code>message</code> - (Optional) A message added by the creator of the lock. This is typically used to give an indication of why the resource is locked.</li>
+          <li><code>related_resource_id</code> - (Optional) The ID of the resource that is locking this resource. Indicates that deleting this resource will remove the lock.</li>
+          <li><code>time_created</code> - (Optional) When the lock was created.</li>
+          <li><code>type</code> - (Required) Type of the lock.</li>
+        </ul>
+      </li>
+      <li><code>parameters</code> - (Required) (Updatable) Reuseable parameter values encoded as a JSON; the top and second level JSON elements are objects. Each key of the top level object refers to a task key that is unqiue to the workflow, each of the second level objects&#39; keys refer to the name of a parameter that is unique to the task. taskKey -&gt; parameterName -&gt; parameterValue ** IMPORTANT ** Any change to a property that does not support update will force the destruction and recreation of the resource with the new property values</li>
+    </ul>
+  </body>
+</html>

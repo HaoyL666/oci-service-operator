@@ -17,7 +17,11 @@
     "specPathPrefix": "spec"
   },
   "update": {
-    "allowInPlacePaths": null,
+    "allowInPlacePaths": [
+      "definedTags",
+      "displayName",
+      "freeformTags"
+    ],
     "denyRules": [
       {
         "fieldPath": "compartmentId",
@@ -25,6 +29,13 @@
         "mergeCase": "replacementRequired",
         "docsEvidenceState": "notDocumented",
         "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "parameters",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
       }
     ]
   }
