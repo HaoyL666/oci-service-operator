@@ -67,9 +67,9 @@ func newDrPlanRuntimeSemantics() *generatedruntime.Semantics {
 		SecretSideEffects: "none",
 		FinalizerPolicy:   "retain-until-confirmed-delete",
 		Lifecycle: generatedruntime.LifecycleSemantics{
-			ProvisioningStates: []string{"CREATING"},
+			ProvisioningStates: []string{"PROVISIONING"},
 			UpdatingStates:     []string{"UPDATING"},
-			ActiveStates:       []string{"ACTIVE", "INACTIVE"},
+			ActiveStates:       []string{"ACTIVE"},
 		},
 		Delete: generatedruntime.DeleteSemantics{
 			Policy:         "required",
@@ -78,31 +78,31 @@ func newDrPlanRuntimeSemantics() *generatedruntime.Semantics {
 		},
 		List: &generatedruntime.ListSemantics{
 			ResponseItemsField: "Items",
-			MatchFields:        []string{"displayName", "drPlanId", "drPlanType", "drProtectionGroupId"},
+			MatchFields:        []string{"compartmentId", "state"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{"definedTags", "displayName", "freeformTags", "planGroups"},
-			ForceNew:      []string{"drProtectionGroupId", "sourcePlanId", "type"},
+			Mutable:       []string{},
+			ForceNew:      []string{"compartmentId"},
 			ConflictsWith: map[string][]string{},
 		},
 		Hooks: generatedruntime.HookSet{
-			Create: []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "drplan", Action: "CREATED"}},
-			Update: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "drplan", Action: "UPDATED"}},
+			Create: []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "template", Action: "CREATED"}},
+			Update: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}},
 			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
 		},
 		CreateFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "GetWorkRequest -> GetDrPlan",
-			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "drplan", Action: "CREATED"}},
+			Strategy: "read-after-write",
+			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "template", Action: "CREATED"}},
 		},
 		UpdateFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "GetWorkRequest -> GetDrPlan",
-			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "drplan", Action: "UPDATED"}},
+			Strategy: "read-after-write",
+			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}},
 		},
 		DeleteFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "GetDrPlan/ListDrPlans confirm-delete",
+			Strategy: "confirm-delete",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
 		},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
+		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "list", MethodName: "ListDrPlan", RequestTypeName: "disasterrecovery.ListDrPlanRequest", ResponseTypeName: "disasterrecovery.ListDrPlanResponse"}},
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }
