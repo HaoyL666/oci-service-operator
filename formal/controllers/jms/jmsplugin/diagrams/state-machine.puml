@@ -107,7 +107,7 @@ DELETED or NotFound.
 end note
 note right of delete_pending
 delete policy: required
-delete observe: GetJmsPlugin or ListJmsPlugin
+delete observe: GetJmsPlugin or ListJmsPlugins
 delete targets: DELETED, NOT_FOUND
 end note
 @enduml

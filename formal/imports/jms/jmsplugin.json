@@ -23,9 +23,9 @@
     ],
     "list": [
       {
-        "operation": "ListJmsPlugin",
-        "requestType": "jms.ListJmsPluginRequest",
-        "responseType": "jms.ListJmsPluginResponse"
+        "operation": "ListJmsPlugins",
+        "requestType": "jms.ListJmsPluginsRequest",
+        "responseType": "jms.ListJmsPluginsResponse"
       }
     ],
     "update": [

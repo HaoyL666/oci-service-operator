@@ -27,15 +27,15 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via GetJmsPlugin;
 else (no)
-:Resolve an existing OCI resource through\nListJmsPlugin using filters compartmentId,\nagentId, id;
+:Resolve an existing OCI resource through\nListJmsPlugins using filters compartmentId,\nagentId, id;
 :Create the OCI resource via CreateJmsPlugin\nwhen no reusable match is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
 }
 if ("Delete requested?") then (yes)
 partition "Delete" {
-:Delete path uses DeleteJmsPlugin with required\nvia GetJmsPlugin or ListJmsPlugin to DELETED,\nNOT_FOUND confirmation;
-:Confirm deletion via GetJmsPlugin or\nListJmsPlugin until OCI reaches DELETED,\nNOT_FOUND;
+:Delete path uses DeleteJmsPlugin with required\nvia GetJmsPlugin or ListJmsPlugins to DELETED,\nNOT_FOUND confirmation;
+:Confirm deletion via GetJmsPlugin or\nListJmsPlugins until OCI reaches DELETED,\nNOT_FOUND;
 if ("Delete cleanup and finalizer release succeed?") then (yes)
 :Remove the finalizer after delete completion;
 else (no)

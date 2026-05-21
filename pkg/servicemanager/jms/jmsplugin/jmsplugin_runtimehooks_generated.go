@@ -98,7 +98,7 @@ func newJmsPluginRuntimeSemantics() *generatedruntime.Semantics {
 			Strategy: "confirm-delete",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
 		},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "list", MethodName: "ListJmsPlugin", RequestTypeName: "jms.ListJmsPluginRequest", ResponseTypeName: "jms.ListJmsPluginResponse"}},
+		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }
