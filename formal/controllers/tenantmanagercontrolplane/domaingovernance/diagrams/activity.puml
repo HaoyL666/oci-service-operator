@@ -27,15 +27,15 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetDomainGovernance;
 else (no)
-:Resolve an existing OCI resource through\nListDomainGovernance using filters\ncompartment_id, state;
+:Resolve an existing OCI resource through\nListDomainGovernances using filters\ncompartmentId, domainId;
 :Create the OCI resource via\nCreateDomainGovernance when no reusable match\nis found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
 }
 if ("Delete requested?") then (yes)
 partition "Delete" {
-:Delete path uses DeleteDomainGovernance with\nrequired via GetDomainGovernance or\nListDomainGovernance to DELETED confirmation;
-:Confirm deletion via GetDomainGovernance or\nListDomainGovernance until OCI reaches DELETED;
+:Delete path uses DeleteDomainGovernance with\nrequired via GetDomainGovernance or\nListDomainGovernances to NOT_FOUND\nconfirmation;
+:Confirm deletion via GetDomainGovernance or\nListDomainGovernances until OCI reaches\nNOT_FOUND;
 if ("Delete cleanup and finalizer release succeed?") then (yes)
 :Remove the finalizer after delete completion;
 else (no)
@@ -46,23 +46,28 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
+:Request requeue while OCI remains in CREATING,\nUPDATING;
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
-:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE;
+:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE, INACTIVE;
 stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields compartmentId, domainId,\nonsSubscriptionId, onsTopicId;
 stop
 endif
-:No imported mutable field surface opens\nUpdateDomainGovernance;
-:Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Return success for the ACTIVE success state;
+if ("Supported mutable drift detected?") then (yes)
+:Apply UpdateDomainGovernance only for mutable\nfields definedTags, freeformTags,\nisGovernanceEnabled, subscriptionEmail;
+else (no)
+:Skip the no-op mutation path;
+endif
+:Run provider helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
+:Apply explicit follow-up semantics\ncreate=none; update=none;\ndelete=GetDomainGovernance/ListDomainGovernances\nconfirm-delete until NOT_FOUND;
+:Return success for the ACTIVE, INACTIVE\nsuccess state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
 }
@@ -87,19 +92,32 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: none
+provider states: create CREATING; update
+UPDATING; delete none
+follow-up: create=none; update=none;
+delete=GetDomainGovernance/ListDomainGovernances
+confirm-delete until NOT_FOUND
+supported drift: definedTags, freeformTags,
+isGovernanceEnabled, subscriptionEmail
 reject before mutate: force-new fields
-compartment_id
+compartmentId, domainId, onsSubscriptionId,
+onsTopicId
 create-only fields: none
 list lookup:
-oci_tenantmanagercontrolplane_domain_governance
-filters compartment_id, state
+oci_tenantmanagercontrolplane_domain_governances
+filters compartmentId, domainId; exact domainId
+plus onsTopicId and onsSubscriptionId unique
+match; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+CreateDomainGovernance and
+UpdateDomainGovernance return concrete
+DomainGovernance bodies directly; ACTIVE and
+INACTIVE are both steady-state success
+observations.
+DeleteDomainGovernance returns headers only, so
+any still-readable DomainGovernance after delete
+is treated as terminating until Get/List stop
+finding it.
 end note
 @enduml

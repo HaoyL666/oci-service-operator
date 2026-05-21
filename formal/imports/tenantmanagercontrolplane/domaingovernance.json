@@ -23,9 +23,9 @@
     ],
     "list": [
       {
-        "operation": "ListDomainGovernance",
-        "requestType": "tenantmanagercontrolplane.ListDomainGovernanceRequest",
-        "responseType": "tenantmanagercontrolplane.ListDomainGovernanceResponse"
+        "operation": "ListDomainGovernances",
+        "requestType": "tenantmanagercontrolplane.ListDomainGovernancesRequest",
+        "responseType": "tenantmanagercontrolplane.ListDomainGovernancesResponse"
       }
     ],
     "update": [
@@ -46,10 +46,11 @@
   "lifecycle": {
     "create": {
       "pending": [
-        "PROVISIONING"
+        "CREATING"
       ],
       "target": [
-        "ACTIVE"
+        "ACTIVE",
+        "INACTIVE"
       ]
     },
     "update": {
@@ -57,14 +58,23 @@
         "UPDATING"
       ],
       "target": [
-        "ACTIVE"
+        "ACTIVE",
+        "INACTIVE"
       ]
     }
   },
   "mutation": {
-    "mutable": [],
+    "mutable": [
+      "defined_tags",
+      "freeform_tags",
+      "is_governance_enabled",
+      "subscription_email"
+    ],
     "forceNew": [
-      "compartment_id"
+      "compartment_id",
+      "domain_id",
+      "ons_subscription_id",
+      "ons_topic_id"
     ],
     "conflictsWith": {}
   },
@@ -72,11 +82,6 @@
     "create": [
       {
         "helper": "tfresource.CreateResource"
-      },
-      {
-        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
-        "entityType": "template",
-        "action": "CREATED"
       }
     ],
     "update": [
@@ -91,20 +96,18 @@
     ]
   },
   "deleteConfirmation": {
-    "pending": [
-      "DELETING"
-    ],
+    "pending": [],
     "target": [
-      "DELETED"
+      "NOT_FOUND"
     ]
   },
   "listLookup": {
-    "datasource": "oci_tenantmanagercontrolplane_domain_governance",
-    "collectionField": "domaingovernance",
+    "datasource": "oci_tenantmanagercontrolplane_domain_governances",
+    "collectionField": "domain_governances",
     "responseItemsField": "Items",
     "filterFields": [
       "compartment_id",
-      "state"
+      "domain_id"
     ]
   },
   "boundary": {
@@ -113,11 +116,16 @@
     "repoAuthoredLogicGapsPath": "controllers/tenantmanagercontrolplane/domaingovernance/logic-gaps.md",
     "excludedSemantics": [
       "bind-versus-create",
-      "secret-output",
-      "delete-confirmation"
+      "delete-confirmation",
+      "lifecycle-classification",
+      "list-lookup",
+      "mutation-policy",
+      "status-projection"
     ]
   },
   "notes": [
-    "Scaffold placeholder for tenantmanagercontrolplane/domaingovernance; replace imported facts before promoting this row beyond scaffold."
+    "Pinned OCI SDK contract: CreateDomainGovernance, GetDomainGovernance, ListDomainGovernances, UpdateDomainGovernance, and DeleteDomainGovernance are present in v65.110.0. CreateDomainGovernanceResponse and UpdateDomainGovernanceResponse both return a concrete DomainGovernance body directly, while DeleteDomainGovernanceResponse returns only request headers and no work-request identifier.",
+    "The visible read surface settles on DomainGovernance bodies and summaries whose lifecycle field is ACTIVE or INACTIVE, so the published runtime treats both states as steady-state success and reserves CREATING and UPDATING only for request-scoped lifecycle classification when they appear on list filters or transitional reads.",
+    "Repo-authored runtime semantics are narrower than the raw CRUD shape: reconcile paginates ListDomainGovernances, filters by compartmentId plus domainId, adopts only a unique exact match on domainId plus onsTopicId plus onsSubscriptionId, updates only subscriptionEmail, isGovernanceEnabled, freeformTags, and definedTags, rejects compartmentId, domainId, onsTopicId, and onsSubscriptionId drift as replacement-only, and keeps delete pending until GetDomainGovernance or ListDomainGovernances stop finding the resource."
   ]
 }

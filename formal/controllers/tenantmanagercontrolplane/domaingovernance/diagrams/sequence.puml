@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetDomainGovernance
 else tracked identity is missing
-ServiceManager -> OCI: ListDomainGovernance(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListDomainGovernances(filters:\ncompartmentId, domainId)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateDomainGovernance
-loop create pending PROVISIONING
+loop create pending CREATING
 ServiceManager -> OCI: GetDomainGovernance
 end
 else reusable OCI resource already exists
@@ -52,10 +52,7 @@ end
 alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteDomainGovernance
-ServiceManager -> OCI: confirm delete via\nGetDomainGovernance or\nListDomainGovernance
-loop delete pending DELETING
-ServiceManager -> OCI: GetDomainGovernance or\nListDomainGovernance
-end
+ServiceManager -> OCI: confirm delete via\nGetDomainGovernance or\nListDomainGovernances
 alt cleanup or finalizer release is blocked
 ServiceManager --> BaseReconciler: retain delete state and retry
 else delete completion observed
@@ -63,19 +60,32 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nCREATING, UPDATING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: none
+Supported update surface: definedTags,
+freeformTags, isGovernanceEnabled,
+subscriptionEmail
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+compartmentId, domainId,
+onsSubscriptionId, onsTopicId
+Lookup filters: compartmentId, domainId
+Lookup matching: exact domainId plus
+onsTopicId and onsSubscriptionId unique
+match; duplicate matches fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
-ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+opt supported mutable drift is detected
+ServiceManager -> OCI: Apply UpdateDomainGovernance only\nfor mutable fields definedTags,\nfreeformTags, isGovernanceEnabled,\nsubscriptionEmail
+loop update pending UPDATING
+ServiceManager -> OCI: GetDomainGovernance
+end
+end
+ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=none; update=none;\ndelete=GetDomainGovernance/ListDomainGovernances\nconfirm-delete until NOT_FOUND
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -102,19 +112,32 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: none
+provider states: create CREATING; update
+UPDATING; delete none
+follow-up: create=none; update=none;
+delete=GetDomainGovernance/ListDomainGovernances
+confirm-delete until NOT_FOUND
+supported drift: definedTags, freeformTags,
+isGovernanceEnabled, subscriptionEmail
 reject before mutate: force-new fields
-compartment_id
+compartmentId, domainId, onsSubscriptionId,
+onsTopicId
 create-only fields: none
 list lookup:
-oci_tenantmanagercontrolplane_domain_governance
-filters compartment_id, state
+oci_tenantmanagercontrolplane_domain_governances
+filters compartmentId, domainId; exact domainId
+plus onsTopicId and onsSubscriptionId unique
+match; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+CreateDomainGovernance and
+UpdateDomainGovernance return concrete
+DomainGovernance bodies directly; ACTIVE and
+INACTIVE are both steady-state success
+observations.
+DeleteDomainGovernance returns headers only, so
+any still-readable DomainGovernance after delete
+is treated as terminating until Get/List stop
+finding it.
 end note
 @enduml
