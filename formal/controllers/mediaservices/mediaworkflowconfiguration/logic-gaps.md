@@ -25,8 +25,9 @@ longer the published contract.
   work-request identifier. The reviewed runtime therefore treats create and
   update as synchronous read-after-write flows, settles `ACTIVE` as success,
   and confirms delete by follow-up `GetMediaWorkflowConfiguration` or fallback
-  `ListMediaWorkflowConfigurations` rereads until OCI reports `DELETED` or
-  NotFound.
+  `ListMediaWorkflowConfigurations` rereads. A post-delete reread that still
+  returns `ACTIVE` is treated as delete pending and keeps the finalizer until
+  OCI eventually reports `DELETED` or NotFound.
 - Pre-create lookup is explicit and conservative. The runtime requires
   `spec.compartmentId`, skips reuse when `spec.displayName` is empty, scopes
   `ListMediaWorkflowConfigurations` by exact compartment and display name, and
@@ -40,8 +41,9 @@ longer the published contract.
   update or delete.
 - Matching create-time locks are normalized out of steady-state parity by
   ignoring OCI-populated `timeCreated` metadata. Changing the requested locks
-  after create remains explicit create-only drift rather than an implicit
-  add/remove lock flow.
+  after create, including omitting `spec.locks` while OCI still reports
+  create-time locks, remains explicit create-only drift rather than an
+  implicit add/remove lock flow.
 - Required status projection remains part of the repo-authored contract. The
   runtime projects identifiers, timestamps, lifecycle state, lifecycle
   details, parameter values, tag maps, locks, and the shared OSOK condition

@@ -16,6 +16,7 @@ import (
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
@@ -246,6 +247,9 @@ func TestApplyMediaWorkflowConfigurationRuntimeHooksUsesReviewedContract(t *test
 	if hooks.ParityHooks.ValidateCreateOnlyDrift == nil {
 		t.Fatal("hooks.ParityHooks.ValidateCreateOnlyDrift = nil, want create-only drift guard")
 	}
+	if hooks.DeleteHooks.ApplyOutcome == nil {
+		t.Fatal("hooks.DeleteHooks.ApplyOutcome = nil, want ACTIVE-after-delete confirmation hook")
+	}
 	if got := hooks.Semantics.CreateFollowUp.Strategy; got != "read-after-write" {
 		t.Fatalf("create follow-up = %q, want %q", got, "read-after-write")
 	}
@@ -365,7 +369,7 @@ func TestMediaWorkflowConfigurationServiceClientUpdatesSupportedMutableDriftAndC
 	}
 }
 
-func TestNormalizeMediaWorkflowConfigurationDesiredStateClearsEquivalentLocks(t *testing.T) {
+func TestNormalizeMediaWorkflowConfigurationDesiredStatePreservesEquivalentLocks(t *testing.T) {
 	t.Parallel()
 
 	resource := newMediaWorkflowConfigurationTestResource()
@@ -378,8 +382,8 @@ func TestNormalizeMediaWorkflowConfigurationDesiredStateClearsEquivalentLocks(t 
 	current.Locks[0].TimeCreated = &now
 
 	normalizeMediaWorkflowConfigurationDesiredState(resource, current)
-	if resource.Spec.Locks != nil {
-		t.Fatalf("spec.locks = %#v, want normalized nil after equivalent OCI lock readback", resource.Spec.Locks)
+	if resource.Spec.Locks == nil {
+		t.Fatal("spec.locks = nil, want desired create-only lock intent preserved for drift validation")
 	}
 }
 
@@ -397,6 +401,24 @@ func TestValidateMediaWorkflowConfigurationCreateOnlyDriftRejectsLockDrift(t *te
 	err := validateMediaWorkflowConfigurationCreateOnlyDrift(resource, current)
 	if err == nil || !strings.Contains(err.Error(), "locks") {
 		t.Fatalf("validateMediaWorkflowConfigurationCreateOnlyDrift() error = %v, want locks drift failure", err)
+	}
+}
+
+func TestValidateMediaWorkflowConfigurationCreateOnlyDriftRejectsOmittedLocks(t *testing.T) {
+	t.Parallel()
+
+	resource := newMediaWorkflowConfigurationTestResource()
+	resource.Spec.Locks = nil
+
+	current := observedMediaWorkflowConfigurationFromSpec(
+		testMediaWorkflowConfigurationID,
+		newMediaWorkflowConfigurationTestResource().Spec,
+		mediaservicessdk.MediaWorkflowConfigurationLifecycleStateActive,
+	)
+
+	err := validateMediaWorkflowConfigurationCreateOnlyDrift(resource, current)
+	if err == nil || !strings.Contains(err.Error(), "spec.locks") {
+		t.Fatalf("validateMediaWorkflowConfigurationCreateOnlyDrift() error = %v, want omitted lock drift failure", err)
 	}
 }
 
@@ -500,6 +522,122 @@ func TestNewMediaWorkflowConfigurationServiceClientWithOCIClientReusesPagedDispl
 	}
 	if resource.Status.Id != existingID {
 		t.Fatalf("resource.Status.Id = %q, want %q", resource.Status.Id, existingID)
+	}
+}
+
+func TestMediaWorkflowConfigurationServiceClientDeleteKeepsFinalizerWhenOCIStillReturnsActive(t *testing.T) {
+	t.Parallel()
+
+	resource := newMediaWorkflowConfigurationTestResource()
+	trackMediaWorkflowConfiguration(resource, testMediaWorkflowConfigurationID)
+
+	getCalls := 0
+	var deleteRequest mediaservicessdk.DeleteMediaWorkflowConfigurationRequest
+
+	client := newMediaWorkflowConfigurationTestClient(&fakeMediaWorkflowConfigurationOCIClient{
+		getFn: func(_ context.Context, req mediaservicessdk.GetMediaWorkflowConfigurationRequest) (mediaservicessdk.GetMediaWorkflowConfigurationResponse, error) {
+			getCalls++
+			if req.MediaWorkflowConfigurationId == nil || *req.MediaWorkflowConfigurationId != testMediaWorkflowConfigurationID {
+				t.Fatalf("get mediaWorkflowConfigurationId = %v, want %q", req.MediaWorkflowConfigurationId, testMediaWorkflowConfigurationID)
+			}
+			return mediaservicessdk.GetMediaWorkflowConfigurationResponse{
+				MediaWorkflowConfiguration: observedMediaWorkflowConfigurationFromSpec(
+					testMediaWorkflowConfigurationID,
+					resource.Spec,
+					mediaservicessdk.MediaWorkflowConfigurationLifecycleStateActive,
+				),
+			}, nil
+		},
+		deleteFn: func(_ context.Context, req mediaservicessdk.DeleteMediaWorkflowConfigurationRequest) (mediaservicessdk.DeleteMediaWorkflowConfigurationResponse, error) {
+			deleteRequest = req
+			return mediaservicessdk.DeleteMediaWorkflowConfigurationResponse{
+				OpcRequestId: common.String("opc-delete-1"),
+			}, nil
+		},
+	})
+
+	deleted, err := client.Delete(context.Background(), resource)
+	if err != nil {
+		t.Fatalf("Delete() error = %v", err)
+	}
+	if deleted {
+		t.Fatal("Delete() deleted = true, want in-progress delete while OCI still returns ACTIVE")
+	}
+	if getCalls != 2 {
+		t.Fatalf("GetMediaWorkflowConfiguration() calls = %d, want 2", getCalls)
+	}
+	if deleteRequest.MediaWorkflowConfigurationId == nil || *deleteRequest.MediaWorkflowConfigurationId != testMediaWorkflowConfigurationID {
+		t.Fatalf("delete mediaWorkflowConfigurationId = %v, want %q", deleteRequest.MediaWorkflowConfigurationId, testMediaWorkflowConfigurationID)
+	}
+	if deleteRequest.IsLockOverride != nil {
+		t.Fatalf("delete isLockOverride = %#v, want reviewed hook field omission", deleteRequest.IsLockOverride)
+	}
+	if resource.Status.LifecycleState != "ACTIVE" {
+		t.Fatalf("status.lifecycleState = %q, want ACTIVE while delete confirmation is pending", resource.Status.LifecycleState)
+	}
+	if resource.Status.OsokStatus.DeletedAt != nil {
+		t.Fatalf("status.deletedAt = %#v, want nil while delete is still pending", resource.Status.OsokStatus.DeletedAt)
+	}
+	if resource.Status.OsokStatus.Reason != string(shared.Terminating) {
+		t.Fatalf("status.reason = %q, want %q", resource.Status.OsokStatus.Reason, shared.Terminating)
+	}
+	if resource.Status.OsokStatus.Async.Current == nil || resource.Status.OsokStatus.Async.Current.Phase != shared.OSOKAsyncPhaseDelete {
+		t.Fatalf("status.async.current = %#v, want delete-pending lifecycle tracker", resource.Status.OsokStatus.Async.Current)
+	}
+	if resource.Status.OsokStatus.OpcRequestID != "opc-delete-1" {
+		t.Fatalf("status.opcRequestId = %q, want %q", resource.Status.OsokStatus.OpcRequestID, "opc-delete-1")
+	}
+}
+
+func TestMediaWorkflowConfigurationServiceClientDeleteDoesNotReissueDeleteWhileConfirmationIsPending(t *testing.T) {
+	t.Parallel()
+
+	resource := newMediaWorkflowConfigurationTestResource()
+	trackMediaWorkflowConfiguration(resource, testMediaWorkflowConfigurationID)
+	now := metav1.Now()
+	resource.Status.OsokStatus.Async.Current = &shared.OSOKAsyncOperation{
+		Source:          shared.OSOKAsyncSourceLifecycle,
+		Phase:           shared.OSOKAsyncPhaseDelete,
+		NormalizedClass: shared.OSOKAsyncClassPending,
+		Message:         mediaWorkflowConfigurationDeletePendingMessage,
+		UpdatedAt:       &now,
+	}
+
+	deleteCalled := false
+	getCalls := 0
+
+	client := newMediaWorkflowConfigurationTestClient(&fakeMediaWorkflowConfigurationOCIClient{
+		getFn: func(_ context.Context, req mediaservicessdk.GetMediaWorkflowConfigurationRequest) (mediaservicessdk.GetMediaWorkflowConfigurationResponse, error) {
+			getCalls++
+			if req.MediaWorkflowConfigurationId == nil || *req.MediaWorkflowConfigurationId != testMediaWorkflowConfigurationID {
+				t.Fatalf("get mediaWorkflowConfigurationId = %v, want %q", req.MediaWorkflowConfigurationId, testMediaWorkflowConfigurationID)
+			}
+			return mediaservicessdk.GetMediaWorkflowConfigurationResponse{
+				MediaWorkflowConfiguration: observedMediaWorkflowConfigurationFromSpec(
+					testMediaWorkflowConfigurationID,
+					resource.Spec,
+					mediaservicessdk.MediaWorkflowConfigurationLifecycleStateActive,
+				),
+			}, nil
+		},
+		deleteFn: func(_ context.Context, req mediaservicessdk.DeleteMediaWorkflowConfigurationRequest) (mediaservicessdk.DeleteMediaWorkflowConfigurationResponse, error) {
+			deleteCalled = true
+			return mediaservicessdk.DeleteMediaWorkflowConfigurationResponse{}, nil
+		},
+	})
+
+	deleted, err := client.Delete(context.Background(), resource)
+	if err != nil {
+		t.Fatalf("Delete() error = %v", err)
+	}
+	if deleted {
+		t.Fatal("Delete() deleted = true, want confirmation requeue while OCI still returns ACTIVE")
+	}
+	if deleteCalled {
+		t.Fatal("Delete() invoked DeleteMediaWorkflowConfiguration again, want confirm-read-only when delete is already pending")
+	}
+	if getCalls != 1 {
+		t.Fatalf("GetMediaWorkflowConfiguration() calls = %d, want 1", getCalls)
 	}
 }
 

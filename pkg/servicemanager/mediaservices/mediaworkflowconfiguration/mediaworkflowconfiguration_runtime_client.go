@@ -18,7 +18,12 @@ import (
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
+	"github.com/oracle/oci-service-operator/pkg/util"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
+
+const mediaWorkflowConfigurationDeletePendingMessage = "OCI resource delete is in progress"
 
 type mediaWorkflowConfigurationOCIClient interface {
 	CreateMediaWorkflowConfiguration(context.Context, mediaservicessdk.CreateMediaWorkflowConfigurationRequest) (mediaservicessdk.CreateMediaWorkflowConfigurationResponse, error)
@@ -64,6 +69,7 @@ func applyMediaWorkflowConfigurationRuntimeHooks(hooks *MediaWorkflowConfigurati
 	wrapMediaWorkflowConfigurationListPages(hooks)
 	hooks.Update.Fields = mediaWorkflowConfigurationUpdateFields()
 	hooks.Delete.Fields = mediaWorkflowConfigurationDeleteFields()
+	hooks.DeleteHooks.ApplyOutcome = applyMediaWorkflowConfigurationDeleteOutcome
 }
 
 func newMediaWorkflowConfigurationServiceClientWithOCIClient(
@@ -380,26 +386,96 @@ func mediaWorkflowConfigurationRuntimeBody(currentResponse any) (mediaservicessd
 	}
 }
 
-func normalizeMediaWorkflowConfigurationDesiredState(resource *mediaservicesv1beta1.MediaWorkflowConfiguration, currentResponse any) {
-	if resource == nil || resource.Spec.Locks == nil {
+func applyMediaWorkflowConfigurationDeleteOutcome(
+	resource *mediaservicesv1beta1.MediaWorkflowConfiguration,
+	response any,
+	stage generatedruntime.DeleteConfirmStage,
+) (generatedruntime.DeleteOutcome, error) {
+	lifecycleState := strings.ToUpper(mediaWorkflowConfigurationLifecycleState(response))
+	if lifecycleState != string(mediaservicessdk.MediaWorkflowConfigurationLifecycleStateActive) {
+		return generatedruntime.DeleteOutcome{}, nil
+	}
+
+	if stage == generatedruntime.DeleteConfirmStageAlreadyPending &&
+		!mediaWorkflowConfigurationDeleteAlreadyPending(resource) {
+		return generatedruntime.DeleteOutcome{}, nil
+	}
+
+	if stage == generatedruntime.DeleteConfirmStageAfterRequest ||
+		stage == generatedruntime.DeleteConfirmStageAlreadyPending {
+		markMediaWorkflowConfigurationTerminating(resource, response)
+		return generatedruntime.DeleteOutcome{Handled: true, Deleted: false}, nil
+	}
+	return generatedruntime.DeleteOutcome{}, nil
+}
+
+func mediaWorkflowConfigurationDeleteAlreadyPending(resource *mediaservicesv1beta1.MediaWorkflowConfiguration) bool {
+	if resource == nil {
+		return false
+	}
+	current := resource.Status.OsokStatus.Async.Current
+	return current != nil &&
+		current.Phase == shared.OSOKAsyncPhaseDelete &&
+		current.NormalizedClass == shared.OSOKAsyncClassPending
+}
+
+func markMediaWorkflowConfigurationTerminating(
+	resource *mediaservicesv1beta1.MediaWorkflowConfiguration,
+	response any,
+) {
+	if resource == nil {
 		return
 	}
-	current, err := mediaWorkflowConfigurationRuntimeBody(currentResponse)
+
+	now := metav1.Now()
+	status := &resource.Status.OsokStatus
+	status.UpdatedAt = &now
+	status.Message = mediaWorkflowConfigurationDeletePendingMessage
+	status.Reason = string(shared.Terminating)
+	status.Async.Current = &shared.OSOKAsyncOperation{
+		Source:          shared.OSOKAsyncSourceLifecycle,
+		Phase:           shared.OSOKAsyncPhaseDelete,
+		RawStatus:       mediaWorkflowConfigurationLifecycleState(response),
+		NormalizedClass: shared.OSOKAsyncClassPending,
+		Message:         mediaWorkflowConfigurationDeletePendingMessage,
+		UpdatedAt:       &now,
+	}
+	*status = util.UpdateOSOKStatusCondition(
+		*status,
+		shared.Terminating,
+		corev1.ConditionTrue,
+		"",
+		mediaWorkflowConfigurationDeletePendingMessage,
+		loggerutil.OSOKLogger{},
+	)
+}
+
+func mediaWorkflowConfigurationLifecycleState(response any) string {
+	current, err := mediaWorkflowConfigurationRuntimeBody(response)
 	if err != nil {
-		return
+		return ""
 	}
-	if mediaWorkflowConfigurationLocksEqual(resource.Spec.Locks, current.Locks) {
-		resource.Spec.Locks = nil
-	}
+	return strings.TrimSpace(string(current.LifecycleState))
+}
+
+func normalizeMediaWorkflowConfigurationDesiredState(resource *mediaservicesv1beta1.MediaWorkflowConfiguration, currentResponse any) {
+	_ = resource
+	_ = currentResponse
 }
 
 func validateMediaWorkflowConfigurationCreateOnlyDrift(resource *mediaservicesv1beta1.MediaWorkflowConfiguration, currentResponse any) error {
-	if resource == nil || resource.Spec.Locks == nil {
+	if resource == nil {
 		return nil
 	}
 	current, err := mediaWorkflowConfigurationRuntimeBody(currentResponse)
 	if err != nil {
 		return err
+	}
+	if resource.Spec.Locks == nil {
+		if len(current.Locks) == 0 {
+			return nil
+		}
+		return fmt.Errorf("MediaWorkflowConfiguration create-only drift detected for locks; removing or omitting spec.locks after create is not supported while OCI still reports locks")
 	}
 	if mediaWorkflowConfigurationLocksEqual(resource.Spec.Locks, current.Locks) {
 		return nil
