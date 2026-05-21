@@ -23,9 +23,9 @@
     ],
     "list": [
       {
-        "operation": "ListDrPlan",
-        "requestType": "disasterrecovery.ListDrPlanRequest",
-        "responseType": "disasterrecovery.ListDrPlanResponse"
+        "operation": "ListDrPlans",
+        "requestType": "disasterrecovery.ListDrPlansRequest",
+        "responseType": "disasterrecovery.ListDrPlansResponse"
       }
     ],
     "update": [
@@ -46,10 +46,11 @@
   "lifecycle": {
     "create": {
       "pending": [
-        "PROVISIONING"
+        "CREATING"
       ],
       "target": [
-        "ACTIVE"
+        "ACTIVE",
+        "INACTIVE"
       ]
     },
     "update": {
@@ -57,14 +58,22 @@
         "UPDATING"
       ],
       "target": [
-        "ACTIVE"
+        "ACTIVE",
+        "INACTIVE"
       ]
     }
   },
   "mutation": {
-    "mutable": [],
+    "mutable": [
+      "defined_tags",
+      "display_name",
+      "freeform_tags",
+      "plan_groups"
+    ],
     "forceNew": [
-      "compartment_id"
+      "dr_protection_group_id",
+      "source_plan_id",
+      "type"
     ],
     "conflictsWith": {}
   },
@@ -75,13 +84,18 @@
       },
       {
         "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
-        "entityType": "template",
+        "entityType": "drplan",
         "action": "CREATED"
       }
     ],
     "update": [
       {
         "helper": "tfresource.UpdateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "drplan",
+        "action": "UPDATED"
       }
     ],
     "delete": [
@@ -99,12 +113,14 @@
     ]
   },
   "listLookup": {
-    "datasource": "oci_disaster_recovery_dr_plan",
-    "collectionField": "drplan",
+    "datasource": "oci_disaster_recovery_dr_plans",
+    "collectionField": "dr_plan_collection",
     "responseItemsField": "Items",
     "filterFields": [
-      "compartment_id",
-      "state"
+      "dr_protection_group_id",
+      "display_name",
+      "dr_plan_type",
+      "dr_plan_id"
     ]
   },
   "boundary": {
@@ -113,11 +129,19 @@
     "repoAuthoredLogicGapsPath": "controllers/disasterrecovery/drplan/logic-gaps.md",
     "excludedSemantics": [
       "bind-versus-create",
+      "list-lookup",
+      "mutation-policy",
+      "status-projection",
       "secret-output",
-      "delete-confirmation"
+      "delete-confirmation",
+      "waiter-work-request"
     ]
   },
   "notes": [
-    "Scaffold placeholder for disasterrecovery/drplan; replace imported facts before promoting this row beyond scaffold."
+    "Pinned OCI SDK contract: CreateDrPlan returns a DrPlan body plus opc-work-request-id, GetDrPlan returns the full DrPlan body, ListDrPlans returns DrPlanSummary items, UpdateDrPlan returns only opc-work-request-id, and DeleteDrPlan returns no work-request header.",
+    "Pinned OCI SDK contract: DrPlan summaries omit planGroups and sourcePlanId, while the full DrPlan body exposes peer DR protection group fields, lifecycle sub-state, lifeCycleDetails, and an ordered planGroups array with service-owned group and step metadata alongside user-defined step payloads.",
+    "Pinned OCI SDK contract: CreateDrPlanDetails exposes only displayName, type, drProtectionGroupId, sourcePlanId, freeformTags, and definedTags. Mutable planGroups edits therefore belong to UpdateDrPlanDetails only, and drProtectionGroupId, sourcePlanId, type, refresh, verify, plan execution, and other disaster recovery helper families stay outside this controller-backed rollout.",
+    "Pinned provider coverage is unconfirmed. formal/sources.lock still points at github.com/oracle/terraform-provider-oci@eb653febb1bab4cc6650a96d404a8baf36fdf671, but the checked-in onboarding audit did not confirm matching DrPlan resource or datasource coverage at that boundary. The providerResource and datasource names therefore stay provisional OCI-style placeholders so generator-owned registry artifacts can derive stable links without claiming verified provider coverage.",
+    "Repo-authored runtime semantics stay explicit: pre-create bind and delete confirmation scope list lookups by drProtectionGroupId plus displayName and type, create and update resume through GetWorkRequest plus GetDrPlan rereads, delete confirmation waits for GetDrPlan/ListDrPlans to prove the plan is gone, and the resource-local update builder strips read-only group and step fields before diffing mutable planGroups."
   ]
 }

@@ -27,15 +27,15 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via GetDrPlan;
 else (no)
-:Resolve an existing OCI resource through\nListDrPlan using filters compartment_id, state;
+:Resolve an existing OCI resource through\nListDrPlans using filters drProtectionGroupId,\ndisplayName, type, drPlanId;
 :Create the OCI resource via CreateDrPlan when\nno reusable match is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
 }
 if ("Delete requested?") then (yes)
 partition "Delete" {
-:Delete path uses DeleteDrPlan with required\nvia GetDrPlan or ListDrPlan to DELETED\nconfirmation;
-:Confirm deletion via GetDrPlan or ListDrPlan\nuntil OCI reaches DELETED;
+:Delete path uses DeleteDrPlan with required\nvia GetDrPlan or ListDrPlans to DELETED\nconfirmation;
+:Confirm deletion via GetDrPlan or ListDrPlans\nuntil OCI reaches DELETED;
 if ("Delete cleanup and finalizer release succeed?") then (yes)
 :Remove the finalizer after delete completion;
 else (no)
@@ -46,23 +46,28 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
+:Request requeue while OCI remains in CREATING,\nUPDATING, DELETING;
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
-:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE;
+:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE, INACTIVE;
 stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields drProtectionGroupId, sourcePlanId, type;
 stop
 endif
-:No imported mutable field surface opens\nUpdateDrPlan;
-:Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Return success for the ACTIVE success state;
+if ("Supported mutable drift detected?") then (yes)
+:Apply UpdateDrPlan only for mutable fields\ndefinedTags, displayName, freeformTags,\nplanGroups;
+else (no)
+:Skip the no-op mutation path;
+endif
+:Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=drplan action=CREATED;\nupdate=tfresource.UpdateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=drplan action=UPDATED;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
+:Apply explicit follow-up semantics\ncreate=GetWorkRequest -> GetDrPlan;\nupdate=GetWorkRequest -> GetDrPlan;\ndelete=GetDrPlan/ListDrPlans confirm-delete;
+:Return success for the ACTIVE, INACTIVE\nsuccess state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
 }
@@ -87,18 +92,41 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: none
+follow-up: create=GetWorkRequest -> GetDrPlan;
+update=GetWorkRequest -> GetDrPlan;
+delete=GetDrPlan/ListDrPlans confirm-delete
+supported drift: definedTags, displayName,
+freeformTags, planGroups
 reject before mutate: force-new fields
-compartment_id
+drProtectionGroupId, sourcePlanId, type
 create-only fields: none
-list lookup: oci_disaster_recovery_dr_plan
-filters compartment_id, state
+list lookup: oci_disaster_recovery_dr_plans
+filters drProtectionGroupId, displayName, type,
+drPlanId; exact drProtectionGroupId plus
+displayName and type unique match; tracked
+rereads and delete confirmation can additionally
+narrow by drPlanId
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+DrPlan create and update are work-request-backed
+and resume through status.async.current as the
+canonical in-flight tracker.
+List responses expose DrPlanSummary items only,
+so the runtime rereads GetDrPlan before status
+projection or mutable drift checks that depend
+on planGroups or sourcePlanId.
+Create ignores spec.planGroups because
+CreateDrPlanDetails does not accept planGroups;
+in-place plan group edits are published only
+through UpdateDrPlanDetails.
+The resource-local update builder strips
+read-only group and step fields from GetDrPlan
+before diffing so service-owned metadata does
+not cause perpetual updates.
+Refresh, verify, plan execution, and other
+disaster recovery helper families remain out of
+scope for this controller-backed runtime.
 end note
 @enduml

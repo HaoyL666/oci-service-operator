@@ -26,19 +26,22 @@ state "Failed" as failed
 observe : read spec, tracked status, delete intent,\nand current OCI lifecycle
 state "ResolveByLookup" as resolve_by_lookup
 state "RejectUnsupportedDrift" as reject_unsupported_drift
+state "ApplyUpdate" as apply_update
 state "DeletePending" as delete_pending
 state "Deleted" as deleted
 state "DeleteCleanupBlocked" as delete_cleanup_blocked
 [*] --> observe : CreateDrPlan
 observe --> resolve_by_lookup : tracked identity missing
-resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE
-resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE, INACTIVE
+resolve_by_lookup --> retryable : OCI state in CREATING,\nUPDATING, DELETING
 resolve_by_lookup --> failed : unresolved OCI error or non-success state
-observe --> evaluate_ready : OCI state in ACTIVE
-observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+observe --> evaluate_ready : OCI state in ACTIVE,\nINACTIVE
+observe --> retryable : OCI state in CREATING,\nUPDATING, DELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
+evaluate_ready --> apply_update : supported mutable drift for\ndefinedTags, displayName,\nfreeformTags (+1 more)
+apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
 retryable --> retryable : OCI remains retryable
@@ -66,23 +69,46 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: none
+follow-up: create=GetWorkRequest -> GetDrPlan;
+update=GetWorkRequest -> GetDrPlan;
+delete=GetDrPlan/ListDrPlans confirm-delete
+supported drift: definedTags, displayName,
+freeformTags, planGroups
 reject before mutate: force-new fields
-compartment_id
+drProtectionGroupId, sourcePlanId, type
 create-only fields: none
-list lookup: oci_disaster_recovery_dr_plan
-filters compartment_id, state
+list lookup: oci_disaster_recovery_dr_plans
+filters drProtectionGroupId, displayName, type,
+drPlanId; exact drProtectionGroupId plus
+displayName and type unique match; tracked
+rereads and delete confirmation can additionally
+narrow by drPlanId
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+DrPlan create and update are work-request-backed
+and resume through status.async.current as the
+canonical in-flight tracker.
+List responses expose DrPlanSummary items only,
+so the runtime rereads GetDrPlan before status
+projection or mutable drift checks that depend
+on planGroups or sourcePlanId.
+Create ignores spec.planGroups because
+CreateDrPlanDetails does not accept planGroups;
+in-place plan group edits are published only
+through UpdateDrPlanDetails.
+The resource-local update builder strips
+read-only group and step fields from GetDrPlan
+before diffing so service-owned metadata does
+not cause perpetual updates.
+Refresh, verify, plan execution, and other
+disaster recovery helper families remain out of
+scope for this controller-backed runtime.
 end note
 note right of delete_pending
 delete policy: required
-delete observe: GetDrPlan or ListDrPlan
+delete observe: GetDrPlan or ListDrPlans
 delete targets: DELETED
 end note
 @enduml
