@@ -27,15 +27,15 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetDistributedDatabase;
 else (no)
-:Resolve an existing OCI resource through\nListDistributedDatabase using filters\ncompartment_id, state;
+:Resolve an existing OCI resource through\nListDistributedDatabases using filters\ncompartmentId, displayName, dbDeploymentType,\nlifecycleState;
 :Create the OCI resource via\nCreateDistributedDatabase when no reusable\nmatch is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
 }
 if ("Delete requested?") then (yes)
 partition "Delete" {
-:Delete path uses DeleteDistributedDatabase\nwith required via GetDistributedDatabase or\nListDistributedDatabase to DELETED\nconfirmation;
-:Confirm deletion via GetDistributedDatabase or\nListDistributedDatabase until OCI reaches\nDELETED;
+:Delete path uses DeleteDistributedDatabase\nwith required via GetDistributedDatabase or\nListDistributedDatabases to DELETED, NOT_FOUND\nconfirmation;
+:Confirm deletion via GetDistributedDatabase or\nListDistributedDatabases until OCI reaches\nDELETED, NOT_FOUND;
 if ("Delete cleanup and finalizer release succeed?") then (yes)
 :Remove the finalizer after delete completion;
 else (no)
@@ -46,23 +46,28 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
+:Request requeue while OCI remains in CREATING,\nUPDATING, DELETING;
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
-:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE;
+:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE, INACTIVE;
 stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields compartmentId;
 stop
 endif
-:No imported mutable field surface opens\nUpdateDistributedDatabase;
-:Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Return success for the ACTIVE success state;
+if ("Supported mutable drift detected?") then (yes)
+:Apply UpdateDistributedDatabase only for\nmutable fields definedTags, displayName,\nfreeformTags;
+else (no)
+:Skip the no-op mutation path;
+endif
+:Run provider helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
+:Apply explicit follow-up semantics\ncreate=read-after-write;\nupdate=read-after-write; delete=confirm-delete;
+:Return success for the ACTIVE, INACTIVE\nsuccess state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
 }
@@ -87,19 +92,55 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: none
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: definedTags, displayName,
+freeformTags
 reject before mutate: force-new fields
-compartment_id
+compartmentId
 create-only fields: none
 list lookup:
-oci_distributeddatabase_distributed_database
-filters compartment_id, state
+oci_distributeddatabase_distributed_databases
+filters compartmentId, displayName,
+dbDeploymentType, lifecycleState; exact
+compartmentId plus displayName list filters,
+then narrow summary candidates in memory to a
+unique exact prefix plus dbDeploymentType match;
+when lifecycleState is already known the runtime
+preserves that filter on fallback list rereads
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Create-body normalization keeps shard and
+catalog `source` inputs compatible with the OCI
+SDK: CRD `EXISTING_CLUSTER` values serialize as
+the SDK's `EXADB_XS`, scaffold-only `jsonData`
+is dropped, and explicit false booleans in
+nested vm-cluster and backup-config payloads are
+preserved.
+Reviewed lifecycle mapping treats CREATING as
+provisioning, UPDATING as updating, ACTIVE and
+INACTIVE as success, NEEDS_ATTENTION and FAILED
+as terminal non-success, and DELETING as
+terminating.
+ListDistributedDatabases returns
+DistributedDatabaseSummary items that omit
+fields such as scanListenerPort,
+latestGsmImageDetails, shardDetails,
+catalogDetails, gsmDetails, dbBackupConfig, and
+gsmSshPublicKey, so every successful bind or
+write path rereads GetDistributedDatabase before
+projecting steady-state status.
+The provider resource exposes broader patch,
+state-transition, and trigger update families,
+but the current CRD does not publish those
+controls; the package-local runtime only
+performs in-place updates through
+UpdateDistributedDatabaseDetails for
+displayName, freeformTags, and definedTags.
+Delete keeps the finalizer until
+GetDistributedDatabase or list fallback confirms
+DELETED or NOT_FOUND.
 end note
 @enduml

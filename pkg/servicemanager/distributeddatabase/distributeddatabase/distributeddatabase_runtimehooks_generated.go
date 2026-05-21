@@ -63,21 +63,21 @@ func newDistributedDatabaseRuntimeSemantics() *generatedruntime.Semantics {
 		SecretSideEffects: "none",
 		FinalizerPolicy:   "retain-until-confirmed-delete",
 		Lifecycle: generatedruntime.LifecycleSemantics{
-			ProvisioningStates: []string{"PROVISIONING"},
+			ProvisioningStates: []string{"CREATING"},
 			UpdatingStates:     []string{"UPDATING"},
-			ActiveStates:       []string{"ACTIVE"},
+			ActiveStates:       []string{"ACTIVE", "INACTIVE"},
 		},
 		Delete: generatedruntime.DeleteSemantics{
 			Policy:         "required",
 			PendingStates:  []string{"DELETING"},
-			TerminalStates: []string{"DELETED"},
+			TerminalStates: []string{"DELETED", "NOT_FOUND"},
 		},
 		List: &generatedruntime.ListSemantics{
 			ResponseItemsField: "Items",
-			MatchFields:        []string{"compartmentId", "state"},
+			MatchFields:        []string{"compartmentId", "dbDeploymentType", "displayName", "metadata", "privateEndpointId", "state"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{},
+			Mutable:       []string{"definedTags", "displayName", "freeformTags"},
 			ForceNew:      []string{"compartmentId"},
 			ConflictsWith: map[string][]string{},
 		},
@@ -98,7 +98,7 @@ func newDistributedDatabaseRuntimeSemantics() *generatedruntime.Semantics {
 			Strategy: "confirm-delete",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
 		},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "list", MethodName: "ListDistributedDatabase", RequestTypeName: "distributeddatabase.ListDistributedDatabaseRequest", ResponseTypeName: "distributeddatabase.ListDistributedDatabaseResponse"}},
+		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }
