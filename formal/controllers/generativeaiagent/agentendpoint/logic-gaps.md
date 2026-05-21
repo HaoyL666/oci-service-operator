@@ -8,9 +8,11 @@ gaps: []
 
 # Logic Gaps
 
-No open logic gaps remain for the seeded `generativeaiagent/AgentEndpoint`
-row after the runtime review replaced the scaffold semantics with the
-published work-request-backed contract.
+No open logic gaps remain for the reviewed
+`generativeaiagent/AgentEndpoint` contract. This story updates the
+resource-local runtime semantics while the shared manifest row stays in the
+scaffold stage until the convergence story handles the cross-resource
+promotion.
 
 ## Current runtime path
 
