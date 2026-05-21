@@ -63,22 +63,22 @@ func newJmsPluginRuntimeSemantics() *generatedruntime.Semantics {
 		SecretSideEffects: "none",
 		FinalizerPolicy:   "retain-until-confirmed-delete",
 		Lifecycle: generatedruntime.LifecycleSemantics{
-			ProvisioningStates: []string{"PROVISIONING"},
-			UpdatingStates:     []string{"UPDATING"},
-			ActiveStates:       []string{"ACTIVE"},
+			ProvisioningStates: []string{},
+			UpdatingStates:     []string{},
+			ActiveStates:       []string{"ACTIVE", "INACTIVE"},
 		},
 		Delete: generatedruntime.DeleteSemantics{
 			Policy:         "required",
-			PendingStates:  []string{"DELETING"},
-			TerminalStates: []string{"DELETED"},
+			PendingStates:  []string{},
+			TerminalStates: []string{"DELETED", "NOT_FOUND"},
 		},
 		List: &generatedruntime.ListSemantics{
 			ResponseItemsField: "Items",
-			MatchFields:        []string{"compartmentId", "state"},
+			MatchFields:        []string{"agentId", "agentType", "availabilityStatus", "compartmentId", "fleetId", "hostnameContains", "id", "lifecycleState", "timeLastSeenLessThanOrEqualTo", "timeRegisteredLessThanOrEqualTo"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{},
-			ForceNew:      []string{"compartmentId"},
+			Mutable:       []string{"definedTags", "fleetId", "freeformTags"},
+			ForceNew:      []string{"agentId", "agentType", "compartmentId"},
 			ConflictsWith: map[string][]string{},
 		},
 		Hooks: generatedruntime.HookSet{
@@ -98,7 +98,7 @@ func newJmsPluginRuntimeSemantics() *generatedruntime.Semantics {
 			Strategy: "confirm-delete",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
 		},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "list", MethodName: "ListJmsPlugin", RequestTypeName: "jms.ListJmsPluginRequest", ResponseTypeName: "jms.ListJmsPluginResponse"}},
+		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }

@@ -5,9 +5,48 @@ slug: jmsplugin
 kind: JmsPlugin
 archetype: generated-service-manager
 states:
-  - provisioning
   - active
-  - updating
   - terminating
+  - deleted
+repoAuthored:
+  listLookup:
+    filters:
+      - compartmentId
+      - agentId
+      - id
+    matchRule: exact compartmentId plus agentId unique match in ACTIVE or INACTIVE; paginated list rereads are exhausted before concluding absent; duplicate matches fail
+  mutation:
+    mutable:
+      - definedTags
+      - fleetId
+      - freeformTags
+    forceNew:
+      - agentId
+      - agentType
+      - compartmentId
+  hooks:
+    create:
+      - helper: tfresource.CreateResource
+    update:
+      - helper: tfresource.UpdateResource
+    delete:
+      - helper: tfresource.DeleteResource
+  followUp:
+    create: read-after-write
+    update: read-after-write
+    delete: confirm-delete
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - JmsPlugin create and update are synchronous reread flows. OCI returns the
+    resource body directly, and fleet-less registration settles in INACTIVE
+    rather than a provisioning bucket.
+  - ACTIVE and INACTIVE are the only published steady success states.
+    NEEDS_ATTENTION stays outside the success set, and DELETED is only a
+    delete-confirmation target.
+  - Pre-create reuse scopes by exact compartmentId plus agentId and exhausts
+    paginated ListJmsPlugins responses before concluding absent. Only ACTIVE
+    and INACTIVE summaries are reusable.
+  - Mutable drift is limited to fleetId, freeformTags, and definedTags.
+    agentId, agentType, and compartmentId remain replacement-only. Fleet
+    detachment stays out of scope because the published spec cannot
+    distinguish omission from clear.
+  - Delete keeps the finalizer until rereads return DELETED or NotFound.

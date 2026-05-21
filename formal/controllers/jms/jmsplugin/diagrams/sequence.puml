@@ -38,12 +38,9 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetJmsPlugin
 else tracked identity is missing
-ServiceManager -> OCI: ListJmsPlugin(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListJmsPlugins(filters:\ncompartmentId, agentId, id)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateJmsPlugin
-loop create pending PROVISIONING
-ServiceManager -> OCI: GetJmsPlugin
-end
 else reusable OCI resource already exists
 ServiceManager -> OCI: GetJmsPlugin
 end
@@ -52,34 +49,40 @@ end
 alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteJmsPlugin
-ServiceManager -> OCI: confirm delete via GetJmsPlugin or\nListJmsPlugin
-loop delete pending DELETING
-ServiceManager -> OCI: GetJmsPlugin or ListJmsPlugin
-end
+ServiceManager -> OCI: confirm delete via GetJmsPlugin or\nListJmsPlugins
 alt cleanup or finalizer release is blocked
 ServiceManager --> BaseReconciler: retain delete state and retry
 else delete completion observed
 ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
-else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: none
+Supported update surface: definedTags,
+fleetId, freeformTags
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+agentId, agentType, compartmentId
+Lookup filters: compartmentId, agentId,
+id
+Lookup matching: exact compartmentId
+plus agentId unique match in ACTIVE or
+INACTIVE; paginated list rereads are
+exhausted before concluding absent;
+duplicate matches fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
-ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+opt supported mutable drift is detected
+ServiceManager -> OCI: Apply UpdateJmsPlugin only for\nmutable fields definedTags, fleetId,\nfreeformTags
+end
+ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
-BaseReconciler --> Controller: requeue on provisioning, updating,\nterminating
+BaseReconciler --> Controller: requeue on terminating
 note right of ServiceManager
 shared diagram:
 shared/diagrams/shared-resolution-sequence.svg
@@ -101,19 +104,43 @@ kind: JmsPlugin
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: none
-reject before mutate: force-new fields
-compartment_id
+requeue: terminating
+provider states: create none; update none;
+delete none
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: definedTags, fleetId,
+freeformTags
+reject before mutate: force-new fields agentId,
+agentType, compartmentId
 create-only fields: none
-list lookup: oci_jms_jms_plugin filters
-compartment_id, state
+list lookup: oci_jms_jms_plugins filters
+compartmentId, agentId, id; exact compartmentId
+plus agentId unique match in ACTIVE or INACTIVE;
+paginated list rereads are exhausted before
+concluding absent; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+JmsPlugin create and update are synchronous
+reread flows. OCI returns the resource body
+directly, and fleet-less registration settles in
+INACTIVE rather than a provisioning bucket.
+ACTIVE and INACTIVE are the only published
+steady success states. NEEDS_ATTENTION stays
+outside the success set, and DELETED is only a
+delete-confirmation target.
+Pre-create reuse scopes by exact compartmentId
+plus agentId and exhausts paginated
+ListJmsPlugins responses before concluding
+absent. Only ACTIVE and INACTIVE summaries are
+reusable.
+Mutable drift is limited to fleetId,
+freeformTags, and definedTags. agentId,
+agentType, and compartmentId remain
+replacement-only. Fleet detachment stays out of
+scope because the published spec cannot
+distinguish omission from clear.
+Delete keeps the finalizer until rereads return
+DELETED or NotFound.
 end note
 @enduml
