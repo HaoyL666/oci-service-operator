@@ -369,6 +369,51 @@ func TestMediaWorkflowConfigurationServiceClientUpdatesSupportedMutableDriftAndC
 	}
 }
 
+func TestMediaWorkflowConfigurationServiceClientIgnoresEquivalentLockTimeCreatedDrift(t *testing.T) {
+	t.Parallel()
+
+	resource := newMediaWorkflowConfigurationTestResource()
+	trackMediaWorkflowConfiguration(resource, testMediaWorkflowConfigurationID)
+
+	updateCalled := false
+	now := common.SDKTime{Time: time.Date(2026, time.May, 7, 12, 34, 56, 0, time.UTC)}
+
+	client := newMediaWorkflowConfigurationTestClient(&fakeMediaWorkflowConfigurationOCIClient{
+		getFn: func(_ context.Context, req mediaservicessdk.GetMediaWorkflowConfigurationRequest) (mediaservicessdk.GetMediaWorkflowConfigurationResponse, error) {
+			if req.MediaWorkflowConfigurationId == nil || *req.MediaWorkflowConfigurationId != testMediaWorkflowConfigurationID {
+				t.Fatalf("get mediaWorkflowConfigurationId = %v, want %q", req.MediaWorkflowConfigurationId, testMediaWorkflowConfigurationID)
+			}
+			current := observedMediaWorkflowConfigurationFromSpec(
+				testMediaWorkflowConfigurationID,
+				resource.Spec,
+				mediaservicessdk.MediaWorkflowConfigurationLifecycleStateActive,
+			)
+			current.Locks[0].TimeCreated = &now
+			return mediaservicessdk.GetMediaWorkflowConfigurationResponse{
+				MediaWorkflowConfiguration: current,
+			}, nil
+		},
+		updateFn: func(_ context.Context, req mediaservicessdk.UpdateMediaWorkflowConfigurationRequest) (mediaservicessdk.UpdateMediaWorkflowConfigurationResponse, error) {
+			updateCalled = true
+			return mediaservicessdk.UpdateMediaWorkflowConfigurationResponse{}, nil
+		},
+	})
+
+	response, err := client.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	if err != nil {
+		t.Fatalf("CreateOrUpdate() error = %v", err)
+	}
+	if !response.IsSuccessful || response.ShouldRequeue {
+		t.Fatalf("response = %#v, want successful steady-state observe without requeue", response)
+	}
+	if updateCalled {
+		t.Fatal("CreateOrUpdate() invoked UpdateMediaWorkflowConfiguration, want equivalent lock timeCreated drift ignored")
+	}
+	if resource.Spec.Locks[0].TimeCreated != now.Time.Format(time.RFC3339Nano) {
+		t.Fatalf("spec.locks[0].timeCreated = %q, want canonicalized OCI timeCreated", resource.Spec.Locks[0].TimeCreated)
+	}
+}
+
 func TestNormalizeMediaWorkflowConfigurationDesiredStatePreservesEquivalentLocks(t *testing.T) {
 	t.Parallel()
 

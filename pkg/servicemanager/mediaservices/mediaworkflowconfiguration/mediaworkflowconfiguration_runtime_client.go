@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"maps"
 	"strings"
+	"time"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
 	mediaservicessdk "github.com/oracle/oci-go-sdk/v65/mediaservices"
@@ -459,8 +460,18 @@ func mediaWorkflowConfigurationLifecycleState(response any) string {
 }
 
 func normalizeMediaWorkflowConfigurationDesiredState(resource *mediaservicesv1beta1.MediaWorkflowConfiguration, currentResponse any) {
-	_ = resource
-	_ = currentResponse
+	if resource == nil || resource.Spec.Locks == nil {
+		return
+	}
+	current, err := mediaWorkflowConfigurationRuntimeBody(currentResponse)
+	if err != nil {
+		return
+	}
+	normalized, ok := mediaWorkflowConfigurationCanonicalizeDesiredLocks(resource.Spec.Locks, current.Locks)
+	if !ok {
+		return
+	}
+	resource.Spec.Locks = normalized
 }
 
 func validateMediaWorkflowConfigurationCreateOnlyDrift(resource *mediaservicesv1beta1.MediaWorkflowConfiguration, currentResponse any) error {
@@ -654,9 +665,31 @@ func mediaWorkflowConfigurationLocksEqual(spec []mediaservicesv1beta1.MediaWorkf
 	return true
 }
 
+func mediaWorkflowConfigurationCanonicalizeDesiredLocks(
+	spec []mediaservicesv1beta1.MediaWorkflowConfigurationLock,
+	current []mediaservicessdk.ResourceLock,
+) ([]mediaservicesv1beta1.MediaWorkflowConfigurationLock, bool) {
+	if !mediaWorkflowConfigurationLocksEqual(spec, current) {
+		return nil, false
+	}
+
+	normalized := append([]mediaservicesv1beta1.MediaWorkflowConfigurationLock(nil), spec...)
+	for index := range normalized {
+		normalized[index].TimeCreated = mediaWorkflowConfigurationSDKTimeString(current[index].TimeCreated)
+	}
+	return normalized, true
+}
+
 func mediaWorkflowConfigurationStringValue(value *string) string {
 	if value == nil {
 		return ""
 	}
 	return *value
+}
+
+func mediaWorkflowConfigurationSDKTimeString(value *common.SDKTime) string {
+	if value == nil {
+		return ""
+	}
+	return value.Time.Format(time.RFC3339Nano)
 }
