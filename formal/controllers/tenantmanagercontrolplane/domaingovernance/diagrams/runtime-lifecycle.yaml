@@ -9,5 +9,28 @@ states:
   - active
   - updating
   - terminating
+  - failed
+repoAuthored:
+  followUp:
+    create: none
+    update: none
+    delete: "GetDomainGovernance/ListDomainGovernances confirm-delete until NOT_FOUND"
+  listLookup:
+    filters:
+      - compartmentId
+      - domainId
+    matchRule: exact domainId plus onsTopicId and onsSubscriptionId unique match; duplicate matches fail
+  mutation:
+    mutable:
+      - definedTags
+      - freeformTags
+      - isGovernanceEnabled
+      - subscriptionEmail
+    forceNew:
+      - compartmentId
+      - domainId
+      - onsSubscriptionId
+      - onsTopicId
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - CreateDomainGovernance and UpdateDomainGovernance return concrete DomainGovernance bodies directly; ACTIVE and INACTIVE are both steady-state success observations.
+  - DeleteDomainGovernance returns headers only, so any still-readable DomainGovernance after delete is treated as terminating until Get/List stop finding it.
