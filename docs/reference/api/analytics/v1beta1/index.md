@@ -11,14 +11,16 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `analytics.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Analytics | preview | `v2.1.0-alpha` | [AnalyticsInstance](#kind-analyticsinstance) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [AnalyticsInstance](#kind-analyticsinstance) | Namespaced | [Sample](../../../samples/analytics/v1beta1/analyticsinstance.md) | - |
+| [AnalyticsInstance](#kind-analyticsinstance) | Namespaced | [Sample](../../../samples/analytics/v1beta1/analyticsinstance.md) | Analytics (`v2.1.0-alpha`) |
 
 <a id="kind-analyticsinstance"></a>
 ## AnalyticsInstance
@@ -29,7 +31,7 @@ Manage OCI Analytics instances.
 - `Scope`: `Namespaced`
 - `APIVersion`: `analytics.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/analytics/v1beta1/analyticsinstance.md) (`config/samples/analytics_v1beta1_analyticsinstance.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Analytics (`v2.1.0-alpha`)
 
 <a id="kind-analyticsinstance-spec"></a>
 ### Spec

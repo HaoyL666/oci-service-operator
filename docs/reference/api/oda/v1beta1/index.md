@@ -11,25 +11,27 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `oda.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Oracle Digital Assistant | preview | `v2.1.0-alpha` | [AuthenticationProvider](#kind-authenticationprovider), [Channel](#kind-channel), [DigitalAssistant](#kind-digitalassistant), [ImportedPackage](#kind-importedpackage), [OdaInstance](#kind-odainstance), [OdaInstanceAttachment](#kind-odainstanceattachment), [OdaPrivateEndpoint](#kind-odaprivateendpoint), [OdaPrivateEndpointAttachment](#kind-odaprivateendpointattachment), [OdaPrivateEndpointScanProxy](#kind-odaprivateendpointscanproxy), [Skill](#kind-skill), [SkillParameter](#kind-skillparameter), [Translator](#kind-translator) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [AuthenticationProvider](#kind-authenticationprovider) | Namespaced | [Sample](../../../samples/oda/v1beta1/authenticationprovider.md) | - |
-| [Channel](#kind-channel) | Namespaced | [Sample](../../../samples/oda/v1beta1/channel.md) | - |
-| [DigitalAssistant](#kind-digitalassistant) | Namespaced | [Sample](../../../samples/oda/v1beta1/digitalassistant.md) | - |
-| [ImportedPackage](#kind-importedpackage) | Namespaced | [Sample](../../../samples/oda/v1beta1/importedpackage.md) | - |
-| [OdaInstance](#kind-odainstance) | Namespaced | [Sample](../../../samples/oda/v1beta1/odainstance.md) | - |
-| [OdaInstanceAttachment](#kind-odainstanceattachment) | Namespaced | [Sample](../../../samples/oda/v1beta1/odainstanceattachment.md) | - |
-| [OdaPrivateEndpoint](#kind-odaprivateendpoint) | Namespaced | [Sample](../../../samples/oda/v1beta1/odaprivateendpoint.md) | - |
-| [OdaPrivateEndpointAttachment](#kind-odaprivateendpointattachment) | Namespaced | [Sample](../../../samples/oda/v1beta1/odaprivateendpointattachment.md) | - |
-| [OdaPrivateEndpointScanProxy](#kind-odaprivateendpointscanproxy) | Namespaced | [Sample](../../../samples/oda/v1beta1/odaprivateendpointscanproxy.md) | - |
-| [Skill](#kind-skill) | Namespaced | [Sample](../../../samples/oda/v1beta1/skill.md) | - |
-| [SkillParameter](#kind-skillparameter) | Namespaced | [Sample](../../../samples/oda/v1beta1/skillparameter.md) | - |
-| [Translator](#kind-translator) | Namespaced | [Sample](../../../samples/oda/v1beta1/translator.md) | - |
+| [AuthenticationProvider](#kind-authenticationprovider) | Namespaced | [Sample](../../../samples/oda/v1beta1/authenticationprovider.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [Channel](#kind-channel) | Namespaced | [Sample](../../../samples/oda/v1beta1/channel.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [DigitalAssistant](#kind-digitalassistant) | Namespaced | [Sample](../../../samples/oda/v1beta1/digitalassistant.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [ImportedPackage](#kind-importedpackage) | Namespaced | [Sample](../../../samples/oda/v1beta1/importedpackage.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [OdaInstance](#kind-odainstance) | Namespaced | [Sample](../../../samples/oda/v1beta1/odainstance.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [OdaInstanceAttachment](#kind-odainstanceattachment) | Namespaced | [Sample](../../../samples/oda/v1beta1/odainstanceattachment.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [OdaPrivateEndpoint](#kind-odaprivateendpoint) | Namespaced | [Sample](../../../samples/oda/v1beta1/odaprivateendpoint.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [OdaPrivateEndpointAttachment](#kind-odaprivateendpointattachment) | Namespaced | [Sample](../../../samples/oda/v1beta1/odaprivateendpointattachment.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [OdaPrivateEndpointScanProxy](#kind-odaprivateendpointscanproxy) | Namespaced | [Sample](../../../samples/oda/v1beta1/odaprivateendpointscanproxy.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [Skill](#kind-skill) | Namespaced | [Sample](../../../samples/oda/v1beta1/skill.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [SkillParameter](#kind-skillparameter) | Namespaced | [Sample](../../../samples/oda/v1beta1/skillparameter.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
+| [Translator](#kind-translator) | Namespaced | [Sample](../../../samples/oda/v1beta1/translator.md) | Oracle Digital Assistant (`v2.1.0-alpha`) |
 
 <a id="kind-authenticationprovider"></a>
 ## AuthenticationProvider
@@ -40,7 +42,7 @@ AuthenticationProvider is the Schema for the authenticationproviders API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/authenticationprovider.md) (`config/samples/oda_v1beta1_authenticationprovider.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-authenticationprovider-spec"></a>
 ### Spec
@@ -162,7 +164,7 @@ Channel is the Schema for the channels API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/channel.md) (`config/samples/oda_v1beta1_channel.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-channel-spec"></a>
 ### Spec
@@ -341,7 +343,7 @@ DigitalAssistant is the Schema for the digitalassistants API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/digitalassistant.md) (`config/samples/oda_v1beta1_digitalassistant.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-digitalassistant-spec"></a>
 ### Spec
@@ -461,7 +463,7 @@ ImportedPackage is the Schema for the importedpackages API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/importedpackage.md) (`config/samples/oda_v1beta1_importedpackage.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-importedpackage-spec"></a>
 ### Spec
@@ -564,7 +566,7 @@ OdaInstance is the Schema for the odainstances API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/odainstance.md) (`config/samples/oda_v1beta1_odainstance.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-odainstance-spec"></a>
 ### Spec
@@ -694,7 +696,7 @@ OdaInstanceAttachment is the Schema for the odainstanceattachments API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/odainstanceattachment.md) (`config/samples/oda_v1beta1_odainstanceattachment.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-odainstanceattachment-spec"></a>
 ### Spec
@@ -824,7 +826,7 @@ OdaPrivateEndpoint is the Schema for the odaprivateendpoints API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/odaprivateendpoint.md) (`config/samples/oda_v1beta1_odaprivateendpoint.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-odaprivateendpoint-spec"></a>
 ### Spec
@@ -929,7 +931,7 @@ OdaPrivateEndpointAttachment is the Schema for the odaprivateendpointattachments
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/odaprivateendpointattachment.md) (`config/samples/oda_v1beta1_odaprivateendpointattachment.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-odaprivateendpointattachment-spec"></a>
 ### Spec
@@ -1025,7 +1027,7 @@ OdaPrivateEndpointScanProxy is the Schema for the odaprivateendpointscanproxies 
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/odaprivateendpointscanproxy.md) (`config/samples/oda_v1beta1_odaprivateendpointscanproxy.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-odaprivateendpointscanproxy-spec"></a>
 ### Spec
@@ -1147,7 +1149,7 @@ Skill is the Schema for the skills API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/skill.md) (`config/samples/oda_v1beta1_skill.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-skill-spec"></a>
 ### Spec
@@ -1268,7 +1270,7 @@ SkillParameter is the Schema for the skillparameters API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/skillparameter.md) (`config/samples/oda_v1beta1_skillparameter.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-skillparameter-spec"></a>
 ### Spec
@@ -1366,7 +1368,7 @@ Translator is the Schema for the translators API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `oda.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/oda/v1beta1/translator.md) (`config/samples/oda_v1beta1_translator.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Digital Assistant (`v2.1.0-alpha`)
 
 <a id="kind-translator-spec"></a>
 ### Spec

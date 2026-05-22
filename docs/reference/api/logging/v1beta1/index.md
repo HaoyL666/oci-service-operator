@@ -11,17 +11,19 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `logging.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Logging | preview | `v2.1.0-alpha` | [Log](#kind-log), [LogGroup](#kind-loggroup), [LogSavedSearch](#kind-logsavedsearch), [UnifiedAgentConfiguration](#kind-unifiedagentconfiguration) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Log](#kind-log) | Namespaced | [Sample](../../../samples/logging/v1beta1/log.md) | - |
-| [LogGroup](#kind-loggroup) | Namespaced | [Sample](../../../samples/logging/v1beta1/loggroup.md) | - |
-| [LogSavedSearch](#kind-logsavedsearch) | Namespaced | [Sample](../../../samples/logging/v1beta1/logsavedsearch.md) | - |
-| [UnifiedAgentConfiguration](#kind-unifiedagentconfiguration) | Namespaced | [Sample](../../../samples/logging/v1beta1/unifiedagentconfiguration.md) | - |
+| [Log](#kind-log) | Namespaced | [Sample](../../../samples/logging/v1beta1/log.md) | Logging (`v2.1.0-alpha`) |
+| [LogGroup](#kind-loggroup) | Namespaced | [Sample](../../../samples/logging/v1beta1/loggroup.md) | Logging (`v2.1.0-alpha`) |
+| [LogSavedSearch](#kind-logsavedsearch) | Namespaced | [Sample](../../../samples/logging/v1beta1/logsavedsearch.md) | Logging (`v2.1.0-alpha`) |
+| [UnifiedAgentConfiguration](#kind-unifiedagentconfiguration) | Namespaced | [Sample](../../../samples/logging/v1beta1/unifiedagentconfiguration.md) | Logging (`v2.1.0-alpha`) |
 
 <a id="kind-log"></a>
 ## Log
@@ -32,7 +34,7 @@ Log is the Schema for the logs API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `logging.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/logging/v1beta1/log.md) (`config/samples/logging_v1beta1_log.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Logging (`v2.1.0-alpha`)
 
 <a id="kind-log-spec"></a>
 ### Spec
@@ -221,7 +223,7 @@ LogGroup is the Schema for the loggroups API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `logging.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/logging/v1beta1/loggroup.md) (`config/samples/logging_v1beta1_loggroup.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Logging (`v2.1.0-alpha`)
 
 <a id="kind-loggroup-spec"></a>
 ### Spec
@@ -322,7 +324,7 @@ LogSavedSearch is the Schema for the logsavedsearches API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `logging.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/logging/v1beta1/logsavedsearch.md) (`config/samples/logging_v1beta1_logsavedsearch.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Logging (`v2.1.0-alpha`)
 
 <a id="kind-logsavedsearch-spec"></a>
 ### Spec
@@ -425,7 +427,7 @@ UnifiedAgentConfiguration is the Schema for the unifiedagentconfigurations API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `logging.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/logging/v1beta1/unifiedagentconfiguration.md) (`config/samples/logging_v1beta1_unifiedagentconfiguration.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Logging (`v2.1.0-alpha`)
 
 <a id="kind-unifiedagentconfiguration-spec"></a>
 ### Spec

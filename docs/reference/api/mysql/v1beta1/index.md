@@ -13,14 +13,14 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| MySQL | preview | `v2.0.0-alpha` | [DbSystem](#kind-dbsystem) |
+| MySQL | preview | `v2.1.0-alpha` | [DbSystem](#kind-dbsystem) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [DbSystem](#kind-dbsystem) | Namespaced | [Sample](../../../samples/mysql/v1beta1/dbsystem.md) | MySQL (`v2.0.0-alpha`) |
+| [DbSystem](#kind-dbsystem) | Namespaced | [Sample](../../../samples/mysql/v1beta1/dbsystem.md) | MySQL (`v2.1.0-alpha`) |
 
 <a id="kind-dbsystem"></a>
 ## DbSystem
@@ -31,7 +31,7 @@ Manage OCI MySQL DB Systems.
 - `Scope`: `Namespaced`
 - `APIVersion`: `mysql.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/mysql/v1beta1/dbsystem.md) (`config/samples/mysql_v1beta1_dbsystem.yaml`)
-- `Packages`: MySQL (`v2.0.0-alpha`)
+- `Packages`: MySQL (`v2.1.0-alpha`)
 
 <a id="kind-dbsystem-spec"></a>
 ### Spec

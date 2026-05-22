@@ -8,30 +8,25 @@ Manage OCI Digital Assistant resources from Kubernetes.
 | --- | --- |
 | Package | `oda` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-oda-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-oda:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-oda-bundle:<version>` |
 | Setup Guide | [Open guide](../../../installation.md) |
 
-## Notes
-
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
-
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `oda/AuthenticationProvider` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/authenticationprovider.md) | [Reference](../../api/oda/v1beta1/index.md#kind-authenticationprovider) |
-| `oda/Channel` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/channel.md) | [Reference](../../api/oda/v1beta1/index.md#kind-channel) |
-| `oda/DigitalAssistant` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/digitalassistant.md) | [Reference](../../api/oda/v1beta1/index.md#kind-digitalassistant) |
-| `oda/ImportedPackage` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/importedpackage.md) | [Reference](../../api/oda/v1beta1/index.md#kind-importedpackage) |
-| `oda/OdaInstance` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/odainstance.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odainstance) |
-| `oda/OdaInstanceAttachment` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/odainstanceattachment.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odainstanceattachment) |
-| `oda/OdaPrivateEndpoint` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/odaprivateendpoint.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odaprivateendpoint) |
-| `oda/OdaPrivateEndpointAttachment` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/odaprivateendpointattachment.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odaprivateendpointattachment) |
-| `oda/OdaPrivateEndpointScanProxy` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/odaprivateendpointscanproxy.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odaprivateendpointscanproxy) |
-| `oda/Skill` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/skill.md) | [Reference](../../api/oda/v1beta1/index.md#kind-skill) |
-| `oda/SkillParameter` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/skillparameter.md) | [Reference](../../api/oda/v1beta1/index.md#kind-skillparameter) |
-| `oda/Translator` | `oda.oracle.com/v1beta1` | — | — | [Sample](../../samples/oda/v1beta1/translator.md) | [Reference](../../api/oda/v1beta1/index.md#kind-translator) |
+| `oda/AuthenticationProvider` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/authenticationprovider.md) | [Sample](../../samples/oda/v1beta1/authenticationprovider.md) | [Reference](../../api/oda/v1beta1/index.md#kind-authenticationprovider) |
+| `oda/Channel` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/channel.md) | [Sample](../../samples/oda/v1beta1/channel.md) | [Reference](../../api/oda/v1beta1/index.md#kind-channel) |
+| `oda/DigitalAssistant` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/digitalassistant.md) | [Sample](../../samples/oda/v1beta1/digitalassistant.md) | [Reference](../../api/oda/v1beta1/index.md#kind-digitalassistant) |
+| `oda/ImportedPackage` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/importedpackage.md) | [Sample](../../samples/oda/v1beta1/importedpackage.md) | [Reference](../../api/oda/v1beta1/index.md#kind-importedpackage) |
+| `oda/OdaInstance` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/odainstance.md) | [Sample](../../samples/oda/v1beta1/odainstance.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odainstance) |
+| `oda/OdaInstanceAttachment` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/odainstanceattachment.md) | [Sample](../../samples/oda/v1beta1/odainstanceattachment.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odainstanceattachment) |
+| `oda/OdaPrivateEndpoint` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/odaprivateendpoint.md) | [Sample](../../samples/oda/v1beta1/odaprivateendpoint.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odaprivateendpoint) |
+| `oda/OdaPrivateEndpointAttachment` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/odaprivateendpointattachment.md) | [Sample](../../samples/oda/v1beta1/odaprivateendpointattachment.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odaprivateendpointattachment) |
+| `oda/OdaPrivateEndpointScanProxy` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/odaprivateendpointscanproxy.md) | [Sample](../../samples/oda/v1beta1/odaprivateendpointscanproxy.md) | [Reference](../../api/oda/v1beta1/index.md#kind-odaprivateendpointscanproxy) |
+| `oda/Skill` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/skill.md) | [Sample](../../samples/oda/v1beta1/skill.md) | [Reference](../../api/oda/v1beta1/index.md#kind-skill) |
+| `oda/SkillParameter` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/skillparameter.md) | [Sample](../../samples/oda/v1beta1/skillparameter.md) | [Reference](../../api/oda/v1beta1/index.md#kind-skillparameter) |
+| `oda/Translator` | `oda.oracle.com/v1beta1` | — | [Guide](../../../guides/oda/translator.md) | [Sample](../../samples/oda/v1beta1/translator.md) | [Reference](../../api/oda/v1beta1/index.md#kind-translator) |

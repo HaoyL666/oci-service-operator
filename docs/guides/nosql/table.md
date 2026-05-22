@@ -13,7 +13,7 @@ Manage OCI NoSQL tables. This page is generated from checked-in package metadata
 | API Version | `nosql.oracle.com/v1beta1` |
 | Package | [NoSQL](../../reference/packages/nosql/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-nosql-system` |
 
 ## Quick Links

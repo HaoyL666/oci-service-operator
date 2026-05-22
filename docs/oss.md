@@ -15,7 +15,7 @@ The current supported surface uses `apiVersion: streaming.oracle.com/v1beta1` an
 | API Version | `streaming.oracle.com/v1beta1` |
 | Package | [Streaming](reference/packages/streaming/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-streaming-system` |
 
 ## Quick Links

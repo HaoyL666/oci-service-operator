@@ -11,15 +11,17 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `containerengine.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Container Engine for Kubernetes | preview | `v2.1.0-alpha` | [Cluster](#kind-cluster), [NodePool](#kind-nodepool) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Cluster](#kind-cluster) | Namespaced | [Sample](../../../samples/containerengine/v1beta1/cluster.md) | - |
-| [NodePool](#kind-nodepool) | Namespaced | [Sample](../../../samples/containerengine/v1beta1/nodepool.md) | - |
+| [Cluster](#kind-cluster) | Namespaced | [Sample](../../../samples/containerengine/v1beta1/cluster.md) | Container Engine for Kubernetes (`v2.1.0-alpha`) |
+| [NodePool](#kind-nodepool) | Namespaced | [Sample](../../../samples/containerengine/v1beta1/nodepool.md) | Container Engine for Kubernetes (`v2.1.0-alpha`) |
 
 <a id="kind-cluster"></a>
 ## Cluster
@@ -30,7 +32,7 @@ Manage OCI Container Engine for Kubernetes clusters.
 - `Scope`: `Namespaced`
 - `APIVersion`: `containerengine.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/containerengine/v1beta1/cluster.md) (`config/samples/containerengine_v1beta1_cluster.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Container Engine for Kubernetes (`v2.1.0-alpha`)
 
 <a id="kind-cluster-spec"></a>
 ### Spec
@@ -527,7 +529,7 @@ Manage OCI Container Engine for Kubernetes node pools.
 - `Scope`: `Namespaced`
 - `APIVersion`: `containerengine.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/containerengine/v1beta1/nodepool.md) (`config/samples/containerengine_v1beta1_nodepool.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Container Engine for Kubernetes (`v2.1.0-alpha`)
 
 <a id="kind-nodepool-spec"></a>
 ### Spec

@@ -4,6 +4,58 @@
 
 This page is generated from checked-in package metadata, release manifests, and sample inventory. It is the canonical customer-facing catalog for released packages, resource kinds, samples, and API entry points.
 
+## AI Document
+
+Manage OCI AI Document projects from Kubernetes with an initial controller-backed Project rollout.
+
+Package page: [AI Document](packages/aidocument/index.md)
+
+Notes:
+- Current package scope is intentionally limited to Project while the remaining AI Document resource families stay unpublished.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [AI Document](packages/aidocument/index.md) | `aidocument/Project` | `aidocument.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/aidocument/project.md) | [Sample](samples/aidocument/v1beta1/project.md) | [Reference](api/aidocument/v1beta1/index.md#kind-project) |
+
+## AI Language
+
+Manage OCI AI Language projects from Kubernetes with an initial controller-backed Project rollout.
+
+Package page: [AI Language](packages/ailanguage/index.md)
+
+Notes:
+- Current package scope is intentionally limited to Project while the remaining AI Language resource families stay unpublished.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [AI Language](packages/ailanguage/index.md) | `ailanguage/Project` | `ailanguage.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/ailanguage/project.md) | [Sample](samples/ailanguage/v1beta1/project.md) | [Reference](api/ailanguage/v1beta1/index.md#kind-project) |
+
+## AI Vision
+
+Manage OCI AI Vision projects from Kubernetes with an initial controller-backed Project rollout.
+
+Package page: [AI Vision](packages/aivision/index.md)
+
+Notes:
+- Current package scope is intentionally limited to Project while the remaining AI Vision resource families stay unpublished.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [AI Vision](packages/aivision/index.md) | `aivision/Project` | `aivision.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/aivision/project.md) | [Sample](samples/aivision/v1beta1/project.md) | [Reference](api/aivision/v1beta1/index.md#kind-project) |
+
+## Analytics
+
+Manage OCI Analytics instances from Kubernetes with a reviewed controller-backed runtime.
+
+Package page: [Analytics](packages/analytics/index.md)
+
+Notes:
+- Analytics ships a reviewed controller-backed runtime for `AnalyticsInstance` in the current checked-in package surface.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Analytics](packages/analytics/index.md) | `analytics/AnalyticsInstance` | `analytics.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/analytics/analyticsinstance.md) | [Sample](samples/analytics/v1beta1/analyticsinstance.md) | [Reference](api/analytics/v1beta1/index.md#kind-analyticsinstance) |
+
 ## API Gateway
 
 Manage OCI API Gateway gateways and deployments from Kubernetes.
@@ -15,8 +67,35 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [API Gateway](packages/apigateway/index.md) | `apigateway/ApiGateway` | `apigateway.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/apigateway/apigateway.md) | — | [Reference](api/apigateway/v1beta1/index.md#kind-apigateway) |
-| [API Gateway](packages/apigateway/index.md) | `apigateway/ApiGatewayDeployment` | `apigateway.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/apigateway/apigatewaydeployment.md) | — | [Reference](api/apigateway/v1beta1/index.md#kind-apigatewaydeployment) |
+| [API Gateway](packages/apigateway/index.md) | `apigateway/ApiGateway` | `apigateway.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/apigateway/apigateway.md) | — | [Reference](api/apigateway/v1beta1/index.md#kind-apigateway) |
+| [API Gateway](packages/apigateway/index.md) | `apigateway/ApiGatewayDeployment` | `apigateway.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/apigateway/apigatewaydeployment.md) | — | [Reference](api/apigateway/v1beta1/index.md#kind-apigatewaydeployment) |
+
+## Big Data Service
+
+Manage OCI Big Data Service instances from Kubernetes with an initial controller-backed BdsInstance rollout.
+
+Package page: [Big Data Service](packages/bds/index.md)
+
+Notes:
+- Current package scope is intentionally limited to BdsInstance while the remaining Big Data Service resource families stay unpublished.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Big Data Service](packages/bds/index.md) | `bds/BdsInstance` | `bds.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/bds/bdsinstance.md) | [Sample](samples/bds/v1beta1/bdsinstance.md) | [Reference](api/bds/v1beta1/index.md#kind-bdsinstance) |
+
+## Container Engine for Kubernetes
+
+Manage OCI Container Engine for Kubernetes clusters and node pools from Kubernetes.
+
+Package page: [Container Engine for Kubernetes](packages/containerengine/index.md)
+
+Notes:
+- Current package scope includes `Cluster` and `NodePool`.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Container Engine for Kubernetes](packages/containerengine/index.md) | `containerengine/Cluster` | `containerengine.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/containerengine/cluster.md) | [Sample](samples/containerengine/v1beta1/cluster.md) | [Reference](api/containerengine/v1beta1/index.md#kind-cluster) |
+| [Container Engine for Kubernetes](packages/containerengine/index.md) | `containerengine/NodePool` | `containerengine.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/containerengine/nodepool.md) | [Sample](samples/containerengine/v1beta1/nodepool.md) | [Reference](api/containerengine/v1beta1/index.md#kind-nodepool) |
 
 ## Container Instances
 
@@ -26,7 +105,7 @@ Package page: [Container Instances](packages/containerinstances/index.md)
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Container Instances](packages/containerinstances/index.md) | `containerinstances/ContainerInstance` | `containerinstances.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/containerinstances/containerinstance.md) | [Sample](samples/containerinstances/v1beta1/containerinstance.md) | [Reference](api/containerinstances/v1beta1/index.md#kind-containerinstance) |
+| [Container Instances](packages/containerinstances/index.md) | `containerinstances/ContainerInstance` | `containerinstances.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/containerinstances/containerinstance.md) | [Sample](samples/containerinstances/v1beta1/containerinstance.md) | [Reference](api/containerinstances/v1beta1/index.md#kind-containerinstance) |
 
 ## Core Compute
 
@@ -53,15 +132,15 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Core Networking](packages/core-network/index.md) | `core/Drg` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/drg.md) | [Sample](samples/core/v1beta1/drg.md) | [Reference](api/core/v1beta1/index.md#kind-drg) |
-| [Core Networking](packages/core-network/index.md) | `core/InternetGateway` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/internetgateway.md) | [Sample](samples/core/v1beta1/internetgateway.md) | [Reference](api/core/v1beta1/index.md#kind-internetgateway) |
-| [Core Networking](packages/core-network/index.md) | `core/NatGateway` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/natgateway.md) | [Sample](samples/core/v1beta1/natgateway.md) | [Reference](api/core/v1beta1/index.md#kind-natgateway) |
-| [Core Networking](packages/core-network/index.md) | `core/NetworkSecurityGroup` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/networksecuritygroup.md) | [Sample](samples/core/v1beta1/networksecuritygroup.md) | [Reference](api/core/v1beta1/index.md#kind-networksecuritygroup) |
-| [Core Networking](packages/core-network/index.md) | `core/RouteTable` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/routetable.md) | [Sample](samples/core/v1beta1/routetable.md) | [Reference](api/core/v1beta1/index.md#kind-routetable) |
-| [Core Networking](packages/core-network/index.md) | `core/SecurityList` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/securitylist.md) | [Sample](samples/core/v1beta1/securitylist.md) | [Reference](api/core/v1beta1/index.md#kind-securitylist) |
-| [Core Networking](packages/core-network/index.md) | `core/ServiceGateway` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/servicegateway.md) | [Sample](samples/core/v1beta1/servicegateway.md) | [Reference](api/core/v1beta1/index.md#kind-servicegateway) |
-| [Core Networking](packages/core-network/index.md) | `core/Subnet` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/subnet.md) | [Sample](samples/core/v1beta1/subnet.md) | [Reference](api/core/v1beta1/index.md#kind-subnet) |
-| [Core Networking](packages/core-network/index.md) | `core/Vcn` | `core.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/core/vcn.md) | [Sample](samples/core/v1beta1/vcn.md) | [Reference](api/core/v1beta1/index.md#kind-vcn) |
+| [Core Networking](packages/core-network/index.md) | `core/Drg` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/drg.md) | [Sample](samples/core/v1beta1/drg.md) | [Reference](api/core/v1beta1/index.md#kind-drg) |
+| [Core Networking](packages/core-network/index.md) | `core/InternetGateway` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/internetgateway.md) | [Sample](samples/core/v1beta1/internetgateway.md) | [Reference](api/core/v1beta1/index.md#kind-internetgateway) |
+| [Core Networking](packages/core-network/index.md) | `core/NatGateway` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/natgateway.md) | [Sample](samples/core/v1beta1/natgateway.md) | [Reference](api/core/v1beta1/index.md#kind-natgateway) |
+| [Core Networking](packages/core-network/index.md) | `core/NetworkSecurityGroup` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/networksecuritygroup.md) | [Sample](samples/core/v1beta1/networksecuritygroup.md) | [Reference](api/core/v1beta1/index.md#kind-networksecuritygroup) |
+| [Core Networking](packages/core-network/index.md) | `core/RouteTable` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/routetable.md) | [Sample](samples/core/v1beta1/routetable.md) | [Reference](api/core/v1beta1/index.md#kind-routetable) |
+| [Core Networking](packages/core-network/index.md) | `core/SecurityList` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/securitylist.md) | [Sample](samples/core/v1beta1/securitylist.md) | [Reference](api/core/v1beta1/index.md#kind-securitylist) |
+| [Core Networking](packages/core-network/index.md) | `core/ServiceGateway` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/servicegateway.md) | [Sample](samples/core/v1beta1/servicegateway.md) | [Reference](api/core/v1beta1/index.md#kind-servicegateway) |
+| [Core Networking](packages/core-network/index.md) | `core/Subnet` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/subnet.md) | [Sample](samples/core/v1beta1/subnet.md) | [Reference](api/core/v1beta1/index.md#kind-subnet) |
+| [Core Networking](packages/core-network/index.md) | `core/Vcn` | `core.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/core/vcn.md) | [Sample](samples/core/v1beta1/vcn.md) | [Reference](api/core/v1beta1/index.md#kind-vcn) |
 
 ## Autonomous Database
 
@@ -74,7 +153,20 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Autonomous Database](packages/database/index.md) | `database/AutonomousDatabase` | `database.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../adb.md) | [Sample](samples/database/v1beta1/autonomousdatabase.md) | [Reference](api/database/v1beta1/index.md#kind-autonomousdatabase) |
+| [Autonomous Database](packages/database/index.md) | `database/AutonomousDatabase` | `database.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../adb.md) | [Sample](samples/database/v1beta1/autonomousdatabase.md) | [Reference](api/database/v1beta1/index.md#kind-autonomousdatabase) |
+
+## Database Tools
+
+Manage OCI Database Tools connections from Kubernetes with an initial controller-backed DatabaseToolsConnection rollout.
+
+Package page: [Database Tools](packages/databasetools/index.md)
+
+Notes:
+- Current package scope is intentionally limited to DatabaseToolsConnection while the remaining Database Tools resource families stay unpublished.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Database Tools](packages/databasetools/index.md) | `databasetools/DatabaseToolsConnection` | `databasetools.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/databasetools/databasetoolsconnection.md) | [Sample](samples/databasetools/v1beta1/databasetoolsconnection.md) | [Reference](api/databasetools/v1beta1/index.md#kind-databasetoolsconnection) |
 
 ## Data Flow
 
@@ -84,7 +176,33 @@ Package page: [Data Flow](packages/dataflow/index.md)
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Data Flow](packages/dataflow/index.md) | `dataflow/Application` | `dataflow.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/dataflow/application.md) | [Sample](samples/dataflow/v1beta1/application.md) | [Reference](api/dataflow/v1beta1/index.md#kind-application) |
+| [Data Flow](packages/dataflow/index.md) | `dataflow/Application` | `dataflow.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/dataflow/application.md) | [Sample](samples/dataflow/v1beta1/application.md) | [Reference](api/dataflow/v1beta1/index.md#kind-application) |
+
+## Data Science
+
+Manage OCI Data Science projects from Kubernetes with an initial controller-backed Project rollout.
+
+Package page: [Data Science](packages/datascience/index.md)
+
+Notes:
+- Current package scope is intentionally limited to Project while the remaining Data Science resource families stay unpublished.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Data Science](packages/datascience/index.md) | `datascience/Project` | `datascience.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/datascience/project.md) | [Sample](samples/datascience/v1beta1/project.md) | [Reference](api/datascience/v1beta1/index.md#kind-project) |
+
+## Email
+
+Manage OCI Email Delivery resources from Kubernetes.
+
+Package page: [Email](packages/email/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Email](packages/email/index.md) | `email/Dkim` | `email.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/email/dkim.md) | [Sample](samples/email/v1beta1/dkim.md) | [Reference](api/email/v1beta1/index.md#kind-dkim) |
+| [Email](packages/email/index.md) | `email/EmailDomain` | `email.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/email/emaildomain.md) | [Sample](samples/email/v1beta1/emaildomain.md) | [Reference](api/email/v1beta1/index.md#kind-emaildomain) |
+| [Email](packages/email/index.md) | `email/Sender` | `email.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/email/sender.md) | [Sample](samples/email/v1beta1/sender.md) | [Reference](api/email/v1beta1/index.md#kind-sender) |
+| [Email](packages/email/index.md) | `email/Suppression` | `email.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/email/suppression.md) | [Sample](samples/email/v1beta1/suppression.md) | [Reference](api/email/v1beta1/index.md#kind-suppression) |
 
 ## Functions
 
@@ -94,8 +212,20 @@ Package page: [Functions](packages/functions/index.md)
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Functions](packages/functions/index.md) | `functions/Application` | `functions.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/functions/application.md) | [Sample](samples/functions/v1beta1/application.md) | [Reference](api/functions/v1beta1/index.md#kind-application) |
-| [Functions](packages/functions/index.md) | `functions/Function` | `functions.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/functions/function.md) | [Sample](samples/functions/v1beta1/function.md) | [Reference](api/functions/v1beta1/index.md#kind-function) |
+| [Functions](packages/functions/index.md) | `functions/Application` | `functions.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/functions/application.md) | [Sample](samples/functions/v1beta1/application.md) | [Reference](api/functions/v1beta1/index.md#kind-application) |
+| [Functions](packages/functions/index.md) | `functions/Function` | `functions.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/functions/function.md) | [Sample](samples/functions/v1beta1/function.md) | [Reference](api/functions/v1beta1/index.md#kind-function) |
+
+## Generative AI
+
+Manage OCI Generative AI resources from Kubernetes.
+
+Package page: [Generative AI](packages/generativeai/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Generative AI](packages/generativeai/index.md) | `generativeai/DedicatedAiCluster` | `generativeai.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/generativeai/dedicatedaicluster.md) | [Sample](samples/generativeai/v1beta1/dedicatedaicluster.md) | [Reference](api/generativeai/v1beta1/index.md#kind-dedicatedaicluster) |
+| [Generative AI](packages/generativeai/index.md) | `generativeai/Endpoint` | `generativeai.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/generativeai/endpoint.md) | [Sample](samples/generativeai/v1beta1/endpoint.md) | [Reference](api/generativeai/v1beta1/index.md#kind-endpoint) |
+| [Generative AI](packages/generativeai/index.md) | `generativeai/Model` | `generativeai.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/generativeai/model.md) | [Sample](samples/generativeai/v1beta1/model.md) | [Reference](api/generativeai/v1beta1/index.md#kind-model) |
 
 ## Identity
 
@@ -108,7 +238,75 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Identity](packages/identity/index.md) | `identity/Compartment` | `identity.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/identity/compartment.md) | [Sample](samples/identity/v1beta1/compartment.md) | [Reference](api/identity/v1beta1/index.md#kind-compartment) |
+| [Identity](packages/identity/index.md) | `identity/Compartment` | `identity.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/identity/compartment.md) | [Sample](samples/identity/v1beta1/compartment.md) | [Reference](api/identity/v1beta1/index.md#kind-compartment) |
+
+## Key Management
+
+Manage OCI Vault resources from Kubernetes.
+
+Package page: [Key Management](packages/keymanagement/index.md)
+
+Notes:
+- Current package scope is intentionally limited to Vault while the remaining keymanagement kinds stay out of the generatedruntime rollout.
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Key Management](packages/keymanagement/index.md) | `keymanagement/EkmsPrivateEndpoint` | `keymanagement.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/keymanagement/ekmsprivateendpoint.md) | [Sample](samples/keymanagement/v1beta1/ekmsprivateendpoint.md) | [Reference](api/keymanagement/v1beta1/index.md#kind-ekmsprivateendpoint) |
+| [Key Management](packages/keymanagement/index.md) | `keymanagement/Vault` | `keymanagement.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/keymanagement/vault.md) | [Sample](samples/keymanagement/v1beta1/vault.md) | [Reference](api/keymanagement/v1beta1/index.md#kind-vault) |
+
+## Load Balancer
+
+Manage OCI Load Balancer resources from Kubernetes.
+
+Package page: [Load Balancer](packages/loadbalancer/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/Backend` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/backend.md) | [Sample](samples/loadbalancer/v1beta1/backend.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-backend) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/BackendSet` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/backendset.md) | [Sample](samples/loadbalancer/v1beta1/backendset.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-backendset) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/Certificate` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/certificate.md) | [Sample](samples/loadbalancer/v1beta1/certificate.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-certificate) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/Hostname` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/hostname.md) | [Sample](samples/loadbalancer/v1beta1/hostname.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-hostname) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/Listener` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/listener.md) | [Sample](samples/loadbalancer/v1beta1/listener.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-listener) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/LoadBalancer` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/loadbalancer.md) | [Sample](samples/loadbalancer/v1beta1/loadbalancer.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-loadbalancer) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/PathRouteSet` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/pathrouteset.md) | [Sample](samples/loadbalancer/v1beta1/pathrouteset.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-pathrouteset) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/RoutingPolicy` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/routingpolicy.md) | [Sample](samples/loadbalancer/v1beta1/routingpolicy.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-routingpolicy) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/RuleSet` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/ruleset.md) | [Sample](samples/loadbalancer/v1beta1/ruleset.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-ruleset) |
+| [Load Balancer](packages/loadbalancer/index.md) | `loadbalancer/SSLCipherSuite` | `loadbalancer.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/loadbalancer/sslciphersuite.md) | [Sample](samples/loadbalancer/v1beta1/sslciphersuite.md) | [Reference](api/loadbalancer/v1beta1/index.md#kind-sslciphersuite) |
+
+## Logging
+
+Manage OCI Logging resources from Kubernetes.
+
+Package page: [Logging](packages/logging/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Logging](packages/logging/index.md) | `logging/Log` | `logging.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/logging/log.md) | [Sample](samples/logging/v1beta1/log.md) | [Reference](api/logging/v1beta1/index.md#kind-log) |
+| [Logging](packages/logging/index.md) | `logging/LogGroup` | `logging.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/logging/loggroup.md) | [Sample](samples/logging/v1beta1/loggroup.md) | [Reference](api/logging/v1beta1/index.md#kind-loggroup) |
+| [Logging](packages/logging/index.md) | `logging/LogSavedSearch` | `logging.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/logging/logsavedsearch.md) | [Sample](samples/logging/v1beta1/logsavedsearch.md) | [Reference](api/logging/v1beta1/index.md#kind-logsavedsearch) |
+| [Logging](packages/logging/index.md) | `logging/UnifiedAgentConfiguration` | `logging.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/logging/unifiedagentconfiguration.md) | [Sample](samples/logging/v1beta1/unifiedagentconfiguration.md) | [Reference](api/logging/v1beta1/index.md#kind-unifiedagentconfiguration) |
+
+## Marketplace
+
+Manage OCI Marketplace resources from Kubernetes.
+
+Package page: [Marketplace](packages/marketplace/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Marketplace](packages/marketplace/index.md) | `marketplace/AcceptedAgreement` | `marketplace.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/marketplace/acceptedagreement.md) | [Sample](samples/marketplace/v1beta1/acceptedagreement.md) | [Reference](api/marketplace/v1beta1/index.md#kind-acceptedagreement) |
+| [Marketplace](packages/marketplace/index.md) | `marketplace/Publication` | `marketplace.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/marketplace/publication.md) | [Sample](samples/marketplace/v1beta1/publication.md) | [Reference](api/marketplace/v1beta1/index.md#kind-publication) |
+
+## Monitoring
+
+Manage OCI Monitoring resources from Kubernetes.
+
+Package page: [Monitoring](packages/monitoring/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Monitoring](packages/monitoring/index.md) | `monitoring/Alarm` | `monitoring.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/monitoring/alarm.md) | [Sample](samples/monitoring/v1beta1/alarm.md) | [Reference](api/monitoring/v1beta1/index.md#kind-alarm) |
+| [Monitoring](packages/monitoring/index.md) | `monitoring/AlarmSuppression` | `monitoring.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/monitoring/alarmsuppression.md) | [Sample](samples/monitoring/v1beta1/alarmsuppression.md) | [Reference](api/monitoring/v1beta1/index.md#kind-alarmsuppression) |
 
 ## MySQL
 
@@ -118,7 +316,7 @@ Package page: [MySQL](packages/mysql/index.md)
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [MySQL](packages/mysql/index.md) | `mysql/DbSystem` | `mysql.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../mysql.md) | [Sample](samples/mysql/v1beta1/dbsystem.md) | [Reference](api/mysql/v1beta1/index.md#kind-dbsystem) |
+| [MySQL](packages/mysql/index.md) | `mysql/DbSystem` | `mysql.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../mysql.md) | [Sample](samples/mysql/v1beta1/dbsystem.md) | [Reference](api/mysql/v1beta1/index.md#kind-dbsystem) |
 
 ## NoSQL
 
@@ -132,7 +330,7 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [NoSQL](packages/nosql/index.md) | `nosql/Table` | `nosql.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/nosql/table.md) | [Sample](samples/nosql/v1beta1/table.md) | [Reference](api/nosql/v1beta1/index.md#kind-table) |
+| [NoSQL](packages/nosql/index.md) | `nosql/Table` | `nosql.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/nosql/table.md) | [Sample](samples/nosql/v1beta1/table.md) | [Reference](api/nosql/v1beta1/index.md#kind-table) |
 
 ## Object Storage
 
@@ -145,7 +343,40 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Object Storage](packages/objectstorage/index.md) | `objectstorage/Bucket` | `objectstorage.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/objectstorage/bucket.md) | [Sample](samples/objectstorage/v1beta1/bucket.md) | [Reference](api/objectstorage/v1beta1/index.md#kind-bucket) |
+| [Object Storage](packages/objectstorage/index.md) | `objectstorage/Bucket` | `objectstorage.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/objectstorage/bucket.md) | [Sample](samples/objectstorage/v1beta1/bucket.md) | [Reference](api/objectstorage/v1beta1/index.md#kind-bucket) |
+
+## Oracle Cloud VMware Solution
+
+Manage OCI Oracle Cloud VMware Solution resources from Kubernetes.
+
+Package page: [Oracle Cloud VMware Solution](packages/ocvp/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Oracle Cloud VMware Solution](packages/ocvp/index.md) | `ocvp/Cluster` | `ocvp.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/ocvp/cluster.md) | [Sample](samples/ocvp/v1beta1/cluster.md) | [Reference](api/ocvp/v1beta1/index.md#kind-cluster) |
+| [Oracle Cloud VMware Solution](packages/ocvp/index.md) | `ocvp/EsxiHost` | `ocvp.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/ocvp/esxihost.md) | [Sample](samples/ocvp/v1beta1/esxihost.md) | [Reference](api/ocvp/v1beta1/index.md#kind-esxihost) |
+| [Oracle Cloud VMware Solution](packages/ocvp/index.md) | `ocvp/Sddc` | `ocvp.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/ocvp/sddc.md) | [Sample](samples/ocvp/v1beta1/sddc.md) | [Reference](api/ocvp/v1beta1/index.md#kind-sddc) |
+
+## Oracle Digital Assistant
+
+Manage OCI Digital Assistant resources from Kubernetes.
+
+Package page: [Oracle Digital Assistant](packages/oda/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/AuthenticationProvider` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/authenticationprovider.md) | [Sample](samples/oda/v1beta1/authenticationprovider.md) | [Reference](api/oda/v1beta1/index.md#kind-authenticationprovider) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/Channel` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/channel.md) | [Sample](samples/oda/v1beta1/channel.md) | [Reference](api/oda/v1beta1/index.md#kind-channel) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/DigitalAssistant` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/digitalassistant.md) | [Sample](samples/oda/v1beta1/digitalassistant.md) | [Reference](api/oda/v1beta1/index.md#kind-digitalassistant) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/ImportedPackage` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/importedpackage.md) | [Sample](samples/oda/v1beta1/importedpackage.md) | [Reference](api/oda/v1beta1/index.md#kind-importedpackage) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/OdaInstance` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/odainstance.md) | [Sample](samples/oda/v1beta1/odainstance.md) | [Reference](api/oda/v1beta1/index.md#kind-odainstance) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/OdaInstanceAttachment` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/odainstanceattachment.md) | [Sample](samples/oda/v1beta1/odainstanceattachment.md) | [Reference](api/oda/v1beta1/index.md#kind-odainstanceattachment) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/OdaPrivateEndpoint` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/odaprivateendpoint.md) | [Sample](samples/oda/v1beta1/odaprivateendpoint.md) | [Reference](api/oda/v1beta1/index.md#kind-odaprivateendpoint) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/OdaPrivateEndpointAttachment` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/odaprivateendpointattachment.md) | [Sample](samples/oda/v1beta1/odaprivateendpointattachment.md) | [Reference](api/oda/v1beta1/index.md#kind-odaprivateendpointattachment) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/OdaPrivateEndpointScanProxy` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/odaprivateendpointscanproxy.md) | [Sample](samples/oda/v1beta1/odaprivateendpointscanproxy.md) | [Reference](api/oda/v1beta1/index.md#kind-odaprivateendpointscanproxy) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/Skill` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/skill.md) | [Sample](samples/oda/v1beta1/skill.md) | [Reference](api/oda/v1beta1/index.md#kind-skill) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/SkillParameter` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/skillparameter.md) | [Sample](samples/oda/v1beta1/skillparameter.md) | [Reference](api/oda/v1beta1/index.md#kind-skillparameter) |
+| [Oracle Digital Assistant](packages/oda/index.md) | `oda/Translator` | `oda.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/oda/translator.md) | [Sample](samples/oda/v1beta1/translator.md) | [Reference](api/oda/v1beta1/index.md#kind-translator) |
 
 ## OpenSearch
 
@@ -158,7 +389,7 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [OpenSearch](packages/opensearch/index.md) | `opensearch/OpensearchCluster` | `opensearch.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/opensearch/opensearchcluster.md) | [Sample](samples/opensearch/v1beta1/opensearchcluster.md) | [Reference](api/opensearch/v1beta1/index.md#kind-opensearchcluster) |
+| [OpenSearch](packages/opensearch/index.md) | `opensearch/OpensearchCluster` | `opensearch.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/opensearch/opensearchcluster.md) | [Sample](samples/opensearch/v1beta1/opensearchcluster.md) | [Reference](api/opensearch/v1beta1/index.md#kind-opensearchcluster) |
 
 ## Private Service Access
 
@@ -183,7 +414,7 @@ Package page: [PostgreSQL](packages/psql/index.md)
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [PostgreSQL](packages/psql/index.md) | `psql/DbSystem` | `psql.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/psql/dbsystem.md) | [Sample](samples/psql/v1beta1/dbsystem.md) | [Reference](api/psql/v1beta1/index.md#kind-dbsystem) |
+| [PostgreSQL](packages/psql/index.md) | `psql/DbSystem` | `psql.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/psql/dbsystem.md) | [Sample](samples/psql/v1beta1/dbsystem.md) | [Reference](api/psql/v1beta1/index.md#kind-dbsystem) |
 
 ## Queue
 
@@ -197,7 +428,7 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Queue](packages/queue/index.md) | `queue/Queue` | `queue.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../queue.md) | [Sample](samples/queue/v1beta1/queue.md) | [Reference](api/queue/v1beta1/index.md#kind-queue) |
+| [Queue](packages/queue/index.md) | `queue/Queue` | `queue.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../queue.md) | [Sample](samples/queue/v1beta1/queue.md) | [Reference](api/queue/v1beta1/index.md#kind-queue) |
 
 ## Redis
 
@@ -211,7 +442,7 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Redis](packages/redis/index.md) | `redis/RedisCluster` | `redis.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../guides/redis/rediscluster.md) | [Sample](samples/redis/v1beta1/rediscluster.md) | [Reference](api/redis/v1beta1/index.md#kind-rediscluster) |
+| [Redis](packages/redis/index.md) | `redis/RedisCluster` | `redis.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/redis/rediscluster.md) | [Sample](samples/redis/v1beta1/rediscluster.md) | [Reference](api/redis/v1beta1/index.md#kind-rediscluster) |
 
 ## Streaming
 
@@ -224,7 +455,20 @@ Notes:
 
 | Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Streaming](packages/streaming/index.md) | `streaming/Stream` | `streaming.oracle.com/v1beta1` | Preview | `v2.0.0-alpha` | [Guide](../oss.md) | [Sample](samples/streaming/v1beta1/stream.md) | [Reference](api/streaming/v1beta1/index.md#kind-stream) |
+| [Streaming](packages/streaming/index.md) | `streaming/Stream` | `streaming.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../oss.md) | [Sample](samples/streaming/v1beta1/stream.md) | [Reference](api/streaming/v1beta1/index.md#kind-stream) |
+
+## Usage API
+
+Manage OCI Usage API resources from Kubernetes.
+
+Package page: [Usage API](packages/usageapi/index.md)
+
+| Package | Group/Kind | API Version | Support Status | Latest Released Version | Guide | Sample | API Spec |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [Usage API](packages/usageapi/index.md) | `usageapi/CustomTable` | `usageapi.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/usageapi/customtable.md) | [Sample](samples/usageapi/v1beta1/customtable.md) | [Reference](api/usageapi/v1beta1/index.md#kind-customtable) |
+| [Usage API](packages/usageapi/index.md) | `usageapi/Query` | `usageapi.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/usageapi/query.md) | [Sample](samples/usageapi/v1beta1/query.md) | [Reference](api/usageapi/v1beta1/index.md#kind-query) |
+| [Usage API](packages/usageapi/index.md) | `usageapi/Schedule` | `usageapi.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/usageapi/schedule.md) | [Sample](samples/usageapi/v1beta1/schedule.md) | [Reference](api/usageapi/v1beta1/index.md#kind-schedule) |
+| [Usage API](packages/usageapi/index.md) | `usageapi/UsageCarbonEmissionsQuery` | `usageapi.oracle.com/v1beta1` | Preview | `v2.1.0-alpha` | [Guide](../guides/usageapi/usagecarbonemissionsquery.md) | [Sample](samples/usageapi/v1beta1/usagecarbonemissionsquery.md) | [Reference](api/usageapi/v1beta1/index.md#kind-usagecarbonemissionsquery) |
 
 ## Repository-only Packages
 

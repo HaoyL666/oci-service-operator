@@ -13,14 +13,14 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| Redis | preview | `v2.0.0-alpha` | [RedisCluster](#kind-rediscluster) |
+| Redis | preview | `v2.1.0-alpha` | [RedisCluster](#kind-rediscluster) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [RedisCluster](#kind-rediscluster) | Namespaced | [Sample](../../../samples/redis/v1beta1/rediscluster.md) | Redis (`v2.0.0-alpha`) |
+| [RedisCluster](#kind-rediscluster) | Namespaced | [Sample](../../../samples/redis/v1beta1/rediscluster.md) | Redis (`v2.1.0-alpha`) |
 
 <a id="kind-rediscluster"></a>
 ## RedisCluster
@@ -31,7 +31,7 @@ Manage OCI Redis clusters.
 - `Scope`: `Namespaced`
 - `APIVersion`: `redis.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/redis/v1beta1/rediscluster.md) (`config/samples/redis_v1beta1_rediscluster.yaml`)
-- `Packages`: Redis (`v2.0.0-alpha`)
+- `Packages`: Redis (`v2.1.0-alpha`)
 
 <a id="kind-rediscluster-spec"></a>
 ### Spec

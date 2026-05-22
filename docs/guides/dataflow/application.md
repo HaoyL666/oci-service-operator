@@ -13,7 +13,7 @@ Manage OCI Data Flow applications. This page is generated from checked-in packag
 | API Version | `dataflow.oracle.com/v1beta1` |
 | Package | [Data Flow](../../reference/packages/dataflow/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-dataflow-system` |
 
 ## Quick Links

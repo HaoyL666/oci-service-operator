@@ -13,7 +13,7 @@ Manage OCI Functions function definitions and images. This page is generated fro
 | API Version | `functions.oracle.com/v1beta1` |
 | Package | [Functions](../../reference/packages/functions/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-functions-system` |
 
 ## Quick Links

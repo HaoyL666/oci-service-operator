@@ -13,15 +13,15 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| Functions | preview | `v2.0.0-alpha` | [Application](#kind-application), [Function](#kind-function) |
+| Functions | preview | `v2.1.0-alpha` | [Application](#kind-application), [Function](#kind-function) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Application](#kind-application) | Namespaced | [Sample](../../../samples/functions/v1beta1/application.md) | Functions (`v2.0.0-alpha`) |
-| [Function](#kind-function) | Namespaced | [Sample](../../../samples/functions/v1beta1/function.md) | Functions (`v2.0.0-alpha`) |
+| [Application](#kind-application) | Namespaced | [Sample](../../../samples/functions/v1beta1/application.md) | Functions (`v2.1.0-alpha`) |
+| [Function](#kind-function) | Namespaced | [Sample](../../../samples/functions/v1beta1/function.md) | Functions (`v2.1.0-alpha`) |
 
 <a id="kind-application"></a>
 ## Application
@@ -32,7 +32,7 @@ Manage OCI Functions application containers.
 - `Scope`: `Namespaced`
 - `APIVersion`: `functions.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/functions/v1beta1/application.md) (`config/samples/functions_v1beta1_application.yaml`)
-- `Packages`: Functions (`v2.0.0-alpha`)
+- `Packages`: Functions (`v2.1.0-alpha`)
 
 <a id="kind-application-spec"></a>
 ### Spec
@@ -217,7 +217,7 @@ Manage OCI Functions function definitions and images.
 - `Scope`: `Namespaced`
 - `APIVersion`: `functions.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/functions/v1beta1/function.md) (`config/samples/functions_v1beta1_function.yaml`)
-- `Packages`: Functions (`v2.0.0-alpha`)
+- `Packages`: Functions (`v2.1.0-alpha`)
 
 <a id="kind-function-spec"></a>
 ### Spec

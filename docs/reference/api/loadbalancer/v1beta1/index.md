@@ -11,23 +11,25 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `loadbalancer.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Load Balancer | preview | `v2.1.0-alpha` | [Backend](#kind-backend), [BackendSet](#kind-backendset), [Certificate](#kind-certificate), [Hostname](#kind-hostname), [Listener](#kind-listener), [LoadBalancer](#kind-loadbalancer), [PathRouteSet](#kind-pathrouteset), [RoutingPolicy](#kind-routingpolicy), [RuleSet](#kind-ruleset), [SSLCipherSuite](#kind-sslciphersuite) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Backend](#kind-backend) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/backend.md) | - |
-| [BackendSet](#kind-backendset) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/backendset.md) | - |
-| [Certificate](#kind-certificate) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/certificate.md) | - |
-| [Hostname](#kind-hostname) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/hostname.md) | - |
-| [Listener](#kind-listener) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/listener.md) | - |
-| [LoadBalancer](#kind-loadbalancer) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/loadbalancer.md) | - |
-| [PathRouteSet](#kind-pathrouteset) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/pathrouteset.md) | - |
-| [RoutingPolicy](#kind-routingpolicy) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/routingpolicy.md) | - |
-| [RuleSet](#kind-ruleset) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/ruleset.md) | - |
-| [SSLCipherSuite](#kind-sslciphersuite) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/sslciphersuite.md) | - |
+| [Backend](#kind-backend) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/backend.md) | Load Balancer (`v2.1.0-alpha`) |
+| [BackendSet](#kind-backendset) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/backendset.md) | Load Balancer (`v2.1.0-alpha`) |
+| [Certificate](#kind-certificate) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/certificate.md) | Load Balancer (`v2.1.0-alpha`) |
+| [Hostname](#kind-hostname) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/hostname.md) | Load Balancer (`v2.1.0-alpha`) |
+| [Listener](#kind-listener) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/listener.md) | Load Balancer (`v2.1.0-alpha`) |
+| [LoadBalancer](#kind-loadbalancer) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/loadbalancer.md) | Load Balancer (`v2.1.0-alpha`) |
+| [PathRouteSet](#kind-pathrouteset) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/pathrouteset.md) | Load Balancer (`v2.1.0-alpha`) |
+| [RoutingPolicy](#kind-routingpolicy) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/routingpolicy.md) | Load Balancer (`v2.1.0-alpha`) |
+| [RuleSet](#kind-ruleset) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/ruleset.md) | Load Balancer (`v2.1.0-alpha`) |
+| [SSLCipherSuite](#kind-sslciphersuite) | Namespaced | [Sample](../../../samples/loadbalancer/v1beta1/sslciphersuite.md) | Load Balancer (`v2.1.0-alpha`) |
 
 <a id="kind-backend"></a>
 ## Backend
@@ -38,7 +40,7 @@ Backend is the Schema for the backends API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/backend.md) (`config/samples/loadbalancer_v1beta1_backend.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-backend-spec"></a>
 ### Spec
@@ -144,7 +146,7 @@ BackendSet is the Schema for the backendsets API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/backendset.md) (`config/samples/loadbalancer_v1beta1_backendset.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-backendset-spec"></a>
 ### Spec
@@ -417,7 +419,7 @@ Certificate is the Schema for the certificates API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/certificate.md) (`config/samples/loadbalancer_v1beta1_certificate.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-certificate-spec"></a>
 ### Spec
@@ -512,7 +514,7 @@ Hostname is the Schema for the hostnames API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/hostname.md) (`config/samples/loadbalancer_v1beta1_hostname.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-hostname-spec"></a>
 ### Spec
@@ -603,7 +605,7 @@ Listener is the Schema for the listeners API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/listener.md) (`config/samples/loadbalancer_v1beta1_listener.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-listener-spec"></a>
 ### Spec
@@ -776,7 +778,7 @@ LoadBalancer is the Schema for the loadbalancers API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/loadbalancer.md) (`config/samples/loadbalancer_v1beta1_loadbalancer.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-loadbalancer-spec"></a>
 ### Spec
@@ -1619,7 +1621,7 @@ PathRouteSet is the Schema for the pathroutesets API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/pathrouteset.md) (`config/samples/loadbalancer_v1beta1_pathrouteset.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-pathrouteset-spec"></a>
 ### Spec
@@ -1758,7 +1760,7 @@ RoutingPolicy is the Schema for the routingpolicies API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/routingpolicy.md) (`config/samples/loadbalancer_v1beta1_routingpolicy.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-routingpolicy-spec"></a>
 ### Spec
@@ -1903,7 +1905,7 @@ RuleSet is the Schema for the rulesets API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/ruleset.md) (`config/samples/loadbalancer_v1beta1_ruleset.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-ruleset-spec"></a>
 ### Spec
@@ -2128,7 +2130,7 @@ SSLCipherSuite is the Schema for the sslciphersuites API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `loadbalancer.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/loadbalancer/v1beta1/sslciphersuite.md) (`config/samples/loadbalancer_v1beta1_sslciphersuite.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Load Balancer (`v2.1.0-alpha`)
 
 <a id="kind-sslciphersuite-spec"></a>
 ### Spec

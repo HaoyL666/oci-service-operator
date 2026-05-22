@@ -8,20 +8,15 @@ Manage OCI Marketplace resources from Kubernetes.
 | --- | --- |
 | Package | `marketplace` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-marketplace-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-marketplace:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-marketplace-bundle:<version>` |
 | Setup Guide | [Open guide](../../../installation.md) |
 
-## Notes
-
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
-
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `marketplace/AcceptedAgreement` | `marketplace.oracle.com/v1beta1` | — | — | [Sample](../../samples/marketplace/v1beta1/acceptedagreement.md) | [Reference](../../api/marketplace/v1beta1/index.md#kind-acceptedagreement) |
-| `marketplace/Publication` | `marketplace.oracle.com/v1beta1` | — | — | [Sample](../../samples/marketplace/v1beta1/publication.md) | [Reference](../../api/marketplace/v1beta1/index.md#kind-publication) |
+| `marketplace/AcceptedAgreement` | `marketplace.oracle.com/v1beta1` | — | [Guide](../../../guides/marketplace/acceptedagreement.md) | [Sample](../../samples/marketplace/v1beta1/acceptedagreement.md) | [Reference](../../api/marketplace/v1beta1/index.md#kind-acceptedagreement) |
+| `marketplace/Publication` | `marketplace.oracle.com/v1beta1` | — | [Guide](../../../guides/marketplace/publication.md) | [Sample](../../samples/marketplace/v1beta1/publication.md) | [Reference](../../api/marketplace/v1beta1/index.md#kind-publication) |

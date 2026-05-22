@@ -8,7 +8,7 @@ Manage OCI Vault resources from Kubernetes.
 | --- | --- |
 | Package | `keymanagement` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-keymanagement-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-keymanagement:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-keymanagement-bundle:<version>` |
@@ -17,12 +17,10 @@ Manage OCI Vault resources from Kubernetes.
 ## Notes
 
 - Current package scope is intentionally limited to Vault while the remaining keymanagement kinds stay out of the generatedruntime rollout.
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `keymanagement/EkmsPrivateEndpoint` | `keymanagement.oracle.com/v1beta1` | — | — | [Sample](../../samples/keymanagement/v1beta1/ekmsprivateendpoint.md) | [Reference](../../api/keymanagement/v1beta1/index.md#kind-ekmsprivateendpoint) |
-| `keymanagement/Vault` | `keymanagement.oracle.com/v1beta1` | Manage OCI Vault resources and their scheduled deletion lifecycle. | — | [Sample](../../samples/keymanagement/v1beta1/vault.md) | [Reference](../../api/keymanagement/v1beta1/index.md#kind-vault) |
+| `keymanagement/EkmsPrivateEndpoint` | `keymanagement.oracle.com/v1beta1` | — | [Guide](../../../guides/keymanagement/ekmsprivateendpoint.md) | [Sample](../../samples/keymanagement/v1beta1/ekmsprivateendpoint.md) | [Reference](../../api/keymanagement/v1beta1/index.md#kind-ekmsprivateendpoint) |
+| `keymanagement/Vault` | `keymanagement.oracle.com/v1beta1` | Manage OCI Vault resources and their scheduled deletion lifecycle. | [Guide](../../../guides/keymanagement/vault.md) | [Sample](../../samples/keymanagement/v1beta1/vault.md) | [Reference](../../api/keymanagement/v1beta1/index.md#kind-vault) |

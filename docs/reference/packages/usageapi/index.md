@@ -8,22 +8,17 @@ Manage OCI Usage API resources from Kubernetes.
 | --- | --- |
 | Package | `usageapi` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-usageapi-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-usageapi:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-usageapi-bundle:<version>` |
 | Setup Guide | [Open guide](../../../installation.md) |
 
-## Notes
-
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
-
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `usageapi/CustomTable` | `usageapi.oracle.com/v1beta1` | — | — | [Sample](../../samples/usageapi/v1beta1/customtable.md) | [Reference](../../api/usageapi/v1beta1/index.md#kind-customtable) |
-| `usageapi/Query` | `usageapi.oracle.com/v1beta1` | — | — | [Sample](../../samples/usageapi/v1beta1/query.md) | [Reference](../../api/usageapi/v1beta1/index.md#kind-query) |
-| `usageapi/Schedule` | `usageapi.oracle.com/v1beta1` | — | — | [Sample](../../samples/usageapi/v1beta1/schedule.md) | [Reference](../../api/usageapi/v1beta1/index.md#kind-schedule) |
-| `usageapi/UsageCarbonEmissionsQuery` | `usageapi.oracle.com/v1beta1` | — | — | [Sample](../../samples/usageapi/v1beta1/usagecarbonemissionsquery.md) | [Reference](../../api/usageapi/v1beta1/index.md#kind-usagecarbonemissionsquery) |
+| `usageapi/CustomTable` | `usageapi.oracle.com/v1beta1` | — | [Guide](../../../guides/usageapi/customtable.md) | [Sample](../../samples/usageapi/v1beta1/customtable.md) | [Reference](../../api/usageapi/v1beta1/index.md#kind-customtable) |
+| `usageapi/Query` | `usageapi.oracle.com/v1beta1` | — | [Guide](../../../guides/usageapi/query.md) | [Sample](../../samples/usageapi/v1beta1/query.md) | [Reference](../../api/usageapi/v1beta1/index.md#kind-query) |
+| `usageapi/Schedule` | `usageapi.oracle.com/v1beta1` | — | [Guide](../../../guides/usageapi/schedule.md) | [Sample](../../samples/usageapi/v1beta1/schedule.md) | [Reference](../../api/usageapi/v1beta1/index.md#kind-schedule) |
+| `usageapi/UsageCarbonEmissionsQuery` | `usageapi.oracle.com/v1beta1` | — | [Guide](../../../guides/usageapi/usagecarbonemissionsquery.md) | [Sample](../../samples/usageapi/v1beta1/usagecarbonemissionsquery.md) | [Reference](../../api/usageapi/v1beta1/index.md#kind-usagecarbonemissionsquery) |
