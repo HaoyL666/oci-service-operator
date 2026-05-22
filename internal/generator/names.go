@@ -31,7 +31,7 @@ var specialSingularRules = []singularRule{
 
 var esPluralSuffixes = []string{"sses", "shes", "ches", "xes", "zes"}
 
-var unpluralizedSuffixes = []string{"Metadata", "metadata", "Information", "information"}
+var unpluralizedSuffixes = []string{"Analysis", "analysis", "Metadata", "metadata", "Information", "information"}
 
 func singularize(name string) string {
 	if singular, ok := applySpecialSingularRules(name); ok {
@@ -171,6 +171,8 @@ func applySpecialSingularRule(name string, rule singularRule) (string, bool) {
 
 func singularizeStandardSuffix(name string) (string, bool) {
 	switch {
+	case hasUnpluralizedSuffix(name):
+		return name, true
 	case strings.HasSuffix(name, "ies") && len(name) > 3:
 		return strings.TrimSuffix(name, "ies") + "y", true
 	case hasPluralESSuffix(name):

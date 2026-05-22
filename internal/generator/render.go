@@ -402,6 +402,9 @@ func renderResourceFile(pkg *PackageModel, resource ResourceModel) (string, erro
 }
 
 func renderControllerFile(pkg *PackageModel, controller ControllerModel) (string, error) {
+	if strings.TrimSpace(controller.ReconcilePredicate) == "" {
+		controller.ReconcilePredicate = "core.ReconcilePredicate"
+	}
 	data := struct {
 		PackageName    string
 		APIImportAlias string
@@ -954,7 +957,7 @@ func (r *{{ .ReconcilerType }}) SetupWithManager(mgr ctrl.Manager) error {
 	builder = builder.WithOptions(controller.Options{MaxConcurrentReconciles: {{ .MaxConcurrentReconciles }}})
 {{- end }}
 	return builder.
-		WithEventFilter(core.ReconcilePredicate()).
+		WithEventFilter({{ .ReconcilePredicate }}()).
 		Complete(r)
 }
 `

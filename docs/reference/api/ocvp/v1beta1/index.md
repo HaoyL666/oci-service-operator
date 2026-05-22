@@ -11,16 +11,18 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `ocvp.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Oracle Cloud VMware Solution | preview | `v2.1.0-alpha` | [Cluster](#kind-cluster), [EsxiHost](#kind-esxihost), [Sddc](#kind-sddc) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Cluster](#kind-cluster) | Namespaced | [Sample](../../../samples/ocvp/v1beta1/cluster.md) | - |
-| [EsxiHost](#kind-esxihost) | Namespaced | [Sample](../../../samples/ocvp/v1beta1/esxihost.md) | - |
-| [Sddc](#kind-sddc) | Namespaced | [Sample](../../../samples/ocvp/v1beta1/sddc.md) | - |
+| [Cluster](#kind-cluster) | Namespaced | [Sample](../../../samples/ocvp/v1beta1/cluster.md) | Oracle Cloud VMware Solution (`v2.1.0-alpha`) |
+| [EsxiHost](#kind-esxihost) | Namespaced | [Sample](../../../samples/ocvp/v1beta1/esxihost.md) | Oracle Cloud VMware Solution (`v2.1.0-alpha`) |
+| [Sddc](#kind-sddc) | Namespaced | [Sample](../../../samples/ocvp/v1beta1/sddc.md) | Oracle Cloud VMware Solution (`v2.1.0-alpha`) |
 
 <a id="kind-cluster"></a>
 ## Cluster
@@ -31,7 +33,7 @@ Cluster is the Schema for the clusters API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `ocvp.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/ocvp/v1beta1/cluster.md) (`config/samples/ocvp_v1beta1_cluster.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Cloud VMware Solution (`v2.1.0-alpha`)
 
 <a id="kind-cluster-spec"></a>
 ### Spec
@@ -281,7 +283,7 @@ EsxiHost is the Schema for the esxihosts API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `ocvp.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/ocvp/v1beta1/esxihost.md) (`config/samples/ocvp_v1beta1_esxihost.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Cloud VMware Solution (`v2.1.0-alpha`)
 
 <a id="kind-esxihost-spec"></a>
 ### Spec
@@ -432,7 +434,7 @@ Sddc is the Schema for the sddcs API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `ocvp.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/ocvp/v1beta1/sddc.md) (`config/samples/ocvp_v1beta1_sddc.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Oracle Cloud VMware Solution (`v2.1.0-alpha`)
 
 <a id="kind-sddc-spec"></a>
 ### Spec

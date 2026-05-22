@@ -24,7 +24,7 @@ No customer-visible package currently exposes `disasterrecovery.oracle.com/v1bet
 <a id="kind-drplan"></a>
 ## DrPlan
 
-DrPlan is the Schema for the drplans API.
+Manage OCI Disaster Recovery DR plans.
 
 - `Plural`: `drplans`
 - `Scope`: `Namespaced`

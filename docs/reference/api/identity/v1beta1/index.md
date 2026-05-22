@@ -13,14 +13,14 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| Identity | preview | `v2.0.0-alpha` | [Compartment](#kind-compartment) |
+| Identity | preview | `v2.1.0-alpha` | [Compartment](#kind-compartment) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Compartment](#kind-compartment) | Namespaced | [Sample](../../../samples/identity/v1beta1/compartment.md) | Identity (`v2.0.0-alpha`) |
+| [Compartment](#kind-compartment) | Namespaced | [Sample](../../../samples/identity/v1beta1/compartment.md) | Identity (`v2.1.0-alpha`) |
 
 <a id="kind-compartment"></a>
 ## Compartment
@@ -31,7 +31,7 @@ Manage OCI IAM compartments.
 - `Scope`: `Namespaced`
 - `APIVersion`: `identity.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/identity/v1beta1/compartment.md) (`config/samples/identity_v1beta1_compartment.yaml`)
-- `Packages`: Identity (`v2.0.0-alpha`)
+- `Packages`: Identity (`v2.1.0-alpha`)
 
 <a id="kind-compartment-spec"></a>
 ### Spec

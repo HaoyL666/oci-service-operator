@@ -1,0 +1,210 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.0
+  name: workitems.jmsutils.oracle.com
+spec:
+  group: jmsutils.oracle.com
+  names:
+    kind: WorkItem
+    listKind: WorkItemList
+    plural: workitems
+    singular: workitem
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: status of the WorkItem
+      jsonPath: .status.status.conditions[-1].type
+      name: Status
+      type: string
+    - description: Ocid of the WorkItem
+      jsonPath: .status.status.ocid
+      name: Ocid
+      priority: 1
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: WorkItem is the Schema for the workitems API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: WorkItemSpec defines the desired state of WorkItem.
+            type: object
+          status:
+            description: WorkItemStatus defines the observed state of WorkItem.
+            properties:
+              details:
+                description: WorkItemDetails defines nested fields for WorkItem.Details.
+                properties:
+                  analysisProjectName:
+                    description: Name of the analysis project.
+                    type: string
+                  artifactObjectStoragePath:
+                    description: Object storage path to the artifact.
+                    type: string
+                  inputApplicationsObjectStoragePaths:
+                    description: |-
+                      Object storage path to the input artifact/s in the form of a serialized array.
+                      Example: "[\"/JMS/Utils/myartifacts1.jar\",\"/JMS/Utils/myartifacts2.war\"]"
+                    type: string
+                  jsonData:
+                    type: string
+                  kind:
+                    type: string
+                  targetJdkVersion:
+                    description: The JDK version against which the migration analysis
+                      was performed to identify effort required to move from source
+                      JDK.
+                    type: string
+                  workItemType:
+                    description: The work item type.
+                    type: string
+                type: object
+              id:
+                description: The unique ID of ths work item.
+                type: string
+              retryCount:
+                description: Number of times this work item is retried.
+                type: integer
+              sdkStatus:
+                description: |-
+                  The status of the work item.
+                  This uses a distinct JSON name so it can coexist with the OSOK status envelope.
+                type: string
+              status:
+                properties:
+                  async:
+                    description: |-
+                      Async is the canonical controller-owned async contract. Resource-local
+                      legacy work-request fields may remain as compatibility mirrors while
+                      follow-on migrations land, but new async state should project here first.
+                    properties:
+                      current:
+                        properties:
+                          message:
+                            type: string
+                          normalizedClass:
+                            enum:
+                            - pending
+                            - succeeded
+                            - failed
+                            - canceled
+                            - attention
+                            - unknown
+                            type: string
+                          percentComplete:
+                            maximum: 100
+                            minimum: 0
+                            type: number
+                          phase:
+                            enum:
+                            - create
+                            - update
+                            - delete
+                            type: string
+                          rawOperationType:
+                            type: string
+                          rawStatus:
+                            type: string
+                          source:
+                            enum:
+                            - none
+                            - lifecycle
+                            - workrequest
+                            type: string
+                          updatedAt:
+                            format: date-time
+                            type: string
+                          workRequestId:
+                            type: string
+                        required:
+                        - normalizedClass
+                        - phase
+                        - source
+                        - updatedAt
+                        type: object
+                    type: object
+                  conditions:
+                    items:
+                      properties:
+                        lastTransitionTime:
+                          format: date-time
+                          type: string
+                        message:
+                          type: string
+                        reason:
+                          type: string
+                        status:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - status
+                      - type
+                      type: object
+                    type: array
+                  createdAt:
+                    format: date-time
+                    type: string
+                  deletedAt:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  ocid:
+                    maxLength: 255
+                    minLength: 1
+                    type: string
+                  opcRequestId:
+                    description: |-
+                      OpcRequestID is the latest non-empty OCI request ID from a mutating OCI
+                      response or surfaced OCI service error that materially contributed to the
+                      current shared status projection. Headerless follow-up observations keep
+                      the last non-empty value intact.
+                    type: string
+                  reason:
+                    type: string
+                  requestedAt:
+                    format: date-time
+                    type: string
+                  updatedAt:
+                    format: date-time
+                    type: string
+                type: object
+              timeLastUpdated:
+                description: The date and time the work item was last updated. (formatted
+                  according to RFC3339 (https://datatracker.ietf.org/doc/html/rfc3339)).
+                type: string
+              workRequestId:
+                description: The OCID of the work request created this work item.
+                type: string
+            required:
+            - status
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

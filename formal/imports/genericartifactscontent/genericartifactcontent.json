@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "genericartifactscontent",
+  "slug": "genericartifactcontent",
+  "kind": "GenericArtifactContent",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "scaffold_genericartifactscontent_genericartifactcontent",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateGenericArtifactContent",
+        "requestType": "genericartifactscontent.CreateGenericArtifactContentRequest",
+        "responseType": "genericartifactscontent.CreateGenericArtifactContentResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetGenericArtifactContent",
+        "requestType": "genericartifactscontent.GetGenericArtifactContentRequest",
+        "responseType": "genericartifactscontent.GetGenericArtifactContentResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListGenericArtifactContent",
+        "requestType": "genericartifactscontent.ListGenericArtifactContentRequest",
+        "responseType": "genericartifactscontent.ListGenericArtifactContentResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateGenericArtifactContent",
+        "requestType": "genericartifactscontent.UpdateGenericArtifactContentRequest",
+        "responseType": "genericartifactscontent.UpdateGenericArtifactContentResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteGenericArtifactContent",
+        "requestType": "genericartifactscontent.DeleteGenericArtifactContentRequest",
+        "responseType": "genericartifactscontent.DeleteGenericArtifactContentResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "display_name"
+    ],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "scaffold_genericartifactscontent_genericartifactcontent",
+    "collectionField": "genericartifactcontent",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/genericartifactscontent/genericartifactcontent/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/genericartifactscontent/genericartifactcontent/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for genericartifactscontent/genericartifactcontent; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

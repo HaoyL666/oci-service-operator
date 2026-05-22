@@ -8,7 +8,7 @@ Manage OCI Big Data Service instances from Kubernetes with an initial controller
 | --- | --- |
 | Package | `bds` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-bds-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-bds:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-bds-bundle:<version>` |
@@ -17,11 +17,9 @@ Manage OCI Big Data Service instances from Kubernetes with an initial controller
 ## Notes
 
 - Current package scope is intentionally limited to BdsInstance while the remaining Big Data Service resource families stay unpublished.
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `bds/BdsInstance` | `bds.oracle.com/v1beta1` | Manage OCI Big Data Service instances. | — | [Sample](../../samples/bds/v1beta1/bdsinstance.md) | [Reference](../../api/bds/v1beta1/index.md#kind-bdsinstance) |
+| `bds/BdsInstance` | `bds.oracle.com/v1beta1` | Manage OCI Big Data Service instances. | [Guide](../../../guides/bds/bdsinstance.md) | [Sample](../../samples/bds/v1beta1/bdsinstance.md) | [Reference](../../api/bds/v1beta1/index.md#kind-bdsinstance) |

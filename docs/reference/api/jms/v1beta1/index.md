@@ -187,7 +187,7 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 <a id="kind-jmsplugin"></a>
 ## JmsPlugin
 
-JmsPlugin is the Schema for the jmsplugins API.
+Manage OCI Java Management Service plugins.
 
 - `Plural`: `jmsplugins`
 - `Scope`: `Namespaced`

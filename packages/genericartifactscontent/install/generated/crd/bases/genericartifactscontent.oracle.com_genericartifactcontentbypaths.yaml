@@ -1,0 +1,228 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.0
+  name: genericartifactcontentbypaths.genericartifactscontent.oracle.com
+spec:
+  group: genericartifactscontent.oracle.com
+  names:
+    kind: GenericArtifactContentByPath
+    listKind: GenericArtifactContentByPathList
+    plural: genericartifactcontentbypaths
+    singular: genericartifactcontentbypath
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: status of the GenericArtifactContentByPath
+      jsonPath: .status.status.conditions[-1].type
+      name: Status
+      type: string
+    - description: Ocid of the GenericArtifactContentByPath
+      jsonPath: .status.status.ocid
+      name: Ocid
+      priority: 1
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: GenericArtifactContentByPath is the Schema for the genericartifactcontentbypaths
+          API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: GenericArtifactContentByPathSpec defines the desired state
+              of GenericArtifactContentByPath.
+            properties:
+              artifactPath:
+                description: A user-defined artifact path within the repository.
+                type: string
+              compartmentId:
+                description: The OCID of the compartment that contains the artifact
+                  repository.
+                type: string
+              content:
+                description: A Kubernetes Secret reference containing the artifact
+                  bytes to upload.
+                properties:
+                  secretName:
+                    type: string
+                type: object
+              contentKey:
+                description: The key inside spec.content.secretName that contains
+                  the artifact bytes. Defaults to content.
+                type: string
+              repositoryId:
+                description: The OCID of the repository that owns the artifact content.
+                type: string
+              version:
+                description: A user-defined artifact version string.
+                type: string
+            type: object
+          status:
+            description: GenericArtifactContentByPathStatus defines the observed state
+              of GenericArtifactContentByPath.
+            properties:
+              artifactPath:
+                description: The observed artifact path used to address the artifact
+                  content.
+                type: string
+              compartmentId:
+                description: The observed compartment OCID returned by OCI.
+                type: string
+              displayName:
+                description: The observed artifact display name returned by OCI.
+                type: string
+              etag:
+                description: The latest observed entity tag for optimistic overwrite
+                  checks.
+                type: string
+              id:
+                description: The OCID of the artifact returned by OCI after upload.
+                type: string
+              lifecycleState:
+                description: The observed artifact lifecycle state returned by OCI.
+                type: string
+              repositoryId:
+                description: The observed repository OCID used to address the artifact
+                  content.
+                type: string
+              sha256:
+                description: The observed SHA256 digest for the artifact content.
+                type: string
+              sizeInBytes:
+                description: The observed artifact size in bytes.
+                format: int64
+                type: integer
+              status:
+                properties:
+                  async:
+                    description: |-
+                      Async is the canonical controller-owned async contract. Resource-local
+                      legacy work-request fields may remain as compatibility mirrors while
+                      follow-on migrations land, but new async state should project here first.
+                    properties:
+                      current:
+                        properties:
+                          message:
+                            type: string
+                          normalizedClass:
+                            enum:
+                            - pending
+                            - succeeded
+                            - failed
+                            - canceled
+                            - attention
+                            - unknown
+                            type: string
+                          percentComplete:
+                            maximum: 100
+                            minimum: 0
+                            type: number
+                          phase:
+                            enum:
+                            - create
+                            - update
+                            - delete
+                            type: string
+                          rawOperationType:
+                            type: string
+                          rawStatus:
+                            type: string
+                          source:
+                            enum:
+                            - none
+                            - lifecycle
+                            - workrequest
+                            type: string
+                          updatedAt:
+                            format: date-time
+                            type: string
+                          workRequestId:
+                            type: string
+                        required:
+                        - normalizedClass
+                        - phase
+                        - source
+                        - updatedAt
+                        type: object
+                    type: object
+                  conditions:
+                    items:
+                      properties:
+                        lastTransitionTime:
+                          format: date-time
+                          type: string
+                        message:
+                          type: string
+                        reason:
+                          type: string
+                        status:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - status
+                      - type
+                      type: object
+                    type: array
+                  createdAt:
+                    format: date-time
+                    type: string
+                  deletedAt:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  ocid:
+                    maxLength: 255
+                    minLength: 1
+                    type: string
+                  opcRequestId:
+                    description: |-
+                      OpcRequestID is the latest non-empty OCI request ID from a mutating OCI
+                      response or surfaced OCI service error that materially contributed to the
+                      current shared status projection. Headerless follow-up observations keep
+                      the last non-empty value intact.
+                    type: string
+                  reason:
+                    type: string
+                  requestedAt:
+                    format: date-time
+                    type: string
+                  updatedAt:
+                    format: date-time
+                    type: string
+                type: object
+              version:
+                description: The observed artifact version used to address the artifact
+                  content.
+                type: string
+            required:
+            - status
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -8,7 +8,7 @@ Manage OCI Object Storage buckets from Kubernetes.
 | --- | --- |
 | Package | `objectstorage` |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-objectstorage-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-objectstorage:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-objectstorage-bundle:<version>` |

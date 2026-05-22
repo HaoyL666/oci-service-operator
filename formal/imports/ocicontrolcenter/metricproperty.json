@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "ocicontrolcenter",
+  "slug": "metricproperty",
+  "kind": "MetricProperty",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "scaffold_ocicontrolcenter_metricproperty",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateMetricProperty",
+        "requestType": "ocicontrolcenter.CreateMetricPropertyRequest",
+        "responseType": "ocicontrolcenter.CreateMetricPropertyResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetMetricProperty",
+        "requestType": "ocicontrolcenter.GetMetricPropertyRequest",
+        "responseType": "ocicontrolcenter.GetMetricPropertyResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListMetricProperty",
+        "requestType": "ocicontrolcenter.ListMetricPropertyRequest",
+        "responseType": "ocicontrolcenter.ListMetricPropertyResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateMetricProperty",
+        "requestType": "ocicontrolcenter.UpdateMetricPropertyRequest",
+        "responseType": "ocicontrolcenter.UpdateMetricPropertyResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteMetricProperty",
+        "requestType": "ocicontrolcenter.DeleteMetricPropertyRequest",
+        "responseType": "ocicontrolcenter.DeleteMetricPropertyResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "display_name"
+    ],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "scaffold_ocicontrolcenter_metricproperty",
+    "collectionField": "metricproperty",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/ocicontrolcenter/metricproperty/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/ocicontrolcenter/metricproperty/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for ocicontrolcenter/metricproperty; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

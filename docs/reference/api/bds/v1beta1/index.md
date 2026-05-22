@@ -11,14 +11,16 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `bds.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Big Data Service | preview | `v2.1.0-alpha` | [BdsInstance](#kind-bdsinstance) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [BdsInstance](#kind-bdsinstance) | Namespaced | [Sample](../../../samples/bds/v1beta1/bdsinstance.md) | - |
+| [BdsInstance](#kind-bdsinstance) | Namespaced | [Sample](../../../samples/bds/v1beta1/bdsinstance.md) | Big Data Service (`v2.1.0-alpha`) |
 
 <a id="kind-bdsinstance"></a>
 ## BdsInstance
@@ -29,7 +31,7 @@ Manage OCI Big Data Service instances.
 - `Scope`: `Namespaced`
 - `APIVersion`: `bds.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/bds/v1beta1/bdsinstance.md) (`config/samples/bds_v1beta1_bdsinstance.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Big Data Service (`v2.1.0-alpha`)
 
 <a id="kind-bdsinstance-spec"></a>
 ### Spec

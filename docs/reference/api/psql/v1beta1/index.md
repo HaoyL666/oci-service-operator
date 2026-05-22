@@ -13,14 +13,14 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| PostgreSQL | preview | `v2.0.0-alpha` | [DbSystem](#kind-dbsystem) |
+| PostgreSQL | preview | `v2.1.0-alpha` | [DbSystem](#kind-dbsystem) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [DbSystem](#kind-dbsystem) | Namespaced | [Sample](../../../samples/psql/v1beta1/dbsystem.md) | PostgreSQL (`v2.0.0-alpha`) |
+| [DbSystem](#kind-dbsystem) | Namespaced | [Sample](../../../samples/psql/v1beta1/dbsystem.md) | PostgreSQL (`v2.1.0-alpha`) |
 
 <a id="kind-dbsystem"></a>
 ## DbSystem
@@ -31,7 +31,7 @@ Manage OCI PostgreSQL DB Systems.
 - `Scope`: `Namespaced`
 - `APIVersion`: `psql.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/psql/v1beta1/dbsystem.md) (`config/samples/psql_v1beta1_dbsystem.yaml`)
-- `Packages`: PostgreSQL (`v2.0.0-alpha`)
+- `Packages`: PostgreSQL (`v2.1.0-alpha`)
 
 <a id="kind-dbsystem-spec"></a>
 ### Spec

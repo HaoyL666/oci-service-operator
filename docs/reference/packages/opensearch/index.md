@@ -8,7 +8,7 @@ Manage OCI OpenSearch clusters from Kubernetes.
 | --- | --- |
 | Package | `opensearch` |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-opensearch-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-opensearch:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-opensearch-bundle:<version>` |

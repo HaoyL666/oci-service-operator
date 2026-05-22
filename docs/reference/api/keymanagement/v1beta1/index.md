@@ -11,15 +11,17 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `keymanagement.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Key Management | preview | `v2.1.0-alpha` | [EkmsPrivateEndpoint](#kind-ekmsprivateendpoint), [Vault](#kind-vault) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [EkmsPrivateEndpoint](#kind-ekmsprivateendpoint) | Namespaced | [Sample](../../../samples/keymanagement/v1beta1/ekmsprivateendpoint.md) | - |
-| [Vault](#kind-vault) | Namespaced | [Sample](../../../samples/keymanagement/v1beta1/vault.md) | - |
+| [EkmsPrivateEndpoint](#kind-ekmsprivateendpoint) | Namespaced | [Sample](../../../samples/keymanagement/v1beta1/ekmsprivateendpoint.md) | Key Management (`v2.1.0-alpha`) |
+| [Vault](#kind-vault) | Namespaced | [Sample](../../../samples/keymanagement/v1beta1/vault.md) | Key Management (`v2.1.0-alpha`) |
 
 <a id="kind-ekmsprivateendpoint"></a>
 ## EkmsPrivateEndpoint
@@ -30,7 +32,7 @@ EkmsPrivateEndpoint is the Schema for the ekmsprivateendpoints API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `keymanagement.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/keymanagement/v1beta1/ekmsprivateendpoint.md) (`config/samples/keymanagement_v1beta1_ekmsprivateendpoint.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Key Management (`v2.1.0-alpha`)
 
 <a id="kind-ekmsprivateendpoint-spec"></a>
 ### Spec
@@ -139,7 +141,7 @@ Manage OCI Vault resources and their scheduled deletion lifecycle.
 - `Scope`: `Namespaced`
 - `APIVersion`: `keymanagement.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/keymanagement/v1beta1/vault.md) (`config/samples/keymanagement_v1beta1_vault.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Key Management (`v2.1.0-alpha`)
 
 <a id="kind-vault-spec"></a>
 ### Spec

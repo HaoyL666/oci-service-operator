@@ -13,7 +13,7 @@ Manage OCI API Gateway gateway resources. This page is generated from checked-in
 | API Version | `apigateway.oracle.com/v1beta1` |
 | Package | [API Gateway](../../reference/packages/apigateway/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-apigateway-system` |
 
 ## Quick Links

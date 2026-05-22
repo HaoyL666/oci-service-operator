@@ -8,7 +8,7 @@ Manage OCI Data Science projects from Kubernetes with an initial controller-back
 | --- | --- |
 | Package | `datascience` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-datascience-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-datascience:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-datascience-bundle:<version>` |
@@ -17,11 +17,9 @@ Manage OCI Data Science projects from Kubernetes with an initial controller-back
 ## Notes
 
 - Current package scope is intentionally limited to Project while the remaining Data Science resource families stay unpublished.
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `datascience/Project` | `datascience.oracle.com/v1beta1` | Manage OCI Data Science projects. | — | [Sample](../../samples/datascience/v1beta1/project.md) | [Reference](../../api/datascience/v1beta1/index.md#kind-project) |
+| `datascience/Project` | `datascience.oracle.com/v1beta1` | Manage OCI Data Science projects. | [Guide](../../../guides/datascience/project.md) | [Sample](../../samples/datascience/v1beta1/project.md) | [Reference](../../api/datascience/v1beta1/index.md#kind-project) |

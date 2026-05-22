@@ -7,10 +7,12 @@ package generator
 
 import (
 	"fmt"
+	"go/token"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
+	"unicode"
 
 	"github.com/oracle/oci-service-operator/internal/formal"
 	"sigs.k8s.io/yaml"
@@ -103,6 +105,7 @@ type ControllerGenerationOverride struct {
 	Strategy                string   `yaml:"strategy,omitempty"`
 	MaxConcurrentReconciles int      `yaml:"maxConcurrentReconciles,omitempty"`
 	ExtraRBACMarkers        []string `yaml:"extraRBACMarkers,omitempty"`
+	ReconcilePredicate      string   `yaml:"reconcilePredicate,omitempty"`
 }
 
 // ServiceManagerGenerationOverride captures per-kind service-manager settings.
@@ -596,7 +599,44 @@ func validateControllerGenerationOverride(serviceName, kind string, controller C
 			)
 		}
 	}
+	if err := validateGoSelector(
+		fmt.Sprintf("service %q generation.resources[%q].controller.reconcilePredicate", serviceName, kind),
+		controller.ReconcilePredicate,
+	); err != nil {
+		return err
+	}
 	return nil
+}
+
+func validateGoSelector(field string, selector string) error {
+	selector = strings.TrimSpace(selector)
+	if selector == "" {
+		return nil
+	}
+	for _, part := range strings.Split(selector, ".") {
+		if !isGoIdentifier(part) {
+			return fmt.Errorf("%s must be a Go identifier or selector, got %q", field, selector)
+		}
+	}
+	return nil
+}
+
+func isGoIdentifier(value string) bool {
+	if value == "" || token.Lookup(value).IsKeyword() {
+		return false
+	}
+	for i, r := range value {
+		if i == 0 {
+			if r != '_' && !unicode.IsLetter(r) {
+				return false
+			}
+			continue
+		}
+		if r != '_' && !unicode.IsLetter(r) && !unicode.IsDigit(r) {
+			return false
+		}
+	}
+	return true
 }
 
 func validateServiceManagerGenerationOverride(serviceName, kind string, serviceManager ServiceManagerGenerationOverride) error {
@@ -828,7 +868,10 @@ func (r ResourceGenerationOverride) hasOverrides() bool {
 }
 
 func (c ControllerGenerationOverride) hasOverrides() bool {
-	return strings.TrimSpace(c.Strategy) != "" || c.MaxConcurrentReconciles != 0 || len(c.ExtraRBACMarkers) > 0
+	return strings.TrimSpace(c.Strategy) != "" ||
+		c.MaxConcurrentReconciles != 0 ||
+		len(c.ExtraRBACMarkers) > 0 ||
+		strings.TrimSpace(c.ReconcilePredicate) != ""
 }
 
 func (s ServiceManagerGenerationOverride) hasOverrides() bool {
@@ -1184,12 +1227,16 @@ func (s ServiceConfig) ControllerGenerationStrategyFor(kind string) string {
 // ControllerGenerationConfigFor resolves one resource's effective controller generation config.
 func (s ServiceConfig) ControllerGenerationConfigFor(kind string) ControllerGenerationOverride {
 	config := ControllerGenerationOverride{
-		Strategy: s.ControllerGenerationStrategyFor(kind),
+		Strategy:           s.ControllerGenerationStrategyFor(kind),
+		ReconcilePredicate: "core.ReconcilePredicate",
 	}
 
 	if override, ok := s.resourceGenerationOverride(kind); ok {
 		config.MaxConcurrentReconciles = override.Controller.MaxConcurrentReconciles
 		config.ExtraRBACMarkers = append([]string(nil), override.Controller.ExtraRBACMarkers...)
+		if strings.TrimSpace(override.Controller.ReconcilePredicate) != "" {
+			config.ReconcilePredicate = strings.TrimSpace(override.Controller.ReconcilePredicate)
+		}
 	}
 
 	return config

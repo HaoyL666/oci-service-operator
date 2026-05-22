@@ -24,7 +24,7 @@ No customer-visible package currently exposes `distributeddatabase.oracle.com/v1
 <a id="kind-distributeddatabase"></a>
 ## DistributedDatabase
 
-DistributedDatabase is the Schema for the distributeddatabases API.
+Manage OCI Distributed Databases.
 
 - `Plural`: `distributeddatabases`
 - `Scope`: `Namespaced`

@@ -2,7 +2,7 @@
 
 # Database Migration
 
-Manage OCI Database Migration connections from Kubernetes with a reviewed controller-backed Connection rollout.
+Manage OCI Database Migration assessments, connections, and migrations from Kubernetes with reviewed controller-backed runtimes.
 
 | Field | Value |
 | --- | --- |
@@ -16,8 +16,8 @@ Manage OCI Database Migration connections from Kubernetes with a reviewed contro
 
 ## Notes
 
-- Current package scope is intentionally limited to Connection while the remaining Database Migration resource families stay unpublished.
-- The published runtime uses service-SDK work requests for create, update, and delete, with explicit MYSQL versus ORACLE request shaping and replacement-only handling for `compartmentId`, `connectionType`, and `technologyType`.
+- Current package scope includes Assessment, Connection, and Migration while service helper families stay unpublished.
+- The published runtimes use service-SDK work requests for create, update, and delete; Assessment and Migration reread after work-request completion, while Connection also narrows pre-create reuse with type-specific request shaping.
 - No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
 - This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
@@ -25,6 +25,6 @@ Manage OCI Database Migration connections from Kubernetes with a reviewed contro
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `databasemigration/Assessment` | `databasemigration.oracle.com/v1beta1` | — | — | [Sample](../../samples/databasemigration/v1beta1/assessment.md) | [Reference](../../api/databasemigration/v1beta1/index.md#kind-assessment) |
+| `databasemigration/Assessment` | `databasemigration.oracle.com/v1beta1` | Manage OCI Database Migration assessments. | — | [Sample](../../samples/databasemigration/v1beta1/assessment.md) | [Reference](../../api/databasemigration/v1beta1/index.md#kind-assessment) |
 | `databasemigration/Connection` | `databasemigration.oracle.com/v1beta1` | Manage OCI Database Migration connections. | — | [Sample](../../samples/databasemigration/v1beta1/connection.md) | [Reference](../../api/databasemigration/v1beta1/index.md#kind-connection) |
-| `databasemigration/Migration` | `databasemigration.oracle.com/v1beta1` | — | — | [Sample](../../samples/databasemigration/v1beta1/migration.md) | [Reference](../../api/databasemigration/v1beta1/index.md#kind-migration) |
+| `databasemigration/Migration` | `databasemigration.oracle.com/v1beta1` | Manage OCI Database Migration migrations. | — | [Sample](../../samples/databasemigration/v1beta1/migration.md) | [Reference](../../api/databasemigration/v1beta1/index.md#kind-migration) |

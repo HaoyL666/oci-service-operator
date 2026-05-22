@@ -28,8 +28,8 @@ func TestBuildReferenceSiteUsesReleaseAndPackageFallbackData(t *testing.T) {
 	if !identity.CustomerVisible {
 		t.Fatalf("identity customerVisible = false, want true")
 	}
-	if identity.LatestReleaseVersion != "v2.0.0-alpha" {
-		t.Fatalf("identity latest release = %q, want %q", identity.LatestReleaseVersion, "v2.0.0-alpha")
+	if identity.LatestReleaseVersion != "v2.1.0-alpha" {
+		t.Fatalf("identity latest release = %q, want %q", identity.LatestReleaseVersion, "v2.1.0-alpha")
 	}
 	if len(identity.Resources) != 1 {
 		t.Fatalf("identity resources = %d, want 1", len(identity.Resources))
@@ -148,8 +148,32 @@ func TestGenerateReferenceDocsGroupsResourceGuideSidebarUnderUmbrella(t *testing
 	}
 	config := string(mkdocsConfig)
 
-	assertContains(t, config, "  - Resource Guides:\n      - guides/index.md\n      - Troubleshooting: TROUBLESHOOT.md\n")
-	assertContains(t, config, "      - By Service and Resource:\n          - apigateway:\n              - ApiGateway: guides/apigateway/apigateway.md\n")
+	assertContains(t, config, "  - Resource Guides:\n      - Overview: guides/index.md\n      - Troubleshooting: TROUBLESHOOT.md\n")
+	assertContains(t, config, "      - By Service and Resource:\n          - aidocument:\n              - Project: guides/aidocument/project.md\n")
+}
+
+func TestGenerateReferenceDocsKeepsAPISidebarCustomerVisible(t *testing.T) {
+	t.Parallel()
+
+	root := repoRoot(t)
+	tempDir := t.TempDir()
+
+	if _, err := sitegen.GenerateReferenceDocs(sitegen.GenerateOptions{
+		Root:       root,
+		OutputRoot: tempDir,
+	}); err != nil {
+		t.Fatalf("GenerateReferenceDocs() error = %v", err)
+	}
+
+	mkdocsConfig, err := os.ReadFile(filepath.Join(tempDir, "mkdocs.yml"))
+	if err != nil {
+		t.Fatalf("ReadFile(mkdocs.yml) error = %v", err)
+	}
+	config := string(mkdocsConfig)
+
+	assertContains(t, config, "          - apigateway.oracle.com/v1beta1: reference/api/apigateway/v1beta1/index.md\n")
+	assertContains(t, config, "          - psa.oracle.com/v1beta1: reference/api/psa/v1beta1/index.md\n")
+	assertNotContains(t, config, "          - accessgovernancecp.oracle.com/v1beta1: reference/api/accessgovernancecp/v1beta1/index.md\n")
 }
 
 func checkedInGeneratedPaths(root string) ([]string, error) {
@@ -224,4 +248,12 @@ func containsString(values []string, want string) bool {
 		}
 	}
 	return false
+}
+
+func assertNotContains(t *testing.T, got string, want string) {
+	t.Helper()
+
+	if strings.Contains(got, want) {
+		t.Fatalf("expected generated output not to contain %q", want)
+	}
 }

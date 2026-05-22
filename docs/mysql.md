@@ -15,7 +15,7 @@ The generator-owned v2 mysql API uses `apiVersion: mysql.oracle.com/v1beta1` and
 | API Version | `mysql.oracle.com/v1beta1` |
 | Package | [MySQL](reference/packages/mysql/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-mysql-system` |
 
 ## Quick Links

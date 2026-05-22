@@ -8,7 +8,7 @@ Manage OCI AI Document projects from Kubernetes with an initial controller-backe
 | --- | --- |
 | Package | `aidocument` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-aidocument-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-aidocument:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-aidocument-bundle:<version>` |
@@ -17,11 +17,9 @@ Manage OCI AI Document projects from Kubernetes with an initial controller-backe
 ## Notes
 
 - Current package scope is intentionally limited to Project while the remaining AI Document resource families stay unpublished.
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `aidocument/Project` | `aidocument.oracle.com/v1beta1` | Manage OCI AI Document projects. | — | [Sample](../../samples/aidocument/v1beta1/project.md) | [Reference](../../api/aidocument/v1beta1/index.md#kind-project) |
+| `aidocument/Project` | `aidocument.oracle.com/v1beta1` | Manage OCI AI Document projects. | [Guide](../../../guides/aidocument/project.md) | [Sample](../../samples/aidocument/v1beta1/project.md) | [Reference](../../api/aidocument/v1beta1/index.md#kind-project) |

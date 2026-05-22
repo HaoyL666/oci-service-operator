@@ -8,7 +8,7 @@ Manage OCI AI Language projects from Kubernetes with an initial controller-backe
 | --- | --- |
 | Package | `ailanguage` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-ailanguage-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-ailanguage:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-ailanguage-bundle:<version>` |
@@ -17,11 +17,9 @@ Manage OCI AI Language projects from Kubernetes with an initial controller-backe
 ## Notes
 
 - Current package scope is intentionally limited to Project while the remaining AI Language resource families stay unpublished.
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `ailanguage/Project` | `ailanguage.oracle.com/v1beta1` | Manage OCI AI Language projects. | — | [Sample](../../samples/ailanguage/v1beta1/project.md) | [Reference](../../api/ailanguage/v1beta1/index.md#kind-project) |
+| `ailanguage/Project` | `ailanguage.oracle.com/v1beta1` | Manage OCI AI Language projects. | [Guide](../../../guides/ailanguage/project.md) | [Sample](../../samples/ailanguage/v1beta1/project.md) | [Reference](../../api/ailanguage/v1beta1/index.md#kind-project) |

@@ -8,22 +8,17 @@ Manage OCI Email Delivery resources from Kubernetes.
 | --- | --- |
 | Package | `email` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-email-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-email:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-email-bundle:<version>` |
 | Setup Guide | [Open guide](../../../installation.md) |
 
-## Notes
-
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
-
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `email/Dkim` | `email.oracle.com/v1beta1` | — | — | [Sample](../../samples/email/v1beta1/dkim.md) | [Reference](../../api/email/v1beta1/index.md#kind-dkim) |
-| `email/EmailDomain` | `email.oracle.com/v1beta1` | — | — | [Sample](../../samples/email/v1beta1/emaildomain.md) | [Reference](../../api/email/v1beta1/index.md#kind-emaildomain) |
-| `email/Sender` | `email.oracle.com/v1beta1` | — | — | [Sample](../../samples/email/v1beta1/sender.md) | [Reference](../../api/email/v1beta1/index.md#kind-sender) |
-| `email/Suppression` | `email.oracle.com/v1beta1` | — | — | [Sample](../../samples/email/v1beta1/suppression.md) | [Reference](../../api/email/v1beta1/index.md#kind-suppression) |
+| `email/Dkim` | `email.oracle.com/v1beta1` | — | [Guide](../../../guides/email/dkim.md) | [Sample](../../samples/email/v1beta1/dkim.md) | [Reference](../../api/email/v1beta1/index.md#kind-dkim) |
+| `email/EmailDomain` | `email.oracle.com/v1beta1` | — | [Guide](../../../guides/email/emaildomain.md) | [Sample](../../samples/email/v1beta1/emaildomain.md) | [Reference](../../api/email/v1beta1/index.md#kind-emaildomain) |
+| `email/Sender` | `email.oracle.com/v1beta1` | — | [Guide](../../../guides/email/sender.md) | [Sample](../../samples/email/v1beta1/sender.md) | [Reference](../../api/email/v1beta1/index.md#kind-sender) |
+| `email/Suppression` | `email.oracle.com/v1beta1` | — | [Guide](../../../guides/email/suppression.md) | [Sample](../../samples/email/v1beta1/suppression.md) | [Reference](../../api/email/v1beta1/index.md#kind-suppression) |

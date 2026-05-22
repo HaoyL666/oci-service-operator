@@ -11,15 +11,17 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `monitoring.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Monitoring | preview | `v2.1.0-alpha` | [Alarm](#kind-alarm), [AlarmSuppression](#kind-alarmsuppression) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Alarm](#kind-alarm) | Namespaced | [Sample](../../../samples/monitoring/v1beta1/alarm.md) | - |
-| [AlarmSuppression](#kind-alarmsuppression) | Namespaced | [Sample](../../../samples/monitoring/v1beta1/alarmsuppression.md) | - |
+| [Alarm](#kind-alarm) | Namespaced | [Sample](../../../samples/monitoring/v1beta1/alarm.md) | Monitoring (`v2.1.0-alpha`) |
+| [AlarmSuppression](#kind-alarmsuppression) | Namespaced | [Sample](../../../samples/monitoring/v1beta1/alarmsuppression.md) | Monitoring (`v2.1.0-alpha`) |
 
 <a id="kind-alarm"></a>
 ## Alarm
@@ -30,7 +32,7 @@ Alarm is the Schema for the alarms API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `monitoring.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/monitoring/v1beta1/alarm.md) (`config/samples/monitoring_v1beta1_alarm.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Monitoring (`v2.1.0-alpha`)
 
 <a id="kind-alarm-spec"></a>
 ### Spec
@@ -227,7 +229,7 @@ AlarmSuppression is the Schema for the alarmsuppressions API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `monitoring.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/monitoring/v1beta1/alarmsuppression.md) (`config/samples/monitoring_v1beta1_alarmsuppression.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Monitoring (`v2.1.0-alpha`)
 
 <a id="kind-alarmsuppression-spec"></a>
 ### Spec
