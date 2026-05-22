@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "jmsutils",
+  "slug": "workitem",
+  "kind": "WorkItem",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "scaffold_jmsutils_workitem",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateWorkItem",
+        "requestType": "jmsutils.CreateWorkItemRequest",
+        "responseType": "jmsutils.CreateWorkItemResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetWorkItem",
+        "requestType": "jmsutils.GetWorkItemRequest",
+        "responseType": "jmsutils.GetWorkItemResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListWorkItem",
+        "requestType": "jmsutils.ListWorkItemRequest",
+        "responseType": "jmsutils.ListWorkItemResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateWorkItem",
+        "requestType": "jmsutils.UpdateWorkItemRequest",
+        "responseType": "jmsutils.UpdateWorkItemResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteWorkItem",
+        "requestType": "jmsutils.DeleteWorkItemRequest",
+        "responseType": "jmsutils.DeleteWorkItemResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "display_name"
+    ],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "scaffold_jmsutils_workitem",
+    "collectionField": "workitem",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/jmsutils/workitem/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/jmsutils/workitem/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for jmsutils/workitem; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

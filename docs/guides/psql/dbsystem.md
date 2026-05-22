@@ -13,7 +13,7 @@ Manage OCI PostgreSQL DB Systems. This page is generated from checked-in package
 | API Version | `psql.oracle.com/v1beta1` |
 | Package | [PostgreSQL](../../reference/packages/psql/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-psql-system` |
 
 ## Quick Links

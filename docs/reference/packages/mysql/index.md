@@ -8,7 +8,7 @@ Manage OCI MySQL DB Systems from Kubernetes.
 | --- | --- |
 | Package | `mysql` |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-mysql-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-mysql:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-mysql-bundle:<version>` |

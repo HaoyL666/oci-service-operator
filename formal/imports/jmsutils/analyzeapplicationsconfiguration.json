@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "jmsutils",
+  "slug": "analyzeapplicationsconfiguration",
+  "kind": "AnalyzeApplicationsConfiguration",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "scaffold_jmsutils_analyzeapplicationsconfiguration",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateAnalyzeApplicationsConfiguration",
+        "requestType": "jmsutils.CreateAnalyzeApplicationsConfigurationRequest",
+        "responseType": "jmsutils.CreateAnalyzeApplicationsConfigurationResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetAnalyzeApplicationsConfiguration",
+        "requestType": "jmsutils.GetAnalyzeApplicationsConfigurationRequest",
+        "responseType": "jmsutils.GetAnalyzeApplicationsConfigurationResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListAnalyzeApplicationsConfiguration",
+        "requestType": "jmsutils.ListAnalyzeApplicationsConfigurationRequest",
+        "responseType": "jmsutils.ListAnalyzeApplicationsConfigurationResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateAnalyzeApplicationsConfiguration",
+        "requestType": "jmsutils.UpdateAnalyzeApplicationsConfigurationRequest",
+        "responseType": "jmsutils.UpdateAnalyzeApplicationsConfigurationResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteAnalyzeApplicationsConfiguration",
+        "requestType": "jmsutils.DeleteAnalyzeApplicationsConfigurationRequest",
+        "responseType": "jmsutils.DeleteAnalyzeApplicationsConfigurationResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "PROVISIONING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "display_name"
+    ],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "scaffold_jmsutils_analyzeapplicationsconfiguration",
+    "collectionField": "analyzeapplicationsconfiguration",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/jmsutils/analyzeapplicationsconfiguration/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/jmsutils/analyzeapplicationsconfiguration/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Scaffold placeholder for jmsutils/analyzeapplicationsconfiguration; replace imported facts before promoting this row beyond scaffold."
+  ]
+}

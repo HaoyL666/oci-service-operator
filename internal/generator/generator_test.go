@@ -1239,6 +1239,7 @@ func TestGenerateRendersControllerOutputs(t *testing.T) {
 				ExtraRBACMarkers: []string{
 					`groups="",resources=secrets,verbs=get;list;watch`,
 				},
+				ReconcilePredicate: "dbSystemReconcilePredicate",
 			},
 		},
 	}
@@ -1262,6 +1263,7 @@ func TestGenerateRendersControllerOutputs(t *testing.T) {
 		`// +kubebuilder:rbac:groups="",resources=events,verbs=create;patch`,
 		`// +kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch`,
 		"builder = builder.WithOptions(controller.Options{MaxConcurrentReconciles: 3})",
+		"WithEventFilter(dbSystemReconcilePredicate()).",
 		"dbSystem := &mysqlv1beta1.DbSystem{}",
 		"return r.Reconciler.Reconcile(ctx, req, dbSystem)",
 	})

@@ -8,7 +8,7 @@ Manage OCI AI Vision projects from Kubernetes with an initial controller-backed 
 | --- | --- |
 | Package | `aivision` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-aivision-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-aivision:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-aivision-bundle:<version>` |
@@ -17,11 +17,9 @@ Manage OCI AI Vision projects from Kubernetes with an initial controller-backed 
 ## Notes
 
 - Current package scope is intentionally limited to Project while the remaining AI Vision resource families stay unpublished.
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `aivision/Project` | `aivision.oracle.com/v1beta1` | Manage OCI AI Vision projects. | — | [Sample](../../samples/aivision/v1beta1/project.md) | [Reference](../../api/aivision/v1beta1/index.md#kind-project) |
+| `aivision/Project` | `aivision.oracle.com/v1beta1` | Manage OCI AI Vision projects. | [Guide](../../../guides/aivision/project.md) | [Sample](../../samples/aivision/v1beta1/project.md) | [Reference](../../api/aivision/v1beta1/index.md#kind-project) |

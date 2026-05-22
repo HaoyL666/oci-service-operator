@@ -2,7 +2,7 @@
 
 # Disaster Recovery
 
-Manage OCI Disaster Recovery protection groups from Kubernetes with an initial controller-backed DrProtectionGroup rollout.
+Manage OCI Disaster Recovery protection groups and DR plans from Kubernetes with controller-backed work-request runtimes.
 
 | Field | Value |
 | --- | --- |
@@ -16,8 +16,8 @@ Manage OCI Disaster Recovery protection groups from Kubernetes with an initial c
 
 ## Notes
 
-- Current package scope is intentionally limited to DrProtectionGroup while associate, disassociate, role-change, DR plan, and work-request helper families stay unpublished.
-- The published runtime uses service-SDK work requests for create, update, and delete, keeps peer and lifecycle state truthfully projected in status, and preserves polymorphic member content instead of flattening the DR protection group membership surface.
+- Current package scope includes DrProtectionGroup and DrPlan while associate, disassociate, role-change, and work-request helper families stay unpublished.
+- The published runtimes use service-SDK work requests for create, update, and delete, keep peer and lifecycle state truthfully projected in status, and preserve polymorphic member content instead of flattening the DR membership surface.
 - No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
 - This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
@@ -25,5 +25,5 @@ Manage OCI Disaster Recovery protection groups from Kubernetes with an initial c
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `disasterrecovery/DrPlan` | `disasterrecovery.oracle.com/v1beta1` | — | — | [Sample](../../samples/disasterrecovery/v1beta1/drplan.md) | [Reference](../../api/disasterrecovery/v1beta1/index.md#kind-drplan) |
+| `disasterrecovery/DrPlan` | `disasterrecovery.oracle.com/v1beta1` | Manage OCI Disaster Recovery DR plans. | — | [Sample](../../samples/disasterrecovery/v1beta1/drplan.md) | [Reference](../../api/disasterrecovery/v1beta1/index.md#kind-drplan) |
 | `disasterrecovery/DrProtectionGroup` | `disasterrecovery.oracle.com/v1beta1` | Manage OCI Disaster Recovery protection groups. | — | [Sample](../../samples/disasterrecovery/v1beta1/drprotectiongroup.md) | [Reference](../../api/disasterrecovery/v1beta1/index.md#kind-drprotectiongroup) |

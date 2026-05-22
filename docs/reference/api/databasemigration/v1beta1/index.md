@@ -25,7 +25,7 @@ No customer-visible package currently exposes `databasemigration.oracle.com/v1be
 <a id="kind-assessment"></a>
 ## Assessment
 
-Assessment is the Schema for the assessments API.
+Manage OCI Database Migration assessments.
 
 - `Plural`: `assessments`
 - `Scope`: `Namespaced`
@@ -422,7 +422,7 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 <a id="kind-migration"></a>
 ## Migration
 
-Migration is the Schema for the migrations API.
+Manage OCI Database Migration migrations.
 
 - `Plural`: `migrations`
 - `Scope`: `Namespaced`

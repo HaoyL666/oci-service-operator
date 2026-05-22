@@ -33,6 +33,7 @@ type ControllerModel struct {
 	ResourceVariable           string
 	MaxConcurrentReconciles    int
 	HasMaxConcurrentReconciles bool
+	ReconcilePredicate         string
 	RBACMarkers                []string
 }
 

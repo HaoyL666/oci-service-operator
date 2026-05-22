@@ -381,6 +381,7 @@ func buildControllerOutputModel(service ServiceConfig, domain string, resources 
 			ResourceVariable:           safeGoIdentifier(lowerCamel(resource.Kind)),
 			MaxConcurrentReconciles:    controllerConfig.MaxConcurrentReconciles,
 			HasMaxConcurrentReconciles: controllerConfig.MaxConcurrentReconciles > 0,
+			ReconcilePredicate:         controllerConfig.ReconcilePredicate,
 			RBACMarkers:                rbacMarkers,
 		})
 	}

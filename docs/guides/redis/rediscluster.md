@@ -13,7 +13,7 @@ Manage OCI Redis clusters. This page is generated from checked-in package metada
 | API Version | `redis.oracle.com/v1beta1` |
 | Package | [Redis](../../reference/packages/redis/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-redis-system` |
 
 ## Quick Links

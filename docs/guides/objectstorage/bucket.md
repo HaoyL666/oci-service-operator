@@ -13,7 +13,7 @@ Manage OCI Object Storage buckets. This page is generated from checked-in packag
 | API Version | `objectstorage.oracle.com/v1beta1` |
 | Package | [Object Storage](../../reference/packages/objectstorage/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-objectstorage-system` |
 
 ## Quick Links

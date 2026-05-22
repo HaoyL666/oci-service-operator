@@ -11,16 +11,18 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `generativeai.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Generative AI | preview | `v2.1.0-alpha` | [DedicatedAiCluster](#kind-dedicatedaicluster), [Endpoint](#kind-endpoint), [Model](#kind-model) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [DedicatedAiCluster](#kind-dedicatedaicluster) | Namespaced | [Sample](../../../samples/generativeai/v1beta1/dedicatedaicluster.md) | - |
-| [Endpoint](#kind-endpoint) | Namespaced | [Sample](../../../samples/generativeai/v1beta1/endpoint.md) | - |
-| [Model](#kind-model) | Namespaced | [Sample](../../../samples/generativeai/v1beta1/model.md) | - |
+| [DedicatedAiCluster](#kind-dedicatedaicluster) | Namespaced | [Sample](../../../samples/generativeai/v1beta1/dedicatedaicluster.md) | Generative AI (`v2.1.0-alpha`) |
+| [Endpoint](#kind-endpoint) | Namespaced | [Sample](../../../samples/generativeai/v1beta1/endpoint.md) | Generative AI (`v2.1.0-alpha`) |
+| [Model](#kind-model) | Namespaced | [Sample](../../../samples/generativeai/v1beta1/model.md) | Generative AI (`v2.1.0-alpha`) |
 
 <a id="kind-dedicatedaicluster"></a>
 ## DedicatedAiCluster
@@ -31,7 +33,7 @@ DedicatedAiCluster is the Schema for the dedicatedaiclusters API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `generativeai.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/generativeai/v1beta1/dedicatedaicluster.md) (`config/samples/generativeai_v1beta1_dedicatedaicluster.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Generative AI (`v2.1.0-alpha`)
 
 <a id="kind-dedicatedaicluster-spec"></a>
 ### Spec
@@ -155,7 +157,7 @@ Endpoint is the Schema for the endpoints API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `generativeai.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/generativeai/v1beta1/endpoint.md) (`config/samples/generativeai_v1beta1_endpoint.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Generative AI (`v2.1.0-alpha`)
 
 <a id="kind-endpoint-spec"></a>
 ### Spec
@@ -348,7 +350,7 @@ Model is the Schema for the models API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `generativeai.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/generativeai/v1beta1/model.md) (`config/samples/generativeai_v1beta1_model.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Generative AI (`v2.1.0-alpha`)
 
 <a id="kind-model-spec"></a>
 ### Spec

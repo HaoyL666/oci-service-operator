@@ -11,17 +11,19 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `usageapi.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Usage API | preview | `v2.1.0-alpha` | [CustomTable](#kind-customtable), [Query](#kind-query), [Schedule](#kind-schedule), [UsageCarbonEmissionsQuery](#kind-usagecarbonemissionsquery) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [CustomTable](#kind-customtable) | Namespaced | [Sample](../../../samples/usageapi/v1beta1/customtable.md) | - |
-| [Query](#kind-query) | Namespaced | [Sample](../../../samples/usageapi/v1beta1/query.md) | - |
-| [Schedule](#kind-schedule) | Namespaced | [Sample](../../../samples/usageapi/v1beta1/schedule.md) | - |
-| [UsageCarbonEmissionsQuery](#kind-usagecarbonemissionsquery) | Namespaced | [Sample](../../../samples/usageapi/v1beta1/usagecarbonemissionsquery.md) | - |
+| [CustomTable](#kind-customtable) | Namespaced | [Sample](../../../samples/usageapi/v1beta1/customtable.md) | Usage API (`v2.1.0-alpha`) |
+| [Query](#kind-query) | Namespaced | [Sample](../../../samples/usageapi/v1beta1/query.md) | Usage API (`v2.1.0-alpha`) |
+| [Schedule](#kind-schedule) | Namespaced | [Sample](../../../samples/usageapi/v1beta1/schedule.md) | Usage API (`v2.1.0-alpha`) |
+| [UsageCarbonEmissionsQuery](#kind-usagecarbonemissionsquery) | Namespaced | [Sample](../../../samples/usageapi/v1beta1/usagecarbonemissionsquery.md) | Usage API (`v2.1.0-alpha`) |
 
 <a id="kind-customtable"></a>
 ## CustomTable
@@ -32,7 +34,7 @@ CustomTable is the Schema for the customtables API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `usageapi.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/usageapi/v1beta1/customtable.md) (`config/samples/usageapi_v1beta1_customtable.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Usage API (`v2.1.0-alpha`)
 
 <a id="kind-customtable-spec"></a>
 ### Spec
@@ -184,7 +186,7 @@ Query is the Schema for the queries API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `usageapi.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/usageapi/v1beta1/query.md) (`config/samples/usageapi_v1beta1_query.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Usage API (`v2.1.0-alpha`)
 
 <a id="kind-query-spec"></a>
 ### Spec
@@ -500,7 +502,7 @@ Schedule is the Schema for the schedules API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `usageapi.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/usageapi/v1beta1/schedule.md) (`config/samples/usageapi_v1beta1_schedule.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Usage API (`v2.1.0-alpha`)
 
 <a id="kind-schedule-spec"></a>
 ### Spec
@@ -812,7 +814,7 @@ UsageCarbonEmissionsQuery is the Schema for the usagecarbonemissionsqueries API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `usageapi.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/usageapi/v1beta1/usagecarbonemissionsquery.md) (`config/samples/usageapi_v1beta1_usagecarbonemissionsquery.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Usage API (`v2.1.0-alpha`)
 
 <a id="kind-usagecarbonemissionsquery-spec"></a>
 ### Spec

@@ -2,7 +2,7 @@
 
 # Generative AI Agent
 
-Manage OCI Generative AI Agent agents and knowledge bases from Kubernetes with reviewed controller-backed runtimes.
+Manage OCI Generative AI Agent agents, agent endpoints, data sources, and knowledge bases from Kubernetes with reviewed controller-backed runtimes.
 
 | Field | Value |
 | --- | --- |
@@ -16,7 +16,7 @@ Manage OCI Generative AI Agent agents and knowledge bases from Kubernetes with r
 
 ## Notes
 
-- Current package scope is intentionally limited to Agent and KnowledgeBase while AgentEndpoint, DataSource, DataIngestionJob, ProvisionedCapacity, Tool, and work-request helper families stay unpublished.
+- Current package scope includes Agent, AgentEndpoint, DataSource, and KnowledgeBase while DataIngestionJob, ProvisionedCapacity, Tool, and work-request helper families stay unpublished.
 - The published runtimes use service-SDK work requests for create, update, and delete. `ChangeAgentCompartment` and `ChangeKnowledgeBaseCompartment` both stay out of scope for the controller-backed surface.
 - The published package keeps `generativeaiagent/KnowledgeBase` explicitly distinct from the existing `adm/KnowledgeBase` rollout in docs, catalog metadata, and formal/runtime surfaces.
 - No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
@@ -27,6 +27,6 @@ Manage OCI Generative AI Agent agents and knowledge bases from Kubernetes with r
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
 | `generativeaiagent/Agent` | `generativeaiagent.oracle.com/v1beta1` | Manage OCI Generative AI Agents. | — | [Sample](../../samples/generativeaiagent/v1beta1/agent.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-agent) |
-| `generativeaiagent/AgentEndpoint` | `generativeaiagent.oracle.com/v1beta1` | — | — | [Sample](../../samples/generativeaiagent/v1beta1/agentendpoint.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-agentendpoint) |
-| `generativeaiagent/DataSource` | `generativeaiagent.oracle.com/v1beta1` | — | — | [Sample](../../samples/generativeaiagent/v1beta1/datasource.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-datasource) |
+| `generativeaiagent/AgentEndpoint` | `generativeaiagent.oracle.com/v1beta1` | Manage OCI Generative AI Agent endpoints. | — | [Sample](../../samples/generativeaiagent/v1beta1/agentendpoint.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-agentendpoint) |
+| `generativeaiagent/DataSource` | `generativeaiagent.oracle.com/v1beta1` | Manage OCI Generative AI Agent data sources. | — | [Sample](../../samples/generativeaiagent/v1beta1/datasource.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-datasource) |
 | `generativeaiagent/KnowledgeBase` | `generativeaiagent.oracle.com/v1beta1` | Manage OCI Generative AI Agent knowledge bases. | — | [Sample](../../samples/generativeaiagent/v1beta1/knowledgebase.md) | [Reference](../../api/generativeaiagent/v1beta1/index.md#kind-knowledgebase) |

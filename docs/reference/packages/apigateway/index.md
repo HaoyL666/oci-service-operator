@@ -8,7 +8,7 @@ Manage OCI API Gateway gateways and deployments from Kubernetes.
 | --- | --- |
 | Package | `apigateway` |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-apigateway-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-apigateway:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-apigateway-bundle:<version>` |

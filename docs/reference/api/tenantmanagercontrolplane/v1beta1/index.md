@@ -133,7 +133,7 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 <a id="kind-domaingovernance"></a>
 ## DomainGovernance
 
-DomainGovernance is the Schema for the domaingovernances API.
+Manage OCI domain governance resources with lifecycle-based generatedruntime semantics.
 
 - `Plural`: `domaingovernances`
 - `Scope`: `Namespaced`

@@ -8,7 +8,7 @@ Manage OCI Container Engine for Kubernetes clusters and node pools from Kubernet
 | --- | --- |
 | Package | `containerengine` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-containerengine-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-containerengine:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-containerengine-bundle:<version>` |
@@ -17,12 +17,10 @@ Manage OCI Container Engine for Kubernetes clusters and node pools from Kubernet
 ## Notes
 
 - Current package scope includes `Cluster` and `NodePool`.
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `containerengine/Cluster` | `containerengine.oracle.com/v1beta1` | Manage OCI Container Engine for Kubernetes clusters. | — | [Sample](../../samples/containerengine/v1beta1/cluster.md) | [Reference](../../api/containerengine/v1beta1/index.md#kind-cluster) |
-| `containerengine/NodePool` | `containerengine.oracle.com/v1beta1` | Manage OCI Container Engine for Kubernetes node pools. | — | [Sample](../../samples/containerengine/v1beta1/nodepool.md) | [Reference](../../api/containerengine/v1beta1/index.md#kind-nodepool) |
+| `containerengine/Cluster` | `containerengine.oracle.com/v1beta1` | Manage OCI Container Engine for Kubernetes clusters. | [Guide](../../../guides/containerengine/cluster.md) | [Sample](../../samples/containerengine/v1beta1/cluster.md) | [Reference](../../api/containerengine/v1beta1/index.md#kind-cluster) |
+| `containerengine/NodePool` | `containerengine.oracle.com/v1beta1` | Manage OCI Container Engine for Kubernetes node pools. | [Guide](../../../guides/containerengine/nodepool.md) | [Sample](../../samples/containerengine/v1beta1/nodepool.md) | [Reference](../../api/containerengine/v1beta1/index.md#kind-nodepool) |

@@ -8,22 +8,17 @@ Manage OCI Logging resources from Kubernetes.
 | --- | --- |
 | Package | `logging` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-logging-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-logging:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-logging-bundle:<version>` |
 | Setup Guide | [Open guide](../../../installation.md) |
 
-## Notes
-
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
-
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `logging/Log` | `logging.oracle.com/v1beta1` | — | — | [Sample](../../samples/logging/v1beta1/log.md) | [Reference](../../api/logging/v1beta1/index.md#kind-log) |
-| `logging/LogGroup` | `logging.oracle.com/v1beta1` | — | — | [Sample](../../samples/logging/v1beta1/loggroup.md) | [Reference](../../api/logging/v1beta1/index.md#kind-loggroup) |
-| `logging/LogSavedSearch` | `logging.oracle.com/v1beta1` | — | — | [Sample](../../samples/logging/v1beta1/logsavedsearch.md) | [Reference](../../api/logging/v1beta1/index.md#kind-logsavedsearch) |
-| `logging/UnifiedAgentConfiguration` | `logging.oracle.com/v1beta1` | — | — | [Sample](../../samples/logging/v1beta1/unifiedagentconfiguration.md) | [Reference](../../api/logging/v1beta1/index.md#kind-unifiedagentconfiguration) |
+| `logging/Log` | `logging.oracle.com/v1beta1` | — | [Guide](../../../guides/logging/log.md) | [Sample](../../samples/logging/v1beta1/log.md) | [Reference](../../api/logging/v1beta1/index.md#kind-log) |
+| `logging/LogGroup` | `logging.oracle.com/v1beta1` | — | [Guide](../../../guides/logging/loggroup.md) | [Sample](../../samples/logging/v1beta1/loggroup.md) | [Reference](../../api/logging/v1beta1/index.md#kind-loggroup) |
+| `logging/LogSavedSearch` | `logging.oracle.com/v1beta1` | — | [Guide](../../../guides/logging/logsavedsearch.md) | [Sample](../../samples/logging/v1beta1/logsavedsearch.md) | [Reference](../../api/logging/v1beta1/index.md#kind-logsavedsearch) |
+| `logging/UnifiedAgentConfiguration` | `logging.oracle.com/v1beta1` | — | [Guide](../../../guides/logging/unifiedagentconfiguration.md) | [Sample](../../samples/logging/v1beta1/unifiedagentconfiguration.md) | [Reference](../../api/logging/v1beta1/index.md#kind-unifiedagentconfiguration) |

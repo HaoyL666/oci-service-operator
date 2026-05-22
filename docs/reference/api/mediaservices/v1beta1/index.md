@@ -231,7 +231,7 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 <a id="kind-mediaworkflow"></a>
 ## MediaWorkflow
 
-MediaWorkflow is the Schema for the mediaworkflows API.
+Manage OCI Media Services media workflows.
 
 - `Plural`: `mediaworkflows`
 - `Scope`: `Namespaced`
@@ -406,7 +406,7 @@ MediaWorkflowTask defines nested fields for MediaWorkflow.Task.
 <a id="kind-mediaworkflowconfiguration"></a>
 ## MediaWorkflowConfiguration
 
-MediaWorkflowConfiguration is the Schema for the mediaworkflowconfigurations API.
+Manage OCI Media Services media workflow configurations.
 
 - `Plural`: `mediaworkflowconfigurations`
 - `Scope`: `Namespaced`

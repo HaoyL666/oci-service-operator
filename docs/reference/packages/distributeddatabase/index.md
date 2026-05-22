@@ -2,7 +2,7 @@
 
 # Distributed Database
 
-Manage OCI Distributed Database private endpoints from Kubernetes with a reviewed controller-backed lifecycle runtime.
+Manage OCI Distributed Databases and private endpoints from Kubernetes with reviewed lifecycle runtimes.
 
 | Field | Value |
 | --- | --- |
@@ -16,8 +16,8 @@ Manage OCI Distributed Database private endpoints from Kubernetes with a reviewe
 
 ## Notes
 
-- Current package scope is intentionally limited to DistributedDatabasePrivateEndpoint while distributed databases, validation helpers, wallet flows, and other service families stay unpublished.
-- The published runtime is lifecycle-classified, rereads GetDistributedDatabasePrivateEndpoint after bind and write paths because list returns summaries, and keeps delete confirmation explicit until DELETED or NotFound.
+- Current package scope includes DistributedDatabase and DistributedDatabasePrivateEndpoint while validation helpers, wallet flows, and other service families stay unpublished.
+- The published runtimes are lifecycle-classified, reread after bind and write paths when list calls return summaries, and keep delete confirmation explicit until DELETED or NotFound.
 - No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
 - This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
@@ -25,5 +25,5 @@ Manage OCI Distributed Database private endpoints from Kubernetes with a reviewe
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `distributeddatabase/DistributedDatabase` | `distributeddatabase.oracle.com/v1beta1` | — | — | [Sample](../../samples/distributeddatabase/v1beta1/distributeddatabase.md) | [Reference](../../api/distributeddatabase/v1beta1/index.md#kind-distributeddatabase) |
+| `distributeddatabase/DistributedDatabase` | `distributeddatabase.oracle.com/v1beta1` | Manage OCI Distributed Databases. | — | [Sample](../../samples/distributeddatabase/v1beta1/distributeddatabase.md) | [Reference](../../api/distributeddatabase/v1beta1/index.md#kind-distributeddatabase) |
 | `distributeddatabase/DistributedDatabasePrivateEndpoint` | `distributeddatabase.oracle.com/v1beta1` | Manage OCI Distributed Database private endpoints. | — | [Sample](../../samples/distributeddatabase/v1beta1/distributeddatabaseprivateendpoint.md) | [Reference](../../api/distributeddatabase/v1beta1/index.md#kind-distributeddatabaseprivateendpoint) |

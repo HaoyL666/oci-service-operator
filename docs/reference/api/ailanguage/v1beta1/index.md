@@ -11,14 +11,16 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `ailanguage.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| AI Language | preview | `v2.1.0-alpha` | [Project](#kind-project) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Project](#kind-project) | Namespaced | [Sample](../../../samples/ailanguage/v1beta1/project.md) | - |
+| [Project](#kind-project) | Namespaced | [Sample](../../../samples/ailanguage/v1beta1/project.md) | AI Language (`v2.1.0-alpha`) |
 
 <a id="kind-project"></a>
 ## Project
@@ -29,7 +31,7 @@ Manage OCI AI Language projects.
 - `Scope`: `Namespaced`
 - `APIVersion`: `ailanguage.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/ailanguage/v1beta1/project.md) (`config/samples/ailanguage_v1beta1_project.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: AI Language (`v2.1.0-alpha`)
 
 <a id="kind-project-spec"></a>
 ### Spec

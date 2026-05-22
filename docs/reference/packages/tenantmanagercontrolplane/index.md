@@ -2,7 +2,7 @@
 
 # Tenant Manager Control Plane
 
-Manage OCI domains and existing organizations from Kubernetes with truthful service-specific runtime behavior.
+Manage OCI domains, domain governance, and existing organizations from Kubernetes with truthful service-specific runtime behavior.
 
 | Field | Value |
 | --- | --- |
@@ -16,8 +16,8 @@ Manage OCI domains and existing organizations from Kubernetes with truthful serv
 
 ## Notes
 
-- Current package scope includes Domain and Organization while OrganizationTenancy, DomainGovernance, invitation, and subscription-mapping helper families stay unpublished.
-- The published runtime is intentionally mixed: Domain exposes workrequest-aware create, direct-body update, and confirmed OCI delete; Organization remains bind-existing plus update-only with local unbind on CR delete.
+- Current package scope includes Domain, DomainGovernance, and Organization while OrganizationTenancy, invitation, and subscription-mapping helper families stay unpublished.
+- The published runtime is intentionally mixed: Domain exposes workrequest-aware create, direct-body update, and confirmed OCI delete; DomainGovernance keeps lifecycle-based generatedruntime rereads; Organization remains bind-existing plus update-only with local unbind on CR delete.
 - No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
 - This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
@@ -26,5 +26,5 @@ Manage OCI domains and existing organizations from Kubernetes with truthful serv
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
 | `tenantmanagercontrolplane/Domain` | `tenantmanagercontrolplane.oracle.com/v1beta1` | Manage OCI domains with workrequest-aware create behavior and confirmed OCI delete semantics. | — | [Sample](../../samples/tenantmanagercontrolplane/v1beta1/domain.md) | [Reference](../../api/tenantmanagercontrolplane/v1beta1/index.md#kind-domain) |
-| `tenantmanagercontrolplane/DomainGovernance` | `tenantmanagercontrolplane.oracle.com/v1beta1` | — | — | [Sample](../../samples/tenantmanagercontrolplane/v1beta1/domaingovernance.md) | [Reference](../../api/tenantmanagercontrolplane/v1beta1/index.md#kind-domaingovernance) |
+| `tenantmanagercontrolplane/DomainGovernance` | `tenantmanagercontrolplane.oracle.com/v1beta1` | Manage OCI domain governance resources with lifecycle-based generatedruntime semantics. | — | [Sample](../../samples/tenantmanagercontrolplane/v1beta1/domaingovernance.md) | [Reference](../../api/tenantmanagercontrolplane/v1beta1/index.md#kind-domaingovernance) |
 | `tenantmanagercontrolplane/Organization` | `tenantmanagercontrolplane.oracle.com/v1beta1` | Manage existing OCI organizations with an update-only default subscription contract. | — | [Sample](../../samples/tenantmanagercontrolplane/v1beta1/organization.md) | [Reference](../../api/tenantmanagercontrolplane/v1beta1/index.md#kind-organization) |

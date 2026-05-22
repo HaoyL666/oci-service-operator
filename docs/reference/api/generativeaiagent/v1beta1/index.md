@@ -213,7 +213,7 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 <a id="kind-agentendpoint"></a>
 ## AgentEndpoint
 
-AgentEndpoint is the Schema for the agentendpoints API.
+Manage OCI Generative AI Agent endpoints.
 
 - `Plural`: `agentendpoints`
 - `Scope`: `Namespaced`
@@ -632,7 +632,7 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 <a id="kind-datasource"></a>
 ## DataSource
 
-DataSource is the Schema for the datasources API.
+Manage OCI Generative AI Agent data sources.
 
 - `Plural`: `datasources`
 - `Scope`: `Namespaced`
