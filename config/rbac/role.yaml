@@ -1082,6 +1082,7 @@ rules:
   resources:
   - assessments
   - connections
+  - migrations
   verbs:
   - create
   - delete
@@ -1095,6 +1096,7 @@ rules:
   resources:
   - assessments/finalizers
   - connections/finalizers
+  - migrations/finalizers
   verbs:
   - update
 - apiGroups:
@@ -1102,6 +1104,7 @@ rules:
   resources:
   - assessments/status
   - connections/status
+  - migrations/status
   verbs:
   - get
   - patch
@@ -1717,6 +1720,7 @@ rules:
 - apiGroups:
   - disasterrecovery.oracle.com
   resources:
+  - drplans
   - drprotectiongroups
   verbs:
   - create
@@ -1729,12 +1733,14 @@ rules:
 - apiGroups:
   - disasterrecovery.oracle.com
   resources:
+  - drplans/finalizers
   - drprotectiongroups/finalizers
   verbs:
   - update
 - apiGroups:
   - disasterrecovery.oracle.com
   resources:
+  - drplans/status
   - drprotectiongroups/status
   verbs:
   - get
@@ -1744,6 +1750,7 @@ rules:
   - distributeddatabase.oracle.com
   resources:
   - distributeddatabaseprivateendpoints
+  - distributeddatabases
   verbs:
   - create
   - delete
@@ -1756,12 +1763,14 @@ rules:
   - distributeddatabase.oracle.com
   resources:
   - distributeddatabaseprivateendpoints/finalizers
+  - distributeddatabases/finalizers
   verbs:
   - update
 - apiGroups:
   - distributeddatabase.oracle.com
   resources:
   - distributeddatabaseprivateendpoints/status
+  - distributeddatabases/status
   verbs:
   - get
   - patch
@@ -2172,7 +2181,9 @@ rules:
 - apiGroups:
   - generativeaiagent.oracle.com
   resources:
+  - agentendpoints
   - agents
+  - datasources
   - knowledgebases
   verbs:
   - create
@@ -2185,14 +2196,18 @@ rules:
 - apiGroups:
   - generativeaiagent.oracle.com
   resources:
+  - agentendpoints/finalizers
   - agents/finalizers
+  - datasources/finalizers
   - knowledgebases/finalizers
   verbs:
   - update
 - apiGroups:
   - generativeaiagent.oracle.com
   resources:
+  - agentendpoints/status
   - agents/status
+  - datasources/status
   - knowledgebases/status
   verbs:
   - get
@@ -2478,6 +2493,7 @@ rules:
   - jms.oracle.com
   resources:
   - fleets
+  - jmsplugins
   verbs:
   - create
   - delete
@@ -2490,12 +2506,14 @@ rules:
   - jms.oracle.com
   resources:
   - fleets/finalizers
+  - jmsplugins/finalizers
   verbs:
   - update
 - apiGroups:
   - jms.oracle.com
   resources:
   - fleets/status
+  - jmsplugins/status
   verbs:
   - get
   - patch
@@ -3063,6 +3081,7 @@ rules:
   - mediaservices.oracle.com
   resources:
   - mediaassets
+  - mediaworkflowconfigurations
   - mediaworkflows
   verbs:
   - create
@@ -3076,6 +3095,7 @@ rules:
   - mediaservices.oracle.com
   resources:
   - mediaassets/finalizers
+  - mediaworkflowconfigurations/finalizers
   - mediaworkflows/finalizers
   verbs:
   - update
@@ -3083,6 +3103,7 @@ rules:
   - mediaservices.oracle.com
   resources:
   - mediaassets/status
+  - mediaworkflowconfigurations/status
   - mediaworkflows/status
   verbs:
   - get
@@ -4267,6 +4288,7 @@ rules:
 - apiGroups:
   - tenantmanagercontrolplane.oracle.com
   resources:
+  - domaingovernances
   - domains
   - organizations
   verbs:
@@ -4280,6 +4302,7 @@ rules:
 - apiGroups:
   - tenantmanagercontrolplane.oracle.com
   resources:
+  - domaingovernances/finalizers
   - domains/finalizers
   - organizations/finalizers
   verbs:
@@ -4287,6 +4310,7 @@ rules:
 - apiGroups:
   - tenantmanagercontrolplane.oracle.com
   resources:
+  - domaingovernances/status
   - domains/status
   - organizations/status
   verbs:

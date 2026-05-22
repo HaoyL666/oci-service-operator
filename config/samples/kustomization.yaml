@@ -451,6 +451,14 @@ resources:
 - wlms_v1beta1_wlsdomain.yaml
 - zpr_v1beta1_configuration.yaml
 - zpr_v1beta1_zprpolicy.yaml
+- databasemigration_v1beta1_migration.yaml
+- disasterrecovery_v1beta1_drplan.yaml
+- distributeddatabase_v1beta1_distributeddatabase.yaml
+- generativeaiagent_v1beta1_agentendpoint.yaml
+- generativeaiagent_v1beta1_datasource.yaml
+- jms_v1beta1_jmsplugin.yaml
+- mediaservices_v1beta1_mediaworkflowconfiguration.yaml
+- tenantmanagercontrolplane_v1beta1_domaingovernance.yaml
 - genericartifactscontent_v1beta1_genericartifactcontent.yaml
 - genericartifactscontent_v1beta1_genericartifactcontentbypath.yaml
 - jmsutils_v1beta1_analyzeapplicationsconfiguration.yaml

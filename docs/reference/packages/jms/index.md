@@ -2,7 +2,7 @@
 
 # Java Management Service
 
-Manage OCI Java Management Service fleets from Kubernetes with a reviewed controller-backed runtime.
+Manage OCI Java Management Service fleets and plugins from Kubernetes with reviewed controller-backed runtimes.
 
 | Field | Value |
 | --- | --- |
@@ -16,8 +16,9 @@ Manage OCI Java Management Service fleets from Kubernetes with a reviewed contro
 
 ## Notes
 
-- Current package scope is intentionally limited to Fleet while advanced feature configuration, agent configuration, DRS, analysis, and work-request helper families stay unpublished.
-- The published runtime uses service-SDK work requests for create, update, and delete, keeps `inventoryLog` required from the first spec, treats `NEEDS_ATTENTION` as a steady success state, and leaves `ChangeFleetCompartment` out of scope.
+- Current package scope includes Fleet and JmsPlugin while advanced feature configuration, agent configuration, DRS, analysis, and work-request helper families stay unpublished.
+- Fleet uses service-SDK work requests for create, update, and delete, keeps `inventoryLog` required from the first spec, treats `NEEDS_ATTENTION` as a steady success state, and leaves `ChangeFleetCompartment` out of scope.
+- JmsPlugin keeps lifecycle-based generatedruntime rereads and direct response-body projection without a service-local work-request resume path.
 - No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
 - This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
@@ -26,3 +27,4 @@ Manage OCI Java Management Service fleets from Kubernetes with a reviewed contro
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
 | `jms/Fleet` | `jms.oracle.com/v1beta1` | Manage OCI Java Management Service fleets. | — | [Sample](../../samples/jms/v1beta1/fleet.md) | [Reference](../../api/jms/v1beta1/index.md#kind-fleet) |
+| `jms/JmsPlugin` | `jms.oracle.com/v1beta1` | Manage OCI Java Management Service plugins. | — | [Sample](../../samples/jms/v1beta1/jmsplugin.md) | [Reference](../../api/jms/v1beta1/index.md#kind-jmsplugin) |

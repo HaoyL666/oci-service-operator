@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "generativeaiagent",
+  "slug": "agentendpoint",
+  "kind": "AgentEndpoint",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_generative_ai_agent_agent_endpoint",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateAgentEndpoint",
+        "requestType": "generativeaiagent.CreateAgentEndpointRequest",
+        "responseType": "generativeaiagent.CreateAgentEndpointResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetAgentEndpoint",
+        "requestType": "generativeaiagent.GetAgentEndpointRequest",
+        "responseType": "generativeaiagent.GetAgentEndpointResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListAgentEndpoints",
+        "requestType": "generativeaiagent.ListAgentEndpointsRequest",
+        "responseType": "generativeaiagent.ListAgentEndpointsResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "ChangeAgentEndpointCompartment",
+        "requestType": "generativeaiagent.ChangeAgentEndpointCompartmentRequest",
+        "responseType": "generativeaiagent.ChangeAgentEndpointCompartmentResponse"
+      },
+      {
+        "operation": "UpdateAgentEndpoint",
+        "requestType": "generativeaiagent.UpdateAgentEndpointRequest",
+        "responseType": "generativeaiagent.UpdateAgentEndpointResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteAgentEndpoint",
+        "requestType": "generativeaiagent.DeleteAgentEndpointRequest",
+        "responseType": "generativeaiagent.DeleteAgentEndpointResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "CREATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "compartment_id",
+      "content_moderation_config",
+      "defined_tags",
+      "description",
+      "display_name",
+      "freeform_tags",
+      "guardrail_config",
+      "human_input_config",
+      "metadata",
+      "output_config",
+      "provisioned_capacity_config",
+      "session_config",
+      "should_enable_citation",
+      "should_enable_multi_language",
+      "should_enable_trace"
+    ],
+    "forceNew": null,
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "agentEndpoint",
+        "action": "UPDATED"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "agentEndpoint",
+        "action": "DELETED"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_generative_ai_agent_agent_endpoints",
+    "collectionField": "agent_endpoint_collection",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "agent_id",
+      "compartment_id",
+      "display_name",
+      "lifecycle_state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/generativeaiagent/agentendpoint/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/generativeaiagent/agentendpoint/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "list-lookup",
+      "mutation-policy",
+      "status-projection",
+      "waiter-work-request",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Pinned OCI SDK contract: CreateAgentEndpoint, GetAgentEndpoint, ListAgentEndpoints, ChangeAgentEndpointCompartment, UpdateAgentEndpoint, DeleteAgentEndpoint, and GetWorkRequest are present in v65.110.0. ListAgentEndpoints filters compartmentId, agentId, lifecycleState, and displayName; create returns the resource body plus opc-work-request-id, and update/delete/change-compartment return opc-work-request-id without an AgentEndpoint body.",
+    "Pinned provider surface: oci_generative_ai_agent_agent_endpoint plus the singular and list data sources oci_generative_ai_agent_agent_endpoint and oci_generative_ai_agent_agent_endpoints are expected to follow the same work-request-backed CRUD shape as the service SDK for create, update, delete, and compartment changes. The reviewed runtime keeps using service-sdk GetWorkRequest polling and shared async status instead of provider helper waiters.",
+    "Repo-authored bind-versus-create stays explicit: when no OCI identifier is tracked, the runtime uses exact compartmentId plus agentId plus displayName list matches, ignores FAILED, DELETING, and DELETED summaries, treats ACTIVE, CREATING, and UPDATING as reusable candidates, and fails on duplicate exact-name matches instead of adopting arbitrarily.",
+    "Repo-authored mutation policy stays explicit: displayName, description, contentModerationConfig, guardrailConfig, metadata, humanInputConfig, outputConfig, shouldEnableTrace, shouldEnableCitation, shouldEnableMultiLanguage, sessionConfig, provisionedCapacityConfig, freeformTags, and definedTags reconcile in place. Provider support for moving compartment_id remains out-of-scope drift because the published runtime treats compartmentId as replacement-only, keeps agentId and shouldEnableSession create-only, and never calls ChangeAgentEndpointCompartment."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-mutability-overlay-docs-input",
+  "service": "databasemigration",
+  "kind": "Migration",
+  "formalSlug": "migration",
+  "providerResource": "oci_database_migration_migration",
+  "terraformDocsVersion": "7.22.0",
+  "registryPath": "providers/oracle/oci/7.22.0/docs/resources/database_migration_migration",
+  "registryURL": "https://registry.terraform.io/providers/oracle/oci/7.22.0/docs/resources/database_migration_migration",
+  "contentType": "text/html; charset=utf-8",
+  "pageShape": "argumentReferenceHTML",
+  "inputSource": "fixture",
+  "inputIdentity": "fixture:7.22.0/databasemigration/migration/page.html",
+  "bodySHA256": "9dfd2af7fe9a10d5e932a5af6dd5c563893a441eed30f970b75546e107f1a4f3",
+  "bodyBytes": 2860,
+  "fixtureBodyPath": "7.22.0/databasemigration/migration/page.html"
+}

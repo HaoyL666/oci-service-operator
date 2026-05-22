@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "generativeaiagent",
+  "slug": "datasource",
+  "kind": "DataSource",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_generative_ai_agent_data_source",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateDataSource",
+        "requestType": "generativeaiagent.CreateDataSourceRequest",
+        "responseType": "generativeaiagent.CreateDataSourceResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetDataSource",
+        "requestType": "generativeaiagent.GetDataSourceRequest",
+        "responseType": "generativeaiagent.GetDataSourceResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListDataSources",
+        "requestType": "generativeaiagent.ListDataSourcesRequest",
+        "responseType": "generativeaiagent.ListDataSourcesResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateDataSource",
+        "requestType": "generativeaiagent.UpdateDataSourceRequest",
+        "responseType": "generativeaiagent.UpdateDataSourceResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteDataSource",
+        "requestType": "generativeaiagent.DeleteDataSourceRequest",
+        "responseType": "generativeaiagent.DeleteDataSourceResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "CREATING"
+      ],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "data_source_config",
+      "defined_tags",
+      "description",
+      "display_name",
+      "freeform_tags",
+      "metadata"
+    ],
+    "forceNew": [
+      "compartment_id",
+      "knowledge_base_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "datasource",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "datasource",
+        "action": "UPDATED"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "datasource",
+        "action": "DELETED"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_generative_ai_agent_data_sources",
+    "collectionField": "data_source_collection",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "knowledge_base_id",
+      "display_name",
+      "lifecycle_state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/generativeaiagent/datasource/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/generativeaiagent/datasource/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "secret-output",
+      "delete-confirmation"
+    ]
+  },
+  "notes": [
+    "Pinned OCI SDK contract: CreateDataSource, GetDataSource, ListDataSources, UpdateDataSource, DeleteDataSource, and GetWorkRequest are present in v65.110.0. ListDataSources filters compartmentId, knowledgeBaseId, lifecycleState, and displayName; create returns the resource body plus opc-work-request-id; and update/delete return opc-work-request-id without a DataSource body.",
+    "Repo-authored bind-versus-create stays explicit: when no OCI identifier is tracked, the runtime uses exact compartmentId plus knowledgeBaseId plus displayName list matches, ignores FAILED, DELETING, and DELETED summaries, treats ACTIVE, INACTIVE, CREATING, and UPDATING as reusable candidates, and fails on duplicate exact-name matches instead of adopting arbitrarily.",
+    "Repo-authored mutation policy stays explicit: only displayName, description, dataSourceConfig, metadata, freeformTags, and definedTags reconcile in place. CompartmentId and knowledgeBaseId are replacement-only drift, and the reviewed runtime keeps the datasource-specific behavior in the resource-local service-manager package instead of widening shared generatedruntime hooks.",
+    "The reviewed runtime prefers the create response body when OCI returns a DataSource identifier and otherwise recovers the created OCID from work-request resources before rereading GetDataSource. Shared manifest promotion for this row is intentionally deferred to the convergence story."
+  ]
+}

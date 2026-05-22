@@ -18,7 +18,748 @@ No customer-visible package currently exposes `distributeddatabase.oracle.com/v1
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
+| [DistributedDatabase](#kind-distributeddatabase) | Namespaced | [Sample](../../../samples/distributeddatabase/v1beta1/distributeddatabase.md) | - |
 | [DistributedDatabasePrivateEndpoint](#kind-distributeddatabaseprivateendpoint) | Namespaced | [Sample](../../../samples/distributeddatabase/v1beta1/distributeddatabaseprivateendpoint.md) | - |
+
+<a id="kind-distributeddatabase"></a>
+## DistributedDatabase
+
+Manage OCI Distributed Databases.
+
+- `Plural`: `distributeddatabases`
+- `Scope`: `Namespaced`
+- `APIVersion`: `distributeddatabase.oracle.com/v1beta1`
+- `Sample`: [Sample](../../../samples/distributeddatabase/v1beta1/distributeddatabase.md) (`config/samples/distributeddatabase_v1beta1_distributeddatabase.yaml`)
+- `Packages`: Not currently exposed by a customer-visible package.
+
+<a id="kind-distributeddatabase-spec"></a>
+### Spec
+
+DistributedDatabaseSpec defines the desired state of DistributedDatabase.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`catalogDetails`](#kind-distributeddatabase-spec-catalogdetails) | Collection of catalog for the Globally distributed database. | `list[object]` | Yes | - | - |
+| `characterSet` | The character set for the database. | `string` | Yes | - | - |
+| `chunks` | Number of chunks in a shardspace. The value of chunks must be greater than 2 times the size of the largest shardgroup in any shardspace. Chunks is required to be provided for distributed databases being created with SYSTEM shardingMethod. For USER shardingMethod, chunks should not be set in create payload. | `integer` | No | - | - |
+| `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Globally distributed database compartment. | `string` | Yes | - | - |
+| `databaseVersion` | Oracle Database version for the shards and catalog used in Globally distributed database. | `string` | Yes | - | - |
+| [`dbBackupConfig`](#kind-distributeddatabase-spec-dbbackupconfig) | DistributedDatabaseDbBackupConfig defines nested fields for DistributedDatabase.DbBackupConfig. | `object` | No | - | - |
+| `dbDeploymentType` | The distributed database deployment type. | `string` | Yes | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
+| `displayName` | The display name of the Globally distributed database. | `string` | Yes | - | - |
+| `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
+| `gsmSshPublicKey` | The SSH public key for Global service manager instances. | `string` | No | - | - |
+| `listenerPort` | The listener port number for the Globally distributed database. The listener port number has to be unique for a customer tenancy across all distributed databases. Same port number should not be re-used for any other distributed database. | `integer` | Yes | - | - |
+| `listenerPortTls` | The TLS listener port number for the Globally distributed database. The TLS listener port number has to be unique for a customer tenancy across all distributed databases. Same port number should not be re-used for any other distributed database. For BASE_DB and EXADB_XS based distributed databases, tls is not supported hence the listenerPortTls is not needed to be provided in create payload. | `integer` | No | - | - |
+| `ncharacterSet` | The national character set for the database. | `string` | Yes | - | - |
+| `onsPortLocal` | The ons local port number for the Globally distributed database. The onsPortLocal has to be unique for a customer tenancy across all distributed databases. Same port number should not be re-used for any other distributed database. | `integer` | Yes | - | - |
+| `onsPortRemote` | The ons remote port number for the Globally distributed database. The onsPortRemote has to be unique for a customer tenancy across all distributed databases. Same port number should not be re-used for any other distributed database. | `integer` | Yes | - | - |
+| `prefix` | Unique name prefix for the Globally distributed databases. Only alpha-numeric values are allowed. First character has to be a letter followed by any combination of letter and number. | `string` | Yes | - | - |
+| `privateEndpointIds` | The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the private endpoint associated with Globally distributed autonomous database. | `list[string]` | Yes | - | - |
+| `replicationFactor` | The Replication factor for RAFT replication based Globally distributed database. Currently supported values are 3, 5 and 7. | `integer` | No | - | - |
+| `replicationMethod` | The Replication method for Globally distributed database. Use RAFT for Raft based replication. With RAFT replication, shards cannot have peers details set on them. In case shards need to have peers, please do not set RAFT replicationMethod. For all non RAFT replication cases (with or without peers), please set replicationMethod as DG or do not set any value for replicationMethod. | `string` | No | - | - |
+| `replicationUnit` | The replication unit count for RAFT based distributed database. For RAFT replication based Globally distributed database, the value should be at least twice the number of shards. | `integer` | No | - | - |
+| `scanListenerPort` | The TCP Single Client Access Name (SCAN) port for clusters created for Globally distributed database. The scanListenerPort number should only be provided if shard and catalog have source type NEW_VAULT_AND_CLUSTER. If shard and catalog have source type NEW_VAULT_AND_CLUSTER and scanListenerPort is not provided then the scanListenerPort will default to value 1521. | `integer` | No | - | - |
+| [`shardDetails`](#kind-distributeddatabase-spec-sharddetails) | Collection of shards for the Globally distributed database. | `list[object]` | Yes | - | - |
+| `shardingMethod` | Sharding Methods for the Globally distributed database. | `string` | Yes | - | - |
+
+<a id="kind-distributeddatabase-spec-catalogdetails"></a>
+#### Spec.catalogDetails[]
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseCatalogDetail defines nested fields for DistributedDatabase.CatalogDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `adminPassword` | The admin password for the catalog associated with Globally distributed database. | `string` | No | - | - |
+| `availabilityDomain` | The name of the availability domain that the distributed database shard will be located in. | `string` | No | - | - |
+| [`dbStorageVaultDetails`](#kind-distributeddatabase-spec-catalogdetails-dbstoragevaultdetails) | DistributedDatabaseCatalogDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.DbStorageVaultDetails. | `object` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `kmsKeyId` | The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations. | `string` | No | - | - |
+| `kmsKeyVersionId` | The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. | `string` | No | - | - |
+| [`peerDetails`](#kind-distributeddatabase-spec-catalogdetails-peerdetails) | The details required for creation of the peer for the ExadbXs infrastructure based catalog. | `list[object]` | No | - | - |
+| `peerVmClusterIds` | This field is deprecated. This should not be used while creation of new distributed database. To set the peers on catalog of distributed database please use peerDetails. | `list[string]` | No | - | - |
+| `shardSpace` | The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created. Shard space name shall be used while creation of new shards. | `string` | No | - | - |
+| `source` | - | `string` | No | - | - |
+| `vaultId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts). This parameter and `kmsKeyId` are required for Customer Managed Keys. | `string` | No | - | - |
+| [`vmClusterDetails`](#kind-distributeddatabase-spec-catalogdetails-vmclusterdetails) | DistributedDatabaseCatalogDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.VmClusterDetails. | `object` | No | - | - |
+| `vmClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster. | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-spec-catalogdetails-dbstoragevaultdetails"></a>
+##### Spec.catalogDetails[].dbStorageVaultDetails
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseCatalogDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.DbStorageVaultDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalFlashCacheInPercent` | The size of additional Flash Cache in percentage of High Capacity database storage. | `integer` | No | - | - |
+| `highCapacityDatabaseStorage` | Total storage capacity in GB for vault storage. | `integer` | Yes | - | - |
+
+<a id="kind-distributeddatabase-spec-catalogdetails-peerdetails"></a>
+##### Spec.catalogDetails[].peerDetails[]
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseCatalogDetailPeerDetail defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `availabilityDomain` | The name of the availability domain that the distributed database shard will be located in. | `string` | Yes | - | - |
+| [`dbStorageVaultDetails`](#kind-distributeddatabase-spec-catalogdetails-peerdetails-dbstoragevaultdetails) | DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.DbStorageVaultDetails. | `object` | Yes | - | - |
+| `protectionMode` | The protectionMode for the catalog peer. | `string` | No | - | - |
+| `transportType` | The redo transport type to use for this Data Guard association. | `string` | No | - | - |
+| [`vmClusterDetails`](#kind-distributeddatabase-spec-catalogdetails-peerdetails-vmclusterdetails) | DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.VmClusterDetails. | `object` | Yes | - | - |
+
+<a id="kind-distributeddatabase-spec-catalogdetails-peerdetails-dbstoragevaultdetails"></a>
+###### Spec.catalogDetails[].peerDetails[].dbStorageVaultDetails
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.DbStorageVaultDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalFlashCacheInPercent` | The size of additional Flash Cache in percentage of High Capacity database storage. | `integer` | No | - | - |
+| `highCapacityDatabaseStorage` | Total storage capacity in GB for vault storage. | `integer` | Yes | - | - |
+
+<a id="kind-distributeddatabase-spec-catalogdetails-peerdetails-vmclusterdetails"></a>
+###### Spec.catalogDetails[].peerDetails[].vmClusterDetails
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.VmClusterDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `backupNetworkNsgIds` | A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to. Setting this to an empty array after the list is created removes the resource from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems. | `list[string]` | No | - | - |
+| `backupSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `domain` | A domain name used for the Exadata VM cluster on Exascale Infrastructure. If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used (do not provide one). Otherwise, provide a valid DNS domain name. Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only. | `string` | No | - | - |
+| `enabledECpuCount` | The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure. | `integer` | Yes | - | - |
+| `isDiagnosticsEventsEnabled` | Indicates whether diagnostic collection is enabled for the VM cluster. Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues. Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system. You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isHealthMonitoringEnabled` | Indicates whether health monitoring is enabled for the VM cluster. Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel. You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system. Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isIncidentLogsEnabled` | Indicates whether incident logs and trace collection are enabled for the VM cluster. Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them. Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `licenseModel` | The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE. | `string` | No | - | - |
+| `nsgIds` | The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs. Setting this to an empty list removes all resources from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). | `list[string]` | No | - | - |
+| `privateZoneId` | The private zone ID in which you want DNS records to be created. | `string` | No | - | - |
+| `sshPublicKeys` | The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure. | `list[string]` | Yes | - | - |
+| `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `totalECpuCount` | The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure. | `integer` | No | - | - |
+| `vmFileSystemStorageSize` | File System Storage Size in GBs for Exadata VM cluster. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-spec-catalogdetails-vmclusterdetails"></a>
+##### Spec.catalogDetails[].vmClusterDetails
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseCatalogDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.VmClusterDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `backupNetworkNsgIds` | A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to. Setting this to an empty array after the list is created removes the resource from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems. | `list[string]` | No | - | - |
+| `backupSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `domain` | A domain name used for the Exadata VM cluster on Exascale Infrastructure. If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used (do not provide one). Otherwise, provide a valid DNS domain name. Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only. | `string` | No | - | - |
+| `enabledECpuCount` | The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure. | `integer` | Yes | - | - |
+| `isDiagnosticsEventsEnabled` | Indicates whether diagnostic collection is enabled for the VM cluster. Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues. Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system. You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isHealthMonitoringEnabled` | Indicates whether health monitoring is enabled for the VM cluster. Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel. You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system. Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isIncidentLogsEnabled` | Indicates whether incident logs and trace collection are enabled for the VM cluster. Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them. Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `licenseModel` | The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE. | `string` | No | - | - |
+| `nsgIds` | The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs. Setting this to an empty list removes all resources from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). | `list[string]` | No | - | - |
+| `privateZoneId` | The private zone ID in which you want DNS records to be created. | `string` | No | - | - |
+| `sshPublicKeys` | The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure. | `list[string]` | Yes | - | - |
+| `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `totalECpuCount` | The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure. | `integer` | No | - | - |
+| `vmFileSystemStorageSize` | File System Storage Size in GBs for Exadata VM cluster. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-spec-dbbackupconfig"></a>
+#### Spec.dbBackupConfig
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseDbBackupConfig defines nested fields for DistributedDatabase.DbBackupConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `autoBackupWindow` | Time window selected for initiating automatic backup for the database system. There are twelve available two-hour time windows. If no option is selected, a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive). Example: `SLOT_TWO` | `string` | No | - | - |
+| `autoFullBackupDay` | Day of the week the full backup should be applied on the database system. If no option is selected, the value is null and we will default to Sunday. | `string` | No | - | - |
+| `autoFullBackupWindow` | Time window selected for initiating full backup for the database system. There are twelve available two-hour time windows. If no option is selected, the value is null and a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive). Example: `SLOT_TWO` | `string` | No | - | - |
+| `backupDeletionPolicy` | This defines when the backups will be deleted. - IMMEDIATE option keep the backup for predefined time i.e 72 hours and then delete permanently... - RETAIN will keep the backups as per the policy defined for database backups. | `string` | No | - | - |
+| [`backupDestinationDetails`](#kind-distributeddatabase-spec-dbbackupconfig-backupdestinationdetails) | Backup destination details. | `list[object]` | No | - | - |
+| `canRunImmediateFullBackup` | If set to true, configures automatic full backups in the local region (the region of the DB system) for the first backup run immediately. | `boolean` | No | - | - |
+| `isAutoBackupEnabled` | If set to true, configures automatic backups. If you previously used RMAN or dbcli to configure backups and then you switch to using the Console or the API for backups, a new backup configuration is created and associated with your database. This means that you can no longer rely on your previously configured unmanaged backups to work. | `boolean` | No | - | - |
+| `isRemoteBackupEnabled` | If set to true, configures automatic incremental backups in the local region (the region of the DB system) and the remote region with a default frequency of 1 hour. If you previously used RMAN or dbcli to configure backups, using the Console or the API for manged backups creates a new backup configuration for your database. The new configuration replaces the configuration created with RMAN or dbcli. This means that you can no longer rely on your previously configured unmanaged backups to work. | `boolean` | No | - | - |
+| `recoveryWindowInDays` | Number of days between the current and the earliest point of recoverability covered by automatic backups. This value applies to automatic backups only. After a new automatic backup has been created, Oracle removes old automatic backups that are created before the window. When the value is updated, it is applied to all existing automatic backups. | `integer` | No | - | - |
+| `remoteRegion` | The name of the remote region where the remote automatic incremental backups will be stored. For information about valid region names, see Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm). | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-spec-dbbackupconfig-backupdestinationdetails"></a>
+##### Spec.dbBackupConfig.backupDestinationDetails[]
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseDbBackupConfigBackupDestinationDetail defines nested fields for DistributedDatabase.DbBackupConfig.BackupDestinationDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `dbrsPolicyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the DBRS policy used for backup. | `string` | No | - | - |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup destination. | `string` | No | - | - |
+| `internetProxy` | Proxy URL to connect to object store. | `string` | No | - | - |
+| `isRemote` | Indicates whether the backup destination is cross-region or local region. | `boolean` | No | - | - |
+| `isZeroDataLossEnabled` | Indicates whether Zero Data Loss functionality is enabled for a Recovery Appliance backup destination in an Autonomous Container Database. When enabled, the database automatically ships all redo logs in real-time to the Recovery Appliance for a Zero Data Loss recovery setup (sub-second RPO). Defaults to `TRUE` if no value is given. | `boolean` | No | - | - |
+| `remoteRegion` | The name of the remote region where the remote automatic incremental backups will be stored. For information about valid region names, see Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm). | `string` | No | - | - |
+| `type` | Type of the database backup destination. | `string` | Yes | - | - |
+| `vpcPassword` | For a RECOVERY_APPLIANCE backup destination, the password for the VPC user that is used to access the Recovery Appliance. | `string` | No | - | - |
+| `vpcUser` | For a RECOVERY_APPLIANCE backup destination, the Virtual Private Catalog (VPC) user that is used to access the Recovery Appliance. | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-spec-sharddetails"></a>
+#### Spec.shardDetails[]
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseShardDetail defines nested fields for DistributedDatabase.ShardDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `adminPassword` | The admin password for the shard associated with Globally distributed database. | `string` | No | - | - |
+| `availabilityDomain` | The name of the availability domain that the distributed database shard will be located in. | `string` | No | - | - |
+| [`dbStorageVaultDetails`](#kind-distributeddatabase-spec-sharddetails-dbstoragevaultdetails) | DistributedDatabaseShardDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.DbStorageVaultDetails. | `object` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `kmsKeyId` | The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations. | `string` | No | - | - |
+| `kmsKeyVersionId` | The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. | `string` | No | - | - |
+| [`peerDetails`](#kind-distributeddatabase-spec-sharddetails-peerdetails) | The details required for creation of the peer for the ExadbXs infrastructure based shard. | `list[object]` | No | - | - |
+| `peerVmClusterIds` | This field is deprecated. This should not be used while creation of new distributed database. To set the peers on new shards of distributed database please use peerDetails. | `list[string]` | No | - | - |
+| `shardSpace` | The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created. Shard space name shall be used while creation of new shards. | `string` | No | - | - |
+| `source` | - | `string` | No | - | - |
+| `vaultId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts). This parameter and `kmsKeyId` are required for Customer Managed Keys. | `string` | No | - | - |
+| [`vmClusterDetails`](#kind-distributeddatabase-spec-sharddetails-vmclusterdetails) | DistributedDatabaseShardDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.VmClusterDetails. | `object` | No | - | - |
+| `vmClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster. | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-spec-sharddetails-dbstoragevaultdetails"></a>
+##### Spec.shardDetails[].dbStorageVaultDetails
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseShardDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.DbStorageVaultDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalFlashCacheInPercent` | The size of additional Flash Cache in percentage of High Capacity database storage. | `integer` | No | - | - |
+| `highCapacityDatabaseStorage` | Total storage capacity in GB for vault storage. | `integer` | Yes | - | - |
+
+<a id="kind-distributeddatabase-spec-sharddetails-peerdetails"></a>
+##### Spec.shardDetails[].peerDetails[]
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseShardDetailPeerDetail defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `availabilityDomain` | The name of the availability domain that the distributed database shard will be located in. | `string` | Yes | - | - |
+| [`dbStorageVaultDetails`](#kind-distributeddatabase-spec-sharddetails-peerdetails-dbstoragevaultdetails) | DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.DbStorageVaultDetails. | `object` | Yes | - | - |
+| `protectionMode` | The protectionMode for the shard peer. | `string` | No | - | - |
+| `transportType` | The redo transport type to use for this Data Guard association. | `string` | No | - | - |
+| [`vmClusterDetails`](#kind-distributeddatabase-spec-sharddetails-peerdetails-vmclusterdetails) | DistributedDatabaseShardDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.VmClusterDetails. | `object` | Yes | - | - |
+
+<a id="kind-distributeddatabase-spec-sharddetails-peerdetails-dbstoragevaultdetails"></a>
+###### Spec.shardDetails[].peerDetails[].dbStorageVaultDetails
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.DbStorageVaultDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalFlashCacheInPercent` | The size of additional Flash Cache in percentage of High Capacity database storage. | `integer` | No | - | - |
+| `highCapacityDatabaseStorage` | Total storage capacity in GB for vault storage. | `integer` | Yes | - | - |
+
+<a id="kind-distributeddatabase-spec-sharddetails-peerdetails-vmclusterdetails"></a>
+###### Spec.shardDetails[].peerDetails[].vmClusterDetails
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseShardDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.VmClusterDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `backupNetworkNsgIds` | A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to. Setting this to an empty array after the list is created removes the resource from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems. | `list[string]` | No | - | - |
+| `backupSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `domain` | A domain name used for the Exadata VM cluster on Exascale Infrastructure. If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used (do not provide one). Otherwise, provide a valid DNS domain name. Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only. | `string` | No | - | - |
+| `enabledECpuCount` | The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure. | `integer` | Yes | - | - |
+| `isDiagnosticsEventsEnabled` | Indicates whether diagnostic collection is enabled for the VM cluster. Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues. Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system. You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isHealthMonitoringEnabled` | Indicates whether health monitoring is enabled for the VM cluster. Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel. You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system. Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isIncidentLogsEnabled` | Indicates whether incident logs and trace collection are enabled for the VM cluster. Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them. Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `licenseModel` | The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE. | `string` | No | - | - |
+| `nsgIds` | The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs. Setting this to an empty list removes all resources from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). | `list[string]` | No | - | - |
+| `privateZoneId` | The private zone ID in which you want DNS records to be created. | `string` | No | - | - |
+| `sshPublicKeys` | The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure. | `list[string]` | Yes | - | - |
+| `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `totalECpuCount` | The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure. | `integer` | No | - | - |
+| `vmFileSystemStorageSize` | File System Storage Size in GBs for Exadata VM cluster. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-spec-sharddetails-vmclusterdetails"></a>
+##### Spec.shardDetails[].vmClusterDetails
+
+[Back to DistributedDatabase spec](#kind-distributeddatabase-spec)
+
+DistributedDatabaseShardDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.VmClusterDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `backupNetworkNsgIds` | A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to. Setting this to an empty array after the list is created removes the resource from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems. | `list[string]` | No | - | - |
+| `backupSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `domain` | A domain name used for the Exadata VM cluster on Exascale Infrastructure. If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used (do not provide one). Otherwise, provide a valid DNS domain name. Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only. | `string` | No | - | - |
+| `enabledECpuCount` | The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure. | `integer` | Yes | - | - |
+| `isDiagnosticsEventsEnabled` | Indicates whether diagnostic collection is enabled for the VM cluster. Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues. Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system. You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isHealthMonitoringEnabled` | Indicates whether health monitoring is enabled for the VM cluster. Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel. You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system. Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isIncidentLogsEnabled` | Indicates whether incident logs and trace collection are enabled for the VM cluster. Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them. Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `licenseModel` | The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE. | `string` | No | - | - |
+| `nsgIds` | The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs. Setting this to an empty list removes all resources from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). | `list[string]` | No | - | - |
+| `privateZoneId` | The private zone ID in which you want DNS records to be created. | `string` | No | - | - |
+| `sshPublicKeys` | The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure. | `list[string]` | Yes | - | - |
+| `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `totalECpuCount` | The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure. | `integer` | No | - | - |
+| `vmFileSystemStorageSize` | File System Storage Size in GBs for Exadata VM cluster. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-status"></a>
+### Status
+
+DistributedDatabaseStatus defines the observed state of DistributedDatabase.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`catalogDetails`](#kind-distributeddatabase-status-catalogdetails) | Collection of catalogs associated with the Globally distributed database. | `list[object]` | No | - | - |
+| `characterSet` | The character set for the database. | `string` | No | - | - |
+| `chunks` | The default number of unique chunks in a shardspace. The value of chunks must be greater than 2 times the size of the largest shardgroup in any shardspace. | `integer` | No | - | - |
+| `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Globally distributed database compartment. | `string` | No | - | - |
+| [`connectionStrings`](#kind-distributeddatabase-status-connectionstrings) | DistributedDatabaseConnectionStrings defines nested fields for DistributedDatabase.ConnectionStrings. | `object` | No | - | - |
+| `databaseVersion` | Oracle Database version for the shards and catalog used in Globally distributed database. | `string` | No | - | - |
+| [`dbBackupConfig`](#kind-distributeddatabase-status-dbbackupconfig) | DistributedDatabaseDbBackupConfig defines nested fields for DistributedDatabase.DbBackupConfig. | `object` | No | - | - |
+| `dbDeploymentType` | The distributed database deployment type. | `string` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
+| `displayName` | The display name of the Globally distributed database. | `string` | No | - | - |
+| `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
+| [`gsmDetails`](#kind-distributeddatabase-status-gsmdetails) | Collection of catalogs associated with the Globally distributed database. | `list[object]` | No | - | - |
+| `gsmSshPublicKey` | The SSH public key for Global service manager instances. | `string` | No | - | - |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Globally distributed database. | `string` | No | - | - |
+| [`latestGsmImageDetails`](#kind-distributeddatabase-status-latestgsmimagedetails) | DistributedDatabaseLatestGsmImageDetails defines nested fields for DistributedDatabase.LatestGsmImageDetails. | `object` | No | - | - |
+| `lifecycleDetails` | The lifecycleDetails for the Globally distributed database. | `string` | No | - | - |
+| `lifecycleState` | Lifecycle states for the Globally distributed database. | `string` | No | - | - |
+| `listenerPort` | The Global service manager listener port number for the Globally distributed database. | `integer` | No | - | - |
+| `listenerPortTls` | The TLS listener port number for Globally distributed database. | `integer` | No | - | - |
+| [`metadata`](#kind-distributeddatabase-status-metadata) | DistributedDatabaseMetadata defines nested fields for DistributedDatabase.Metadata. | `object` | No | - | - |
+| `ncharacterSet` | The national character set for the database. | `string` | No | - | - |
+| `onsPortLocal` | Ons local port number. | `integer` | No | - | - |
+| `onsPortRemote` | Ons remote port number. | `integer` | No | - | - |
+| `prefix` | Unique name prefix for the Globally distributed databases. Only alpha-numeric values are allowed. First character has to be a letter followed by any combination of letter and number. | `string` | No | - | - |
+| `privateEndpointIds` | The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the private endpoint associated with Globally distributed autonomous database. | `list[string]` | No | - | - |
+| `replicationFactor` | The Replication factor for RAFT replication based Globally distributed database. Currently supported values are 3, 5 and 7. | `integer` | No | - | - |
+| `replicationMethod` | The Replication method for Globally distributed database. Use RAFT for Raft replication, and DG for DataGuard. If replicationMethod is not provided, it defaults to DG. | `string` | No | - | - |
+| `replicationUnit` | The replication unit count for RAFT based distributed database. For RAFT replication based Globally distributed database, the value should be at least twice the number of shards. | `integer` | No | - | - |
+| `scanListenerPort` | The TCP Single Client Access Name (SCAN) port for Globally distributed database clusters. | `integer` | No | - | - |
+| [`shardDetails`](#kind-distributeddatabase-status-sharddetails) | Collection of shards associated with the Globally distributed database. | `list[object]` | No | - | - |
+| `shardingMethod` | Sharding Methods for the Globally distributed database. | `string` | No | - | - |
+| [`status`](#kind-distributeddatabase-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
+| `timeCreated` | The time the Globally distributed database was created. An RFC3339 formatted datetime string | `string` | No | - | - |
+| `timeUpdated` | The time the Globally distributed database was last updated. An RFC3339 formatted datetime string | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-status-catalogdetails"></a>
+#### Status.catalogDetails[]
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseCatalogDetail defines nested fields for DistributedDatabase.CatalogDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `adminPassword` | The admin password for the catalog associated with Globally distributed database. | `string` | No | - | - |
+| `availabilityDomain` | The name of the availability domain that the distributed database shard will be located in. | `string` | No | - | - |
+| [`dbStorageVaultDetails`](#kind-distributeddatabase-status-catalogdetails-dbstoragevaultdetails) | DistributedDatabaseCatalogDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.DbStorageVaultDetails. | `object` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `kmsKeyId` | The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations. | `string` | No | - | - |
+| `kmsKeyVersionId` | The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. | `string` | No | - | - |
+| [`peerDetails`](#kind-distributeddatabase-status-catalogdetails-peerdetails) | The details required for creation of the peer for the ExadbXs infrastructure based catalog. | `list[object]` | No | - | - |
+| `peerVmClusterIds` | This field is deprecated. This should not be used while creation of new distributed database. To set the peers on catalog of distributed database please use peerDetails. | `list[string]` | No | - | - |
+| `shardSpace` | The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created. Shard space name shall be used while creation of new shards. | `string` | No | - | - |
+| `source` | - | `string` | No | - | - |
+| `vaultId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts). This parameter and `kmsKeyId` are required for Customer Managed Keys. | `string` | No | - | - |
+| [`vmClusterDetails`](#kind-distributeddatabase-status-catalogdetails-vmclusterdetails) | DistributedDatabaseCatalogDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.VmClusterDetails. | `object` | No | - | - |
+| `vmClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster. | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-status-catalogdetails-dbstoragevaultdetails"></a>
+##### Status.catalogDetails[].dbStorageVaultDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseCatalogDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.DbStorageVaultDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalFlashCacheInPercent` | The size of additional Flash Cache in percentage of High Capacity database storage. | `integer` | No | - | - |
+| `highCapacityDatabaseStorage` | Total storage capacity in GB for vault storage. | `integer` | Yes | - | - |
+
+<a id="kind-distributeddatabase-status-catalogdetails-peerdetails"></a>
+##### Status.catalogDetails[].peerDetails[]
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseCatalogDetailPeerDetail defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `availabilityDomain` | The name of the availability domain that the distributed database shard will be located in. | `string` | Yes | - | - |
+| [`dbStorageVaultDetails`](#kind-distributeddatabase-status-catalogdetails-peerdetails-dbstoragevaultdetails) | DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.DbStorageVaultDetails. | `object` | Yes | - | - |
+| `protectionMode` | The protectionMode for the catalog peer. | `string` | No | - | - |
+| `transportType` | The redo transport type to use for this Data Guard association. | `string` | No | - | - |
+| [`vmClusterDetails`](#kind-distributeddatabase-status-catalogdetails-peerdetails-vmclusterdetails) | DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.VmClusterDetails. | `object` | Yes | - | - |
+
+<a id="kind-distributeddatabase-status-catalogdetails-peerdetails-dbstoragevaultdetails"></a>
+###### Status.catalogDetails[].peerDetails[].dbStorageVaultDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.DbStorageVaultDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalFlashCacheInPercent` | The size of additional Flash Cache in percentage of High Capacity database storage. | `integer` | No | - | - |
+| `highCapacityDatabaseStorage` | Total storage capacity in GB for vault storage. | `integer` | Yes | - | - |
+
+<a id="kind-distributeddatabase-status-catalogdetails-peerdetails-vmclusterdetails"></a>
+###### Status.catalogDetails[].peerDetails[].vmClusterDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.VmClusterDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `backupNetworkNsgIds` | A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to. Setting this to an empty array after the list is created removes the resource from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems. | `list[string]` | No | - | - |
+| `backupSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `domain` | A domain name used for the Exadata VM cluster on Exascale Infrastructure. If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used (do not provide one). Otherwise, provide a valid DNS domain name. Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only. | `string` | No | - | - |
+| `enabledECpuCount` | The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure. | `integer` | Yes | - | - |
+| `isDiagnosticsEventsEnabled` | Indicates whether diagnostic collection is enabled for the VM cluster. Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues. Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system. You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isHealthMonitoringEnabled` | Indicates whether health monitoring is enabled for the VM cluster. Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel. You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system. Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isIncidentLogsEnabled` | Indicates whether incident logs and trace collection are enabled for the VM cluster. Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them. Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `licenseModel` | The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE. | `string` | No | - | - |
+| `nsgIds` | The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs. Setting this to an empty list removes all resources from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). | `list[string]` | No | - | - |
+| `privateZoneId` | The private zone ID in which you want DNS records to be created. | `string` | No | - | - |
+| `sshPublicKeys` | The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure. | `list[string]` | Yes | - | - |
+| `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `totalECpuCount` | The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure. | `integer` | No | - | - |
+| `vmFileSystemStorageSize` | File System Storage Size in GBs for Exadata VM cluster. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-status-catalogdetails-vmclusterdetails"></a>
+##### Status.catalogDetails[].vmClusterDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseCatalogDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.VmClusterDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `backupNetworkNsgIds` | A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to. Setting this to an empty array after the list is created removes the resource from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems. | `list[string]` | No | - | - |
+| `backupSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `domain` | A domain name used for the Exadata VM cluster on Exascale Infrastructure. If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used (do not provide one). Otherwise, provide a valid DNS domain name. Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only. | `string` | No | - | - |
+| `enabledECpuCount` | The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure. | `integer` | Yes | - | - |
+| `isDiagnosticsEventsEnabled` | Indicates whether diagnostic collection is enabled for the VM cluster. Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues. Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system. You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isHealthMonitoringEnabled` | Indicates whether health monitoring is enabled for the VM cluster. Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel. You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system. Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isIncidentLogsEnabled` | Indicates whether incident logs and trace collection are enabled for the VM cluster. Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them. Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `licenseModel` | The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE. | `string` | No | - | - |
+| `nsgIds` | The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs. Setting this to an empty list removes all resources from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). | `list[string]` | No | - | - |
+| `privateZoneId` | The private zone ID in which you want DNS records to be created. | `string` | No | - | - |
+| `sshPublicKeys` | The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure. | `list[string]` | Yes | - | - |
+| `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `totalECpuCount` | The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure. | `integer` | No | - | - |
+| `vmFileSystemStorageSize` | File System Storage Size in GBs for Exadata VM cluster. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-status-connectionstrings"></a>
+#### Status.connectionStrings
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseConnectionStrings defines nested fields for DistributedDatabase.ConnectionStrings.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `allConnectionStrings` | Collection of connection strings. | `map[string, string]` | No | - | - |
+
+<a id="kind-distributeddatabase-status-dbbackupconfig"></a>
+#### Status.dbBackupConfig
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseDbBackupConfig defines nested fields for DistributedDatabase.DbBackupConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `autoBackupWindow` | Time window selected for initiating automatic backup for the database system. There are twelve available two-hour time windows. If no option is selected, a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive). Example: `SLOT_TWO` | `string` | No | - | - |
+| `autoFullBackupDay` | Day of the week the full backup should be applied on the database system. If no option is selected, the value is null and we will default to Sunday. | `string` | No | - | - |
+| `autoFullBackupWindow` | Time window selected for initiating full backup for the database system. There are twelve available two-hour time windows. If no option is selected, the value is null and a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive). Example: `SLOT_TWO` | `string` | No | - | - |
+| `backupDeletionPolicy` | This defines when the backups will be deleted. - IMMEDIATE option keep the backup for predefined time i.e 72 hours and then delete permanently... - RETAIN will keep the backups as per the policy defined for database backups. | `string` | No | - | - |
+| [`backupDestinationDetails`](#kind-distributeddatabase-status-dbbackupconfig-backupdestinationdetails) | Backup destination details. | `list[object]` | No | - | - |
+| `canRunImmediateFullBackup` | If set to true, configures automatic full backups in the local region (the region of the DB system) for the first backup run immediately. | `boolean` | No | - | - |
+| `isAutoBackupEnabled` | If set to true, configures automatic backups. If you previously used RMAN or dbcli to configure backups and then you switch to using the Console or the API for backups, a new backup configuration is created and associated with your database. This means that you can no longer rely on your previously configured unmanaged backups to work. | `boolean` | No | - | - |
+| `isRemoteBackupEnabled` | If set to true, configures automatic incremental backups in the local region (the region of the DB system) and the remote region with a default frequency of 1 hour. If you previously used RMAN or dbcli to configure backups, using the Console or the API for manged backups creates a new backup configuration for your database. The new configuration replaces the configuration created with RMAN or dbcli. This means that you can no longer rely on your previously configured unmanaged backups to work. | `boolean` | No | - | - |
+| `recoveryWindowInDays` | Number of days between the current and the earliest point of recoverability covered by automatic backups. This value applies to automatic backups only. After a new automatic backup has been created, Oracle removes old automatic backups that are created before the window. When the value is updated, it is applied to all existing automatic backups. | `integer` | No | - | - |
+| `remoteRegion` | The name of the remote region where the remote automatic incremental backups will be stored. For information about valid region names, see Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm). | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-status-dbbackupconfig-backupdestinationdetails"></a>
+##### Status.dbBackupConfig.backupDestinationDetails[]
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseDbBackupConfigBackupDestinationDetail defines nested fields for DistributedDatabase.DbBackupConfig.BackupDestinationDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `dbrsPolicyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the DBRS policy used for backup. | `string` | No | - | - |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup destination. | `string` | No | - | - |
+| `internetProxy` | Proxy URL to connect to object store. | `string` | No | - | - |
+| `isRemote` | Indicates whether the backup destination is cross-region or local region. | `boolean` | No | - | - |
+| `isZeroDataLossEnabled` | Indicates whether Zero Data Loss functionality is enabled for a Recovery Appliance backup destination in an Autonomous Container Database. When enabled, the database automatically ships all redo logs in real-time to the Recovery Appliance for a Zero Data Loss recovery setup (sub-second RPO). Defaults to `TRUE` if no value is given. | `boolean` | No | - | - |
+| `remoteRegion` | The name of the remote region where the remote automatic incremental backups will be stored. For information about valid region names, see Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm). | `string` | No | - | - |
+| `type` | Type of the database backup destination. | `string` | Yes | - | - |
+| `vpcPassword` | For a RECOVERY_APPLIANCE backup destination, the password for the VPC user that is used to access the Recovery Appliance. | `string` | No | - | - |
+| `vpcUser` | For a RECOVERY_APPLIANCE backup destination, the Virtual Private Catalog (VPC) user that is used to access the Recovery Appliance. | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-status-gsmdetails"></a>
+#### Status.gsmDetails[]
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseGsmDetail defines nested fields for DistributedDatabase.GsmDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `computeCount` | The compute count for the Global service manager instance. | `number` | No | - | - |
+| `dataStorageSizeInGbs` | The data disk group size to be allocated in GBs for the Global service manager instance. | `number` | No | - | - |
+| [`gsmImageDetails`](#kind-distributeddatabase-status-gsmdetails-gsmimagedetails) | DistributedDatabaseGsmDetailGsmImageDetails defines nested fields for DistributedDatabase.GsmDetail.GsmImageDetails. | `object` | No | - | - |
+| [`metadata`](#kind-distributeddatabase-status-gsmdetails-metadata) | DistributedDatabaseGsmDetailMetadata defines nested fields for DistributedDatabase.GsmDetail.Metadata. | `object` | No | - | - |
+| `name` | Name of the Global service manager instance | `string` | No | - | - |
+| `status` | Status of the gsm. | `string` | No | - | - |
+| `supportingResourceId` | the identifier of the underlying supporting resource. | `string` | No | - | - |
+| `timeCreated` | The time the Global service manager instance was created. An RFC3339 formatted datetime string | `string` | No | - | - |
+| `timeSslCertificateExpires` | The time the ssl certificate associated with Global service manager expires. An RFC3339 formatted datetime string | `string` | No | - | - |
+| `timeUpdated` | The time the Global service manager instance was last updated. An RFC3339 formatted datetime string | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-status-gsmdetails-gsmimagedetails"></a>
+##### Status.gsmDetails[].gsmImageDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseGsmDetailGsmImageDetails defines nested fields for DistributedDatabase.GsmDetail.GsmImageDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Global service manager software image. | `string` | No | - | - |
+| `versionNumber` | The version number associated with the image identified by id. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-status-gsmdetails-metadata"></a>
+##### Status.gsmDetails[].metadata
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseGsmDetailMetadata defines nested fields for DistributedDatabase.GsmDetail.Metadata.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `map` | The map containing key-value pair of additional metadata. | `map[string, string]` | No | - | - |
+
+<a id="kind-distributeddatabase-status-latestgsmimagedetails"></a>
+#### Status.latestGsmImageDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseLatestGsmImageDetails defines nested fields for DistributedDatabase.LatestGsmImageDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Global service manager software image. | `string` | No | - | - |
+| `versionNumber` | The version number associated with the image identified by id. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-status-metadata"></a>
+#### Status.metadata
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseMetadata defines nested fields for DistributedDatabase.Metadata.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `map` | The map containing key-value pair of additional metadata. | `map[string, string]` | No | - | - |
+
+<a id="kind-distributeddatabase-status-sharddetails"></a>
+#### Status.shardDetails[]
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseShardDetail defines nested fields for DistributedDatabase.ShardDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `adminPassword` | The admin password for the shard associated with Globally distributed database. | `string` | No | - | - |
+| `availabilityDomain` | The name of the availability domain that the distributed database shard will be located in. | `string` | No | - | - |
+| [`dbStorageVaultDetails`](#kind-distributeddatabase-status-sharddetails-dbstoragevaultdetails) | DistributedDatabaseShardDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.DbStorageVaultDetails. | `object` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `kmsKeyId` | The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations. | `string` | No | - | - |
+| `kmsKeyVersionId` | The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. | `string` | No | - | - |
+| [`peerDetails`](#kind-distributeddatabase-status-sharddetails-peerdetails) | The details required for creation of the peer for the ExadbXs infrastructure based shard. | `list[object]` | No | - | - |
+| `peerVmClusterIds` | This field is deprecated. This should not be used while creation of new distributed database. To set the peers on new shards of distributed database please use peerDetails. | `list[string]` | No | - | - |
+| `shardSpace` | The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created. Shard space name shall be used while creation of new shards. | `string` | No | - | - |
+| `source` | - | `string` | No | - | - |
+| `vaultId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts). This parameter and `kmsKeyId` are required for Customer Managed Keys. | `string` | No | - | - |
+| [`vmClusterDetails`](#kind-distributeddatabase-status-sharddetails-vmclusterdetails) | DistributedDatabaseShardDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.VmClusterDetails. | `object` | No | - | - |
+| `vmClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster. | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-status-sharddetails-dbstoragevaultdetails"></a>
+##### Status.shardDetails[].dbStorageVaultDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseShardDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.DbStorageVaultDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalFlashCacheInPercent` | The size of additional Flash Cache in percentage of High Capacity database storage. | `integer` | No | - | - |
+| `highCapacityDatabaseStorage` | Total storage capacity in GB for vault storage. | `integer` | Yes | - | - |
+
+<a id="kind-distributeddatabase-status-sharddetails-peerdetails"></a>
+##### Status.shardDetails[].peerDetails[]
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseShardDetailPeerDetail defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `availabilityDomain` | The name of the availability domain that the distributed database shard will be located in. | `string` | Yes | - | - |
+| [`dbStorageVaultDetails`](#kind-distributeddatabase-status-sharddetails-peerdetails-dbstoragevaultdetails) | DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.DbStorageVaultDetails. | `object` | Yes | - | - |
+| `protectionMode` | The protectionMode for the shard peer. | `string` | No | - | - |
+| `transportType` | The redo transport type to use for this Data Guard association. | `string` | No | - | - |
+| [`vmClusterDetails`](#kind-distributeddatabase-status-sharddetails-peerdetails-vmclusterdetails) | DistributedDatabaseShardDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.VmClusterDetails. | `object` | Yes | - | - |
+
+<a id="kind-distributeddatabase-status-sharddetails-peerdetails-dbstoragevaultdetails"></a>
+###### Status.shardDetails[].peerDetails[].dbStorageVaultDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.DbStorageVaultDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalFlashCacheInPercent` | The size of additional Flash Cache in percentage of High Capacity database storage. | `integer` | No | - | - |
+| `highCapacityDatabaseStorage` | Total storage capacity in GB for vault storage. | `integer` | Yes | - | - |
+
+<a id="kind-distributeddatabase-status-sharddetails-peerdetails-vmclusterdetails"></a>
+###### Status.shardDetails[].peerDetails[].vmClusterDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseShardDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.VmClusterDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `backupNetworkNsgIds` | A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to. Setting this to an empty array after the list is created removes the resource from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems. | `list[string]` | No | - | - |
+| `backupSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `domain` | A domain name used for the Exadata VM cluster on Exascale Infrastructure. If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used (do not provide one). Otherwise, provide a valid DNS domain name. Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only. | `string` | No | - | - |
+| `enabledECpuCount` | The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure. | `integer` | Yes | - | - |
+| `isDiagnosticsEventsEnabled` | Indicates whether diagnostic collection is enabled for the VM cluster. Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues. Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system. You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isHealthMonitoringEnabled` | Indicates whether health monitoring is enabled for the VM cluster. Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel. You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system. Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isIncidentLogsEnabled` | Indicates whether incident logs and trace collection are enabled for the VM cluster. Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them. Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `licenseModel` | The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE. | `string` | No | - | - |
+| `nsgIds` | The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs. Setting this to an empty list removes all resources from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). | `list[string]` | No | - | - |
+| `privateZoneId` | The private zone ID in which you want DNS records to be created. | `string` | No | - | - |
+| `sshPublicKeys` | The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure. | `list[string]` | Yes | - | - |
+| `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `totalECpuCount` | The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure. | `integer` | No | - | - |
+| `vmFileSystemStorageSize` | File System Storage Size in GBs for Exadata VM cluster. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-status-sharddetails-vmclusterdetails"></a>
+##### Status.shardDetails[].vmClusterDetails
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+DistributedDatabaseShardDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.VmClusterDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `backupNetworkNsgIds` | A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to. Setting this to an empty array after the list is created removes the resource from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems. | `list[string]` | No | - | - |
+| `backupSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `domain` | A domain name used for the Exadata VM cluster on Exascale Infrastructure. If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used (do not provide one). Otherwise, provide a valid DNS domain name. Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only. | `string` | No | - | - |
+| `enabledECpuCount` | The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure. | `integer` | Yes | - | - |
+| `isDiagnosticsEventsEnabled` | Indicates whether diagnostic collection is enabled for the VM cluster. Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues. Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system. You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isHealthMonitoringEnabled` | Indicates whether health monitoring is enabled for the VM cluster. Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel. You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system. Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `isIncidentLogsEnabled` | Indicates whether incident logs and trace collection are enabled for the VM cluster. Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them. Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API. | `boolean` | No | - | - |
+| `licenseModel` | The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE. | `string` | No | - | - |
+| `nsgIds` | The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs. Setting this to an empty list removes all resources from all NSGs. For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). | `list[string]` | No | - | - |
+| `privateZoneId` | The private zone ID in which you want DNS records to be created. | `string` | No | - | - |
+| `sshPublicKeys` | The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure. | `list[string]` | Yes | - | - |
+| `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure. | `string` | Yes | - | - |
+| `totalECpuCount` | The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure. | `integer` | No | - | - |
+| `vmFileSystemStorageSize` | File System Storage Size in GBs for Exadata VM cluster. | `integer` | No | - | - |
+
+<a id="kind-distributeddatabase-status-status"></a>
+#### Status.status
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`async`](#kind-distributeddatabase-status-status-async) | Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first. | `object` | No | - | - |
+| [`conditions`](#kind-distributeddatabase-status-status-conditions) | - | `list[object]` | No | - | - |
+| `createdAt` | - | `string (date-time)` | No | - | - |
+| `deletedAt` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `ocid` | - | `string` | No | - | - |
+| `opcRequestId` | OpcRequestID is the latest non-empty OCI request ID from a mutating OCI response or surfaced OCI service error that materially contributed to the current shared status projection. Headerless follow-up observations keep the last non-empty value intact. | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `requestedAt` | - | `string (date-time)` | No | - | - |
+| `updatedAt` | - | `string (date-time)` | No | - | - |
+
+<a id="kind-distributeddatabase-status-status-async"></a>
+##### Status.status.async
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`current`](#kind-distributeddatabase-status-status-async-current) | - | `object` | No | - | - |
+
+<a id="kind-distributeddatabase-status-status-async-current"></a>
+###### Status.status.async.current
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `message` | - | `string` | No | - | - |
+| `normalizedClass` | - | `string` | Yes | - | `attention`, `canceled`, `failed`, `pending`, `succeeded`, `unknown` |
+| `percentComplete` | - | `number` | No | - | - |
+| `phase` | - | `string` | Yes | - | `create`, `delete`, `update` |
+| `rawOperationType` | - | `string` | No | - | - |
+| `rawStatus` | - | `string` | No | - | - |
+| `source` | - | `string` | Yes | - | `lifecycle`, `none`, `workrequest` |
+| `updatedAt` | - | `string (date-time)` | Yes | - | - |
+| `workRequestId` | - | `string` | No | - | - |
+
+<a id="kind-distributeddatabase-status-status-conditions"></a>
+##### Status.status.conditions[]
+
+[Back to DistributedDatabase status](#kind-distributeddatabase-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `lastTransitionTime` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `status` | - | `string` | Yes | - | - |
+| `type` | - | `string` | Yes | - | - |
 
 <a id="kind-distributeddatabaseprivateendpoint"></a>
 ## DistributedDatabasePrivateEndpoint

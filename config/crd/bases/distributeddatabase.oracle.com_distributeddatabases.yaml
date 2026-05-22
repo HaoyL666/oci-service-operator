@@ -1,0 +1,1878 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.0
+  name: distributeddatabases.distributeddatabase.oracle.com
+spec:
+  group: distributeddatabase.oracle.com
+  names:
+    kind: DistributedDatabase
+    listKind: DistributedDatabaseList
+    plural: distributeddatabases
+    singular: distributeddatabase
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.displayName
+      name: DisplayName
+      priority: 1
+      type: string
+    - description: status of the DistributedDatabase
+      jsonPath: .status.status.conditions[-1].type
+      name: Status
+      type: string
+    - description: Ocid of the DistributedDatabase
+      jsonPath: .status.status.ocid
+      name: Ocid
+      priority: 1
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: DistributedDatabase is the Schema for the distributeddatabases
+          API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: DistributedDatabaseSpec defines the desired state of DistributedDatabase.
+            properties:
+              catalogDetails:
+                description: Collection of catalog for the Globally distributed database.
+                items:
+                  description: DistributedDatabaseCatalogDetail defines nested fields
+                    for DistributedDatabase.CatalogDetail.
+                  properties:
+                    adminPassword:
+                      description: The admin password for the catalog associated with
+                        Globally distributed database.
+                      type: string
+                    availabilityDomain:
+                      description: The name of the availability domain that the distributed
+                        database shard will be located in.
+                      type: string
+                    dbStorageVaultDetails:
+                      description: DistributedDatabaseCatalogDetailDbStorageVaultDetails
+                        defines nested fields for DistributedDatabase.CatalogDetail.DbStorageVaultDetails.
+                      properties:
+                        additionalFlashCacheInPercent:
+                          description: The size of additional Flash Cache in percentage
+                            of High Capacity database storage.
+                          type: integer
+                        highCapacityDatabaseStorage:
+                          description: Total storage capacity in GB for vault storage.
+                          type: integer
+                      required:
+                      - highCapacityDatabaseStorage
+                      type: object
+                    jsonData:
+                      type: string
+                    kmsKeyId:
+                      description: The OCID of the key container that is used as the
+                        master encryption key in database transparent data encryption
+                        (TDE) operations.
+                      type: string
+                    kmsKeyVersionId:
+                      description: The OCID of the key container version that is used
+                        in database transparent data encryption (TDE) operations KMS
+                        Key can have multiple key versions.
+                      type: string
+                    peerDetails:
+                      description: The details required for creation of the peer for
+                        the ExadbXs infrastructure based catalog.
+                      items:
+                        description: DistributedDatabaseCatalogDetailPeerDetail defines
+                          nested fields for DistributedDatabase.CatalogDetail.PeerDetail.
+                        properties:
+                          availabilityDomain:
+                            description: The name of the availability domain that
+                              the distributed database shard will be located in.
+                            type: string
+                          dbStorageVaultDetails:
+                            description: DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails
+                              defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.DbStorageVaultDetails.
+                            properties:
+                              additionalFlashCacheInPercent:
+                                description: The size of additional Flash Cache in
+                                  percentage of High Capacity database storage.
+                                type: integer
+                              highCapacityDatabaseStorage:
+                                description: Total storage capacity in GB for vault
+                                  storage.
+                                type: integer
+                            required:
+                            - highCapacityDatabaseStorage
+                            type: object
+                          protectionMode:
+                            description: The protectionMode for the catalog peer.
+                            type: string
+                          transportType:
+                            description: The redo transport type to use for this Data
+                              Guard association.
+                            type: string
+                          vmClusterDetails:
+                            description: DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails
+                              defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.VmClusterDetails.
+                            properties:
+                              backupNetworkNsgIds:
+                                description: |-
+                                  A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+                                  Setting this to an empty array after the list is created removes the resource from all NSGs.
+                                  For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+                                items:
+                                  type: string
+                                type: array
+                              backupSubnetId:
+                                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                                  of the backup network subnet associated with the
+                                  Exadata VM cluster on Exascale Infrastructure.
+                                type: string
+                              domain:
+                                description: |-
+                                  A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+                                  If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+                                  (do not provide one). Otherwise, provide a valid DNS domain name.
+                                  Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+                                type: string
+                              enabledECpuCount:
+                                description: The number of ECPUs to enable for an
+                                  Exadata VM cluster on Exascale Infrastructure.
+                                type: integer
+                              isDiagnosticsEventsEnabled:
+                                description: |-
+                                  Indicates whether diagnostic collection is enabled for the VM cluster.
+                                  Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+                                  Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+                                  You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+                                type: boolean
+                              isHealthMonitoringEnabled:
+                                description: |-
+                                  Indicates whether health monitoring is enabled for the VM cluster.
+                                  Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+                                  You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+                                  Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+                                type: boolean
+                              isIncidentLogsEnabled:
+                                description: |-
+                                  Indicates whether incident logs and trace collection are enabled for the VM cluster.
+                                  Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+                                  Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+                                type: boolean
+                              licenseModel:
+                                description: The Oracle license model that applies
+                                  to the Exadata VM cluster on Exascale Infrastructure.
+                                  The default is BRING_YOUR_OWN_LICENSE.
+                                type: string
+                              nsgIds:
+                                description: |-
+                                  The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+                                  Setting this to an empty list removes all resources from all NSGs.
+                                  For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+                                items:
+                                  type: string
+                                type: array
+                              privateZoneId:
+                                description: The private zone ID in which you want
+                                  DNS records to be created.
+                                type: string
+                              sshPublicKeys:
+                                description: The public key portion of one or more
+                                  key pairs used for SSH access to the Exadata VM
+                                  cluster on Exascale Infrastructure.
+                                items:
+                                  type: string
+                                type: array
+                              subnetId:
+                                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                                  of the subnet associated with the Exadata VM cluster
+                                  on Exascale Infrastructure.
+                                type: string
+                              totalECpuCount:
+                                description: The number of Total ECPUs for an Exadata
+                                  VM cluster on Exascale Infrastructure.
+                                type: integer
+                              vmFileSystemStorageSize:
+                                description: File System Storage Size in GBs for Exadata
+                                  VM cluster.
+                                type: integer
+                            required:
+                            - backupSubnetId
+                            - enabledECpuCount
+                            - sshPublicKeys
+                            - subnetId
+                            type: object
+                        required:
+                        - availabilityDomain
+                        - dbStorageVaultDetails
+                        - vmClusterDetails
+                        type: object
+                      type: array
+                    peerVmClusterIds:
+                      description: |-
+                        This field is deprecated. This should not be used while creation of new distributed database. To set the peers
+                        on catalog of distributed database please use peerDetails.
+                      items:
+                        type: string
+                      type: array
+                    shardSpace:
+                      description: |-
+                        The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created.
+                        Shard space name shall be used while creation of new shards.
+                      type: string
+                    source:
+                      type: string
+                    vaultId:
+                      description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                        of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+                        This parameter and `kmsKeyId` are required for Customer Managed
+                        Keys.
+                      type: string
+                    vmClusterDetails:
+                      description: DistributedDatabaseCatalogDetailVmClusterDetails
+                        defines nested fields for DistributedDatabase.CatalogDetail.VmClusterDetails.
+                      properties:
+                        backupNetworkNsgIds:
+                          description: |-
+                            A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+                            Setting this to an empty array after the list is created removes the resource from all NSGs.
+                            For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+                          items:
+                            type: string
+                          type: array
+                        backupSubnetId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the backup network subnet associated with the Exadata
+                            VM cluster on Exascale Infrastructure.
+                          type: string
+                        domain:
+                          description: |-
+                            A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+                            If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+                            (do not provide one). Otherwise, provide a valid DNS domain name.
+                            Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+                          type: string
+                        enabledECpuCount:
+                          description: The number of ECPUs to enable for an Exadata
+                            VM cluster on Exascale Infrastructure.
+                          type: integer
+                        isDiagnosticsEventsEnabled:
+                          description: |-
+                            Indicates whether diagnostic collection is enabled for the VM cluster.
+                            Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+                            Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+                            You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+                          type: boolean
+                        isHealthMonitoringEnabled:
+                          description: |-
+                            Indicates whether health monitoring is enabled for the VM cluster.
+                            Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+                            You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+                            Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+                          type: boolean
+                        isIncidentLogsEnabled:
+                          description: |-
+                            Indicates whether incident logs and trace collection are enabled for the VM cluster.
+                            Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+                            Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+                          type: boolean
+                        licenseModel:
+                          description: The Oracle license model that applies to the
+                            Exadata VM cluster on Exascale Infrastructure. The default
+                            is BRING_YOUR_OWN_LICENSE.
+                          type: string
+                        nsgIds:
+                          description: |-
+                            The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+                            Setting this to an empty list removes all resources from all NSGs.
+                            For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+                          items:
+                            type: string
+                          type: array
+                        privateZoneId:
+                          description: The private zone ID in which you want DNS records
+                            to be created.
+                          type: string
+                        sshPublicKeys:
+                          description: The public key portion of one or more key pairs
+                            used for SSH access to the Exadata VM cluster on Exascale
+                            Infrastructure.
+                          items:
+                            type: string
+                          type: array
+                        subnetId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the subnet associated with the Exadata VM cluster on
+                            Exascale Infrastructure.
+                          type: string
+                        totalECpuCount:
+                          description: The number of Total ECPUs for an Exadata VM
+                            cluster on Exascale Infrastructure.
+                          type: integer
+                        vmFileSystemStorageSize:
+                          description: File System Storage Size in GBs for Exadata
+                            VM cluster.
+                          type: integer
+                      required:
+                      - backupSubnetId
+                      - enabledECpuCount
+                      - sshPublicKeys
+                      - subnetId
+                      type: object
+                    vmClusterId:
+                      description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                        of the VmCluster.
+                      type: string
+                  type: object
+                type: array
+              characterSet:
+                description: The character set for the database.
+                type: string
+              chunks:
+                description: |-
+                  Number of chunks in a shardspace. The value of chunks must be
+                  greater than 2 times the size of the largest shardgroup in any shardspace. Chunks is
+                  required to be provided for distributed databases being created with
+                  SYSTEM shardingMethod. For USER shardingMethod, chunks should not be set in create payload.
+                type: integer
+              compartmentId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the Globally distributed database compartment.
+                type: string
+              databaseVersion:
+                description: Oracle Database version for the shards and catalog used
+                  in Globally distributed database.
+                type: string
+              dbBackupConfig:
+                description: DistributedDatabaseDbBackupConfig defines nested fields
+                  for DistributedDatabase.DbBackupConfig.
+                properties:
+                  autoBackupWindow:
+                    description: |-
+                      Time window selected for initiating automatic backup for the database system. There are twelve available two-hour time windows. If no option is selected, a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive).
+                      Example: `SLOT_TWO`
+                    type: string
+                  autoFullBackupDay:
+                    description: Day of the week the full backup should be applied
+                      on the database system. If no option is selected, the value
+                      is null and we will default to Sunday.
+                    type: string
+                  autoFullBackupWindow:
+                    description: |-
+                      Time window selected for initiating full backup for the database system. There are twelve available two-hour time windows. If no option is selected, the value is null and a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive).
+                      Example: `SLOT_TWO`
+                    type: string
+                  backupDeletionPolicy:
+                    description: This defines when the backups will be deleted. -
+                      IMMEDIATE option keep the backup for predefined time i.e 72
+                      hours and then delete permanently... - RETAIN will keep the
+                      backups as per the policy defined for database backups.
+                    type: string
+                  backupDestinationDetails:
+                    description: Backup destination details.
+                    items:
+                      description: DistributedDatabaseDbBackupConfigBackupDestinationDetail
+                        defines nested fields for DistributedDatabase.DbBackupConfig.BackupDestinationDetail.
+                      properties:
+                        dbrsPolicyId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the DBRS policy used for backup.
+                          type: string
+                        id:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the backup destination.
+                          type: string
+                        internetProxy:
+                          description: Proxy URL to connect to object store.
+                          type: string
+                        isRemote:
+                          description: Indicates whether the backup destination is
+                            cross-region or local region.
+                          type: boolean
+                        isZeroDataLossEnabled:
+                          description: Indicates whether Zero Data Loss functionality
+                            is enabled for a Recovery Appliance backup destination
+                            in an Autonomous Container Database. When enabled, the
+                            database automatically ships all redo logs in real-time
+                            to the Recovery Appliance for a Zero Data Loss recovery
+                            setup (sub-second RPO). Defaults to `TRUE` if no value
+                            is given.
+                          type: boolean
+                        remoteRegion:
+                          description: |-
+                            The name of the remote region where the remote automatic incremental backups will be stored.
+                            For information about valid region names, see
+                            Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm).
+                          type: string
+                        type:
+                          description: Type of the database backup destination.
+                          type: string
+                        vpcPassword:
+                          description: For a RECOVERY_APPLIANCE backup destination,
+                            the password for the VPC user that is used to access the
+                            Recovery Appliance.
+                          type: string
+                        vpcUser:
+                          description: For a RECOVERY_APPLIANCE backup destination,
+                            the Virtual Private Catalog (VPC) user that is used to
+                            access the Recovery Appliance.
+                          type: string
+                      required:
+                      - type
+                      type: object
+                    type: array
+                  canRunImmediateFullBackup:
+                    description: If set to true, configures automatic full backups
+                      in the local region (the region of the DB system) for the first
+                      backup run immediately.
+                    type: boolean
+                  isAutoBackupEnabled:
+                    description: If set to true, configures automatic backups. If
+                      you previously used RMAN or dbcli to configure backups and then
+                      you switch to using the Console or the API for backups, a new
+                      backup configuration is created and associated with your database.
+                      This means that you can no longer rely on your previously configured
+                      unmanaged backups to work.
+                    type: boolean
+                  isRemoteBackupEnabled:
+                    description: |-
+                      If set to true, configures automatic incremental backups in the local region (the region of the DB system) and the remote region with a default frequency of 1 hour.
+                      If you previously used RMAN or dbcli to configure backups, using the Console or the API for manged backups creates a new backup configuration for your database. The new configuration replaces the configuration created with RMAN or dbcli.
+                      This means that you can no longer rely on your previously configured unmanaged backups to work.
+                    type: boolean
+                  recoveryWindowInDays:
+                    description: |-
+                      Number of days between the current and the earliest point of recoverability covered by automatic backups.
+                      This value applies to automatic backups only. After a new automatic backup has been created, Oracle removes old automatic backups that are created before the window.
+                      When the value is updated, it is applied to all existing automatic backups.
+                    type: integer
+                  remoteRegion:
+                    description: |-
+                      The name of the remote region where the remote automatic incremental backups will be stored.
+                      For information about valid region names, see
+                      Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm).
+                    type: string
+                type: object
+              dbDeploymentType:
+                description: The distributed database deployment type.
+                type: string
+              definedTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Defined tags for this resource. Each key is predefined and scoped to a namespace.
+                  Example: `{"foo-namespace": {"bar-key": "value"}}`
+                type: object
+              displayName:
+                description: The display name of the Globally distributed database.
+                type: string
+              freeformTags:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
+                  Example: `{"bar-key": "value"}`
+                type: object
+              gsmSshPublicKey:
+                description: The SSH public key for Global service manager instances.
+                type: string
+              listenerPort:
+                description: |-
+                  The listener port number for the Globally distributed database. The listener port number
+                  has to be unique for a customer tenancy across all distributed databases. Same port number should
+                  not be re-used for any other distributed database.
+                type: integer
+              listenerPortTls:
+                description: |-
+                  The TLS listener port number for the Globally distributed database. The TLS listener port number
+                  has to be unique for a customer tenancy across all distributed databases. Same port number should
+                  not be re-used for any other distributed database. For BASE_DB and EXADB_XS based distributed databases,
+                  tls is not supported hence the listenerPortTls is not needed to be provided in create payload.
+                type: integer
+              ncharacterSet:
+                description: The national character set for the database.
+                type: string
+              onsPortLocal:
+                description: |-
+                  The ons local port number for the Globally distributed database. The onsPortLocal has to be
+                  unique for a customer tenancy across all distributed databases. Same port number should not be
+                  re-used for any other distributed database.
+                type: integer
+              onsPortRemote:
+                description: |-
+                  The ons remote port number for the Globally distributed database. The onsPortRemote has to be
+                  unique for a customer tenancy across all distributed databases. Same port number should not be
+                  re-used for any other distributed database.
+                type: integer
+              prefix:
+                description: |-
+                  Unique name prefix for the Globally distributed databases. Only alpha-numeric values are allowed. First character
+                  has to be a letter followed by any combination of letter and number.
+                type: string
+              privateEndpointIds:
+                description: The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the private endpoint associated with Globally distributed autonomous
+                  database.
+                items:
+                  type: string
+                type: array
+              replicationFactor:
+                description: The Replication factor for RAFT replication based Globally
+                  distributed database. Currently supported values are 3, 5 and 7.
+                type: integer
+              replicationMethod:
+                description: |-
+                  The Replication method for Globally distributed database. Use RAFT for Raft based replication.
+                  With RAFT replication, shards cannot have peers details set on them. In case shards need to
+                  have peers, please do not set RAFT replicationMethod. For all non RAFT replication cases (with or
+                  without peers), please set replicationMethod as DG or do not set any value for replicationMethod.
+                type: string
+              replicationUnit:
+                description: |-
+                  The replication unit count for RAFT based distributed database. For RAFT replication based
+                  Globally distributed database, the value should be at least twice the number of shards.
+                type: integer
+              scanListenerPort:
+                description: |-
+                  The TCP Single Client Access Name (SCAN) port for clusters created for Globally distributed database.
+                  The scanListenerPort number should only be provided if shard and catalog have source type NEW_VAULT_AND_CLUSTER.
+                  If shard and catalog have source type NEW_VAULT_AND_CLUSTER and scanListenerPort is not provided then the
+                  scanListenerPort will default to value 1521.
+                type: integer
+              shardDetails:
+                description: Collection of shards for the Globally distributed database.
+                items:
+                  description: DistributedDatabaseShardDetail defines nested fields
+                    for DistributedDatabase.ShardDetail.
+                  properties:
+                    adminPassword:
+                      description: The admin password for the shard associated with
+                        Globally distributed database.
+                      type: string
+                    availabilityDomain:
+                      description: The name of the availability domain that the distributed
+                        database shard will be located in.
+                      type: string
+                    dbStorageVaultDetails:
+                      description: DistributedDatabaseShardDetailDbStorageVaultDetails
+                        defines nested fields for DistributedDatabase.ShardDetail.DbStorageVaultDetails.
+                      properties:
+                        additionalFlashCacheInPercent:
+                          description: The size of additional Flash Cache in percentage
+                            of High Capacity database storage.
+                          type: integer
+                        highCapacityDatabaseStorage:
+                          description: Total storage capacity in GB for vault storage.
+                          type: integer
+                      required:
+                      - highCapacityDatabaseStorage
+                      type: object
+                    jsonData:
+                      type: string
+                    kmsKeyId:
+                      description: The OCID of the key container that is used as the
+                        master encryption key in database transparent data encryption
+                        (TDE) operations.
+                      type: string
+                    kmsKeyVersionId:
+                      description: The OCID of the key container version that is used
+                        in database transparent data encryption (TDE) operations KMS
+                        Key can have multiple key versions.
+                      type: string
+                    peerDetails:
+                      description: The details required for creation of the peer for
+                        the ExadbXs infrastructure based shard.
+                      items:
+                        description: DistributedDatabaseShardDetailPeerDetail defines
+                          nested fields for DistributedDatabase.ShardDetail.PeerDetail.
+                        properties:
+                          availabilityDomain:
+                            description: The name of the availability domain that
+                              the distributed database shard will be located in.
+                            type: string
+                          dbStorageVaultDetails:
+                            description: DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails
+                              defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.DbStorageVaultDetails.
+                            properties:
+                              additionalFlashCacheInPercent:
+                                description: The size of additional Flash Cache in
+                                  percentage of High Capacity database storage.
+                                type: integer
+                              highCapacityDatabaseStorage:
+                                description: Total storage capacity in GB for vault
+                                  storage.
+                                type: integer
+                            required:
+                            - highCapacityDatabaseStorage
+                            type: object
+                          protectionMode:
+                            description: The protectionMode for the shard peer.
+                            type: string
+                          transportType:
+                            description: The redo transport type to use for this Data
+                              Guard association.
+                            type: string
+                          vmClusterDetails:
+                            description: DistributedDatabaseShardDetailPeerDetailVmClusterDetails
+                              defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.VmClusterDetails.
+                            properties:
+                              backupNetworkNsgIds:
+                                description: |-
+                                  A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+                                  Setting this to an empty array after the list is created removes the resource from all NSGs.
+                                  For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+                                items:
+                                  type: string
+                                type: array
+                              backupSubnetId:
+                                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                                  of the backup network subnet associated with the
+                                  Exadata VM cluster on Exascale Infrastructure.
+                                type: string
+                              domain:
+                                description: |-
+                                  A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+                                  If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+                                  (do not provide one). Otherwise, provide a valid DNS domain name.
+                                  Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+                                type: string
+                              enabledECpuCount:
+                                description: The number of ECPUs to enable for an
+                                  Exadata VM cluster on Exascale Infrastructure.
+                                type: integer
+                              isDiagnosticsEventsEnabled:
+                                description: |-
+                                  Indicates whether diagnostic collection is enabled for the VM cluster.
+                                  Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+                                  Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+                                  You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+                                type: boolean
+                              isHealthMonitoringEnabled:
+                                description: |-
+                                  Indicates whether health monitoring is enabled for the VM cluster.
+                                  Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+                                  You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+                                  Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+                                type: boolean
+                              isIncidentLogsEnabled:
+                                description: |-
+                                  Indicates whether incident logs and trace collection are enabled for the VM cluster.
+                                  Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+                                  Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+                                type: boolean
+                              licenseModel:
+                                description: The Oracle license model that applies
+                                  to the Exadata VM cluster on Exascale Infrastructure.
+                                  The default is BRING_YOUR_OWN_LICENSE.
+                                type: string
+                              nsgIds:
+                                description: |-
+                                  The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+                                  Setting this to an empty list removes all resources from all NSGs.
+                                  For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+                                items:
+                                  type: string
+                                type: array
+                              privateZoneId:
+                                description: The private zone ID in which you want
+                                  DNS records to be created.
+                                type: string
+                              sshPublicKeys:
+                                description: The public key portion of one or more
+                                  key pairs used for SSH access to the Exadata VM
+                                  cluster on Exascale Infrastructure.
+                                items:
+                                  type: string
+                                type: array
+                              subnetId:
+                                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                                  of the subnet associated with the Exadata VM cluster
+                                  on Exascale Infrastructure.
+                                type: string
+                              totalECpuCount:
+                                description: The number of Total ECPUs for an Exadata
+                                  VM cluster on Exascale Infrastructure.
+                                type: integer
+                              vmFileSystemStorageSize:
+                                description: File System Storage Size in GBs for Exadata
+                                  VM cluster.
+                                type: integer
+                            required:
+                            - backupSubnetId
+                            - enabledECpuCount
+                            - sshPublicKeys
+                            - subnetId
+                            type: object
+                        required:
+                        - availabilityDomain
+                        - dbStorageVaultDetails
+                        - vmClusterDetails
+                        type: object
+                      type: array
+                    peerVmClusterIds:
+                      description: |-
+                        This field is deprecated. This should not be used while creation of new distributed database. To set the peers
+                        on new shards of distributed database please use peerDetails.
+                      items:
+                        type: string
+                      type: array
+                    shardSpace:
+                      description: |-
+                        The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created.
+                        Shard space name shall be used while creation of new shards.
+                      type: string
+                    source:
+                      type: string
+                    vaultId:
+                      description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                        of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+                        This parameter and `kmsKeyId` are required for Customer Managed
+                        Keys.
+                      type: string
+                    vmClusterDetails:
+                      description: DistributedDatabaseShardDetailVmClusterDetails
+                        defines nested fields for DistributedDatabase.ShardDetail.VmClusterDetails.
+                      properties:
+                        backupNetworkNsgIds:
+                          description: |-
+                            A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+                            Setting this to an empty array after the list is created removes the resource from all NSGs.
+                            For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+                          items:
+                            type: string
+                          type: array
+                        backupSubnetId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the backup network subnet associated with the Exadata
+                            VM cluster on Exascale Infrastructure.
+                          type: string
+                        domain:
+                          description: |-
+                            A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+                            If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+                            (do not provide one). Otherwise, provide a valid DNS domain name.
+                            Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+                          type: string
+                        enabledECpuCount:
+                          description: The number of ECPUs to enable for an Exadata
+                            VM cluster on Exascale Infrastructure.
+                          type: integer
+                        isDiagnosticsEventsEnabled:
+                          description: |-
+                            Indicates whether diagnostic collection is enabled for the VM cluster.
+                            Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+                            Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+                            You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+                          type: boolean
+                        isHealthMonitoringEnabled:
+                          description: |-
+                            Indicates whether health monitoring is enabled for the VM cluster.
+                            Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+                            You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+                            Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+                          type: boolean
+                        isIncidentLogsEnabled:
+                          description: |-
+                            Indicates whether incident logs and trace collection are enabled for the VM cluster.
+                            Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+                            Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+                          type: boolean
+                        licenseModel:
+                          description: The Oracle license model that applies to the
+                            Exadata VM cluster on Exascale Infrastructure. The default
+                            is BRING_YOUR_OWN_LICENSE.
+                          type: string
+                        nsgIds:
+                          description: |-
+                            The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+                            Setting this to an empty list removes all resources from all NSGs.
+                            For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+                          items:
+                            type: string
+                          type: array
+                        privateZoneId:
+                          description: The private zone ID in which you want DNS records
+                            to be created.
+                          type: string
+                        sshPublicKeys:
+                          description: The public key portion of one or more key pairs
+                            used for SSH access to the Exadata VM cluster on Exascale
+                            Infrastructure.
+                          items:
+                            type: string
+                          type: array
+                        subnetId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the subnet associated with the Exadata VM cluster on
+                            Exascale Infrastructure.
+                          type: string
+                        totalECpuCount:
+                          description: The number of Total ECPUs for an Exadata VM
+                            cluster on Exascale Infrastructure.
+                          type: integer
+                        vmFileSystemStorageSize:
+                          description: File System Storage Size in GBs for Exadata
+                            VM cluster.
+                          type: integer
+                      required:
+                      - backupSubnetId
+                      - enabledECpuCount
+                      - sshPublicKeys
+                      - subnetId
+                      type: object
+                    vmClusterId:
+                      description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                        of the VmCluster.
+                      type: string
+                  type: object
+                type: array
+              shardingMethod:
+                description: Sharding Methods for the Globally distributed database.
+                type: string
+            required:
+            - catalogDetails
+            - characterSet
+            - compartmentId
+            - databaseVersion
+            - dbDeploymentType
+            - displayName
+            - listenerPort
+            - ncharacterSet
+            - onsPortLocal
+            - onsPortRemote
+            - prefix
+            - privateEndpointIds
+            - shardDetails
+            - shardingMethod
+            type: object
+          status:
+            description: DistributedDatabaseStatus defines the observed state of DistributedDatabase.
+            properties:
+              catalogDetails:
+                description: Collection of catalogs associated with the Globally distributed
+                  database.
+                items:
+                  description: DistributedDatabaseCatalogDetail defines nested fields
+                    for DistributedDatabase.CatalogDetail.
+                  properties:
+                    adminPassword:
+                      description: The admin password for the catalog associated with
+                        Globally distributed database.
+                      type: string
+                    availabilityDomain:
+                      description: The name of the availability domain that the distributed
+                        database shard will be located in.
+                      type: string
+                    dbStorageVaultDetails:
+                      description: DistributedDatabaseCatalogDetailDbStorageVaultDetails
+                        defines nested fields for DistributedDatabase.CatalogDetail.DbStorageVaultDetails.
+                      properties:
+                        additionalFlashCacheInPercent:
+                          description: The size of additional Flash Cache in percentage
+                            of High Capacity database storage.
+                          type: integer
+                        highCapacityDatabaseStorage:
+                          description: Total storage capacity in GB for vault storage.
+                          type: integer
+                      required:
+                      - highCapacityDatabaseStorage
+                      type: object
+                    jsonData:
+                      type: string
+                    kmsKeyId:
+                      description: The OCID of the key container that is used as the
+                        master encryption key in database transparent data encryption
+                        (TDE) operations.
+                      type: string
+                    kmsKeyVersionId:
+                      description: The OCID of the key container version that is used
+                        in database transparent data encryption (TDE) operations KMS
+                        Key can have multiple key versions.
+                      type: string
+                    peerDetails:
+                      description: The details required for creation of the peer for
+                        the ExadbXs infrastructure based catalog.
+                      items:
+                        description: DistributedDatabaseCatalogDetailPeerDetail defines
+                          nested fields for DistributedDatabase.CatalogDetail.PeerDetail.
+                        properties:
+                          availabilityDomain:
+                            description: The name of the availability domain that
+                              the distributed database shard will be located in.
+                            type: string
+                          dbStorageVaultDetails:
+                            description: DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails
+                              defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.DbStorageVaultDetails.
+                            properties:
+                              additionalFlashCacheInPercent:
+                                description: The size of additional Flash Cache in
+                                  percentage of High Capacity database storage.
+                                type: integer
+                              highCapacityDatabaseStorage:
+                                description: Total storage capacity in GB for vault
+                                  storage.
+                                type: integer
+                            required:
+                            - highCapacityDatabaseStorage
+                            type: object
+                          protectionMode:
+                            description: The protectionMode for the catalog peer.
+                            type: string
+                          transportType:
+                            description: The redo transport type to use for this Data
+                              Guard association.
+                            type: string
+                          vmClusterDetails:
+                            description: DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails
+                              defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.VmClusterDetails.
+                            properties:
+                              backupNetworkNsgIds:
+                                description: |-
+                                  A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+                                  Setting this to an empty array after the list is created removes the resource from all NSGs.
+                                  For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+                                items:
+                                  type: string
+                                type: array
+                              backupSubnetId:
+                                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                                  of the backup network subnet associated with the
+                                  Exadata VM cluster on Exascale Infrastructure.
+                                type: string
+                              domain:
+                                description: |-
+                                  A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+                                  If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+                                  (do not provide one). Otherwise, provide a valid DNS domain name.
+                                  Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+                                type: string
+                              enabledECpuCount:
+                                description: The number of ECPUs to enable for an
+                                  Exadata VM cluster on Exascale Infrastructure.
+                                type: integer
+                              isDiagnosticsEventsEnabled:
+                                description: |-
+                                  Indicates whether diagnostic collection is enabled for the VM cluster.
+                                  Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+                                  Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+                                  You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+                                type: boolean
+                              isHealthMonitoringEnabled:
+                                description: |-
+                                  Indicates whether health monitoring is enabled for the VM cluster.
+                                  Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+                                  You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+                                  Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+                                type: boolean
+                              isIncidentLogsEnabled:
+                                description: |-
+                                  Indicates whether incident logs and trace collection are enabled for the VM cluster.
+                                  Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+                                  Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+                                type: boolean
+                              licenseModel:
+                                description: The Oracle license model that applies
+                                  to the Exadata VM cluster on Exascale Infrastructure.
+                                  The default is BRING_YOUR_OWN_LICENSE.
+                                type: string
+                              nsgIds:
+                                description: |-
+                                  The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+                                  Setting this to an empty list removes all resources from all NSGs.
+                                  For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+                                items:
+                                  type: string
+                                type: array
+                              privateZoneId:
+                                description: The private zone ID in which you want
+                                  DNS records to be created.
+                                type: string
+                              sshPublicKeys:
+                                description: The public key portion of one or more
+                                  key pairs used for SSH access to the Exadata VM
+                                  cluster on Exascale Infrastructure.
+                                items:
+                                  type: string
+                                type: array
+                              subnetId:
+                                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                                  of the subnet associated with the Exadata VM cluster
+                                  on Exascale Infrastructure.
+                                type: string
+                              totalECpuCount:
+                                description: The number of Total ECPUs for an Exadata
+                                  VM cluster on Exascale Infrastructure.
+                                type: integer
+                              vmFileSystemStorageSize:
+                                description: File System Storage Size in GBs for Exadata
+                                  VM cluster.
+                                type: integer
+                            required:
+                            - backupSubnetId
+                            - enabledECpuCount
+                            - sshPublicKeys
+                            - subnetId
+                            type: object
+                        required:
+                        - availabilityDomain
+                        - dbStorageVaultDetails
+                        - vmClusterDetails
+                        type: object
+                      type: array
+                    peerVmClusterIds:
+                      description: |-
+                        This field is deprecated. This should not be used while creation of new distributed database. To set the peers
+                        on catalog of distributed database please use peerDetails.
+                      items:
+                        type: string
+                      type: array
+                    shardSpace:
+                      description: |-
+                        The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created.
+                        Shard space name shall be used while creation of new shards.
+                      type: string
+                    source:
+                      type: string
+                    vaultId:
+                      description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                        of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+                        This parameter and `kmsKeyId` are required for Customer Managed
+                        Keys.
+                      type: string
+                    vmClusterDetails:
+                      description: DistributedDatabaseCatalogDetailVmClusterDetails
+                        defines nested fields for DistributedDatabase.CatalogDetail.VmClusterDetails.
+                      properties:
+                        backupNetworkNsgIds:
+                          description: |-
+                            A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+                            Setting this to an empty array after the list is created removes the resource from all NSGs.
+                            For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+                          items:
+                            type: string
+                          type: array
+                        backupSubnetId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the backup network subnet associated with the Exadata
+                            VM cluster on Exascale Infrastructure.
+                          type: string
+                        domain:
+                          description: |-
+                            A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+                            If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+                            (do not provide one). Otherwise, provide a valid DNS domain name.
+                            Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+                          type: string
+                        enabledECpuCount:
+                          description: The number of ECPUs to enable for an Exadata
+                            VM cluster on Exascale Infrastructure.
+                          type: integer
+                        isDiagnosticsEventsEnabled:
+                          description: |-
+                            Indicates whether diagnostic collection is enabled for the VM cluster.
+                            Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+                            Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+                            You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+                          type: boolean
+                        isHealthMonitoringEnabled:
+                          description: |-
+                            Indicates whether health monitoring is enabled for the VM cluster.
+                            Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+                            You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+                            Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+                          type: boolean
+                        isIncidentLogsEnabled:
+                          description: |-
+                            Indicates whether incident logs and trace collection are enabled for the VM cluster.
+                            Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+                            Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+                          type: boolean
+                        licenseModel:
+                          description: The Oracle license model that applies to the
+                            Exadata VM cluster on Exascale Infrastructure. The default
+                            is BRING_YOUR_OWN_LICENSE.
+                          type: string
+                        nsgIds:
+                          description: |-
+                            The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+                            Setting this to an empty list removes all resources from all NSGs.
+                            For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+                          items:
+                            type: string
+                          type: array
+                        privateZoneId:
+                          description: The private zone ID in which you want DNS records
+                            to be created.
+                          type: string
+                        sshPublicKeys:
+                          description: The public key portion of one or more key pairs
+                            used for SSH access to the Exadata VM cluster on Exascale
+                            Infrastructure.
+                          items:
+                            type: string
+                          type: array
+                        subnetId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the subnet associated with the Exadata VM cluster on
+                            Exascale Infrastructure.
+                          type: string
+                        totalECpuCount:
+                          description: The number of Total ECPUs for an Exadata VM
+                            cluster on Exascale Infrastructure.
+                          type: integer
+                        vmFileSystemStorageSize:
+                          description: File System Storage Size in GBs for Exadata
+                            VM cluster.
+                          type: integer
+                      required:
+                      - backupSubnetId
+                      - enabledECpuCount
+                      - sshPublicKeys
+                      - subnetId
+                      type: object
+                    vmClusterId:
+                      description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                        of the VmCluster.
+                      type: string
+                  type: object
+                type: array
+              characterSet:
+                description: The character set for the database.
+                type: string
+              chunks:
+                description: |-
+                  The default number of unique chunks in a shardspace. The value of chunks must be
+                  greater than 2 times the size of the largest shardgroup in any shardspace.
+                type: integer
+              compartmentId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the Globally distributed database compartment.
+                type: string
+              connectionStrings:
+                description: DistributedDatabaseConnectionStrings defines nested fields
+                  for DistributedDatabase.ConnectionStrings.
+                properties:
+                  allConnectionStrings:
+                    additionalProperties:
+                      type: string
+                    description: Collection of connection strings.
+                    type: object
+                type: object
+              databaseVersion:
+                description: Oracle Database version for the shards and catalog used
+                  in Globally distributed database.
+                type: string
+              dbBackupConfig:
+                description: DistributedDatabaseDbBackupConfig defines nested fields
+                  for DistributedDatabase.DbBackupConfig.
+                properties:
+                  autoBackupWindow:
+                    description: |-
+                      Time window selected for initiating automatic backup for the database system. There are twelve available two-hour time windows. If no option is selected, a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive).
+                      Example: `SLOT_TWO`
+                    type: string
+                  autoFullBackupDay:
+                    description: Day of the week the full backup should be applied
+                      on the database system. If no option is selected, the value
+                      is null and we will default to Sunday.
+                    type: string
+                  autoFullBackupWindow:
+                    description: |-
+                      Time window selected for initiating full backup for the database system. There are twelve available two-hour time windows. If no option is selected, the value is null and a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive).
+                      Example: `SLOT_TWO`
+                    type: string
+                  backupDeletionPolicy:
+                    description: This defines when the backups will be deleted. -
+                      IMMEDIATE option keep the backup for predefined time i.e 72
+                      hours and then delete permanently... - RETAIN will keep the
+                      backups as per the policy defined for database backups.
+                    type: string
+                  backupDestinationDetails:
+                    description: Backup destination details.
+                    items:
+                      description: DistributedDatabaseDbBackupConfigBackupDestinationDetail
+                        defines nested fields for DistributedDatabase.DbBackupConfig.BackupDestinationDetail.
+                      properties:
+                        dbrsPolicyId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the DBRS policy used for backup.
+                          type: string
+                        id:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the backup destination.
+                          type: string
+                        internetProxy:
+                          description: Proxy URL to connect to object store.
+                          type: string
+                        isRemote:
+                          description: Indicates whether the backup destination is
+                            cross-region or local region.
+                          type: boolean
+                        isZeroDataLossEnabled:
+                          description: Indicates whether Zero Data Loss functionality
+                            is enabled for a Recovery Appliance backup destination
+                            in an Autonomous Container Database. When enabled, the
+                            database automatically ships all redo logs in real-time
+                            to the Recovery Appliance for a Zero Data Loss recovery
+                            setup (sub-second RPO). Defaults to `TRUE` if no value
+                            is given.
+                          type: boolean
+                        remoteRegion:
+                          description: |-
+                            The name of the remote region where the remote automatic incremental backups will be stored.
+                            For information about valid region names, see
+                            Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm).
+                          type: string
+                        type:
+                          description: Type of the database backup destination.
+                          type: string
+                        vpcPassword:
+                          description: For a RECOVERY_APPLIANCE backup destination,
+                            the password for the VPC user that is used to access the
+                            Recovery Appliance.
+                          type: string
+                        vpcUser:
+                          description: For a RECOVERY_APPLIANCE backup destination,
+                            the Virtual Private Catalog (VPC) user that is used to
+                            access the Recovery Appliance.
+                          type: string
+                      required:
+                      - type
+                      type: object
+                    type: array
+                  canRunImmediateFullBackup:
+                    description: If set to true, configures automatic full backups
+                      in the local region (the region of the DB system) for the first
+                      backup run immediately.
+                    type: boolean
+                  isAutoBackupEnabled:
+                    description: If set to true, configures automatic backups. If
+                      you previously used RMAN or dbcli to configure backups and then
+                      you switch to using the Console or the API for backups, a new
+                      backup configuration is created and associated with your database.
+                      This means that you can no longer rely on your previously configured
+                      unmanaged backups to work.
+                    type: boolean
+                  isRemoteBackupEnabled:
+                    description: |-
+                      If set to true, configures automatic incremental backups in the local region (the region of the DB system) and the remote region with a default frequency of 1 hour.
+                      If you previously used RMAN or dbcli to configure backups, using the Console or the API for manged backups creates a new backup configuration for your database. The new configuration replaces the configuration created with RMAN or dbcli.
+                      This means that you can no longer rely on your previously configured unmanaged backups to work.
+                    type: boolean
+                  recoveryWindowInDays:
+                    description: |-
+                      Number of days between the current and the earliest point of recoverability covered by automatic backups.
+                      This value applies to automatic backups only. After a new automatic backup has been created, Oracle removes old automatic backups that are created before the window.
+                      When the value is updated, it is applied to all existing automatic backups.
+                    type: integer
+                  remoteRegion:
+                    description: |-
+                      The name of the remote region where the remote automatic incremental backups will be stored.
+                      For information about valid region names, see
+                      Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm).
+                    type: string
+                type: object
+              dbDeploymentType:
+                description: The distributed database deployment type.
+                type: string
+              definedTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Defined tags for this resource. Each key is predefined and scoped to a namespace.
+                  Example: `{"foo-namespace": {"bar-key": "value"}}`
+                type: object
+              displayName:
+                description: The display name of the Globally distributed database.
+                type: string
+              freeformTags:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
+                  Example: `{"bar-key": "value"}`
+                type: object
+              gsmDetails:
+                description: Collection of catalogs associated with the Globally distributed
+                  database.
+                items:
+                  description: DistributedDatabaseGsmDetail defines nested fields
+                    for DistributedDatabase.GsmDetail.
+                  properties:
+                    computeCount:
+                      description: The compute count for the Global service manager
+                        instance.
+                      type: number
+                    dataStorageSizeInGbs:
+                      description: The data disk group size to be allocated in GBs
+                        for the Global service manager instance.
+                      type: number
+                    gsmImageDetails:
+                      description: DistributedDatabaseGsmDetailGsmImageDetails defines
+                        nested fields for DistributedDatabase.GsmDetail.GsmImageDetails.
+                      properties:
+                        id:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the Global service manager software image.
+                          type: string
+                        versionNumber:
+                          description: The version number associated with the image
+                            identified by id.
+                          type: integer
+                      type: object
+                    metadata:
+                      description: DistributedDatabaseGsmDetailMetadata defines nested
+                        fields for DistributedDatabase.GsmDetail.Metadata.
+                      properties:
+                        map:
+                          additionalProperties:
+                            type: string
+                          description: The map containing key-value pair of additional
+                            metadata.
+                          type: object
+                      type: object
+                    name:
+                      description: Name of the Global service manager instance
+                      type: string
+                    status:
+                      description: Status of the gsm.
+                      type: string
+                    supportingResourceId:
+                      description: the identifier of the underlying supporting resource.
+                      type: string
+                    timeCreated:
+                      description: The time the Global service manager instance was
+                        created. An RFC3339 formatted datetime string
+                      type: string
+                    timeSslCertificateExpires:
+                      description: The time the ssl certificate associated with Global
+                        service manager expires. An RFC3339 formatted datetime string
+                      type: string
+                    timeUpdated:
+                      description: The time the Global service manager instance was
+                        last updated. An RFC3339 formatted datetime string
+                      type: string
+                  type: object
+                type: array
+              gsmSshPublicKey:
+                description: The SSH public key for Global service manager instances.
+                type: string
+              id:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the Globally distributed database.
+                type: string
+              latestGsmImageDetails:
+                description: DistributedDatabaseLatestGsmImageDetails defines nested
+                  fields for DistributedDatabase.LatestGsmImageDetails.
+                properties:
+                  id:
+                    description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                      of the Global service manager software image.
+                    type: string
+                  versionNumber:
+                    description: The version number associated with the image identified
+                      by id.
+                    type: integer
+                type: object
+              lifecycleDetails:
+                description: The lifecycleDetails for the Globally distributed database.
+                type: string
+              lifecycleState:
+                description: Lifecycle states for the Globally distributed database.
+                type: string
+              listenerPort:
+                description: The Global service manager listener port number for the
+                  Globally distributed database.
+                type: integer
+              listenerPortTls:
+                description: The TLS listener port number for Globally distributed
+                  database.
+                type: integer
+              metadata:
+                description: DistributedDatabaseMetadata defines nested fields for
+                  DistributedDatabase.Metadata.
+                properties:
+                  map:
+                    additionalProperties:
+                      type: string
+                    description: The map containing key-value pair of additional metadata.
+                    type: object
+                type: object
+              ncharacterSet:
+                description: The national character set for the database.
+                type: string
+              onsPortLocal:
+                description: Ons local port number.
+                type: integer
+              onsPortRemote:
+                description: Ons remote port number.
+                type: integer
+              prefix:
+                description: |-
+                  Unique name prefix for the Globally distributed databases. Only alpha-numeric values are allowed. First character
+                  has to be a letter followed by any combination of letter and number.
+                type: string
+              privateEndpointIds:
+                description: The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the private endpoint associated with Globally distributed autonomous
+                  database.
+                items:
+                  type: string
+                type: array
+              replicationFactor:
+                description: The Replication factor for RAFT replication based Globally
+                  distributed database. Currently supported values are 3, 5 and 7.
+                type: integer
+              replicationMethod:
+                description: |-
+                  The Replication method for Globally distributed database. Use RAFT for Raft replication, and DG for
+                  DataGuard. If replicationMethod is not provided, it defaults to DG.
+                type: string
+              replicationUnit:
+                description: |-
+                  The replication unit count for RAFT based distributed database. For RAFT replication based
+                  Globally distributed database, the value should be at least twice the number of shards.
+                type: integer
+              scanListenerPort:
+                description: The TCP Single Client Access Name (SCAN) port for Globally
+                  distributed database clusters.
+                type: integer
+              shardDetails:
+                description: Collection of shards associated with the Globally distributed
+                  database.
+                items:
+                  description: DistributedDatabaseShardDetail defines nested fields
+                    for DistributedDatabase.ShardDetail.
+                  properties:
+                    adminPassword:
+                      description: The admin password for the shard associated with
+                        Globally distributed database.
+                      type: string
+                    availabilityDomain:
+                      description: The name of the availability domain that the distributed
+                        database shard will be located in.
+                      type: string
+                    dbStorageVaultDetails:
+                      description: DistributedDatabaseShardDetailDbStorageVaultDetails
+                        defines nested fields for DistributedDatabase.ShardDetail.DbStorageVaultDetails.
+                      properties:
+                        additionalFlashCacheInPercent:
+                          description: The size of additional Flash Cache in percentage
+                            of High Capacity database storage.
+                          type: integer
+                        highCapacityDatabaseStorage:
+                          description: Total storage capacity in GB for vault storage.
+                          type: integer
+                      required:
+                      - highCapacityDatabaseStorage
+                      type: object
+                    jsonData:
+                      type: string
+                    kmsKeyId:
+                      description: The OCID of the key container that is used as the
+                        master encryption key in database transparent data encryption
+                        (TDE) operations.
+                      type: string
+                    kmsKeyVersionId:
+                      description: The OCID of the key container version that is used
+                        in database transparent data encryption (TDE) operations KMS
+                        Key can have multiple key versions.
+                      type: string
+                    peerDetails:
+                      description: The details required for creation of the peer for
+                        the ExadbXs infrastructure based shard.
+                      items:
+                        description: DistributedDatabaseShardDetailPeerDetail defines
+                          nested fields for DistributedDatabase.ShardDetail.PeerDetail.
+                        properties:
+                          availabilityDomain:
+                            description: The name of the availability domain that
+                              the distributed database shard will be located in.
+                            type: string
+                          dbStorageVaultDetails:
+                            description: DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails
+                              defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.DbStorageVaultDetails.
+                            properties:
+                              additionalFlashCacheInPercent:
+                                description: The size of additional Flash Cache in
+                                  percentage of High Capacity database storage.
+                                type: integer
+                              highCapacityDatabaseStorage:
+                                description: Total storage capacity in GB for vault
+                                  storage.
+                                type: integer
+                            required:
+                            - highCapacityDatabaseStorage
+                            type: object
+                          protectionMode:
+                            description: The protectionMode for the shard peer.
+                            type: string
+                          transportType:
+                            description: The redo transport type to use for this Data
+                              Guard association.
+                            type: string
+                          vmClusterDetails:
+                            description: DistributedDatabaseShardDetailPeerDetailVmClusterDetails
+                              defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.VmClusterDetails.
+                            properties:
+                              backupNetworkNsgIds:
+                                description: |-
+                                  A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+                                  Setting this to an empty array after the list is created removes the resource from all NSGs.
+                                  For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+                                items:
+                                  type: string
+                                type: array
+                              backupSubnetId:
+                                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                                  of the backup network subnet associated with the
+                                  Exadata VM cluster on Exascale Infrastructure.
+                                type: string
+                              domain:
+                                description: |-
+                                  A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+                                  If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+                                  (do not provide one). Otherwise, provide a valid DNS domain name.
+                                  Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+                                type: string
+                              enabledECpuCount:
+                                description: The number of ECPUs to enable for an
+                                  Exadata VM cluster on Exascale Infrastructure.
+                                type: integer
+                              isDiagnosticsEventsEnabled:
+                                description: |-
+                                  Indicates whether diagnostic collection is enabled for the VM cluster.
+                                  Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+                                  Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+                                  You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+                                type: boolean
+                              isHealthMonitoringEnabled:
+                                description: |-
+                                  Indicates whether health monitoring is enabled for the VM cluster.
+                                  Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+                                  You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+                                  Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+                                type: boolean
+                              isIncidentLogsEnabled:
+                                description: |-
+                                  Indicates whether incident logs and trace collection are enabled for the VM cluster.
+                                  Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+                                  Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+                                type: boolean
+                              licenseModel:
+                                description: The Oracle license model that applies
+                                  to the Exadata VM cluster on Exascale Infrastructure.
+                                  The default is BRING_YOUR_OWN_LICENSE.
+                                type: string
+                              nsgIds:
+                                description: |-
+                                  The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+                                  Setting this to an empty list removes all resources from all NSGs.
+                                  For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+                                items:
+                                  type: string
+                                type: array
+                              privateZoneId:
+                                description: The private zone ID in which you want
+                                  DNS records to be created.
+                                type: string
+                              sshPublicKeys:
+                                description: The public key portion of one or more
+                                  key pairs used for SSH access to the Exadata VM
+                                  cluster on Exascale Infrastructure.
+                                items:
+                                  type: string
+                                type: array
+                              subnetId:
+                                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                                  of the subnet associated with the Exadata VM cluster
+                                  on Exascale Infrastructure.
+                                type: string
+                              totalECpuCount:
+                                description: The number of Total ECPUs for an Exadata
+                                  VM cluster on Exascale Infrastructure.
+                                type: integer
+                              vmFileSystemStorageSize:
+                                description: File System Storage Size in GBs for Exadata
+                                  VM cluster.
+                                type: integer
+                            required:
+                            - backupSubnetId
+                            - enabledECpuCount
+                            - sshPublicKeys
+                            - subnetId
+                            type: object
+                        required:
+                        - availabilityDomain
+                        - dbStorageVaultDetails
+                        - vmClusterDetails
+                        type: object
+                      type: array
+                    peerVmClusterIds:
+                      description: |-
+                        This field is deprecated. This should not be used while creation of new distributed database. To set the peers
+                        on new shards of distributed database please use peerDetails.
+                      items:
+                        type: string
+                      type: array
+                    shardSpace:
+                      description: |-
+                        The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created.
+                        Shard space name shall be used while creation of new shards.
+                      type: string
+                    source:
+                      type: string
+                    vaultId:
+                      description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                        of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+                        This parameter and `kmsKeyId` are required for Customer Managed
+                        Keys.
+                      type: string
+                    vmClusterDetails:
+                      description: DistributedDatabaseShardDetailVmClusterDetails
+                        defines nested fields for DistributedDatabase.ShardDetail.VmClusterDetails.
+                      properties:
+                        backupNetworkNsgIds:
+                          description: |-
+                            A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+                            Setting this to an empty array after the list is created removes the resource from all NSGs.
+                            For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+                          items:
+                            type: string
+                          type: array
+                        backupSubnetId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the backup network subnet associated with the Exadata
+                            VM cluster on Exascale Infrastructure.
+                          type: string
+                        domain:
+                          description: |-
+                            A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+                            If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+                            (do not provide one). Otherwise, provide a valid DNS domain name.
+                            Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+                          type: string
+                        enabledECpuCount:
+                          description: The number of ECPUs to enable for an Exadata
+                            VM cluster on Exascale Infrastructure.
+                          type: integer
+                        isDiagnosticsEventsEnabled:
+                          description: |-
+                            Indicates whether diagnostic collection is enabled for the VM cluster.
+                            Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+                            Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+                            You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+                          type: boolean
+                        isHealthMonitoringEnabled:
+                          description: |-
+                            Indicates whether health monitoring is enabled for the VM cluster.
+                            Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+                            You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+                            Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+                          type: boolean
+                        isIncidentLogsEnabled:
+                          description: |-
+                            Indicates whether incident logs and trace collection are enabled for the VM cluster.
+                            Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+                            Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+                          type: boolean
+                        licenseModel:
+                          description: The Oracle license model that applies to the
+                            Exadata VM cluster on Exascale Infrastructure. The default
+                            is BRING_YOUR_OWN_LICENSE.
+                          type: string
+                        nsgIds:
+                          description: |-
+                            The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+                            Setting this to an empty list removes all resources from all NSGs.
+                            For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+                          items:
+                            type: string
+                          type: array
+                        privateZoneId:
+                          description: The private zone ID in which you want DNS records
+                            to be created.
+                          type: string
+                        sshPublicKeys:
+                          description: The public key portion of one or more key pairs
+                            used for SSH access to the Exadata VM cluster on Exascale
+                            Infrastructure.
+                          items:
+                            type: string
+                          type: array
+                        subnetId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                            of the subnet associated with the Exadata VM cluster on
+                            Exascale Infrastructure.
+                          type: string
+                        totalECpuCount:
+                          description: The number of Total ECPUs for an Exadata VM
+                            cluster on Exascale Infrastructure.
+                          type: integer
+                        vmFileSystemStorageSize:
+                          description: File System Storage Size in GBs for Exadata
+                            VM cluster.
+                          type: integer
+                      required:
+                      - backupSubnetId
+                      - enabledECpuCount
+                      - sshPublicKeys
+                      - subnetId
+                      type: object
+                    vmClusterId:
+                      description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                        of the VmCluster.
+                      type: string
+                  type: object
+                type: array
+              shardingMethod:
+                description: Sharding Methods for the Globally distributed database.
+                type: string
+              status:
+                properties:
+                  async:
+                    description: |-
+                      Async is the canonical controller-owned async contract. Resource-local
+                      legacy work-request fields may remain as compatibility mirrors while
+                      follow-on migrations land, but new async state should project here first.
+                    properties:
+                      current:
+                        properties:
+                          message:
+                            type: string
+                          normalizedClass:
+                            enum:
+                            - pending
+                            - succeeded
+                            - failed
+                            - canceled
+                            - attention
+                            - unknown
+                            type: string
+                          percentComplete:
+                            maximum: 100
+                            minimum: 0
+                            type: number
+                          phase:
+                            enum:
+                            - create
+                            - update
+                            - delete
+                            type: string
+                          rawOperationType:
+                            type: string
+                          rawStatus:
+                            type: string
+                          source:
+                            enum:
+                            - none
+                            - lifecycle
+                            - workrequest
+                            type: string
+                          updatedAt:
+                            format: date-time
+                            type: string
+                          workRequestId:
+                            type: string
+                        required:
+                        - normalizedClass
+                        - phase
+                        - source
+                        - updatedAt
+                        type: object
+                    type: object
+                  conditions:
+                    items:
+                      properties:
+                        lastTransitionTime:
+                          format: date-time
+                          type: string
+                        message:
+                          type: string
+                        reason:
+                          type: string
+                        status:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - status
+                      - type
+                      type: object
+                    type: array
+                  createdAt:
+                    format: date-time
+                    type: string
+                  deletedAt:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  ocid:
+                    maxLength: 255
+                    minLength: 1
+                    type: string
+                  opcRequestId:
+                    description: |-
+                      OpcRequestID is the latest non-empty OCI request ID from a mutating OCI
+                      response or surfaced OCI service error that materially contributed to the
+                      current shared status projection. Headerless follow-up observations keep
+                      the last non-empty value intact.
+                    type: string
+                  reason:
+                    type: string
+                  requestedAt:
+                    format: date-time
+                    type: string
+                  updatedAt:
+                    format: date-time
+                    type: string
+                type: object
+              systemTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Usage of system tag keys. These predefined keys are scoped to namespaces.
+                  Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
+                type: object
+              timeCreated:
+                description: The time the Globally distributed database was created.
+                  An RFC3339 formatted datetime string
+                type: string
+              timeUpdated:
+                description: The time the Globally distributed database was last updated.
+                  An RFC3339 formatted datetime string
+                type: string
+            required:
+            - status
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

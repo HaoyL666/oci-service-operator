@@ -1462,7 +1462,7 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 	assertServiceSelection(t, services["core"], true, SelectionModeExplicit, []string{"Instance"})
 	assertServiceSelection(t, services["dashboardservice"], true, SelectionModeExplicit, []string{"DashboardGroup", "Dashboard"})
 	assertServiceSelection(t, services["database"], true, SelectionModeExplicit, []string{"AutonomousDatabase"})
-	assertServiceSelection(t, services["databasemigration"], true, SelectionModeExplicit, []string{"Connection", "Assessment"})
+	assertServiceSelection(t, services["databasemigration"], true, SelectionModeExplicit, []string{"Connection", "Assessment", "Migration"})
 	assertServiceSelection(t, services["databasetools"], true, SelectionModeExplicit, []string{"DatabaseToolsConnection"})
 	assertServiceSelection(t, services["datacatalog"], true, SelectionModeExplicit, []string{"Attribute", "AttributeTag", "Catalog", "CatalogPrivateEndpoint", "Connection", "CustomProperty", "DataAsset", "DataAssetTag", "Entity", "EntityTag", "Folder", "FolderTag", "Glossary", "Job", "JobDefinition", "Metastore", "Namespace", "Pattern", "Term", "TermRelationship"})
 	assertServiceSelection(t, services["dataflow"], true, SelectionModeExplicit, []string{"Application"})
@@ -1477,8 +1477,8 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 	assertServiceSelection(t, services["desktops"], true, SelectionModeExplicit, []string{"DesktopPool"})
 	assertServiceSelection(t, services["devops"], true, SelectionModeExplicit, []string{"Project", "Repository", "BuildPipeline", "DeployPipeline", "DeployArtifact", "Trigger"})
 	assertServiceSelection(t, services["dif"], true, SelectionModeExplicit, []string{"Stack"})
-	assertServiceSelection(t, services["disasterrecovery"], true, SelectionModeExplicit, []string{"DrProtectionGroup"})
-	assertServiceSelection(t, services["distributeddatabase"], true, SelectionModeExplicit, []string{"DistributedDatabasePrivateEndpoint"})
+	assertServiceSelection(t, services["disasterrecovery"], true, SelectionModeExplicit, []string{"DrProtectionGroup", "DrPlan"})
+	assertServiceSelection(t, services["distributeddatabase"], true, SelectionModeExplicit, []string{"DistributedDatabasePrivateEndpoint", "DistributedDatabase"})
 	assertServiceSelection(t, services["dns"], true, SelectionModeExplicit, []string{"Zone", "View", "TsigKey", "SteeringPolicy", "SteeringPolicyAttachment"})
 	assertServiceSelection(t, services["email"], true, SelectionModeExplicit, []string{"Dkim", "EmailDomain", "Sender", "Suppression"})
 	assertServiceSelection(t, services["emwarehouse"], true, SelectionModeExplicit, []string{"EmWarehouse"})
@@ -1490,7 +1490,7 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 	assertServiceSelection(t, services["fusionapps"], true, SelectionModeExplicit, []string{"FusionEnvironment", "FusionEnvironmentFamily", "RefreshActivity", "ServiceAttachment"})
 	assertServiceSelection(t, services["gdp"], true, SelectionModeExplicit, []string{"GdpPipeline"})
 	assertServiceSelection(t, services["generativeai"], true, SelectionModeExplicit, []string{"DedicatedAiCluster", "Endpoint", "Model"})
-	assertServiceSelection(t, services["generativeaiagent"], true, SelectionModeExplicit, []string{"KnowledgeBase", "Agent"})
+	assertServiceSelection(t, services["generativeaiagent"], true, SelectionModeExplicit, []string{"KnowledgeBase", "Agent", "AgentEndpoint", "DataSource"})
 	assertServiceSelection(t, services["generativeaiagentruntime"], true, SelectionModeExplicit, []string{"Session"})
 	assertServiceSelection(t, services["generativeaidata"], true, SelectionModeExplicit, []string{"EnrichmentJob"})
 	assertServiceSelection(t, services["genericartifactscontent"], true, SelectionModeExplicit, []string{"GenericArtifactContent", "GenericArtifactContentByPath"})
@@ -1500,7 +1500,7 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 	assertServiceSelection(t, services["identity"], true, SelectionModeExplicit, []string{"Compartment"})
 	assertServiceSelection(t, services["integration"], true, SelectionModeExplicit, []string{"IntegrationInstance"})
 	assertServiceSelection(t, services["iot"], true, SelectionModeExplicit, []string{"DigitalTwinAdapter", "DigitalTwinInstance", "DigitalTwinModel", "DigitalTwinRelationship", "IotDomain", "IotDomainGroup"})
-	assertServiceSelection(t, services["jms"], true, SelectionModeExplicit, []string{"Fleet"})
+	assertServiceSelection(t, services["jms"], true, SelectionModeExplicit, []string{"Fleet", "JmsPlugin"})
 	assertServiceSelection(t, services["jmsjavadownloads"], true, SelectionModeExplicit, []string{"JavaDownloadToken"})
 	assertServiceSelection(t, services["jmsutils"], true, SelectionModeExplicit, []string{"AnalyzeApplicationsConfiguration", "JavaMigrationAnalysis", "PerformanceTuningAnalysis", "SubscriptionAcknowledgmentConfiguration", "WorkItem"})
 	assertServiceSelection(t, services["keymanagement"], true, SelectionModeExplicit, []string{"EkmsPrivateEndpoint", "Vault"})
@@ -1518,7 +1518,7 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 	assertServiceSelection(t, services["marketplace"], true, SelectionModeExplicit, []string{"AcceptedAgreement", "Publication"})
 	assertServiceSelection(t, services["marketplaceprivateoffer"], true, SelectionModeExplicit, []string{"Attachment", "Offer"})
 	assertServiceSelection(t, services["marketplacepublisher"], true, SelectionModeExplicit, []string{"Artifact", "Listing", "ListingRevision", "ListingRevisionAttachment", "ListingRevisionNote", "ListingRevisionPackage", "Term", "TermVersion"})
-	assertServiceSelection(t, services["mediaservices"], true, SelectionModeExplicit, []string{"MediaAsset", "MediaWorkflow"})
+	assertServiceSelection(t, services["mediaservices"], true, SelectionModeExplicit, []string{"MediaAsset", "MediaWorkflow", "MediaWorkflowConfiguration"})
 	assertServiceSelection(t, services["mngdmac"], true, SelectionModeExplicit, []string{"MacOrder", "MacDevice"})
 	assertServiceSelection(t, services["monitoring"], true, SelectionModeExplicit, []string{"Alarm", "AlarmSuppression"})
 	assertServiceSelection(t, services["multicloud"], true, SelectionModeExplicit, []string{"ExternalLocationDetailsMetadata", "ExternalLocationMappingMetadata", "ExternalLocationSummariesMetadata", "MultiCloudMetadata", "MulticloudResource", "MulticloudSubscription", "NetworkAnchor", "ResourceAnchor"})
@@ -1556,7 +1556,7 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 	assertServiceSelection(t, services["servicemanagerproxy"], true, SelectionModeExplicit, []string{"ServiceEnvironment"})
 	assertServiceSelection(t, services["stackmonitoring"], true, SelectionModeExplicit, []string{"AlarmCondition", "BaselineableMetric", "Config", "DiscoveryJob", "MaintenanceWindow", "MetricExtension", "MonitoredResource", "MonitoredResourceType", "MonitoringTemplate", "ProcessSet"})
 	assertServiceSelection(t, services["streaming"], true, SelectionModeExplicit, []string{"Stream"})
-	assertServiceSelection(t, services["tenantmanagercontrolplane"], true, SelectionModeExplicit, []string{"Domain", "Organization"})
+	assertServiceSelection(t, services["tenantmanagercontrolplane"], true, SelectionModeExplicit, []string{"Domain", "Organization", "DomainGovernance"})
 	assertServiceSelection(t, services["usageapi"], true, SelectionModeExplicit, []string{"CustomTable", "Query", "Schedule", "UsageCarbonEmissionsQuery"})
 	assertServiceSelection(t, services["vault"], false, SelectionModeAll, nil)
 	assertServiceSelection(t, services["vbsinst"], true, SelectionModeExplicit, []string{"VbsInstance"})
@@ -1574,7 +1574,7 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	t.Parallel()
 
 	cfg := loadCheckedInConfig(t)
-	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "bds", "containerengine", "containerinstances", "core", "dataflow", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "functions", "identity", "keymanagement", "mysql", "nosql", "oce", "ocvp", "psql", "redis", "streaming")
+	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "bds", "containerengine", "containerinstances", "core", "dataflow", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "disasterrecovery", "distributeddatabase", "functions", "generativeaiagent", "identity", "jms", "keymanagement", "mediaservices", "mysql", "nosql", "oce", "ocvp", "psql", "redis", "streaming", "tenantmanagercontrolplane")
 	assertAIDocumentRuntimeRolloutMetadata(t, services["aidocument"])
 	assertAILanguageRuntimeRolloutMetadata(t, services["ailanguage"])
 	assertAISpeechRuntimeRolloutMetadata(t, services["aispeech"])
@@ -1583,6 +1583,13 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	assertDatabaseMigrationRuntimeRolloutMetadata(t, services["databasemigration"])
 	assertDatabaseToolsRuntimeRolloutMetadata(t, services["databasetools"])
 	assertDataScienceRuntimeRolloutMetadata(t, services["datascience"])
+	assertAsyncContract(t, services["disasterrecovery"], "DrPlan", AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)
+	assertAsyncContract(t, services["distributeddatabase"], "DistributedDatabase", AsyncStrategyLifecycle, AsyncRuntimeGeneratedRuntime)
+	assertAsyncContract(t, services["generativeaiagent"], "AgentEndpoint", AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)
+	assertAsyncContract(t, services["generativeaiagent"], "DataSource", AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)
+	assertAsyncContract(t, services["jms"], "JmsPlugin", AsyncStrategyLifecycle, AsyncRuntimeGeneratedRuntime)
+	assertAsyncContract(t, services["mediaservices"], "MediaWorkflowConfiguration", AsyncStrategyLifecycle, AsyncRuntimeGeneratedRuntime)
+	assertAsyncContract(t, services["tenantmanagercontrolplane"], "DomainGovernance", AsyncStrategyLifecycle, AsyncRuntimeGeneratedRuntime)
 
 	assertServiceGenerationStrategies(t, services["dataflow"], generationStrategyExpectations{
 		controller:     GenerationStrategyGenerated,
@@ -1673,7 +1680,7 @@ func TestCheckedInConfigPromotesFormalSpecReferences(t *testing.T) {
 	t.Parallel()
 
 	cfg := loadCheckedInConfig(t)
-	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "analytics", "apiaccesscontrol", "bds", "containerengine", "containerinstances", "core", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "dataflow", "identity", "mysql", "objectstorage", "oce", "ocvp", "opa", "opensearch", "psql", "redis", "streaming")
+	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "analytics", "apiaccesscontrol", "bds", "containerengine", "containerinstances", "core", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "dataflow", "disasterrecovery", "distributeddatabase", "generativeaiagent", "identity", "jms", "mediaservices", "mysql", "objectstorage", "oce", "ocvp", "opa", "opensearch", "psql", "redis", "streaming", "tenantmanagercontrolplane")
 	assertFormalSpecFor(t, services["aidocument"], "Project", "project")
 	assertFormalSpecFor(t, services["ailanguage"], "Project", "project")
 	assertFormalSpecFor(t, services["aispeech"], "TranscriptionJob", "transcriptionjob")
@@ -1686,9 +1693,17 @@ func TestCheckedInConfigPromotesFormalSpecReferences(t *testing.T) {
 	assertFormalSpecFor(t, services["containerinstances"], "ContainerInstance", "")
 	assertFormalSpecFor(t, services["databasemigration"], "Assessment", "assessment")
 	assertFormalSpecFor(t, services["databasemigration"], "Connection", "connection")
+	assertFormalSpecFor(t, services["databasemigration"], "Migration", "migration")
 	assertFormalSpecFor(t, services["databasetools"], "DatabaseToolsConnection", "databasetoolsconnection")
 	assertFormalSpecFor(t, services["datalabelingservice"], "Dataset", "dataset")
+	assertFormalSpecFor(t, services["disasterrecovery"], "DrPlan", "drplan")
+	assertFormalSpecFor(t, services["distributeddatabase"], "DistributedDatabase", "distributeddatabase")
+	assertFormalSpecFor(t, services["generativeaiagent"], "AgentEndpoint", "agentendpoint")
+	assertFormalSpecFor(t, services["generativeaiagent"], "DataSource", "datasource")
 	assertFormalSpecFor(t, services["identity"], "Compartment", "compartment")
+	assertFormalSpecFor(t, services["jms"], "JmsPlugin", "jmsplugin")
+	assertFormalSpecFor(t, services["mediaservices"], "MediaWorkflowConfiguration", "mediaworkflowconfiguration")
+	assertFormalSpecFor(t, services["tenantmanagercontrolplane"], "DomainGovernance", "domaingovernance")
 	for _, formal := range []struct {
 		kind string
 		slug string
@@ -2412,7 +2427,9 @@ func TestCheckedInConfigSelectedKindsHaveExplicitAsyncContracts(t *testing.T) {
 		strategy string
 		runtime  string
 	}{
-		"wlms/ManagedInstance": {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
+		"jms/JmsPlugin": {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
+		"tenantmanagercontrolplane/DomainGovernance": {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
+		"wlms/ManagedInstance":                       {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
 	}
 
 	targets := defaultActiveExplicitSelectedKindTargets(cfg)
@@ -3170,7 +3187,7 @@ func assertDatabaseMigrationRuntimeRolloutMetadata(t *testing.T, service *Servic
 		registration:   GenerationStrategyGenerated,
 		webhook:        GenerationStrategyNone,
 	})
-	assertResourceOverrideCount(t, service, 2)
+	assertResourceOverrideCount(t, service, 3)
 
 	async := assertAsyncContract(t, service, "Connection", AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)
 	if async.FormalClassification != AsyncStrategyWorkRequest {
@@ -3192,6 +3209,17 @@ func assertDatabaseMigrationRuntimeRolloutMetadata(t *testing.T, service *Servic
 	}
 	if !slices.Equal(async.WorkRequest.Phases, []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}) {
 		t.Fatalf("databasemigration Assessment workRequest.phases = %v, want %v", async.WorkRequest.Phases, []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete})
+	}
+
+	async = assertAsyncContract(t, service, "Migration", AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)
+	if async.FormalClassification != AsyncStrategyWorkRequest {
+		t.Fatalf("databasemigration Migration formalClassification = %q, want %q", async.FormalClassification, AsyncStrategyWorkRequest)
+	}
+	if async.WorkRequest.Source != AsyncWorkRequestSourceServiceSDK {
+		t.Fatalf("databasemigration Migration workRequest.source = %q, want %q", async.WorkRequest.Source, AsyncWorkRequestSourceServiceSDK)
+	}
+	if !slices.Equal(async.WorkRequest.Phases, []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}) {
+		t.Fatalf("databasemigration Migration workRequest.phases = %v, want %v", async.WorkRequest.Phases, []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete})
 	}
 }
 

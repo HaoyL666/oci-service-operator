@@ -1,0 +1,146 @@
+@startuml
+skinparam shadowing false
+skinparam backgroundColor #fcfcfd
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 14
+skinparam arrowColor #0f172a
+skinparam noteBackgroundColor #fff7d6
+skinparam noteBorderColor #b45309
+skinparam noteFontColor #334155
+skinparam roundcorner 16
+title Sequence - jms/JmsPlugin
+hide footbox
+skinparam sequence {
+  actorBorderColor #0f172a
+  actorBackgroundColor #e2e8f0
+  participantBorderColor #0f172a
+  participantBackgroundColor #e2e8f0
+  participantFontColor #0f172a
+  lifeLineBorderColor #94a3b8
+  groupBorderColor #cbd5e1
+  groupBackgroundColor #f8fafc
+}
+actor Kubernetes
+participant Controller
+participant BaseReconciler
+participant "OSOKServiceManager" as ServiceManager
+participant OCI
+note over BaseReconciler,ServiceManager
+shared resolution:
+shared/diagrams/shared-resolution-sequence.svg
+shared delete:
+shared/diagrams/shared-delete-sequence.svg
+end note
+Kubernetes -> Controller: enqueue JmsPlugin reconcile
+Controller -> BaseReconciler: Reconcile(request)
+BaseReconciler -> ServiceManager: reconcile desired JmsPlugin
+group Lookup and bind
+alt tracked or explicit OCI identity already exists
+ServiceManager -> OCI: GetJmsPlugin
+else tracked identity is missing
+ServiceManager -> OCI: ListJmsPlugins(filters:\ncompartmentId, agentId, id)
+alt reusable OCI resource is not found
+ServiceManager -> OCI: CreateJmsPlugin
+else reusable OCI resource already exists
+ServiceManager -> OCI: GetJmsPlugin
+end
+ServiceManager --> BaseReconciler: persist resolved OCI identity in status
+end
+alt delete requested
+group Delete
+ServiceManager -> OCI: DeleteJmsPlugin
+ServiceManager -> OCI: confirm delete via GetJmsPlugin or\nListJmsPlugins
+alt cleanup or finalizer release is blocked
+ServiceManager --> BaseReconciler: retain delete state and retry
+else delete completion observed
+ServiceManager --> BaseReconciler: release finalizer after delete completion
+end
+end
+else live state requires field-aware\ndrift evaluation
+group Drift handling
+note over ServiceManager,OCI
+Supported update surface: definedTags,
+fleetId, freeformTags
+Reject before mutate: force-new fields
+agentId, agentType, compartmentId
+Lookup filters: compartmentId, agentId,
+id
+Lookup matching: exact compartmentId
+plus agentId unique match in ACTIVE or
+INACTIVE; paginated list rereads are
+exhausted before concluding absent;
+duplicate matches fail
+end note
+opt force-new or conflicting drift is detected
+ServiceManager --> BaseReconciler: reject before OCI mutation
+end
+opt supported mutable drift is detected
+ServiceManager -> OCI: Apply UpdateJmsPlugin only for\nmutable fields definedTags, fleetId,\nfreeformTags
+end
+ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
+end
+ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
+end
+BaseReconciler --> Controller: requeue on terminating
+note right of ServiceManager
+shared diagram:
+shared/diagrams/shared-resolution-sequence.svg
+shared delete diagram:
+shared/diagrams/shared-delete-sequence.svg
+Start from the shared resolution sequence for
+OCID binding, datasource pagination, and
+create-or-update dispatch.
+Layer the shared delete sequence when finalizer
+retention, delete confirmation, work-request
+polling, or Secret cleanup apply.
+archetype batch: Generated service-manager
+controllers follow the shared resolution and
+delete sequences with imported waits and
+controller-local policy.
+service: jms
+slug: jmsplugin
+kind: JmsPlugin
+archetype: generated-service-manager
+status/finalizer: required /
+retain-until-confirmed-delete
+requeue: terminating
+provider states: create none; update none;
+delete none
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: definedTags, fleetId,
+freeformTags
+reject before mutate: force-new fields agentId,
+agentType, compartmentId
+create-only fields: none
+list lookup: oci_jms_jms_plugins filters
+compartmentId, agentId, id; exact compartmentId
+plus agentId unique match in ACTIVE or INACTIVE;
+paginated list rereads are exhausted before
+concluding absent; duplicate matches fail
+conflicts: none
+open gaps: none
+JmsPlugin create and update are synchronous
+reread flows. OCI returns the resource body
+directly, and fleet-less registration settles in
+INACTIVE rather than a provisioning bucket.
+ACTIVE and INACTIVE are the only published
+steady success states. NEEDS_ATTENTION stays
+outside the success set, and DELETED is only a
+delete-confirmation target.
+Pre-create reuse scopes by exact compartmentId
+plus agentId and exhausts paginated
+ListJmsPlugins responses before concluding
+absent. Only ACTIVE and INACTIVE summaries are
+reusable.
+Mutable drift is limited to fleetId,
+freeformTags, and definedTags. agentId,
+agentType, and compartmentId remain
+replacement-only. Fleet detachment stays out of
+scope because the published spec cannot
+distinguish omission from clear.
+Delete keeps the finalizer until rereads return
+DELETED or NotFound.
+end note
+@enduml

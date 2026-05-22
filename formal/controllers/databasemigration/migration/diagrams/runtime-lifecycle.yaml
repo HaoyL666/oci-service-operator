@@ -1,0 +1,13 @@
+schemaVersion: 1
+surface: repo-authored-semantics
+service: databasemigration
+slug: migration
+kind: Migration
+archetype: generated-service-manager
+states:
+  - provisioning
+  - active
+  - updating
+  - terminating
+notes:
+  - Work-request-backed generatedruntime overlay with explicit MYSQL/ORACLE request builders, conservative bind-before-create lookup, helper-surface rejection, and required delete confirmation.

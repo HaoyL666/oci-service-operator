@@ -14,6 +14,7 @@ rules:
 - apiGroups:
   - tenantmanagercontrolplane.oracle.com
   resources:
+  - domaingovernances
   - domains
   - organizations
   verbs:
@@ -27,6 +28,7 @@ rules:
 - apiGroups:
   - tenantmanagercontrolplane.oracle.com
   resources:
+  - domaingovernances/finalizers
   - domains/finalizers
   - organizations/finalizers
   verbs:
@@ -34,6 +36,7 @@ rules:
 - apiGroups:
   - tenantmanagercontrolplane.oracle.com
   resources:
+  - domaingovernances/status
   - domains/status
   - organizations/status
   verbs:

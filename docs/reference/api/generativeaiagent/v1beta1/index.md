@@ -19,6 +19,8 @@ No customer-visible package currently exposes `generativeaiagent.oracle.com/v1be
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
 | [Agent](#kind-agent) | Namespaced | [Sample](../../../samples/generativeaiagent/v1beta1/agent.md) | - |
+| [AgentEndpoint](#kind-agentendpoint) | Namespaced | [Sample](../../../samples/generativeaiagent/v1beta1/agentendpoint.md) | - |
+| [DataSource](#kind-datasource) | Namespaced | [Sample](../../../samples/generativeaiagent/v1beta1/datasource.md) | - |
 | [KnowledgeBase](#kind-knowledgebase) | Namespaced | [Sample](../../../samples/generativeaiagent/v1beta1/knowledgebase.md) | - |
 
 <a id="kind-agent"></a>
@@ -199,6 +201,588 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 ##### Status.status.conditions[]
 
 [Back to Agent status](#kind-agent-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `lastTransitionTime` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `status` | - | `string` | Yes | - | - |
+| `type` | - | `string` | Yes | - | - |
+
+<a id="kind-agentendpoint"></a>
+## AgentEndpoint
+
+Manage OCI Generative AI Agent endpoints.
+
+- `Plural`: `agentendpoints`
+- `Scope`: `Namespaced`
+- `APIVersion`: `generativeaiagent.oracle.com/v1beta1`
+- `Sample`: [Sample](../../../samples/generativeaiagent/v1beta1/agentendpoint.md) (`config/samples/generativeaiagent_v1beta1_agentendpoint.yaml`)
+- `Packages`: Not currently exposed by a customer-visible package.
+
+<a id="kind-agentendpoint-spec"></a>
+### Spec
+
+AgentEndpointSpec defines the desired state of AgentEndpoint.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `agentId` | The OCID of the agent that this endpoint is associated with. | `string` | Yes | - | - |
+| `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment to create the endpoint in. | `string` | Yes | - | - |
+| [`contentModerationConfig`](#kind-agentendpoint-spec-contentmoderationconfig) | AgentEndpointContentModerationConfig defines nested fields for AgentEndpoint.ContentModerationConfig. | `object` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `description` | An optional description of the endpoint. | `string` | No | - | - |
+| `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
+| `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| [`guardrailConfig`](#kind-agentendpoint-spec-guardrailconfig) | AgentEndpointGuardrailConfig defines nested fields for AgentEndpoint.GuardrailConfig. | `object` | No | - | - |
+| [`humanInputConfig`](#kind-agentendpoint-spec-humaninputconfig) | AgentEndpointHumanInputConfig defines nested fields for AgentEndpoint.HumanInputConfig. | `object` | No | - | - |
+| `metadata` | Key-value pairs to allow additional configurations. | `map[string, string]` | No | - | - |
+| [`outputConfig`](#kind-agentendpoint-spec-outputconfig) | AgentEndpointOutputConfig defines nested fields for AgentEndpoint.OutputConfig. | `object` | No | - | - |
+| [`provisionedCapacityConfig`](#kind-agentendpoint-spec-provisionedcapacityconfig) | AgentEndpointProvisionedCapacityConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig. | `object` | No | - | - |
+| [`sessionConfig`](#kind-agentendpoint-spec-sessionconfig) | AgentEndpointSessionConfig defines nested fields for AgentEndpoint.SessionConfig. | `object` | No | - | - |
+| `shouldEnableCitation` | Whether to show citations in the chat result. | `boolean` | No | - | - |
+| `shouldEnableMultiLanguage` | Whether to enable multi-language for chat. | `boolean` | No | - | - |
+| `shouldEnableSession` | Whether or not to enable Session-based chat. | `boolean` | No | - | - |
+| `shouldEnableTrace` | Whether to show traces in the chat result. | `boolean` | No | - | - |
+
+<a id="kind-agentendpoint-spec-contentmoderationconfig"></a>
+#### Spec.contentModerationConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointContentModerationConfig defines nested fields for AgentEndpoint.ContentModerationConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `shouldEnableOnInput` | A flag to enable or disable content moderation on input. | `boolean` | No | - | - |
+| `shouldEnableOnOutput` | A flag to enable or disable content moderation on output. | `boolean` | No | - | - |
+
+<a id="kind-agentendpoint-spec-guardrailconfig"></a>
+#### Spec.guardrailConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointGuardrailConfig defines nested fields for AgentEndpoint.GuardrailConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`contentModerationConfig`](#kind-agentendpoint-spec-guardrailconfig-contentmoderationconfig) | AgentEndpointGuardrailConfigContentModerationConfig defines nested fields for AgentEndpoint.GuardrailConfig.ContentModerationConfig. | `object` | No | - | - |
+| [`personallyIdentifiableInformationConfig`](#kind-agentendpoint-spec-guardrailconfig-personallyidentifiableinformationconfig) | AgentEndpointGuardrailConfigPersonallyIdentifiableInformationConfig defines nested fields for AgentEndpoint.GuardrailConfig.PersonallyIdentifiableInformationConfig. | `object` | No | - | - |
+| [`promptInjectionConfig`](#kind-agentendpoint-spec-guardrailconfig-promptinjectionconfig) | AgentEndpointGuardrailConfigPromptInjectionConfig defines nested fields for AgentEndpoint.GuardrailConfig.PromptInjectionConfig. | `object` | No | - | - |
+
+<a id="kind-agentendpoint-spec-guardrailconfig-contentmoderationconfig"></a>
+##### Spec.guardrailConfig.contentModerationConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointGuardrailConfigContentModerationConfig defines nested fields for AgentEndpoint.GuardrailConfig.ContentModerationConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `inputGuardrailMode` | An input guardrail mode for content moderation. | `string` | No | - | - |
+| `outputGuardrailMode` | An output guardrail mode for content moderation. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-spec-guardrailconfig-personallyidentifiableinformationconfig"></a>
+##### Spec.guardrailConfig.personallyIdentifiableInformationConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointGuardrailConfigPersonallyIdentifiableInformationConfig defines nested fields for AgentEndpoint.GuardrailConfig.PersonallyIdentifiableInformationConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `inputGuardrailMode` | An input guardrail mode for personally identifiable information. | `string` | No | - | - |
+| `outputGuardrailMode` | An output guardrail mode for personally identifiable information. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-spec-guardrailconfig-promptinjectionconfig"></a>
+##### Spec.guardrailConfig.promptInjectionConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointGuardrailConfigPromptInjectionConfig defines nested fields for AgentEndpoint.GuardrailConfig.PromptInjectionConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `inputGuardrailMode` | An input guardrail mode for prompt injection. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-spec-humaninputconfig"></a>
+#### Spec.humanInputConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointHumanInputConfig defines nested fields for AgentEndpoint.HumanInputConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `shouldEnableHumanInput` | The Agent will request for human input for disambiguation or additional information gathering if this is enabled. | `boolean` | Yes | - | - |
+
+<a id="kind-agentendpoint-spec-outputconfig"></a>
+#### Spec.outputConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointOutputConfig defines nested fields for AgentEndpoint.OutputConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`outputLocation`](#kind-agentendpoint-spec-outputconfig-outputlocation) | AgentEndpointOutputConfigOutputLocation defines nested fields for AgentEndpoint.OutputConfig.OutputLocation. | `object` | Yes | - | - |
+| `retentionPeriodInMinutes` | Retention duration of the output data. | `integer` | No | - | - |
+
+<a id="kind-agentendpoint-spec-outputconfig-outputlocation"></a>
+##### Spec.outputConfig.outputLocation
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointOutputConfigOutputLocation defines nested fields for AgentEndpoint.OutputConfig.OutputLocation.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucketName` | The name of the bucket. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `namespaceName` | The namespace of the object storage. | `string` | No | - | - |
+| `outputLocationType` | - | `string` | No | - | - |
+| `prefix` | The prefix of the object storage. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-spec-provisionedcapacityconfig"></a>
+#### Spec.provisionedCapacityConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointProvisionedCapacityConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`platformRuntimeConfig`](#kind-agentendpoint-spec-provisionedcapacityconfig-platformruntimeconfig) | AgentEndpointProvisionedCapacityConfigPlatformRuntimeConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig.PlatformRuntimeConfig. | `object` | No | - | - |
+| `provisionedCapacityId` | An OCID that uniquely identifies an Provisioned Capacity. | `string` | Yes | - | - |
+| [`toolRuntimeConfigs`](#kind-agentendpoint-spec-provisionedcapacityconfig-toolruntimeconfigs) | RAG and SQL will be tools. | `list[object]` | No | - | - |
+
+<a id="kind-agentendpoint-spec-provisionedcapacityconfig-platformruntimeconfig"></a>
+##### Spec.provisionedCapacityConfig.platformRuntimeConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointProvisionedCapacityConfigPlatformRuntimeConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig.PlatformRuntimeConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `platformRuntimeConfigType` | The type of Platform runtime config. | `string` | No | - | - |
+| `version` | The version of the Core. The latest version will be displayed as default. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-spec-provisionedcapacityconfig-toolruntimeconfigs"></a>
+##### Spec.provisionedCapacityConfig.toolRuntimeConfigs[]
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointProvisionedCapacityConfigToolRuntimeConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig.ToolRuntimeConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `toolRuntimeConfigType` | The type of the tool. | `string` | Yes | - | - |
+| `version` | The version of the components. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-spec-sessionconfig"></a>
+#### Spec.sessionConfig
+
+[Back to AgentEndpoint spec](#kind-agentendpoint-spec)
+
+AgentEndpointSessionConfig defines nested fields for AgentEndpoint.SessionConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `idleTimeoutInSeconds` | The session will become inactive after this timeout. | `integer` | No | - | - |
+
+<a id="kind-agentendpoint-status"></a>
+### Status
+
+AgentEndpointStatus defines the observed state of AgentEndpoint.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `agentId` | The OCID of the agent that this endpoint is associated with. | `string` | No | - | - |
+| `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment. | `string` | No | - | - |
+| [`contentModerationConfig`](#kind-agentendpoint-status-contentmoderationconfig) | AgentEndpointContentModerationConfig defines nested fields for AgentEndpoint.ContentModerationConfig. | `object` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `description` | An optional description of the endpoint. | `string` | No | - | - |
+| `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. | `string` | No | - | - |
+| `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| [`guardrailConfig`](#kind-agentendpoint-status-guardrailconfig) | AgentEndpointGuardrailConfig defines nested fields for AgentEndpoint.GuardrailConfig. | `object` | No | - | - |
+| [`humanInputConfig`](#kind-agentendpoint-status-humaninputconfig) | AgentEndpointHumanInputConfig defines nested fields for AgentEndpoint.HumanInputConfig. | `object` | No | - | - |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the endpoint. | `string` | No | - | - |
+| `lifecycleDetails` | A message that describes the current state of the endpoint in more detail. For example, can be used to provide actionable information for a resource in the Failed state. | `string` | No | - | - |
+| `lifecycleState` | The current state of the endpoint. | `string` | No | - | - |
+| `metadata` | Key-value pairs to allow additional configurations. | `map[string, string]` | No | - | - |
+| [`outputConfig`](#kind-agentendpoint-status-outputconfig) | AgentEndpointOutputConfig defines nested fields for AgentEndpoint.OutputConfig. | `object` | No | - | - |
+| [`provisionedCapacityConfig`](#kind-agentendpoint-status-provisionedcapacityconfig) | AgentEndpointProvisionedCapacityConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig. | `object` | No | - | - |
+| [`sessionConfig`](#kind-agentendpoint-status-sessionconfig) | AgentEndpointSessionConfig defines nested fields for AgentEndpoint.SessionConfig. | `object` | No | - | - |
+| `shouldEnableCitation` | Whether to show citations in the chat result. | `boolean` | No | - | - |
+| `shouldEnableMultiLanguage` | Whether to enable multi-language for chat. | `boolean` | No | - | - |
+| `shouldEnableSession` | Whether or not to enable Session-based chat. | `boolean` | No | - | - |
+| `shouldEnableTrace` | Whether to show traces in the chat result. | `boolean` | No | - | - |
+| [`status`](#kind-agentendpoint-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
+| `timeCreated` | The date and time the AgentEndpoint was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeUpdated` | The date and time the endpoint was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+
+<a id="kind-agentendpoint-status-contentmoderationconfig"></a>
+#### Status.contentModerationConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointContentModerationConfig defines nested fields for AgentEndpoint.ContentModerationConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `shouldEnableOnInput` | A flag to enable or disable content moderation on input. | `boolean` | No | - | - |
+| `shouldEnableOnOutput` | A flag to enable or disable content moderation on output. | `boolean` | No | - | - |
+
+<a id="kind-agentendpoint-status-guardrailconfig"></a>
+#### Status.guardrailConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointGuardrailConfig defines nested fields for AgentEndpoint.GuardrailConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`contentModerationConfig`](#kind-agentendpoint-status-guardrailconfig-contentmoderationconfig) | AgentEndpointGuardrailConfigContentModerationConfig defines nested fields for AgentEndpoint.GuardrailConfig.ContentModerationConfig. | `object` | No | - | - |
+| [`personallyIdentifiableInformationConfig`](#kind-agentendpoint-status-guardrailconfig-personallyidentifiableinformationconfig) | AgentEndpointGuardrailConfigPersonallyIdentifiableInformationConfig defines nested fields for AgentEndpoint.GuardrailConfig.PersonallyIdentifiableInformationConfig. | `object` | No | - | - |
+| [`promptInjectionConfig`](#kind-agentendpoint-status-guardrailconfig-promptinjectionconfig) | AgentEndpointGuardrailConfigPromptInjectionConfig defines nested fields for AgentEndpoint.GuardrailConfig.PromptInjectionConfig. | `object` | No | - | - |
+
+<a id="kind-agentendpoint-status-guardrailconfig-contentmoderationconfig"></a>
+##### Status.guardrailConfig.contentModerationConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointGuardrailConfigContentModerationConfig defines nested fields for AgentEndpoint.GuardrailConfig.ContentModerationConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `inputGuardrailMode` | An input guardrail mode for content moderation. | `string` | No | - | - |
+| `outputGuardrailMode` | An output guardrail mode for content moderation. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-status-guardrailconfig-personallyidentifiableinformationconfig"></a>
+##### Status.guardrailConfig.personallyIdentifiableInformationConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointGuardrailConfigPersonallyIdentifiableInformationConfig defines nested fields for AgentEndpoint.GuardrailConfig.PersonallyIdentifiableInformationConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `inputGuardrailMode` | An input guardrail mode for personally identifiable information. | `string` | No | - | - |
+| `outputGuardrailMode` | An output guardrail mode for personally identifiable information. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-status-guardrailconfig-promptinjectionconfig"></a>
+##### Status.guardrailConfig.promptInjectionConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointGuardrailConfigPromptInjectionConfig defines nested fields for AgentEndpoint.GuardrailConfig.PromptInjectionConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `inputGuardrailMode` | An input guardrail mode for prompt injection. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-status-humaninputconfig"></a>
+#### Status.humanInputConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointHumanInputConfig defines nested fields for AgentEndpoint.HumanInputConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `shouldEnableHumanInput` | The Agent will request for human input for disambiguation or additional information gathering if this is enabled. | `boolean` | Yes | - | - |
+
+<a id="kind-agentendpoint-status-outputconfig"></a>
+#### Status.outputConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointOutputConfig defines nested fields for AgentEndpoint.OutputConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`outputLocation`](#kind-agentendpoint-status-outputconfig-outputlocation) | AgentEndpointOutputConfigOutputLocation defines nested fields for AgentEndpoint.OutputConfig.OutputLocation. | `object` | Yes | - | - |
+| `retentionPeriodInMinutes` | Retention duration of the output data. | `integer` | No | - | - |
+
+<a id="kind-agentendpoint-status-outputconfig-outputlocation"></a>
+##### Status.outputConfig.outputLocation
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointOutputConfigOutputLocation defines nested fields for AgentEndpoint.OutputConfig.OutputLocation.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucketName` | The name of the bucket. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `namespaceName` | The namespace of the object storage. | `string` | No | - | - |
+| `outputLocationType` | - | `string` | No | - | - |
+| `prefix` | The prefix of the object storage. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-status-provisionedcapacityconfig"></a>
+#### Status.provisionedCapacityConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointProvisionedCapacityConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`platformRuntimeConfig`](#kind-agentendpoint-status-provisionedcapacityconfig-platformruntimeconfig) | AgentEndpointProvisionedCapacityConfigPlatformRuntimeConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig.PlatformRuntimeConfig. | `object` | No | - | - |
+| `provisionedCapacityId` | An OCID that uniquely identifies an Provisioned Capacity. | `string` | Yes | - | - |
+| [`toolRuntimeConfigs`](#kind-agentendpoint-status-provisionedcapacityconfig-toolruntimeconfigs) | RAG and SQL will be tools. | `list[object]` | No | - | - |
+
+<a id="kind-agentendpoint-status-provisionedcapacityconfig-platformruntimeconfig"></a>
+##### Status.provisionedCapacityConfig.platformRuntimeConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointProvisionedCapacityConfigPlatformRuntimeConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig.PlatformRuntimeConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `platformRuntimeConfigType` | The type of Platform runtime config. | `string` | No | - | - |
+| `version` | The version of the Core. The latest version will be displayed as default. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-status-provisionedcapacityconfig-toolruntimeconfigs"></a>
+##### Status.provisionedCapacityConfig.toolRuntimeConfigs[]
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointProvisionedCapacityConfigToolRuntimeConfig defines nested fields for AgentEndpoint.ProvisionedCapacityConfig.ToolRuntimeConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `toolRuntimeConfigType` | The type of the tool. | `string` | Yes | - | - |
+| `version` | The version of the components. | `string` | No | - | - |
+
+<a id="kind-agentendpoint-status-sessionconfig"></a>
+#### Status.sessionConfig
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+AgentEndpointSessionConfig defines nested fields for AgentEndpoint.SessionConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `idleTimeoutInSeconds` | The session will become inactive after this timeout. | `integer` | No | - | - |
+
+<a id="kind-agentendpoint-status-status"></a>
+#### Status.status
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`async`](#kind-agentendpoint-status-status-async) | Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first. | `object` | No | - | - |
+| [`conditions`](#kind-agentendpoint-status-status-conditions) | - | `list[object]` | No | - | - |
+| `createdAt` | - | `string (date-time)` | No | - | - |
+| `deletedAt` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `ocid` | - | `string` | No | - | - |
+| `opcRequestId` | OpcRequestID is the latest non-empty OCI request ID from a mutating OCI response or surfaced OCI service error that materially contributed to the current shared status projection. Headerless follow-up observations keep the last non-empty value intact. | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `requestedAt` | - | `string (date-time)` | No | - | - |
+| `updatedAt` | - | `string (date-time)` | No | - | - |
+
+<a id="kind-agentendpoint-status-status-async"></a>
+##### Status.status.async
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`current`](#kind-agentendpoint-status-status-async-current) | - | `object` | No | - | - |
+
+<a id="kind-agentendpoint-status-status-async-current"></a>
+###### Status.status.async.current
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `message` | - | `string` | No | - | - |
+| `normalizedClass` | - | `string` | Yes | - | `attention`, `canceled`, `failed`, `pending`, `succeeded`, `unknown` |
+| `percentComplete` | - | `number` | No | - | - |
+| `phase` | - | `string` | Yes | - | `create`, `delete`, `update` |
+| `rawOperationType` | - | `string` | No | - | - |
+| `rawStatus` | - | `string` | No | - | - |
+| `source` | - | `string` | Yes | - | `lifecycle`, `none`, `workrequest` |
+| `updatedAt` | - | `string (date-time)` | Yes | - | - |
+| `workRequestId` | - | `string` | No | - | - |
+
+<a id="kind-agentendpoint-status-status-conditions"></a>
+##### Status.status.conditions[]
+
+[Back to AgentEndpoint status](#kind-agentendpoint-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `lastTransitionTime` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `status` | - | `string` | Yes | - | - |
+| `type` | - | `string` | Yes | - | - |
+
+<a id="kind-datasource"></a>
+## DataSource
+
+Manage OCI Generative AI Agent data sources.
+
+- `Plural`: `datasources`
+- `Scope`: `Namespaced`
+- `APIVersion`: `generativeaiagent.oracle.com/v1beta1`
+- `Sample`: [Sample](../../../samples/generativeaiagent/v1beta1/datasource.md) (`config/samples/generativeaiagent_v1beta1_datasource.yaml`)
+- `Packages`: Not currently exposed by a customer-visible package.
+
+<a id="kind-datasource-spec"></a>
+### Spec
+
+DataSourceSpec defines the desired state of DataSource.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment to create the data source in. | `string` | Yes | - | - |
+| [`dataSourceConfig`](#kind-datasource-spec-datasourceconfig) | DataSourceConfig defines nested fields for DataSource.DataSourceConfig. | `object` | Yes | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `description` | A description of the data source. | `string` | No | - | - |
+| `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
+| `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `knowledgeBaseId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the parent KnowledgeBase. | `string` | Yes | - | - |
+| `metadata` | Key-value pairs to allow additional configurations. | `map[string, string]` | No | - | - |
+
+<a id="kind-datasource-spec-datasourceconfig"></a>
+#### Spec.dataSourceConfig
+
+[Back to DataSource spec](#kind-datasource-spec)
+
+DataSourceConfig defines nested fields for DataSource.DataSourceConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `dataSourceConfigType` | - | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| [`objectStoragePrefixes`](#kind-datasource-spec-datasourceconfig-objectstorageprefixes) | The locations of data items in Object Storage, can either be an object (File) or a prefix (folder). | `list[object]` | No | - | - |
+| `shouldEnableMultiModality` | Flag to enable or disable multi modality such as image processing while ingestion of data. True enable the processing and false exclude the multi modality contents during ingestion. | `boolean` | No | - | - |
+
+<a id="kind-datasource-spec-datasourceconfig-objectstorageprefixes"></a>
+##### Spec.dataSourceConfig.objectStoragePrefixes[]
+
+[Back to DataSource spec](#kind-datasource-spec)
+
+DataSourceConfigObjectStoragePrefix defines nested fields for DataSource.DataSourceConfig.ObjectStoragePrefix.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucketName` | The bucket name of an object. | `string` | Yes | - | - |
+| `namespaceName` | The namespace name of an object. | `string` | Yes | - | - |
+| `prefix` | The prefix of file object(s) or folder prefix. | `string` | No | - | - |
+
+<a id="kind-datasource-status"></a>
+### Status
+
+DataSourceStatus defines the observed state of DataSource.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment. | `string` | No | - | - |
+| [`dataSourceConfig`](#kind-datasource-status-datasourceconfig) | DataSourceConfig defines nested fields for DataSource.DataSourceConfig. | `object` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `description` | A description of the data source. | `string` | No | - | - |
+| `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. | `string` | No | - | - |
+| `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the data source. | `string` | No | - | - |
+| `knowledgeBaseId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the parent KnowledgeBase. | `string` | No | - | - |
+| `lifecycleDetails` | A message that describes the current state of the data source in more detail. For example, can be used to provide actionable information for a resource in the Failed state. | `string` | No | - | - |
+| `lifecycleState` | The current state of the data source. | `string` | No | - | - |
+| `metadata` | Key-value pairs to allow additional configurations. | `map[string, string]` | No | - | - |
+| [`status`](#kind-datasource-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
+| `timeCreated` | The date and time the data source was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeUpdated` | The date and time the data source was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+
+<a id="kind-datasource-status-datasourceconfig"></a>
+#### Status.dataSourceConfig
+
+[Back to DataSource status](#kind-datasource-status)
+
+DataSourceConfig defines nested fields for DataSource.DataSourceConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `dataSourceConfigType` | - | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| [`objectStoragePrefixes`](#kind-datasource-status-datasourceconfig-objectstorageprefixes) | The locations of data items in Object Storage, can either be an object (File) or a prefix (folder). | `list[object]` | No | - | - |
+| `shouldEnableMultiModality` | Flag to enable or disable multi modality such as image processing while ingestion of data. True enable the processing and false exclude the multi modality contents during ingestion. | `boolean` | No | - | - |
+
+<a id="kind-datasource-status-datasourceconfig-objectstorageprefixes"></a>
+##### Status.dataSourceConfig.objectStoragePrefixes[]
+
+[Back to DataSource status](#kind-datasource-status)
+
+DataSourceConfigObjectStoragePrefix defines nested fields for DataSource.DataSourceConfig.ObjectStoragePrefix.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucketName` | The bucket name of an object. | `string` | Yes | - | - |
+| `namespaceName` | The namespace name of an object. | `string` | Yes | - | - |
+| `prefix` | The prefix of file object(s) or folder prefix. | `string` | No | - | - |
+
+<a id="kind-datasource-status-status"></a>
+#### Status.status
+
+[Back to DataSource status](#kind-datasource-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`async`](#kind-datasource-status-status-async) | Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first. | `object` | No | - | - |
+| [`conditions`](#kind-datasource-status-status-conditions) | - | `list[object]` | No | - | - |
+| `createdAt` | - | `string (date-time)` | No | - | - |
+| `deletedAt` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `ocid` | - | `string` | No | - | - |
+| `opcRequestId` | OpcRequestID is the latest non-empty OCI request ID from a mutating OCI response or surfaced OCI service error that materially contributed to the current shared status projection. Headerless follow-up observations keep the last non-empty value intact. | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `requestedAt` | - | `string (date-time)` | No | - | - |
+| `updatedAt` | - | `string (date-time)` | No | - | - |
+
+<a id="kind-datasource-status-status-async"></a>
+##### Status.status.async
+
+[Back to DataSource status](#kind-datasource-status)
+
+Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`current`](#kind-datasource-status-status-async-current) | - | `object` | No | - | - |
+
+<a id="kind-datasource-status-status-async-current"></a>
+###### Status.status.async.current
+
+[Back to DataSource status](#kind-datasource-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `message` | - | `string` | No | - | - |
+| `normalizedClass` | - | `string` | Yes | - | `attention`, `canceled`, `failed`, `pending`, `succeeded`, `unknown` |
+| `percentComplete` | - | `number` | No | - | - |
+| `phase` | - | `string` | Yes | - | `create`, `delete`, `update` |
+| `rawOperationType` | - | `string` | No | - | - |
+| `rawStatus` | - | `string` | No | - | - |
+| `source` | - | `string` | Yes | - | `lifecycle`, `none`, `workrequest` |
+| `updatedAt` | - | `string (date-time)` | Yes | - | - |
+| `workRequestId` | - | `string` | No | - | - |
+
+<a id="kind-datasource-status-status-conditions"></a>
+##### Status.status.conditions[]
+
+[Back to DataSource status](#kind-datasource-status)
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
