@@ -13,14 +13,14 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| Streaming | preview | `v2.0.0-alpha` | [Stream](#kind-stream) |
+| Streaming | preview | `v2.1.0-alpha` | [Stream](#kind-stream) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Stream](#kind-stream) | Namespaced | [Sample](../../../samples/streaming/v1beta1/stream.md) | Streaming (`v2.0.0-alpha`) |
+| [Stream](#kind-stream) | Namespaced | [Sample](../../../samples/streaming/v1beta1/stream.md) | Streaming (`v2.1.0-alpha`) |
 
 <a id="kind-stream"></a>
 ## Stream
@@ -31,7 +31,7 @@ Manage OCI Streaming streams.
 - `Scope`: `Namespaced`
 - `APIVersion`: `streaming.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/streaming/v1beta1/stream.md) (`config/samples/streaming_v1beta1_stream.yaml`)
-- `Packages`: Streaming (`v2.0.0-alpha`)
+- `Packages`: Streaming (`v2.1.0-alpha`)
 
 <a id="kind-stream-spec"></a>
 ### Spec

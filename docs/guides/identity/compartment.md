@@ -13,7 +13,7 @@ Manage OCI IAM compartments. This page is generated from checked-in package meta
 | API Version | `identity.oracle.com/v1beta1` |
 | Package | [Identity](../../reference/packages/identity/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-identity-system` |
 
 ## Quick Links

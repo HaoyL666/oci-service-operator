@@ -8,7 +8,7 @@ Manage OCI Redis clusters from Kubernetes.
 | --- | --- |
 | Package | `redis` |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-redis-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-redis:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-redis-bundle:<version>` |

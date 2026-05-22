@@ -15,7 +15,7 @@ The published v2 surface uses `apiVersion: database.oracle.com/v1beta1` and `kin
 | API Version | `database.oracle.com/v1beta1` |
 | Package | [Autonomous Database](reference/packages/database/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-database-system` |
 
 ## Quick Links

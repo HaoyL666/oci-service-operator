@@ -1,0 +1,354 @@
+# Checked-in release history for the customer-facing docs surface.
+schemaVersion: v1alpha1
+version: v2.1.0-alpha
+publishedAt: 2026-04-17T17:54:33-05:00
+commit: fa4cf8376d281f4aec061850f674b39496ec90d9
+notes:
+  - Release manifest for the v2.1.0-alpha docs surface, based on the Oracle upstream v2.1.0-alpha tag fetched from oracle/main.
+  - Packages listed here match the default publish workflow at that tag; core is intentionally omitted because the default publish batch excludes it.
+  - Group and kind entries follow the current checked-in package metadata, which is the site-data validation contract.
+  - Image references keep the <REPOSITORY_OWNER> placeholder used by the publish workflow and install docs.
+packages:
+  - package: aidocument
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-aidocument:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-aidocument-bundle:v2.1.0-alpha
+    groups:
+      - group: aidocument
+        version: v1beta1
+        kinds:
+          - Project
+
+  - package: ailanguage
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-ailanguage:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-ailanguage-bundle:v2.1.0-alpha
+    groups:
+      - group: ailanguage
+        version: v1beta1
+        kinds:
+          - Project
+
+  - package: aivision
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-aivision:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-aivision-bundle:v2.1.0-alpha
+    groups:
+      - group: aivision
+        version: v1beta1
+        kinds:
+          - Project
+
+  - package: analytics
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-analytics:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-analytics-bundle:v2.1.0-alpha
+    groups:
+      - group: analytics
+        version: v1beta1
+        kinds:
+          - AnalyticsInstance
+
+  - package: apigateway
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-apigateway:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-apigateway-bundle:v2.1.0-alpha
+    groups:
+      - group: apigateway
+        version: v1beta1
+        kinds:
+          - ApiGateway
+          - ApiGatewayDeployment
+
+  - package: bds
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-bds:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-bds-bundle:v2.1.0-alpha
+    groups:
+      - group: bds
+        version: v1beta1
+        kinds:
+          - BdsInstance
+
+  - package: containerengine
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-containerengine:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-containerengine-bundle:v2.1.0-alpha
+    groups:
+      - group: containerengine
+        version: v1beta1
+        kinds:
+          - Cluster
+          - NodePool
+
+  - package: containerinstances
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-containerinstances:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-containerinstances-bundle:v2.1.0-alpha
+    groups:
+      - group: containerinstances
+        version: v1beta1
+        kinds:
+          - ContainerInstance
+
+  - package: core-network
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-core-network:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-core-network-bundle:v2.1.0-alpha
+    groups:
+      - group: core
+        version: v1beta1
+        kinds:
+          - Drg
+          - InternetGateway
+          - NatGateway
+          - NetworkSecurityGroup
+          - RouteTable
+          - SecurityList
+          - ServiceGateway
+          - Subnet
+          - Vcn
+
+  - package: database
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-database:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-database-bundle:v2.1.0-alpha
+    groups:
+      - group: database
+        version: v1beta1
+        kinds:
+          - AutonomousDatabase
+
+  - package: databasetools
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-databasetools:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-databasetools-bundle:v2.1.0-alpha
+    groups:
+      - group: databasetools
+        version: v1beta1
+        kinds:
+          - DatabaseToolsConnection
+
+  - package: dataflow
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-dataflow:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-dataflow-bundle:v2.1.0-alpha
+    groups:
+      - group: dataflow
+        version: v1beta1
+        kinds:
+          - Application
+
+  - package: datascience
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-datascience:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-datascience-bundle:v2.1.0-alpha
+    groups:
+      - group: datascience
+        version: v1beta1
+        kinds:
+          - Project
+
+  - package: email
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-email:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-email-bundle:v2.1.0-alpha
+    groups:
+      - group: email
+        version: v1beta1
+        kinds:
+          - Dkim
+          - EmailDomain
+          - Sender
+          - Suppression
+
+  - package: functions
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-functions:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-functions-bundle:v2.1.0-alpha
+    groups:
+      - group: functions
+        version: v1beta1
+        kinds:
+          - Application
+          - Function
+
+  - package: generativeai
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-generativeai:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-generativeai-bundle:v2.1.0-alpha
+    groups:
+      - group: generativeai
+        version: v1beta1
+        kinds:
+          - DedicatedAiCluster
+          - Endpoint
+          - Model
+
+  - package: identity
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-identity:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-identity-bundle:v2.1.0-alpha
+    groups:
+      - group: identity
+        version: v1beta1
+        kinds:
+          - Compartment
+
+  - package: keymanagement
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-keymanagement:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-keymanagement-bundle:v2.1.0-alpha
+    groups:
+      - group: keymanagement
+        version: v1beta1
+        kinds:
+          - EkmsPrivateEndpoint
+          - Vault
+
+  - package: loadbalancer
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-loadbalancer:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-loadbalancer-bundle:v2.1.0-alpha
+    groups:
+      - group: loadbalancer
+        version: v1beta1
+        kinds:
+          - Backend
+          - BackendSet
+          - Certificate
+          - Hostname
+          - Listener
+          - LoadBalancer
+          - PathRouteSet
+          - RoutingPolicy
+          - RuleSet
+          - SSLCipherSuite
+
+  - package: logging
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-logging:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-logging-bundle:v2.1.0-alpha
+    groups:
+      - group: logging
+        version: v1beta1
+        kinds:
+          - Log
+          - LogGroup
+          - LogSavedSearch
+          - UnifiedAgentConfiguration
+
+  - package: marketplace
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-marketplace:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-marketplace-bundle:v2.1.0-alpha
+    groups:
+      - group: marketplace
+        version: v1beta1
+        kinds:
+          - AcceptedAgreement
+          - Publication
+
+  - package: monitoring
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-monitoring:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-monitoring-bundle:v2.1.0-alpha
+    groups:
+      - group: monitoring
+        version: v1beta1
+        kinds:
+          - Alarm
+          - AlarmSuppression
+
+  - package: mysql
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-mysql:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-mysql-bundle:v2.1.0-alpha
+    groups:
+      - group: mysql
+        version: v1beta1
+        kinds:
+          - DbSystem
+
+  - package: nosql
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-nosql:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-nosql-bundle:v2.1.0-alpha
+    groups:
+      - group: nosql
+        version: v1beta1
+        kinds:
+          - Table
+
+  - package: objectstorage
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-objectstorage:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-objectstorage-bundle:v2.1.0-alpha
+    groups:
+      - group: objectstorage
+        version: v1beta1
+        kinds:
+          - Bucket
+
+  - package: ocvp
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-ocvp:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-ocvp-bundle:v2.1.0-alpha
+    groups:
+      - group: ocvp
+        version: v1beta1
+        kinds:
+          - Cluster
+          - EsxiHost
+          - Sddc
+
+  - package: oda
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-oda:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-oda-bundle:v2.1.0-alpha
+    groups:
+      - group: oda
+        version: v1beta1
+        kinds:
+          - AuthenticationProvider
+          - Channel
+          - DigitalAssistant
+          - ImportedPackage
+          - OdaInstance
+          - OdaInstanceAttachment
+          - OdaPrivateEndpoint
+          - OdaPrivateEndpointAttachment
+          - OdaPrivateEndpointScanProxy
+          - Skill
+          - SkillParameter
+          - Translator
+
+  - package: opensearch
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-opensearch:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-opensearch-bundle:v2.1.0-alpha
+    groups:
+      - group: opensearch
+        version: v1beta1
+        kinds:
+          - OpensearchCluster
+
+  - package: psql
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-psql:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-psql-bundle:v2.1.0-alpha
+    groups:
+      - group: psql
+        version: v1beta1
+        kinds:
+          - DbSystem
+
+  - package: queue
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-queue:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-queue-bundle:v2.1.0-alpha
+    groups:
+      - group: queue
+        version: v1beta1
+        kinds:
+          - Queue
+
+  - package: redis
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-redis:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-redis-bundle:v2.1.0-alpha
+    groups:
+      - group: redis
+        version: v1beta1
+        kinds:
+          - RedisCluster
+
+  - package: streaming
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-streaming:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-streaming-bundle:v2.1.0-alpha
+    groups:
+      - group: streaming
+        version: v1beta1
+        kinds:
+          - Stream
+
+  - package: usageapi
+    controllerImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-usageapi:v2.1.0-alpha
+    bundleImage: ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-usageapi-bundle:v2.1.0-alpha
+    groups:
+      - group: usageapi
+        version: v1beta1
+        kinds:
+          - CustomTable
+          - Query
+          - Schedule
+          - UsageCarbonEmissionsQuery

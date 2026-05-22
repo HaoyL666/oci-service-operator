@@ -13,7 +13,7 @@ Manage OCI Container Instance workloads. This page is generated from checked-in 
 | API Version | `containerinstances.oracle.com/v1beta1` |
 | Package | [Container Instances](../../reference/packages/containerinstances/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-containerinstances-system` |
 
 ## Quick Links

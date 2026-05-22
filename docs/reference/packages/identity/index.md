@@ -8,7 +8,7 @@ Manage OCI Identity compartments from Kubernetes.
 | --- | --- |
 | Package | `identity` |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-identity-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-identity:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-identity-bundle:<version>` |

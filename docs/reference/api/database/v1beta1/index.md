@@ -13,14 +13,14 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| Autonomous Database | preview | `v2.0.0-alpha` | [AutonomousDatabase](#kind-autonomousdatabase) |
+| Autonomous Database | preview | `v2.1.0-alpha` | [AutonomousDatabase](#kind-autonomousdatabase) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [AutonomousDatabase](#kind-autonomousdatabase) | Namespaced | [Sample](../../../samples/database/v1beta1/autonomousdatabase.md) | Autonomous Database (`v2.0.0-alpha`) |
+| [AutonomousDatabase](#kind-autonomousdatabase) | Namespaced | [Sample](../../../samples/database/v1beta1/autonomousdatabase.md) | Autonomous Database (`v2.1.0-alpha`) |
 
 <a id="kind-autonomousdatabase"></a>
 ## AutonomousDatabase
@@ -31,7 +31,7 @@ Manage OCI Autonomous Database instances.
 - `Scope`: `Namespaced`
 - `APIVersion`: `database.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/database/v1beta1/autonomousdatabase.md) (`config/samples/database_v1beta1_autonomousdatabase.yaml`)
-- `Packages`: Autonomous Database (`v2.0.0-alpha`)
+- `Packages`: Autonomous Database (`v2.1.0-alpha`)
 
 <a id="kind-autonomousdatabase-spec"></a>
 ### Spec

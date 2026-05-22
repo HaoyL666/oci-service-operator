@@ -13,14 +13,14 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| NoSQL | preview | `v2.0.0-alpha` | [Table](#kind-table) |
+| NoSQL | preview | `v2.1.0-alpha` | [Table](#kind-table) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Table](#kind-table) | Namespaced | [Sample](../../../samples/nosql/v1beta1/table.md) | NoSQL (`v2.0.0-alpha`) |
+| [Table](#kind-table) | Namespaced | [Sample](../../../samples/nosql/v1beta1/table.md) | NoSQL (`v2.1.0-alpha`) |
 
 <a id="kind-table"></a>
 ## Table
@@ -31,7 +31,7 @@ Manage OCI NoSQL tables.
 - `Scope`: `Namespaced`
 - `APIVersion`: `nosql.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/nosql/v1beta1/table.md) (`config/samples/nosql_v1beta1_table.yaml`)
-- `Packages`: NoSQL (`v2.0.0-alpha`)
+- `Packages`: NoSQL (`v2.1.0-alpha`)
 
 <a id="kind-table-spec"></a>
 ### Spec

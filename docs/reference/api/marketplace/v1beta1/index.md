@@ -11,15 +11,17 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `marketplace.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Marketplace | preview | `v2.1.0-alpha` | [AcceptedAgreement](#kind-acceptedagreement), [Publication](#kind-publication) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [AcceptedAgreement](#kind-acceptedagreement) | Namespaced | [Sample](../../../samples/marketplace/v1beta1/acceptedagreement.md) | - |
-| [Publication](#kind-publication) | Namespaced | [Sample](../../../samples/marketplace/v1beta1/publication.md) | - |
+| [AcceptedAgreement](#kind-acceptedagreement) | Namespaced | [Sample](../../../samples/marketplace/v1beta1/acceptedagreement.md) | Marketplace (`v2.1.0-alpha`) |
+| [Publication](#kind-publication) | Namespaced | [Sample](../../../samples/marketplace/v1beta1/publication.md) | Marketplace (`v2.1.0-alpha`) |
 
 <a id="kind-acceptedagreement"></a>
 ## AcceptedAgreement
@@ -30,7 +32,7 @@ AcceptedAgreement is the Schema for the acceptedagreements API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `marketplace.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/marketplace/v1beta1/acceptedagreement.md) (`config/samples/marketplace_v1beta1_acceptedagreement.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Marketplace (`v2.1.0-alpha`)
 
 <a id="kind-acceptedagreement-spec"></a>
 ### Spec
@@ -135,7 +137,7 @@ Publication is the Schema for the publications API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `marketplace.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/marketplace/v1beta1/publication.md) (`config/samples/marketplace_v1beta1_publication.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Marketplace (`v2.1.0-alpha`)
 
 <a id="kind-publication-spec"></a>
 ### Spec

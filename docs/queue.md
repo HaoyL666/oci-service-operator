@@ -15,7 +15,7 @@ The published reconcile path is work-request-aware: create, update, and delete a
 | API Version | `queue.oracle.com/v1beta1` |
 | Package | [Queue](reference/packages/queue/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-queue-system` |
 
 ## Quick Links

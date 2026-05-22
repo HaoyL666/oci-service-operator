@@ -13,14 +13,14 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| Data Flow | preview | `v2.0.0-alpha` | [Application](#kind-application) |
+| Data Flow | preview | `v2.1.0-alpha` | [Application](#kind-application) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Application](#kind-application) | Namespaced | [Sample](../../../samples/dataflow/v1beta1/application.md) | Data Flow (`v2.0.0-alpha`) |
+| [Application](#kind-application) | Namespaced | [Sample](../../../samples/dataflow/v1beta1/application.md) | Data Flow (`v2.1.0-alpha`) |
 
 <a id="kind-application"></a>
 ## Application
@@ -31,7 +31,7 @@ Manage OCI Data Flow applications.
 - `Scope`: `Namespaced`
 - `APIVersion`: `dataflow.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/dataflow/v1beta1/application.md) (`config/samples/dataflow_v1beta1_application.yaml`)
-- `Packages`: Data Flow (`v2.0.0-alpha`)
+- `Packages`: Data Flow (`v2.1.0-alpha`)
 
 <a id="kind-application-spec"></a>
 ### Spec

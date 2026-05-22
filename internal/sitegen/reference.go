@@ -351,7 +351,7 @@ func renderMkDocsConfig(repoRoot string, site *ReferenceSite) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("render mkdocs resource guide nav: %w", err)
 	}
-	rendered, err = replaceMarkedBlock(rendered, mkdocsGeneratedAPINavBegin, mkdocsGeneratedAPINavEnd, renderMkDocsAPIVersionNav(site.APIVersions))
+	rendered, err = replaceMarkedBlock(rendered, mkdocsGeneratedAPINavBegin, mkdocsGeneratedAPINavEnd, renderMkDocsAPIVersionNav(buildAPIVersionIndex(site.PublicPackages)))
 	if err != nil {
 		return "", fmt.Errorf("render mkdocs api nav: %w", err)
 	}

@@ -13,7 +13,7 @@ Manage OCI OpenSearch clusters. This page is generated from checked-in package m
 | API Version | `opensearch.oracle.com/v1beta1` |
 | Package | [OpenSearch](../../reference/packages/opensearch/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-opensearch-system` |
 
 ## Quick Links

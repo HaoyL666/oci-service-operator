@@ -13,15 +13,15 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 
 | Package | Support | Latest release | Resources |
 | --- | --- | --- | --- |
-| API Gateway | preview | `v2.0.0-alpha` | [ApiGateway](#kind-apigateway), [ApiGatewayDeployment](#kind-apigatewaydeployment) |
+| API Gateway | preview | `v2.1.0-alpha` | [ApiGateway](#kind-apigateway), [ApiGatewayDeployment](#kind-apigatewaydeployment) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [ApiGateway](#kind-apigateway) | Namespaced | - | API Gateway (`v2.0.0-alpha`) |
-| [ApiGatewayDeployment](#kind-apigatewaydeployment) | Namespaced | - | API Gateway (`v2.0.0-alpha`) |
+| [ApiGateway](#kind-apigateway) | Namespaced | - | API Gateway (`v2.1.0-alpha`) |
+| [ApiGatewayDeployment](#kind-apigatewaydeployment) | Namespaced | - | API Gateway (`v2.1.0-alpha`) |
 
 <a id="kind-apigateway"></a>
 ## ApiGateway
@@ -32,7 +32,7 @@ Manage OCI API Gateway gateway resources.
 - `Scope`: `Namespaced`
 - `APIVersion`: `apigateway.oracle.com/v1beta1`
 - `Sample`: No checked-in sample manifest currently exists.
-- `Packages`: API Gateway (`v2.0.0-alpha`)
+- `Packages`: API Gateway (`v2.1.0-alpha`)
 
 <a id="kind-apigateway-spec"></a>
 ### Spec
@@ -128,7 +128,7 @@ Manage OCI API Gateway deployment routes and backend bindings.
 - `Scope`: `Namespaced`
 - `APIVersion`: `apigateway.oracle.com/v1beta1`
 - `Sample`: No checked-in sample manifest currently exists.
-- `Packages`: API Gateway (`v2.0.0-alpha`)
+- `Packages`: API Gateway (`v2.1.0-alpha`)
 
 <a id="kind-apigatewaydeployment-spec"></a>
 ### Spec

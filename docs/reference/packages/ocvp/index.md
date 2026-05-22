@@ -8,21 +8,16 @@ Manage OCI Oracle Cloud VMware Solution resources from Kubernetes.
 | --- | --- |
 | Package | `ocvp` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-ocvp-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-ocvp:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-ocvp-bundle:<version>` |
 | Setup Guide | [Open guide](../../../installation.md) |
 
-## Notes
-
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
-
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `ocvp/Cluster` | `ocvp.oracle.com/v1beta1` | — | — | [Sample](../../samples/ocvp/v1beta1/cluster.md) | [Reference](../../api/ocvp/v1beta1/index.md#kind-cluster) |
-| `ocvp/EsxiHost` | `ocvp.oracle.com/v1beta1` | — | — | [Sample](../../samples/ocvp/v1beta1/esxihost.md) | [Reference](../../api/ocvp/v1beta1/index.md#kind-esxihost) |
-| `ocvp/Sddc` | `ocvp.oracle.com/v1beta1` | — | — | [Sample](../../samples/ocvp/v1beta1/sddc.md) | [Reference](../../api/ocvp/v1beta1/index.md#kind-sddc) |
+| `ocvp/Cluster` | `ocvp.oracle.com/v1beta1` | — | [Guide](../../../guides/ocvp/cluster.md) | [Sample](../../samples/ocvp/v1beta1/cluster.md) | [Reference](../../api/ocvp/v1beta1/index.md#kind-cluster) |
+| `ocvp/EsxiHost` | `ocvp.oracle.com/v1beta1` | — | [Guide](../../../guides/ocvp/esxihost.md) | [Sample](../../samples/ocvp/v1beta1/esxihost.md) | [Reference](../../api/ocvp/v1beta1/index.md#kind-esxihost) |
+| `ocvp/Sddc` | `ocvp.oracle.com/v1beta1` | — | [Guide](../../../guides/ocvp/sddc.md) | [Sample](../../samples/ocvp/v1beta1/sddc.md) | [Reference](../../api/ocvp/v1beta1/index.md#kind-sddc) |

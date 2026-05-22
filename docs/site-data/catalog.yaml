@@ -40,7 +40,7 @@ packages:
     displayName: AI Document
     summary: Manage OCI AI Document projects from Kubernetes with an initial controller-backed Project rollout.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Current package scope is intentionally limited to Project while the remaining AI Document resource families stay unpublished.
@@ -53,7 +53,7 @@ packages:
     displayName: AI Language
     summary: Manage OCI AI Language projects from Kubernetes with an initial controller-backed Project rollout.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Current package scope is intentionally limited to Project while the remaining AI Language resource families stay unpublished.
@@ -79,7 +79,7 @@ packages:
     displayName: AI Vision
     summary: Manage OCI AI Vision projects from Kubernetes with an initial controller-backed Project rollout.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Current package scope is intentionally limited to Project while the remaining AI Vision resource families stay unpublished.
@@ -92,7 +92,7 @@ packages:
     displayName: Analytics
     summary: Manage OCI Analytics instances from Kubernetes with a reviewed controller-backed runtime.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Analytics ships a reviewed controller-backed runtime for `AnalyticsInstance` in the current checked-in package surface.
@@ -270,7 +270,7 @@ packages:
     displayName: Big Data Service
     summary: Manage OCI Big Data Service instances from Kubernetes with an initial controller-backed BdsInstance rollout.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Current package scope is intentionally limited to BdsInstance while the remaining Big Data Service resource families stay unpublished.
@@ -383,7 +383,7 @@ packages:
     displayName: Container Engine for Kubernetes
     summary: Manage OCI Container Engine for Kubernetes clusters and node pools from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Current package scope includes `Cluster` and `NodePool`.
@@ -475,7 +475,7 @@ packages:
     displayName: Database Tools
     summary: Manage OCI Database Tools connections from Kubernetes with an initial controller-backed DatabaseToolsConnection rollout.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Current package scope is intentionally limited to DatabaseToolsConnection while the remaining Database Tools resource families stay unpublished.
@@ -541,7 +541,7 @@ packages:
     displayName: Data Science
     summary: Manage OCI Data Science projects from Kubernetes with an initial controller-backed Project rollout.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Current package scope is intentionally limited to Project while the remaining Data Science resource families stay unpublished.
@@ -673,7 +673,7 @@ packages:
     displayName: Email
     summary: Manage OCI Email Delivery resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: emwarehouse
@@ -754,7 +754,7 @@ packages:
     displayName: Generative AI
     summary: Manage OCI Generative AI resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: generativeaiagent
@@ -910,7 +910,7 @@ packages:
     displayName: Key Management
     summary: Manage OCI Vault resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
     packageNotes:
       - Current package scope is intentionally limited to Vault while the remaining keymanagement kinds stay out of the generatedruntime rollout.
@@ -948,7 +948,7 @@ packages:
     displayName: Load Balancer
     summary: Manage OCI Load Balancer resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: lockbox
@@ -969,7 +969,7 @@ packages:
     displayName: Logging
     summary: Manage OCI Logging resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: lustrefilestorage
@@ -1021,7 +1021,7 @@ packages:
     displayName: Marketplace
     summary: Manage OCI Marketplace resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: marketplaceprivateoffer
@@ -1073,7 +1073,7 @@ packages:
     displayName: Monitoring
     summary: Manage OCI Monitoring resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: multicloud
@@ -1173,14 +1173,14 @@ packages:
     displayName: Oracle Cloud VMware Solution
     summary: Manage OCI Oracle Cloud VMware Solution resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: oda
     displayName: Oracle Digital Assistant
     summary: Manage OCI Digital Assistant resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: onesubscription
@@ -1494,7 +1494,7 @@ packages:
     displayName: Usage API
     summary: Manage OCI Usage API resources from Kubernetes.
     supportStatus: preview
-    customerVisible: false
+    customerVisible: true
     guidePath: docs/installation.md
 
   - package: vbsinst

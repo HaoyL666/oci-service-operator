@@ -13,7 +13,7 @@ Manage OCI core networking resources from Kubernetes. This page is generated fro
 | API Version | `core.oracle.com/v1beta1` |
 | Package | [Core Networking](../../reference/packages/core-network/index.md) |
 | Support Status | Preview |
-| Latest Released Version | `v2.0.0-alpha` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-core-network-system` |
 
 ## Quick Links

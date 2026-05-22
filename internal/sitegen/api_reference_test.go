@@ -28,7 +28,7 @@ func TestBuildAPIReferenceSiteQueuePage(t *testing.T) {
 	}
 
 	assertContains(t, site.LandingPage.Content, "[queue.oracle.com/v1beta1](queue/v1beta1/index.md)")
-	assertContains(t, site.LandingPage.Content, "Core Compute (`Not yet released`), Core Networking (`v2.0.0-alpha`)")
+	assertContains(t, site.LandingPage.Content, "Core Compute (`Not yet released`), Core Networking (`v2.1.0-alpha`)")
 
 	page := generatedPage(t, site, "queue/v1beta1/index.md")
 	assertContains(t, page.Content, "# queue.oracle.com/v1beta1")

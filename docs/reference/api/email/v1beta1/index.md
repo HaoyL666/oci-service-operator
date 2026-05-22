@@ -11,17 +11,19 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `email.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Email | preview | `v2.1.0-alpha` | [Dkim](#kind-dkim), [EmailDomain](#kind-emaildomain), [Sender](#kind-sender), [Suppression](#kind-suppression) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [Dkim](#kind-dkim) | Namespaced | [Sample](../../../samples/email/v1beta1/dkim.md) | - |
-| [EmailDomain](#kind-emaildomain) | Namespaced | [Sample](../../../samples/email/v1beta1/emaildomain.md) | - |
-| [Sender](#kind-sender) | Namespaced | [Sample](../../../samples/email/v1beta1/sender.md) | - |
-| [Suppression](#kind-suppression) | Namespaced | [Sample](../../../samples/email/v1beta1/suppression.md) | - |
+| [Dkim](#kind-dkim) | Namespaced | [Sample](../../../samples/email/v1beta1/dkim.md) | Email (`v2.1.0-alpha`) |
+| [EmailDomain](#kind-emaildomain) | Namespaced | [Sample](../../../samples/email/v1beta1/emaildomain.md) | Email (`v2.1.0-alpha`) |
+| [Sender](#kind-sender) | Namespaced | [Sample](../../../samples/email/v1beta1/sender.md) | Email (`v2.1.0-alpha`) |
+| [Suppression](#kind-suppression) | Namespaced | [Sample](../../../samples/email/v1beta1/suppression.md) | Email (`v2.1.0-alpha`) |
 
 <a id="kind-dkim"></a>
 ## Dkim
@@ -32,7 +34,7 @@ Dkim is the Schema for the dkims API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `email.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/email/v1beta1/dkim.md) (`config/samples/email_v1beta1_dkim.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Email (`v2.1.0-alpha`)
 
 <a id="kind-dkim-spec"></a>
 ### Spec
@@ -142,7 +144,7 @@ EmailDomain is the Schema for the emaildomains API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `email.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/email/v1beta1/emaildomain.md) (`config/samples/email_v1beta1_emaildomain.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Email (`v2.1.0-alpha`)
 
 <a id="kind-emaildomain-spec"></a>
 ### Spec
@@ -264,7 +266,7 @@ Sender is the Schema for the senders API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `email.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/email/v1beta1/sender.md) (`config/samples/email_v1beta1_sender.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Email (`v2.1.0-alpha`)
 
 <a id="kind-sender-spec"></a>
 ### Spec
@@ -383,7 +385,7 @@ Suppression is the Schema for the suppressions API.
 - `Scope`: `Namespaced`
 - `APIVersion`: `email.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/email/v1beta1/suppression.md) (`config/samples/email_v1beta1_suppression.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Email (`v2.1.0-alpha`)
 
 <a id="kind-suppression-spec"></a>
 ### Spec

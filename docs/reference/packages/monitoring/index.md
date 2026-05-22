@@ -8,20 +8,15 @@ Manage OCI Monitoring resources from Kubernetes.
 | --- | --- |
 | Package | `monitoring` |
 | Support Status | Preview |
-| Latest Released Version | `Not yet released` |
+| Latest Released Version | `v2.1.0-alpha` |
 | Install Namespace | `oci-service-operator-monitoring-system` |
 | Controller Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-monitoring:<version>` |
 | Bundle Image Pattern | `ghcr.io/<REPOSITORY_OWNER>/oci-service-operator-monitoring-bundle:<version>` |
 | Setup Guide | [Open guide](../../../installation.md) |
 
-## Notes
-
-- No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
-- This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
-
 ## Exposed Resources
 
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
-| `monitoring/Alarm` | `monitoring.oracle.com/v1beta1` | — | — | [Sample](../../samples/monitoring/v1beta1/alarm.md) | [Reference](../../api/monitoring/v1beta1/index.md#kind-alarm) |
-| `monitoring/AlarmSuppression` | `monitoring.oracle.com/v1beta1` | — | — | [Sample](../../samples/monitoring/v1beta1/alarmsuppression.md) | [Reference](../../api/monitoring/v1beta1/index.md#kind-alarmsuppression) |
+| `monitoring/Alarm` | `monitoring.oracle.com/v1beta1` | — | [Guide](../../../guides/monitoring/alarm.md) | [Sample](../../samples/monitoring/v1beta1/alarm.md) | [Reference](../../api/monitoring/v1beta1/index.md#kind-alarm) |
+| `monitoring/AlarmSuppression` | `monitoring.oracle.com/v1beta1` | — | [Guide](../../../guides/monitoring/alarmsuppression.md) | [Sample](../../samples/monitoring/v1beta1/alarmsuppression.md) | [Reference](../../api/monitoring/v1beta1/index.md#kind-alarmsuppression) |

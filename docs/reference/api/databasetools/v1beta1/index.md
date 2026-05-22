@@ -11,14 +11,16 @@ This content is generated from the checked-in CRD schemas in `config/crd/bases/`
 <a id="packages"></a>
 ## Packages
 
-No customer-visible package currently exposes `databasetools.oracle.com/v1beta1`.
+| Package | Support | Latest release | Resources |
+| --- | --- | --- | --- |
+| Database Tools | preview | `v2.1.0-alpha` | [DatabaseToolsConnection](#kind-databasetoolsconnection) |
 
 <a id="resources"></a>
 ## Resources
 
 | Kind | Scope | Sample | Packages |
 | --- | --- | --- | --- |
-| [DatabaseToolsConnection](#kind-databasetoolsconnection) | Namespaced | [Sample](../../../samples/databasetools/v1beta1/databasetoolsconnection.md) | - |
+| [DatabaseToolsConnection](#kind-databasetoolsconnection) | Namespaced | [Sample](../../../samples/databasetools/v1beta1/databasetoolsconnection.md) | Database Tools (`v2.1.0-alpha`) |
 
 <a id="kind-databasetoolsconnection"></a>
 ## DatabaseToolsConnection
@@ -29,7 +31,7 @@ Manage OCI Database Tools connections.
 - `Scope`: `Namespaced`
 - `APIVersion`: `databasetools.oracle.com/v1beta1`
 - `Sample`: [Sample](../../../samples/databasetools/v1beta1/databasetoolsconnection.md) (`config/samples/databasetools_v1beta1_databasetoolsconnection.yaml`)
-- `Packages`: Not currently exposed by a customer-visible package.
+- `Packages`: Database Tools (`v2.1.0-alpha`)
 
 <a id="kind-databasetoolsconnection-spec"></a>
 ### Spec
