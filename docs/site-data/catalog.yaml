@@ -459,17 +459,23 @@ packages:
 
   - package: databasemigration
     displayName: Database Migration
-    summary: Manage OCI Database Migration connections from Kubernetes with a reviewed controller-backed Connection rollout.
+    summary: Manage OCI Database Migration assessments, connections, and migrations from Kubernetes with reviewed controller-backed runtimes.
     supportStatus: preview
     customerVisible: false
     guidePath: docs/installation.md
     packageNotes:
-      - Current package scope is intentionally limited to Connection while the remaining Database Migration resource families stay unpublished.
-      - The published runtime uses service-SDK work requests for create, update, and delete, with explicit MYSQL versus ORACLE request shaping and replacement-only handling for `compartmentId`, `connectionType`, and `technologyType`.
+      - Current package scope includes Assessment, Connection, and Migration while service helper families stay unpublished.
+      - The published runtimes use service-SDK work requests for create, update, and delete; Assessment and Migration reread after work-request completion, while Connection also narrows pre-create reuse with type-specific request shaping.
     kindOverrides:
+      - group: databasemigration
+        kind: Assessment
+        summary: Manage OCI Database Migration assessments.
       - group: databasemigration
         kind: Connection
         summary: Manage OCI Database Migration connections.
+      - group: databasemigration
+        kind: Migration
+        summary: Manage OCI Database Migration migrations.
 
   - package: databasetools
     displayName: Database Tools
@@ -620,28 +626,34 @@ packages:
 
   - package: disasterrecovery
     displayName: Disaster Recovery
-    summary: Manage OCI Disaster Recovery protection groups from Kubernetes with an initial controller-backed DrProtectionGroup rollout.
+    summary: Manage OCI Disaster Recovery protection groups and DR plans from Kubernetes with controller-backed work-request runtimes.
     supportStatus: preview
     customerVisible: false
     guidePath: docs/installation.md
     packageNotes:
-      - Current package scope is intentionally limited to DrProtectionGroup while associate, disassociate, role-change, DR plan, and work-request helper families stay unpublished.
-      - The published runtime uses service-SDK work requests for create, update, and delete, keeps peer and lifecycle state truthfully projected in status, and preserves polymorphic member content instead of flattening the DR protection group membership surface.
+      - Current package scope includes DrProtectionGroup and DrPlan while associate, disassociate, role-change, and work-request helper families stay unpublished.
+      - The published runtimes use service-SDK work requests for create, update, and delete, keep peer and lifecycle state truthfully projected in status, and preserve polymorphic member content instead of flattening the DR membership surface.
     kindOverrides:
+      - group: disasterrecovery
+        kind: DrPlan
+        summary: Manage OCI Disaster Recovery DR plans.
       - group: disasterrecovery
         kind: DrProtectionGroup
         summary: Manage OCI Disaster Recovery protection groups.
 
   - package: distributeddatabase
     displayName: Distributed Database
-    summary: Manage OCI Distributed Database private endpoints from Kubernetes with a reviewed controller-backed lifecycle runtime.
+    summary: Manage OCI Distributed Databases and private endpoints from Kubernetes with reviewed lifecycle runtimes.
     supportStatus: preview
     customerVisible: false
     guidePath: docs/installation.md
     packageNotes:
-      - Current package scope is intentionally limited to DistributedDatabasePrivateEndpoint while distributed databases, validation helpers, wallet flows, and other service families stay unpublished.
-      - The published runtime is lifecycle-classified, rereads GetDistributedDatabasePrivateEndpoint after bind and write paths because list returns summaries, and keeps delete confirmation explicit until DELETED or NotFound.
+      - Current package scope includes DistributedDatabase and DistributedDatabasePrivateEndpoint while validation helpers, wallet flows, and other service families stay unpublished.
+      - The published runtimes are lifecycle-classified, reread after bind and write paths when list calls return summaries, and keep delete confirmation explicit until DELETED or NotFound.
     kindOverrides:
+      - group: distributeddatabase
+        kind: DistributedDatabase
+        summary: Manage OCI Distributed Databases.
       - group: distributeddatabase
         kind: DistributedDatabasePrivateEndpoint
         summary: Manage OCI Distributed Database private endpoints.
@@ -759,18 +771,24 @@ packages:
 
   - package: generativeaiagent
     displayName: Generative AI Agent
-    summary: Manage OCI Generative AI Agent agents and knowledge bases from Kubernetes with reviewed controller-backed runtimes.
+    summary: Manage OCI Generative AI Agent agents, agent endpoints, data sources, and knowledge bases from Kubernetes with reviewed controller-backed runtimes.
     supportStatus: preview
     customerVisible: false
     guidePath: docs/installation.md
     packageNotes:
-      - Current package scope is intentionally limited to Agent and KnowledgeBase while AgentEndpoint, DataSource, DataIngestionJob, ProvisionedCapacity, Tool, and work-request helper families stay unpublished.
+      - Current package scope includes Agent, AgentEndpoint, DataSource, and KnowledgeBase while DataIngestionJob, ProvisionedCapacity, Tool, and work-request helper families stay unpublished.
       - The published runtimes use service-SDK work requests for create, update, and delete. `ChangeAgentCompartment` and `ChangeKnowledgeBaseCompartment` both stay out of scope for the controller-backed surface.
       - The published package keeps `generativeaiagent/KnowledgeBase` explicitly distinct from the existing `adm/KnowledgeBase` rollout in docs, catalog metadata, and formal/runtime surfaces.
     kindOverrides:
       - group: generativeaiagent
         kind: Agent
         summary: Manage OCI Generative AI Agents.
+      - group: generativeaiagent
+        kind: AgentEndpoint
+        summary: Manage OCI Generative AI Agent endpoints.
+      - group: generativeaiagent
+        kind: DataSource
+        summary: Manage OCI Generative AI Agent data sources.
       - group: generativeaiagent
         kind: KnowledgeBase
         summary: Manage OCI Generative AI Agent knowledge bases.
@@ -872,17 +890,21 @@ packages:
 
   - package: jms
     displayName: Java Management Service
-    summary: Manage OCI Java Management Service fleets from Kubernetes with a reviewed controller-backed runtime.
+    summary: Manage OCI Java Management Service fleets and plugins from Kubernetes with reviewed controller-backed runtimes.
     supportStatus: preview
     customerVisible: false
     guidePath: docs/installation.md
     packageNotes:
-      - Current package scope is intentionally limited to Fleet while advanced feature configuration, agent configuration, DRS, analysis, and work-request helper families stay unpublished.
-      - The published runtime uses service-SDK work requests for create, update, and delete, keeps `inventoryLog` required from the first spec, treats `NEEDS_ATTENTION` as a steady success state, and leaves `ChangeFleetCompartment` out of scope.
+      - Current package scope includes Fleet and JmsPlugin while advanced feature configuration, agent configuration, DRS, analysis, and work-request helper families stay unpublished.
+      - Fleet uses service-SDK work requests for create, update, and delete, keeps `inventoryLog` required from the first spec, treats `NEEDS_ATTENTION` as a steady success state, and leaves `ChangeFleetCompartment` out of scope.
+      - JmsPlugin keeps lifecycle-based generatedruntime rereads and direct response-body projection without a service-local work-request resume path.
     kindOverrides:
       - group: jms
         kind: Fleet
         summary: Manage OCI Java Management Service fleets.
+      - group: jms
+        kind: JmsPlugin
+        summary: Manage OCI Java Management Service plugins.
 
   - package: jmsjavadownloads
     displayName: Java Downloads
@@ -1040,17 +1062,23 @@ packages:
 
   - package: mediaservices
     displayName: Media Services
-    summary: Manage OCI Media Services media assets from Kubernetes with a reviewed controller-backed runtime.
+    summary: Manage OCI Media Services media assets, workflows, and workflow configurations from Kubernetes with reviewed runtime coverage.
     supportStatus: preview
     customerVisible: false
     guidePath: docs/installation.md
     packageNotes:
-      - Current package scope is intentionally limited to MediaAsset while workflow, packaging, and attachment families stay unpublished.
-      - The published runtime keeps lifecycle-based CRUD semantics, guarded pre-create reuse on exact identity subsets, and an explicit delete contract that omits hierarchical delete modes.
+      - Current package scope includes MediaAsset, MediaWorkflow, and MediaWorkflowConfiguration while packaging and attachment families stay unpublished.
+      - The published runtimes keep lifecycle-based or follow-up CRUD semantics, guarded pre-create reuse on exact identity subsets, and explicit delete contracts that do not invent hierarchical delete modes.
     kindOverrides:
       - group: mediaservices
         kind: MediaAsset
         summary: Manage OCI Media Services media assets.
+      - group: mediaservices
+        kind: MediaWorkflow
+        summary: Manage OCI Media Services media workflows.
+      - group: mediaservices
+        kind: MediaWorkflowConfiguration
+        summary: Manage OCI Media Services media workflow configurations.
 
   - package: mngdmac
     displayName: Managed Services for Mac
@@ -1475,17 +1503,20 @@ packages:
 
   - package: tenantmanagercontrolplane
     displayName: Tenant Manager Control Plane
-    summary: Manage OCI domains and existing organizations from Kubernetes with truthful service-specific runtime behavior.
+    summary: Manage OCI domains, domain governance, and existing organizations from Kubernetes with truthful service-specific runtime behavior.
     supportStatus: preview
     customerVisible: false
     guidePath: docs/installation.md
     packageNotes:
-      - Current package scope includes Domain and Organization while OrganizationTenancy, DomainGovernance, invitation, and subscription-mapping helper families stay unpublished.
-      - "The published runtime is intentionally mixed: Domain exposes workrequest-aware create, direct-body update, and confirmed OCI delete; Organization remains bind-existing plus update-only with local unbind on CR delete."
+      - Current package scope includes Domain, DomainGovernance, and Organization while OrganizationTenancy, invitation, and subscription-mapping helper families stay unpublished.
+      - "The published runtime is intentionally mixed: Domain exposes workrequest-aware create, direct-body update, and confirmed OCI delete; DomainGovernance keeps lifecycle-based generatedruntime rereads; Organization remains bind-existing plus update-only with local unbind on CR delete."
     kindOverrides:
       - group: tenantmanagercontrolplane
         kind: Domain
         summary: Manage OCI domains with workrequest-aware create behavior and confirmed OCI delete semantics.
+      - group: tenantmanagercontrolplane
+        kind: DomainGovernance
+        summary: Manage OCI domain governance resources with lifecycle-based generatedruntime semantics.
       - group: tenantmanagercontrolplane
         kind: Organization
         summary: Manage existing OCI organizations with an update-only default subscription contract.

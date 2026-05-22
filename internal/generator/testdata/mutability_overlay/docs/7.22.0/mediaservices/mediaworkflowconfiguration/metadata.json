@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-mutability-overlay-docs-input",
+  "service": "mediaservices",
+  "kind": "MediaWorkflowConfiguration",
+  "formalSlug": "mediaworkflowconfiguration",
+  "providerResource": "oci_media_services_media_workflow_configuration",
+  "terraformDocsVersion": "7.22.0",
+  "registryPath": "providers/oracle/oci/7.22.0/docs/resources/media_services_media_workflow_configuration",
+  "registryURL": "https://registry.terraform.io/providers/oracle/oci/7.22.0/docs/resources/media_services_media_workflow_configuration",
+  "contentType": "text/html; charset=utf-8",
+  "pageShape": "argumentReferenceHTML",
+  "inputSource": "fixture",
+  "inputIdentity": "fixture:7.22.0/mediaservices/mediaworkflowconfiguration/page.html",
+  "bodySHA256": "bcb589e5d2406a38a6c14e4e3fcc485f28ae2ab7b3ff47d577ddb6ba5a6ce520",
+  "bodyBytes": 2164,
+  "fixtureBodyPath": "7.22.0/mediaservices/mediaworkflowconfiguration/page.html"
+}

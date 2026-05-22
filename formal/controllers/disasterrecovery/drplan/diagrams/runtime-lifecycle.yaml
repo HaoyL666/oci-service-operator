@@ -1,0 +1,60 @@
+schemaVersion: 1
+surface: repo-authored-semantics
+service: disasterrecovery
+slug: drplan
+kind: DrPlan
+archetype: generated-service-manager
+states:
+  - provisioning
+  - active
+  - updating
+  - terminating
+  - failed
+repoAuthored:
+  providerLifecycle:
+    createPending:
+      - CREATING
+    updatePending:
+      - UPDATING
+    deletePending:
+      - DELETING
+  listLookup:
+    filters:
+      - drProtectionGroupId
+      - displayName
+      - type
+      - drPlanId
+    matchRule: exact drProtectionGroupId plus displayName and type unique match; tracked rereads and delete confirmation can additionally narrow by drPlanId
+  mutation:
+    mutable:
+      - definedTags
+      - displayName
+      - freeformTags
+      - planGroups
+    forceNew:
+      - drProtectionGroupId
+      - sourcePlanId
+      - type
+  hooks:
+    create:
+      - helper: tfresource.CreateResource
+      - helper: tfresource.WaitForWorkRequestWithErrorHandling
+        entityType: drplan
+        action: CREATED
+    update:
+      - helper: tfresource.UpdateResource
+      - helper: tfresource.WaitForWorkRequestWithErrorHandling
+        entityType: drplan
+        action: UPDATED
+    delete:
+      - helper: tfresource.DeleteResource
+  followUp:
+    create: GetWorkRequest -> GetDrPlan
+    update: GetWorkRequest -> GetDrPlan
+    delete: GetDrPlan/ListDrPlans confirm-delete
+notes:
+  - DrPlan create and update are work-request-backed and resume through status.async.current as the canonical in-flight tracker.
+  - List responses expose DrPlanSummary items only, so the runtime rereads GetDrPlan before status projection or mutable drift checks that depend on planGroups or sourcePlanId.
+  - Create ignores spec.planGroups because CreateDrPlanDetails does not accept planGroups; in-place plan group edits are published only through UpdateDrPlanDetails.
+  - The resource-local update builder strips read-only group and step fields from GetDrPlan before diffing so service-owned metadata does not cause perpetual updates.
+  - Refresh, verify, plan execution, and other disaster recovery helper families remain out of scope for this controller-backed runtime.

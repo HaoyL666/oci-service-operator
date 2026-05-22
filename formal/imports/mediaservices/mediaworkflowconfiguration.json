@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "mediaservices",
+  "slug": "mediaworkflowconfiguration",
+  "kind": "MediaWorkflowConfiguration",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_media_services_media_workflow_configuration",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateMediaWorkflowConfiguration",
+        "requestType": "mediaservices.CreateMediaWorkflowConfigurationRequest",
+        "responseType": "mediaservices.CreateMediaWorkflowConfigurationResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetMediaWorkflowConfiguration",
+        "requestType": "mediaservices.GetMediaWorkflowConfigurationRequest",
+        "responseType": "mediaservices.GetMediaWorkflowConfigurationResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListMediaWorkflowConfigurations",
+        "requestType": "mediaservices.ListMediaWorkflowConfigurationsRequest",
+        "responseType": "mediaservices.ListMediaWorkflowConfigurationsResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateMediaWorkflowConfiguration",
+        "requestType": "mediaservices.UpdateMediaWorkflowConfigurationRequest",
+        "responseType": "mediaservices.UpdateMediaWorkflowConfigurationResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteMediaWorkflowConfiguration",
+        "requestType": "mediaservices.DeleteMediaWorkflowConfigurationRequest",
+        "responseType": "mediaservices.DeleteMediaWorkflowConfigurationResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [],
+      "target": [
+        "ACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [],
+      "target": [
+        "ACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "defined_tags",
+      "display_name",
+      "freeform_tags",
+      "parameters"
+    ],
+    "forceNew": [
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [],
+    "target": [
+      "DELETED",
+      "NOT_FOUND"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_media_services_media_workflow_configurations",
+    "collectionField": "media_workflow_configurations",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "display_name"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/mediaservices/mediaworkflowconfiguration/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/mediaservices/mediaworkflowconfiguration/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "lifecycle-classification",
+      "list-lookup",
+      "mutation-policy",
+      "status-projection",
+      "synchronous-write-success",
+      "delete-confirmation",
+      "secret-output"
+    ]
+  },
+  "notes": [
+    "Pinned OCI SDK contract: CreateMediaWorkflowConfiguration, GetMediaWorkflowConfiguration, ListMediaWorkflowConfigurations, UpdateMediaWorkflowConfiguration, and DeleteMediaWorkflowConfiguration are present in v65.110.0. Create, get, and update return the MediaWorkflowConfiguration body directly, while delete returns only headers and no service-local work-request identifier. MediaWorkflowConfiguration exposes lifecycle states ACTIVE and DELETED.",
+    "Pinned provider coverage is unconfirmed. formal/sources.lock still points at github.com/oracle/terraform-provider-oci@eb653febb1bab4cc6650a96d404a8baf36fdf671, but the accessible local provider inventory did not expose a checked-in MediaWorkflowConfiguration resource or data source. The providerResource and datasource names therefore stay provisional OCI-style placeholders so manifest-owned catalog promotion can happen later without blocking the runtime review.",
+    "Repo-authored runtime treats create and update as synchronous read-after-write flows. The reviewed controller-backed contract does not publish provisioning or updating lifecycle buckets and settles ACTIVE as success after a follow-up GetMediaWorkflowConfiguration reread.",
+    "Repo-authored bind-versus-create is explicit: pre-create lookup requires spec.compartmentId and a non-empty spec.displayName, scopes ListMediaWorkflowConfigurations by compartment and exact display name, and adopts only a unique exact match on compartmentId plus displayName. Duplicate matches fail instead of binding arbitrarily.",
+    "Repo-authored mutation policy is narrower than the SDK surface: only displayName, parameters, freeformTags, and definedTags reconcile in place. compartmentId remains replacement-only drift, and create-time locks remain explicit unsupported drift after creation instead of implicitly using isLockOverride or lock helper APIs.",
+    "Delete confirmation is explicit in repo-authored semantics: the runtime calls DeleteMediaWorkflowConfiguration without isLockOverride, treats either a DELETED lifecycle reread or OCI NotFound as terminal, and keeps ACTIVE rereads in a terminating requeue path until OCI stops returning the resource. Matching create-time locks are normalized out of steady-state parity checks by ignoring OCI-populated timeCreated metadata, but omitting spec.locks later still counts as create-only drift while OCI reports locks."
+  ]
+}

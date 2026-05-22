@@ -14,7 +14,9 @@ rules:
 - apiGroups:
   - generativeaiagent.oracle.com
   resources:
+  - agentendpoints
   - agents
+  - datasources
   - knowledgebases
   verbs:
   - create
@@ -27,14 +29,18 @@ rules:
 - apiGroups:
   - generativeaiagent.oracle.com
   resources:
+  - agentendpoints/finalizers
   - agents/finalizers
+  - datasources/finalizers
   - knowledgebases/finalizers
   verbs:
   - update
 - apiGroups:
   - generativeaiagent.oracle.com
   resources:
+  - agentendpoints/status
   - agents/status
+  - datasources/status
   - knowledgebases/status
   verbs:
   - get

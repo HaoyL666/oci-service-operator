@@ -15,6 +15,7 @@ rules:
   - mediaservices.oracle.com
   resources:
   - mediaassets
+  - mediaworkflowconfigurations
   - mediaworkflows
   verbs:
   - create
@@ -28,6 +29,7 @@ rules:
   - mediaservices.oracle.com
   resources:
   - mediaassets/finalizers
+  - mediaworkflowconfigurations/finalizers
   - mediaworkflows/finalizers
   verbs:
   - update
@@ -35,6 +37,7 @@ rules:
   - mediaservices.oracle.com
   resources:
   - mediaassets/status
+  - mediaworkflowconfigurations/status
   - mediaworkflows/status
   verbs:
   - get

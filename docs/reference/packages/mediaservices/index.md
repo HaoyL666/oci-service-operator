@@ -2,7 +2,7 @@
 
 # Media Services
 
-Manage OCI Media Services media assets from Kubernetes with a reviewed controller-backed runtime.
+Manage OCI Media Services media assets, workflows, and workflow configurations from Kubernetes with reviewed runtime coverage.
 
 | Field | Value |
 | --- | --- |
@@ -16,8 +16,8 @@ Manage OCI Media Services media assets from Kubernetes with a reviewed controlle
 
 ## Notes
 
-- Current package scope is intentionally limited to MediaAsset while workflow, packaging, and attachment families stay unpublished.
-- The published runtime keeps lifecycle-based CRUD semantics, guarded pre-create reuse on exact identity subsets, and an explicit delete contract that omits hierarchical delete modes.
+- Current package scope includes MediaAsset, MediaWorkflow, and MediaWorkflowConfiguration while packaging and attachment families stay unpublished.
+- The published runtimes keep lifecycle-based or follow-up CRUD semantics, guarded pre-create reuse on exact identity subsets, and explicit delete contracts that do not invent hierarchical delete modes.
 - No checked-in release manifest currently lists this package; the resource scope below reflects the current repository package metadata.
 - This package is currently hidden from the Supported Resources landing page until a checked-in release manifest promotes it to the customer-visible surface.
 
@@ -26,4 +26,5 @@ Manage OCI Media Services media assets from Kubernetes with a reviewed controlle
 | Resource | API Version | Summary | Guide | Sample | API Spec |
 | --- | --- | --- | --- | --- | --- |
 | `mediaservices/MediaAsset` | `mediaservices.oracle.com/v1beta1` | Manage OCI Media Services media assets. | — | [Sample](../../samples/mediaservices/v1beta1/mediaasset.md) | [Reference](../../api/mediaservices/v1beta1/index.md#kind-mediaasset) |
-| `mediaservices/MediaWorkflow` | `mediaservices.oracle.com/v1beta1` | — | — | [Sample](../../samples/mediaservices/v1beta1/mediaworkflow.md) | [Reference](../../api/mediaservices/v1beta1/index.md#kind-mediaworkflow) |
+| `mediaservices/MediaWorkflow` | `mediaservices.oracle.com/v1beta1` | Manage OCI Media Services media workflows. | — | [Sample](../../samples/mediaservices/v1beta1/mediaworkflow.md) | [Reference](../../api/mediaservices/v1beta1/index.md#kind-mediaworkflow) |
+| `mediaservices/MediaWorkflowConfiguration` | `mediaservices.oracle.com/v1beta1` | Manage OCI Media Services media workflow configurations. | — | [Sample](../../samples/mediaservices/v1beta1/mediaworkflowconfiguration.md) | [Reference](../../api/mediaservices/v1beta1/index.md#kind-mediaworkflowconfiguration) |

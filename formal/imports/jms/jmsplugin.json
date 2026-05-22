@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "jms",
+  "slug": "jmsplugin",
+  "kind": "JmsPlugin",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_jms_jms_plugin",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateJmsPlugin",
+        "requestType": "jms.CreateJmsPluginRequest",
+        "responseType": "jms.CreateJmsPluginResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetJmsPlugin",
+        "requestType": "jms.GetJmsPluginRequest",
+        "responseType": "jms.GetJmsPluginResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListJmsPlugins",
+        "requestType": "jms.ListJmsPluginsRequest",
+        "responseType": "jms.ListJmsPluginsResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateJmsPlugin",
+        "requestType": "jms.UpdateJmsPluginRequest",
+        "responseType": "jms.UpdateJmsPluginResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteJmsPlugin",
+        "requestType": "jms.DeleteJmsPluginRequest",
+        "responseType": "jms.DeleteJmsPluginResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "target": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "update": {
+      "target": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "defined_tags",
+      "fleet_id",
+      "freeform_tags"
+    ],
+    "forceNew": [
+      "agent_id",
+      "agent_type",
+      "compartment_id"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "target": [
+      "DELETED",
+      "NOT_FOUND"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_jms_jms_plugins",
+    "collectionField": "jms_plugin_collection",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "agent_id",
+      "agent_type",
+      "availability_status",
+      "compartment_id",
+      "fleet_id",
+      "hostname_contains",
+      "id",
+      "lifecycle_state",
+      "time_last_seen_less_than_or_equal_to",
+      "time_registered_less_than_or_equal_to"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/jms/jmsplugin/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/jms/jmsplugin/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "delete-confirmation",
+      "lifecycle-classification",
+      "list-lookup",
+      "mutation-policy",
+      "secret-output",
+      "status-projection"
+    ]
+  },
+  "notes": [
+    "Pinned OCI SDK contract: CreateJmsPlugin and UpdateJmsPlugin return a JmsPlugin body immediately, GetJmsPlugin returns the resource body, ListJmsPlugins paginates through opc-next-page, DeleteJmsPlugin returns no body, and fleet-less registration creates an INACTIVE plugin.",
+    "Reviewed jms/jmsplugin row keeps repo-authored lifecycle classification: ACTIVE and INACTIVE are the only published steady success states, no provisioning or updating buckets are published, DELETED is a delete-confirmation target, and NEEDS_ATTENTION stays outside the success set.",
+    "Pre-create reuse and delete confirmation are repo-authored: existing-before-create lookup exhausts paginated ListJmsPlugins responses and adopts only a unique exact compartmentId plus agentId match; delete retains the finalizer until GetJmsPlugin or fallback ListJmsPlugins returns DELETED or NotFound.",
+    "Repo-authored mutable drift is limited to fleetId, freeformTags, and definedTags. agentId, agentType, and compartmentId remain replacement-only, and detaching a plugin from a fleet stays out of scope because the published spec cannot distinguish omission from clear."
+  ]
+}

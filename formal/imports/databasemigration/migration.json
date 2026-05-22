@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "databasemigration",
+  "slug": "migration",
+  "kind": "Migration",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_database_migration_migration",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateMigration",
+        "requestType": "databasemigration.CreateMigrationRequest",
+        "responseType": "databasemigration.CreateMigrationResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetMigration",
+        "requestType": "databasemigration.GetMigrationRequest",
+        "responseType": "databasemigration.GetMigrationResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListMigrations",
+        "requestType": "databasemigration.ListMigrationsRequest",
+        "responseType": "databasemigration.ListMigrationsResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateMigration",
+        "requestType": "databasemigration.UpdateMigrationRequest",
+        "responseType": "databasemigration.UpdateMigrationResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteMigration",
+        "requestType": "databasemigration.DeleteMigrationRequest",
+        "responseType": "databasemigration.DeleteMigrationResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "ACCEPTED",
+        "CREATING",
+        "IN_PROGRESS",
+        "WAITING"
+      ],
+      "target": [
+        "ACTIVE",
+        "INACTIVE",
+        "SUCCEEDED"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE",
+        "INACTIVE",
+        "SUCCEEDED"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "advanced_parameters",
+      "advisor_settings",
+      "data_transfer_medium_details",
+      "defined_tags",
+      "description",
+      "display_name",
+      "freeform_tags",
+      "ggs_details",
+      "hub_details",
+      "initial_load_settings",
+      "source_container_database_connection_id",
+      "source_database_connection_id",
+      "source_standby_database_connection_id",
+      "target_database_connection_id",
+      "type"
+    ],
+    "forceNew": [
+      "assessment_id",
+      "compartment_id",
+      "database_combination"
+    ],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "migration",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "migration",
+        "action": "UPDATED"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "migration",
+        "action": "DELETED"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_database_migration_migrations",
+    "collectionField": "migration_collection",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "display_name",
+      "lifecycle_details",
+      "lifecycle_state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/databasemigration/migration/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/databasemigration/migration/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "list-lookup",
+      "mutation-policy",
+      "status-projection",
+      "secret-output",
+      "delete-confirmation",
+      "waiter-work-request"
+    ]
+  },
+  "notes": [
+    "Pinned OCI SDK contract: Migration, MigrationSummary, CreateMigrationDetails, and UpdateMigrationDetails are all polymorphic over databaseCombination MYSQL and ORACLE. The published runtime requires spec.databaseCombination explicitly and builds the matching concrete create/update body type before OCI calls.",
+    "Pinned OCI SDK contract: CreateMigration returns a Migration body plus opc-work-request-id, while UpdateMigration and DeleteMigration surface only opc-work-request-id headers. The reviewed runtime therefore follows create, update, and delete with GetWorkRequest plus a concrete GetMigration reread before projecting status or confirming delete completion.",
+    "Pinned provider-facing shape: the CRUD family is CreateMigration, GetMigration, ListMigrations, UpdateMigration, and DeleteMigration, with list filters compartmentId, displayName, lifecycleState, and lifecycleDetails plus the service-local work-request status surface from GetWorkRequest.",
+    "Repo-authored bind-versus-create stays explicit: the reviewed runtime only attempts pre-create reuse when compartmentId, displayName, databaseCombination, type, sourceDatabaseConnectionId, and targetDatabaseConnectionId are all present, then narrows list candidates in memory by those stable fields through GetMigration rereads.",
+    "Repo-authored mutation policy stays explicit: only the UpdateMigrationDetails surface reconciles in place. compartmentId, assessmentId, and databaseCombination remain replacement-only drift, while includeObjects, excludeObjects, and bulkIncludeExcludeData are rejected because the live CRUD read model does not echo those helper inputs after create.",
+    "Repo-authored status projection and secret behavior stay explicit: the runtime projects the published Migration status read model from concrete GetMigration responses, preserves the shared async contract in status.async.current for work-request-backed flows, and has no Kubernetes secret side effects. hubDetails.restAdminCredentials.password is treated as write-only parity input because GetMigration redacts it after create."
+  ]
+}

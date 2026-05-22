@@ -1,0 +1,123 @@
+@startuml
+skinparam shadowing false
+skinparam backgroundColor #fcfcfd
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 14
+skinparam arrowColor #0f172a
+skinparam noteBackgroundColor #fff7d6
+skinparam noteBorderColor #b45309
+skinparam noteFontColor #334155
+skinparam roundcorner 16
+title Activity - tenantmanagercontrolplane/DomainGovernance
+skinparam activity {
+  backgroundColor #f8fafc
+  borderColor #0f172a
+  fontColor #0f172a
+  diamondBackgroundColor #e2e8f0
+  diamondBorderColor #1d4ed8
+  diamondFontColor #0f172a
+  startColor #1d4ed8
+  endColor #0f172a
+  barColor #1d4ed8
+}
+start
+partition "Observe and Bind" {
+:Start from shared flow\nshared/diagrams/shared-reconcile-activity.svg;
+:Read desired DomainGovernance spec, tracked\nstatus, and delete intent;
+if ("Tracked or explicit OCI identity present?") then (yes)
+:Get the current OCI resource via\nGetDomainGovernance;
+else (no)
+:Resolve an existing OCI resource through\nListDomainGovernances using filters\ncompartmentId, domainId;
+:Create the OCI resource via\nCreateDomainGovernance when no reusable match\nis found;
+:Persist the resolved or created OCI identity\ninto status;
+endif
+}
+if ("Delete requested?") then (yes)
+partition "Delete" {
+:Delete path uses DeleteDomainGovernance with\nrequired via GetDomainGovernance or\nListDomainGovernances to NOT_FOUND\nconfirmation;
+:Confirm deletion via GetDomainGovernance or\nListDomainGovernances until OCI reaches\nNOT_FOUND;
+if ("Delete cleanup and finalizer release succeed?") then (yes)
+:Remove the finalizer after delete completion;
+else (no)
+:Stay blocked until cleanup or finalizer\nrelease succeeds;
+endif
+}
+stop
+else (no)
+partition "Lifecycle Classification" {
+if ("OCI state in retryable set?") then (yes)
+:Request requeue while OCI remains in CREATING,\nUPDATING;
+stop
+endif
+if ("OCI state is outside success targets?") then (yes)
+:Return an unsuccessful reconcile result until\nOCI reaches ACTIVE, INACTIVE;
+stop
+endif
+}
+partition "Ready and Drift Handling" {
+:Compare live OCI state against the\nrepo-authored mutation surface;
+if ("Force-new or conflicting drift detected?") then (yes)
+:Reject drift before OCI mutation for force-new\nfields compartmentId, domainId,\nonsSubscriptionId, onsTopicId;
+stop
+endif
+if ("Supported mutable drift detected?") then (yes)
+:Apply UpdateDomainGovernance only for mutable\nfields definedTags, freeformTags,\nisGovernanceEnabled, subscriptionEmail;
+else (no)
+:Skip the no-op mutation path;
+endif
+:Run provider helper hooks\ncreate=tfresource.CreateResource;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
+:Apply explicit follow-up semantics\ncreate=none; update=none;\ndelete=GetDomainGovernance/ListDomainGovernances\nconfirm-delete until NOT_FOUND;
+:Return success for the ACTIVE, INACTIVE\nsuccess state;
+:Project required status and finalizer policy\nretain-until-confirmed-delete;
+:Requeue on provisioning, updating, terminating;
+}
+endif
+stop
+note right
+shared diagram:
+shared/diagrams/shared-reconcile-activity.svg
+Start from the shared reconcile activity and
+specialize provider-backed CRUD, wait, and
+status-projection details here.
+Controller-local activity diagrams add
+list-lookup hints, secret policies, delete
+handling, and open formal gaps.
+archetype batch: Generated service-manager
+controllers specialize the shared reconcile path
+with formal runtime ownership.
+service: tenantmanagercontrolplane
+slug: domaingovernance
+kind: DomainGovernance
+archetype: generated-service-manager
+status/finalizer: required /
+retain-until-confirmed-delete
+requeue: provisioning, updating, terminating
+provider states: create CREATING; update
+UPDATING; delete none
+follow-up: create=none; update=none;
+delete=GetDomainGovernance/ListDomainGovernances
+confirm-delete until NOT_FOUND
+supported drift: definedTags, freeformTags,
+isGovernanceEnabled, subscriptionEmail
+reject before mutate: force-new fields
+compartmentId, domainId, onsSubscriptionId,
+onsTopicId
+create-only fields: none
+list lookup:
+oci_tenantmanagercontrolplane_domain_governances
+filters compartmentId, domainId; exact domainId
+plus onsTopicId and onsSubscriptionId unique
+match; duplicate matches fail
+conflicts: none
+open gaps: none
+CreateDomainGovernance and
+UpdateDomainGovernance return concrete
+DomainGovernance bodies directly; ACTIVE and
+INACTIVE are both steady-state success
+observations.
+DeleteDomainGovernance returns headers only, so
+any still-readable DomainGovernance after delete
+is treated as terminating until Get/List stop
+finding it.
+end note
+@enduml

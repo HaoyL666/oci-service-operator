@@ -14,6 +14,8 @@ import (
 	generativeaiagentcontrollers "github.com/oracle/oci-service-operator/controllers/generativeaiagent"
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
 	generativeaiagentagentservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/generativeaiagent/agent"
+	generativeaiagentagentendpointservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/generativeaiagent/agentendpoint"
+	generativeaiagentdatasourceservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/generativeaiagent/datasource"
 	generativeaiagentknowledgebaseservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/generativeaiagent/knowledgebase"
 )
 
@@ -32,6 +34,28 @@ func init() {
 				),
 			}).SetupWithManager(ctx.Manager); err != nil {
 				return fmt.Errorf("setup Agent controller: %w", err)
+			}
+			if err := (&generativeaiagentcontrollers.AgentEndpointReconciler{
+				Reconciler: NewBaseReconciler(
+					ctx,
+					"AgentEndpoint",
+					func(deps servicemanager.RuntimeDeps) servicemanager.OSOKServiceManager {
+						return generativeaiagentagentendpointservicemanager.NewAgentEndpointServiceManagerWithDeps(deps)
+					},
+				),
+			}).SetupWithManager(ctx.Manager); err != nil {
+				return fmt.Errorf("setup AgentEndpoint controller: %w", err)
+			}
+			if err := (&generativeaiagentcontrollers.DataSourceReconciler{
+				Reconciler: NewBaseReconciler(
+					ctx,
+					"DataSource",
+					func(deps servicemanager.RuntimeDeps) servicemanager.OSOKServiceManager {
+						return generativeaiagentdatasourceservicemanager.NewDataSourceServiceManagerWithDeps(deps)
+					},
+				),
+			}).SetupWithManager(ctx.Manager); err != nil {
+				return fmt.Errorf("setup DataSource controller: %w", err)
 			}
 			if err := (&generativeaiagentcontrollers.KnowledgeBaseReconciler{
 				Reconciler: NewBaseReconciler(

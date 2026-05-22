@@ -908,6 +908,7 @@ var seedTargets = []Target{
 	// Databasemigration CRD support
 	newTarget("databasemigration", "AssessmentCollection", reflect.TypeOf(databasemigration.AssessmentCollection{})),
 	newTarget("databasemigration", "ConnectionCollection", reflect.TypeOf(databasemigration.ConnectionCollection{})),
+	newTarget("databasemigration", "MigrationCollection", reflect.TypeOf(databasemigration.MigrationCollection{})),
 
 	// Databasetools CRD support
 	newTarget("databasetools", "CreateDatabaseToolsConnectionGenericJdbcDetails", reflect.TypeOf(databasetools.CreateDatabaseToolsConnectionGenericJdbcDetails{})),
@@ -1384,18 +1385,28 @@ var seedTargets = []Target{
 	newTarget("dif", "StackSummary", reflect.TypeOf(dif.StackSummary{})),
 
 	// Disasterrecovery CRD support
+	newTarget("disasterrecovery", "CreateDrPlanDetails", reflect.TypeOf(disasterrecovery.CreateDrPlanDetails{})),
 	newTarget("disasterrecovery", "CreateDrProtectionGroupDetails", reflect.TypeOf(disasterrecovery.CreateDrProtectionGroupDetails{})),
+	newTarget("disasterrecovery", "UpdateDrPlanDetails", reflect.TypeOf(disasterrecovery.UpdateDrPlanDetails{})),
 	newTarget("disasterrecovery", "UpdateDrProtectionGroupDetails", reflect.TypeOf(disasterrecovery.UpdateDrProtectionGroupDetails{})),
+	newTarget("disasterrecovery", "DrPlan", reflect.TypeOf(disasterrecovery.DrPlan{})),
+	newTarget("disasterrecovery", "DrPlanCollection", reflect.TypeOf(disasterrecovery.DrPlanCollection{})),
 	newTarget("disasterrecovery", "DrProtectionGroup", reflect.TypeOf(disasterrecovery.DrProtectionGroup{})),
 	newTarget("disasterrecovery", "DrProtectionGroupCollection", reflect.TypeOf(disasterrecovery.DrProtectionGroupCollection{})),
+	newTarget("disasterrecovery", "DrPlanSummary", reflect.TypeOf(disasterrecovery.DrPlanSummary{})),
 	newTarget("disasterrecovery", "DrProtectionGroupSummary", reflect.TypeOf(disasterrecovery.DrProtectionGroupSummary{})),
 
 	// Distributeddatabase CRD support
+	newTarget("distributeddatabase", "CreateDistributedDatabaseDetails", reflect.TypeOf(distributeddatabase.CreateDistributedDatabaseDetails{})),
 	newTarget("distributeddatabase", "CreateDistributedDatabasePrivateEndpointDetails", reflect.TypeOf(distributeddatabase.CreateDistributedDatabasePrivateEndpointDetails{})),
+	newTarget("distributeddatabase", "UpdateDistributedDatabaseDetails", reflect.TypeOf(distributeddatabase.UpdateDistributedDatabaseDetails{})),
 	newTarget("distributeddatabase", "UpdateDistributedDatabasePrivateEndpointDetails", reflect.TypeOf(distributeddatabase.UpdateDistributedDatabasePrivateEndpointDetails{})),
+	newTarget("distributeddatabase", "DistributedDatabase", reflect.TypeOf(distributeddatabase.DistributedDatabase{})),
+	newTarget("distributeddatabase", "DistributedDatabaseCollection", reflect.TypeOf(distributeddatabase.DistributedDatabaseCollection{})),
 	newTarget("distributeddatabase", "DistributedDatabasePrivateEndpoint", reflect.TypeOf(distributeddatabase.DistributedDatabasePrivateEndpoint{})),
 	newTarget("distributeddatabase", "DistributedDatabasePrivateEndpointCollection", reflect.TypeOf(distributeddatabase.DistributedDatabasePrivateEndpointCollection{})),
 	newTarget("distributeddatabase", "DistributedDatabasePrivateEndpointSummary", reflect.TypeOf(distributeddatabase.DistributedDatabasePrivateEndpointSummary{})),
+	newTarget("distributeddatabase", "DistributedDatabaseSummary", reflect.TypeOf(distributeddatabase.DistributedDatabaseSummary{})),
 
 	// Emwarehouse CRD support
 	newTarget("emwarehouse", "CreateEmWarehouseDetails", reflect.TypeOf(emwarehouse.CreateEmWarehouseDetails{})),
@@ -1559,14 +1570,24 @@ var seedTargets = []Target{
 
 	// Generativeaiagent CRD support
 	newTarget("generativeaiagent", "CreateAgentDetails", reflect.TypeOf(generativeaiagent.CreateAgentDetails{})),
+	newTarget("generativeaiagent", "CreateAgentEndpointDetails", reflect.TypeOf(generativeaiagent.CreateAgentEndpointDetails{})),
+	newTarget("generativeaiagent", "CreateDataSourceDetails", reflect.TypeOf(generativeaiagent.CreateDataSourceDetails{})),
 	newTarget("generativeaiagent", "CreateKnowledgeBaseDetails", reflect.TypeOf(generativeaiagent.CreateKnowledgeBaseDetails{})),
 	newTarget("generativeaiagent", "UpdateAgentDetails", reflect.TypeOf(generativeaiagent.UpdateAgentDetails{})),
+	newTarget("generativeaiagent", "UpdateAgentEndpointDetails", reflect.TypeOf(generativeaiagent.UpdateAgentEndpointDetails{})),
+	newTarget("generativeaiagent", "UpdateDataSourceDetails", reflect.TypeOf(generativeaiagent.UpdateDataSourceDetails{})),
 	newTarget("generativeaiagent", "UpdateKnowledgeBaseDetails", reflect.TypeOf(generativeaiagent.UpdateKnowledgeBaseDetails{})),
 	newTarget("generativeaiagent", "Agent", reflect.TypeOf(generativeaiagent.Agent{})),
 	newTarget("generativeaiagent", "AgentCollection", reflect.TypeOf(generativeaiagent.AgentCollection{})),
+	newTarget("generativeaiagent", "AgentEndpoint", reflect.TypeOf(generativeaiagent.AgentEndpoint{})),
+	newTarget("generativeaiagent", "AgentEndpointCollection", reflect.TypeOf(generativeaiagent.AgentEndpointCollection{})),
+	newTarget("generativeaiagent", "DataSource", reflect.TypeOf(generativeaiagent.DataSource{})),
+	newTarget("generativeaiagent", "DataSourceCollection", reflect.TypeOf(generativeaiagent.DataSourceCollection{})),
 	newTarget("generativeaiagent", "KnowledgeBase", reflect.TypeOf(generativeaiagent.KnowledgeBase{})),
 	newTarget("generativeaiagent", "KnowledgeBaseCollection", reflect.TypeOf(generativeaiagent.KnowledgeBaseCollection{})),
+	newTarget("generativeaiagent", "AgentEndpointSummary", reflect.TypeOf(generativeaiagent.AgentEndpointSummary{})),
 	newTarget("generativeaiagent", "AgentSummary", reflect.TypeOf(generativeaiagent.AgentSummary{})),
+	newTarget("generativeaiagent", "DataSourceSummary", reflect.TypeOf(generativeaiagent.DataSourceSummary{})),
 	newTarget("generativeaiagent", "KnowledgeBaseSummary", reflect.TypeOf(generativeaiagent.KnowledgeBaseSummary{})),
 
 	// Generativeaiagentruntime CRD support
@@ -1668,10 +1689,15 @@ var seedTargets = []Target{
 
 	// Jms CRD support
 	newTarget("jms", "CreateFleetDetails", reflect.TypeOf(jms.CreateFleetDetails{})),
+	newTarget("jms", "CreateJmsPluginDetails", reflect.TypeOf(jms.CreateJmsPluginDetails{})),
 	newTarget("jms", "UpdateFleetDetails", reflect.TypeOf(jms.UpdateFleetDetails{})),
+	newTarget("jms", "UpdateJmsPluginDetails", reflect.TypeOf(jms.UpdateJmsPluginDetails{})),
 	newTarget("jms", "Fleet", reflect.TypeOf(jms.Fleet{})),
 	newTarget("jms", "FleetCollection", reflect.TypeOf(jms.FleetCollection{})),
+	newTarget("jms", "JmsPlugin", reflect.TypeOf(jms.JmsPlugin{})),
+	newTarget("jms", "JmsPluginCollection", reflect.TypeOf(jms.JmsPluginCollection{})),
 	newTarget("jms", "FleetSummary", reflect.TypeOf(jms.FleetSummary{})),
+	newTarget("jms", "JmsPluginSummary", reflect.TypeOf(jms.JmsPluginSummary{})),
 
 	// Jmsjavadownloads CRD support
 	newTarget("jmsjavadownloads", "CreateJavaDownloadTokenDetails", reflect.TypeOf(jmsjavadownloads.CreateJavaDownloadTokenDetails{})),
@@ -1848,14 +1874,19 @@ var seedTargets = []Target{
 
 	// Mediaservices CRD support
 	newTarget("mediaservices", "CreateMediaAssetDetails", reflect.TypeOf(mediaservices.CreateMediaAssetDetails{})),
+	newTarget("mediaservices", "CreateMediaWorkflowConfigurationDetails", reflect.TypeOf(mediaservices.CreateMediaWorkflowConfigurationDetails{})),
 	newTarget("mediaservices", "CreateMediaWorkflowDetails", reflect.TypeOf(mediaservices.CreateMediaWorkflowDetails{})),
 	newTarget("mediaservices", "UpdateMediaAssetDetails", reflect.TypeOf(mediaservices.UpdateMediaAssetDetails{})),
+	newTarget("mediaservices", "UpdateMediaWorkflowConfigurationDetails", reflect.TypeOf(mediaservices.UpdateMediaWorkflowConfigurationDetails{})),
 	newTarget("mediaservices", "UpdateMediaWorkflowDetails", reflect.TypeOf(mediaservices.UpdateMediaWorkflowDetails{})),
 	newTarget("mediaservices", "MediaAsset", reflect.TypeOf(mediaservices.MediaAsset{})),
 	newTarget("mediaservices", "MediaAssetCollection", reflect.TypeOf(mediaservices.MediaAssetCollection{})),
 	newTarget("mediaservices", "MediaWorkflow", reflect.TypeOf(mediaservices.MediaWorkflow{})),
 	newTarget("mediaservices", "MediaWorkflowCollection", reflect.TypeOf(mediaservices.MediaWorkflowCollection{})),
+	newTarget("mediaservices", "MediaWorkflowConfiguration", reflect.TypeOf(mediaservices.MediaWorkflowConfiguration{})),
+	newTarget("mediaservices", "MediaWorkflowConfigurationCollection", reflect.TypeOf(mediaservices.MediaWorkflowConfigurationCollection{})),
 	newTarget("mediaservices", "MediaAssetSummary", reflect.TypeOf(mediaservices.MediaAssetSummary{})),
+	newTarget("mediaservices", "MediaWorkflowConfigurationSummary", reflect.TypeOf(mediaservices.MediaWorkflowConfigurationSummary{})),
 	newTarget("mediaservices", "MediaWorkflowSummary", reflect.TypeOf(mediaservices.MediaWorkflowSummary{})),
 
 	// Mngdmac CRD support
@@ -2231,12 +2262,17 @@ var seedTargets = []Target{
 
 	// Tenantmanagercontrolplane CRD support
 	newTarget("tenantmanagercontrolplane", "CreateDomainDetails", reflect.TypeOf(tenantmanagercontrolplane.CreateDomainDetails{})),
+	newTarget("tenantmanagercontrolplane", "CreateDomainGovernanceDetails", reflect.TypeOf(tenantmanagercontrolplane.CreateDomainGovernanceDetails{})),
 	newTarget("tenantmanagercontrolplane", "UpdateDomainDetails", reflect.TypeOf(tenantmanagercontrolplane.UpdateDomainDetails{})),
+	newTarget("tenantmanagercontrolplane", "UpdateDomainGovernanceDetails", reflect.TypeOf(tenantmanagercontrolplane.UpdateDomainGovernanceDetails{})),
 	newTarget("tenantmanagercontrolplane", "UpdateOrganizationDetails", reflect.TypeOf(tenantmanagercontrolplane.UpdateOrganizationDetails{})),
 	newTarget("tenantmanagercontrolplane", "Domain", reflect.TypeOf(tenantmanagercontrolplane.Domain{})),
 	newTarget("tenantmanagercontrolplane", "DomainCollection", reflect.TypeOf(tenantmanagercontrolplane.DomainCollection{})),
+	newTarget("tenantmanagercontrolplane", "DomainGovernance", reflect.TypeOf(tenantmanagercontrolplane.DomainGovernance{})),
+	newTarget("tenantmanagercontrolplane", "DomainGovernanceCollection", reflect.TypeOf(tenantmanagercontrolplane.DomainGovernanceCollection{})),
 	newTarget("tenantmanagercontrolplane", "Organization", reflect.TypeOf(tenantmanagercontrolplane.Organization{})),
 	newTarget("tenantmanagercontrolplane", "OrganizationCollection", reflect.TypeOf(tenantmanagercontrolplane.OrganizationCollection{})),
+	newTarget("tenantmanagercontrolplane", "DomainGovernanceSummary", reflect.TypeOf(tenantmanagercontrolplane.DomainGovernanceSummary{})),
 	newTarget("tenantmanagercontrolplane", "DomainSummary", reflect.TypeOf(tenantmanagercontrolplane.DomainSummary{})),
 	newTarget("tenantmanagercontrolplane", "OrganizationSummary", reflect.TypeOf(tenantmanagercontrolplane.OrganizationSummary{})),
 

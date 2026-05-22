@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "surface": "provider-facts",
+  "service": "distributeddatabase",
+  "slug": "distributeddatabase",
+  "kind": "DistributedDatabase",
+  "sourceRef": "terraform-provider-oci",
+  "providerResource": "oci_distributeddatabase_distributed_database",
+  "operations": {
+    "create": [
+      {
+        "operation": "CreateDistributedDatabase",
+        "requestType": "distributeddatabase.CreateDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.CreateDistributedDatabaseResponse"
+      }
+    ],
+    "get": [
+      {
+        "operation": "GetDistributedDatabase",
+        "requestType": "distributeddatabase.GetDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.GetDistributedDatabaseResponse"
+      }
+    ],
+    "list": [
+      {
+        "operation": "ListDistributedDatabases",
+        "requestType": "distributeddatabase.ListDistributedDatabasesRequest",
+        "responseType": "distributeddatabase.ListDistributedDatabasesResponse"
+      }
+    ],
+    "update": [
+      {
+        "operation": "UpdateDistributedDatabase",
+        "requestType": "distributeddatabase.UpdateDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.UpdateDistributedDatabaseResponse"
+      }
+    ],
+    "delete": [
+      {
+        "operation": "DeleteDistributedDatabase",
+        "requestType": "distributeddatabase.DeleteDistributedDatabaseRequest",
+        "responseType": "distributeddatabase.DeleteDistributedDatabaseResponse"
+      }
+    ]
+  },
+  "lifecycle": {
+    "create": {
+      "pending": [
+        "CREATING"
+      ],
+      "target": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "update": {
+      "pending": [
+        "UPDATING"
+      ],
+      "target": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    }
+  },
+  "mutation": {
+    "mutable": [
+      "change_db_backup_config_trigger",
+      "compartment_id",
+      "configure_sharding_trigger",
+      "defined_tags",
+      "display_name",
+      "download_gsm_certificate_signing_request_trigger",
+      "freeform_tags",
+      "generate_gsm_certificate_signing_request_trigger",
+      "generate_wallet_trigger",
+      "move_replication_unit_trigger",
+      "patch_operations",
+      "recreate_failed_resource_trigger",
+      "state",
+      "upload_signed_certificate_and_generate_wallet_trigger",
+      "validate_network_trigger"
+    ],
+    "forceNew": [],
+    "conflictsWith": {}
+  },
+  "hooks": {
+    "create": [
+      {
+        "helper": "tfresource.CreateResource"
+      },
+      {
+        "helper": "tfresource.WaitForWorkRequestWithErrorHandling",
+        "entityType": "template",
+        "action": "CREATED"
+      }
+    ],
+    "update": [
+      {
+        "helper": "tfresource.UpdateResource"
+      }
+    ],
+    "delete": [
+      {
+        "helper": "tfresource.DeleteResource"
+      }
+    ]
+  },
+  "deleteConfirmation": {
+    "pending": [
+      "DELETING"
+    ],
+    "target": [
+      "DELETED",
+      "NOT_FOUND"
+    ]
+  },
+  "listLookup": {
+    "datasource": "oci_distributeddatabase_distributed_databases",
+    "collectionField": "distributed_database_collection",
+    "responseItemsField": "Items",
+    "filterFields": [
+      "compartment_id",
+      "db_deployment_type",
+      "display_name",
+      "metadata",
+      "private_endpoint_id",
+      "state"
+    ]
+  },
+  "boundary": {
+    "providerFactsOnly": true,
+    "repoAuthoredSpecPath": "controllers/distributeddatabase/distributeddatabase/spec.cfg",
+    "repoAuthoredLogicGapsPath": "controllers/distributeddatabase/distributeddatabase/logic-gaps.md",
+    "excludedSemantics": [
+      "bind-versus-create",
+      "delete-confirmation",
+      "list-lookup",
+      "mutation-policy",
+      "status-projection"
+    ]
+  },
+  "notes": [
+    "Pinned OCI SDK contract: CreateDistributedDatabase, GetDistributedDatabase, and UpdateDistributedDatabase return the resource body, ListDistributedDatabases returns DistributedDatabaseSummary items, and DeleteDistributedDatabase returns headers only.",
+    "Pinned OCI SDK contract: lifecycle states include CREATING, UPDATING, ACTIVE, INACTIVE, NEEDS_ATTENTION, FAILED, DELETING, and DELETED.",
+    "Pinned provider docs expose the plural datasource `oci_distributeddatabase_distributed_databases` with `compartment_id`, `db_deployment_type`, `display_name`, `metadata`, `private_endpoint_id`, and `state` filters.",
+    "Pinned provider docs mark a broader mutation surface as updatable, including compartment moves, patch operations, state transitions, and several trigger-driven actions. The current OSOK CRD intentionally narrows that surface and only publishes direct CRUD plus displayName and tag drift.",
+    "Repo-authored runtime contract keeps in-place mutation aligned with UpdateDistributedDatabaseDetails for displayName, freeformTags, and definedTags. compartmentId remains replacement-only drift because the published CRD does not expose the separate change-compartment helper.",
+    "Repo-authored bind-versus-create stays explicit: pre-create lookup lists by exact compartmentId plus displayName, preserves dbDeploymentType and lifecycleState when they are already available for rereads, then narrows summary candidates in memory to a unique exact prefix plus dbDeploymentType match before reuse.",
+    "List summaries omit fields such as scanListenerPort, latestGsmImageDetails, shardDetails, catalogDetails, gsmDetails, dbBackupConfig, and gsmSshPublicKey, so the reviewed runtime always rereads GetDistributedDatabase before status projection after bind, create, or update. The runtime has no Kubernetes Secret side effects."
+  ]
+}

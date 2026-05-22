@@ -20,6 +20,7 @@ No customer-visible package currently exposes `mediaservices.oracle.com/v1beta1`
 | --- | --- | --- | --- |
 | [MediaAsset](#kind-mediaasset) | Namespaced | [Sample](../../../samples/mediaservices/v1beta1/mediaasset.md) | - |
 | [MediaWorkflow](#kind-mediaworkflow) | Namespaced | [Sample](../../../samples/mediaservices/v1beta1/mediaworkflow.md) | - |
+| [MediaWorkflowConfiguration](#kind-mediaworkflowconfiguration) | Namespaced | [Sample](../../../samples/mediaservices/v1beta1/mediaworkflowconfiguration.md) | - |
 
 <a id="kind-mediaasset"></a>
 ## MediaAsset
@@ -230,7 +231,7 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 <a id="kind-mediaworkflow"></a>
 ## MediaWorkflow
 
-MediaWorkflow is the Schema for the mediaworkflows API.
+Manage OCI Media Services media workflows.
 
 - `Plural`: `mediaworkflows`
 - `Scope`: `Namespaced`
@@ -401,3 +402,139 @@ MediaWorkflowTask defines nested fields for MediaWorkflow.Task.
 | `prerequisites` | Keys to the other tasks in this workflow that must be completed before execution of this task can begin. | `list[string]` | No | - | - |
 | `type` | The type of process to run at this task. Refers to the name of a MediaWorkflowTaskDeclaration. | `string` | Yes | - | - |
 | `version` | The version of the MediaWorkflowTaskDeclaration. | `integer (int64)` | Yes | - | - |
+
+<a id="kind-mediaworkflowconfiguration"></a>
+## MediaWorkflowConfiguration
+
+Manage OCI Media Services media workflow configurations.
+
+- `Plural`: `mediaworkflowconfigurations`
+- `Scope`: `Namespaced`
+- `APIVersion`: `mediaservices.oracle.com/v1beta1`
+- `Sample`: [Sample](../../../samples/mediaservices/v1beta1/mediaworkflowconfiguration.md) (`config/samples/mediaservices_v1beta1_mediaworkflowconfiguration.yaml`)
+- `Packages`: Not currently exposed by a customer-visible package.
+
+<a id="kind-mediaworkflowconfiguration-spec"></a>
+### Spec
+
+MediaWorkflowConfigurationSpec defines the desired state of MediaWorkflowConfiguration.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `compartmentId` | Compartment Identifier. | `string` | Yes | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
+| `displayName` | MediaWorkflowConfiguration identifier. Avoid entering confidential information. | `string` | Yes | - | - |
+| `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
+| [`locks`](#kind-mediaworkflowconfiguration-spec-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
+| `parameters` | Reuseable parameter values encoded as a JSON; the top and second level JSON elements are objects. Each key of the top level object refers to a task key that is unqiue to the workflow, each of the second level objects' keys refer to the name of a parameter that is unique to the task. taskKey -> parameterName -> parameterValue | `map[string, object (preserves unknown fields)]` | Yes | - | - |
+
+<a id="kind-mediaworkflowconfiguration-spec-locks"></a>
+#### Spec.locks[]
+
+[Back to MediaWorkflowConfiguration spec](#kind-mediaworkflowconfiguration-spec)
+
+MediaWorkflowConfigurationLock defines nested fields for MediaWorkflowConfiguration.Lock.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `compartmentId` | The compartment ID of the lock. | `string` | Yes | - | - |
+| `message` | A message added by the creator of the lock. This is typically used to give an indication of why the resource is locked. | `string` | No | - | - |
+| `relatedResourceId` | The ID of the resource that is locking this resource. Indicates that deleting this resource will remove the lock. | `string` | No | - | - |
+| `timeCreated` | When the lock was created. | `string` | No | - | - |
+| `type` | Type of the lock. | `string` | Yes | - | - |
+
+<a id="kind-mediaworkflowconfiguration-status"></a>
+### Status
+
+MediaWorkflowConfigurationStatus defines the observed state of MediaWorkflowConfiguration.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `compartmentId` | Compartment Identifier. | `string` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
+| `displayName` | Display name for the MediaWorkflowConfiguration. Avoid entering confidential information. | `string` | No | - | - |
+| `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
+| `id` | Unique identifier that is immutable on creation. | `string` | No | - | - |
+| `lifecycleDetails` | A message describing the current state in more detail. For example, can be used to provide actionable information for a resource in Failed state. | `string` | No | - | - |
+| `lifecycleState` | The current state of the MediaWorkflowConfiguration. | `string` | No | - | - |
+| `lifecyleDetails` | A message describing the current state in more detail. For example, can be used to provide actionable information for a resource in Failed state. | `string` | No | - | - |
+| [`locks`](#kind-mediaworkflowconfiguration-status-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
+| `parameters` | Reuseable parameter values encoded as a JSON; the top and second level JSON elements are objects. Each key of the top level object refer to a task key that is unqiue to the workflow, each of the second level objects' keys refer to the name of a parameter that is unique to the task. taskKey -> parameterName -> parameterValue | `map[string, object (preserves unknown fields)]` | No | - | - |
+| [`status`](#kind-mediaworkflowconfiguration-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
+| `timeCreated` | The time when the the MediaWorkflowConfiguration was created. An RFC3339 formatted datetime string. | `string` | No | - | - |
+| `timeUpdated` | The time when the MediaWorkflowConfiguration was updated. An RFC3339 formatted datetime string. | `string` | No | - | - |
+
+<a id="kind-mediaworkflowconfiguration-status-locks"></a>
+#### Status.locks[]
+
+[Back to MediaWorkflowConfiguration status](#kind-mediaworkflowconfiguration-status)
+
+MediaWorkflowConfigurationLock defines nested fields for MediaWorkflowConfiguration.Lock.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `compartmentId` | The compartment ID of the lock. | `string` | Yes | - | - |
+| `message` | A message added by the creator of the lock. This is typically used to give an indication of why the resource is locked. | `string` | No | - | - |
+| `relatedResourceId` | The ID of the resource that is locking this resource. Indicates that deleting this resource will remove the lock. | `string` | No | - | - |
+| `timeCreated` | When the lock was created. | `string` | No | - | - |
+| `type` | Type of the lock. | `string` | Yes | - | - |
+
+<a id="kind-mediaworkflowconfiguration-status-status"></a>
+#### Status.status
+
+[Back to MediaWorkflowConfiguration status](#kind-mediaworkflowconfiguration-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`async`](#kind-mediaworkflowconfiguration-status-status-async) | Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first. | `object` | No | - | - |
+| [`conditions`](#kind-mediaworkflowconfiguration-status-status-conditions) | - | `list[object]` | No | - | - |
+| `createdAt` | - | `string (date-time)` | No | - | - |
+| `deletedAt` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `ocid` | - | `string` | No | - | - |
+| `opcRequestId` | OpcRequestID is the latest non-empty OCI request ID from a mutating OCI response or surfaced OCI service error that materially contributed to the current shared status projection. Headerless follow-up observations keep the last non-empty value intact. | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `requestedAt` | - | `string (date-time)` | No | - | - |
+| `updatedAt` | - | `string (date-time)` | No | - | - |
+
+<a id="kind-mediaworkflowconfiguration-status-status-async"></a>
+##### Status.status.async
+
+[Back to MediaWorkflowConfiguration status](#kind-mediaworkflowconfiguration-status)
+
+Async is the canonical controller-owned async contract. Resource-local legacy work-request fields may remain as compatibility mirrors while follow-on migrations land, but new async state should project here first.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`current`](#kind-mediaworkflowconfiguration-status-status-async-current) | - | `object` | No | - | - |
+
+<a id="kind-mediaworkflowconfiguration-status-status-async-current"></a>
+###### Status.status.async.current
+
+[Back to MediaWorkflowConfiguration status](#kind-mediaworkflowconfiguration-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `message` | - | `string` | No | - | - |
+| `normalizedClass` | - | `string` | Yes | - | `attention`, `canceled`, `failed`, `pending`, `succeeded`, `unknown` |
+| `percentComplete` | - | `number` | No | - | - |
+| `phase` | - | `string` | Yes | - | `create`, `delete`, `update` |
+| `rawOperationType` | - | `string` | No | - | - |
+| `rawStatus` | - | `string` | No | - | - |
+| `source` | - | `string` | Yes | - | `lifecycle`, `none`, `workrequest` |
+| `updatedAt` | - | `string (date-time)` | Yes | - | - |
+| `workRequestId` | - | `string` | No | - | - |
+
+<a id="kind-mediaworkflowconfiguration-status-status-conditions"></a>
+##### Status.status.conditions[]
+
+[Back to MediaWorkflowConfiguration status](#kind-mediaworkflowconfiguration-status)
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `lastTransitionTime` | - | `string (date-time)` | No | - | - |
+| `message` | - | `string` | No | - | - |
+| `reason` | - | `string` | No | - | - |
+| `status` | - | `string` | Yes | - | - |
+| `type` | - | `string` | Yes | - | - |

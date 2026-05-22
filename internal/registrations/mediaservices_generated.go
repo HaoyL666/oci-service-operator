@@ -15,6 +15,7 @@ import (
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
 	mediaservicesmediaassetservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/mediaservices/mediaasset"
 	mediaservicesmediaworkflowservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/mediaservices/mediaworkflow"
+	mediaservicesmediaworkflowconfigurationservicemanager "github.com/oracle/oci-service-operator/pkg/servicemanager/mediaservices/mediaworkflowconfiguration"
 )
 
 func init() {
@@ -43,6 +44,17 @@ func init() {
 				),
 			}).SetupWithManager(ctx.Manager); err != nil {
 				return fmt.Errorf("setup MediaWorkflow controller: %w", err)
+			}
+			if err := (&mediaservicescontrollers.MediaWorkflowConfigurationReconciler{
+				Reconciler: NewBaseReconciler(
+					ctx,
+					"MediaWorkflowConfiguration",
+					func(deps servicemanager.RuntimeDeps) servicemanager.OSOKServiceManager {
+						return mediaservicesmediaworkflowconfigurationservicemanager.NewMediaWorkflowConfigurationServiceManagerWithDeps(deps)
+					},
+				),
+			}).SetupWithManager(ctx.Manager); err != nil {
+				return fmt.Errorf("setup MediaWorkflowConfiguration controller: %w", err)
 			}
 			return nil
 		},
