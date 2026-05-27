@@ -40,9 +40,26 @@ func (c ServiceClient[T]) shouldObserveCurrentLifecycle(currentResponse any) boo
 		return false
 	}
 
-	return containsString(c.config.Semantics.Lifecycle.ProvisioningStates, lifecycleState) ||
+	if containsString(c.config.Semantics.Lifecycle.ActiveStates, lifecycleState) {
+		return false
+	}
+	if containsString(c.config.Semantics.Lifecycle.ProvisioningStates, lifecycleState) ||
 		containsString(c.config.Semantics.Lifecycle.UpdatingStates, lifecycleState) ||
-		containsString(c.config.Semantics.Delete.PendingStates, lifecycleState)
+		containsString(c.config.Semantics.Delete.PendingStates, lifecycleState) ||
+		containsString(c.config.Semantics.Delete.TerminalStates, lifecycleState) {
+		return true
+	}
+
+	switch heuristicLifecycleCategory(lifecycleState) {
+	case lifecycleCategoryProvisioning,
+		lifecycleCategoryUpdating,
+		lifecycleCategoryDeleting,
+		lifecycleCategoryDeleted,
+		lifecycleCategoryFailed:
+		return true
+	default:
+		return false
+	}
 }
 
 func (c ServiceClient[T]) validateMutationPolicy(resource T, existing bool, currentResponse any) error {
