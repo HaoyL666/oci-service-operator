@@ -44,6 +44,7 @@ func applyDistributedDatabasePrivateEndpointRuntimeHooks(hooks *DistributedDatab
 
 func reviewedDistributedDatabasePrivateEndpointRuntimeSemantics() *generatedruntime.Semantics {
 	semantics := newDistributedDatabasePrivateEndpointRuntimeSemantics()
+	semantics.Lifecycle.FailedStates = []string{"FAILED"}
 	semantics.List = &generatedruntime.ListSemantics{
 		ResponseItemsField: "Items",
 		MatchFields:        []string{"compartmentId", "displayName", "lifecycleState"},
