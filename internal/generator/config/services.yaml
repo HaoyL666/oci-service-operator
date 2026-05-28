@@ -1429,6 +1429,20 @@ services:
                 - delete
           serviceManager:
             packagePath: clusterplacementgroups/clusterplacementgroup
+          specFields:
+            - name: Capabilities
+              type: ClusterPlacementGroupCapabilities
+              tag: 'json:"capabilities,omitempty,omitzero"'
+            - name: PlacementInstruction
+              type: ClusterPlacementGroupPlacementInstruction
+              tag: 'json:"placementInstruction,omitempty,omitzero"'
+          statusFields:
+            - name: Capabilities
+              type: ClusterPlacementGroupCapabilities
+              tag: 'json:"capabilities,omitempty,omitzero"'
+            - name: PlacementInstruction
+              type: ClusterPlacementGroupPlacementInstruction
+              tag: 'json:"placementInstruction,omitempty,omitzero"'
         - kind: WorkRequest
           controller:
             strategy: none
