@@ -814,13 +814,37 @@ func configIsNilOrEmptyCollection(value any) bool {
 	}
 	switch concrete := value.(type) {
 	case map[string]any:
-		return len(concrete) == 0
+		if len(concrete) == 0 {
+			return true
+		}
+		for _, child := range concrete {
+			if !configIsNilOrEmptyCollection(child) {
+				return false
+			}
+		}
+		return true
 	case map[string]string:
 		return len(concrete) == 0
 	case map[string]map[string]interface{}:
-		return len(concrete) == 0
+		if len(concrete) == 0 {
+			return true
+		}
+		for _, child := range concrete {
+			if !configIsNilOrEmptyCollection(child) {
+				return false
+			}
+		}
+		return true
 	case []any:
-		return len(concrete) == 0
+		if len(concrete) == 0 {
+			return true
+		}
+		for _, child := range concrete {
+			if !configIsNilOrEmptyCollection(child) {
+				return false
+			}
+		}
+		return true
 	case []string:
 		return len(concrete) == 0
 	default:
