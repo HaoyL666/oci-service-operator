@@ -70,8 +70,6 @@ func (c ServiceClient[T]) invokeWithValues(ctx context.Context, op *Operation, r
 
 func (c ServiceClient[T]) retryTokenScope(op *Operation) string {
 	switch op {
-	case c.config.Create:
-		return "create"
 	case c.config.Update:
 		return "update"
 	case c.config.Delete:
@@ -980,9 +978,6 @@ func jsonFieldString(payload []byte, field string) (string, error) {
 
 func assignDeterministicRetryToken(requestStruct reflect.Value, resource any, scope string) {
 	scope = retryTokenScopeName(scope)
-	if scope == "" {
-		return
-	}
 	field, ok := fieldValue(requestStruct, "OpcRetryToken")
 	if !ok || !field.IsValid() || !field.CanSet() {
 		return

@@ -114,7 +114,9 @@ func TestServiceClientInvokeScopesDeterministicRetryTokensByOperationAndRequest(
 		t.Fatalf("invoke changed update error = %v", err)
 	}
 
-	requireRetryTokenScope(t, createToken, "create")
+	if createToken != string(resource.UID) {
+		t.Fatalf("create retry token = %q, want legacy resource UID token %q", createToken, resource.UID)
+	}
 	requireRetryTokenScope(t, updateTokens[0], "update")
 	requireRetryTokenScope(t, deleteTokens[0], "delete")
 	if createToken == updateTokens[0] || createToken == deleteTokens[0] || updateTokens[0] == deleteTokens[0] {
@@ -125,6 +127,66 @@ func TestServiceClientInvokeScopesDeterministicRetryTokensByOperationAndRequest(
 	}
 	if updateTokens[1] == updateTokens[0] {
 		t.Fatalf("changed update token = %q, want a new token for a different update request", updateTokens[1])
+	}
+}
+
+func TestBuildRequestScopesGeneratedRetryTokenWhenRequested(t *testing.T) {
+	t.Parallel()
+
+	request := &retryTokenCreateRequest{}
+	resource := &fakeResource{
+		UID: "11111111-1111-1111-1111-111111111111",
+	}
+
+	err := buildRequest(
+		request,
+		resource,
+		nil,
+		"",
+		[]RequestField{
+			{FieldName: "RetryTokenDetails", RequestName: "RetryTokenDetails", Contribution: "body"},
+		},
+		nil,
+		requestBuildOptions{RetryTokenScope: "create"},
+		retryTokenDetails{DisplayName: "first", Enabled: true},
+		true,
+	)
+	if err != nil {
+		t.Fatalf("buildRequest() error = %v", err)
+	}
+	got := requiredRetryToken(t, request.OpcRetryToken)
+	requireRetryTokenScope(t, got, "create")
+	if got == string(resource.UID) {
+		t.Fatalf("buildRequest() retry token = %q, want request-scoped token", got)
+	}
+}
+
+func TestBuildRequestPreservesExplicitRetryToken(t *testing.T) {
+	t.Parallel()
+
+	token := "caller-supplied-token"
+	request := &retryTokenCreateRequest{
+		OpcRetryToken: &token,
+	}
+
+	err := buildRequest(
+		request,
+		nil,
+		nil,
+		"",
+		[]RequestField{
+			{FieldName: "RetryTokenDetails", RequestName: "RetryTokenDetails", Contribution: "body"},
+		},
+		nil,
+		requestBuildOptions{RetryTokenScope: "create"},
+		retryTokenDetails{DisplayName: "first", Enabled: true},
+		true,
+	)
+	if err != nil {
+		t.Fatalf("buildRequest() error = %v", err)
+	}
+	if got := requiredRetryToken(t, request.OpcRetryToken); got != token {
+		t.Fatalf("buildRequest() retry token = %q, want explicit token %q preserved", got, token)
 	}
 }
 
