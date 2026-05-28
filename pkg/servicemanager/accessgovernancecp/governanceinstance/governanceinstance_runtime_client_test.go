@@ -154,6 +154,32 @@ func TestReviewedGovernanceInstanceRuntimeSemanticsEncodesLifecycleContract(t *t
 	}
 }
 
+func TestNormalizeGovernanceInstanceEndpointUsesCertificateHost(t *testing.T) {
+	t.Parallel()
+
+	client := &accessgovernancecpsdk.AccessGovernanceCPClient{}
+	client.Host = "https://cp-prod.access-governance.us-ashburn-1.oci.oraclecloud.com"
+
+	normalizeGovernanceInstanceEndpoint(client)
+
+	if client.Host != "https://cp-prod.access-governance.us-ashburn-1.oci.oracleiaas.com" {
+		t.Fatalf("Host = %q, want oracleiaas certificate host", client.Host)
+	}
+}
+
+func TestNormalizeGovernanceInstanceEndpointLeavesOtherRealms(t *testing.T) {
+	t.Parallel()
+
+	client := &accessgovernancecpsdk.AccessGovernanceCPClient{}
+	client.Host = "https://cp-prod.access-governance.us-gov-ashburn-1.oci.oraclegovcloud.com"
+
+	normalizeGovernanceInstanceEndpoint(client)
+
+	if client.Host != "https://cp-prod.access-governance.us-gov-ashburn-1.oci.oraclegovcloud.com" {
+		t.Fatalf("Host = %q, want non-OC1 realm unchanged", client.Host)
+	}
+}
+
 func TestGuardGovernanceInstanceExistingBeforeCreate(t *testing.T) {
 	t.Parallel()
 

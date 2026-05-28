@@ -51,7 +51,16 @@ func newGovernanceInstanceSDKClient(manager *GovernanceInstanceServiceManager) (
 	if err != nil {
 		return nil, err
 	}
+	normalizeGovernanceInstanceEndpoint(&client)
 	return client, nil
+}
+
+func normalizeGovernanceInstanceEndpoint(client *accessgovernancecpsdk.AccessGovernanceCPClient) {
+	if client == nil {
+		return
+	}
+
+	client.Host = strings.Replace(client.Host, ".oci.oraclecloud.com", ".oci.oracleiaas.com", 1)
 }
 
 func applyGovernanceInstanceRuntimeHooks(
