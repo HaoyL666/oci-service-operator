@@ -150,6 +150,75 @@ func TestBuildConfigUpdateDetailsSpanFilterDetectsDrift(t *testing.T) {
 	}
 }
 
+func TestBuildConfigUpdateDetailsSpanFilterNoopIgnoresServerEmptyTags(t *testing.T) {
+	t.Parallel()
+
+	resource := &apmconfigv1beta1.Config{
+		Spec: apmconfigv1beta1.ConfigSpec{
+			ApmDomainId: "ocid1.apmdomain.oc1..example",
+			ConfigType:  "SPAN_FILTER",
+			DisplayName: "span-filter",
+			FilterText:  `service.name = "checkout"`,
+			Description: "span filter",
+			FreeformTags: map[string]string{
+				"managed-by": "osok-e2e",
+			},
+		},
+	}
+	current := apmconfigsdk.GetConfigResponse{
+		Config: apmconfigsdk.SpanFilter{
+			DisplayName: common.String("span-filter"),
+			FilterText:  common.String(`service.name = "checkout"`),
+			Description: common.String("span filter"),
+			FreeformTags: map[string]string{
+				"managed-by": "osok-e2e",
+			},
+			DefinedTags: map[string]map[string]interface{}{},
+		},
+	}
+
+	_, updateNeeded, err := buildConfigUpdateDetails(context.Background(), resource, "default", current)
+	if err != nil {
+		t.Fatalf("buildConfigUpdateDetails() error = %v", err)
+	}
+	if updateNeeded {
+		t.Fatal("buildConfigUpdateDetails() updateNeeded = true, want false when OCI returns empty definedTags for omitted desired tags")
+	}
+}
+
+func TestBuildConfigUpdateDetailsSpanFilterPreservesExplicitEmptyTagDrift(t *testing.T) {
+	t.Parallel()
+
+	resource := &apmconfigv1beta1.Config{
+		Spec: apmconfigv1beta1.ConfigSpec{
+			ApmDomainId:  "ocid1.apmdomain.oc1..example",
+			ConfigType:   "SPAN_FILTER",
+			DisplayName:  "span-filter",
+			FilterText:   `service.name = "checkout"`,
+			Description:  "span filter",
+			FreeformTags: map[string]string{},
+		},
+	}
+	current := apmconfigsdk.GetConfigResponse{
+		Config: apmconfigsdk.SpanFilter{
+			DisplayName: common.String("span-filter"),
+			FilterText:  common.String(`service.name = "checkout"`),
+			Description: common.String("span filter"),
+			FreeformTags: map[string]string{
+				"remove": "me",
+			},
+		},
+	}
+
+	_, updateNeeded, err := buildConfigUpdateDetails(context.Background(), resource, "default", current)
+	if err != nil {
+		t.Fatalf("buildConfigUpdateDetails() error = %v", err)
+	}
+	if !updateNeeded {
+		t.Fatal("buildConfigUpdateDetails() updateNeeded = false, want true when explicit empty tags should clear current tags")
+	}
+}
+
 func TestGuardConfigExistingBeforeCreate(t *testing.T) {
 	t.Parallel()
 
