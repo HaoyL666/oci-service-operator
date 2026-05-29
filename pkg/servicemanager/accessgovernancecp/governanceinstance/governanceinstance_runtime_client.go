@@ -60,7 +60,18 @@ func normalizeGovernanceInstanceEndpoint(client *accessgovernancecpsdk.AccessGov
 		return
 	}
 
-	client.Host = strings.Replace(client.Host, ".oci.oraclecloud.com", ".oci.oracleiaas.com", 1)
+	const (
+		accessGovernanceOC1Prefix = "https://cp-prod.access-governance."
+		oc1SDKHostSuffix          = ".oci.oraclecloud.com"
+		oc1CertificateHostSuffix  = ".oci.oracleiaas.com"
+	)
+
+	host := strings.TrimSpace(client.Host)
+	if !strings.HasPrefix(host, accessGovernanceOC1Prefix) || !strings.HasSuffix(host, oc1SDKHostSuffix) {
+		return
+	}
+
+	client.Host = strings.TrimSuffix(host, oc1SDKHostSuffix) + oc1CertificateHostSuffix
 }
 
 func applyGovernanceInstanceRuntimeHooks(
