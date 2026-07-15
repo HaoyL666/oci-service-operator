@@ -6814,6 +6814,9 @@ services:
           - PrimaryDbInstanceDetails
         WorkRequestLog:
           - WorkRequestLogEntry
+      requiredPointerFieldPaths:
+        DbSystem:
+          - StorageDetails.IsRegionallyDurable
 
   - service: queue
     sdkPackage: github.com/oracle/oci-go-sdk/v65/queue

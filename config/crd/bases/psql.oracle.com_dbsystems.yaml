@@ -661,7 +661,8 @@ spec:
                     type: string
                 type: object
               storageDetails:
-                description: DbSystemStorageDetails defines nested fields for DbSystem.StorageDetails.
+                description: DbSystemStorageDetailsObservedState defines nested fields
+                  for DbSystem.StorageDetails.
                 properties:
                   availabilityDomain:
                     description: |-

@@ -3627,6 +3627,30 @@ func TestObservedStateExcludedFieldPaths(t *testing.T) {
 	}
 }
 
+func TestObservedStateRequiredPointerFieldPaths(t *testing.T) {
+	t.Parallel()
+
+	service := ServiceConfig{
+		ObservedState: ObservedStateConfig{
+			RequiredPointerFieldPaths: map[string][]string{
+				"DbSystem": {"StorageDetails.IsRegionallyDurable", " storageDetails.isRegionallyDurable "},
+			},
+		},
+	}
+
+	got := service.ObservedStateRequiredPointerFieldPaths("DbSystem")
+	wantKey, err := normalizeObservedStateFieldPath("StorageDetails.IsRegionallyDurable")
+	if err != nil {
+		t.Fatalf("normalizeObservedStateFieldPath() error = %v", err)
+	}
+	if len(got) != 1 {
+		t.Fatalf("ObservedStateRequiredPointerFieldPaths() returned %d entries, want 1", len(got))
+	}
+	if _, ok := got[wantKey]; !ok {
+		t.Fatalf("ObservedStateRequiredPointerFieldPaths() = %v, want %q", got, wantKey)
+	}
+}
+
 func TestCheckedInConfigExcludesMySQLDbSystemSourceURLFromObservedState(t *testing.T) {
 	t.Parallel()
 

@@ -32,6 +32,7 @@ func synthesizeResourceFieldSet(index *ocisdk.Package, service ServiceConfig, re
 			scope:                     fieldScopeStatus,
 			escapeStatusJSONCollision: true,
 			excludedFieldPaths:        service.ObservedStateExcludedFieldPaths(rawName),
+			requiredPointerFieldPaths: service.ObservedStateRequiredPointerFieldPaths(rawName),
 		},
 	)
 	for _, field := range observedFields {
@@ -158,6 +159,10 @@ func (s *fieldSynthesizer) buildGeneratedField(
 
 	fieldModel := buildFieldModel(field, jsonName, options)
 	fieldModel.Type = renderedType
+	if isObservedStateRequiredPointerField(fieldPath, options) {
+		fieldModel.Type = pointerRenderedType(renderedType)
+		fieldModel.Tag = jsonTag(renderedFieldJSONName(jsonName, options), false)
+	}
 	return fieldModel, true
 }
 
@@ -247,7 +252,7 @@ func (s *fieldSynthesizer) ensureHelperType(
 		if helperFieldShapesEqual(s.helperTypes[index].Fields, helperFields) && !existingHelperContainsSensitiveFields {
 			return s.helperTypes[index].Name, true
 		}
-		if !existingHelperContainsSensitiveFields && !containsSensitiveObservedStateFields && len(options.excludedFieldPaths) == 0 {
+		if !existingHelperContainsSensitiveFields && !containsSensitiveObservedStateFields && len(options.excludedFieldPaths) == 0 && len(options.requiredPointerFieldPaths) == 0 {
 			return s.helperTypes[index].Name, true
 		}
 		typeName = s.uniqueScopedHelperTypeName(typeName, helperFields, options.scope)
@@ -347,6 +352,27 @@ func isObservedStateFieldExcluded(fieldPath []string, options fieldRenderingOpti
 	}
 	_, excluded := options.excludedFieldPaths[key]
 	return excluded
+}
+
+func isObservedStateRequiredPointerField(fieldPath []string, options fieldRenderingOptions) bool {
+	if options.scope != fieldScopeStatus || len(options.requiredPointerFieldPaths) == 0 {
+		return false
+	}
+
+	key, err := observedStateFieldPathKey(fieldPath)
+	if err != nil {
+		return false
+	}
+	_, requiredPointer := options.requiredPointerFieldPaths[key]
+	return requiredPointer
+}
+
+func pointerRenderedType(typeExpr string) string {
+	trimmed := strings.TrimSpace(typeExpr)
+	if trimmed == "" || strings.HasPrefix(trimmed, "*") {
+		return trimmed
+	}
+	return "*" + trimmed
 }
 
 var sensitiveObservedStateFieldNames = map[string]struct{}{

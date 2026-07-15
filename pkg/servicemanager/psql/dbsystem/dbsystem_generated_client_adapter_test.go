@@ -244,9 +244,9 @@ func TestValidateImmutableDriftAcceptsPostCreateReadbackNormalization(t *testing
 		InstanceOcpuCount:       2,
 		InstanceMemorySizeInGBs: 16,
 		InstanceCount:           1,
-		StorageDetails: psqlv1beta1.DbSystemStorageDetails{
+		StorageDetails: psqlv1beta1.DbSystemStorageDetailsObservedState{
 			SystemType:          resource.Spec.StorageDetails.SystemType,
-			IsRegionallyDurable: resource.Spec.StorageDetails.IsRegionallyDurable,
+			IsRegionallyDurable: common.Bool(resource.Spec.StorageDetails.IsRegionallyDurable),
 			Iops:                resource.Spec.StorageDetails.Iops,
 		},
 		NetworkDetails: psqlv1beta1.DbSystemNetworkDetails{
@@ -269,9 +269,9 @@ func TestValidateImmutableDriftRejectsDbVersionMajorChange(t *testing.T) {
 		CompartmentId: resource.Spec.CompartmentId,
 		DbVersion:     "15.1",
 		Shape:         resource.Spec.Shape,
-		StorageDetails: psqlv1beta1.DbSystemStorageDetails{
+		StorageDetails: psqlv1beta1.DbSystemStorageDetailsObservedState{
 			SystemType:          resource.Spec.StorageDetails.SystemType,
-			IsRegionallyDurable: resource.Spec.StorageDetails.IsRegionallyDurable,
+			IsRegionallyDurable: common.Bool(resource.Spec.StorageDetails.IsRegionallyDurable),
 		},
 		NetworkDetails: resource.Spec.NetworkDetails,
 		AdminUsername:  resource.Spec.Credentials.Username,
