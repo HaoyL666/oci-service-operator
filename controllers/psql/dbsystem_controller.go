@@ -24,7 +24,7 @@ type DbSystemReconciler struct {
 // +kubebuilder:rbac:groups=psql.oracle.com,resources=dbsystems/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=psql.oracle.com,resources=dbsystems/finalizers,verbs=update
 // +kubebuilder:rbac:groups="",resources=events,verbs=create;patch
-// +kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch
+// +kubebuilder:rbac:groups="",resources=secrets,verbs=get
 
 // Reconcile is part of the main Kubernetes reconciliation loop.
 func (r *DbSystemReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

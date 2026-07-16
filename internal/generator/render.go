@@ -214,7 +214,7 @@ func (r *Renderer) RenderManagerOutputs(root string, pkg *PackageModel, overwrit
 		return err
 	}
 
-	managerDeploymentContent, err := renderManagerDeploymentFile()
+	managerDeploymentContent, err := renderManagerDeploymentFile(pkg.Service.Package.DedicatedServiceAccount)
 	if err != nil {
 		return fmt.Errorf("render manager deployment for %s: %w", pkg.Service.Service, err)
 	}
@@ -470,8 +470,12 @@ func renderManagerKustomizationFile() (string, error) {
 	return executeTemplate(managerKustomizationTemplate, struct{}{})
 }
 
-func renderManagerDeploymentFile() (string, error) {
-	return executeTemplate(managerDeploymentTemplate, struct{}{})
+func renderManagerDeploymentFile(dedicatedServiceAccount bool) (string, error) {
+	return executeTemplate(managerDeploymentTemplate, struct {
+		DedicatedServiceAccount bool
+	}{
+		DedicatedServiceAccount: dedicatedServiceAccount,
+	})
 }
 
 func renderControllerManagerConfigFile(group string) (string, error) {
@@ -1689,6 +1693,41 @@ metadata:
   name: osokconfig
 data:
   useinstanceprincipal: dHJ1ZQ==
+{{- if .DedicatedServiceAccount}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: controller-manager
+  namespace: system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: manager-role
+subjects:
+- kind: ServiceAccount
+  name: controller-manager
+  namespace: system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: leader-election-rolebinding
+  namespace: system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: controller-manager
+  namespace: system
+{{- end}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1707,6 +1746,9 @@ spec:
       labels:
         control-plane: controller-manager
     spec:
+{{- if .DedicatedServiceAccount}}
+      serviceAccountName: controller-manager
+{{- end}}
       securityContext:
         runAsUser: 65532
       containers:
