@@ -8,9 +8,7 @@ resources:
 - generated/crd
 - generated/rbac
 - ../../../config/manager/psql
-- ../../../config/rbac/role_binding.yaml
 - ../../../config/rbac/leader_election_role.yaml
-- ../../../config/rbac/leader_election_role_binding.yaml
 
 patches:
 - path: ../../../config/default/manager_config_patch.yaml

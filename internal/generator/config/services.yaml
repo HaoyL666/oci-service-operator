@@ -6734,6 +6734,8 @@ services:
       mode: explicit
       includeKinds:
         - DbSystem
+    package:
+      dedicatedServiceAccount: true
     generation:
       controller:
         strategy: generated
@@ -6752,7 +6754,7 @@ services:
             formalClassification: lifecycle
           controller:
             extraRBACMarkers:
-              - groups="",resources=secrets,verbs=get;list;watch
+              - groups="",resources=secrets,verbs=get
           specFields:
             - name: AdminUsername
               type: shared.UsernameSource

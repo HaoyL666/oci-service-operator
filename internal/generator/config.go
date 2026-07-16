@@ -64,6 +64,9 @@ type PackageProfile struct {
 // PackageConfig describes service-scoped package overlay details.
 type PackageConfig struct {
 	ExtraResources []string `yaml:"extraResources,omitempty"`
+	// DedicatedServiceAccount isolates a package manager from the shared default
+	// service account and its role bindings.
+	DedicatedServiceAccount bool `yaml:"dedicatedServiceAccount,omitempty"`
 }
 
 // SelectionConfig declares whether a service participates in the default active surface.

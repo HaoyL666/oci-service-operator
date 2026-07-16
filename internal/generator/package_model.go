@@ -146,10 +146,14 @@ func buildPackageOutputModelFor(service ServiceConfig, outputName string, defaul
 			"generated/crd",
 			"generated/rbac",
 			managerOverlay,
-			"../../../config/rbac/role_binding.yaml",
 			"../../../config/rbac/leader_election_role.yaml",
-			"../../../config/rbac/leader_election_role_binding.yaml",
 		)
+		if !service.Package.DedicatedServiceAccount {
+			output.Install.Resources = append(output.Install.Resources,
+				"../../../config/rbac/role_binding.yaml",
+				"../../../config/rbac/leader_election_role_binding.yaml",
+			)
+		}
 		output.Install.Resources = appendUniqueStrings(output.Install.Resources, service.Package.ExtraResources...)
 		if service.WebhookGenerationStrategy() == GenerationStrategyManual {
 			output.Install.Resources = appendUniqueStrings(output.Install.Resources,
