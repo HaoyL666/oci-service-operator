@@ -22,8 +22,6 @@ RUN GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" CGO_ENABLED="${CGO_ENABLED}" GOEXP
 FROM oraclelinux:9-slim
 WORKDIR /
 
-RUN rpm -q ca-certificates && test -s /etc/pki/tls/certs/ca-bundle.crt
-
 COPY --from=builder /workspace/manager .
 
 USER 65532:65532
