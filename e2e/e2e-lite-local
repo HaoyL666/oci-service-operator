@@ -832,22 +832,7 @@ EOF
     -o jsonpath='{range .spec.template.spec.volumes[*]}{@.name}{"\n"}{end}' \
     | awk '$0 == "pki" { print NR - 1; exit }')"
   if [ -n "${pki_mount_index}" ] || [ -n "${pki_volume_index}" ]; then
-    patch_ops="["
-    if [ -n "${pki_mount_index}" ]; then
-      patch_ops="${patch_ops}{\"op\":\"remove\",\"path\":\"/spec/template/spec/containers/0/volumeMounts/${pki_mount_index}\"}"
-    fi
-    if [ -n "${pki_volume_index}" ]; then
-      if [ "${patch_ops}" != "[" ]; then
-        patch_ops="${patch_ops},"
-      fi
-      patch_ops="${patch_ops}{\"op\":\"remove\",\"path\":\"/spec/template/spec/volumes/${pki_volume_index}\"}"
-    fi
-    patch_ops="${patch_ops}]"
-
-    log "Removing host /etc/pki override from deployment ${DEPLOYMENT_NAME} for local Kind trust"
-    "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" patch deployment "${DEPLOYMENT_NAME}" \
-      --type=json \
-      -p="${patch_ops}" >/dev/null
+    die "deployment ${DEPLOYMENT_NAME} unexpectedly mounts host /etc/pki"
   fi
 
   log "Restarting deployment ${DEPLOYMENT_NAME} so updated secrets are re-read"

@@ -431,7 +431,29 @@ $ operator-sdk cleanup oci-service-operator
 
 ### Customize CA trust bundle
 
-The OCI Service Operator for Kubernetes by default mounts the `/etc/pki` host path so that the host
-certificate chains can be used for TLS verification. The default container image is built on top of
-Oracle Linux 9 which has the default CA trust bundle under `/etc/pki`. A new container image can be
-created with a custom CA trust bundle.
+The default controller image is built on Oracle Linux 9 and uses the CA trust bundle included in the
+image. Controller Deployments do not mount the Kubernetes worker node's `/etc/pki` directory.
+
+For an environment that requires additional private or corporate certificate authorities, mount a
+complete PEM trust bundle from a ConfigMap or Secret and set `OCI_DEFAULT_CERTS_PATH` to the mounted
+file. The bundle must contain both the public roots needed for OCI endpoints and any additional
+private roots because the OCI SDK uses the configured file as its complete trust pool. For example:
+
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: manager
+        env:
+        - name: OCI_DEFAULT_CERTS_PATH
+          value: /etc/osok-ca/ca-bundle.pem
+        volumeMounts:
+        - name: custom-ca
+          mountPath: /etc/osok-ca
+          readOnly: true
+      volumes:
+      - name: custom-ca
+        configMap:
+          name: osok-ca-bundle
+```
