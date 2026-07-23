@@ -1,0 +1,71 @@
+replicaCount: 1
+
+image:
+  repository: __OSOK_IMAGE_REPOSITORY__
+  tag: "__OSOK_IMAGE_TAG__"
+  digest: "__OSOK_IMAGE_DIGEST__"
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  name: oci-service-operator-psql-controller-manager
+  automountServiceAccountToken: true
+  annotations: {}
+
+credentials:
+  existingSecret: ocicredentials
+  mountPath: /etc/oci
+  optional: true
+
+auth:
+  # Leave type empty to read auth_type from credentials.existingSecret.
+  type: ""
+  legacyUseInstancePrincipal: true
+
+manager:
+  healthProbeBindAddress: ":8081"
+  metricsBindAddress: "127.0.0.1:8080"
+  webhookPort: 9443
+  leaderElection:
+    enabled: true
+    resourceName: 40558063.oci.psql
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 300Mi
+  requests:
+    cpu: 500m
+    memory: 200Mi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+customCA:
+  existingConfigMap: ""
+  existingSecret: ""
+  key: ca.crt
+  mountPath: /etc/osok-ca
+
+proxy:
+  httpProxy: ""
+  httpsProxy: ""
+  noProxy: ""
+
+podAnnotations: {}
+podLabels: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+topologySpreadConstraints: []

@@ -1,0 +1,12 @@
+OCI Service Operator for OCI Database with PostgreSQL is installed in
+{{ .Release.Namespace }}.
+
+The chart references the existing credentials Secret
+{{ .Values.credentials.existingSecret | quote }}; it never stores credential
+values in Helm values.
+
+Helm installs CRDs on first install but does not upgrade them. Before upgrading,
+apply the CRD from the target chart version:
+
+  helm show crds oci://ghcr.io/oracle/oci-service-operator-psql-chart \
+    --version {{ .Chart.Version }} | kubectl apply -f -

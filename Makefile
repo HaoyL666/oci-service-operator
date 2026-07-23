@@ -68,6 +68,10 @@ PACKAGE_DIR ?= $(PACKAGES_DIR)/$(GROUP)
 PACKAGE_OUTPUT_DIR ?= dist/packages/$(GROUP)
 PACKAGE_SCRIPT ?= hack/package.sh
 PACKAGE_OLM_SCRIPT ?= hack/package-olm.sh
+PACKAGE_HELM_SCRIPT ?= hack/package-helm.sh
+HELM_OUTPUT_DIR ?= dist/charts
+HELM_WORK_DIR ?= $(HELM_OUTPUT_DIR)/.work/$(GROUP)
+HELM ?= helm
 MONOLITH_SCRIPT ?= hack/monolith.sh
 CONTROLLER_IMG ?=
 GENERATOR_ENTRYPOINT ?= ./cmd/generator
@@ -466,6 +470,16 @@ package-install: controller-gen kustomize ## Render a single install YAML for GR
 	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
 	@CONTROLLER_GEN_RUNNER="$(CONTROLLER_GEN_RUNNER)" CONTROLLER_GEN="$(CONTROLLER_GEN)" KUSTOMIZE="$(KUSTOMIZE)" CONTROLLER_IMG="$(CONTROLLER_IMG)" OUT="$(PACKAGE_OUTPUT_DIR)/install.yaml" \
 		"$(PACKAGE_SCRIPT)" render "$(GROUP)"
+
+package-helm: controller-gen kustomize ## Build, lint, parity-check, and package the PostgreSQL Helm OCI chart.
+	@test "$(GROUP)" = "psql" || { echo "The Helm pilot currently supports GROUP=psql only."; exit 1; }
+	@[ -n "$(VERSION)" ] || { echo "VERSION must be set (for example v2.3.0-alpha)"; exit 1; }
+	@[ -n "$(CONTROLLER_IMG)" ] || { echo "CONTROLLER_IMG must be an exact tagged or digest-pinned image"; exit 1; }
+	@CONTROLLER_GEN_RUNNER="$(CONTROLLER_GEN_RUNNER)" CONTROLLER_GEN="$(CONTROLLER_GEN)" KUSTOMIZE="$(KUSTOMIZE)" HELM="$(HELM)" CONTROLLER_IMG="$(CONTROLLER_IMG)" VERSION="$(VERSION)" OUT_DIR="$(HELM_OUTPUT_DIR)" WORK_DIR="$(HELM_WORK_DIR)" \
+		"$(BASH)" "$(PWD)/$(PACKAGE_HELM_SCRIPT)" build "$(GROUP)"
+
+test-package-helm-kind: ## Test PostgreSQL Helm install, CRD upgrade, and uninstall on a disposable Kind cluster.
+	@HELM="$(HELM)" "$(BASH)" "$(PWD)/hack/test-package-helm-kind.sh"
 
 monolith-install: kustomize ## Render the monolithic install YAML into dist/monolith/install.yaml.
 	@KUSTOMIZE="$(KUSTOMIZE)" CONTROLLER_IMG="$(CONTROLLER_IMG)" OUT="dist/monolith/install.yaml" \

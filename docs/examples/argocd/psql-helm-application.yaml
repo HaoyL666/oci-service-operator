@@ -1,0 +1,31 @@
+# Replace the version in targetRevision and image.tag together. For a
+# digest-pinned deployment, set image.digest and leave image.tag unchanged;
+# the digest takes precedence.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: osok-psql
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: ghcr.io/oracle
+    chart: oci-service-operator-psql-chart
+    targetRevision: 2.3.0-alpha
+    helm:
+      releaseName: osok-psql
+      valuesObject:
+        image:
+          repository: ghcr.io/oracle/oci-service-operator-psql
+          tag: v2.3.0-alpha
+        credentials:
+          existingSecret: ocicredentials
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: oci-service-operator-psql-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

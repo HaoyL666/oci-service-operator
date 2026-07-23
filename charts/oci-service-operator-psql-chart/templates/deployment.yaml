@@ -1,0 +1,271 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oci-service-operator-psql-controller-manager
+  namespace: {{ .Release.Namespace }}
+  labels:
+    control-plane: controller-manager
+spec:
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        control-plane: controller-manager
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "osok-psql.serviceAccountName" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - command:
+            - /manager
+          args:
+            - --config=controller_manager_config.yaml
+          image: {{ include "osok-psql.controllerImage" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: manager
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: user
+                  optional: {{ .Values.credentials.optional }}
+            - name: AUTH_TYPE
+              {{- if .Values.auth.type }}
+              value: {{ .Values.auth.type | quote }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: auth_type
+                  optional: {{ .Values.credentials.optional }}
+              {{- end }}
+            - name: TENANCY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: tenancy
+                  optional: {{ .Values.credentials.optional }}
+            - name: REGION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: region
+                  optional: {{ .Values.credentials.optional }}
+            - name: FINGERPRINT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: fingerprint
+                  optional: {{ .Values.credentials.optional }}
+            - name: PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: passphrase
+                  optional: {{ .Values.credentials.optional }}
+            - name: PRIVATEKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: privatekey
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_CONFIG_FILE_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: config_file_path
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_CONFIG_PROFILE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: config_file_profile
+                  optional: {{ .Values.credentials.optional }}
+            - name: INSTANCE_PRINCIPAL_DELEGATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: instance_principal_delegation_token
+                  optional: {{ .Values.credentials.optional }}
+            - name: RESOURCE_PRINCIPAL_DELEGATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: resource_principal_delegation_token
+                  optional: {{ .Values.credentials.optional }}
+            - name: INSTANCE_PRINCIPAL_LEAF_CERTIFICATE_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: instance_principal_leaf_certificate_path
+                  optional: {{ .Values.credentials.optional }}
+            - name: INSTANCE_PRINCIPAL_LEAF_PRIVATE_KEY_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: instance_principal_leaf_private_key_path
+                  optional: {{ .Values.credentials.optional }}
+            - name: INSTANCE_PRINCIPAL_LEAF_PRIVATE_KEY_PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: instance_principal_leaf_private_key_passphrase
+                  optional: {{ .Values.credentials.optional }}
+            - name: INSTANCE_PRINCIPAL_INTERMEDIATE_CERTIFICATE_PATHS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: instance_principal_intermediate_certificate_paths
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_RESOURCE_PRINCIPAL_VERSION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: oci_resource_principal_version
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_RESOURCE_PRINCIPAL_RPST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: oci_resource_principal_rpst
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_RESOURCE_PRINCIPAL_PRIVATE_PEM
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: oci_resource_principal_private_pem
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_RESOURCE_PRINCIPAL_PRIVATE_PEM_PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: oci_resource_principal_private_pem_passphrase
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_RESOURCE_PRINCIPAL_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: oci_resource_principal_region
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_RESOURCE_PRINCIPAL_RPST_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: oci_resource_principal_rpst_endpoint
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_RESOURCE_PRINCIPAL_RPT_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: oci_resource_principal_rpt_endpoint
+                  optional: {{ .Values.credentials.optional }}
+            - name: OCI_KUBERNETES_SERVICE_ACCOUNT_CERT_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.existingSecret }}
+                  key: oci_kubernetes_service_account_cert_path
+                  optional: {{ .Values.credentials.optional }}
+            - name: USEINSTANCEPRINCIPAL
+              valueFrom:
+                secretKeyRef:
+                  name: oci-service-operator-psql-osokconfig
+                  key: useinstanceprincipal
+            {{- if or .Values.customCA.existingConfigMap .Values.customCA.existingSecret }}
+            - name: SSL_CERT_DIR
+              value: {{ printf "%s:/etc/ssl/certs" .Values.customCA.mountPath | quote }}
+            {{- end }}
+            {{- with .Values.proxy.httpProxy }}
+            - name: HTTP_PROXY
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.proxy.httpsProxy }}
+            - name: HTTPS_PROXY
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.proxy.noProxy }}
+            - name: NO_PROXY
+              value: {{ . | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: manager-config
+              mountPath: /controller_manager_config.yaml
+              subPath: controller_manager_config.yaml
+            - name: oci-credentials
+              mountPath: {{ .Values.credentials.mountPath }}
+              readOnly: true
+            {{- if or .Values.customCA.existingConfigMap .Values.customCA.existingSecret }}
+            - name: custom-ca
+              mountPath: {{ .Values.customCA.mountPath }}
+              readOnly: true
+            {{- end }}
+      volumes:
+        - name: manager-config
+          configMap:
+            name: oci-service-operator-psql-manager-config
+        - name: oci-credentials
+          secret:
+            secretName: {{ .Values.credentials.existingSecret }}
+            optional: {{ .Values.credentials.optional }}
+        {{- if .Values.customCA.existingConfigMap }}
+        - name: custom-ca
+          configMap:
+            name: {{ .Values.customCA.existingConfigMap }}
+            items:
+              - key: {{ .Values.customCA.key }}
+                path: {{ .Values.customCA.key }}
+        {{- else if .Values.customCA.existingSecret }}
+        - name: custom-ca
+          secret:
+            secretName: {{ .Values.customCA.existingSecret }}
+            items:
+              - key: {{ .Values.customCA.key }}
+                path: {{ .Values.customCA.key }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 10

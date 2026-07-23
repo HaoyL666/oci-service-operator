@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oci-service-operator-psql-manager-config
+  namespace: {{ .Release.Namespace }}
+data:
+  controller_manager_config.yaml: |
+    apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
+    kind: ControllerManagerConfiguration
+    health:
+      healthProbeBindAddress: {{ .Values.manager.healthProbeBindAddress }}
+    metrics:
+      bindAddress: {{ .Values.manager.metricsBindAddress }}
+    webhook:
+      port: {{ .Values.manager.webhookPort }}
+    leaderElection:
+      leaderElect: {{ .Values.manager.leaderElection.enabled }}
+      resourceName: {{ .Values.manager.leaderElection.resourceName }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: oci-service-operator-psql-osokconfig
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+data:
+  useinstanceprincipal: {{ ternary "dHJ1ZQ==" "ZmFsc2U=" .Values.auth.legacyUseInstancePrincipal }}
