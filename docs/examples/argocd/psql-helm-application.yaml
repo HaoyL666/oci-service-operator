@@ -1,6 +1,6 @@
-# Replace the version in targetRevision and image.tag together. For a
-# digest-pinned deployment, set image.digest and leave image.tag unchanged;
-# the digest takes precedence.
+# Replace targetRevision, image.tag, and image.digest together. image.digest
+# must be the OCI index digest for the matching multi-architecture controller
+# image; it takes precedence over the informational tag.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -18,6 +18,7 @@ spec:
         image:
           repository: ghcr.io/oracle/oci-service-operator-psql
           tag: v2.3.0-alpha
+          digest: sha256:ac65476b1cd0f61aff44e382b38ec3db0afc60d60038019ff30f0c8da492ad4e
         credentials:
           existingSecret: ocicredentials
   destination:
