@@ -359,13 +359,14 @@ ENVTEST_INSTALLED_ONLY ?=
 ENVTEST_USE_ENV ?=
 ENVTEST_LEGACY_GOMODCACHE ?= $(CURDIR)/.envtest-home/.gomodcache
 SETUP_ENVTEST_GOPATH ?= $(ENVTEST_ROOT)/gopath
-SETUP_ENVTEST_ENV ?= env -u GOMODCACHE $(ENVTEST_ENV) GOPATH=$(SETUP_ENVTEST_GOPATH)
+SETUP_ENVTEST_GOCACHE ?= $(ENVTEST_ROOT)/go-build-cache
+SETUP_ENVTEST_ENV ?= env -u GOMODCACHE $(ENVTEST_ENV) GOPATH=$(SETUP_ENVTEST_GOPATH) GOCACHE=$(SETUP_ENVTEST_GOCACHE)
 # setup-envtest is published from a separate tool module; pin the release-0.17-compatible revision.
 SETUP_ENVTEST_VERSION ?= v0.0.0-20240812162837-9557f1031fe4
 SETUP_ENVTEST_GOFLAGS ?= $(strip $(filter-out -mod=%,$(GOFLAGS)) -mod=mod)
 SETUP_ENVTEST_RUN ?= $(SETUP_ENVTEST_ENV) GOFLAGS="$(SETUP_ENVTEST_GOFLAGS)" go run sigs.k8s.io/controller-runtime/tools/setup-envtest@$(SETUP_ENVTEST_VERSION)
 SETUP_ENVTEST ?= $(SETUP_ENVTEST_RUN) use $(ENVTEST_K8S_VERSION) -p path --bin-dir $(ENVTEST_ASSETS_DIR) --use-deprecated-gcs=false
-ENVTEST_PREPARE_DIRS = rm -rf $(ENVTEST_LEGACY_GOMODCACHE); mkdir -p $(ENVTEST_ASSETS_DIR) $(ENVTEST_CACHE_DIR) $(ENVTEST_CONFIG_DIR) $(SETUP_ENVTEST_GOPATH)
+ENVTEST_PREPARE_DIRS = rm -rf $(ENVTEST_LEGACY_GOMODCACHE); mkdir -p $(ENVTEST_ASSETS_DIR) $(ENVTEST_CACHE_DIR) $(ENVTEST_CONFIG_DIR) $(SETUP_ENVTEST_GOPATH) $(SETUP_ENVTEST_GOCACHE)
 
 define ENVTEST_RESOLVE_ASSETS
 is_true() { case "$$1" in 1|true|TRUE|yes|YES) return 0 ;; *) return 1 ;; esac; }; \
@@ -397,7 +398,9 @@ endef
 
 envtest: ## Download and cache the pinned envtest assets for later installed-only test runs.
 	$(ENVTEST_PREPARE_DIRS)
-	@envtest_assets="$$( $(SETUP_ENVTEST) )"; \
+	@set -e; \
+		envtest_assets="$$( $(SETUP_ENVTEST) )"; \
+		test -n "$$envtest_assets"; \
 		echo "Envtest assets available at $$envtest_assets"
 
 test: manifests generate fmt vet ## Run tests.
