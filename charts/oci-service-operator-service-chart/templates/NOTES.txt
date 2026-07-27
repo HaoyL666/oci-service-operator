@@ -1,4 +1,4 @@
-OCI Service Operator for OCI Database with PostgreSQL is installed in
+OCI Service Operator for the __OSOK_GROUP__ service package is installed in
 {{ .Release.Namespace }}.
 
 The chart references the existing credentials Secret
@@ -8,5 +8,5 @@ values in Helm values.
 Helm installs CRDs on first install but does not upgrade them. Before upgrading,
 apply the CRD from the target chart version:
 
-  helm show crds oci://ghcr.io/oracle/oci-service-operator-psql-chart \
+  helm show crds oci://ghcr.io/oracle/__OSOK_CHART_NAME__ \
     --version {{ .Chart.Version }} | kubectl apply -f -

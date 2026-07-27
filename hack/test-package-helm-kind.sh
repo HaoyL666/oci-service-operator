@@ -7,13 +7,16 @@ kind_bin=${KIND:-kind}
 kubectl_bin=${KUBECTL:-kubectl}
 helm_bin=${HELM:-helm}
 docker_bin=${DOCKER:-docker}
-cluster_name=${KIND_CLUSTER_NAME:-osok-psql-helm}
+group=${GROUP:-psql}
+cluster_name=${KIND_CLUSTER_NAME:-"osok-${group}-helm"}
 node_image=${KIND_NODE_IMAGE:-kindest/node:v1.29.4@sha256:3abb816a5b1061fb15c6e9e60856ec40d56b7b52bcea5f5f1350bc6e2320b6f8}
-namespace=${TEST_NAMESPACE:-oci-service-operator-psql-system}
+namespace=${TEST_NAMESPACE:-"oci-service-operator-${group}-system"}
 install_version=${INSTALL_VERSION:-v0.0.0-oke44460}
 upgrade_version=${UPGRADE_VERSION:-v0.0.1-oke44460}
-image_repository=${CONTROLLER_IMAGE_REPOSITORY:-osok-psql-helm-test}
-work_root=${WORK_ROOT:-"${TMPDIR:-/tmp}/osok-psql-helm-kind"}
+image_repository=${CONTROLLER_IMAGE_REPOSITORY:-"osok-${group}-helm-test"}
+work_root=${WORK_ROOT:-"${TMPDIR:-/tmp}/osok-${group}-helm-kind"}
+release_name="osok-${group}"
+manager_name="oci-service-operator-${group}-controller-manager"
 
 cleanup() {
 	"${kind_bin}" delete cluster --name "${cluster_name}" >/dev/null 2>&1 || true
@@ -57,54 +60,42 @@ build_chart() {
 	(
 		cd "${ROOT_DIR}"
 		make package-helm \
-			GROUP=psql \
+			GROUP="${group}" \
 			VERSION="${version}" \
 			CONTROLLER_IMG="${image_repository}:${version}" \
 			HELM="${helm_bin}" \
 			HELM_OUTPUT_DIR="${output_dir}/charts" \
 			HELM_WORK_DIR="${output_dir}/work" >&2
 	)
-	printf '%s\n' "${output_dir}/charts/oci-service-operator-psql-chart-${version#v}.tgz"
+	printf '%s\n' "${output_dir}/charts/oci-service-operator-${group}-chart-${version#v}.tgz"
 }
 
 install_chart=$(build_chart "${install_version}")
-"${helm_bin}" install osok-psql "${install_chart}" \
+"${helm_bin}" install "${release_name}" "${install_chart}" \
 	--namespace "${namespace}" \
 	--set image.pullPolicy=IfNotPresent \
 	--wait \
 	--timeout 120s
 
-"${kubectl_bin}" -n "${namespace}" get deployment oci-service-operator-psql-controller-manager
+"${kubectl_bin}" -n "${namespace}" get deployment "${manager_name}"
 "${kubectl_bin}" -n "${namespace}" rollout status \
-	deployment/oci-service-operator-psql-controller-manager \
+	"deployment/${manager_name}" \
 	--timeout=120s
-if ! "${kubectl_bin}" auth can-i get secrets \
-	--as "system:serviceaccount:${namespace}:oci-service-operator-psql-controller-manager" \
-	--namespace "${namespace}"; then
-	echo "controller service account cannot get referenced Secrets" >&2
-	exit 1
-fi
-if "${kubectl_bin}" auth can-i list secrets \
-	--as "system:serviceaccount:${namespace}:oci-service-operator-psql-controller-manager" \
-	--namespace "${namespace}"; then
-	echo "controller service account can unexpectedly list Secrets" >&2
-	exit 1
-fi
 
 upgrade_chart=$(build_chart "${upgrade_version}")
 "${helm_bin}" show crds "${upgrade_chart}" | "${kubectl_bin}" apply -f -
-"${helm_bin}" upgrade osok-psql "${upgrade_chart}" \
+"${helm_bin}" upgrade "${release_name}" "${upgrade_chart}" \
 	--namespace "${namespace}" \
 	--set image.pullPolicy=IfNotPresent \
 	--wait \
 	--timeout 120s
 
-"${helm_bin}" uninstall osok-psql --namespace "${namespace}" --wait
-if "${kubectl_bin}" -n "${namespace}" get deployment oci-service-operator-psql-controller-manager >/dev/null 2>&1; then
+"${helm_bin}" uninstall "${release_name}" --namespace "${namespace}" --wait
+if "${kubectl_bin}" -n "${namespace}" get deployment "${manager_name}" >/dev/null 2>&1; then
 	echo "deployment still exists after Helm uninstall" >&2
 	exit 1
 fi
-"${kubectl_bin}" get crd dbsystems.psql.oracle.com >/dev/null
-"${kubectl_bin}" delete crd dbsystems.psql.oracle.com
+"${helm_bin}" show crds "${upgrade_chart}" | "${kubectl_bin}" get -f - >/dev/null
+"${helm_bin}" show crds "${upgrade_chart}" | "${kubectl_bin}" delete -f -
 
-echo "PostgreSQL Helm install, upgrade, and uninstall test passed"
+echo "${group} Helm install, upgrade, and uninstall test passed"

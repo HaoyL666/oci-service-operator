@@ -79,7 +79,7 @@ func runArchive(args []string) error {
 func runGenerate(args []string) error {
 	opts := packagehelm.GenerateOptions{}
 	flags := flag.NewFlagSet("packagehelm generate", flag.ContinueOnError)
-	flags.StringVar(&opts.Group, "group", "", "Package group (the pilot supports psql)")
+	flags.StringVar(&opts.Group, "group", "", "Package group")
 	flags.StringVar(&opts.Version, "version", "", "Release version including its leading v")
 	flags.StringVar(&opts.ControllerImage, "controller-image", "", "Exact controller image reference")
 	flags.StringVar(&opts.ManifestPath, "manifest", "", "Rendered package manifest")

@@ -7,7 +7,7 @@ ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 usage() {
 	cat <<'EOF'
 Usage:
-  VERSION=v2.3.0 CONTROLLER_IMG=registry/image:v2.3.0 hack/package-helm.sh build psql
+  VERSION=v2.3.0 CONTROLLER_IMG=registry/image:v2.3.0 hack/package-helm.sh build <group>
 EOF
 }
 
@@ -17,25 +17,32 @@ if [[ $# -ne 2 || $1 != "build" ]]; then
 fi
 
 group=$2
-if [[ "${group}" != "psql" ]]; then
-	echo "the Helm pilot currently supports only psql" >&2
+metadata_file="${ROOT_DIR}/packages/${group}/metadata.env"
+if [[ ! -f "${metadata_file}" ]]; then
+	echo "unknown package group: ${group}" >&2
 	exit 1
 fi
+# shellcheck disable=SC1090
+source "${metadata_file}"
 
 : "${VERSION:?VERSION must be set and retain its leading v}"
 : "${CONTROLLER_IMG:?CONTROLLER_IMG must be set to an exact tagged or digest-pinned image}"
+: "${PACKAGE_NAME:?missing PACKAGE_NAME in ${metadata_file}}"
+: "${PACKAGE_NAMESPACE:?missing PACKAGE_NAMESPACE in ${metadata_file}}"
 
 helm_bin=${HELM:-helm}
 out_dir=${OUT_DIR:-"${ROOT_DIR}/dist/charts"}
 work_dir=${WORK_DIR:-"${out_dir}/.work/${group}"}
-chart_name=oci-service-operator-psql-chart
+chart_name="${PACKAGE_NAME}-chart"
 chart_version=${VERSION#v}
 chart_dir="${out_dir}/${chart_name}"
 package_manifest="${work_dir}/package-install.yaml"
 helm_manifest="${work_dir}/helm-install.yaml"
-companion_crd="${out_dir}/psql-crds-${chart_version}.yaml"
+companion_crd="${out_dir}/${group}-crds-${chart_version}.yaml"
 archive="${out_dir}/${chart_name}-${chart_version}.tgz"
-skeleton="${ROOT_DIR}/charts/${chart_name}"
+skeleton="${ROOT_DIR}/charts/oci-service-operator-service-chart"
+release_name="osok-${group}"
+namespace="${PACKAGE_NAMESPACE}"
 
 mkdir -p "${out_dir}" "${work_dir}"
 
@@ -59,8 +66,8 @@ OUT="${package_manifest}" \
 )
 
 "${helm_bin}" lint "${chart_dir}" --strict
-"${helm_bin}" template osok-psql "${chart_dir}" \
-	--namespace oci-service-operator-psql-system \
+"${helm_bin}" template "${release_name}" "${chart_dir}" \
+	--namespace "${namespace}" \
 	--include-crds >"${helm_manifest}"
 
 (

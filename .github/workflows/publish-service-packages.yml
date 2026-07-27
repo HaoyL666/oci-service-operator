@@ -243,28 +243,26 @@ jobs:
           raw_platforms="${{ inputs.platform }}"
           raw_platforms="${raw_platforms// /,}"
           IFS=',' read -r -a platform_list <<< "${raw_platforms}"
+          printf '%s' "${{ secrets.GITHUB_TOKEN }}" |
+            helm registry login ghcr.io \
+              --username "${{ github.repository_owner }}" \
+              --password-stdin
 
           for service in "${services[@]}"; do
             [ -n "${service}" ] || continue
             image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}:${{ inputs.version }}"
             bundle_image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}-bundle:${{ inputs.version }}"
-
-            if [ "${service}" = "psql" ]; then
-              chart_version="${{ inputs.version }}"
-              chart_version="${chart_version#v}"
-              chart_ref="oci://${{ env.GHCR_REGORG }}/oci-service-operator-psql-chart"
-              printf '%s' "${{ secrets.GITHUB_TOKEN }}" |
-                helm registry login ghcr.io \
-                  --username "${{ github.repository_owner }}" \
-                  --password-stdin
-              if lookup_output=$(helm show chart "${chart_ref}" --version "${chart_version}" 2>&1); then
-                echo "Refusing to overwrite existing immutable chart ${chart_ref}:${chart_version}" >&2
-                exit 1
-              elif ! grep -Eiq 'not found|manifest unknown' <<<"${lookup_output}"; then
-                echo "Unable to prove ${chart_ref}:${chart_version} is unused:" >&2
-                echo "${lookup_output}" >&2
-                exit 1
-              fi
+            chart_version="${{ inputs.version }}"
+            chart_version="${chart_version#v}"
+            chart_name="oci-service-operator-${service}-chart"
+            chart_ref="oci://${{ env.GHCR_REGORG }}/${chart_name}"
+            if lookup_output=$(helm show chart "${chart_ref}" --version "${chart_version}" 2>&1); then
+              echo "Refusing to overwrite existing immutable chart ${chart_ref}:${chart_version}" >&2
+              exit 1
+            elif ! grep -Eiq 'not found|manifest unknown' <<<"${lookup_output}"; then
+              echo "Unable to prove ${chart_ref}:${chart_version} is unused:" >&2
+              echo "${lookup_output}" >&2
+              exit 1
             fi
 
             refs=()
@@ -281,16 +279,14 @@ jobs:
             make bundle-build BUNDLE_IMG="${bundle_image}"
             make bundle-push BUNDLE_IMG="${bundle_image}"
 
-            if [ "${service}" = "psql" ]; then
-              make package-helm \
-                GROUP=psql \
-                VERSION="${{ inputs.version }}" \
-                CONTROLLER_IMG="${image}"
-              archive="dist/charts/oci-service-operator-psql-chart-${chart_version}.tgz"
-              echo "Publishing ${chart_ref}:${chart_version}"
-              helm push "${archive}" "oci://${{ env.GHCR_REGORG }}"
-              helm show chart "${chart_ref}" --version "${chart_version}"
-              cat "${archive}.sha256"
-              cat "dist/charts/psql-crds-${chart_version}.yaml.sha256"
-            fi
+            make package-helm \
+              GROUP="${service}" \
+              VERSION="${{ inputs.version }}" \
+              CONTROLLER_IMG="${image}"
+            archive="dist/charts/${chart_name}-${chart_version}.tgz"
+            echo "Publishing ${chart_ref}:${chart_version}"
+            helm push "${archive}" "oci://${{ env.GHCR_REGORG }}"
+            helm show chart "${chart_ref}" --version "${chart_version}"
+            cat "${archive}.sha256"
+            cat "dist/charts/${service}-crds-${chart_version}.yaml.sha256"
           done

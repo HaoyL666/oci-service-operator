@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oci-service-operator-psql-controller-manager
+  name: __OSOK_MANAGER_NAME__
   namespace: {{ .Release.Namespace }}
   labels:
     control-plane: controller-manager
@@ -22,7 +22,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ include "osok-psql.serviceAccountName" . }}
+      serviceAccountName: {{ include "osok.serviceAccountName" . }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -34,7 +34,7 @@ spec:
             - /manager
           args:
             - --config=controller_manager_config.yaml
-          image: {{ include "osok-psql.controllerImage" . }}
+          image: {{ include "osok.controllerImage" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           name: manager
           securityContext:
@@ -199,7 +199,7 @@ spec:
             - name: USEINSTANCEPRINCIPAL
               valueFrom:
                 secretKeyRef:
-                  name: oci-service-operator-psql-osokconfig
+                  name: __OSOK_CONFIG_SECRET_NAME__
                   key: useinstanceprincipal
             {{- if or .Values.customCA.existingConfigMap .Values.customCA.existingSecret }}
             - name: SSL_CERT_DIR
@@ -232,7 +232,7 @@ spec:
       volumes:
         - name: manager-config
           configMap:
-            name: oci-service-operator-psql-manager-config
+            name: __OSOK_MANAGER_CONFIG_NAME__
         - name: oci-credentials
           secret:
             secretName: {{ .Values.credentials.existingSecret }}

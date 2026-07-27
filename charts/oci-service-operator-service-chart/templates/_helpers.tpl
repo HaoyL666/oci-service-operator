@@ -1,8 +1,8 @@
-{{- define "osok-psql.serviceAccountName" -}}
-{{- default "oci-service-operator-psql-controller-manager" .Values.serviceAccount.name -}}
+{{- define "osok.serviceAccountName" -}}
+{{- default "__OSOK_MANAGER_NAME__" .Values.serviceAccount.name -}}
 {{- end -}}
 
-{{- define "osok-psql.controllerImage" -}}
+{{- define "osok.controllerImage" -}}
 {{- if .Values.image.digest -}}
 {{- printf "%s@%s" .Values.image.repository .Values.image.digest -}}
 {{- else -}}

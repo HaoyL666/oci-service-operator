@@ -72,6 +72,7 @@ PACKAGE_HELM_SCRIPT ?= hack/package-helm.sh
 HELM_OUTPUT_DIR ?= dist/charts
 HELM_WORK_DIR ?= $(HELM_OUTPUT_DIR)/.work/$(GROUP)
 HELM ?= helm
+HELM_REGISTRY ?= ghcr.io/oracle
 MONOLITH_SCRIPT ?= hack/monolith.sh
 CONTROLLER_IMG ?=
 GENERATOR_ENTRYPOINT ?= ./cmd/generator
@@ -462,6 +463,8 @@ docker-push: ## Push docker image with the manager.
 
 ##@ Packages
 
+.PHONY: packages package-generate package-install package-helm package-helm-all test-package-helm-kind
+
 packages: ## List configured package groups under packages/.
 	@find $(PACKAGES_DIR) -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort
 
@@ -474,14 +477,24 @@ package-install: controller-gen kustomize ## Render a single install YAML for GR
 	@CONTROLLER_GEN_RUNNER="$(CONTROLLER_GEN_RUNNER)" CONTROLLER_GEN="$(CONTROLLER_GEN)" KUSTOMIZE="$(KUSTOMIZE)" CONTROLLER_IMG="$(CONTROLLER_IMG)" OUT="$(PACKAGE_OUTPUT_DIR)/install.yaml" \
 		"$(PACKAGE_SCRIPT)" render "$(GROUP)"
 
-package-helm: controller-gen kustomize ## Build, lint, parity-check, and package the PostgreSQL Helm OCI chart.
-	@test "$(GROUP)" = "psql" || { echo "The Helm pilot currently supports GROUP=psql only."; exit 1; }
+package-helm: controller-gen kustomize ## Build, lint, parity-check, and package one service Helm OCI chart.
+	@test -f "$(PACKAGE_DIR)/metadata.env" || { echo "Unknown GROUP '$(GROUP)'. See 'make packages'."; exit 1; }
 	@[ -n "$(VERSION)" ] || { echo "VERSION must be set (for example v2.3.0-alpha)"; exit 1; }
 	@[ -n "$(CONTROLLER_IMG)" ] || { echo "CONTROLLER_IMG must be an exact tagged or digest-pinned image"; exit 1; }
 	@CONTROLLER_GEN_RUNNER="$(CONTROLLER_GEN_RUNNER)" CONTROLLER_GEN="$(CONTROLLER_GEN)" KUSTOMIZE="$(KUSTOMIZE)" HELM="$(HELM)" CONTROLLER_IMG="$(CONTROLLER_IMG)" VERSION="$(VERSION)" OUT_DIR="$(HELM_OUTPUT_DIR)" WORK_DIR="$(HELM_WORK_DIR)" \
 		"$(BASH)" "$(PWD)/$(PACKAGE_HELM_SCRIPT)" build "$(GROUP)"
 
-test-package-helm-kind: ## Test PostgreSQL Helm install, CRD upgrade, and uninstall on a disposable Kind cluster.
+package-helm-all: ## Build Helm OCI charts for every service package published by the release workflow.
+	@case "$(VERSION)" in v*) ;; *) echo "VERSION must retain its leading v"; exit 1 ;; esac
+	@set -e; \
+	for group in $$(find "$(PACKAGES_DIR)" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort | grep -v '^core$$'); do \
+		"$(MAKE)" --no-print-directory package-helm \
+			GROUP="$$group" \
+			VERSION="$(VERSION)" \
+			CONTROLLER_IMG="$(HELM_REGISTRY)/oci-service-operator-$$group:$(VERSION)"; \
+	done
+
+test-package-helm-kind: ## Test one service Helm install, CRD upgrade, and uninstall on a disposable Kind cluster.
 	@HELM="$(HELM)" "$(BASH)" "$(PWD)/hack/test-package-helm-kind.sh"
 
 monolith-install: kustomize ## Render the monolithic install YAML into dist/monolith/install.yaml.

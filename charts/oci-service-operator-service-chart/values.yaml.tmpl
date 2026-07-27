@@ -10,7 +10,7 @@ imagePullSecrets: []
 
 serviceAccount:
   create: true
-  name: oci-service-operator-psql-controller-manager
+  name: __OSOK_MANAGER_NAME__
   automountServiceAccountToken: true
   annotations: {}
 
@@ -30,7 +30,7 @@ manager:
   webhookPort: 9443
   leaderElection:
     enabled: true
-    resourceName: 40558063.oci.psql
+    resourceName: 40558063.oci.__OSOK_GROUP__
 
 resources:
   limits:

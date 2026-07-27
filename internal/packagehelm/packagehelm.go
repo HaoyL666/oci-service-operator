@@ -19,7 +19,6 @@ import (
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
-	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilyaml "k8s.io/apimachinery/pkg/util/yaml"
@@ -30,19 +29,20 @@ const (
 	argocdSyncOptionsAnnotation = "argocd.argoproj.io/sync-options"
 	argocdPruneFalse            = "Prune=false"
 	helmNamespaceToken          = "__OSOK_HELM_RELEASE_NAMESPACE__"
-	psqlChartName               = "oci-service-operator-psql-chart"
+	serviceAccountToken         = "__OSOK_SERVICE_ACCOUNT__"
 )
 
 var (
 	chartVersionPattern = regexp.MustCompile(`^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$`)
 	digestPattern       = regexp.MustCompile(`^sha256:[0-9a-f]{64}$`)
+	groupPattern        = regexp.MustCompile(`^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$`)
 	imageTagPattern     = regexp.MustCompile(`^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$`)
 )
 
 var deterministicArchiveTime = time.Date(2000, time.January, 1, 0, 0, 0, 0, time.UTC)
 
 // GenerateOptions identifies the source package manifest and the destination
-// used to assemble the PostgreSQL Helm chart.
+// used to assemble one service-scoped Helm chart.
 type GenerateOptions struct {
 	Group           string
 	Version         string
@@ -82,25 +82,24 @@ func Generate(opts GenerateOptions) error {
 		return fmt.Errorf("copy chart skeleton: %w", err)
 	}
 
+	namePrefix := "oci-service-operator-" + opts.Group + "-"
 	replacements := map[string]string{
-		"__OSOK_CHART_VERSION__":    chartVersion,
-		"__OSOK_APP_VERSION__":      opts.Version,
-		"__OSOK_IMAGE_REPOSITORY__": image.Repository,
-		"__OSOK_IMAGE_TAG__":        image.Tag,
-		"__OSOK_IMAGE_DIGEST__":     image.Digest,
+		"__OSOK_GROUP__":                     opts.Group,
+		"__OSOK_CHART_NAME__":                chartName(opts.Group),
+		"__OSOK_MANAGER_NAME__":              namePrefix + "controller-manager",
+		"__OSOK_MANAGER_CONFIG_NAME__":       namePrefix + "manager-config",
+		"__OSOK_CONFIG_SECRET_NAME__":        namePrefix + "osokconfig",
+		"__OSOK_MANAGER_ROLE_NAME__":         namePrefix + "manager-role",
+		"__OSOK_MANAGER_ROLE_BINDING_NAME__": namePrefix + "manager-rolebinding",
+		"__OSOK_LEADER_ROLE_NAME__":          namePrefix + "leader-election-role",
+		"__OSOK_LEADER_ROLE_BINDING_NAME__":  namePrefix + "leader-election-rolebinding",
+		"__OSOK_CHART_VERSION__":             chartVersion,
+		"__OSOK_APP_VERSION__":               opts.Version,
+		"__OSOK_IMAGE_REPOSITORY__":          image.Repository,
+		"__OSOK_IMAGE_TAG__":                 image.Tag,
+		"__OSOK_IMAGE_DIGEST__":              image.Digest,
 	}
-	if err := renderTemplateFile(
-		filepath.Join(opts.OutputDir, "Chart.yaml.tmpl"),
-		filepath.Join(opts.OutputDir, "Chart.yaml"),
-		replacements,
-	); err != nil {
-		return err
-	}
-	if err := renderTemplateFile(
-		filepath.Join(opts.OutputDir, "values.yaml.tmpl"),
-		filepath.Join(opts.OutputDir, "values.yaml"),
-		replacements,
-	); err != nil {
+	if err := renderTemplateDirectory(opts.OutputDir, replacements); err != nil {
 		return err
 	}
 
@@ -115,8 +114,8 @@ func Generate(opts GenerateOptions) error {
 }
 
 // VerifyManifestParity compares the package output with Helm-rendered output.
-// The package Namespace and the chart's Argo CD CRD prune annotation are the
-// only intentional differences.
+// The package Namespace, chart-owned dedicated ServiceAccount, and the chart's
+// Argo CD CRD prune annotation are intentional differences.
 func VerifyManifestParity(packageManifestPath, helmManifestPath string) error {
 	packageObjects, err := readObjects(packageManifestPath)
 	if err != nil {
@@ -184,8 +183,7 @@ func VerifySecurityPosture(helmManifestPath string) error {
 
 	var (
 		deploymentFound       bool
-		credentialRBACFound   bool
-		crdPrunePolicyFound   bool
+		crdFound              bool
 		securityPostureErrors []string
 	)
 	for i := range objects {
@@ -194,11 +192,18 @@ func VerifySecurityPosture(helmManifestPath string) error {
 		case "Namespace":
 			securityPostureErrors = append(securityPostureErrors, "chart must not render a Namespace")
 		case "CustomResourceDefinition":
-			if object.GetAnnotations()[argocdSyncOptionsAnnotation] == argocdPruneFalse {
-				crdPrunePolicyFound = true
+			crdFound = true
+			if object.GetAnnotations()[argocdSyncOptionsAnnotation] != argocdPruneFalse {
+				securityPostureErrors = append(
+					securityPostureErrors,
+					fmt.Sprintf(
+						"chart CRD %q is missing the Argo CD Prune=false policy",
+						object.GetName(),
+					),
+				)
 			}
 		case "Secret":
-			if object.GetName() != "oci-service-operator-psql-osokconfig" {
+			if !strings.HasSuffix(object.GetName(), "-osokconfig") {
 				securityPostureErrors = append(
 					securityPostureErrors,
 					fmt.Sprintf("chart must not create credential Secret %q", object.GetName()),
@@ -211,23 +216,13 @@ func VerifySecurityPosture(helmManifestPath string) error {
 				return fmt.Errorf("decode Deployment %q: %w", object.GetName(), err)
 			}
 			securityPostureErrors = append(securityPostureErrors, deploymentSecurityErrors(&deployment)...)
-		case "Role", "ClusterRole":
-			found, ruleErrors, err := secretRBACSecurityErrors(object)
-			if err != nil {
-				return err
-			}
-			credentialRBACFound = credentialRBACFound || found
-			securityPostureErrors = append(securityPostureErrors, ruleErrors...)
 		}
 	}
 	if !deploymentFound {
 		securityPostureErrors = append(securityPostureErrors, "chart did not render a Deployment")
 	}
-	if !credentialRBACFound {
-		securityPostureErrors = append(securityPostureErrors, "chart did not render get-only Secret RBAC")
-	}
-	if !crdPrunePolicyFound {
-		securityPostureErrors = append(securityPostureErrors, "chart CRD is missing the Argo CD Prune=false policy")
+	if !crdFound {
+		securityPostureErrors = append(securityPostureErrors, "chart did not render a CustomResourceDefinition")
 	}
 	if len(securityPostureErrors) > 0 {
 		return fmt.Errorf("Helm security checks failed:\n- %s", strings.Join(securityPostureErrors, "\n- "))
@@ -289,45 +284,6 @@ func containsCapability(values []corev1.Capability, expected corev1.Capability) 
 		}
 	}
 	return false
-}
-
-func secretRBACSecurityErrors(object *unstructured.Unstructured) (bool, []string, error) {
-	var rules []rbacv1.PolicyRule
-	switch object.GetKind() {
-	case "Role":
-		var role rbacv1.Role
-		if err := runtime.DefaultUnstructuredConverter.FromUnstructured(object.Object, &role); err != nil {
-			return false, nil, fmt.Errorf("decode Role %q: %w", object.GetName(), err)
-		}
-		rules = role.Rules
-	case "ClusterRole":
-		var role rbacv1.ClusterRole
-		if err := runtime.DefaultUnstructuredConverter.FromUnstructured(object.Object, &role); err != nil {
-			return false, nil, fmt.Errorf("decode ClusterRole %q: %w", object.GetName(), err)
-		}
-		rules = role.Rules
-	}
-
-	found := false
-	var securityErrors []string
-	for _, rule := range rules {
-		if !containsString(rule.Resources, "secrets") {
-			continue
-		}
-		found = true
-		if len(rule.Verbs) != 1 || rule.Verbs[0] != "get" {
-			securityErrors = append(
-				securityErrors,
-				fmt.Sprintf(
-					"%s/%s Secret access must contain only get, found %q",
-					object.GetKind(),
-					object.GetName(),
-					rule.Verbs,
-				),
-			)
-		}
-	}
-	return found, securityErrors, nil
 }
 
 // WriteChecksum writes a conventional SHA-256 checksum file next to a release
@@ -501,8 +457,8 @@ func parseControllerImage(value string) (controllerImage, error) {
 
 func validateGenerateOptions(opts GenerateOptions) error {
 	switch {
-	case opts.Group != "psql":
-		return fmt.Errorf("unsupported group %q: the Helm pilot currently supports only psql", opts.Group)
+	case !groupPattern.MatchString(opts.Group):
+		return fmt.Errorf("group %q must be a lowercase DNS label", opts.Group)
 	case strings.TrimSpace(opts.Version) == "":
 		return errors.New("version is required")
 	case !strings.HasPrefix(opts.Version, "v"):
@@ -518,8 +474,9 @@ func validateGenerateOptions(opts GenerateOptions) error {
 	case strings.TrimSpace(opts.CRDOutputPath) == "":
 		return errors.New("CRD output path is required")
 	}
-	if filepath.Base(filepath.Clean(opts.OutputDir)) != psqlChartName {
-		return fmt.Errorf("chart output directory must end in %q", psqlChartName)
+	expectedChartName := chartName(opts.Group)
+	if filepath.Base(filepath.Clean(opts.OutputDir)) != expectedChartName {
+		return fmt.Errorf("chart output directory must end in %q", expectedChartName)
 	}
 	skeletonPath, err := filepath.Abs(opts.SkeletonDir)
 	if err != nil {
@@ -532,11 +489,15 @@ func validateGenerateOptions(opts GenerateOptions) error {
 	if skeletonPath == outputPath {
 		return errors.New("chart output directory must differ from the source skeleton")
 	}
-	if !strings.HasPrefix(filepath.Base(opts.CRDOutputPath), "psql-crds-") ||
+	if !strings.HasPrefix(filepath.Base(opts.CRDOutputPath), opts.Group+"-crds-") ||
 		filepath.Ext(opts.CRDOutputPath) != ".yaml" {
-		return errors.New("CRD output filename must use psql-crds-<version>.yaml")
+		return fmt.Errorf("CRD output filename must use %s-crds-<version>.yaml", opts.Group)
 	}
 	return nil
+}
+
+func chartName(group string) string {
+	return "oci-service-operator-" + group + "-chart"
 }
 
 func resetGeneratedDirectory(path string) error {
@@ -589,23 +550,41 @@ func copyDirectory(source, destination string) error {
 	})
 }
 
-func renderTemplateFile(sourcePath, destinationPath string, replacements map[string]string) error {
-	content, err := os.ReadFile(sourcePath)
-	if err != nil {
-		return fmt.Errorf("read template %q: %w", sourcePath, err)
+func renderTemplateDirectory(root string, replacements map[string]string) error {
+	var paths []string
+	if err := filepath.WalkDir(root, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if !entry.IsDir() {
+			paths = append(paths, path)
+		}
+		return nil
+	}); err != nil {
+		return err
 	}
-	rendered := string(content)
-	for placeholder, value := range replacements {
-		rendered = strings.ReplaceAll(rendered, placeholder, value)
-	}
-	if strings.Contains(rendered, "__OSOK_") {
-		return fmt.Errorf("template %q contains an unresolved OSOK placeholder", sourcePath)
-	}
-	if err := os.WriteFile(destinationPath, []byte(rendered), 0o644); err != nil {
-		return fmt.Errorf("write rendered file %q: %w", destinationPath, err)
-	}
-	if err := os.Remove(sourcePath); err != nil {
-		return fmt.Errorf("remove template source %q: %w", sourcePath, err)
+	sort.Strings(paths)
+	for _, sourcePath := range paths {
+		content, err := os.ReadFile(sourcePath)
+		if err != nil {
+			return fmt.Errorf("read template %q: %w", sourcePath, err)
+		}
+		rendered := string(content)
+		for placeholder, value := range replacements {
+			rendered = strings.ReplaceAll(rendered, placeholder, value)
+		}
+		if strings.Contains(rendered, "__OSOK_") {
+			return fmt.Errorf("template %q contains an unresolved OSOK placeholder", sourcePath)
+		}
+		destinationPath := strings.TrimSuffix(sourcePath, ".tmpl")
+		if err := os.WriteFile(destinationPath, []byte(rendered), 0o644); err != nil {
+			return fmt.Errorf("write rendered file %q: %w", destinationPath, err)
+		}
+		if destinationPath != sourcePath {
+			if err := os.Remove(sourcePath); err != nil {
+				return fmt.Errorf("remove template source %q: %w", sourcePath, err)
+			}
+		}
 	}
 	return nil
 }
@@ -766,6 +745,10 @@ func normalizeObjects(objects []unstructured.Unstructured, packageOutput bool) (
 		if packageOutput && object.GetKind() == "Namespace" {
 			continue
 		}
+		if object.GetKind() == "ServiceAccount" &&
+			strings.HasSuffix(object.GetName(), "-controller-manager") {
+			continue
+		}
 		if object.GetKind() == "CustomResourceDefinition" {
 			annotations := object.GetAnnotations()
 			delete(annotations, argocdSyncOptionsAnnotation)
@@ -780,6 +763,14 @@ func normalizeObjects(objects []unstructured.Unstructured, packageOutput bool) (
 				return nil, err
 			}
 		}
+		if object.GetKind() == "Deployment" {
+			unstructured.RemoveNestedField(object.Object, "spec", "template", "spec", "serviceAccountName")
+		}
+		if object.GetKind() == "RoleBinding" || object.GetKind() == "ClusterRoleBinding" {
+			if err := normalizeServiceAccountSubjects(object); err != nil {
+				return nil, err
+			}
+		}
 		key := objectKey(object)
 		if _, exists := normalized[key]; exists {
 			return nil, fmt.Errorf("duplicate object %s", key)
@@ -787,6 +778,24 @@ func normalizeObjects(objects []unstructured.Unstructured, packageOutput bool) (
 		normalized[key] = object.Object
 	}
 	return normalized, nil
+}
+
+func normalizeServiceAccountSubjects(object *unstructured.Unstructured) error {
+	subjects, found, err := unstructured.NestedSlice(object.Object, "subjects")
+	if err != nil || !found {
+		return err
+	}
+	for i, rawSubject := range subjects {
+		subject, ok := rawSubject.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("%s/%s contains a non-object subject", object.GetKind(), object.GetName())
+		}
+		if subject["kind"] == "ServiceAccount" {
+			subject["name"] = serviceAccountToken
+			subjects[i] = subject
+		}
+	}
+	return unstructured.SetNestedSlice(object.Object, subjects, "subjects")
 }
 
 func normalizeManagerConfig(object *unstructured.Unstructured) error {

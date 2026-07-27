@@ -8,7 +8,7 @@
 > production.
 
 * [Pre-Requisites](#pre-requisites)
-* [PostgreSQL Helm OCI Chart](#postgresql-helm-oci-chart)
+* [Service Helm OCI Charts](#service-helm-oci-charts)
 * [Install Operator SDK](#install-operator-sdk)
 * [Install Operator Lifecycle Manager (OLM)](#install-olm)
 * [Deploy OCI Service Operator for Kubernetes](#deploy-oci-service-operator-for-kubernetes)
@@ -16,32 +16,36 @@
 ## Pre-Requisites
 
 * Kubernetes Cluster
-* [Operator SDK](https://sdk.operatorframework.io/)
-* [Operator Lifecycle Manager (OLM)](https://olm.operatorframework.io/docs/getting-started/)
 * `kubectl` to control the Kubernetes Cluster. Please make sure it points to the above Kubernetes Cluster.
+* Helm 3 for the Helm installation path.
+* [Operator SDK](https://sdk.operatorframework.io/) and
+  [Operator Lifecycle Manager (OLM)](https://olm.operatorframework.io/docs/getting-started/)
+  for the OLM installation path.
 
-## PostgreSQL Helm OCI Chart
+## Service Helm OCI Charts
 
-The first service-scoped Helm package is the OCI Database with PostgreSQL
-controller. It is published as an OCI chart at:
+Every published service package has a matching OCI Helm chart:
 
 ```text
-oci://ghcr.io/oracle/oci-service-operator-psql-chart
+oci://ghcr.io/oracle/oci-service-operator-<service>-chart
 ```
 
-This is a pilot packaging path for PostgreSQL only. The existing per-service
-OLM bundles remain available and are unchanged.
+For example, the OCI Database with PostgreSQL chart is
+`oci://ghcr.io/oracle/oci-service-operator-psql-chart`. The existing
+per-service OLM bundles remain available; each release workflow publishes both
+the OLM bundle and Helm chart for the selected service.
 
 The chart uses the Helm release namespace and deliberately does not create a
 `Namespace` object. Create the namespace and OCI credential Secret before
 installing:
 
 ```bash
-export OSOK_PSQL_VERSION=2.3.0-alpha
-export OSOK_PSQL_NAMESPACE=oci-service-operator-psql-system
+export OSOK_SERVICE=psql
+export OSOK_VERSION=2.3.0-alpha
+export OSOK_NAMESPACE="oci-service-operator-${OSOK_SERVICE}-system"
 
-kubectl create namespace "${OSOK_PSQL_NAMESPACE}"
-kubectl -n "${OSOK_PSQL_NAMESPACE}" create secret generic ocicredentials \
+kubectl create namespace "${OSOK_NAMESPACE}"
+kubectl -n "${OSOK_NAMESPACE}" create secret generic ocicredentials \
   --from-literal=auth_type=user_principal \
   --from-literal=tenancy=<CUSTOMER_TENANCY_OCID> \
   --from-literal=user=<USER_OCID> \
@@ -50,10 +54,10 @@ kubectl -n "${OSOK_PSQL_NAMESPACE}" create secret generic ocicredentials \
   --from-literal=passphrase=<PASSPHRASE_STRING> \
   --from-file=privatekey=<PATH_OF_USER_PRIVATE_API_KEY>
 
-helm install osok-psql \
-  oci://ghcr.io/oracle/oci-service-operator-psql-chart \
-  --version "${OSOK_PSQL_VERSION}" \
-  --namespace "${OSOK_PSQL_NAMESPACE}" \
+helm install "osok-${OSOK_SERVICE}" \
+  "oci://ghcr.io/oracle/oci-service-operator-${OSOK_SERVICE}-chart" \
+  --version "${OSOK_VERSION}" \
+  --namespace "${OSOK_NAMESPACE}" \
   --set credentials.existingSecret=ocicredentials
 ```
 
@@ -66,9 +70,10 @@ contexts, and standard pod scheduling controls.
 
 The default pod and container security contexts comply with the Kubernetes
 Restricted Pod Security Standard. The controller service account is dedicated
-to PostgreSQL. Secret access is limited to `get`; it cannot list, watch, create,
-update, or delete Secrets. The read permission also supports Secret references
-from PostgreSQL custom resources reconciled by the controller.
+to the Helm release. RBAC is generated from the same service controller markers
+used by the OLM package. Some controllers require broader Secret permissions to
+manage connection or output Secrets; review the rendered RBAC for the selected
+service before production use.
 
 ### Upgrade and rollback
 
@@ -77,17 +82,17 @@ but Helm does not upgrade or delete those CRDs. Apply the CRD from the exact
 target chart version before upgrading:
 
 ```bash
-export OSOK_PSQL_TARGET_VERSION=2.3.1
+export OSOK_TARGET_VERSION=2.3.1
 
 helm show crds \
-  oci://ghcr.io/oracle/oci-service-operator-psql-chart \
-  --version "${OSOK_PSQL_TARGET_VERSION}" |
+  "oci://ghcr.io/oracle/oci-service-operator-${OSOK_SERVICE}-chart" \
+  --version "${OSOK_TARGET_VERSION}" |
   kubectl apply -f -
 
-helm upgrade osok-psql \
-  oci://ghcr.io/oracle/oci-service-operator-psql-chart \
-  --version "${OSOK_PSQL_TARGET_VERSION}" \
-  --namespace "${OSOK_PSQL_NAMESPACE}" \
+helm upgrade "osok-${OSOK_SERVICE}" \
+  "oci://ghcr.io/oracle/oci-service-operator-${OSOK_SERVICE}-chart" \
+  --version "${OSOK_TARGET_VERSION}" \
+  --namespace "${OSOK_NAMESPACE}" \
   --reuse-values
 ```
 
@@ -99,15 +104,15 @@ automatically.
 ### Uninstall
 
 ```bash
-helm uninstall osok-psql --namespace "${OSOK_PSQL_NAMESPACE}"
+helm uninstall "osok-${OSOK_SERVICE}" --namespace "${OSOK_NAMESPACE}"
 ```
 
 The namespaced controller resources and Helm-owned RBAC are removed. The
-PostgreSQL CRD and any PostgreSQL custom resources remain so uninstall cannot
-silently delete managed OCI resources. Delete custom resources deliberately
-and verify their OCI cleanup before manually deleting the CRD.
+service CRDs and custom resources remain so uninstall cannot silently delete
+managed OCI resources. Delete custom resources deliberately and verify their
+OCI cleanup before manually deleting CRDs.
 
-For GitOps, use the reviewed
+For GitOps, adapt the reviewed PostgreSQL
 [Argo CD Application example](examples/argocd/psql-helm-application.yaml).
 The CRD carries `argocd.argoproj.io/sync-options: Prune=false` to prevent
 automated pruning during an application removal.
@@ -116,9 +121,12 @@ Contributors can reproduce the release chart locally:
 
 ```bash
 make package-helm \
-  GROUP=psql \
+  GROUP="${OSOK_SERVICE}" \
   VERSION=v2.3.0-alpha \
-  CONTROLLER_IMG=ghcr.io/oracle/oci-service-operator-psql:v2.3.0-alpha
+  CONTROLLER_IMG="ghcr.io/oracle/oci-service-operator-${OSOK_SERVICE}:v2.3.0-alpha"
+
+# Build the complete release chart set.
+make package-helm-all VERSION=v2.3.0-alpha HELM_REGISTRY=ghcr.io/oracle
 ```
 
 The target generates the service package assets, assembles the chart, validates
@@ -128,12 +136,12 @@ checks, and writes the chart, versioned CRD manifest, and SHA-256 checksums
 under `dist/charts`.
 
 The release workflow refuses to overwrite an existing chart version and GHCR
-records the immutable OCI manifest digest. The pilot does not yet publish a
-Helm provenance file or a separate signature; consumers that require signed
-artifacts should treat that as a production-readiness gap. Before a production
-rollout, validate a canary install and upgrade, controller health and
-reconciliation alerts, custom-resource cleanup, and the rollback procedure
-against the target OKE/Kubernetes version.
+records the immutable OCI manifest digest. The workflow does not yet publish a
+Helm provenance file or separate signature; consumers that require signed
+artifacts should treat that as a production-readiness gap. Before production,
+validate a canary install and upgrade, controller health and reconciliation
+alerts, custom-resource cleanup, and rollback against the target
+OKE/Kubernetes version.
 
 ## Install Operator SDK
 

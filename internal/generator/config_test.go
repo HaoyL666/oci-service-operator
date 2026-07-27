@@ -1625,7 +1625,7 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 		controller:     GenerationStrategyGenerated,
 		serviceManager: GenerationStrategyGenerated,
 		registration:   GenerationStrategyGenerated,
-		webhook:        GenerationStrategyManual,
+		webhook:        GenerationStrategyNone,
 	})
 
 	assertContainerengineRuntimeRolloutMetadata(t, services["containerengine"])
