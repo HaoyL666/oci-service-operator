@@ -31,7 +31,6 @@ on:
 
 env:
   DOCKER_BUILDX_VERSION: 'v0.20.1'
-  GHCR_REGORG: 'ghcr.io/${{ github.repository_owner }}'
   HELM_VERSION: 'v3.18.6'
   HELM_LINUX_AMD64_SHA256: '3f43c0aa57243852dd542493a0f54f1396c0bc8ec7296bbb2c01e802010819ce'
 
@@ -99,10 +98,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          registry_owner=$(printf '%s' "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
+          registry_org="ghcr.io/${registry_owner}"
           IFS=',' read -r -a services <<< "${{ steps.packages.outputs.packages_batch }}"
           for service in "${services[@]}"; do
             [ -n "${service}" ] || continue
-            image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}:${{ inputs.version }}"
+            image="${registry_org}/oci-service-operator-${service}:${{ inputs.version }}"
             IMAGE="$image" \
             CONTROLLER_MAIN="./cmd/manager/${service}" \
             PLATFORMS="linux_amd64" \
@@ -147,10 +148,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          registry_owner=$(printf '%s' "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
+          registry_org="ghcr.io/${registry_owner}"
           IFS=',' read -r -a services <<< "${{ steps.packages.outputs.packages_batch }}"
           for service in "${services[@]}"; do
             [ -n "${service}" ] || continue
-            image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}:${{ inputs.version }}"
+            image="${registry_org}/oci-service-operator-${service}:${{ inputs.version }}"
             IMAGE="$image" \
             CONTROLLER_MAIN="./cmd/manager/${service}" \
             PLATFORMS="linux_arm64" \
@@ -239,6 +242,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          registry_owner=$(printf '%s' "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
+          registry_org="ghcr.io/${registry_owner}"
           IFS=',' read -r -a services <<< "${{ steps.packages.outputs.packages_batch }}"
           raw_platforms="${{ inputs.platform }}"
           raw_platforms="${raw_platforms// /,}"
@@ -250,12 +255,12 @@ jobs:
 
           for service in "${services[@]}"; do
             [ -n "${service}" ] || continue
-            image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}:${{ inputs.version }}"
-            bundle_image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}-bundle:${{ inputs.version }}"
+            image="${registry_org}/oci-service-operator-${service}:${{ inputs.version }}"
+            bundle_image="${registry_org}/oci-service-operator-${service}-bundle:${{ inputs.version }}"
             chart_version="${{ inputs.version }}"
             chart_version="${chart_version#v}"
             chart_name="oci-service-operator-${service}-chart"
-            chart_ref="oci://${{ env.GHCR_REGORG }}/${chart_name}"
+            chart_ref="oci://${registry_org}/${chart_name}"
             if lookup_output=$(helm show chart "${chart_ref}" --version "${chart_version}" 2>&1); then
               echo "Refusing to overwrite existing immutable chart ${chart_ref}:${chart_version}" >&2
               exit 1
@@ -285,7 +290,7 @@ jobs:
               CONTROLLER_IMG="${image}"
             archive="dist/charts/${chart_name}-${chart_version}.tgz"
             echo "Publishing ${chart_ref}:${chart_version}"
-            helm push "${archive}" "oci://${{ env.GHCR_REGORG }}"
+            helm push "${archive}" "oci://${registry_org}"
             helm show chart "${chart_ref}" --version "${chart_version}"
             cat "${archive}.sha256"
             cat "dist/charts/${service}-crds-${chart_version}.yaml.sha256"
