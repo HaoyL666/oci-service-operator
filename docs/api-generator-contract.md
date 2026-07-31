@@ -22,6 +22,7 @@ Each service record defines:
 | `sampleOrder` | Optional deterministic ordering hint for generated sample entries. |
 | `packageProfile` | Install posture for the group: `controller-backed` or `crd-only`. |
 | `package.extraResources` | Optional extra package overlay resources to include in the generated install kustomization. |
+| `package.dedicatedServiceAccount` | When true, generate a package-specific manager ServiceAccount and its manager and leader-election bindings instead of binding those roles to the shared default ServiceAccount. |
 | `selection.enabled` | Whether the service participates in the default active generator surface. |
 | `selection.mode` | Default selection contract for the service: `all` or `explicit`. |
 | `selection.includeKinds` | Optional non-empty kind list used only when `selection.mode=explicit`. |

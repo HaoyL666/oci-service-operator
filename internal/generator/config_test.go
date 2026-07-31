@@ -2951,10 +2951,13 @@ func assertPSQLRuntimeRolloutMetadata(t *testing.T, service *ServiceConfig) {
 	if override.Kind != "DbSystem" {
 		t.Fatalf("psql override kind = %q, want %q", override.Kind, "DbSystem")
 	}
+	if !service.Package.DedicatedServiceAccount {
+		t.Fatal("psql dedicatedServiceAccount = false, want true")
+	}
 	if !slices.Equal(
 		override.Controller.ExtraRBACMarkers,
 		[]string{
-			`groups="",resources=secrets,verbs=get;list;watch`,
+			`groups="",resources=secrets,verbs=get`,
 		},
 	) {
 		t.Fatalf("psql extra RBAC markers = %v, want secret read markers only", override.Controller.ExtraRBACMarkers)

@@ -39,7 +39,7 @@ func TestCheckedInDatabaseAutonomousDatabasePackageRBACMatchesReadOnlySecretSema
 func TestCheckedInPSQLDbSystemPackageRBACMatchesSecretAndEventRecorderSemantics(t *testing.T) {
 	controllerPath := filepath.Join(repoRoot(t), "controllers", "psql", "dbsystem_controller.go")
 	assertFileContains(t, controllerPath, []string{
-		`// +kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch`,
+		`// +kubebuilder:rbac:groups="",resources=secrets,verbs=get`,
 		`// +kubebuilder:rbac:groups="",resources=events,verbs=create;patch`,
 	})
 	assertFileDoesNotContain(t, controllerPath, []string{
@@ -52,9 +52,22 @@ func TestCheckedInPSQLDbSystemPackageRBACMatchesSecretAndEventRecorderSemantics(
 		filepath.Join(repoRoot(t), "packages", "psql", "install", "generated", "rbac", "role.yaml"),
 		map[string][]string{
 			"events":  {"create", "patch"},
-			"secrets": {"get", "list", "watch"},
+			"secrets": {"get"},
 		},
 	)
+
+	managerPath := filepath.Join(repoRoot(t), "config", "manager", "psql", "manager.yaml")
+	assertFileContains(t, managerPath, []string{
+		"kind: ServiceAccount",
+		"name: controller-manager",
+		"kind: ClusterRoleBinding",
+		"kind: RoleBinding",
+		"serviceAccountName: controller-manager",
+	})
+	assertFileDoesNotContain(t, filepath.Join(repoRoot(t), "packages", "psql", "install", "kustomization.yaml"), []string{
+		"../../../config/rbac/role_binding.yaml",
+		"../../../config/rbac/leader_election_role_binding.yaml",
+	})
 }
 
 func TestCheckedInRedisClusterPackageRBACMatchesEventRecorderSemantics(t *testing.T) {
