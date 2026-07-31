@@ -1750,7 +1750,10 @@ spec:
       serviceAccountName: controller-manager
 {{- end}}
       securityContext:
+        runAsNonRoot: true
         runAsUser: 65532
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - command:
         - /manager
@@ -1761,6 +1764,9 @@ spec:
         name: manager
         securityContext:
           allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
         livenessProbe:
           httpGet:
             path: /healthz
@@ -1928,17 +1934,11 @@ spec:
           - name: oci-credentials
             mountPath: /etc/oci
             readOnly: true
-          - name: pki
-            mountPath: /etc/pki
-            readOnly: true
       volumes:
         - name: oci-credentials
           secret:
             secretName: ocicredentials
             optional: true
-        - name: pki
-          hostPath:
-            path: /etc/pki
       terminationGracePeriodSeconds: 10
 `
 
