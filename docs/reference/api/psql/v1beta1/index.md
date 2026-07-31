@@ -268,7 +268,7 @@ DbSystemStatus defines the observed state of DbSystem.
 | `shape` | The name of the shape for the database instance. Example: `VM.Standard.E4.Flex` | `string` | No | - | - |
 | [`source`](#kind-dbsystem-status-source) | DbSystemSource defines nested fields for DbSystem.Source. | `object` | No | - | - |
 | [`status`](#kind-dbsystem-status-status) | - | `object` | Yes | - | - |
-| [`storageDetails`](#kind-dbsystem-status-storagedetails) | DbSystemStorageDetails defines nested fields for DbSystem.StorageDetails. | `object` | No | - | - |
+| [`storageDetails`](#kind-dbsystem-status-storagedetails) | DbSystemStorageDetailsObservedState defines nested fields for DbSystem.StorageDetails. | `object` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `systemType` | Type of the database system. | `string` | No | - | - |
 | `timeCreated` | The date and time that the database system was created, expressed in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
@@ -466,7 +466,7 @@ Async is the canonical controller-owned async contract. Resource-local legacy wo
 
 [Back to DbSystem status](#kind-dbsystem-status)
 
-DbSystemStorageDetails defines nested fields for DbSystem.StorageDetails.
+DbSystemStorageDetailsObservedState defines nested fields for DbSystem.StorageDetails.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |

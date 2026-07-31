@@ -181,8 +181,9 @@ type ServiceConfig struct {
 
 // ObservedStateConfig tunes how read-model fields are synthesized into status types.
 type ObservedStateConfig struct {
-	SDKAliases         map[string][]string `yaml:"sdkAliases,omitempty"`
-	ExcludedFieldPaths map[string][]string `yaml:"excludedFieldPaths,omitempty"`
+	SDKAliases                map[string][]string `yaml:"sdkAliases,omitempty"`
+	ExcludedFieldPaths        map[string][]string `yaml:"excludedFieldPaths,omitempty"`
+	RequiredPointerFieldPaths map[string][]string `yaml:"requiredPointerFieldPaths,omitempty"`
 }
 
 // LoadConfig reads and validates the generator config file.
@@ -315,7 +316,10 @@ func validateObservedStateConfig(service ServiceConfig) error {
 	if err := validateObservedStateAliases(service); err != nil {
 		return err
 	}
-	return validateObservedStateExcludedFieldPaths(service)
+	if err := validateObservedStateExcludedFieldPaths(service); err != nil {
+		return err
+	}
+	return validateObservedStateRequiredPointerFieldPaths(service)
 }
 
 func validateObservedStateAliases(service ServiceConfig) error {
@@ -341,6 +345,25 @@ func validateObservedStateExcludedFieldPaths(service ServiceConfig) error {
 			if _, err := normalizeObservedStateFieldPath(fieldPath); err != nil {
 				return fmt.Errorf(
 					"service %q observedState excludedFieldPaths[%q] %w",
+					service.Service,
+					rawName,
+					err,
+				)
+			}
+		}
+	}
+	return nil
+}
+
+func validateObservedStateRequiredPointerFieldPaths(service ServiceConfig) error {
+	for rawName, paths := range service.ObservedState.RequiredPointerFieldPaths {
+		if strings.TrimSpace(rawName) == "" {
+			return fmt.Errorf("service %q observedState requiredPointerFieldPaths contains a blank resource name", service.Service)
+		}
+		for _, fieldPath := range paths {
+			if _, err := normalizeObservedStateFieldPath(fieldPath); err != nil {
+				return fmt.Errorf(
+					"service %q observedState requiredPointerFieldPaths[%q] %w",
 					service.Service,
 					rawName,
 					err,
@@ -1395,6 +1418,33 @@ func (s ServiceConfig) ObservedStateExcludedFieldPaths(rawName string) map[strin
 	}
 
 	configured := s.ObservedState.ExcludedFieldPaths[rawName]
+	if len(configured) == 0 {
+		return nil
+	}
+
+	paths := make(map[string]struct{}, len(configured))
+	for _, path := range configured {
+		normalized, err := normalizeObservedStateFieldPath(path)
+		if err != nil {
+			continue
+		}
+		paths[normalized] = struct{}{}
+	}
+	if len(paths) == 0 {
+		return nil
+	}
+	return paths
+}
+
+// ObservedStateRequiredPointerFieldPaths returns observed-state fields that must retain
+// presence information while remaining required in the generated status schema.
+func (s ServiceConfig) ObservedStateRequiredPointerFieldPaths(rawName string) map[string]struct{} {
+	rawName = strings.TrimSpace(rawName)
+	if rawName == "" {
+		return nil
+	}
+
+	configured := s.ObservedState.RequiredPointerFieldPaths[rawName]
 	if len(configured) == 0 {
 		return nil
 	}

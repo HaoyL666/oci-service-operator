@@ -722,6 +722,7 @@ type fieldRenderingOptions struct {
 	scope                     fieldScope
 	escapeStatusJSONCollision bool
 	excludedFieldPaths        map[string]struct{}
+	requiredPointerFieldPaths map[string]struct{}
 }
 
 func buildFieldModel(field ocisdk.Field, jsonName string, options fieldRenderingOptions) FieldModel {

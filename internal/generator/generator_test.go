@@ -339,6 +339,9 @@ func TestBuildPackageModelSynthesizesPSQLObservedStateFields(t *testing.T) {
 				"PrimaryDbInstance": []string{"PrimaryDbInstanceDetails"},
 				"WorkRequestLog":    []string{"WorkRequestLogEntry"},
 			},
+			RequiredPointerFieldPaths: map[string][]string{
+				"DbSystem": {"StorageDetails.IsRegionallyDurable"},
+			},
 		},
 	}
 
@@ -354,6 +357,13 @@ func TestBuildPackageModelSynthesizesPSQLObservedStateFields(t *testing.T) {
 		"PrimaryDbInstance": {"DbInstanceId"},
 		"WorkRequestLog":    {"Message", "Timestamp"},
 	})
+
+	dbSystem := findResource(t, pkg.Resources, "DbSystem")
+	storageDetails := findFieldModel(t, dbSystem.StatusFields, "StorageDetails")
+	assertFieldType(t, "DbSystem status StorageDetails", storageDetails, "DbSystemStorageDetailsObservedState")
+	regionallyDurable := findFieldModel(t, findHelperType(t, dbSystem.HelperTypes, "DbSystemStorageDetailsObservedState").Fields, "IsRegionallyDurable")
+	assertFieldType(t, "DbSystem status StorageDetails.IsRegionallyDurable", regionallyDurable, "*bool")
+	assertFieldTag(t, "DbSystem status StorageDetails.IsRegionallyDurable", regionallyDurable, `json:"isRegionallyDurable"`)
 }
 
 func TestBuildPackageModelExcludesMySQLDbSystemSourceURLFromObservedState(t *testing.T) {

@@ -548,7 +548,7 @@ func validateImmutableDrift(
 		{field: "instanceCount", equal: spec.InstanceCount == 0 || spec.InstanceCount == observed.InstanceCount},
 		{field: "networkDetails", equal: dbSystemNetworkDetailsEqual(spec.NetworkDetails, observed.NetworkDetails)},
 		{field: "storageDetails.availabilityDomain", equal: spec.StorageDetails.AvailabilityDomain == observed.StorageDetails.AvailabilityDomain},
-		{field: "storageDetails.isRegionallyDurable", equal: spec.StorageDetails.IsRegionallyDurable == observed.StorageDetails.IsRegionallyDurable},
+		{field: "storageDetails.isRegionallyDurable", equal: observed.StorageDetails.IsRegionallyDurable != nil && spec.StorageDetails.IsRegionallyDurable == *observed.StorageDetails.IsRegionallyDurable},
 		{field: "storageDetails.systemType", equal: spec.StorageDetails.SystemType == observed.StorageDetails.SystemType},
 	}
 	for _, check := range checks {

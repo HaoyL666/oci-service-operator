@@ -231,6 +231,23 @@ type DbSystemDbConfigurationParams struct {
 	ApplyConfig string `json:"applyConfig,omitempty"`
 }
 
+// DbSystemStorageDetailsObservedState defines nested fields for DbSystem.StorageDetails.
+type DbSystemStorageDetailsObservedState struct {
+	JsonData string `json:"jsonData,omitempty"`
+	// Specifies the availability domain of AD-local storage.
+	// If `isRegionallyDurable` is set to true, `availabilityDomain` should not be specified.
+	// If `isRegionallyDurable` is set to false, `availabilityDomain` must be specified.
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// Specifies if the block volume used for the database system is regional or AD-local.
+	// If not specified, it will be set to false.
+	// If `isRegionallyDurable` is set to true, `availabilityDomain` should not be specified.
+	// If `isRegionallyDurable` is set to false, `availabilityDomain` must be specified.
+	IsRegionallyDurable *bool  `json:"isRegionallyDurable"`
+	SystemType          string `json:"systemType,omitempty"`
+	// Guaranteed input/output storage requests per second (IOPS) available to the database system.
+	Iops int64 `json:"iops,omitempty"`
+}
+
 // DbSystemInstance defines nested fields for DbSystem.Instance.
 type DbSystemInstance struct {
 	// A unique identifier for the database instance node. Immutable on creation.
@@ -280,10 +297,10 @@ type DbSystemStatus struct {
 	// The total number of OCPUs available to each database instance node.
 	InstanceOcpuCount int `json:"instanceOcpuCount,omitempty"`
 	// The total amount of memory available to each database instance node, in gigabytes.
-	InstanceMemorySizeInGBs int                      `json:"instanceMemorySizeInGBs,omitempty"`
-	StorageDetails          DbSystemStorageDetails   `json:"storageDetails,omitempty"`
-	NetworkDetails          DbSystemNetworkDetails   `json:"networkDetails,omitempty"`
-	ManagementPolicy        DbSystemManagementPolicy `json:"managementPolicy,omitempty"`
+	InstanceMemorySizeInGBs int                                 `json:"instanceMemorySizeInGBs,omitempty"`
+	StorageDetails          DbSystemStorageDetailsObservedState `json:"storageDetails,omitempty"`
+	NetworkDetails          DbSystemNetworkDetails              `json:"networkDetails,omitempty"`
+	ManagementPolicy        DbSystemManagementPolicy            `json:"managementPolicy,omitempty"`
 	// A description of the database system.
 	Description string `json:"description,omitempty"`
 	// The date and time that the database system was updated, expressed in
