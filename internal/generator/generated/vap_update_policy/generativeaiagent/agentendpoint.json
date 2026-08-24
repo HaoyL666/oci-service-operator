@@ -17,14 +17,35 @@
     "specPathPrefix": "spec"
   },
   "update": {
-    "allowInPlacePaths": null,
+    "allowInPlacePaths": [
+      "compartmentId",
+      "contentModerationConfig",
+      "definedTags",
+      "description",
+      "displayName",
+      "freeformTags",
+      "guardrailConfig",
+      "humanInputConfig",
+      "metadata",
+      "outputConfig",
+      "sessionConfig",
+      "shouldEnableCitation",
+      "shouldEnableMultiLanguage"
+    ],
     "denyRules": [
       {
-        "fieldPath": "compartmentId",
-        "decision": "replacementRequired",
-        "mergeCase": "replacementRequired",
+        "fieldPath": "provisionedCapacityConfig",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
         "docsEvidenceState": "notDocumented",
-        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "shouldEnableTrace",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
       }
     ]
   }
