@@ -6,6 +6,7 @@
 package formalscaffold
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -532,48 +533,54 @@ func TestGenerateAddsScaffoldsForPublishedKindsAndPreservesSeededRows(t *testing
 	assertRenderedDiagramFamily(t, filepath.Join(repoRoot, "formal", "controllers", "identity", "networksource", "diagrams"))
 }
 
-func TestGeneratePreservesRepoAuthoredSourcesForExistingScaffoldRow(t *testing.T) {
+func TestGeneratePreservesRepoAuthoredScaffoldRows(t *testing.T) {
 	requirePlantUML(t)
 	repoRoot := writeTestRepo(t)
 	formalRoot := filepath.Join(repoRoot, "formal")
 
-	manifestPath := filepath.Join(formalRoot, "controller_manifest.tsv")
-	writeTestFile(t, manifestPath, manifestHeader+testTemplateManifestRow+strings.Replace(testSeededManifestRow, "\tseeded\t", "\tscaffold\t", 1))
-	specPath := filepath.Join(formalRoot, "controllers", "identity", "user", "spec.cfg")
-	writeTestFile(t, specPath, strings.Replace(testSeededSpec, "stage = seeded", "stage = scaffold", 1))
+	writeTestFile(
+		t,
+		filepath.Join(formalRoot, "controller_manifest.tsv"),
+		manifestHeader+testTemplateManifestRow+strings.Replace(testSeededManifestRow, "\tseeded\t", "\tscaffold\t", 1),
+	)
+	writeTestFile(
+		t,
+		filepath.Join(formalRoot, "controllers", "identity", "user", "spec.cfg"),
+		strings.Replace(testSeededSpec, "stage = seeded", "stage = scaffold", 1),
+	)
 
-	sourcePaths := []string{
-		specPath,
+	paths := []string{
+		filepath.Join(formalRoot, "controllers", "identity", "user", "spec.cfg"),
 		filepath.Join(formalRoot, "controllers", "identity", "user", "logic-gaps.md"),
 		filepath.Join(formalRoot, "controllers", "identity", "user", "diagrams", "runtime-lifecycle.yaml"),
 		filepath.Join(formalRoot, "imports", "identity", "user.json"),
 	}
-	want := make(map[string]string, len(sourcePaths))
-	for _, path := range sourcePaths {
-		want[path] = readFormalScaffoldTestFile(t, path)
+	before := make(map[string][]byte, len(paths))
+	for _, path := range paths {
+		contents, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("ReadFile(%q) error = %v", path, err)
+		}
+		before[path] = contents
 	}
 
 	if _, err := Generate(Options{
-		Root:       formalRoot,
-		ConfigPath: filepath.Join(repoRoot, "internal", "generator", "config", "services.yaml"),
+		Root:            formalRoot,
+		ConfigPath:      filepath.Join(repoRoot, "internal", "generator", "config", "services.yaml"),
+		BackfillMissing: true,
 	}); err != nil {
 		t.Fatalf("Generate() error = %v", err)
 	}
 
-	for _, path := range sourcePaths {
-		if got := readFormalScaffoldTestFile(t, path); got != want[path] {
-			t.Fatalf("Generate() rewrote repo-authored scaffold source %q", filepath.ToSlash(path))
+	for _, path := range paths {
+		contents, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("ReadFile(%q) after Generate error = %v", path, err)
+		}
+		if !bytes.Equal(contents, before[path]) {
+			t.Fatalf("Generate() replaced repo-authored scaffold artifact %q", path)
 		}
 	}
-}
-
-func readFormalScaffoldTestFile(t *testing.T, path string) string {
-	t.Helper()
-	content, err := os.ReadFile(path)
-	if err != nil {
-		t.Fatalf("ReadFile(%q) error = %v", path, err)
-	}
-	return string(content)
 }
 
 func TestGenerateSkipsMissingPublishedKindsWithoutBackfill(t *testing.T) {
