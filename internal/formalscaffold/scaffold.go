@@ -965,7 +965,7 @@ func writeScaffoldArtifacts(root string, row formal.ManifestRow, artifacts scaff
 
 	writes := 0
 	for _, target := range targets {
-		changed, err := writeFileIfChanged(target.path, target.data)
+		changed, err := writeFileIfMissing(target.path, target.data)
 		if err != nil {
 			return writes, err
 		}
@@ -974,6 +974,21 @@ func writeScaffoldArtifacts(root string, row formal.ManifestRow, artifacts scaff
 		}
 	}
 	return writes, nil
+}
+
+func writeFileIfMissing(path string, contents []byte) (bool, error) {
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return false, fmt.Errorf("create parent directory for %q: %w", filepath.ToSlash(path), err)
+	}
+	if _, err := os.Stat(path); err == nil {
+		return false, nil
+	} else if !os.IsNotExist(err) {
+		return false, fmt.Errorf("stat %q: %w", filepath.ToSlash(path), err)
+	}
+	if err := os.WriteFile(path, contents, 0o644); err != nil {
+		return false, fmt.Errorf("write %q: %w", filepath.ToSlash(path), err)
+	}
+	return true, nil
 }
 
 func pruneStaleFormalArtifacts(root string, rows []formal.ManifestRow) error {
