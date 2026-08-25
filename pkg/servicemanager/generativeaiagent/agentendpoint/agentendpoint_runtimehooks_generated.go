@@ -81,8 +81,8 @@ func newAgentEndpointRuntimeSemantics() *generatedruntime.Semantics {
 			MatchFields:        []string{"agentId", "compartmentId", "displayName", "lifecycleState"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{"compartmentId", "contentModerationConfig", "definedTags", "description", "displayName", "freeformTags", "guardrailConfig", "humanInputConfig", "metadata", "outputConfig", "provisionedCapacityConfig", "sessionConfig", "shouldEnableCitation", "shouldEnableMultiLanguage", "shouldEnableTrace"},
-			ForceNew:      []string{},
+			Mutable:       []string{"contentModerationConfig", "definedTags", "description", "displayName", "freeformTags", "guardrailConfig", "humanInputConfig", "metadata", "outputConfig", "provisionedCapacityConfig", "sessionConfig", "shouldEnableCitation", "shouldEnableMultiLanguage", "shouldEnableTrace"},
+			ForceNew:      []string{"agentId", "compartmentId", "shouldEnableSession"},
 			ConflictsWith: map[string][]string{},
 		},
 		Hooks: generatedruntime.HookSet{

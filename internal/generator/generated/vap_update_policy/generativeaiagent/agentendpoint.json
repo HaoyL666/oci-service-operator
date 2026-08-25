@@ -18,7 +18,6 @@
   },
   "update": {
     "allowInPlacePaths": [
-      "compartmentId",
       "contentModerationConfig",
       "definedTags",
       "description",
@@ -34,11 +33,32 @@
     ],
     "denyRules": [
       {
+        "fieldPath": "agentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "compartmentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
         "fieldPath": "provisionedCapacityConfig",
         "decision": "unknown",
         "mergeCase": "astOnlyCandidate",
         "docsEvidenceState": "notDocumented",
         "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "shouldEnableSession",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
       },
       {
         "fieldPath": "shouldEnableTrace",

@@ -121,10 +121,7 @@
     "responseItemsField": "Items",
     "filterFields": [
       "compartment_id",
-      "db_deployment_type",
       "display_name",
-      "metadata",
-      "private_endpoint_id",
       "state"
     ]
   },

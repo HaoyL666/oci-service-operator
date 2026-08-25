@@ -30,29 +30,55 @@
   },
   "fields": [
     {
-      "astFieldPath": "compartmentId",
-      "terraformFieldPath": "compartment_id",
-      "canonicalJoinKey": "compartmentId",
+      "astFieldPath": "agentId",
+      "terraformFieldPath": "agentId",
+      "canonicalJoinKey": "agentId",
       "pathShape": "scalar",
       "ast": {
-        "updateCandidateState": "updateCandidate",
-        "forceNew": false,
+        "updateCandidateState": "notUpdateCandidate",
+        "forceNew": true,
         "conflictsWith": null
       },
       "docs": {
-        "evidenceState": "confirmedUpdatable",
-        "detail": "Argument Reference marks the field as updatable in place.",
-        "rawSignal": "(updatable)"
+        "evidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
       },
       "merge": {
         "joinStatus": "matched",
-        "mergeCase": "docsConfirmedCandidate",
-        "finalPolicy": "allowInPlaceUpdate"
+        "mergeCase": "replacementRequired",
+        "finalPolicy": "replacementRequired"
       },
       "provenance": {
         "formalImportPath": "imports/generativeaiagent/agentendpoint.json",
         "formalSourceRef": "terraform-provider-oci",
-        "astSourceBucket": "mutation.mutable",
+        "astSourceBucket": "mutation.forceNew",
+        "terraformDocsPage": "generative_ai_agent_agent_endpoint#argument-reference",
+        "terraformDocsSection": "Argument Reference"
+      }
+    },
+    {
+      "astFieldPath": "compartmentId",
+      "terraformFieldPath": "compartmentId",
+      "canonicalJoinKey": "compartmentId",
+      "pathShape": "scalar",
+      "ast": {
+        "updateCandidateState": "notUpdateCandidate",
+        "forceNew": true,
+        "conflictsWith": null
+      },
+      "docs": {
+        "evidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      "merge": {
+        "joinStatus": "matched",
+        "mergeCase": "replacementRequired",
+        "finalPolicy": "replacementRequired"
+      },
+      "provenance": {
+        "formalImportPath": "imports/generativeaiagent/agentendpoint.json",
+        "formalSourceRef": "terraform-provider-oci",
+        "astSourceBucket": "mutation.forceNew",
         "terraformDocsPage": "generative_ai_agent_agent_endpoint#argument-reference",
         "terraformDocsSection": "Argument Reference"
       }
@@ -416,6 +442,33 @@
         "formalImportPath": "imports/generativeaiagent/agentendpoint.json",
         "formalSourceRef": "terraform-provider-oci",
         "astSourceBucket": "mutation.mutable",
+        "terraformDocsPage": "generative_ai_agent_agent_endpoint#argument-reference",
+        "terraformDocsSection": "Argument Reference"
+      }
+    },
+    {
+      "astFieldPath": "shouldEnableSession",
+      "terraformFieldPath": "shouldEnableSession",
+      "canonicalJoinKey": "shouldEnableSession",
+      "pathShape": "scalar",
+      "ast": {
+        "updateCandidateState": "notUpdateCandidate",
+        "forceNew": true,
+        "conflictsWith": null
+      },
+      "docs": {
+        "evidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      "merge": {
+        "joinStatus": "matched",
+        "mergeCase": "replacementRequired",
+        "finalPolicy": "replacementRequired"
+      },
+      "provenance": {
+        "formalImportPath": "imports/generativeaiagent/agentendpoint.json",
+        "formalSourceRef": "terraform-provider-oci",
+        "astSourceBucket": "mutation.forceNew",
         "terraformDocsPage": "generative_ai_agent_agent_endpoint#argument-reference",
         "terraformDocsSection": "Argument Reference"
       }
