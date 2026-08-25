@@ -22,10 +22,8 @@ repoAuthored:
       - compartmentId
       - displayName
       - dbDeploymentType
-      - metadata
-      - privateEndpointId
       - lifecycleState
-    matchRule: "exact compartmentId plus displayName list filters preserve dbDeploymentType, metadata, privateEndpointId, and lifecycleState when already known, then narrow summary candidates in memory to a unique exact prefix plus dbDeploymentType match"
+    matchRule: "exact compartmentId plus displayName list filters preserve dbDeploymentType and lifecycleState when already known, then narrow summary candidates in memory to a unique exact prefix plus dbDeploymentType match"
   mutation:
     mutable:
       - definedTags

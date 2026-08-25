@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetDistributedDatabase;
 else (no)
-:Resolve an existing OCI resource through\nListDistributedDatabases using filters\ncompartmentId, displayName, dbDeploymentType,\nmetadata (+2 more);
+:Resolve an existing OCI resource through\nListDistributedDatabases using filters\ncompartmentId, displayName, dbDeploymentType,\nlifecycleState;
 :Create the OCI resource via\nCreateDistributedDatabase when no reusable\nmatch is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -104,13 +104,12 @@ create-only fields: none
 list lookup:
 oci_globally_distributed_database_sharded_databases
 filters compartmentId, displayName,
-dbDeploymentType, metadata (+2 more); exact
+dbDeploymentType, lifecycleState; exact
 compartmentId plus displayName list filters
-preserve dbDeploymentType, metadata,
-privateEndpointId, and lifecycleState when
-already known, then narrow summary candidates in
-memory to a unique exact prefix plus
-dbDeploymentType match
+preserve dbDeploymentType and lifecycleState
+when already known, then narrow summary
+candidates in memory to a unique exact prefix
+plus dbDeploymentType match
 conflicts: none
 open gaps: none
 Create-body normalization keeps shard and

@@ -81,7 +81,7 @@ opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply\nChangeAgentEndpointCompartment,\nUpdateAgentEndpoint only for mutable\nfields contentModerationConfig,\ndefinedTags, description,\ndisplayName (+10 more)
+ServiceManager -> OCI: Apply UpdateAgentEndpoint only for\nmutable fields\ncontentModerationConfig,\ndefinedTags, description,\ndisplayName (+10 more)
 loop update pending UPDATING
 ServiceManager -> OCI: GetAgentEndpoint
 end

@@ -70,7 +70,7 @@ func buildRuntimeSemanticsModelWithAsync(
 			Update: updateHooks,
 			Delete: deleteHooks,
 		},
-		AuxiliaryOperations: buildAuxiliaryOperationModels(binding, runtime),
+		AuxiliaryOperations: buildAuxiliaryOperationModels(formalModel, runtime),
 		OpenGaps:            buildRuntimeGapModels(binding),
 	}
 	if binding.Import.ListLookup != nil {
@@ -259,7 +259,11 @@ func repoAuthoredFollowUpStrategy(formalModel *FormalModel, phase string) string
 	}
 }
 
-func buildAuxiliaryOperationModels(binding formal.ControllerBinding, runtime *RuntimeModel) []RuntimeAuxiliaryOperationModel {
+func buildAuxiliaryOperationModels(formalModel *FormalModel, runtime *RuntimeModel) []RuntimeAuxiliaryOperationModel {
+	if formalModel == nil {
+		return nil
+	}
+	binding := formalModel.Binding
 	primary := map[string]string{}
 	if runtime != nil {
 		if runtime.Create != nil {
@@ -297,7 +301,7 @@ func buildAuxiliaryOperationModels(binding formal.ControllerBinding, runtime *Ru
 	appendPhase("create", binding.Import.Operations.Create)
 	appendPhase("get", binding.Import.Operations.Get)
 	appendPhase("list", binding.Import.Operations.List)
-	appendPhase("update", binding.Import.Operations.Update)
+	appendPhase("update", formal.EffectiveRuntimeLifecycleUpdateOperations(formalModel.RuntimeLifecycle, binding.Import.Operations.Update))
 	appendPhase("delete", binding.Import.Operations.Delete)
 
 	sort.Slice(auxiliary, func(i, j int) bool {

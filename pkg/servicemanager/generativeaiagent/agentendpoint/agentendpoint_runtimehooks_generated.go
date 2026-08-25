@@ -102,7 +102,7 @@ func newAgentEndpointRuntimeSemantics() *generatedruntime.Semantics {
 			Strategy: "confirm-delete",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "agentEndpoint", Action: "DELETED"}},
 		},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "update", MethodName: "ChangeAgentEndpointCompartment", RequestTypeName: "generativeaiagent.ChangeAgentEndpointCompartmentRequest", ResponseTypeName: "generativeaiagent.ChangeAgentEndpointCompartmentResponse"}},
+		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }

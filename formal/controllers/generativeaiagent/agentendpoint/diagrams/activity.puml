@@ -61,7 +61,7 @@ if ("Force-new or conflicting drift detected?") then (yes)
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply ChangeAgentEndpointCompartment,\nUpdateAgentEndpoint only for mutable fields\ncontentModerationConfig, definedTags,\ndescription, displayName (+10 more);
+:Apply UpdateAgentEndpoint only for mutable\nfields contentModerationConfig, definedTags,\ndescription, displayName (+10 more);
 else (no)
 :Skip the no-op mutation path;
 endif

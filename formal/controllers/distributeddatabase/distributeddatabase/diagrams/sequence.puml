@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetDistributedDatabase
 else tracked identity is missing
-ServiceManager -> OCI: ListDistributedDatabases(filters:\ncompartmentId, displayName,\ndbDeploymentType, metadata (+2\nmore))
+ServiceManager -> OCI: ListDistributedDatabases(filters:\ncompartmentId, displayName,\ndbDeploymentType, lifecycleState)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateDistributedDatabase
 loop create pending CREATING
@@ -72,13 +72,12 @@ displayName, freeformTags
 Reject before mutate: force-new fields
 compartmentId
 Lookup filters: compartmentId,
-displayName, dbDeploymentType, metadata
-(+2 more)
+displayName, dbDeploymentType,
+lifecycleState
 Lookup matching: exact compartmentId
 plus displayName list filters preserve
-dbDeploymentType, metadata,
-privateEndpointId, and lifecycleState
-when already known, then narrow summary
+dbDeploymentType and lifecycleState when
+already known, then narrow summary
 candidates in memory to a unique exact
 prefix plus dbDeploymentType match
 end note
@@ -131,13 +130,12 @@ create-only fields: none
 list lookup:
 oci_globally_distributed_database_sharded_databases
 filters compartmentId, displayName,
-dbDeploymentType, metadata (+2 more); exact
+dbDeploymentType, lifecycleState; exact
 compartmentId plus displayName list filters
-preserve dbDeploymentType, metadata,
-privateEndpointId, and lifecycleState when
-already known, then narrow summary candidates in
-memory to a unique exact prefix plus
-dbDeploymentType match
+preserve dbDeploymentType and lifecycleState
+when already known, then narrow summary
+candidates in memory to a unique exact prefix
+plus dbDeploymentType match
 conflicts: none
 open gaps: none
 Create-body normalization keeps shard and
