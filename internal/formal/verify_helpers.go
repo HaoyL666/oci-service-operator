@@ -968,7 +968,29 @@ func validateRepoAuthoredUpdateOperations(path string, diagram diagramSpec, impo
 			seen[name] = struct{}{}
 		}
 	}
+	if primary := importedPrimaryUpdateOperation(diagram.Kind, imported); primary != "" && !containsTrimmedString(diagram.RepoAuthored.Operations.Update, primary) {
+		problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.update must include primary update operation %q", filepath.ToSlash(path), primary))
+	}
 	return problems
+}
+
+func importedPrimaryUpdateOperation(kind string, imported []operationBinding) string {
+	want := "Update" + strings.TrimSpace(kind)
+	for _, operation := range imported {
+		if strings.TrimSpace(operation.Operation) == want {
+			return want
+		}
+	}
+	return ""
+}
+
+func containsTrimmedString(values []string, want string) bool {
+	for _, value := range values {
+		if strings.TrimSpace(value) == want {
+			return true
+		}
+	}
+	return false
 }
 
 func hasStringKey(values map[string]struct{}, key string) bool {

@@ -14,7 +14,49 @@ import (
 func TestBuildRuntimeSemanticsHonorsRepoAuthoredUpdateOperationSubset(t *testing.T) {
 	t.Parallel()
 
-	formalModel := &FormalModel{
+	formalModel := newThingFormalModelWithUpdateSubset([]string{"UpdateThing"})
+	runtime := &RuntimeModel{
+		Update: &RuntimeOperationModel{MethodName: "UpdateThing"},
+	}
+	if err := validateRuntimeUpdateOperationSubset(formalModel, runtime); err != nil {
+		t.Fatalf("validateRuntimeUpdateOperationSubset() error = %v", err)
+	}
+
+	semantics := buildRuntimeSemanticsModel(formalModel, runtime)
+	if semantics == nil {
+		t.Fatal("buildRuntimeSemanticsModel() = nil")
+	}
+	if len(semantics.AuxiliaryOperations) != 0 {
+		t.Fatalf("AuxiliaryOperations = %#v, want excluded ChangeThingCompartment to be absent", semantics.AuxiliaryOperations)
+	}
+}
+
+func TestValidateRuntimeUpdateOperationSubsetRejectsExcludedPrimary(t *testing.T) {
+	t.Parallel()
+
+	for _, tc := range []struct {
+		name   string
+		subset []string
+	}{
+		{name: "auxiliary only", subset: []string{"ChangeThingCompartment"}},
+		{name: "explicit empty", subset: []string{}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			err := validateRuntimeUpdateOperationSubset(
+				newThingFormalModelWithUpdateSubset(tc.subset),
+				&RuntimeModel{Update: &RuntimeOperationModel{MethodName: "UpdateThing"}},
+			)
+			if err == nil || err.Error() != `repo-authored update-operation subset must include primary runtime update operation "UpdateThing"` {
+				t.Fatalf("validateRuntimeUpdateOperationSubset() error = %v, want excluded-primary failure", err)
+			}
+		})
+	}
+}
+
+func newThingFormalModelWithUpdateSubset(subset []string) *FormalModel {
+	return &FormalModel{
 		Binding: formal.ControllerBinding{
 			Import: formal.ImportModel{
 				Operations: formal.Operations{
@@ -36,20 +78,9 @@ func TestBuildRuntimeSemanticsHonorsRepoAuthoredUpdateOperationSubset(t *testing
 		RuntimeLifecycle: &formal.RuntimeLifecycleSpec{
 			RepoAuthored: &formal.RuntimeLifecycleRepoAuthoredSemantics{
 				Operations: &formal.RuntimeLifecycleOperationSemantics{
-					Update: []string{"UpdateThing"},
+					Update: subset,
 				},
 			},
 		},
-	}
-	runtime := &RuntimeModel{
-		Update: &RuntimeOperationModel{MethodName: "UpdateThing"},
-	}
-
-	semantics := buildRuntimeSemanticsModel(formalModel, runtime)
-	if semantics == nil {
-		t.Fatal("buildRuntimeSemanticsModel() = nil")
-	}
-	if len(semantics.AuxiliaryOperations) != 0 {
-		t.Fatalf("AuxiliaryOperations = %#v, want excluded ChangeThingCompartment to be absent", semantics.AuxiliaryOperations)
 	}
 }
