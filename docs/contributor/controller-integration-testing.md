@@ -52,7 +52,9 @@ interactions by method, host, path, canonical query, selected semantic headers,
 and canonical request body. Interaction order may vary across concurrent
 reconciles, but duplicate requests consume their recorded responses in order.
 
-Recorded integration tests default to replay. An operator must explicitly opt
+Recorded integration tests default to replay. Synthetic integration tests are
+always replay-only and use the `*_synthetic_integration_test.go` naming suffix
+so they cannot be mistaken for live OCI evidence. An operator must explicitly opt
 into live OCI traffic:
 
 ```bash
@@ -111,6 +113,22 @@ A new cassette test should cover create, read-after-create, update,
 read-after-update, delete, and confirmed not-found whenever the OCI resource
 supports those operations. Tests for immutable resources can omit update and
 state that in the test name.
+
+Synthetic cassettes use the checked-in OCI SDK models and service contract when
+live creation is impractical because of permissions, quota, cost, regional
+availability, or external prerequisites. Name their tests `TestSynthetic...`,
+set `provenance: synthetic`, and do not provide record-mode behavior. They prove
+request construction and response handling, not live OCI behavior.
+
+The initial synthetic matrix is intentionally limited to resources with clear
+external side effects or prerequisites:
+
+- Access Governance instances require a service entitlement and an IDCS
+  administrator token.
+- Rover clusters represent orders for physical appliances.
+
+Do not replace these with live recordings unless a service owner provides an
+isolated entitlement and explicitly approves the external side effects.
 
 Do not commit raw recordings. Review the sanitized cassette before adding it to
 the repository.

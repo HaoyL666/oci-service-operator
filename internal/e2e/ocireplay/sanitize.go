@@ -221,7 +221,7 @@ func sensitiveJSONKey(key string) bool {
 		}
 	}
 	value := normalized.String()
-	for _, marker := range []string{"authorization", "createdby", "password", "passphrase", "privatekey", "securitytoken", "secret", "fingerprint"} {
+	for _, marker := range []string{"authorization", "createdby", "password", "passphrase", "privatekey", "token", "secret", "fingerprint"} {
 		if strings.Contains(value, marker) {
 			return true
 		}

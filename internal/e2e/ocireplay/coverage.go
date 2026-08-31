@@ -157,7 +157,7 @@ func discoverCoverageCassettes(root string, controllerResources []CoverageResour
 		if err := validateMetadata(*file.Metadata); err != nil {
 			return fmt.Errorf("validate replay coverage cassette %s: %w", relative, err)
 		}
-		referenced, err := cassetteReferencedByRecordedTest(path)
+		referenced, err := cassetteReferencedByReplayTest(path, file.Metadata.Provenance)
 		if err != nil {
 			return fmt.Errorf("inspect replay coverage cassette %s references: %w", relative, err)
 		}
@@ -184,7 +184,7 @@ func discoverCoverageCassettes(root string, controllerResources []CoverageResour
 	return legacy, unreferenced, orphans, nil
 }
 
-func cassetteReferencedByRecordedTest(path string) (bool, error) {
+func cassetteReferencedByReplayTest(path string, provenance Provenance) (bool, error) {
 	packageDir := filepath.Dir(filepath.Dir(filepath.Dir(path)))
 	entries, err := os.ReadDir(packageDir)
 	if err != nil {
@@ -192,7 +192,7 @@ func cassetteReferencedByRecordedTest(path string) (bool, error) {
 	}
 	name := []byte(filepath.Base(path))
 	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), "_recorded_integration_test.go") {
+		if entry.IsDir() || !isReplayIntegrationTest(entry.Name(), provenance) {
 			continue
 		}
 		content, err := os.ReadFile(filepath.Join(packageDir, entry.Name()))
@@ -204,6 +204,17 @@ func cassetteReferencedByRecordedTest(path string) (bool, error) {
 		}
 	}
 	return false, nil
+}
+
+func isReplayIntegrationTest(name string, provenance Provenance) bool {
+	switch provenance {
+	case ProvenanceRecorded:
+		return strings.HasSuffix(name, "_recorded_integration_test.go")
+	case ProvenanceSynthetic:
+		return strings.HasSuffix(name, "_synthetic_integration_test.go")
+	default:
+		return false
+	}
 }
 
 func decodeCassetteFile(path string) (cassetteFile, error) {

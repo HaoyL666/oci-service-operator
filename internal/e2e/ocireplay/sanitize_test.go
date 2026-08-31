@@ -54,3 +54,30 @@ func TestValidateBindingsRejectsAmbiguousDefinitions(t *testing.T) {
 		t.Fatalf("validateSafeRecording(raw OCID) error = %v", err)
 	}
 }
+
+func TestSanitizerRedactsSensitiveJSONKeysAcrossNamingStyles(t *testing.T) {
+	t.Parallel()
+
+	sanitizer := newSanitizer(nil)
+	body, encoding, err := sanitizer.body([]byte(`{
+		"idcsAccessToken":"idcs-value",
+		"security_token":"security-value",
+		"refresh-token":"refresh-value",
+		"nested":{"privateKey":"private-value"},
+		"displayName":"safe-value"
+	}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if encoding != "json" {
+		t.Fatalf("encoding = %q, want json", encoding)
+	}
+	for _, secret := range []string{"idcs-value", "security-value", "refresh-value", "private-value"} {
+		if strings.Contains(body, secret) {
+			t.Fatalf("sanitized body contains %q: %s", secret, body)
+		}
+	}
+	if !strings.Contains(body, `"displayName":"safe-value"`) {
+		t.Fatalf("sanitized body lost ordinary value: %s", body)
+	}
+}

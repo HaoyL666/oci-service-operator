@@ -407,15 +407,15 @@ test: manifests generate fmt vet ## Run tests.
 		$(ENVTEST_ENV) KUBEBUILDER_ASSETS="$$envtest_assets" go test ./... -coverprofile cover.out | tee unittests.cover'
 	go tool cover -func cover.out | grep total | awk '{print substr($$3, 1, length($$3)-1)}' > unittests.percent
 
-RECORDED_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f -name '*_recorded_integration_test.go' -exec dirname {} \;))
+REPLAY_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f \( -name '*_recorded_integration_test.go' -o -name '*_synthetic_integration_test.go' \) -exec dirname {} \;))
 
 replay-coverage: ## Report OCI HTTP replay coverage without enforcing completeness.
 	go run ./cmd/osok-replay-coverage
 
 replaytest: replay-coverage ## Run credential-free OCI SDK HTTP replay tests.
 	go test ./internal/e2e/ocireplay
-	@[ -n "$(RECORDED_INTEGRATION_PACKAGES)" ] || { echo "No recorded integration tests found"; exit 1; }
-	go test $(addprefix ./,$(RECORDED_INTEGRATION_PACKAGES)) -run '^TestRecorded' -count=1
+	@[ -n "$(REPLAY_INTEGRATION_PACKAGES)" ] || { echo "No replay integration tests found"; exit 1; }
+	go test $(addprefix ./,$(REPLAY_INTEGRATION_PACKAGES)) -run '^Test(Recorded|Synthetic)' -count=1
 
 integrationtest: replaytest ## Run OCI cassette and resource lifecycle integration tests without live cloud access.
 	go test ./internal/e2e/lifecycle

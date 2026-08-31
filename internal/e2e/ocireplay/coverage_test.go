@@ -18,9 +18,9 @@ func TestAuditCoverageReportsCoveredMissingLegacyAndOrphanResources(t *testing.T
 	writeCoverageFile(t, root, "controllers/aivision/project_controller.go", "package aivision\n")
 	writeCoverageFile(t, root, "controllers/budget/budget_controller.go", "package budget\n")
 	writeCoverageFile(t, root, "controllers/ons/topic_controller.go", "package ons\n")
-	writeCoverageFile(t, root, "pkg/servicemanager/aivision/project/project_recorded_integration_test.go", "package project\n// project.yaml\n")
+	writeCoverageFile(t, root, "pkg/servicemanager/aivision/project/project_synthetic_integration_test.go", "package project\n// project.yaml\n")
 	writeCoverageFile(t, root, "pkg/servicemanager/budget/budget/budget_recorded_integration_test.go", "package budget\n// budget.yaml\n")
-	writeCoverageFile(t, root, "pkg/servicemanager/orphan/resource/resource_recorded_integration_test.go", "package resource\n// orphan.yaml\n")
+	writeCoverageFile(t, root, "pkg/servicemanager/orphan/resource/resource_synthetic_integration_test.go", "package resource\n// orphan.yaml\n")
 	writeCoverageFile(t, root, "pkg/servicemanager/aivision/project/testdata/recordings/project.yaml", `version: 1
 metadata:
   service: aivision
@@ -99,6 +99,61 @@ interactions:
 	}
 	if budgetCoverage == nil || len(budgetCoverage.Cassettes) != 1 || budgetCoverage.Cassettes[0].Metadata.Provenance != ProvenanceRecorded {
 		t.Fatalf("budget coverage = %+v", budgetCoverage)
+	}
+}
+
+func TestAuditCoverageIgnoresCassetteReferencedOnlyByOrdinaryTest(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	writeCoverageFile(t, root, "controllers/aivision/project_controller.go", "package aivision\n")
+	writeCoverageFile(t, root, "pkg/servicemanager/aivision/project/project_test.go", "package project\n// project.yaml\n")
+	writeCoverageFile(t, root, "pkg/servicemanager/aivision/project/testdata/recordings/project.yaml", `version: 1
+metadata:
+  service: aivision
+  resource: Project
+  operations: [read]
+  sdkVersion: v65.110.0
+  provenance: synthetic
+interactions:
+  - request: {method: GET, host: example.test, path: /projects/example}
+    response: {statusCode: 200}
+`)
+
+	report, err := AuditCoverage(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if report.CoveredResources != 0 || len(report.UnreferencedCassettes) != 1 {
+		t.Fatalf("coverage report = %+v", report)
+	}
+}
+
+func TestAuditCoverageRequiresTestNameToMatchCassetteProvenance(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	writeCoverageFile(t, root, "controllers/aivision/project_controller.go", "package aivision\n")
+	writeCoverageFile(t, root, "pkg/servicemanager/aivision/project/project_recorded_integration_test.go", "package project\n// project.yaml\n")
+	writeCoverageFile(t, root, "pkg/servicemanager/aivision/project/testdata/recordings/project.yaml", `version: 1
+metadata:
+  service: aivision
+  resource: Project
+  operations: [read]
+  sdkVersion: v65.110.0
+  provenance: synthetic
+interactions:
+  - request: {method: GET, host: example.test, path: /projects/example}
+    response: {statusCode: 200}
+`)
+
+	report, err := AuditCoverage(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if report.CoveredResources != 0 || report.SyntheticResources != 0 ||
+		len(report.UnreferencedCassettes) != 1 {
+		t.Fatalf("coverage report = %+v", report)
 	}
 }
 
