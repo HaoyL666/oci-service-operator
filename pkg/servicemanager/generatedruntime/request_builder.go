@@ -980,11 +980,25 @@ func assignDeterministicRetryToken(requestStruct reflect.Value, resource any) {
 		return
 	}
 
-	token := resourceRetryToken(resource)
+	token := requestRetryToken(resource, requestStruct.Type())
 	if token == "" {
 		return
 	}
 	_ = assignField(field, token)
+}
+
+func requestRetryToken(resource any, requestType reflect.Type) string {
+	token := resourceRetryToken(resource)
+	if token == "" || isCreateRequestType(requestType) {
+		return token
+	}
+
+	operation := ""
+	if requestType != nil {
+		operation = requestType.PkgPath() + "." + requestType.Name()
+	}
+	sum := sha256.Sum256([]byte(token + "\x00" + operation))
+	return fmt.Sprintf("%x", sum[:16])
 }
 
 func resourceRetryToken(resource any) string {
@@ -1001,9 +1015,16 @@ func resourceRetryToken(resource any) string {
 	if namespace == "" && name == "" {
 		return ""
 	}
-
 	sum := sha256.Sum256([]byte(namespace + "/" + name))
 	return fmt.Sprintf("%x", sum[:16])
+}
+
+func isCreateRequestType(requestType reflect.Type) bool {
+	if requestType == nil {
+		return false
+	}
+	name := strings.ToLower(requestType.Name())
+	return strings.HasPrefix(name, "create") || strings.HasPrefix(name, "launch")
 }
 
 func resourceNamespace(resource any, fallback string) string {

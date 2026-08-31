@@ -17,6 +17,7 @@ import (
 	mysqlv1beta1 "github.com/oracle/oci-service-operator/api/mysql/v1beta1"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
 	"io"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -227,6 +228,35 @@ func TestBuildRequestPopulatesLaunchInstancePolymorphicSourceDetails(t *testing.
 			}
 			tc.assert(t, request.LaunchInstanceDetails)
 		})
+	}
+}
+
+func TestDeterministicRetryTokensAreStablePerOperation(t *testing.T) {
+	t.Parallel()
+
+	resource := &fakeResource{Name: "thing", Namespace: "default", UID: "00000000-0000-0000-0000-000000000001"}
+	createFirst := reflect.New(reflect.TypeOf(coresdk.LaunchInstanceRequest{})).Elem()
+	createSecond := reflect.New(reflect.TypeOf(coresdk.LaunchInstanceRequest{})).Elem()
+	update := reflect.New(reflect.TypeOf(coresdk.UpdateInstanceRequest{})).Elem()
+
+	assignDeterministicRetryToken(createFirst, resource)
+	assignDeterministicRetryToken(createSecond, resource)
+	assignDeterministicRetryToken(update, resource)
+
+	createFirstToken := createFirst.FieldByName("OpcRetryToken")
+	createSecondToken := createSecond.FieldByName("OpcRetryToken")
+	updateToken := update.FieldByName("OpcRetryToken")
+	if createFirstToken.IsNil() || createSecondToken.IsNil() || updateToken.IsNil() {
+		t.Fatal("retry tokens must be populated for requests that support them")
+	}
+	if got, want := createFirstToken.Elem().String(), "00000000-0000-0000-0000-000000000001"; got != want {
+		t.Fatalf("create token = %q, want original resource UID %q", got, want)
+	}
+	if got, want := createSecondToken.Elem().String(), createFirstToken.Elem().String(); got != want {
+		t.Fatalf("second create token = %q, want stable token %q", got, want)
+	}
+	if got, unwanted := updateToken.Elem().String(), createFirstToken.Elem().String(); got == unwanted {
+		t.Fatalf("update token = %q, must differ from create token", got)
 	}
 }
 

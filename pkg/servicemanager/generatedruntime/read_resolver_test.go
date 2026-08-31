@@ -206,6 +206,42 @@ func TestServiceClientCreateOrUpdateKeepsTrackedCurrentIDWhenPreCreateLookupMiss
 	}
 }
 
+func TestTrackedStatusIDCannotBeClearedWhileAsyncOperationIsPending(t *testing.T) {
+	t.Parallel()
+
+	client := NewServiceClient[*fakeResource](Config[*fakeResource]{
+		Kind:    "Thing",
+		SDKName: "Thing",
+		Get: &Operation{
+			NewRequest: func() any { return &fakeGetThingRequest{} },
+			Fields: []RequestField{
+				{FieldName: "ThingId", RequestName: "thingId", Contribution: "path", PreferResourceID: true},
+			},
+		},
+	})
+	resource := &fakeResource{
+		Status: fakeStatus{
+			OsokStatus: shared.OSOKStatus{
+				Ocid: "ocid1.thing.oc1..creating",
+				Async: shared.OSOKAsyncTracker{Current: &shared.OSOKAsyncOperation{
+					Source:          shared.OSOKAsyncSourceLifecycle,
+					Phase:           shared.OSOKAsyncPhaseCreate,
+					NormalizedClass: shared.OSOKAsyncClassPending,
+				}},
+			},
+		},
+	}
+
+	if client.trackedStatusIDCanBeClearedAfterGetNotFound(resource, "ocid1.thing.oc1..creating") {
+		t.Fatal("pending async operation must retain its tracked OCI ID after an eventually consistent NotFound")
+	}
+
+	resource.Status.OsokStatus.Async.Current = nil
+	if !client.trackedStatusIDCanBeClearedAfterGetNotFound(resource, "ocid1.thing.oc1..creating") {
+		t.Fatal("tracked OCI ID should remain clearable after the pending async operation is gone")
+	}
+}
+
 func TestServiceClientCreateOrUpdateUsesUppercaseSpecIDAlias(t *testing.T) {
 	t.Parallel()
 	var getRequest fakeGetThingRequest

@@ -11,6 +11,8 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+
+	shared "github.com/oracle/oci-service-operator/pkg/shared"
 )
 
 func (c ServiceClient[T]) prepareCreateOrUpdateState(ctx context.Context, resource T, identity any) (createOrUpdateState, error) {
@@ -76,6 +78,11 @@ func (c ServiceClient[T]) resolveTrackedCurrentID(resource T, currentID string, 
 func (c ServiceClient[T]) trackedStatusIDCanBeClearedAfterGetNotFound(resource T, preferredID string) bool {
 	getOp := c.getReadOperation()
 	if preferredID == "" || !c.usesStatusOnlyCurrentID(resource, preferredID) || getOp == nil {
+		return false
+	}
+	if status, err := osokStatus(resource); err == nil &&
+		status.Async.Current != nil &&
+		status.Async.Current.NormalizedClass == shared.OSOKAsyncClassPending {
 		return false
 	}
 
