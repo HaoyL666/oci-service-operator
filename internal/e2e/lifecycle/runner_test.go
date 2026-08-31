@@ -287,6 +287,40 @@ func TestRunRejectsUnsetVariablesAndServiceMismatch(t *testing.T) {
 	}
 }
 
+func TestRenderScenarioDerivesIdentifierSafeSuffix(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	writeTestFile(t, root, "scenario.yaml", "version: 1\nname: identifier\nservice: nosql\ncreate: create.yaml\n")
+	writeTestFile(t, root, "create.yaml", `apiVersion: nosql.oracle.com/v1beta1
+kind: Table
+metadata:
+  name: table-${OSOK_E2E_SUFFIX}
+spec:
+  name: table_${OSOK_E2E_ID}
+  compartmentId: ${OCI_COMPARTMENT_ID}
+  ddlStatement: CREATE TABLE table_${OSOK_E2E_ID} (id INTEGER, PRIMARY KEY(id))
+`)
+	scenario, err := LoadScenario(filepath.Join(root, "scenario.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rendered, err := renderScenario(scenario, t.TempDir(), map[string]string{
+		"OCI_COMPARTMENT_ID": "ocid1.compartment.oc1..test",
+		"OSOK_E2E_SUFFIX":    "20260831-123456.a",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	content, err := os.ReadFile(rendered.Create)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(content), "table_20260831123456a") {
+		t.Fatalf("rendered manifest did not contain safe identifier:\n%s", content)
+	}
+}
+
 func TestCheckedInLifecycleScenariosRenderAndKeepResourceIdentity(t *testing.T) {
 	t.Parallel()
 
@@ -307,9 +341,13 @@ func TestCheckedInLifecycleScenariosRenderAndKeepResourceIdentity(t *testing.T) 
 			}
 			rendered, err := renderScenario(scenario, t.TempDir(), map[string]string{
 				"OCI_AVAILABILITY_DOMAIN": "example:US-ASHBURN-AD-1",
+				"OCI_COMPUTE_SHAPE":       "VM.Standard.E4.Flex",
 				"OCI_COMPARTMENT_ID":      "ocid1.compartment.oc1..scenario",
+				"OCI_IMAGE_ID":            "ocid1.image.oc1..scenario",
 				"OCI_TENANCY_ID":          "ocid1.tenancy.oc1..scenario",
 				"OCI_REGION":              "us-ashburn-1",
+				"OCI_SUBNET_ID":           "ocid1.subnet.oc1..scenario",
+				"OCI_VCN_ID":              "ocid1.vcn.oc1..scenario",
 				"OSOK_E2E_SUFFIX":         "scenario",
 			})
 			if err != nil {

@@ -510,6 +510,18 @@ func renderScenario(scenario *loadedScenario, destination string, variables map[
 	if values["OSOK_E2E_SUFFIX"] == "" {
 		values["OSOK_E2E_SUFFIX"] = time.Now().UTC().Format("20060102-150405")
 	}
+	if values["OSOK_E2E_ID"] == "" {
+		var identifier strings.Builder
+		for _, character := range values["OSOK_E2E_SUFFIX"] {
+			if character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' {
+				identifier.WriteRune(character)
+			}
+		}
+		if identifier.Len() == 0 {
+			identifier.WriteString("e2e")
+		}
+		values["OSOK_E2E_ID"] = identifier.String()
+	}
 	values["OSOK_E2E_NAMESPACE"] = scenario.Namespace
 
 	render := func(source, name string) (string, error) {

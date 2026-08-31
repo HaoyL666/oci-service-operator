@@ -280,6 +280,10 @@ to the first AD visible from the target compartment. `OSOK_E2E_SUFFIX` is genera
 `OSOK_E2E_NAMESPACE` resolves to the scenario namespace. Any other unset
 variable is a hard authoring error.
 
+`OSOK_E2E_ID` is derived automatically from `OSOK_E2E_SUFFIX` by retaining
+only letters and numbers. Use it when an OCI resource name or DDL identifier
+cannot contain the punctuation valid in a Kubernetes resource name.
+
 Readiness can require condition types, lifecycle states, an OCI identifier, and
 field equality such as `spec.displayName == status.displayName`. Field equality
 prevents an update from passing against status left over from the create phase.
@@ -287,6 +291,25 @@ prevents an update from passing against status left over from the create phase.
 Secret data keys after create/update, plus their deletion with the primary CR.
 The runner cleans up the primary CR after success or failure and deletes
 scenario-owned dependencies in reverse order.
+
+The checked-in live reference scenarios cover several distinct controller
+behaviors:
+
+| Scenario | Additional operator inputs | Behavior exercised |
+| --- | --- | --- |
+| Object Storage Bucket | none | basic lifecycle and metadata update |
+| Streaming Stream | none | lifecycle plus endpoint Secret |
+| ADM KnowledgeBase | none | service work requests |
+| Cluster Placement Group | none; availability domain is discovered | independent work requests |
+| Core VCN | none | foundational network lifecycle |
+| Core Subnet | `OCI_VCN_ID` | resource with an existing-network prerequisite |
+| Queue | none | work requests plus endpoint Secret |
+| NoSQL Table | none | eventual-consistency lifecycle and sequenced updates |
+| Core Instance | `OCI_SUBNET_ID`, `OCI_IMAGE_ID`, and `OCI_COMPUTE_SHAPE` | compute lifecycle and in-place update |
+
+The Instance scenario sets `instanceOptions.areLegacyImdsEndpointsDisabled:
+true`, which is required in tenancies that enforce IMDSv2. Do not commit live
+OCIDs into these manifests; the per-operator inputs remain environment values.
 
 See [Controller integration testing](../docs/contributor/controller-integration-testing.md)
 for cassette authoring and test-selection guidance.
