@@ -15,6 +15,14 @@ Run the deterministic integration suite with:
 make integrationtest
 ```
 
+Run only credential-free OCI SDK HTTP replays, or print the current
+controller-to-cassette coverage audit, with:
+
+```bash
+make replaytest
+make replay-coverage
+```
+
 It is intended to:
 
 - use the local `docker` CLI/runtime from Rancher Desktop

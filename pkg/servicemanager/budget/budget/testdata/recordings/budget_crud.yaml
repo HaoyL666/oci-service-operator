@@ -1,4 +1,10 @@
 version: 1
+metadata:
+  service: budget
+  resource: Budget
+  operations: [create, read, update, delete]
+  sdkVersion: v65.110.0
+  provenance: recorded
 interactions:
   - request:
       method: GET

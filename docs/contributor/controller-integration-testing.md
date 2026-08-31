@@ -6,10 +6,11 @@ handwritten service-manager behavior.
 ## Test Layers
 
 `make test` remains the repository build, generation, envtest, and unit-test
-gate. `make integrationtest` adds resource reconciliation through the real OCI
-SDK HTTP surface using checked-in sanitized cassettes. `make e2e-live` installs
-a service controller in Kind and performs a real OCI create, update, and delete
-lifecycle.
+gate. `make replaytest` exercises the real OCI SDK HTTP surface using checked-in
+sanitized cassettes without credentials or network access. `make
+integrationtest` combines those replays with the deterministic lifecycle-runner
+tests. `make e2e-live` installs a service controller in Kind and performs a real
+OCI create, update, and delete lifecycle.
 
 The cassette suite follows the Azure Service Operator record/replay pattern:
 the same SDK requests and responses can be replayed without credentials, quota,
@@ -27,6 +28,23 @@ The `internal/e2e/ocireplay` package implements the OCI SDK HTTP dispatcher
 interface. A resource integration test attaches a cassette to the SDK client's
 embedded `common.BaseClient`, then constructs its normal runtime hooks and
 service client.
+
+Every new cassette declares metadata:
+
+```yaml
+metadata:
+  service: budget
+  resource: Budget
+  operations: [create, read, update, delete]
+  sdkVersion: v65.110.0
+  provenance: recorded
+```
+
+`provenance` is either `recorded` for interactions captured from a real OCI API
+or `synthetic` for interactions authored from the checked-in OCI SDK/API
+contract. Synthetic cassettes must not be described as live OCI evidence.
+Operation names are limited to `create`, `read`, `update`, `delete`, and
+`action`.
 
 Record mode delegates to the real SDK HTTP client and writes the cassette
 atomically. Replay mode does not open a network connection. It matches unused
@@ -48,6 +66,12 @@ Replay restores recorded OCI identifiers to the test's input values and creates
 stable synthetic OCIDs for resource identifiers first returned by OCI. This
 keeps spec-to-status comparisons meaningful.
 
+Use `ocireplay.OpenSDKReplay` to construct a credential-free, no-retry OCI SDK
+base client and verify the cassette metadata before the first interaction. The
+session's `Close` method fails when any recorded interaction was not consumed.
+The lower-level `Open` API remains available to record and test the dispatcher
+itself.
+
 The Budget integration test is the initial reference:
 
 ```text
@@ -62,6 +86,25 @@ state that in the test name.
 
 Do not commit raw recordings. Review the sanitized cassette before adding it to
 the repository.
+
+Run only the SDK HTTP replay layer with:
+
+```bash
+make replaytest
+```
+
+Inspect current controller-to-cassette coverage with:
+
+```bash
+make replay-coverage
+```
+
+The coverage audit derives its inventory from checked-in controller files and
+correlates them with cassette metadata and the recorded integration test that
+references each cassette. During the phased rollout it reports missing,
+legacy, unreferenced, and orphan cassettes without failing. Coverage
+enforcement is intentionally deferred until the controller-backed surface has
+been classified.
 
 ## Live Lifecycle Scenarios
 

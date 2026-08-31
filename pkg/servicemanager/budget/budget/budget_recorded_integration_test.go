@@ -7,12 +7,10 @@ package budget
 
 import (
 	"context"
-	"net/http"
 	"path/filepath"
 	"testing"
 
 	budgetsdk "github.com/oracle/oci-go-sdk/v65/budget"
-	"github.com/oracle/oci-go-sdk/v65/common"
 	budgetv1beta1 "github.com/oracle/oci-service-operator/api/budget/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/e2e/ocireplay"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
@@ -20,31 +18,30 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-type replaySigner struct{}
-
-func (replaySigner) Sign(*http.Request) error { return nil }
-
 func TestRecordedBudgetCreateUpdateDelete(t *testing.T) {
-	cassette, err := ocireplay.Open(ocireplay.Options{
-		Mode: ocireplay.ModeReplay,
-		Path: filepath.Join("testdata", "recordings", "budget_crud.yaml"),
+	metadata := ocireplay.Metadata{
+		Service:    "budget",
+		Resource:   "Budget",
+		Operations: []ocireplay.Operation{ocireplay.OperationCreate, ocireplay.OperationRead, ocireplay.OperationUpdate, ocireplay.OperationDelete},
+		SDKVersion: "v65.110.0",
+		Provenance: ocireplay.ProvenanceRecorded,
+	}
+	replay, err := ocireplay.OpenSDKReplay(ocireplay.SDKReplayOptions{
+		Path:     filepath.Join("testdata", "recordings", "budget_crud.yaml"),
+		Host:     "https://usage.us-ashburn-1.oci.oraclecloud.com",
+		BasePath: "20190111",
+		Metadata: metadata,
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() {
-		if err := cassette.Close(); err != nil {
+		if err := replay.Close(); err != nil {
 			t.Errorf("close cassette: %v", err)
 		}
 	})
 
-	baseClient := common.DefaultBaseClientWithSigner(replaySigner{})
-	baseClient.Host = "https://usage.us-ashburn-1.oci.oraclecloud.com"
-	baseClient.BasePath = "20190111"
-	noRetry := common.NoRetryPolicy()
-	baseClient.Configuration.RetryPolicy = &noRetry
-	sdkClient := budgetsdk.BudgetClient{BaseClient: baseClient}
-	cassette.Attach(&sdkClient.BaseClient)
+	sdkClient := budgetsdk.BudgetClient{BaseClient: replay.BaseClient()}
 
 	hooks := newBudgetDefaultRuntimeHooks(sdkClient)
 	applyBudgetRuntimeHooks(&hooks)
@@ -91,7 +88,7 @@ func TestRecordedBudgetCreateUpdateDelete(t *testing.T) {
 	if !deleted {
 		t.Fatal("delete did not confirm OCI resource removal")
 	}
-	if err := cassette.Close(); err != nil {
+	if err := replay.Close(); err != nil {
 		t.Fatal(err)
 	}
 }

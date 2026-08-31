@@ -409,10 +409,16 @@ test: manifests generate fmt vet ## Run tests.
 
 RECORDED_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f -name '*_recorded_integration_test.go' -exec dirname {} \;))
 
-integrationtest: ## Run OCI cassette and resource lifecycle integration tests without live cloud access.
-	go test ./internal/e2e/...
+replay-coverage: ## Report OCI HTTP replay coverage without enforcing completeness.
+	go run ./cmd/osok-replay-coverage
+
+replaytest: replay-coverage ## Run credential-free OCI SDK HTTP replay tests.
+	go test ./internal/e2e/ocireplay
 	@[ -n "$(RECORDED_INTEGRATION_PACKAGES)" ] || { echo "No recorded integration tests found"; exit 1; }
 	go test $(addprefix ./,$(RECORDED_INTEGRATION_PACKAGES)) -run '^TestRecorded' -count=1
+
+integrationtest: replaytest ## Run OCI cassette and resource lifecycle integration tests without live cloud access.
+	go test ./internal/e2e/lifecycle
 
 functionaltest: integrationtest ## Run deterministic controller integration tests.
 

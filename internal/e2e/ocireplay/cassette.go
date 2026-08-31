@@ -49,6 +49,11 @@ func Open(options Options) (*Cassette, error) {
 	if options.Mode == ModeRecord && options.Delegate == nil {
 		return nil, errors.New("record mode requires a delegate HTTP dispatcher")
 	}
+	if options.Metadata != nil {
+		if err := validateMetadata(*options.Metadata); err != nil {
+			return nil, err
+		}
+	}
 	if options.MaxBodyBytes <= 0 {
 		options.MaxBodyBytes = DefaultMaxBodyBytes
 	}
@@ -59,7 +64,7 @@ func Open(options Options) (*Cassette, error) {
 		delegate:     options.Delegate,
 		overwrite:    options.Overwrite,
 		maxBodyBytes: options.MaxBodyBytes,
-		file:         cassetteFile{Version: Version},
+		file:         cassetteFile{Version: Version, Metadata: cloneMetadata(options.Metadata)},
 		sanitizer:    newSanitizer(),
 	}
 	if options.Mode == ModeRecord {
@@ -85,11 +90,35 @@ func Open(options Options) (*Cassette, error) {
 	if cassette.file.Version != Version {
 		return nil, fmt.Errorf("cassette version %d is unsupported; expected %d", cassette.file.Version, Version)
 	}
+	if cassette.file.Metadata != nil {
+		if err := validateMetadata(*cassette.file.Metadata); err != nil {
+			return nil, err
+		}
+	}
+	if options.Metadata != nil {
+		if cassette.file.Metadata == nil {
+			return nil, errors.New("replay cassette does not declare metadata")
+		}
+		if !metadataEqual(*options.Metadata, *cassette.file.Metadata) {
+			return nil, fmt.Errorf("replay cassette metadata does not match expected metadata")
+		}
+	}
 	if len(cassette.file.Interactions) == 0 {
 		return nil, errors.New("replay cassette contains no interactions")
 	}
 	cassette.used = make([]bool, len(cassette.file.Interactions))
 	return cassette, nil
+}
+
+// Metadata returns a defensive copy of the cassette metadata. Legacy cassettes
+// without metadata return nil.
+func (c *Cassette) Metadata() *Metadata {
+	if c == nil {
+		return nil
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return cloneMetadata(c.file.Metadata)
 }
 
 // Attach replaces an OCI SDK base client's HTTP dispatcher with the cassette.
@@ -218,6 +247,11 @@ func (c *Cassette) Close() error {
 func (c *Cassette) writeLocked() error {
 	if len(c.file.Interactions) == 0 {
 		return errors.New("refusing to write an empty OCI cassette")
+	}
+	if c.file.Metadata != nil {
+		if err := validateMetadata(*c.file.Metadata); err != nil {
+			return err
+		}
 	}
 	content, err := yaml.Marshal(c.file)
 	if err != nil {

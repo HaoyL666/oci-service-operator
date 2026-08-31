@@ -25,10 +25,41 @@ const (
 	ModeReplay Mode = "replay"
 )
 
+// Provenance states how a cassette's OCI interactions were obtained.
+type Provenance string
+
+const (
+	// ProvenanceRecorded identifies interactions captured from a real OCI API.
+	ProvenanceRecorded Provenance = "recorded"
+	// ProvenanceSynthetic identifies interactions authored from an OCI SDK/API contract.
+	ProvenanceSynthetic Provenance = "synthetic"
+)
+
+// Operation names a resource behavior covered by a cassette.
+type Operation string
+
+const (
+	OperationCreate Operation = "create"
+	OperationRead   Operation = "read"
+	OperationUpdate Operation = "update"
+	OperationDelete Operation = "delete"
+	OperationAction Operation = "action"
+)
+
+// Metadata describes the scope and provenance of a replay cassette.
+type Metadata struct {
+	Service    string      `yaml:"service" json:"service"`
+	Resource   string      `yaml:"resource" json:"resource"`
+	Operations []Operation `yaml:"operations" json:"operations"`
+	SDKVersion string      `yaml:"sdkVersion" json:"sdkVersion"`
+	Provenance Provenance  `yaml:"provenance" json:"provenance"`
+}
+
 // Options configures a cassette.
 type Options struct {
 	Mode     Mode
 	Path     string
+	Metadata *Metadata
 	Delegate interface {
 		Do(*http.Request) (*http.Response, error)
 	}
@@ -38,6 +69,7 @@ type Options struct {
 
 type cassetteFile struct {
 	Version      int           `yaml:"version"`
+	Metadata     *Metadata     `yaml:"metadata,omitempty"`
 	Interactions []interaction `yaml:"interactions"`
 }
 
