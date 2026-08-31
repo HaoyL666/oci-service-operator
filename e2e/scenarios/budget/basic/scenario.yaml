@@ -1,0 +1,21 @@
+version: 1
+name: budget-basic-crud
+service: budget
+namespace: default
+timeout: 10m
+pollInterval: 5s
+create: create.yaml
+update: update.yaml
+ready:
+  conditionTypes: [Active]
+  lifecycleStates: [ACTIVE]
+  requireOCID: true
+  fieldsEqual:
+    - desired: spec.displayName
+      observed: status.displayName
+failureConditionTypes: [Failed]
+delete:
+  enabled: true
+  timeout: 10m
+  cleanupDependencies: true
+cleanupOnFailure: true

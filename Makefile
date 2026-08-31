@@ -407,8 +407,22 @@ test: manifests generate fmt vet ## Run tests.
 		$(ENVTEST_ENV) KUBEBUILDER_ASSETS="$$envtest_assets" go test ./... -coverprofile cover.out | tee unittests.cover'
 	go tool cover -func cover.out | grep total | awk '{print substr($$3, 1, length($$3)-1)}' > unittests.percent
 
-functionaltest: ## Run functionaltest (placeholder — no functional tests yet).
-	@echo "No functional tests available."
+RECORDED_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f -name '*_recorded_integration_test.go' -exec dirname {} \;))
+
+integrationtest: ## Run OCI cassette and resource lifecycle integration tests without live cloud access.
+	go test ./internal/e2e/...
+	@[ -n "$(RECORDED_INTEGRATION_PACKAGES)" ] || { echo "No recorded integration tests found"; exit 1; }
+	go test $(addprefix ./,$(RECORDED_INTEGRATION_PACKAGES)) -run '^TestRecorded' -count=1
+
+functionaltest: integrationtest ## Run deterministic controller integration tests.
+
+E2E_SERVICE ?= budget
+E2E_SCENARIO ?= e2e/scenarios/$(E2E_SERVICE)/basic/scenario.yaml
+
+e2e-live: ## Run one real OCI create/update/delete lifecycle through a local Kind controller.
+	@[ -n "$(E2E_SERVICE)" ] || { echo "E2E_SERVICE must be set"; exit 1; }
+	@[ -f "$(E2E_SCENARIO)" ] || { echo "E2E_SCENARIO not found: $(E2E_SCENARIO)"; exit 1; }
+	SKIP_OLM=true ./e2e/e2e-lite-local test --service "$(E2E_SERVICE)" --scenario "$(E2E_SCENARIO)"
 
 ##@ Build Service
 

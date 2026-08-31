@@ -1,8 +1,19 @@
-# E2E Local Bootstrap
+# OSOK Controller Integration And Live E2E
 
 `e2e/e2e-lite-local` creates a lightweight local Kind cluster for OSOK development.
 
-This README documents `e2e/e2e-lite-local` only.
+OSOK has two complementary controller-level test paths:
+
+- checked-in sanitized OCI HTTP cassettes exercise OCI SDK serialization and
+  service-manager reconciliation without cloud credentials;
+- live lifecycle scenarios install the real controller and perform create,
+  update, and delete operations against OCI.
+
+Run the deterministic integration suite with:
+
+```bash
+make integrationtest
+```
 
 It is intended to:
 
@@ -87,6 +98,18 @@ This is also available as an explicit test action:
 ```bash
 SKIP_OLM=true ./e2e/e2e-lite-local test --service streaming
 ```
+
+Run an explicit create/update/delete lifecycle instead of the package samples:
+
+```bash
+export OCI_COMPARTMENT_ID=ocid1.compartment.oc1..example
+SKIP_OLM=true ./e2e/e2e-lite-local test \
+  --service budget \
+  --scenario e2e/scenarios/budget/basic/scenario.yaml
+```
+
+The equivalent Make target is `make e2e-live`. Override `E2E_SERVICE` and
+`E2E_SCENARIO` for another checked-in scenario.
 
 The direct package-install path does not require OLM, so `SKIP_OLM=true` is the
 recommended local setting for `--service` runs.
@@ -186,6 +209,7 @@ equivalent to exporting the variable first:
 - kubeconfig: `e2e/.e2e-lite-local-<cluster-name>/kubeconfig`
 - kind config: `e2e/.e2e-lite-local-<cluster-name>/kind-config.yaml`
 - service results: `e2e/.e2e-lite-local-<cluster-name>/results/<group>.tsv`
+- lifecycle evidence: `e2e/.e2e-lite-local-<cluster-name>/scenarios/<name>/result.json`
 - controller logs: `e2e/.e2e-lite-local-<cluster-name>/logs/<group>-controller.log`
 
 ## What The Script Does
@@ -210,6 +234,8 @@ The script:
 - when `--service` is set, restarts and waits for the controller deployment
 - when `--service` is set, applies matching sample manifests and records
   per-resource `PASS`/`FAIL`
+- when `--scenario` is set, renders its variables, performs create/update/delete,
+  waits for status convergence, confirms deletion, and writes JSON evidence
 
 ## What The Script Does Not Do
 
@@ -233,6 +259,31 @@ The script does not:
   `admitted-only` to make that distinction explicit.
 - The `Stream` resource gets one extra check: the result includes whether the
   generated endpoint secret named after the resource is present.
+
+## Lifecycle Scenario Contract
+
+Scenarios live under `e2e/scenarios/<service>/<scenario>/` and contain:
+
+```text
+scenario.yaml
+create.yaml
+update.yaml       # optional
+dependencies.yaml # optional
+```
+
+Manifest placeholders such as `${OCI_COMPARTMENT_ID}` are resolved from the
+environment. `OSOK_E2E_SUFFIX` is generated when it is not provided, and
+`OSOK_E2E_NAMESPACE` resolves to the scenario namespace. An unset variable is
+a hard authoring error.
+
+Readiness can require condition types, lifecycle states, an OCI identifier, and
+field equality such as `spec.displayName == status.displayName`. Field equality
+prevents an update from passing against status left over from the create phase.
+The runner cleans up the primary CR after success or failure and deletes
+scenario-owned dependencies in reverse order.
+
+See [Controller integration testing](../docs/contributor/controller-integration-testing.md)
+for cassette authoring and test-selection guidance.
 
 ## Notes
 

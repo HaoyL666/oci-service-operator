@@ -16,6 +16,8 @@ SKIP_PACKAGE_RENDER="${SKIP_PACKAGE_RENDER:-false}"
 REFRESH_OCI_SECRET="${REFRESH_OCI_SECRET:-false}"
 SAMPLE_DIR="${SAMPLE_DIR:-${REPO_ROOT}/config/samples}"
 SAMPLE_GLOB="${SAMPLE_GLOB:-}"
+SCENARIO_PATH="${SCENARIO_PATH:-}"
+SCENARIO_ARTIFACT_DIR="${SCENARIO_ARTIFACT_DIR:-}"
 TEST_NAMESPACE="${TEST_NAMESPACE:-default}"
 CONTROLLER_ROLLOUT_TIMEOUT="${CONTROLLER_ROLLOUT_TIMEOUT:-5m}"
 RESOURCE_TIMEOUT="${RESOURCE_TIMEOUT:-10m}"
@@ -92,7 +94,7 @@ Default action:
 
 Other actions:
   test    Require --service. Bootstrap the cluster if needed, then deploy and
-          validate the selected package group against local sample manifests.
+          validate the selected package group against samples or one lifecycle scenario.
   down    Delete the Kind cluster and local artifacts for CLUSTER_NAME.
   status  Show cluster, OLM, and optional service deployment status.
   render  Render the Kind config only.
@@ -103,6 +105,8 @@ Service test options:
   --controller-img IMG     Local controller image tag. Default: osok-<group>:dev
   --sample-dir DIR         Sample manifest directory. Default: ${SAMPLE_DIR}
   --sample-glob GLOB       Manifest glob inside --sample-dir. Default: <group>_*.yaml
+  --scenario PATH          Run an AWS ACK-style create/update/delete scenario
+                           instead of applying the package sample directory.
   --test-namespace NS      Namespace for sample applies when manifests omit it.
                            Default: ${TEST_NAMESPACE}
   --oci-profile PROFILE    OCI profile for auto-created ocicredentials. Default: ${OCI_PROFILE}
@@ -171,6 +175,11 @@ parse_args() {
       --sample-glob)
         [ $# -ge 2 ] || die "--sample-glob requires a value"
         SAMPLE_GLOB="$2"
+        shift 2
+        ;;
+      --scenario)
+        [ $# -ge 2 ] || die "--scenario requires a value"
+        SCENARIO_PATH="$2"
         shift 2
         ;;
       --test-namespace)
@@ -245,6 +254,14 @@ parse_args() {
       SAMPLE_DIR="${REPO_ROOT}/${SAMPLE_DIR}"
       ;;
   esac
+
+  if [ -n "${SCENARIO_PATH}" ]; then
+    case "${SCENARIO_PATH}" in
+      /*) ;;
+      *) SCENARIO_PATH="${REPO_ROOT}/${SCENARIO_PATH}" ;;
+    esac
+    [ -f "${SCENARIO_PATH}" ] || die "lifecycle scenario not found: ${SCENARIO_PATH}"
+  fi
 
   if [ -n "${SERVICE}" ] && [ -z "${CONTROLLER_IMG}" ]; then
     CONTROLLER_IMG="osok-${SERVICE}:dev"
@@ -1278,6 +1295,30 @@ run_service_samples() {
   log "Resource creation summary for ${SERVICE}: pass=${RESULT_PASS_COUNT} fail=${RESULT_FAIL_COUNT} total=${sample_count}"
 }
 
+run_lifecycle_scenario() {
+  local scenario_name
+  local scenario_artifacts
+
+  scenario_name="$(basename -- "$(dirname -- "${SCENARIO_PATH}")")"
+  scenario_artifacts="${SCENARIO_ARTIFACT_DIR:-${ARTIFACT_DIR}/scenarios/${scenario_name}}"
+  ensure_make_cache_dirs
+  log "Running lifecycle scenario ${SCENARIO_PATH}"
+  (
+    cd "${REPO_ROOT}"
+    GOCACHE="${MAKE_GOCACHE}" \
+    GOMODCACHE="${MAKE_GOMODCACHE}" \
+    GOTMPDIR="${MAKE_GOTMPDIR}" \
+    GOPATH="${MAKE_GOPATH}" \
+    go run -buildvcs=false ./cmd/osok-e2e lifecycle \
+      --scenario "${SCENARIO_PATH}" \
+      --artifacts-dir "${scenario_artifacts}" \
+      --kubeconfig "${KUBECONFIG_PATH}" \
+      --kubectl "${KUBECTL_BIN}" \
+      --expected-service "${SERVICE}"
+  )
+  log "Lifecycle evidence written to ${scenario_artifacts}/result.json"
+}
+
 run_service_suite() {
   load_service_metadata
   ensure_service_prereqs
@@ -1317,10 +1358,14 @@ run_service_suite() {
   apply_service_install_manifest
   patch_kind_local_mismatches
   wait_for_controller_rollout
-  run_service_samples
+  if [ -n "${SCENARIO_PATH}" ]; then
+    run_lifecycle_scenario
+  else
+    run_service_samples
+  fi
   capture_controller_logs
 
-  if [ "${RESULT_FAIL_COUNT}" -ne 0 ]; then
+  if [ -z "${SCENARIO_PATH}" ] && [ "${RESULT_FAIL_COUNT}" -ne 0 ]; then
     die "service suite failed for ${SERVICE}; see ${RESULTS_FILE} and ${CONTROLLER_LOG_FILE}"
   fi
 }
