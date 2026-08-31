@@ -1,0 +1,264 @@
+version: 1
+metadata:
+    service: nosql
+    resource: Table
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables
+        query: compartmentId=%3Cocid%3A1%3E&lifecycleState=ALL&name=osok_replay_common_table_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            opc-request-id:
+                - <redacted>
+        body: '{"autoReclaimableTables":0,"availableReplicationRegions":["af-johannesburg-1","ap-chuncheon-1","ap-hyderabad-1","ap-melbourne-1","ap-mumbai-1","ap-osaka-1","ap-seoul-1","ap-singapore-1","ap-sydney-1","ap-tokyo-1","ca-montreal-1","ca-toronto-1","eu-amsterdam-1","eu-frankfurt-1","eu-madrid-1","eu-marseille-1","eu-milan-1","eu-paris-1","eu-stockholm-1","eu-zurich-1","il-jerusalem-1","me-abudhabi-1","me-dubai-1","me-jeddah-1","me-riyadh-1","mx-monterrey-1","mx-queretaro-1","sa-bogota-1","sa-santiago-1","sa-saopaulo-1","sa-valparaiso-1","sa-vinhedo-1","uk-cardiff-1","uk-london-1","us-chicago-1","us-phoenix-1","us-saltlake-2","us-sanjose-1"],"items":[],"maxAutoReclaimableTables":0,"maxOnDemandCapacityTables":3,"onDemandCapacityTables":0}'
+        encoding: json
+    - request:
+        method: POST
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":"CREATE TABLE osok_replay_common_table_v1 (id INTEGER, payload STRING, PRIMARY KEY(id))","freeformTags":{"osok-replay":"create"},"isAutoReclaimable":false,"name":"osok_replay_common_table_v1","tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":10,"maxStorageInGBs":1,"maxWriteUnits":10}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/osok_replay_common_table_v1
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            etag:
+                - AAABoFok2es=
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":null,"id":"<ocid:3>","isAutoReclaimable":false,"isMultiRegion":false,"lifecycleDetails":"Creating resource is in-progress","lifecycleState":"CREATING","name":"osok_replay_common_table_v1","schemaState":"MUTABLE","tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":10,"maxStorageInGBs":1,"maxWriteUnits":10},"timeCreated":"2026-08-31T23:25:59.646Z","timeUpdated":"2026-08-31T23:25:59.659Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            etag:
+                - AAABoFok/a8=
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":"CREATE TABLE osok_replay_common_table_v1 (id INTEGER, payload STRING, PRIMARY KEY(id))","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:25:59.636Z"}},"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isAutoReclaimable":false,"isMultiRegion":false,"lifecycleDetails":"The resource is ACTIVE","lifecycleState":"ACTIVE","name":"osok_replay_common_table_v1","schema":{"columns":[{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":false,"name":"id","type":"INTEGER"},{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":true,"name":"payload","type":"STRING"}],"primaryKey":["id"],"shardKey":["id"]},"schemaState":"MUTABLE","systemTags":{},"tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":10,"maxStorageInGBs":1,"maxWriteUnits":10},"timeCreated":"2026-08-31T23:26:05.664Z","timeUpdated":"2026-08-31T23:26:08.815Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            etag:
+                - AAABoFok/a8=
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":"CREATE TABLE osok_replay_common_table_v1 (id INTEGER, payload STRING, PRIMARY KEY(id))","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:25:59.636Z"}},"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isAutoReclaimable":false,"isMultiRegion":false,"lifecycleDetails":"The resource is ACTIVE","lifecycleState":"ACTIVE","name":"osok_replay_common_table_v1","schema":{"columns":[{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":false,"name":"id","type":"INTEGER"},{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":true,"name":"payload","type":"STRING"}],"primaryKey":["id"],"shardKey":["id"]},"schemaState":"MUTABLE","systemTags":{},"tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":10,"maxStorageInGBs":1,"maxWriteUnits":10},"timeCreated":"2026-08-31T23:26:05.664Z","timeUpdated":"2026-08-31T23:26:08.815Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":20,"maxStorageInGBs":1,"maxWriteUnits":10}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            etag:
+                - AAABoFok/a8=
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":"CREATE TABLE osok_replay_common_table_v1 (id INTEGER, payload STRING, PRIMARY KEY(id))","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:25:59.636Z"}},"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isAutoReclaimable":false,"isMultiRegion":false,"lifecycleDetails":"The resource is ACTIVE","lifecycleState":"ACTIVE","name":"osok_replay_common_table_v1","schema":{"columns":[{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":false,"name":"id","type":"INTEGER"},{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":true,"name":"payload","type":"STRING"}],"primaryKey":["id"],"shardKey":["id"]},"schemaState":"MUTABLE","systemTags":{},"tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":10,"maxStorageInGBs":1,"maxWriteUnits":10},"timeCreated":"2026-08-31T23:26:05.664Z","timeUpdated":"2026-08-31T23:26:08.815Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            etag:
+                - AAABoFol57A=
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":"CREATE TABLE osok_replay_common_table_v1 (id INTEGER, payload STRING, PRIMARY KEY(id))","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:25:59.636Z"}},"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isAutoReclaimable":false,"isMultiRegion":false,"lifecycleDetails":"The resource is ACTIVE","lifecycleState":"ACTIVE","name":"osok_replay_common_table_v1","schema":{"columns":[{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":false,"name":"id","type":"INTEGER"},{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":true,"name":"payload","type":"STRING"}],"primaryKey":["id"],"shardKey":["id"]},"schemaState":"MUTABLE","systemTags":{},"tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":20,"maxStorageInGBs":1,"maxWriteUnits":10},"timeCreated":"2026-08-31T23:26:05.664Z","timeUpdated":"2026-08-31T23:27:08.720Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            etag:
+                - AAABoFom2qI=
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":"CREATE TABLE osok_replay_common_table_v1 (id INTEGER, payload STRING, PRIMARY KEY(id))","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:25:59.636Z"}},"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isAutoReclaimable":false,"isMultiRegion":false,"lifecycleDetails":"The resource is ACTIVE","lifecycleState":"ACTIVE","name":"osok_replay_common_table_v1","schema":{"columns":[{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":false,"name":"id","type":"INTEGER"},{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":true,"name":"payload","type":"STRING"}],"primaryKey":["id"],"shardKey":["id"]},"schemaState":"MUTABLE","systemTags":{},"tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":20,"maxStorageInGBs":1,"maxWriteUnits":10},"timeCreated":"2026-08-31T23:26:05.664Z","timeUpdated":"2026-08-31T23:28:10.914Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            etag:
+                - AAABoFom2qI=
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":"CREATE TABLE osok_replay_common_table_v1 (id INTEGER, payload STRING, PRIMARY KEY(id))","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:25:59.636Z"}},"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isAutoReclaimable":false,"isMultiRegion":false,"lifecycleDetails":"The resource is ACTIVE","lifecycleState":"ACTIVE","name":"osok_replay_common_table_v1","schema":{"columns":[{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":false,"name":"id","type":"INTEGER"},{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":true,"name":"payload","type":"STRING"}],"primaryKey":["id"],"shardKey":["id"]},"schemaState":"MUTABLE","systemTags":{},"tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":20,"maxStorageInGBs":1,"maxWriteUnits":10},"timeCreated":"2026-08-31T23:26:05.664Z","timeUpdated":"2026-08-31T23:28:10.914Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        query: isIfExists=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:6>
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json; charset=UTF-8
+            etag:
+                - AAABoFom28g=
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","ddlStatement":"CREATE TABLE osok_replay_common_table_v1 (id INTEGER, payload STRING, PRIMARY KEY(id))","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:25:59.636Z"}},"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isAutoReclaimable":false,"isMultiRegion":false,"lifecycleDetails":"Deleting resource is in-progress","lifecycleState":"DELETING","name":"osok_replay_common_table_v1","schema":{"columns":[{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":false,"name":"id","type":"INTEGER"},{"defaultValue":null,"isAsUuid":false,"isGenerated":false,"isNullable":true,"name":"payload","type":"STRING"}],"primaryKey":["id"],"shardKey":["id"]},"schemaState":"MUTABLE","systemTags":{},"tableLimits":{"capacityMode":"PROVISIONED","maxReadUnits":20,"maxStorageInGBs":1,"maxWriteUnits":10},"timeCreated":"2026-08-31T23:26:05.664Z","timeUpdated":"2026-08-31T23:28:11.208Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: nosql.us-ashburn-1.oci.oraclecloud.com
+        path: /20190828/tables/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"TableNotFound","message":"Table not found: <ocid:3>"}'
+        encoding: json

@@ -126,6 +126,8 @@ external side effects or prerequisites:
 - Access Governance instances require a service entitlement and an IDCS
   administrator token.
 - Rover clusters represent orders for physical appliances.
+- Generative AI dedicated AI clusters consume scarce paid accelerator
+  capacity.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
@@ -139,6 +141,19 @@ live OCI merely for testing. The initial failure matrix proves:
   disappeared before the delete request;
 - a failed Queue work request becomes a terminal failed status with preserved
   asynchronous evidence.
+
+The expanded recorded matrix also covers commonly used, bounded OCI resources:
+
+- Notifications Topic;
+- disabled Monitoring Alarm with a temporary Topic destination;
+- single-partition Streaming Stream in the default pool;
+- minimally provisioned NoSQL Table.
+
+Each live recorder owns fixed test naming, update assertions, best-effort
+failure cleanup, and confirmed terminal deletion before publishing its
+cassette. Service-specific limits remain part of the recorder: NoSQL uses a
+65-second DDL polling interval so retries do not perpetuate its per-minute DDL
+limit.
 
 Do not commit raw recordings. Review the sanitized cassette before adding it to
 the repository.

@@ -1,0 +1,158 @@
+version: 1
+metadata:
+    service: generativeai
+    resource: DedicatedAiCluster
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic create","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"create"},"type":"HOSTING","unitCount":1,"unitShape":"SMALL_COHERE"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic create","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","timeCreated":"2026-08-31T12:00:00Z","type":"HOSTING","unitCount":1,"unitShape":"SMALL_COHERE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic create","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","timeCreated":"2026-08-31T12:00:00Z","type":"HOSTING","unitCount":1,"unitShape":"SMALL_COHERE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic create","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","timeCreated":"2026-08-31T12:00:00Z","type":"HOSTING","unitCount":1,"unitShape":"SMALL_COHERE"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"synthetic update","freeformTags":{"osok-replay":"update"},"unitCount":2}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic update","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","timeCreated":"2026-08-31T12:00:00Z","timeUpdated":"2026-08-31T12:05:00Z","type":"HOSTING","unitCount":2,"unitShape":"SMALL_COHERE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic update","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","timeCreated":"2026-08-31T12:00:00Z","timeUpdated":"2026-08-31T12:05:00Z","type":"HOSTING","unitCount":2,"unitShape":"SMALL_COHERE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic update","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","timeCreated":"2026-08-31T12:00:00Z","timeUpdated":"2026-08-31T12:05:00Z","type":"HOSTING","unitCount":2,"unitShape":"SMALL_COHERE"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic update","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","timeCreated":"2026-08-31T12:00:00Z","timeUpdated":"2026-08-31T12:05:00Z","type":"HOSTING","unitCount":2,"unitShape":"SMALL_COHERE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: generativeai.us-ashburn-1.oci.oraclecloud.com
+        path: /20231130/dedicatedAiClusters/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"synthetic update","displayName":"osok-replay-synthetic-ai-cluster-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETED","timeCreated":"2026-08-31T12:00:00Z","timeUpdated":"2026-08-31T12:05:00Z","type":"HOSTING","unitCount":2,"unitShape":"SMALL_COHERE"}'
+        encoding: json
