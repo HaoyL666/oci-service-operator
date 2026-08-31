@@ -130,6 +130,16 @@ external side effects or prerequisites:
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
 
+Synthetic cassettes also cover failure paths that should not be induced against
+live OCI merely for testing. The initial failure matrix proves:
+
+- an Object Storage create can surface throttling and succeed on a later
+  reconciliation;
+- an Object Storage delete completes when a confirmation read proves the bucket
+  disappeared before the delete request;
+- a failed Queue work request becomes a terminal failed status with preserved
+  asynchronous evidence.
+
 Do not commit raw recordings. Review the sanitized cassette before adding it to
 the repository.
 
