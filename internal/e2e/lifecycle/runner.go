@@ -470,7 +470,6 @@ func evaluateReadiness(object *unstructured.Unstructured, assertions ReadyAssert
 	var messages []string
 	var observedGeneration int64
 	var lastConditionType string
-	var lastConditionStatus string
 	for _, raw := range conditions {
 		condition, ok := raw.(map[string]any)
 		if !ok {
@@ -480,7 +479,6 @@ func evaluateReadiness(object *unstructured.Unstructured, assertions ReadyAssert
 		status, _, _ := unstructured.NestedString(condition, "status")
 		if conditionType != "" {
 			lastConditionType = conditionType
-			lastConditionStatus = status
 		}
 		generation, _, _ := unstructured.NestedInt64(condition, "observedGeneration")
 		if generation > observedGeneration {
@@ -492,15 +490,19 @@ func evaluateReadiness(object *unstructured.Unstructured, assertions ReadyAssert
 			messages = append(messages, fmt.Sprintf("%s=%s reason=%s message=%s", conditionType, status, reason, message))
 		}
 	}
+	currentConditionType, _, _ := unstructured.NestedString(object.Object, "status", "status", "reason")
+	if strings.TrimSpace(currentConditionType) == "" {
+		currentConditionType = lastConditionType
+	}
 	for _, failureType := range failureTypes {
-		if strings.EqualFold(lastConditionType, failureType) && strings.EqualFold(lastConditionStatus, "true") {
+		if strings.EqualFold(currentConditionType, failureType) {
 			return false, true, strings.Join(messages, "; ")
 		}
 	}
 
 	conditionsReady := len(assertions.ConditionTypes) == 0
 	for _, readyType := range assertions.ConditionTypes {
-		if strings.EqualFold(lastConditionType, readyType) && strings.EqualFold(lastConditionStatus, "true") {
+		if strings.EqualFold(currentConditionType, readyType) {
 			conditionsReady = true
 			break
 		}
@@ -533,8 +535,8 @@ func evaluateReadiness(object *unstructured.Unstructured, assertions ReadyAssert
 		}
 		fieldDetails = append(fieldDetails, fmt.Sprintf("%s=%v %s=%v equal=%t", equality.Desired, desired, equality.Observed, observed, equal))
 	}
-	detail := fmt.Sprintf("conditions=[%s] lifecycle=%s ocid=%t generation=%d observedGeneration=%d",
-		strings.Join(messages, "; "), lifecycle, ocid != "", object.GetGeneration(), observedGeneration)
+	detail := fmt.Sprintf("reason=%s conditions=[%s] lifecycle=%s ocid=%t generation=%d observedGeneration=%d",
+		currentConditionType, strings.Join(messages, "; "), lifecycle, ocid != "", object.GetGeneration(), observedGeneration)
 	if len(fieldDetails) > 0 {
 		detail += " fields=[" + strings.Join(fieldDetails, "; ") + "]"
 	}

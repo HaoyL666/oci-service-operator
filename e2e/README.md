@@ -104,8 +104,8 @@ Run an explicit create/update/delete lifecycle instead of the package samples:
 ```bash
 export OCI_COMPARTMENT_ID=ocid1.compartment.oc1..example
 SKIP_OLM=true ./e2e/e2e-lite-local test \
-  --service budget \
-  --scenario e2e/scenarios/budget/basic/scenario.yaml
+  --service objectstorage \
+  --scenario e2e/scenarios/objectstorage/basic/scenario.yaml
 ```
 
 The equivalent Make target is `make e2e-live`. Override `E2E_SERVICE` and
@@ -272,9 +272,10 @@ dependencies.yaml # optional
 ```
 
 Manifest placeholders such as `${OCI_COMPARTMENT_ID}` are resolved from the
-environment. `OSOK_E2E_SUFFIX` is generated when it is not provided, and
-`OSOK_E2E_NAMESPACE` resolves to the scenario namespace. An unset variable is
-a hard authoring error.
+environment. `OCI_TENANCY_ID` and `OCI_REGION` default from the selected OCI
+profile. `OSOK_E2E_SUFFIX` is generated when it is not provided, and
+`OSOK_E2E_NAMESPACE` resolves to the scenario namespace. Any other unset
+variable is a hard authoring error.
 
 Readiness can require condition types, lifecycle states, an OCI identifier, and
 field equality such as `spec.displayName == status.displayName`. Field equality

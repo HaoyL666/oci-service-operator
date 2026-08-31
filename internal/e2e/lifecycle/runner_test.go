@@ -148,7 +148,7 @@ create: create.yaml
 	fake := &fakeCommandRunner{t: t, responses: []commandResponse{
 		{contains: []string{"apply", "dependency-01.yaml"}, output: "configured"},
 		{contains: []string{"apply", "create.yaml"}, output: "created"},
-		{contains: []string{"get", "budget.budget.oracle.com"}, output: resourceJSON(1, 1, "Failed", "True", "FAILED", "")},
+		{contains: []string{"get", "budget.budget.oracle.com"}, output: resourceJSON(1, 1, "Failed", "False", "FAILED", "")},
 		{contains: []string{"delete", "budget.budget.oracle.com"}, output: "deleted"},
 		{contains: []string{"get", "budget.budget.oracle.com"}, output: "NotFound", err: errors.New("exit 1")},
 		{contains: []string{"delete", "dependency-01.yaml"}, output: "deleted"},
@@ -162,7 +162,7 @@ create: create.yaml
 			"OCI_COMPARTMENT_ID": "ocid1.compartment.oc1..test",
 		},
 	})
-	if err == nil || !strings.Contains(err.Error(), "Failed=True") {
+	if err == nil || !strings.Contains(err.Error(), "Failed=False") {
 		t.Fatalf("Run() error = %v", err)
 	}
 	if result.Status != "failed" {
@@ -218,6 +218,50 @@ func TestRunRejectsUnsetVariablesAndServiceMismatch(t *testing.T) {
 	}
 }
 
+func TestCheckedInLifecycleScenariosRenderAndKeepResourceIdentity(t *testing.T) {
+	t.Parallel()
+
+	paths, err := filepath.Glob(filepath.Join("..", "..", "..", "e2e", "scenarios", "*", "*", "scenario.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(paths) == 0 {
+		t.Fatal("no checked-in lifecycle scenarios found")
+	}
+	for _, path := range paths {
+		path := path
+		t.Run(filepath.ToSlash(path), func(t *testing.T) {
+			t.Parallel()
+			scenario, err := LoadScenario(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			rendered, err := renderScenario(scenario, t.TempDir(), map[string]string{
+				"OCI_COMPARTMENT_ID": "ocid1.compartment.oc1..scenario",
+				"OCI_TENANCY_ID":     "ocid1.tenancy.oc1..scenario",
+				"OCI_REGION":         "us-ashburn-1",
+				"OSOK_E2E_SUFFIX":    "scenario",
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			createRef, err := manifestResourceRef(rendered.Create, scenario.Namespace)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if rendered.Update != "" {
+				updateRef, err := manifestResourceRef(rendered.Update, scenario.Namespace)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if createRef != updateRef {
+					t.Fatalf("create ref = %#v, update ref = %#v", createRef, updateRef)
+				}
+			}
+		})
+	}
+}
+
 func TestEvaluateReadinessRequiresEveryConfiguredCategory(t *testing.T) {
 	t.Parallel()
 
@@ -251,6 +295,7 @@ func TestEvaluateReadinessUsesLatestCondition(t *testing.T) {
 	object := &unstructured.Unstructured{Object: map[string]any{
 		"status": map[string]any{
 			"status": map[string]any{
+				"reason": "Active",
 				"conditions": []any{
 					map[string]any{"type": "Failed", "status": "True", "message": "transient"},
 					map[string]any{"type": "Active", "status": "True", "message": "recovered"},
@@ -264,8 +309,11 @@ func TestEvaluateReadinessUsesLatestCondition(t *testing.T) {
 	}
 
 	conditions, _, _ := unstructured.NestedSlice(object.Object, "status", "status", "conditions")
-	conditions = append(conditions, map[string]any{"type": "Failed", "status": "True", "message": "terminal"})
+	conditions = append(conditions, map[string]any{"type": "Failed", "status": "False", "message": "terminal"})
 	if err := unstructured.SetNestedSlice(object.Object, conditions, "status", "status", "conditions"); err != nil {
+		t.Fatal(err)
+	}
+	if err := unstructured.SetNestedField(object.Object, "Failed", "status", "status", "reason"); err != nil {
 		t.Fatal(err)
 	}
 	ready, failed, _ = evaluateReadiness(object, ReadyAssertions{ConditionTypes: []string{"Active"}}, []string{"Failed"})
@@ -302,9 +350,10 @@ func resourceJSON(generation, observed int64, conditionType, conditionStatus, li
   "status":{
     "lifecycleState":%q,
     "status":{
+      "reason":%q,
       "ocid":%q,
       "conditions":[{"type":%q,"status":%q,"observedGeneration":%d,"reason":"","message":""}]
     }
   }
-}`, generation, lifecycle, ocid, conditionType, conditionStatus, observed)
+}`, generation, lifecycle, conditionType, ocid, conditionType, conditionStatus, observed)
 }

@@ -83,7 +83,7 @@ On failure it makes a best-effort cleanup and preserves the original failure
 separately from any cleanup error. Rendered manifests and `result.json` are
 written below the ignored E2E artifact directory.
 
-Run the Budget reference scenario with:
+Run the Object Storage reference scenario with:
 
 ```bash
 export OCI_COMPARTMENT_ID=ocid1.compartment.oc1..replace_me
@@ -101,6 +101,9 @@ make e2e-live
 Only use dependencies created for the scenario when
 `cleanupDependencies: true`. Never place credentials or private keys in a
 checked-in manifest; inject required values through environment placeholders.
+The wrapper derives `OCI_TENANCY_ID` and `OCI_REGION` from the selected OCI
+profile, while resource-specific values such as `OCI_COMPARTMENT_ID` remain
+explicit operator inputs.
 
 ## Coverage Expectations
 

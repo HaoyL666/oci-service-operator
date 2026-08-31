@@ -1298,9 +1298,17 @@ run_service_samples() {
 run_lifecycle_scenario() {
   local scenario_name
   local scenario_artifacts
+  local profile_tenancy
+  local profile_region
 
   scenario_name="$(basename -- "$(dirname -- "${SCENARIO_PATH}")")"
   scenario_artifacts="${SCENARIO_ARTIFACT_DIR:-${ARTIFACT_DIR}/scenarios/${scenario_name}}"
+  profile_tenancy="$(oci_config_value tenancy)"
+  profile_region="$(oci_config_value region)"
+  export OCI_TENANCY_ID="${OCI_TENANCY_ID:-${profile_tenancy}}"
+  export OCI_REGION="${OCI_REGION:-${profile_region}}"
+  [ -n "${OCI_TENANCY_ID}" ] || die "profile ${OCI_PROFILE} does not provide OCI_TENANCY_ID for lifecycle scenarios"
+  [ -n "${OCI_REGION}" ] || die "profile ${OCI_PROFILE} does not provide OCI_REGION for lifecycle scenarios"
   ensure_make_cache_dirs
   log "Running lifecycle scenario ${SCENARIO_PATH}"
   (

@@ -416,7 +416,7 @@ integrationtest: ## Run OCI cassette and resource lifecycle integration tests wi
 
 functionaltest: integrationtest ## Run deterministic controller integration tests.
 
-E2E_SERVICE ?= budget
+E2E_SERVICE ?= objectstorage
 E2E_SCENARIO ?= e2e/scenarios/$(E2E_SERVICE)/basic/scenario.yaml
 
 e2e-live: ## Run one real OCI create/update/delete lifecycle through a local Kind controller.

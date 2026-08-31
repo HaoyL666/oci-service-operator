@@ -1,6 +1,6 @@
 version: 1
-name: budget-basic-crud
-service: budget
+name: objectstorage-bucket-basic-crud
+service: objectstorage
 namespace: default
 timeout: 10m
 pollInterval: 5s
@@ -8,11 +8,12 @@ create: create.yaml
 update: update.yaml
 ready:
   conditionTypes: [Active]
-  lifecycleStates: [ACTIVE]
   requireOCID: true
   fieldsEqual:
-    - desired: spec.displayName
-      observed: status.displayName
+    - desired: spec.name
+      observed: status.name
+    - desired: spec.metadata
+      observed: status.metadata
 failureConditionTypes: [Failed]
 delete:
   enabled: true
