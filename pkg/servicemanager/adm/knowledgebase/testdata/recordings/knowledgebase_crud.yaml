@@ -1,0 +1,480 @@
+version: 1
+metadata:
+    service: adm
+    resource: KnowledgeBase
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/knowledgeBases
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-async-adm-v1","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e6bf15fb0b733fc7adff9cadd80e24563c724e9053d032817a62dfa14f3c3bc1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:00:51.013Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e6bf15fb0b733fc7adff9cadd80e24563c724e9053d032817a62dfa14f3c3bc1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:00:51.013Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e6bf15fb0b733fc7adff9cadd80e24563c724e9053d032817a62dfa14f3c3bc1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:00:51.013Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e6bf15fb0b733fc7adff9cadd80e24563c724e9053d032817a62dfa14f3c3bc1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:00:51.013Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e6bf15fb0b733fc7adff9cadd80e24563c724e9053d032817a62dfa14f3c3bc1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:00:51.013Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e6bf15fb0b733fc7adff9cadd80e24563c724e9053d032817a62dfa14f3c3bc1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:00:51.013Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e6bf15fb0b733fc7adff9cadd80e24563c724e9053d032817a62dfa14f3c3bc1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:00:51.013Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7010860eada2c06a2a4e38ff842d8aa993af158cb25b08bd70f936fed71e3d61--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:01:27.167Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7010860eada2c06a2a4e38ff842d8aa993af158cb25b08bd70f936fed71e3d61--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:01:27.167Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7010860eada2c06a2a4e38ff842d8aa993af158cb25b08bd70f936fed71e3d61--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:01:27.167Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7010860eada2c06a2a4e38ff842d8aa993af158cb25b08bd70f936fed71e3d61--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:01:27.167Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7010860eada2c06a2a4e38ff842d8aa993af158cb25b08bd70f936fed71e3d61--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":null,"timeStarted":"2026-08-31T21:01:27.167Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 744d7d1ed84c8015e233ff3c9c38c8636c9bdf54431ed6fb8d9997464d2f5570--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"SUCCEEDED","timeAccepted":"2026-08-31T21:00:50.986Z","timeFinished":"2026-08-31T21:01:48.250Z","timeStarted":"2026-08-31T21:01:27.167Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 744d7d1ed84c8015e233ff3c9c38c8636c9bdf54431ed6fb8d9997464d2f5570--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"auditLifecyclePolicies":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:00:50.820Z"}},"displayName":"osok-replay-async-adm-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-08-31T21:00:50.985Z","timeUpdated":"2026-08-31T21:01:48.232Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 744d7d1ed84c8015e233ff3c9c38c8636c9bdf54431ed6fb8d9997464d2f5570--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"auditLifecyclePolicies":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:00:50.820Z"}},"displayName":"osok-replay-async-adm-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-08-31T21:00:50.985Z","timeUpdated":"2026-08-31T21:01:48.232Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"displayName":"osok-replay-async-adm-v1-updated","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - cb191af4069db6cb3dcc6153bd99bfa0e6f9b34afc02f591bf58eb5ee8604c45--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:01:53.798Z","timeFinished":null,"timeStarted":"2026-08-31T21:01:53.802Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - cb191af4069db6cb3dcc6153bd99bfa0e6f9b34afc02f591bf58eb5ee8604c45--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:01:53.798Z","timeFinished":null,"timeStarted":"2026-08-31T21:01:53.802Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - cb191af4069db6cb3dcc6153bd99bfa0e6f9b34afc02f591bf58eb5ee8604c45--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:01:53.798Z","timeFinished":null,"timeStarted":"2026-08-31T21:01:53.802Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - cb5c91f11bb2231e09d6e095ac1ca46157c2b05af172b8777a4c786510c9dc92--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_KNOWLEDGE_BASE","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"SUCCEEDED","timeAccepted":"2026-08-31T21:01:53.798Z","timeFinished":"2026-08-31T21:02:08.284Z","timeStarted":"2026-08-31T21:01:53.802Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - cb5c91f11bb2231e09d6e095ac1ca46157c2b05af172b8777a4c786510c9dc92--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"auditLifecyclePolicies":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:00:50.820Z"}},"displayName":"osok-replay-async-adm-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-08-31T21:00:50.985Z","timeUpdated":"2026-08-31T21:02:08.273Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 98a892b3da384b1b0bff77e6ff8d3720e0a7a699b31f30828a870b495032f995--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_KNOWLEDGE_BASE","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"IN_PROGRESS","timeAccepted":"2026-08-31T21:02:09.989Z","timeFinished":null,"timeStarted":"2026-08-31T21:02:10.001Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fc20609b79ab21b168cc455413c20af826d0f2c2b6b0454f0cc50f3e0909f2e4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_KNOWLEDGE_BASE","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"knowledgeBase","entityUri":"/knowledgeBases/<ocid:3>","identifier":"<ocid:3>","metadata":{}}],"status":"SUCCEEDED","timeAccepted":"2026-08-31T21:02:09.989Z","timeFinished":"2026-08-31T21:02:13.517Z","timeStarted":"2026-08-31T21:02:10.001Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: adm.us-ashburn-1.oci.oraclecloud.com
+        path: /20220421/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fc20609b79ab21b168cc455413c20af826d0f2c2b6b0454f0cc50f3e0909f2e4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"auditLifecyclePolicies":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:00:50.820Z"}},"displayName":"osok-replay-async-adm-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleState":"DELETED","systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-08-31T21:00:50.985Z","timeUpdated":"2026-08-31T21:02:13.512Z"}'
+        encoding: json

@@ -1,0 +1,198 @@
+version: 1
+metadata:
+    service: clusterplacementgroups
+    resource: ClusterPlacementGroup
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/clusterPlacementGroups
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"availabilityDomain":"<binding:availability-domain>","clusterPlacementGroupType":"STANDARD","compartmentId":"<ocid:1>","description":"recorded create","freeformTags":{"osok-replay":"create"},"name":"osok-replay-async-cpg-v1"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bba4e782cea9f2720dfbfd954ea6631869d693ed808299318828a873a8d534f4--gzip
+            location:
+                - https://clusterPlacementGroups.us-ashburn-1.oci.oraclecloud.com/20230801/clusterPlacementGroups<ocid:3>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"availabilityDomain":"<binding:availability-domain>","capabilities":null,"clusterPlacementGroupType":"STANDARD","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:05:59.530Z"}},"description":"recorded create","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","name":"osok-replay-async-cpg-v1","placementInstruction":null,"systemTags":{},"timeCreated":"2026-08-31T21:05:59.742Z","timeUpdated":"2026-08-31T21:05:59.742Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bba4e782cea9f2720dfbfd954ea6631869d693ed808299318828a873a8d534f4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_CLUSTER_PLACEMENT_GROUP","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"clusterplacementgroup","entityUri":"/clusterPlacementGroups/<ocid:3>","identifier":"<ocid:3>","metadata":{"is_dry_run":"false"}}],"status":"SUCCEEDED","timeAccepted":"2026-08-31T21:05:59.743Z","timeFinished":"2026-08-31T21:05:59.749Z","timeStarted":"2026-08-31T21:05:59.749Z","timeUpdated":"2026-08-31T21:05:59.749Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/clusterPlacementGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bba4e782cea9f2720dfbfd954ea6631869d693ed808299318828a873a8d534f4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availabilityDomain":"<binding:availability-domain>","capabilities":null,"clusterPlacementGroupType":"STANDARD","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:05:59.530Z"}},"description":"recorded create","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","name":"osok-replay-async-cpg-v1","placementInstruction":null,"systemTags":{},"timeCreated":"2026-08-31T21:05:59.742Z","timeUpdated":"2026-08-31T21:05:59.742Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/clusterPlacementGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bba4e782cea9f2720dfbfd954ea6631869d693ed808299318828a873a8d534f4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availabilityDomain":"<binding:availability-domain>","capabilities":null,"clusterPlacementGroupType":"STANDARD","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:05:59.530Z"}},"description":"recorded create","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","name":"osok-replay-async-cpg-v1","placementInstruction":null,"systemTags":{},"timeCreated":"2026-08-31T21:05:59.742Z","timeUpdated":"2026-08-31T21:05:59.742Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/clusterPlacementGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8ac00dcabe53f3ecc57d81ad192f3633cf9980f4a55c308f25efdee5379805bf--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_CLUSTER_PLACEMENT_GROUP","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"clusterplacementgroup","entityUri":"/clusterPlacementGroups/<ocid:3>","identifier":"<ocid:3>","metadata":{"is_dry_run":"false"}}],"status":"SUCCEEDED","timeAccepted":"2026-08-31T21:06:00.605Z","timeFinished":"2026-08-31T21:06:00.613Z","timeStarted":"2026-08-31T21:06:00.613Z","timeUpdated":"2026-08-31T21:06:00.613Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/clusterPlacementGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8ac00dcabe53f3ecc57d81ad192f3633cf9980f4a55c308f25efdee5379805bf--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availabilityDomain":"<binding:availability-domain>","capabilities":null,"clusterPlacementGroupType":"STANDARD","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:05:59.530Z"}},"description":"recorded update","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","name":"osok-replay-async-cpg-v1","placementInstruction":null,"systemTags":{},"timeCreated":"2026-08-31T21:05:59.742Z","timeUpdated":"2026-08-31T21:06:00.595Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/clusterPlacementGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - cd0656bf35d3a1323723a8d7016489e646f5c798aa9b336639f24ea3967a2c37--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_CLUSTER_PLACEMENT_GROUP","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"clusterplacementgroup","entityUri":"/clusterPlacementGroups/<ocid:3>","identifier":"<ocid:3>","metadata":{"is_dry_run":"false"}}],"status":"SUCCEEDED","timeAccepted":"2026-08-31T21:06:01.283Z","timeFinished":"2026-08-31T21:06:03.368Z","timeStarted":"2026-08-31T21:06:03.368Z","timeUpdated":"2026-08-31T21:06:03.368Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: clusterplacementgroups.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/clusterPlacementGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - cd0656bf35d3a1323723a8d7016489e646f5c798aa9b336639f24ea3967a2c37--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availabilityDomain":"<binding:availability-domain>","capabilities":null,"clusterPlacementGroupType":"STANDARD","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:05:59.530Z"}},"description":"recorded update","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"DELETED","name":"osok-replay-async-cpg-v1","placementInstruction":null,"systemTags":{},"timeCreated":"2026-08-31T21:05:59.742Z","timeUpdated":"2026-08-31T21:06:03.301Z"}'
+        encoding: json

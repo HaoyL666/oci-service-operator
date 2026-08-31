@@ -124,12 +124,13 @@ var requestHeaderPolicy = headerPolicy{
 }
 
 var responseHeaderPolicy = headerPolicy{
-	"content-type":   false,
-	"etag":           false,
-	"location":       false,
-	"opc-next-page":  false,
-	"opc-request-id": true,
-	"retry-after":    false,
+	"content-type":        false,
+	"etag":                false,
+	"location":            false,
+	"opc-next-page":       false,
+	"opc-request-id":      true,
+	"opc-work-request-id": false,
+	"retry-after":         false,
 }
 
 func (s *sanitizer) headers(headers http.Header, policy headerPolicy) map[string][]string {

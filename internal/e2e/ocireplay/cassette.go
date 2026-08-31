@@ -10,10 +10,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"os"
 	"path/filepath"
-	"reflect"
+	"slices"
 	"strings"
 	"sync"
 
@@ -170,13 +171,37 @@ func (c *Cassette) replay(req *http.Request, body []byte) (*http.Response, error
 		return nil, err
 	}
 	for index, candidate := range c.file.Interactions {
-		if c.used[index] || !reflect.DeepEqual(candidate.Request, actual) {
+		if c.used[index] || !recordedRequestsEqual(candidate.Request, actual) {
 			continue
 		}
 		c.used[index] = true
 		return replayResponse(req, candidate.Response, c.sanitizer)
 	}
-	return nil, fmt.Errorf("no unused OCI interaction matches %s %s%s; headers=%v body=%s", actual.Method, actual.Path, querySuffix(actual.Query), actual.Headers, actual.Body)
+	var firstUnused *recordedRequest
+	for index := range c.file.Interactions {
+		if !c.used[index] {
+			candidate := c.file.Interactions[index].Request
+			firstUnused = &candidate
+			break
+		}
+	}
+	difference := ""
+	if firstUnused != nil {
+		difference = fmt.Sprintf(" fieldEquality={method:%t host:%t path:%t query:%t headers:%t body:%t encoding:%t}",
+			firstUnused.Method == actual.Method, firstUnused.Host == actual.Host, firstUnused.Path == actual.Path,
+			firstUnused.Query == actual.Query, maps.EqualFunc(firstUnused.Headers, actual.Headers, slices.Equal),
+			firstUnused.Body == actual.Body, firstUnused.Encoding == actual.Encoding)
+		if firstUnused.Host != actual.Host {
+			difference += fmt.Sprintf(" hostBytes={actual:%x expected:%x}", []byte(actual.Host), []byte(firstUnused.Host))
+		}
+	}
+	return nil, fmt.Errorf("no unused OCI interaction matches %s %s%s; actual=%#v firstUnused=%#v%s", actual.Method, actual.Path, querySuffix(actual.Query), actual, firstUnused, difference)
+}
+
+func recordedRequestsEqual(left, right recordedRequest) bool {
+	return left.Method == right.Method && left.Host == right.Host && left.Path == right.Path &&
+		left.Query == right.Query && left.Body == right.Body && left.Encoding == right.Encoding &&
+		maps.EqualFunc(left.Headers, right.Headers, slices.Equal)
 }
 
 func (c *Cassette) record(req *http.Request, requestBody []byte) (*http.Response, error) {
