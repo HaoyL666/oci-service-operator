@@ -14,6 +14,7 @@ SKIP_GENERATOR_REFRESH="${SKIP_GENERATOR_REFRESH:-false}"
 GENERATOR_OVERWRITE="${GENERATOR_OVERWRITE:-true}"
 SKIP_PACKAGE_RENDER="${SKIP_PACKAGE_RENDER:-false}"
 REFRESH_OCI_SECRET="${REFRESH_OCI_SECRET:-false}"
+SKIP_CERT_MANAGER="${SKIP_CERT_MANAGER:-false}"
 SAMPLE_DIR="${SAMPLE_DIR:-${REPO_ROOT}/config/samples}"
 SAMPLE_GLOB="${SAMPLE_GLOB:-}"
 SCENARIO_PATH="${SCENARIO_PATH:-}"
@@ -37,6 +38,8 @@ OLM_VERSION="${OLM_VERSION:-v0.28.0}"
 KIND_WAIT="${KIND_WAIT:-5m}"
 COREDNS_ROLLOUT_TIMEOUT="${COREDNS_ROLLOUT_TIMEOUT:-5m}"
 OLM_TIMEOUT="${OLM_TIMEOUT:-10m}"
+CERT_MANAGER_VERSION="${CERT_MANAGER_VERSION:-v1.19.3}"
+CERT_MANAGER_TIMEOUT="${CERT_MANAGER_TIMEOUT:-5m}"
 RECREATE_CLUSTER="${RECREATE_CLUSTER:-false}"
 SKIP_OLM="${SKIP_OLM:-false}"
 KIND_NODE_NAMESERVERS="${KIND_NODE_NAMESERVERS:-1.1.1.1 8.8.8.8}"
@@ -118,6 +121,7 @@ Service test options:
   --skip-load              Skip kind load docker-image.
   --skip-generator-refresh Skip make generator-refresh.
   --skip-package-render    Skip make package-install and reuse dist/packages/<group>/install.yaml.
+  --skip-cert-manager      Do not install cert-manager when the package manifest requires it.
 
 Common environment overrides:
   CLUSTER_NAME=${CLUSTER_NAME}
@@ -129,6 +133,7 @@ Common environment overrides:
   OLM_REGISTRY_PROBE_URL=${OLM_REGISTRY_PROBE_URL}
   OPERATOR_SDK_VERSION=${OPERATOR_SDK_VERSION}
   OLM_VERSION=${OLM_VERSION}
+  CERT_MANAGER_VERSION=${CERT_MANAGER_VERSION}
   RECREATE_CLUSTER=${RECREATE_CLUSTER}
   SKIP_OLM=${SKIP_OLM}
 EOF
@@ -225,6 +230,10 @@ parse_args() {
         ;;
       --skip-package-render)
         SKIP_PACKAGE_RENDER=true
+        shift
+        ;;
+      --skip-cert-manager)
+        SKIP_CERT_MANAGER=true
         shift
         ;;
       help|-h|--help)
@@ -620,6 +629,29 @@ ensure_service_install_manifest() {
   [ -f "${INSTALL_MANIFEST_PATH}" ] || die "install manifest not found: ${INSTALL_MANIFEST_PATH}"
 }
 
+install_cert_manager_if_required() {
+  local manifest_url
+
+  if ! grep -q 'cert-manager.io/' "${INSTALL_MANIFEST_PATH}"; then
+    return
+  fi
+  if is_true "${SKIP_CERT_MANAGER}"; then
+    die "package ${SERVICE} requires cert-manager but SKIP_CERT_MANAGER=${SKIP_CERT_MANAGER}"
+  fi
+  if "${KUBECTL_BIN}" get crd certificates.cert-manager.io issuers.cert-manager.io >/dev/null 2>&1 \
+    && "${KUBECTL_BIN}" -n cert-manager get deployment \
+      cert-manager cert-manager-cainjector cert-manager-webhook >/dev/null 2>&1; then
+    log "Reusing installed cert-manager"
+  else
+    manifest_url="https://github.com/cert-manager/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.yaml"
+    log "Installing cert-manager ${CERT_MANAGER_VERSION}"
+    "${KUBECTL_BIN}" apply -f "${manifest_url}"
+  fi
+  "${KUBECTL_BIN}" -n cert-manager rollout status deployment/cert-manager --timeout "${CERT_MANAGER_TIMEOUT}"
+  "${KUBECTL_BIN}" -n cert-manager rollout status deployment/cert-manager-cainjector --timeout "${CERT_MANAGER_TIMEOUT}"
+  "${KUBECTL_BIN}" -n cert-manager rollout status deployment/cert-manager-webhook --timeout "${CERT_MANAGER_TIMEOUT}"
+}
+
 ensure_namespace_exists() {
   "${KUBECTL_BIN}" create namespace "${PACKAGE_NAMESPACE}" --dry-run=client -o yaml | "${KUBECTL_BIN}" apply -f - >/dev/null
 }
@@ -782,32 +814,32 @@ apply_service_install_manifest() {
 }
 
 patch_kind_local_mismatches() {
+  local desired_replicas
   local pki_mount_index
   local pki_volume_index
-  local patch_ops
   local auth_patch
 
-  log "Patching deployment ${DEPLOYMENT_NAME} image=${CONTROLLER_IMG} for Kind"
-  "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" patch deployment "${DEPLOYMENT_NAME}" \
-    --type=json \
-    -p="[{\"op\":\"replace\",\"path\":\"/spec/template/spec/containers/0/image\",\"value\":\"${CONTROLLER_IMG}\"}]" >/dev/null
-
-  log "Patching deployment ${DEPLOYMENT_NAME} imagePullPolicy=IfNotPresent for Kind"
-  "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" patch deployment "${DEPLOYMENT_NAME}" \
-    --type=json \
-    -p='[{"op":"replace","path":"/spec/template/spec/containers/0/imagePullPolicy","value":"IfNotPresent"}]' >/dev/null
+  desired_replicas="$("${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" get deployment "${DEPLOYMENT_NAME}" \
+    -o jsonpath='{.spec.replicas}')"
+  desired_replicas="${desired_replicas:-1}"
+  log "Scaling deployment ${DEPLOYMENT_NAME} to zero before applying local-only settings"
+  "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" scale deployment "${DEPLOYMENT_NAME}" --replicas=0 >/dev/null
+  "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" rollout status "deployment/${DEPLOYMENT_NAME}" \
+    --timeout="${CONTROLLER_ROLLOUT_TIMEOUT}" >/dev/null
 
   log "Patching secret ${OSOKCONFIG_SECRET_NAME} useinstanceprincipal=false for local credentials"
   "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" patch secret "${OSOKCONFIG_SECRET_NAME}" \
     --type=merge \
     -p='{"stringData":{"useinstanceprincipal":"false"}}' >/dev/null
 
-  auth_patch="$(cat <<'EOF'
+  auth_patch="$(cat <<EOF
 spec:
   template:
     spec:
       containers:
       - name: manager
+        image: ${CONTROLLER_IMG}
+        imagePullPolicy: IfNotPresent
         env:
         - name: AUTH_TYPE
           valueFrom:
@@ -837,7 +869,7 @@ spec:
           secretName: ocicredentials
 EOF
 )"
-  log "Patching deployment ${DEPLOYMENT_NAME} with ocicredentials env and /etc/oci mount"
+  log "Patching deployment ${DEPLOYMENT_NAME} atomically for the local image and OCI credentials"
   "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" patch deployment "${DEPLOYMENT_NAME}" \
     --type=strategic \
     -p "${auth_patch}" >/dev/null
@@ -852,8 +884,9 @@ EOF
     die "deployment ${DEPLOYMENT_NAME} unexpectedly mounts host /etc/pki"
   fi
 
-  log "Restarting deployment ${DEPLOYMENT_NAME} so updated secrets are re-read"
-  "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" rollout restart "deployment/${DEPLOYMENT_NAME}" >/dev/null
+  log "Restoring deployment ${DEPLOYMENT_NAME} replicas=${desired_replicas}"
+  "${KUBECTL_BIN}" -n "${PACKAGE_NAMESPACE}" scale deployment "${DEPLOYMENT_NAME}" \
+    --replicas="${desired_replicas}" >/dev/null
 }
 
 wait_for_controller_rollout() {
@@ -1300,15 +1333,35 @@ run_lifecycle_scenario() {
   local scenario_artifacts
   local profile_tenancy
   local profile_region
+  local profile_security_token_file
+  local profile_availability_domain
+  local -a oci_auth_args
 
-  scenario_name="$(basename -- "$(dirname -- "${SCENARIO_PATH}")")"
+  scenario_name="${SERVICE}-$(basename -- "$(dirname -- "${SCENARIO_PATH}")")"
   scenario_artifacts="${SCENARIO_ARTIFACT_DIR:-${ARTIFACT_DIR}/scenarios/${scenario_name}}"
   profile_tenancy="$(oci_config_value tenancy)"
   profile_region="$(oci_config_value region)"
+  profile_security_token_file="$(oci_config_value security_token_file)"
   export OCI_TENANCY_ID="${OCI_TENANCY_ID:-${profile_tenancy}}"
   export OCI_REGION="${OCI_REGION:-${profile_region}}"
   [ -n "${OCI_TENANCY_ID}" ] || die "profile ${OCI_PROFILE} does not provide OCI_TENANCY_ID for lifecycle scenarios"
   [ -n "${OCI_REGION}" ] || die "profile ${OCI_PROFILE} does not provide OCI_REGION for lifecycle scenarios"
+  if [ -z "${OCI_AVAILABILITY_DOMAIN:-}" ] && command -v oci >/dev/null 2>&1; then
+    oci_auth_args=( --profile "${OCI_PROFILE}" )
+    if [ -n "${profile_security_token_file}" ]; then
+      oci_auth_args+=( --auth security_token )
+    fi
+    profile_availability_domain="$(
+      oci iam availability-domain list \
+        --compartment-id "${OCI_COMPARTMENT_ID:-${OCI_TENANCY_ID}}" \
+        "${oci_auth_args[@]}" \
+        --query 'data[0].name' \
+        --raw-output 2>/dev/null || true
+    )"
+    if [ -n "${profile_availability_domain}" ] && [ "${profile_availability_domain}" != "null" ]; then
+      export OCI_AVAILABILITY_DOMAIN="${profile_availability_domain}"
+    fi
+  fi
   ensure_make_cache_dirs
   log "Running lifecycle scenario ${SCENARIO_PATH}"
   (
@@ -1362,6 +1415,7 @@ run_service_suite() {
   fi
 
   ensure_service_install_manifest
+  install_cert_manager_if_required
   ensure_ocicredentials_secret
   apply_service_install_manifest
   patch_kind_local_mismatches

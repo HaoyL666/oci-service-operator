@@ -176,6 +176,57 @@ create: create.yaml
 	}
 }
 
+func TestRunVerifiesRelatedObjectLifecycle(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	writeTestFile(t, root, "scenario.yaml", `version: 1
+name: related-secret
+service: budget
+timeout: 1s
+pollInterval: 1ms
+create: create.yaml
+relatedObjects:
+  - apiVersion: v1
+    kind: Secret
+    requiredDataKeys: [endpoint]
+    deleteWithResource: true
+`)
+	writeTestFile(t, root, "create.yaml", testBudgetManifest("initial"))
+	fake := &fakeCommandRunner{t: t, responses: []commandResponse{
+		{contains: []string{"apply", "create.yaml"}, output: "created"},
+		{contains: []string{"get", "budget.budget.oracle.com"}, output: resourceJSON(1, 1, "Active", "True", "ACTIVE", "ocid1.budget.oc1..created")},
+		{contains: []string{"get", "secret", "budget-demo"}, output: `{"apiVersion":"v1","kind":"Secret","metadata":{"name":"budget-demo","namespace":"default"},"data":{"endpoint":"aHR0cHM6Ly9leGFtcGxl"}}`},
+		{contains: []string{"delete", "budget.budget.oracle.com"}, output: "deleted"},
+		{contains: []string{"get", "budget.budget.oracle.com"}, output: "NotFound", err: errors.New("exit 1")},
+		{contains: []string{"get", "secret", "budget-demo"}, output: "NotFound", err: errors.New("exit 1")},
+	}}
+	result, err := Run(context.Background(), RunOptions{
+		ScenarioPath:  filepath.Join(root, "scenario.yaml"),
+		ArtifactsDir:  filepath.Join(root, "artifacts"),
+		CommandRunner: fake,
+		Variables: map[string]string{
+			"OSOK_E2E_SUFFIX":    "fixed",
+			"OCI_COMPARTMENT_ID": "ocid1.compartment.oc1..test",
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.Status != "passed" {
+		t.Fatalf("result status = %q", result.Status)
+	}
+	if len(result.Phases) != 6 {
+		t.Fatalf("phase count = %d, want 6", len(result.Phases))
+	}
+	if got := result.Phases[2].Name; got != "verify_related_after_create" {
+		t.Fatalf("phase[2] = %q", got)
+	}
+	if got := result.Phases[5].Name; got != "verify_related_deletion" {
+		t.Fatalf("phase[5] = %q", got)
+	}
+}
+
 func TestLoadScenarioRejectsUnknownFieldAndEscapingPath(t *testing.T) {
 	t.Parallel()
 
@@ -193,6 +244,24 @@ func TestLoadScenarioRejectsUnknownFieldAndEscapingPath(t *testing.T) {
 	writeTestFile(t, root, "escape.yaml", "version: 1\nname: x\nservice: budget\ncreate: ../outside.yaml\n")
 	if _, err := LoadScenario(filepath.Join(root, "escape.yaml")); err == nil || !strings.Contains(err.Error(), "escapes") {
 		t.Fatalf("LoadScenario(escape) error = %v", err)
+	}
+}
+
+func TestLoadScenarioRejectsInvalidRelatedObject(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	writeTestFile(t, root, "create.yaml", testBudgetManifest("initial"))
+	writeTestFile(t, root, "scenario.yaml", `version: 1
+name: invalid-related-object
+service: budget
+create: create.yaml
+relatedObjects:
+  - apiVersion: invalid/version/extra
+    kind: Secret
+`)
+	if _, err := LoadScenario(filepath.Join(root, "scenario.yaml")); err == nil || !strings.Contains(err.Error(), "apiVersion") {
+		t.Fatalf("LoadScenario(invalid related object) error = %v", err)
 	}
 }
 
@@ -237,10 +306,11 @@ func TestCheckedInLifecycleScenariosRenderAndKeepResourceIdentity(t *testing.T) 
 				t.Fatal(err)
 			}
 			rendered, err := renderScenario(scenario, t.TempDir(), map[string]string{
-				"OCI_COMPARTMENT_ID": "ocid1.compartment.oc1..scenario",
-				"OCI_TENANCY_ID":     "ocid1.tenancy.oc1..scenario",
-				"OCI_REGION":         "us-ashburn-1",
-				"OSOK_E2E_SUFFIX":    "scenario",
+				"OCI_AVAILABILITY_DOMAIN": "example:US-ASHBURN-AD-1",
+				"OCI_COMPARTMENT_ID":      "ocid1.compartment.oc1..scenario",
+				"OCI_TENANCY_ID":          "ocid1.tenancy.oc1..scenario",
+				"OCI_REGION":              "us-ashburn-1",
+				"OSOK_E2E_SUFFIX":         "scenario",
 			})
 			if err != nil {
 				t.Fatal(err)

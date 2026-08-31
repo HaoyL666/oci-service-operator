@@ -74,10 +74,14 @@ The runner performs:
 
 1. dependency apply in declared order;
 2. primary resource create;
-3. readiness and status convergence;
-4. optional update and renewed convergence;
-5. primary resource deletion and not-found confirmation;
+3. readiness, status convergence, and optional related-object assertions;
+4. optional update and renewed convergence/assertions;
+5. primary resource deletion, not-found confirmation, and optional related-object deletion;
 6. dependency deletion in reverse order.
+
+The local bootstrap also installs the pinned cert-manager release when a
+selected package contains `Certificate` or `Issuer` resources. Packages without
+cert-manager resources do not pay that setup cost.
 
 On failure it makes a best-effort cleanup and preserves the original failure
 separately from any cleanup error. Rendered manifests and `result.json` are
@@ -102,8 +106,9 @@ Only use dependencies created for the scenario when
 `cleanupDependencies: true`. Never place credentials or private keys in a
 checked-in manifest; inject required values through environment placeholders.
 The wrapper derives `OCI_TENANCY_ID` and `OCI_REGION` from the selected OCI
-profile, while resource-specific values such as `OCI_COMPARTMENT_ID` remain
-explicit operator inputs.
+profile and, when OCI CLI access is available, discovers the first
+`OCI_AVAILABILITY_DOMAIN` visible from the target compartment. Resource-specific
+values such as `OCI_COMPARTMENT_ID` remain explicit operator inputs.
 
 ## Coverage Expectations
 

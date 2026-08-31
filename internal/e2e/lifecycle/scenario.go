@@ -17,25 +17,27 @@ import (
 	"time"
 
 	"gopkg.in/yaml.v3"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 const scenarioVersion = 1
 
 // Scenario describes one live OSOK resource lifecycle.
 type Scenario struct {
-	Version               int             `yaml:"version"`
-	Name                  string          `yaml:"name"`
-	Service               string          `yaml:"service"`
-	Namespace             string          `yaml:"namespace,omitempty"`
-	Timeout               string          `yaml:"timeout,omitempty"`
-	PollInterval          string          `yaml:"pollInterval,omitempty"`
-	Dependencies          []string        `yaml:"dependencies,omitempty"`
-	Create                string          `yaml:"create"`
-	Update                string          `yaml:"update,omitempty"`
-	Ready                 ReadyAssertions `yaml:"ready,omitempty"`
-	FailureConditionTypes []string        `yaml:"failureConditionTypes,omitempty"`
-	Delete                DeleteSpec      `yaml:"delete,omitempty"`
-	CleanupOnFailure      *bool           `yaml:"cleanupOnFailure,omitempty"`
+	Version               int                      `yaml:"version"`
+	Name                  string                   `yaml:"name"`
+	Service               string                   `yaml:"service"`
+	Namespace             string                   `yaml:"namespace,omitempty"`
+	Timeout               string                   `yaml:"timeout,omitempty"`
+	PollInterval          string                   `yaml:"pollInterval,omitempty"`
+	Dependencies          []string                 `yaml:"dependencies,omitempty"`
+	Create                string                   `yaml:"create"`
+	Update                string                   `yaml:"update,omitempty"`
+	Ready                 ReadyAssertions          `yaml:"ready,omitempty"`
+	FailureConditionTypes []string                 `yaml:"failureConditionTypes,omitempty"`
+	RelatedObjects        []RelatedObjectAssertion `yaml:"relatedObjects,omitempty"`
+	Delete                DeleteSpec               `yaml:"delete,omitempty"`
+	CleanupOnFailure      *bool                    `yaml:"cleanupOnFailure,omitempty"`
 }
 
 // ReadyAssertions define observable Kubernetes evidence for a converged CR.
@@ -53,6 +55,17 @@ type ReadyAssertions struct {
 type FieldEquality struct {
 	Desired  string `yaml:"desired"`
 	Observed string `yaml:"observed"`
+}
+
+// RelatedObjectAssertion verifies a Kubernetes side effect owned by the
+// primary resource. Empty name or namespace values inherit from that resource.
+type RelatedObjectAssertion struct {
+	APIVersion         string   `yaml:"apiVersion"`
+	Kind               string   `yaml:"kind"`
+	Name               string   `yaml:"name,omitempty"`
+	Namespace          string   `yaml:"namespace,omitempty"`
+	RequiredDataKeys   []string `yaml:"requiredDataKeys,omitempty"`
+	DeleteWithResource bool     `yaml:"deleteWithResource,omitempty"`
 }
 
 // DeleteSpec configures cleanup of the primary resource and dependencies.
@@ -110,6 +123,19 @@ func LoadScenario(path string) (*loadedScenario, error) {
 	for index, equality := range scenario.Ready.FieldsEqual {
 		if strings.TrimSpace(equality.Desired) == "" || strings.TrimSpace(equality.Observed) == "" {
 			return nil, fmt.Errorf("ready.fieldsEqual[%d] requires desired and observed paths", index)
+		}
+	}
+	for index, related := range scenario.RelatedObjects {
+		if strings.TrimSpace(related.APIVersion) == "" || strings.TrimSpace(related.Kind) == "" {
+			return nil, fmt.Errorf("relatedObjects[%d] requires apiVersion and kind", index)
+		}
+		if _, err := schema.ParseGroupVersion(related.APIVersion); err != nil {
+			return nil, fmt.Errorf("relatedObjects[%d].apiVersion %q is invalid: %w", index, related.APIVersion, err)
+		}
+		for keyIndex, key := range related.RequiredDataKeys {
+			if strings.TrimSpace(key) == "" {
+				return nil, fmt.Errorf("relatedObjects[%d].requiredDataKeys[%d] must not be empty", index, keyIndex)
+			}
 		}
 	}
 	if len(scenario.FailureConditionTypes) == 0 {

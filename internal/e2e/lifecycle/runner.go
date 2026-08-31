@@ -180,6 +180,13 @@ func (r *runner) execute(ctx context.Context) error {
 	}); err != nil {
 		return err
 	}
+	if len(r.scenario.RelatedObjects) > 0 {
+		if err := r.phase(ctx, "verify_related_after_create", func(phaseCtx context.Context) (string, error) {
+			return r.waitRelatedReady(phaseCtx, createRef, r.scenario.TimeoutValue)
+		}); err != nil {
+			return err
+		}
+	}
 
 	if r.paths.Update != "" {
 		if err := r.phase(ctx, "update", func(phaseCtx context.Context) (string, error) {
@@ -192,6 +199,13 @@ func (r *runner) execute(ctx context.Context) error {
 			return r.waitReady(phaseCtx, createRef, r.scenario.TimeoutValue)
 		}); err != nil {
 			return err
+		}
+		if len(r.scenario.RelatedObjects) > 0 {
+			if err := r.phase(ctx, "verify_related_after_update", func(phaseCtx context.Context) (string, error) {
+				return r.waitRelatedReady(phaseCtx, createRef, r.scenario.TimeoutValue)
+			}); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -208,6 +222,13 @@ func (r *runner) execute(ctx context.Context) error {
 			return err
 		}
 		r.created = false
+		if hasRelatedDeletionAssertions(r.scenario.RelatedObjects) {
+			if err := r.phase(ctx, "verify_related_deletion", func(phaseCtx context.Context) (string, error) {
+				return r.waitRelatedDeleted(phaseCtx, createRef, r.scenario.DeleteTimeout)
+			}); err != nil {
+				return err
+			}
+		}
 	}
 	if r.scenario.CleanupDeps && r.depsDone > 0 {
 		dependencyCount := r.depsDone
@@ -289,6 +310,125 @@ func (r *runner) waitDeleted(ctx context.Context, ref resourceRef, timeout time.
 			return "", err
 		}
 	}
+}
+
+func (r *runner) waitRelatedReady(ctx context.Context, primary resourceRef, timeout time.Duration) (string, error) {
+	waitCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	deadline := r.now().Add(timeout)
+	var last string
+	for {
+		ready := true
+		var verified []string
+		for _, assertion := range r.scenario.RelatedObjects {
+			ref, err := relatedObjectRef(primary, assertion)
+			if err != nil {
+				return last, err
+			}
+			object, err := r.client.get(waitCtx, ref)
+			if err != nil {
+				ready = false
+				last = fmt.Sprintf("waiting for %s/%s: %v", ref.Kind, ref.Name, err)
+				continue
+			}
+			data, _, _ := unstructured.NestedStringMap(object.Object, "data")
+			for _, key := range assertion.RequiredDataKeys {
+				if strings.TrimSpace(data[key]) == "" {
+					ready = false
+					last = fmt.Sprintf("waiting for %s/%s data key %q", ref.Kind, ref.Name, key)
+				}
+			}
+			if ready {
+				verified = append(verified, fmt.Sprintf("%s/%s keys=%s", ref.Kind, ref.Name, strings.Join(assertion.RequiredDataKeys, ",")))
+			}
+		}
+		if ready {
+			return strings.Join(verified, "; "), nil
+		}
+		if !r.now().Before(deadline) {
+			return last, fmt.Errorf("timed out after %s waiting for related objects: %s", timeout, last)
+		}
+		if err := sleepContext(waitCtx, r.scenario.PollValue); err != nil {
+			if errors.Is(err, context.DeadlineExceeded) {
+				return last, fmt.Errorf("timed out after %s waiting for related objects: %s", timeout, last)
+			}
+			return last, err
+		}
+	}
+}
+
+func (r *runner) waitRelatedDeleted(ctx context.Context, primary resourceRef, timeout time.Duration) (string, error) {
+	waitCtx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	deadline := r.now().Add(timeout)
+	var last string
+	for {
+		deleted := true
+		var verified []string
+		for _, assertion := range r.scenario.RelatedObjects {
+			if !assertion.DeleteWithResource {
+				continue
+			}
+			ref, err := relatedObjectRef(primary, assertion)
+			if err != nil {
+				return last, err
+			}
+			_, err = r.client.get(waitCtx, ref)
+			if errors.Is(err, errResourceNotFound) {
+				verified = append(verified, fmt.Sprintf("%s/%s deleted", ref.Kind, ref.Name))
+				continue
+			}
+			deleted = false
+			if err != nil {
+				last = fmt.Sprintf("waiting for %s/%s deletion: %v", ref.Kind, ref.Name, err)
+			} else {
+				last = fmt.Sprintf("waiting for %s/%s deletion", ref.Kind, ref.Name)
+			}
+		}
+		if deleted {
+			return strings.Join(verified, "; "), nil
+		}
+		if !r.now().Before(deadline) {
+			return last, fmt.Errorf("timed out after %s waiting for related object deletion: %s", timeout, last)
+		}
+		if err := sleepContext(waitCtx, r.scenario.PollValue); err != nil {
+			if errors.Is(err, context.DeadlineExceeded) {
+				return last, fmt.Errorf("timed out after %s waiting for related object deletion: %s", timeout, last)
+			}
+			return last, err
+		}
+	}
+}
+
+func relatedObjectRef(primary resourceRef, assertion RelatedObjectAssertion) (resourceRef, error) {
+	groupVersion, err := schema.ParseGroupVersion(assertion.APIVersion)
+	if err != nil {
+		return resourceRef{}, fmt.Errorf("parse related object apiVersion %q: %w", assertion.APIVersion, err)
+	}
+	name := strings.TrimSpace(assertion.Name)
+	if name == "" {
+		name = primary.Name
+	}
+	namespace := strings.TrimSpace(assertion.Namespace)
+	if namespace == "" {
+		namespace = primary.Namespace
+	}
+	return resourceRef{
+		Group:     groupVersion.Group,
+		Version:   groupVersion.Version,
+		Kind:      assertion.Kind,
+		Name:      name,
+		Namespace: namespace,
+	}, nil
+}
+
+func hasRelatedDeletionAssertions(assertions []RelatedObjectAssertion) bool {
+	for _, assertion := range assertions {
+		if assertion.DeleteWithResource {
+			return true
+		}
+	}
+	return false
 }
 
 func (r *runner) cleanup(ctx context.Context) error {

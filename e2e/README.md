@@ -24,6 +24,7 @@ It is intended to:
 - rewrite Kind node DNS to public resolvers before OLM install
 - probe the OLM registry endpoint before invoking `operator-sdk olm install`
 - install OLM
+- install cert-manager when a selected package manifest requires it
 - mount the current OSOK checkout into the Kind node
 - mount `~/.oci` into the Kind node
 
@@ -231,7 +232,8 @@ The script:
 - when `--service` is set, patches the prefixed package secret
   `oci-service-operator-<group>-osokconfig` to disable instance principals for
   local runs
-- when `--service` is set, restarts and waits for the controller deployment
+- when `--service` is set, applies the local image and credentials in one
+  controller Deployment revision and waits for it
 - when `--service` is set, applies matching sample manifests and records
   per-resource `PASS`/`FAIL`
 - when `--scenario` is set, renders its variables, performs create/update/delete,
@@ -273,13 +275,16 @@ dependencies.yaml # optional
 
 Manifest placeholders such as `${OCI_COMPARTMENT_ID}` are resolved from the
 environment. `OCI_TENANCY_ID` and `OCI_REGION` default from the selected OCI
-profile. `OSOK_E2E_SUFFIX` is generated when it is not provided, and
+profile. When OCI CLI access is available, `OCI_AVAILABILITY_DOMAIN` defaults
+to the first AD visible from the target compartment. `OSOK_E2E_SUFFIX` is generated when it is not provided, and
 `OSOK_E2E_NAMESPACE` resolves to the scenario namespace. Any other unset
 variable is a hard authoring error.
 
 Readiness can require condition types, lifecycle states, an OCI identifier, and
 field equality such as `spec.displayName == status.displayName`. Field equality
 prevents an update from passing against status left over from the create phase.
+`relatedObjects` can also require companion Kubernetes objects and selected
+Secret data keys after create/update, plus their deletion with the primary CR.
 The runner cleans up the primary CR after success or failure and deletes
 scenario-owned dependencies in reverse order.
 
