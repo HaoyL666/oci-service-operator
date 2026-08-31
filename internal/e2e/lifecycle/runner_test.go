@@ -340,15 +340,16 @@ func TestCheckedInLifecycleScenariosRenderAndKeepResourceIdentity(t *testing.T) 
 				t.Fatal(err)
 			}
 			rendered, err := renderScenario(scenario, t.TempDir(), map[string]string{
-				"OCI_AVAILABILITY_DOMAIN": "example:US-ASHBURN-AD-1",
-				"OCI_COMPUTE_SHAPE":       "VM.Standard.E4.Flex",
-				"OCI_COMPARTMENT_ID":      "ocid1.compartment.oc1..scenario",
-				"OCI_IMAGE_ID":            "ocid1.image.oc1..scenario",
-				"OCI_TENANCY_ID":          "ocid1.tenancy.oc1..scenario",
-				"OCI_REGION":              "us-ashburn-1",
-				"OCI_SUBNET_ID":           "ocid1.subnet.oc1..scenario",
-				"OCI_VCN_ID":              "ocid1.vcn.oc1..scenario",
-				"OSOK_E2E_SUFFIX":         "scenario",
+				"OCI_AVAILABILITY_DOMAIN":   "example:US-ASHBURN-AD-1",
+				"OCI_COMPUTE_SHAPE":         "VM.Standard.E4.Flex",
+				"OCI_COMPARTMENT_ID":        "ocid1.compartment.oc1..scenario",
+				"OCI_IMAGE_ID":              "ocid1.image.oc1..scenario",
+				"OCI_NOTIFICATION_TOPIC_ID": "ocid1.onstopic.oc1..scenario",
+				"OCI_TENANCY_ID":            "ocid1.tenancy.oc1..scenario",
+				"OCI_REGION":                "us-ashburn-1",
+				"OCI_SUBNET_ID":             "ocid1.subnet.oc1..scenario",
+				"OCI_VCN_ID":                "ocid1.vcn.oc1..scenario",
+				"OSOK_E2E_SUFFIX":           "scenario",
 			})
 			if err != nil {
 				t.Fatal(err)

@@ -303,9 +303,15 @@ behaviors:
 | Cluster Placement Group | none; availability domain is discovered | independent work requests |
 | Core VCN | none | foundational network lifecycle |
 | Core Subnet | `OCI_VCN_ID` | resource with an existing-network prerequisite |
+| Core Network Security Group | `OCI_VCN_ID` | network security lifecycle and metadata update |
+| Core Internet Gateway | `OCI_VCN_ID` for a VCN that can accept an Internet Gateway | gateway enablement and network lifecycle |
 | Queue | none | work requests plus endpoint Secret |
 | NoSQL Table | none | eventual-consistency lifecycle and sequenced updates |
 | Core Instance | `OCI_SUBNET_ID`, `OCI_IMAGE_ID`, and `OCI_COMPUTE_SHAPE` | compute lifecycle and in-place update |
+| File Storage File System | none; availability domain is discovered | foundational storage lifecycle |
+| Load Balancer | `OCI_SUBNET_ID` | private flexible Load Balancer lifecycle |
+| Notifications Topic | none | notification lifecycle and metadata update |
+| Monitoring Alarm | `OCI_NOTIFICATION_TOPIC_ID` | disabled alarm lifecycle and query update |
 
 The Instance scenario sets `instanceOptions.areLegacyImdsEndpointsDisabled:
 true`, which is required in tenancies that enforce IMDSv2. Do not commit live
