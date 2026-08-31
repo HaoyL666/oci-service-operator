@@ -54,6 +54,9 @@ func Open(options Options) (*Cassette, error) {
 			return nil, err
 		}
 	}
+	if err := validateBindings(options.Bindings); err != nil {
+		return nil, err
+	}
 	if options.MaxBodyBytes <= 0 {
 		options.MaxBodyBytes = DefaultMaxBodyBytes
 	}
@@ -65,7 +68,7 @@ func Open(options Options) (*Cassette, error) {
 		overwrite:    options.Overwrite,
 		maxBodyBytes: options.MaxBodyBytes,
 		file:         cassetteFile{Version: Version, Metadata: cloneMetadata(options.Metadata)},
-		sanitizer:    newSanitizer(),
+		sanitizer:    newSanitizer(options.Bindings),
 	}
 	if options.Mode == ModeRecord {
 		if !options.Overwrite {
@@ -81,6 +84,9 @@ func Open(options Options) (*Cassette, error) {
 	content, err := os.ReadFile(options.Path)
 	if err != nil {
 		return nil, fmt.Errorf("read cassette: %w", err)
+	}
+	if err := validateSafeRecording(content); err != nil {
+		return nil, err
 	}
 	decoder := yaml.NewDecoder(bytes.NewReader(content))
 	decoder.KnownFields(true)
@@ -362,6 +368,7 @@ func validateSafeRecording(content []byte) error {
 		"-----begin rsa private key-----",
 		"security_token=",
 		"authorization: signature",
+		"ocid1.",
 	} {
 		if strings.Contains(lower, marker) {
 			return fmt.Errorf("refusing to persist cassette containing sensitive marker %q", marker)

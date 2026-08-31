@@ -20,6 +20,7 @@ type SDKReplayOptions struct {
 	Host         string
 	BasePath     string
 	Metadata     Metadata
+	Bindings     map[string]string
 	MaxBodyBytes int64
 }
 
@@ -28,6 +29,24 @@ type SDKReplayOptions struct {
 type SDKReplaySession struct {
 	cassette   *Cassette
 	baseClient common.BaseClient
+}
+
+// SDKRecordOptions configures a live OCI SDK recording session. The supplied
+// base client must already contain the intended configuration provider and
+// signer.
+type SDKRecordOptions struct {
+	Path         string
+	Metadata     Metadata
+	BaseClient   *common.BaseClient
+	Bindings     map[string]string
+	Overwrite    bool
+	MaxBodyBytes int64
+}
+
+// SDKRecordSession owns a recording cassette attached to a caller-provided OCI
+// SDK base client.
+type SDKRecordSession struct {
+	cassette *Cassette
 }
 
 type unsignedReplaySigner struct{}
@@ -48,6 +67,7 @@ func OpenSDKReplay(options SDKReplayOptions) (*SDKReplaySession, error) {
 		Mode:         ModeReplay,
 		Path:         options.Path,
 		Metadata:     &options.Metadata,
+		Bindings:     options.Bindings,
 		MaxBodyBytes: options.MaxBodyBytes,
 	})
 	if err != nil {
@@ -61,6 +81,37 @@ func OpenSDKReplay(options SDKReplayOptions) (*SDKReplaySession, error) {
 	baseClient.Configuration.RetryPolicy = &noRetry
 	cassette.Attach(&baseClient)
 	return &SDKReplaySession{cassette: cassette, baseClient: baseClient}, nil
+}
+
+// OpenSDKRecord attaches a sanitizer/recorder to an authenticated OCI SDK base
+// client. Close atomically publishes the cassette after all cleanup traffic has
+// completed.
+func OpenSDKRecord(options SDKRecordOptions) (*SDKRecordSession, error) {
+	if options.BaseClient == nil {
+		return nil, fmt.Errorf("OCI recording base client is required")
+	}
+	if options.BaseClient.HTTPClient == nil {
+		return nil, fmt.Errorf("OCI recording base client has no HTTP dispatcher")
+	}
+	if err := validateMetadata(options.Metadata); err != nil {
+		return nil, err
+	}
+	cassette, err := Open(Options{
+		Mode:         ModeRecord,
+		Path:         options.Path,
+		Metadata:     &options.Metadata,
+		Bindings:     options.Bindings,
+		Delegate:     options.BaseClient.HTTPClient,
+		Overwrite:    options.Overwrite,
+		MaxBodyBytes: options.MaxBodyBytes,
+	})
+	if err != nil {
+		return nil, err
+	}
+	noRetry := common.NoRetryPolicy()
+	options.BaseClient.Configuration.RetryPolicy = &noRetry
+	cassette.Attach(options.BaseClient)
+	return &SDKRecordSession{cassette: cassette}, nil
 }
 
 // BaseClient returns a copy of the configured OCI SDK base client.
@@ -81,6 +132,14 @@ func (s *SDKReplaySession) Metadata() *Metadata {
 
 // Close verifies that every replay interaction was consumed.
 func (s *SDKReplaySession) Close() error {
+	if s == nil || s.cassette == nil {
+		return nil
+	}
+	return s.cassette.Close()
+}
+
+// Close atomically publishes the sanitized recording.
+func (s *SDKRecordSession) Close() error {
 	if s == nil || s.cassette == nil {
 		return nil
 	}

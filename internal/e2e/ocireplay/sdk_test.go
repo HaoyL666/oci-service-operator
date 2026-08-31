@@ -12,6 +12,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/oracle/oci-go-sdk/v65/common"
 )
 
 func TestOpenSDKReplayConfiguresCredentialFreeBaseClient(t *testing.T) {
@@ -93,5 +95,100 @@ func TestOpenSDKReplayRejectsInvalidHostAndMetadata(t *testing.T) {
 		if err == nil || !strings.Contains(err.Error(), "host") {
 			t.Fatalf("OpenSDKReplay(host=%q) error = %v", host, err)
 		}
+	}
+}
+
+func TestOpenSDKRecordAttachesAndPublishesSanitizedCassette(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "recorded.yaml")
+	baseClient := common.DefaultBaseClientWithSigner(unsignedReplaySigner{})
+	baseClient.HTTPClient = dispatcherFunc(func(request *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     http.Header{"Content-Type": []string{"application/json"}},
+			Body:       io.NopCloser(strings.NewReader(`{"id":"ocid1.example.oc1..sensitive"}`)),
+			Request:    request,
+		}, nil
+	})
+	metadata := Metadata{
+		Service:    "example",
+		Resource:   "Example",
+		Operations: []Operation{OperationRead},
+		SDKVersion: "v65.110.0",
+		Provenance: ProvenanceRecorded,
+	}
+	session, err := OpenSDKRecord(SDKRecordOptions{
+		Path:       path,
+		Metadata:   metadata,
+		BaseClient: &baseClient,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	request, err := http.NewRequest(http.MethodGet, "https://example.test/resources/ocid1.example.oc1..sensitive", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	response, err := baseClient.HTTPClient.Do(request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := io.ReadAll(response.Body); err != nil {
+		t.Fatal(err)
+	}
+	if err := session.Close(); err != nil {
+		t.Fatal(err)
+	}
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(content), "ocid1.example") || !strings.Contains(string(content), "provenance: recorded") {
+		t.Fatalf("recording was not sanitized or metadata was lost:\n%s", content)
+	}
+}
+
+func TestOpenSDKRecordDoesNotReplaceCassetteBeforeClose(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "recorded.yaml")
+	const original = "previous reviewed cassette\n"
+	if err := os.WriteFile(path, []byte(original), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	baseClient := common.DefaultBaseClientWithSigner(unsignedReplaySigner{})
+	baseClient.HTTPClient = dispatcherFunc(func(request *http.Request) (*http.Response, error) {
+		return &http.Response{StatusCode: http.StatusNoContent, Body: http.NoBody, Request: request}, nil
+	})
+	session, err := OpenSDKRecord(SDKRecordOptions{
+		Path: path,
+		Metadata: Metadata{
+			Service:    "example",
+			Resource:   "Example",
+			Operations: []Operation{OperationRead},
+			SDKVersion: "v65.110.0",
+			Provenance: ProvenanceRecorded,
+		},
+		BaseClient: &baseClient,
+		Overwrite:  true,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_ = session
+	request, err := http.NewRequest(http.MethodGet, "https://example.test/resources", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := baseClient.HTTPClient.Do(request); err != nil {
+		t.Fatal(err)
+	}
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(content) != original {
+		t.Fatalf("cassette changed before Close(): %q", content)
 	}
 }

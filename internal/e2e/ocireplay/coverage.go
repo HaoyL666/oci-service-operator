@@ -211,6 +211,9 @@ func decodeCassetteFile(path string) (cassetteFile, error) {
 	if err != nil {
 		return cassetteFile{}, err
 	}
+	if err := validateSafeRecording(content); err != nil {
+		return cassetteFile{}, err
+	}
 	var file cassetteFile
 	decoder := yaml.NewDecoder(bytes.NewReader(content))
 	decoder.KnownFields(true)

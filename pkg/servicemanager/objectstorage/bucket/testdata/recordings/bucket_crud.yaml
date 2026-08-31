@@ -1,0 +1,190 @@
+version: 1
+metadata:
+    service: objectstorage
+    resource: Bucket
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","freeformTags":{"osok-replay":"create"},"metadata":{"phase":"create"},"name":"osok-replay-basic-bucket-v1","publicAccessType":"NoPublicAccess","storageTier":"Standard"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29266065-e140-4ef4-a8bf-a7f560cf84ac
+            location:
+                - https://objectstorage.us-ashburn-1.oraclecloud.com/n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateCount":null,"approximateSize":null,"approximateSizeMultipartUploads":null,"autoTiering":null,"bucketKeyEnabled":false,"bucketScope":"NAMESPACE","bucketSoftDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T20:00:50.509Z"}},"etag":"29266065-e140-4ef4-a8bf-a7f560cf84ac","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isBucketKeyEnabled":false,"isReadOnly":false,"kmsKeyId":null,"mdsBucketType":"MDS_1","metadata":{"phase":"create"},"meterFlagSet":{"empty":true},"name":"osok-replay-basic-bucket-v1","namespace":"<binding:objectstorage-namespace>","objectEventsEnabled":false,"objectLevelAuditMode":"Disabled","publicAccessType":"NoPublicAccess","replicationEnabled":false,"softDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"storageTier":"Standard","timeCreated":"2026-08-31T20:00:50.584Z","versioning":"Disabled"}'
+        encoding: json
+    - request:
+        method: GET
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29266065-e140-4ef4-a8bf-a7f560cf84ac
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateCount":null,"approximateSize":null,"approximateSizeMultipartUploads":null,"autoTiering":null,"bucketKeyEnabled":false,"bucketScope":"NAMESPACE","bucketSoftDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T20:00:50.509Z"}},"etag":"29266065-e140-4ef4-a8bf-a7f560cf84ac","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isBucketKeyEnabled":false,"isReadOnly":false,"kmsKeyId":null,"mdsBucketType":"MDS_1","metadata":{"phase":"create"},"meterFlagSet":{"empty":true},"name":"osok-replay-basic-bucket-v1","namespace":"<binding:objectstorage-namespace>","objectEventsEnabled":false,"objectLevelAuditMode":"Disabled","publicAccessType":"NoPublicAccess","replicationEnabled":false,"softDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"storageTier":"Standard","timeCreated":"2026-08-31T20:00:50.584Z","versioning":"Disabled"}'
+        encoding: json
+    - request:
+        method: GET
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29266065-e140-4ef4-a8bf-a7f560cf84ac
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateCount":null,"approximateSize":null,"approximateSizeMultipartUploads":null,"autoTiering":null,"bucketKeyEnabled":false,"bucketScope":"NAMESPACE","bucketSoftDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T20:00:50.509Z"}},"etag":"29266065-e140-4ef4-a8bf-a7f560cf84ac","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isBucketKeyEnabled":false,"isReadOnly":false,"kmsKeyId":null,"mdsBucketType":"MDS_1","metadata":{"phase":"create"},"meterFlagSet":{"empty":true},"name":"osok-replay-basic-bucket-v1","namespace":"<binding:objectstorage-namespace>","objectEventsEnabled":false,"objectLevelAuditMode":"Disabled","publicAccessType":"NoPublicAccess","replicationEnabled":false,"softDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"storageTier":"Standard","timeCreated":"2026-08-31T20:00:50.584Z","versioning":"Disabled"}'
+        encoding: json
+    - request:
+        method: GET
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29266065-e140-4ef4-a8bf-a7f560cf84ac
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateCount":null,"approximateSize":null,"approximateSizeMultipartUploads":null,"autoTiering":null,"bucketKeyEnabled":false,"bucketScope":"NAMESPACE","bucketSoftDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T20:00:50.509Z"}},"etag":"29266065-e140-4ef4-a8bf-a7f560cf84ac","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isBucketKeyEnabled":false,"isReadOnly":false,"kmsKeyId":null,"mdsBucketType":"MDS_1","metadata":{"phase":"create"},"meterFlagSet":{"empty":true},"name":"osok-replay-basic-bucket-v1","namespace":"<binding:objectstorage-namespace>","objectEventsEnabled":false,"objectLevelAuditMode":"Disabled","publicAccessType":"NoPublicAccess","replicationEnabled":false,"softDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"storageTier":"Standard","timeCreated":"2026-08-31T20:00:50.584Z","versioning":"Disabled"}'
+        encoding: json
+    - request:
+        method: POST
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+        body: '{"freeformTags":{"osok-replay":"update"},"metadata":{"phase":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - f0c19b64-b0d1-41e3-8200-129ac59dd7b4
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateCount":null,"approximateSize":null,"approximateSizeMultipartUploads":null,"autoTiering":"Disabled","bucketKeyEnabled":false,"bucketScope":"NAMESPACE","bucketSoftDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T20:00:50.509Z"}},"etag":"f0c19b64-b0d1-41e3-8200-129ac59dd7b4","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isBucketKeyEnabled":false,"isReadOnly":false,"kmsKeyId":null,"mdsBucketType":"MDS_1","metadata":{"phase":"update"},"meterFlagSet":{"empty":true},"name":"osok-replay-basic-bucket-v1","namespace":"<binding:objectstorage-namespace>","objectEventsEnabled":false,"objectLevelAuditMode":"Disabled","publicAccessType":"NoPublicAccess","replicationEnabled":false,"softDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"storageTier":"Standard","timeCreated":"2026-08-31T20:00:50.584Z","versioning":"Disabled"}'
+        encoding: json
+    - request:
+        method: GET
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - f0c19b64-b0d1-41e3-8200-129ac59dd7b4
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateCount":null,"approximateSize":null,"approximateSizeMultipartUploads":null,"autoTiering":null,"bucketKeyEnabled":false,"bucketScope":"NAMESPACE","bucketSoftDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T20:00:50.509Z"}},"etag":"f0c19b64-b0d1-41e3-8200-129ac59dd7b4","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isBucketKeyEnabled":false,"isReadOnly":false,"kmsKeyId":null,"mdsBucketType":"MDS_1","metadata":{"phase":"update"},"meterFlagSet":{"empty":true},"name":"osok-replay-basic-bucket-v1","namespace":"<binding:objectstorage-namespace>","objectEventsEnabled":false,"objectLevelAuditMode":"Disabled","publicAccessType":"NoPublicAccess","replicationEnabled":false,"softDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"storageTier":"Standard","timeCreated":"2026-08-31T20:00:50.584Z","versioning":"Disabled"}'
+        encoding: json
+    - request:
+        method: GET
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - f0c19b64-b0d1-41e3-8200-129ac59dd7b4
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateCount":null,"approximateSize":null,"approximateSizeMultipartUploads":null,"autoTiering":null,"bucketKeyEnabled":false,"bucketScope":"NAMESPACE","bucketSoftDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T20:00:50.509Z"}},"etag":"f0c19b64-b0d1-41e3-8200-129ac59dd7b4","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isBucketKeyEnabled":false,"isReadOnly":false,"kmsKeyId":null,"mdsBucketType":"MDS_1","metadata":{"phase":"update"},"meterFlagSet":{"empty":true},"name":"osok-replay-basic-bucket-v1","namespace":"<binding:objectstorage-namespace>","objectEventsEnabled":false,"objectLevelAuditMode":"Disabled","publicAccessType":"NoPublicAccess","replicationEnabled":false,"softDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"storageTier":"Standard","timeCreated":"2026-08-31T20:00:50.584Z","versioning":"Disabled"}'
+        encoding: json
+    - request:
+        method: GET
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - f0c19b64-b0d1-41e3-8200-129ac59dd7b4
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateCount":null,"approximateSize":null,"approximateSizeMultipartUploads":null,"autoTiering":null,"bucketKeyEnabled":false,"bucketScope":"NAMESPACE","bucketSoftDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T20:00:50.509Z"}},"etag":"f0c19b64-b0d1-41e3-8200-129ac59dd7b4","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isBucketKeyEnabled":false,"isReadOnly":false,"kmsKeyId":null,"mdsBucketType":"MDS_1","metadata":{"phase":"update"},"meterFlagSet":{"empty":true},"name":"osok-replay-basic-bucket-v1","namespace":"<binding:objectstorage-namespace>","objectEventsEnabled":false,"objectLevelAuditMode":"Disabled","publicAccessType":"NoPublicAccess","replicationEnabled":false,"softDeletePolicy":{"currentPolicy":{"coolOffDuration":null,"restoreDuration":null,"softDeleteMode":"Disabled","timeActivation":null},"nextPolicy":null,"timeModified":null},"storageTier":"Standard","timeCreated":"2026-08-31T20:00:50.584Z","versioning":"Disabled"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: objectstorage.us-ashburn-1.oraclecloud.com
+        path: /n/<binding:objectstorage-namespace>/b/osok-replay-basic-bucket-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"BucketNotFound","message":"The bucket ''osok-replay-basic-bucket-v1'' does not exist in namespace ''<binding:objectstorage-namespace>''"}'
+        encoding: json

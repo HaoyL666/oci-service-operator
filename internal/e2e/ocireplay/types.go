@@ -60,6 +60,7 @@ type Options struct {
 	Mode     Mode
 	Path     string
 	Metadata *Metadata
+	Bindings map[string]string
 	Delegate interface {
 		Do(*http.Request) (*http.Response, error)
 	}

@@ -52,15 +52,43 @@ interactions by method, host, path, canonical query, selected semantic headers,
 and canonical request body. Interaction order may vary across concurrent
 reconciles, but duplicate requests consume their recorded responses in order.
 
+Recorded integration tests default to replay. An operator must explicitly opt
+into live OCI traffic:
+
+```bash
+OSOK_OCI_CASSETTE_MODE=record \
+OSOK_OCI_RECORD_AUTH=security_token \
+OCI_CONFIG_PROFILE=YOUR_PROFILE \
+OCI_COMPARTMENT_ID=ocid1.compartment.oc1..replace_me \
+go test ./pkg/servicemanager/SERVICE/RESOURCE \
+  -run '^TestRecordedRESOURCECreateUpdateDelete$' -count=1 -v
+```
+
+Use `OSOK_OCI_CASSETTE_OVERWRITE=true` only when intentionally replacing an
+existing reviewed cassette. `OSOK_OCI_RECORD_AUTH` accepts `security_token` or
+`user_principal`; configuration comes from `OCI_CONFIG_FILE` and
+`OCI_CONFIG_PROFILE`. A recording test must use test-owned names, clean up its
+OCI resource, and keep external prerequisite OCIDs in environment variables.
+The test publishes its cassette only after the full lifecycle succeeds; a
+failed recording cleans up OCI state without replacing the previous cassette.
+
 Before a cassette is written, the recorder:
 
 - removes authorization and volatile signing headers;
 - redacts retry tokens and request identifiers;
 - replaces OCI identifiers with stable placeholders;
+- replaces explicitly bound non-OCID values, such as an Object Storage
+  namespace, with named placeholders;
 - redacts JSON keys containing credentials, tokens, passwords, private keys,
-  fingerprints, or secrets;
+  fingerprints, creator identities, or secrets;
 - rejects private-key and security-token markers;
 - limits captured request and response sizes.
+
+Placeholder assignment traverses query and JSON keys in canonical order, so a
+request containing several OCIDs replays deterministically across processes.
+Avoid recording broad list operations when they could capture unrelated tenant
+resources; use the runtime's bounded skip-existing-before-create context for a
+test-owned unique resource instead.
 
 Replay restores recorded OCI identifiers to the test's input values and creates
 stable synthetic OCIDs for resource identifiers first returned by OCI. This

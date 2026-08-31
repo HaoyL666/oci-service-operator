@@ -45,12 +45,12 @@ func TestRecordSanitizesAndReplays(t *testing.T) {
 		}, nil
 	})
 
-	recorder, err := Open(Options{Mode: ModeRecord, Path: path, Delegate: delegate})
+	recorder, err := Open(Options{Mode: ModeRecord, Path: path, Bindings: map[string]string{"namespace": "live-namespace"}, Delegate: delegate})
 	if err != nil {
 		t.Fatal(err)
 	}
 	request, err := http.NewRequest(http.MethodPost,
-		"https://usage.us-ashburn-1.oci.oraclecloud.com/20190111/budgets?compartmentId=ocid1.compartment.oc1..sensitive",
+		"https://usage.us-ashburn-1.oci.oraclecloud.com/20190111/live-namespace/budgets?compartmentId=ocid1.compartment.oc1..sensitive",
 		strings.NewReader(`{"compartmentId":"ocid1.compartment.oc1..sensitive","privateKey":"do-not-store"}`))
 	if err != nil {
 		t.Fatal(err)
@@ -73,23 +73,23 @@ func TestRecordSanitizesAndReplays(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, forbidden := range []string{"do-not-store", "Signature secret", "random-token", "ocid1.compartment", "ocid1.budget"} {
+	for _, forbidden := range []string{"do-not-store", "Signature secret", "random-token", "ocid1.compartment", "ocid1.budget", "live-namespace"} {
 		if bytes.Contains(content, []byte(forbidden)) {
 			t.Fatalf("recording contains %q:\n%s", forbidden, content)
 		}
 	}
-	for _, expected := range []string{"<redacted>", "<ocid:1>", "<ocid:2>"} {
+	for _, expected := range []string{"<redacted>", "<ocid:1>", "<ocid:2>", "<binding:namespace>"} {
 		if !bytes.Contains(content, []byte(expected)) {
 			t.Fatalf("recording does not contain %q:\n%s", expected, content)
 		}
 	}
 
-	replay, err := Open(Options{Mode: ModeReplay, Path: path})
+	replay, err := Open(Options{Mode: ModeReplay, Path: path, Bindings: map[string]string{"namespace": "replay-namespace"}})
 	if err != nil {
 		t.Fatal(err)
 	}
 	replayRequest, err := http.NewRequest(http.MethodPost,
-		"https://usage.us-ashburn-1.oci.oraclecloud.com/20190111/budgets?compartmentId=ocid1.compartment.oc1..different",
+		"https://usage.us-ashburn-1.oci.oraclecloud.com/20190111/replay-namespace/budgets?compartmentId=ocid1.compartment.oc1..different",
 		strings.NewReader(`{"privateKey":"another-value","compartmentId":"ocid1.compartment.oc1..different"}`))
 	if err != nil {
 		t.Fatal(err)

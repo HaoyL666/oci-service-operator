@@ -21,13 +21,46 @@ import (
 
 var ocidPattern = regexp.MustCompile(`ocid1\.[A-Za-z0-9._-]+`)
 var ocidPlaceholderPattern = regexp.MustCompile(`<ocid:([0-9]+)>`)
+var bindingNamePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 
 type sanitizer struct {
-	ocids map[string]string
+	ocids              map[string]string
+	bindingValues      []string
+	bindingPlaceholder map[string]string
+	bindingRestore     map[string]string
 }
 
-func newSanitizer() *sanitizer {
-	return &sanitizer{ocids: map[string]string{}}
+func newSanitizer(bindings map[string]string) *sanitizer {
+	s := &sanitizer{
+		ocids:              map[string]string{},
+		bindingPlaceholder: map[string]string{},
+		bindingRestore:     map[string]string{},
+	}
+	for name, value := range bindings {
+		placeholder := "<binding:" + name + ">"
+		s.bindingValues = append(s.bindingValues, value)
+		s.bindingPlaceholder[value] = placeholder
+		s.bindingRestore[placeholder] = value
+	}
+	sort.Slice(s.bindingValues, func(i, j int) bool { return len(s.bindingValues[i]) > len(s.bindingValues[j]) })
+	return s
+}
+
+func validateBindings(bindings map[string]string) error {
+	seenValues := make(map[string]string, len(bindings))
+	for name, value := range bindings {
+		if !bindingNamePattern.MatchString(name) {
+			return fmt.Errorf("cassette binding name %q must use lowercase letters, digits, or hyphens", name)
+		}
+		if strings.TrimSpace(value) == "" {
+			return fmt.Errorf("cassette binding %q must not be empty", name)
+		}
+		if previous, ok := seenValues[value]; ok {
+			return fmt.Errorf("cassette bindings %q and %q use the same value", previous, name)
+		}
+		seenValues[value] = name
+	}
+	return nil
 }
 
 func (s *sanitizer) request(req *http.Request, body []byte) (recordedRequest, error) {
@@ -35,7 +68,13 @@ func (s *sanitizer) request(req *http.Request, body []byte) (recordedRequest, er
 	if err != nil {
 		return recordedRequest{}, fmt.Errorf("parse request query: %w", err)
 	}
-	for key, values := range query {
+	queryKeys := make([]string, 0, len(query))
+	for key := range query {
+		queryKeys = append(queryKeys, key)
+	}
+	sort.Strings(queryKeys)
+	for _, key := range queryKeys {
+		values := query[key]
 		for i := range values {
 			values[i] = s.text(values[i])
 		}
@@ -152,8 +191,13 @@ func (s *sanitizer) jsonValue(value any, key string) any {
 	}
 	switch typed := value.(type) {
 	case map[string]any:
-		for childKey, child := range typed {
-			typed[childKey] = s.jsonValue(child, childKey)
+		keys := make([]string, 0, len(typed))
+		for childKey := range typed {
+			keys = append(keys, childKey)
+		}
+		sort.Strings(keys)
+		for _, childKey := range keys {
+			typed[childKey] = s.jsonValue(typed[childKey], childKey)
 		}
 		return typed
 	case []any:
@@ -176,7 +220,7 @@ func sensitiveJSONKey(key string) bool {
 		}
 	}
 	value := normalized.String()
-	for _, marker := range []string{"authorization", "password", "passphrase", "privatekey", "securitytoken", "secret", "fingerprint"} {
+	for _, marker := range []string{"authorization", "createdby", "password", "passphrase", "privatekey", "securitytoken", "secret", "fingerprint"} {
 		if strings.Contains(value, marker) {
 			return true
 		}
@@ -185,6 +229,9 @@ func sensitiveJSONKey(key string) bool {
 }
 
 func (s *sanitizer) text(value string) string {
+	for _, bindingValue := range s.bindingValues {
+		value = strings.ReplaceAll(value, bindingValue, s.bindingPlaceholder[bindingValue])
+	}
 	return ocidPattern.ReplaceAllStringFunc(value, func(ocid string) string {
 		if replacement, ok := s.ocids[ocid]; ok {
 			return replacement
@@ -196,6 +243,9 @@ func (s *sanitizer) text(value string) string {
 }
 
 func (s *sanitizer) restoreText(value string) string {
+	for placeholder, bindingValue := range s.bindingRestore {
+		value = strings.ReplaceAll(value, placeholder, bindingValue)
+	}
 	return ocidPlaceholderPattern.ReplaceAllStringFunc(value, func(placeholder string) string {
 		for ocid, recordedPlaceholder := range s.ocids {
 			if recordedPlaceholder == placeholder {
