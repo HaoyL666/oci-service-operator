@@ -1,0 +1,156 @@
+version: 1
+metadata:
+    service: logging
+    resource: LogSavedSearch
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/logSavedSearches
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","freeformTags":{"osok-replay":"create"},"name":"osok-replay-log-saved-search-v1","query":"search \"recorded-replay-token\" | sort by datetime desc"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e379f041-68c6-433d-bf7d-0f06d5aa2e84
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.681Z"}},"description":"recorded create","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","name":"osok-replay-log-saved-search-v1","query":"search \"recorded-replay-token\" | sort by datetime desc","systemTags":{},"timeCreated":"2026-09-01T17:53:35.739Z","timeLastModified":"2026-09-01T17:53:35.739Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/logSavedSearches/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e379f041-68c6-433d-bf7d-0f06d5aa2e84
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.681Z"}},"description":"recorded create","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","name":"osok-replay-log-saved-search-v1","query":"search \"recorded-replay-token\" | sort by datetime desc","systemTags":{},"timeCreated":"2026-09-01T17:53:35.739Z","timeLastModified":"2026-09-01T17:53:35.739Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/logSavedSearches/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e379f041-68c6-433d-bf7d-0f06d5aa2e84
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.681Z"}},"description":"recorded create","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","name":"osok-replay-log-saved-search-v1","query":"search \"recorded-replay-token\" | sort by datetime desc","systemTags":{},"timeCreated":"2026-09-01T17:53:35.739Z","timeLastModified":"2026-09-01T17:53:35.739Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/logSavedSearches/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","freeformTags":{"osok-replay":"update"},"name":"osok-replay-log-saved-search-v1-updated"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 093b51bd-6774-4776-b36d-477979e88544
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.681Z"}},"description":"recorded update","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","name":"osok-replay-log-saved-search-v1-updated","query":"search \"recorded-replay-token\" | sort by datetime desc","systemTags":{},"timeCreated":"2026-09-01T17:53:35.739Z","timeLastModified":"2026-09-01T17:53:36.511Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/logSavedSearches/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 093b51bd-6774-4776-b36d-477979e88544
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.681Z"}},"description":"recorded update","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","name":"osok-replay-log-saved-search-v1-updated","query":"search \"recorded-replay-token\" | sort by datetime desc","systemTags":{},"timeCreated":"2026-09-01T17:53:35.739Z","timeLastModified":"2026-09-01T17:53:36.511Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/logSavedSearches/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 093b51bd-6774-4776-b36d-477979e88544
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.681Z"}},"description":"recorded update","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","name":"osok-replay-log-saved-search-v1-updated","query":"search \"recorded-replay-token\" | sort by datetime desc","systemTags":{},"timeCreated":"2026-09-01T17:53:35.739Z","timeLastModified":"2026-09-01T17:53:36.511Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/logSavedSearches/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/logSavedSearches/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json

@@ -1,0 +1,162 @@
+version: 1
+metadata:
+    service: cloudguard
+    resource: ManagedList
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/managedLists
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-managed-list-v1","freeformTags":{"osok-replay":"create"},"listItems":["192.0.2.0/24"],"listType":"CIDR_BLOCK"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e508fe662227106e50a59305c49fa5e3e5358f2a191ff06223220112ae574353--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T19:28:20.920Z"}},"description":"recorded create","displayName":"osok-replay-managed-list-v1","feedProvider":"CUSTOMER","freeformTags":{"osok-replay":"create"},"group":null,"id":"<ocid:2>","isEditable":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","lifecyleDetails":null,"listItems":["192.0.2.0/24"],"listType":"CIDR_BLOCK","locks":[],"manageType":"LOCAL","sourceManagedListId":null,"systemTags":{},"timeCreated":"2026-09-01T19:28:21.077Z","timeUpdated":"2026-09-01T19:28:21.077Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/managedLists/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e508fe662227106e50a59305c49fa5e3e5358f2a191ff06223220112ae574353--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T19:28:20.920Z"}},"description":"recorded create","displayName":"osok-replay-managed-list-v1","feedProvider":"CUSTOMER","freeformTags":{"osok-replay":"create"},"group":null,"id":"<ocid:2>","isEditable":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","lifecyleDetails":null,"listItems":["192.0.2.0/24"],"listType":"CIDR_BLOCK","locks":[],"manageType":"LOCAL","sourceManagedListId":null,"systemTags":{},"timeCreated":"2026-09-01T19:28:21.077Z","timeUpdated":"2026-09-01T19:28:21.077Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/managedLists/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e508fe662227106e50a59305c49fa5e3e5358f2a191ff06223220112ae574353--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T19:28:20.920Z"}},"description":"recorded create","displayName":"osok-replay-managed-list-v1","feedProvider":"CUSTOMER","freeformTags":{"osok-replay":"create"},"group":null,"id":"<ocid:2>","isEditable":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","lifecyleDetails":null,"listItems":["192.0.2.0/24"],"listType":"CIDR_BLOCK","locks":[],"manageType":"LOCAL","sourceManagedListId":null,"systemTags":{},"timeCreated":"2026-09-01T19:28:21.077Z","timeUpdated":"2026-09-01T19:28:21.077Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/managedLists/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"description":"recorded update","listItems":["198.51.100.0/24"]}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b73aa3808aa51b6405f8210afd04d4eabc7fc21f334ce20d54a3d72d4b38c51a
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T19:28:20.920Z"}},"description":"recorded update","displayName":"osok-replay-managed-list-v1","feedProvider":"CUSTOMER","freeformTags":{"osok-replay":"create"},"group":null,"id":"<ocid:2>","isEditable":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","lifecyleDetails":null,"listItems":["198.51.100.0/24"],"listType":"CIDR_BLOCK","locks":[],"manageType":"LOCAL","sourceManagedListId":null,"systemTags":{},"timeCreated":"2026-09-01T19:28:21.077Z","timeUpdated":"2026-09-01T19:28:21.941Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/managedLists/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b73aa3808aa51b6405f8210afd04d4eabc7fc21f334ce20d54a3d72d4b38c51a--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T19:28:20.920Z"}},"description":"recorded update","displayName":"osok-replay-managed-list-v1","feedProvider":"CUSTOMER","freeformTags":{"osok-replay":"create"},"group":null,"id":"<ocid:2>","isEditable":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","lifecyleDetails":null,"listItems":["198.51.100.0/24"],"listType":"CIDR_BLOCK","locks":[],"manageType":"LOCAL","sourceManagedListId":null,"systemTags":{},"timeCreated":"2026-09-01T19:28:21.077Z","timeUpdated":"2026-09-01T19:28:21.941Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/managedLists/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b73aa3808aa51b6405f8210afd04d4eabc7fc21f334ce20d54a3d72d4b38c51a--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T19:28:20.920Z"}},"description":"recorded update","displayName":"osok-replay-managed-list-v1","feedProvider":"CUSTOMER","freeformTags":{"osok-replay":"create"},"group":null,"id":"<ocid:2>","isEditable":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","lifecyleDetails":null,"listItems":["198.51.100.0/24"],"listType":"CIDR_BLOCK","locks":[],"manageType":"LOCAL","sourceManagedListId":null,"systemTags":{},"timeCreated":"2026-09-01T19:28:21.077Z","timeUpdated":"2026-09-01T19:28:21.941Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/managedLists/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/managedLists/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b73aa3808aa51b6405f8210afd04d4eabc7fc21f334ce20d54a3d72d4b38c51a--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T19:28:20.920Z"}},"description":"recorded update","displayName":"osok-replay-managed-list-v1","feedProvider":"CUSTOMER","freeformTags":{"osok-replay":"create"},"group":null,"id":"<ocid:2>","isEditable":true,"lifecycleDetails":null,"lifecycleState":"DELETED","lifecyleDetails":null,"listItems":["198.51.100.0/24"],"listType":"CIDR_BLOCK","locks":[],"manageType":"LOCAL","sourceManagedListId":null,"systemTags":{},"timeCreated":"2026-09-01T19:28:21.077Z","timeUpdated":"2026-09-01T19:28:22.852Z"}'
+        encoding: json

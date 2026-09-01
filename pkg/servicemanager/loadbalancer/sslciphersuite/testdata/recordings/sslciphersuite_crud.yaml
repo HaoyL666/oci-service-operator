@@ -1,0 +1,320 @@
+version: 1
+metadata:
+    service: loadbalancer
+    resource: SSLCipherSuite
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no cipher suite ''osok_replay_ssl_cipher_v2''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870888010"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: POST
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"ciphers":["ECDHE-RSA-AES256-GCM-SHA384"],"name":"osok_replay_ssl_cipher_v2"}'
+        encoding: json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:2>","lifecycleState":"ACCEPTED","loadBalancerId":"<ocid:1>","message":null,"timeAccepted":"2026-09-01T19:18:22.782Z","timeFinished":null,"type":"CreateCipherSuite"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:2>","lifecycleState":"SUCCEEDED","loadBalancerId":"<ocid:1>","message":"{\"eventId\":\"217da238-df11-43c1-a314-cd2de3f8fa1b\",\"loadBalancerId\":\"<ocid:1>\",\"workflowName\":\"AddCipherSuiteWorkflow\",\"type\":\"SUCCESS\",\"message\":\"OK\",\"workRequestId\":\"<ocid:2>\"}","timeAccepted":"2026-09-01T19:18:22.782Z","timeFinished":"2026-09-01T19:18:27.816Z","type":"CreateCipherSuite"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870981554"'
+            opc-request-id:
+                - <redacted>
+        body: '{"ciphers":["ECDHE-RSA-AES256-GCM-SHA384"],"name":"osok_replay_ssl_cipher_v2"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870981554"'
+            opc-request-id:
+                - <redacted>
+        body: '{"ciphers":["ECDHE-RSA-AES256-GCM-SHA384"],"name":"osok_replay_ssl_cipher_v2"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"ciphers":["ECDHE-RSA-AES256-GCM-SHA384","ECDHE-RSA-AES128-GCM-SHA256"]}'
+        encoding: json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:4>","lifecycleState":"ACCEPTED","loadBalancerId":"<ocid:1>","message":null,"timeAccepted":"2026-09-01T19:18:30.158Z","timeFinished":null,"type":"UpdateCipherSuite"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:4>","lifecycleState":"SUCCEEDED","loadBalancerId":"<ocid:1>","message":"{\"eventId\":\"76044c5d-094d-43c0-9c3a-3e18a082641b\",\"loadBalancerId\":\"<ocid:1>\",\"workflowName\":\"PutCipherSuiteWorkflow\",\"type\":\"SUCCESS\",\"message\":\"OK\",\"workRequestId\":\"<ocid:4>\"}","timeAccepted":"2026-09-01T19:18:30.158Z","timeFinished":"2026-09-01T19:18:34.713Z","type":"UpdateCipherSuite"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870981921"'
+            opc-request-id:
+                - <redacted>
+        body: '{"ciphers":["ECDHE-RSA-AES256-GCM-SHA384","ECDHE-RSA-AES128-GCM-SHA256"],"name":"osok_replay_ssl_cipher_v2"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870981921"'
+            opc-request-id:
+                - <redacted>
+        body: '{"ciphers":["ECDHE-RSA-AES256-GCM-SHA384","ECDHE-RSA-AES128-GCM-SHA256"],"name":"osok_replay_ssl_cipher_v2"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:5>","lifecycleState":"ACCEPTED","loadBalancerId":"<ocid:1>","message":null,"timeAccepted":"2026-09-01T19:18:37.375Z","timeFinished":null,"type":"DeleteCipherSuite"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:5>","lifecycleState":"IN_PROGRESS","loadBalancerId":"<ocid:1>","message":null,"timeAccepted":"2026-09-01T19:18:37.375Z","timeFinished":null,"type":"DeleteCipherSuite"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:5>","lifecycleState":"SUCCEEDED","loadBalancerId":"<ocid:1>","message":"{\"eventId\":\"8d4a7af8-fe2b-41ec-bd4e-3d2e3b671bbe\",\"loadBalancerId\":\"<ocid:1>\",\"workflowName\":\"RemoveCipherSuiteWorkflow\",\"type\":\"SUCCESS\",\"message\":\"OK\",\"workRequestId\":\"<ocid:5>\"}","timeAccepted":"2026-09-01T19:18:37.375Z","timeFinished":"2026-09-01T19:18:43.748Z","type":"DeleteCipherSuite"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no cipher suite ''osok_replay_ssl_cipher_v2''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/sslCipherSuites
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870982409"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json

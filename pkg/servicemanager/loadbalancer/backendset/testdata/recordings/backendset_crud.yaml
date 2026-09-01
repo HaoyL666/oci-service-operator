@@ -1,0 +1,422 @@
+version: 1
+metadata:
+    service: loadbalancer
+    resource: BackendSet
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no backend set ''osok_replay_backend_set_v1''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870876098"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: POST
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"backends":[{"ipAddress":"10.0.0.3","port":8080,"weight":1}],"healthChecker":{"intervalInMillis":10000,"port":8080,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000},"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN"}'
+        encoding: json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no backend set ''osok_replay_backend_set_v1''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870876618"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no backend set ''osok_replay_backend_set_v1''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870876618"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no backend set ''osok_replay_backend_set_v1''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870876618"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: PUT
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","offline":false,"port":8080,"weight":1}],"healthChecker":{"intervalInMillis":10000,"isForcePlainText":false,"port":8080,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000},"policy":"ROUND_ROBIN"}'
+        encoding: json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877085"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":null,"port":8080,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877085"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":null,"port":8080,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","offline":false,"port":8080,"weight":1}],"healthChecker":{"intervalInMillis":10000,"isForcePlainText":false,"port":8081,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000},"policy":"ROUND_ROBIN"}'
+        encoding: json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:3>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877278"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":null,"port":8080,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877278"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":null,"port":8080,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","offline":false,"port":8080,"weight":1}],"healthChecker":{"intervalInMillis":10000,"isForcePlainText":false,"port":8081,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000},"policy":"ROUND_ROBIN"}'
+        encoding: json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877564"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":null,"port":8080,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877640"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":false,"port":8081,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877640"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":false,"port":8081,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877945"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":false,"port":8081,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870877984"'
+            opc-request-id:
+                - <redacted>
+        body: '{"backendMaxConnections":null,"backendRetryPolicy":null,"backends":[{"backup":false,"drain":false,"ipAddress":"10.0.0.3","maxConnections":null,"name":"10.0.0.3:8080","offline":false,"port":8080,"weight":1}],"connectionEstablishmentTimeoutInSeconds":null,"healthChecker":{"intervalInMillis":10000,"isForcePlainText":false,"port":8081,"protocol":"TCP","responseBodyRegex":".*","retries":3,"returnCode":200,"timeoutInMillis":3000,"urlPath":null},"keepAliveTimeoutInSeconds":null,"lbCookieSessionPersistenceConfiguration":null,"name":"osok_replay_backend_set_v1","policy":"ROUND_ROBIN","sessionPersistenceConfiguration":null,"sslConfiguration":null}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json

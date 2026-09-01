@@ -9,6 +9,17 @@ resources:
     classification: synthetic
     reason: A production-tier Autonomous Database provisions billable database compute and storage with long create/delete lifecycles.
     nextAction: Add a contract-faithful synthetic create, update, and delete replay for a non-free-tier serverless database.
+  - service: email
+    resource: dkim
+    classification: deferred
+    reason: Live create and update reached the expected NEEDS_ATTENTION steady state, but deletion remained DELETING beyond the bounded recording window.
+    blocker: A complete sanitized lifecycle cassette cannot be published until OCI reaches terminal deletion within the recorder timeout.
+    nextAction: Re-record with an operator-approved longer delete window after confirming the Email service's expected DKIM retention time.
+  - service: email
+    resource: suppression
+    classification: synthetic
+    reason: Suppressions are tenancy-level resources, and direct ListSuppressions and CreateSuppression calls independently confirmed that the recording principal lacks permission.
+    nextAction: Add a contract-faithful synthetic create, read, and delete replay from the pinned Email SDK surface.
   - service: functions
     resource: function
     classification: deferred
@@ -43,3 +54,9 @@ resources:
     resource: rovercluster
     classification: synthetic
     reason: Live creation represents an order for physical appliance infrastructure.
+  - service: servicecatalog
+    resource: servicecatalog
+    classification: deferred
+    reason: Direct service-manager and official OCI CLI creates both fail with MissingParameter even though the serialized request contains displayName.
+    blocker: The live Service Catalog endpoint rejects a valid SDK request before creating a resource.
+    nextAction: Retry recording after the Service Catalog API accepts its documented CreateServiceCatalog payload.

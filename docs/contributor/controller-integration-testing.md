@@ -200,6 +200,22 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   configuration; no Terraform job is run.
 - disabled Events Rule with an owned temporary ONS Topic action target and
   confirmed cleanup of both resources.
+- Generic Artifacts Repository, Management Agent Install Key, and File Storage
+  Snapshot Policy as bounded standalone lifecycles.
+- disabled Ping Monitor, DNS TSIG Key, Logging Saved Search, and Identity
+  Compartment, including scoped confirmation for auth-shaped or eventually
+  consistent 404 responses.
+- AI Document, AI Language, and AI Vision Projects plus an APM Domain, covering
+  both lifecycle and work-request services and the live AI Language
+  synchronous-update response variant.
+- Dashboard Group and Dashboard, with the child recording using one temporary
+  shared group.
+- Email Domain and Sender without sending mail or requiring external DNS
+  verification.
+- classic Load Balancer Backend Set, Hostname, and SSL Cipher Suite children
+  beneath one temporary private load balancer.
+- Cloud Bridge Environment and Cloud Guard Managed List, whose live recordings
+  also establish their previously missing generatedruntime lifecycle contracts.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its

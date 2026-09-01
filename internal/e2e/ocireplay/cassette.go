@@ -192,7 +192,10 @@ func (c *Cassette) replay(req *http.Request, body []byte) (*http.Response, error
 			firstUnused.Query == actual.Query, maps.EqualFunc(firstUnused.Headers, actual.Headers, slices.Equal),
 			firstUnused.Body == actual.Body, firstUnused.Encoding == actual.Encoding)
 		if firstUnused.Host != actual.Host {
-			difference += fmt.Sprintf(" hostBytes={actual:%x expected:%x}", []byte(actual.Host), []byte(firstUnused.Host))
+			difference += fmt.Sprintf(
+				" hostBytes={actual:%x expected:%x} hostLengths={actual:%d expected:%d} hostQuoted={actual:%q expected:%q}",
+				[]byte(actual.Host), []byte(firstUnused.Host), len(actual.Host), len(firstUnused.Host), actual.Host, firstUnused.Host,
+			)
 		}
 	}
 	return nil, fmt.Errorf("no unused OCI interaction matches %s %s%s; actual=%#v firstUnused=%#v%s", actual.Method, actual.Path, querySuffix(actual.Query), actual, firstUnused, difference)

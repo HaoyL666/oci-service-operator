@@ -1,0 +1,156 @@
+version: 1
+metadata:
+    service: dashboardservice
+    resource: DashboardGroup
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: dashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20210731/dashboardGroups
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-dashboard-group-v1","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bc20d47c990be153b636912f977124922ed5d861b6274655ab8965d0f572d39e--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:16:48.403Z"}},"description":"recorded create","displayName":"osok-replay-dashboard-group-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"2026-09-01T18:16:48.519Z","timeUpdated":"2026-09-01T18:16:48.519Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: dashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20210731/dashboardGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bc20d47c990be153b636912f977124922ed5d861b6274655ab8965d0f572d39e--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:16:48.403Z"}},"description":"recorded create","displayName":"osok-replay-dashboard-group-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"2026-09-01T18:16:48.519Z","timeUpdated":"2026-09-01T18:16:48.519Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: dashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20210731/dashboardGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bc20d47c990be153b636912f977124922ed5d861b6274655ab8965d0f572d39e--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:16:48.403Z"}},"description":"recorded create","displayName":"osok-replay-dashboard-group-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"2026-09-01T18:16:48.519Z","timeUpdated":"2026-09-01T18:16:48.519Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: dashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20210731/dashboardGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 627206f66ae10275cf8a017f333496d08a672733fec9d435b8feea0a5d01ef09
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:16:48.403Z"}},"description":"recorded update","displayName":"osok-replay-dashboard-group-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"2026-09-01T18:16:48.519Z","timeUpdated":"2026-09-01T18:16:49.486Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: dashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20210731/dashboardGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 627206f66ae10275cf8a017f333496d08a672733fec9d435b8feea0a5d01ef09--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:16:48.403Z"}},"description":"recorded update","displayName":"osok-replay-dashboard-group-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"2026-09-01T18:16:48.519Z","timeUpdated":"2026-09-01T18:16:49.486Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: dashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20210731/dashboardGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 627206f66ae10275cf8a017f333496d08a672733fec9d435b8feea0a5d01ef09--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:16:48.403Z"}},"description":"recorded update","displayName":"osok-replay-dashboard-group-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"2026-09-01T18:16:48.519Z","timeUpdated":"2026-09-01T18:16:49.486Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: dashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20210731/dashboardGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: dashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20210731/dashboardGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json

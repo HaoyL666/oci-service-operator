@@ -1,0 +1,398 @@
+version: 1
+metadata:
+    service: email
+    resource: EmailDomain
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","freeformTags":{"osok-replay":"create"},"name":"osok-replay-recorded.example.com"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b2ffc5583afecebf7d5e0deae2f15803bc7b8650f8ee4e42a8956f68d627074--gzip
+            location:
+                - https://ctrl.email.us-ashburn-1.oci.oraclecloud.com/emaildomains/<ocid:2>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:3>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"CREATING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b2ffc5583afecebf7d5e0deae2f15803bc7b8650f8ee4e42a8956f68d627074--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"CREATING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b2ffc5583afecebf7d5e0deae2f15803bc7b8650f8ee4e42a8956f68d627074--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"CREATING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b2ffc5583afecebf7d5e0deae2f15803bc7b8650f8ee4e42a8956f68d627074--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"CREATING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b2ffc5583afecebf7d5e0deae2f15803bc7b8650f8ee4e42a8956f68d627074--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"CREATING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b2ffc5583afecebf7d5e0deae2f15803bc7b8650f8ee4e42a8956f68d627074--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"CREATING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b2ffc5583afecebf7d5e0deae2f15803bc7b8650f8ee4e42a8956f68d627074--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"CREATING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 73bec755c3a9709f59af8cafcd872371dbf43e93bd501d1a8131b906b07fb4b7--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"ACTIVE","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 73bec755c3a9709f59af8cafcd872371dbf43e93bd501d1a8131b906b07fb4b7--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded create","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"ACTIVE","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            etag:
+                - 73bec755c3a9709f59af8cafcd872371dbf43e93bd501d1a8131b906b07fb4b7
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 02bba22e21516c27ce8a3172a4b0a2d11476731343b1b9a785e1ae2b129ea395--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"ACTIVE","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 02bba22e21516c27ce8a3172a4b0a2d11476731343b1b9a785e1ae2b129ea395--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"ACTIVE","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4cc59e8620ba31d9c2dc0dc5844263ac695e2e3b061b6f7d94d3178a2e9a92b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"DELETING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4cc59e8620ba31d9c2dc0dc5844263ac695e2e3b061b6f7d94d3178a2e9a92b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"DELETING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4cc59e8620ba31d9c2dc0dc5844263ac695e2e3b061b6f7d94d3178a2e9a92b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"DELETING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4cc59e8620ba31d9c2dc0dc5844263ac695e2e3b061b6f7d94d3178a2e9a92b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"DELETING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4cc59e8620ba31d9c2dc0dc5844263ac695e2e3b061b6f7d94d3178a2e9a92b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"DELETING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4cc59e8620ba31d9c2dc0dc5844263ac695e2e3b061b6f7d94d3178a2e9a92b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"DELETING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4cc59e8620ba31d9c2dc0dc5844263ac695e2e3b061b6f7d94d3178a2e9a92b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"DELETING","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ctrl.email.us-ashburn-1.oci.oraclecloud.com
+        path: /20170907/emailDomains/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 874615910bdc552f7178d197dcd2e32403d5199a704d8ede5b11f0aebf7404b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"activeDkimId":null,"compartmentId":"<ocid:1>","customHeaders":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T18:20:00.465Z"}},"description":"recorded update","domainVerificationId":null,"domainVerificationStatus":null,"emailPrivateEndpointId":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isListUnsubscribeEnabled":true,"isSpf":false,"lifecycleDetails":null,"lifecycleState":"DELETED","locks":[],"name":"osok-replay-recorded.example.com","requirePrivatePath":"NONE","systemTags":{},"timeCreated":"2026-09-01T18:20:00.658Z"}'
+        encoding: json

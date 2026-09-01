@@ -1,0 +1,306 @@
+version: 1
+metadata:
+    service: loadbalancer
+    resource: Hostname
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no hostname named ''osok_replay_hostname_v1''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870878232"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: POST
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"hostname":"create.example.com","name":"osok_replay_hostname_v1"}'
+        encoding: json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no hostname named ''osok_replay_hostname_v1''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870878741"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:2>","lifecycleState":"SUCCEEDED","loadBalancerId":"<ocid:1>","message":"{\"eventId\":\"9502aa63-cb2f-4192-8a2f-8ce91549f72b\",\"loadBalancerId\":\"<ocid:1>\",\"workflowName\":\"AddHostnameWorkflow\",\"type\":\"SUCCESS\",\"message\":\"OK\",\"workRequestId\":\"<ocid:2>\"}","timeAccepted":"2026-09-01T18:40:17.844Z","timeFinished":"2026-09-01T18:40:23.890Z","type":"CreateHostname"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870879001"'
+            opc-request-id:
+                - <redacted>
+        body: '{"hostname":"create.example.com","name":"osok_replay_hostname_v1"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870879001"'
+            opc-request-id:
+                - <redacted>
+        body: '{"hostname":"create.example.com","name":"osok_replay_hostname_v1"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"hostname":"update.example.com"}'
+        encoding: json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870879108"'
+            opc-request-id:
+                - <redacted>
+        body: '{"hostname":"create.example.com","name":"osok_replay_hostname_v1"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:4>","lifecycleState":"IN_PROGRESS","loadBalancerId":"<ocid:1>","message":null,"timeAccepted":"2026-09-01T18:40:25.906Z","timeFinished":null,"type":"UpdateHostname"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:4>","lifecycleState":"SUCCEEDED","loadBalancerId":"<ocid:1>","message":"{\"eventId\":\"cce27916-9244-4a8a-850c-7185cab04c43\",\"loadBalancerId\":\"<ocid:1>\",\"workflowName\":\"PutHostnameWorkflow\",\"type\":\"SUCCESS\",\"message\":\"OK\",\"workRequestId\":\"<ocid:4>\"}","timeAccepted":"2026-09-01T18:40:25.906Z","timeFinished":"2026-09-01T18:40:32.229Z","type":"UpdateHostname"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870879401"'
+            opc-request-id:
+                - <redacted>
+        body: '{"hostname":"update.example.com","name":"osok_replay_hostname_v1"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:5>","lifecycleState":"SUCCEEDED","loadBalancerId":"<ocid:1>","message":"{\"eventId\":\"39354293-a2ae-416b-a506-faffa5fb6868\",\"loadBalancerId\":\"<ocid:1>\",\"workflowName\":\"RemoveHostnameWorkflow\",\"type\":\"SUCCESS\",\"message\":\"OK\",\"workRequestId\":\"<ocid:5>\"}","timeAccepted":"2026-09-01T18:40:37.577Z","timeFinished":"2026-09-01T18:40:41.430Z","type":"DeleteHostname"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotFound","message":"Load balancer <ocid:1> has no hostname named ''osok_replay_hostname_v1''"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/hostnames
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17870879841"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
