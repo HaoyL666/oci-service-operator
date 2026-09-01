@@ -6,6 +6,7 @@
 package generatedruntime
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
@@ -92,5 +93,46 @@ func TestFilteredUpdateBodyPreservesNestedFalseClusterBool(t *testing.T) {
 		t.Fatal("filteredUpdateBody() omitted imagePolicyConfig.isPolicyEnabled")
 	} else if boolValue, ok := got.(bool); !ok || boolValue {
 		t.Fatalf("filteredUpdateBody() imagePolicyConfig.isPolicyEnabled = %#v, want false", got)
+	}
+}
+
+func TestValidateForceNewTreatsDeclaredZeroOptionalObjectAsNull(t *testing.T) {
+	t.Parallel()
+	client := ServiceClient[*containerenginev1beta1.Cluster]{config: Config[*containerenginev1beta1.Cluster]{
+		Kind: "Cluster",
+		Semantics: &Semantics{Mutation: MutationSemantics{
+			ForceNew:                []string{"imagePolicyConfig"},
+			ZeroValueNullEquivalent: []string{"imagePolicyConfig"},
+		}},
+	}}
+	resource := &containerenginev1beta1.Cluster{
+		Spec: containerenginev1beta1.ClusterSpec{
+			ImagePolicyConfig: containerenginev1beta1.ClusterImagePolicyConfig{IsPolicyEnabled: false},
+		},
+	}
+	current := containerenginesdk.GetClusterResponse{Cluster: containerenginesdk.Cluster{ImagePolicyConfig: nil}}
+	if err := client.validateMutationPolicy(resource, true, current); err != nil {
+		t.Fatalf("validateMutationPolicy() error = %v, want declared zero object and null to compare equal", err)
+	}
+}
+
+func TestValidateForceNewPreservesDeclaredNonzeroOptionalObjectIntent(t *testing.T) {
+	t.Parallel()
+	client := ServiceClient[*containerenginev1beta1.Cluster]{config: Config[*containerenginev1beta1.Cluster]{
+		Kind: "Cluster",
+		Semantics: &Semantics{Mutation: MutationSemantics{
+			ForceNew:                []string{"imagePolicyConfig"},
+			ZeroValueNullEquivalent: []string{"imagePolicyConfig"},
+		}},
+	}}
+	resource := &containerenginev1beta1.Cluster{
+		Spec: containerenginev1beta1.ClusterSpec{
+			ImagePolicyConfig: containerenginev1beta1.ClusterImagePolicyConfig{IsPolicyEnabled: true},
+		},
+	}
+	current := containerenginesdk.GetClusterResponse{Cluster: containerenginesdk.Cluster{ImagePolicyConfig: nil}}
+	err := client.validateMutationPolicy(resource, true, current)
+	if err == nil || !strings.Contains(err.Error(), "require replacement when imagePolicyConfig changes") {
+		t.Fatalf("validateMutationPolicy() error = %v, want nonzero force-new drift", err)
 	}
 }

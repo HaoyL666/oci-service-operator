@@ -134,6 +134,9 @@ func (c ServiceClient[T]) validateForceNewFields(resource T, specValues map[stri
 		if !specOK || !statusOK {
 			continue
 		}
+		if zeroValueNullEquivalent(field, wantedValue, statusValue, c.config.Semantics.Mutation) {
+			continue
+		}
 		if !forceNewValuesEqual(wantedValue, statusValue) {
 			return fmt.Errorf("%s formal semantics require replacement when %s changes", c.config.Kind, field)
 		}
@@ -309,12 +312,21 @@ func zeroValueNullEquivalentDrift(
 	currentValues map[string]any,
 	semantics MutationSemantics,
 ) bool {
-	if !pathCoveredByAny(path, semantics.ZeroValueNullEquivalent) {
-		return false
-	}
 	specValue, specFound := lookupValueByPath(specValues, path)
 	currentValue, currentFound := lookupValueByPath(currentValues, path)
 	if !specFound || !currentFound {
+		return false
+	}
+	return zeroValueNullEquivalent(path, specValue, currentValue, semantics)
+}
+
+func zeroValueNullEquivalent(
+	path string,
+	specValue any,
+	currentValue any,
+	semantics MutationSemantics,
+) bool {
+	if !pathCoveredByAny(path, semantics.ZeroValueNullEquivalent) {
 		return false
 	}
 	if _, currentMeaningful := pruneComparableValue(currentValue); currentMeaningful {
