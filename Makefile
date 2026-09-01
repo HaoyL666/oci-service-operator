@@ -409,7 +409,7 @@ test: manifests generate fmt vet ## Run tests.
 
 REPLAY_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f \( -name '*_recorded_integration_test.go' -o -name '*_synthetic_integration_test.go' \) -exec dirname {} \;))
 
-replay-coverage: ## Report OCI HTTP replay coverage without enforcing completeness.
+replay-coverage: ## Report OCI HTTP replay coverage and classification without enforcing completeness.
 	go run ./cmd/osok-replay-coverage
 
 replaytest: replay-coverage ## Run credential-free OCI SDK HTTP replay tests.

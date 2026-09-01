@@ -46,9 +46,32 @@ func main() {
 	fmt.Printf("  legacy cassettes:    %d\n", len(report.LegacyCassettes))
 	fmt.Printf("  unreferenced cassettes: %d\n", len(report.UnreferencedCassettes))
 	fmt.Printf("  orphan cassettes:    %d\n", len(report.OrphanCassettes))
+	fmt.Printf("OCI replay classifications: %d/%d controller resources\n", report.ClassifiedResources, report.TotalControllers)
+	fmt.Printf("  recorded strategy:   %d\n", report.RecordedClassified)
+	fmt.Printf("  synthetic strategy:  %d\n", report.SyntheticClassified)
+	fmt.Printf("  deferred resources:  %d\n", report.DeferredClassified)
+	fmt.Printf("  unclassified:        %d\n", len(report.Unclassified))
 	if *verbose {
 		for _, resource := range report.Missing {
-			fmt.Printf("missing %s/%s (%s)\n", resource.Service, resource.Resource, resource.ControllerPath)
+			fmt.Printf(
+				"missing %s/%s classification=%s (%s)\n",
+				resource.Service,
+				resource.Resource,
+				resource.Classification,
+				resource.ControllerPath,
+			)
+		}
+		for _, resource := range report.Deferred {
+			fmt.Printf(
+				"deferred %s/%s blocker=%q next=%q\n",
+				resource.Service,
+				resource.Resource,
+				resource.Blocker,
+				resource.NextAction,
+			)
+		}
+		for _, resource := range report.Unclassified {
+			fmt.Printf("unclassified %s/%s (%s)\n", resource.Service, resource.Resource, resource.ControllerPath)
 		}
 		for _, path := range report.LegacyCassettes {
 			fmt.Printf("legacy %s\n", path)
@@ -60,5 +83,5 @@ func main() {
 			fmt.Printf("orphan %s (%s/%s)\n", cassette.Path, cassette.Metadata.Service, cassette.Metadata.Resource)
 		}
 	}
-	fmt.Println("Coverage audit is reporting-only; missing resources do not fail this milestone.")
+	fmt.Println("Coverage and classification completeness are reporting-only; missing or unclassified resources do not fail this milestone.")
 }

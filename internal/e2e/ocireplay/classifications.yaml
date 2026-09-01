@@ -1,0 +1,45 @@
+schemaVersion: 1
+resources:
+  - service: accessgovernancecp
+    resource: governanceinstance
+    classification: synthetic
+    reason: Live creation requires a service entitlement and an IDCS administrator token.
+  - service: database
+    resource: autonomousdatabase
+    classification: synthetic
+    reason: A production-tier Autonomous Database provisions billable database compute and storage with long create/delete lifecycles.
+    nextAction: Add a contract-faithful synthetic create, update, and delete replay for a non-free-tier serverless database.
+  - service: functions
+    resource: function
+    classification: deferred
+    reason: Function lifecycle recording is safe only after a reusable invocation image is available.
+    blocker: No stable public test image and registry contract is packaged for the recorder.
+    nextAction: Publish a minimal reusable image fixture, then record Function lifecycle beneath the recorded Application.
+  - service: generativeai
+    resource: dedicatedaicluster
+    classification: synthetic
+    reason: Live creation consumes scarce paid accelerator capacity.
+  - service: mysql
+    resource: dbsystem
+    classification: synthetic
+    reason: Live creation provisions billable database compute and block storage and has a long lifecycle.
+  - service: objectstorage
+    resource: bucket
+    classification: recorded
+    syntheticReason: Throttling recovery and disappearance-before-delete are failure paths that should not be induced against live OCI.
+  - service: ocvp
+    resource: sddc
+    classification: synthetic
+    reason: Live creation allocates multiple billable bare-metal ESXi hosts and requires a purpose-built VLAN topology.
+  - service: opensearch
+    resource: opensearchcluster
+    classification: synthetic
+    reason: Live creation allocates several compute nodes, block storage, and VCN infrastructure.
+  - service: queue
+    resource: queue
+    classification: recorded
+    syntheticReason: A terminal failed work request should be replayed deterministically rather than deliberately induced in live OCI.
+  - service: rover
+    resource: rovercluster
+    classification: synthetic
+    reason: Live creation represents an order for physical appliance infrastructure.

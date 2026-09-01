@@ -19,10 +19,15 @@ import (
 
 // CoverageResource describes replay coverage for one checked-in controller.
 type CoverageResource struct {
-	Service        string             `json:"service"`
-	Resource       string             `json:"resource"`
-	ControllerPath string             `json:"controllerPath"`
-	Cassettes      []CoverageCassette `json:"cassettes,omitempty"`
+	Service              string               `json:"service"`
+	Resource             string               `json:"resource"`
+	ControllerPath       string               `json:"controllerPath"`
+	Classification       ReplayClassification `json:"classification"`
+	ClassificationReason string               `json:"classificationReason,omitempty"`
+	SyntheticReason      string               `json:"syntheticReason,omitempty"`
+	Blocker              string               `json:"blocker,omitempty"`
+	NextAction           string               `json:"nextAction,omitempty"`
+	Cassettes            []CoverageCassette   `json:"cassettes,omitempty"`
 }
 
 // CoverageCassette describes one cassette associated with a controller.
@@ -37,8 +42,14 @@ type CoverageReport struct {
 	CoveredResources      int                `json:"coveredResources"`
 	RecordedResources     int                `json:"recordedResources"`
 	SyntheticResources    int                `json:"syntheticResources"`
+	ClassifiedResources   int                `json:"classifiedResources"`
+	RecordedClassified    int                `json:"recordedClassified"`
+	SyntheticClassified   int                `json:"syntheticClassified"`
+	DeferredClassified    int                `json:"deferredClassified"`
 	Resources             []CoverageResource `json:"resources"`
 	Missing               []CoverageResource `json:"missing"`
+	Deferred              []CoverageResource `json:"deferred,omitempty"`
+	Unclassified          []CoverageResource `json:"unclassified,omitempty"`
 	LegacyCassettes       []string           `json:"legacyCassettes,omitempty"`
 	UnreferencedCassettes []string           `json:"unreferencedCassettes,omitempty"`
 	OrphanCassettes       []CoverageCassette `json:"orphanCassettes,omitempty"`
@@ -60,6 +71,11 @@ func AuditCoverage(root string) (CoverageReport, error) {
 		return CoverageReport{}, err
 	}
 
+	declarations, err := loadCoverageClassifications(root)
+	if err != nil {
+		return CoverageReport{}, err
+	}
+
 	report := CoverageReport{
 		TotalControllers:      len(resources),
 		Resources:             resources,
@@ -70,11 +86,6 @@ func AuditCoverage(root string) (CoverageReport, error) {
 	for index := range report.Resources {
 		resource := &report.Resources[index]
 		sort.Slice(resource.Cassettes, func(i, j int) bool { return resource.Cassettes[i].Path < resource.Cassettes[j].Path })
-		if len(resource.Cassettes) == 0 {
-			report.Missing = append(report.Missing, *resource)
-			continue
-		}
-		report.CoveredResources++
 		hasRecorded := false
 		hasSynthetic := false
 		for _, cassette := range resource.Cassettes {
@@ -87,6 +98,44 @@ func AuditCoverage(root string) (CoverageReport, error) {
 		if hasSynthetic {
 			report.SyntheticResources++
 		}
+		if len(resource.Cassettes) != 0 {
+			report.CoveredResources++
+		}
+		if err := classifyCoverageResource(
+			resource,
+			declarations,
+			hasRecorded,
+			hasSynthetic,
+		); err != nil {
+			return CoverageReport{}, err
+		}
+		if len(resource.Cassettes) == 0 {
+			report.Missing = append(report.Missing, *resource)
+		}
+		switch resource.Classification {
+		case ReplayClassificationRecorded:
+			report.ClassifiedResources++
+			report.RecordedClassified++
+		case ReplayClassificationSynthetic:
+			report.ClassifiedResources++
+			report.SyntheticClassified++
+		case ReplayClassificationDeferred:
+			report.ClassifiedResources++
+			report.DeferredClassified++
+			report.Deferred = append(report.Deferred, *resource)
+		case ReplayClassificationUnclassified:
+			report.Unclassified = append(report.Unclassified, *resource)
+		default:
+			return CoverageReport{}, fmt.Errorf(
+				"controller %s/%s has unsupported replay classification %q",
+				resource.Service,
+				resource.Resource,
+				resource.Classification,
+			)
+		}
+	}
+	if err := validateClassificationTargets(report.Resources, declarations); err != nil {
+		return CoverageReport{}, err
 	}
 	return report, nil
 }

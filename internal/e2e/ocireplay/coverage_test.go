@@ -70,6 +70,13 @@ interactions:
   - request: {method: GET, host: example.test, path: /unused}
     response: {statusCode: 200}
 `)
+	writeCoverageFile(t, root, coverageClassificationPath, `schemaVersion: 1
+resources:
+  - service: aivision
+    resource: project
+    classification: synthetic
+    reason: Live creation requires unavailable model-serving capacity.
+`)
 
 	report, err := AuditCoverage(root)
 	if err != nil {
@@ -78,8 +85,16 @@ interactions:
 	if report.TotalControllers != 3 || report.CoveredResources != 2 || report.RecordedResources != 1 || report.SyntheticResources != 1 {
 		t.Fatalf("coverage totals = %+v", report)
 	}
+	if report.ClassifiedResources != 2 || report.RecordedClassified != 1 ||
+		report.SyntheticClassified != 1 || report.DeferredClassified != 0 ||
+		len(report.Unclassified) != 1 {
+		t.Fatalf("classification totals = %+v", report)
+	}
 	if len(report.Missing) != 1 || report.Missing[0].Service != "ons" || report.Missing[0].Resource != "topic" {
 		t.Fatalf("missing = %+v", report.Missing)
+	}
+	if report.Missing[0].Classification != ReplayClassificationUnclassified {
+		t.Fatalf("missing classification = %q, want unclassified", report.Missing[0].Classification)
 	}
 	if len(report.LegacyCassettes) != 1 || report.LegacyCassettes[0] != "pkg/servicemanager/legacy/resource/testdata/recordings/legacy.yaml" {
 		t.Fatalf("legacy = %+v", report.LegacyCassettes)
@@ -119,6 +134,7 @@ interactions:
   - request: {method: GET, host: example.test, path: /projects/example}
     response: {statusCode: 200}
 `)
+	writeCoverageFile(t, root, coverageClassificationPath, "schemaVersion: 1\nresources: []\n")
 
 	report, err := AuditCoverage(root)
 	if err != nil {
@@ -146,6 +162,7 @@ interactions:
   - request: {method: GET, host: example.test, path: /projects/example}
     response: {statusCode: 200}
 `)
+	writeCoverageFile(t, root, coverageClassificationPath, "schemaVersion: 1\nresources: []\n")
 
 	report, err := AuditCoverage(root)
 	if err != nil {

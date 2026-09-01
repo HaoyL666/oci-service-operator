@@ -196,6 +196,28 @@ legacy, unreferenced, and orphan cassettes without failing. Coverage
 enforcement is intentionally deferred until the controller-backed surface has
 been classified.
 
+Classification metadata lives in
+`internal/e2e/ocireplay/classifications.yaml`. Checked-in recorded and
+synthetic cassettes remain authoritative; the metadata adds synthetic
+justifications, planned strategies, and deferred blockers. Resources with no
+cassette or declaration are reported as `unclassified` and must not be listed
+as such in the file.
+
+Use only these declared classifications:
+
+- `recorded`: safe for a bounded live lifecycle. An uncovered entry requires
+  `nextAction`.
+- `synthetic`: live creation is costly, unavailable, or has external side
+  effects. It requires `reason`, plus `nextAction` until covered.
+- `deferred`: a concrete blocker prevents the intended test. It requires
+  `reason`, `blocker`, and `nextAction`.
+
+Resources that have both recorded coverage and synthetic failure scenarios are
+classified as `recorded` and must provide `syntheticReason`. The audit rejects
+unknown controllers, duplicate or unsorted declarations, strategy/cassette
+conflicts, and unjustified synthetic coverage. Classification completeness is
+reporting-only while the inventory is being reviewed service by service.
+
 ## Live Lifecycle Scenarios
 
 Each scenario owns a `scenario.yaml`, a create manifest, an optional update
