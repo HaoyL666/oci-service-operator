@@ -146,6 +146,23 @@ func (s *SDKRecordSession) Close() error {
 	return s.cassette.Close()
 }
 
+// Attach adds another authenticated OCI SDK base client to the same recording
+// session. This supports one resource lifecycle that legitimately reads a
+// related object through another OCI service client, while preserving one
+// atomic cassette and one sanitizer namespace.
+func (s *SDKRecordSession) Attach(baseClient *common.BaseClient) error {
+	if s == nil || s.cassette == nil {
+		return fmt.Errorf("OCI recording session is not initialized")
+	}
+	if baseClient == nil {
+		return fmt.Errorf("OCI recording base client is required")
+	}
+	noRetry := common.NoRetryPolicy()
+	baseClient.Configuration.RetryPolicy = &noRetry
+	s.cassette.Attach(baseClient)
+	return nil
+}
+
 func replayHost(value string) (string, error) {
 	value = strings.TrimSpace(value)
 	parsed, err := url.Parse(value)

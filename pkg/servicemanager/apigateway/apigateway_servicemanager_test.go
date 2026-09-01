@@ -279,6 +279,54 @@ func TestGatewayCreateOrUpdateBindByID(t *testing.T) {
 	assert.Equal(t, "opc-gateway-update-1", resource.Status.OsokStatus.OpcRequestID)
 }
 
+func TestGatewayCreateOrUpdateUsesTrackedStatusIDAfterDisplayNameChange(t *testing.T) {
+	const gatewayID = "ocid1.apigateway.oc1..tracked"
+	updatedID := ""
+
+	manager := makeGatewayManager(&mockGatewayClient{
+		listGatewaysFn: func(context.Context, apigatewaysdk.ListGatewaysRequest) (apigatewaysdk.ListGatewaysResponse, error) {
+			t.Fatal("ListGateways should not run when status tracks the gateway")
+			return apigatewaysdk.ListGatewaysResponse{}, nil
+		},
+		createGatewayFn: func(context.Context, apigatewaysdk.CreateGatewayRequest) (apigatewaysdk.CreateGatewayResponse, error) {
+			t.Fatal("CreateGateway should not run when status tracks the gateway")
+			return apigatewaysdk.CreateGatewayResponse{}, nil
+		},
+		getGatewayFn: func(_ context.Context, req apigatewaysdk.GetGatewayRequest) (apigatewaysdk.GetGatewayResponse, error) {
+			assert.Equal(t, gatewayID, *req.GatewayId)
+			return apigatewaysdk.GetGatewayResponse{Gateway: apigatewaysdk.Gateway{
+				Id:             req.GatewayId,
+				DisplayName:    common.String("old-name"),
+				EndpointType:   apigatewaysdk.GatewayEndpointTypePublic,
+				SubnetId:       common.String("ocid1.subnet.oc1..example"),
+				Hostname:       common.String("tracked.example.com"),
+				LifecycleState: apigatewaysdk.GatewayLifecycleStateActive,
+				CompartmentId:  common.String("ocid1.compartment.oc1..example"),
+				FreeformTags:   map[string]string{"stage": "old"},
+			}}, nil
+		},
+		updateGatewayFn: func(_ context.Context, req apigatewaysdk.UpdateGatewayRequest) (apigatewaysdk.UpdateGatewayResponse, error) {
+			updatedID = *req.GatewayId
+			return apigatewaysdk.UpdateGatewayResponse{}, nil
+		},
+	}, &fakeCredentialClient{})
+	resource := &apigatewayv1beta1.ApiGateway{
+		ObjectMeta: metav1.ObjectMeta{Name: "tracked", Namespace: "default"},
+		Spec: apigatewayv1beta1.ApiGatewaySpec{
+			CompartmentId: "ocid1.compartment.oc1..example",
+			DisplayName:   "new-name",
+			EndpointType:  "PUBLIC",
+			SubnetId:      "ocid1.subnet.oc1..example",
+		},
+	}
+	resource.Status.OsokStatus.Ocid = gatewayID
+
+	response, err := manager.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	assert.NoError(t, err)
+	assert.True(t, response.IsSuccessful)
+	assert.Equal(t, gatewayID, updatedID)
+}
+
 func TestGatewayCreateOrUpdateCreateFailureCapturesOpcRequestID(t *testing.T) {
 	manager := makeGatewayManager(&mockGatewayClient{
 		listGatewaysFn: func(_ context.Context, _ apigatewaysdk.ListGatewaysRequest) (apigatewaysdk.ListGatewaysResponse, error) {
@@ -307,6 +355,7 @@ func TestGatewayCreateOrUpdateCreateFailureCapturesOpcRequestID(t *testing.T) {
 func TestGatewayDeleteUsesSpecID(t *testing.T) {
 	const gatewayID = "ocid1.apigateway.oc1..delete"
 	deletedID := ""
+	getCalls := 0
 
 	manager := makeGatewayManager(&mockGatewayClient{
 		deleteGatewayFn: func(_ context.Context, req apigatewaysdk.DeleteGatewayRequest) (apigatewaysdk.DeleteGatewayResponse, error) {
@@ -314,10 +363,15 @@ func TestGatewayDeleteUsesSpecID(t *testing.T) {
 			return apigatewaysdk.DeleteGatewayResponse{OpcRequestId: common.String("opc-gateway-delete-1")}, nil
 		},
 		getGatewayFn: func(_ context.Context, req apigatewaysdk.GetGatewayRequest) (apigatewaysdk.GetGatewayResponse, error) {
+			getCalls++
+			state := apigatewaysdk.GatewayLifecycleStateActive
+			if getCalls > 1 {
+				state = apigatewaysdk.GatewayLifecycleStateDeleted
+			}
 			return apigatewaysdk.GetGatewayResponse{
 				Gateway: apigatewaysdk.Gateway{
 					Id:             req.GatewayId,
-					LifecycleState: apigatewaysdk.GatewayLifecycleStateDeleted,
+					LifecycleState: state,
 				},
 			}, nil
 		},
@@ -334,6 +388,29 @@ func TestGatewayDeleteUsesSpecID(t *testing.T) {
 	assert.True(t, done)
 	assert.Equal(t, gatewayID, deletedID)
 	assert.Equal(t, "opc-gateway-delete-1", resource.Status.OsokStatus.OpcRequestID)
+}
+
+func TestGatewayDeleteSkipsRepeatedDeleteWhileDeleting(t *testing.T) {
+	const gatewayID = "ocid1.apigateway.oc1..deleting"
+	deleteCalled := false
+	manager := makeGatewayManager(&mockGatewayClient{
+		getGatewayFn: func(_ context.Context, req apigatewaysdk.GetGatewayRequest) (apigatewaysdk.GetGatewayResponse, error) {
+			return apigatewaysdk.GetGatewayResponse{Gateway: apigatewaysdk.Gateway{
+				Id: req.GatewayId, LifecycleState: apigatewaysdk.GatewayLifecycleStateDeleting,
+			}}, nil
+		},
+		deleteGatewayFn: func(context.Context, apigatewaysdk.DeleteGatewayRequest) (apigatewaysdk.DeleteGatewayResponse, error) {
+			deleteCalled = true
+			return apigatewaysdk.DeleteGatewayResponse{}, nil
+		},
+	}, &fakeCredentialClient{})
+	resource := &apigatewayv1beta1.ApiGateway{}
+	resource.Status.OsokStatus.Ocid = gatewayID
+
+	done, err := manager.Delete(context.Background(), resource)
+	assert.NoError(t, err)
+	assert.False(t, done)
+	assert.False(t, deleteCalled)
 }
 
 func TestDeploymentCreateOrUpdateCreateSuccess(t *testing.T) {
@@ -377,9 +454,54 @@ func TestDeploymentCreateOrUpdateCreateSuccess(t *testing.T) {
 	assert.Equal(t, "opc-deployment-create-1", resource.Status.OsokStatus.OpcRequestID)
 }
 
+func TestDeploymentCreateOrUpdateUsesTrackedStatusIDAfterDisplayNameChange(t *testing.T) {
+	const deploymentID = "ocid1.apigatewaydeployment.oc1..tracked"
+	updatedID := ""
+
+	manager := makeDeploymentManager(&mockDeploymentClient{
+		listDeploymentsFn: func(context.Context, apigatewaysdk.ListDeploymentsRequest) (apigatewaysdk.ListDeploymentsResponse, error) {
+			t.Fatal("ListDeployments should not run when status tracks the deployment")
+			return apigatewaysdk.ListDeploymentsResponse{}, nil
+		},
+		createDeploymentFn: func(context.Context, apigatewaysdk.CreateDeploymentRequest) (apigatewaysdk.CreateDeploymentResponse, error) {
+			t.Fatal("CreateDeployment should not run when status tracks the deployment")
+			return apigatewaysdk.CreateDeploymentResponse{}, nil
+		},
+		getDeploymentFn: func(_ context.Context, req apigatewaysdk.GetDeploymentRequest) (apigatewaysdk.GetDeploymentResponse, error) {
+			assert.Equal(t, deploymentID, *req.DeploymentId)
+			return apigatewaysdk.GetDeploymentResponse{Deployment: apigatewaysdk.Deployment{
+				Id:             req.DeploymentId,
+				GatewayId:      common.String("ocid1.apigateway.oc1..parent"),
+				CompartmentId:  common.String("ocid1.compartment.oc1..example"),
+				DisplayName:    common.String("old-name"),
+				PathPrefix:     common.String("/hello"),
+				Specification:  buildApiSpecification(nil),
+				LifecycleState: apigatewaysdk.DeploymentLifecycleStateActive,
+			}}, nil
+		},
+		updateDeploymentFn: func(_ context.Context, req apigatewaysdk.UpdateDeploymentRequest) (apigatewaysdk.UpdateDeploymentResponse, error) {
+			updatedID = *req.DeploymentId
+			return apigatewaysdk.UpdateDeploymentResponse{}, nil
+		},
+	})
+	resource := &apigatewayv1beta1.ApiGatewayDeployment{Spec: apigatewayv1beta1.ApiGatewayDeploymentSpec{
+		GatewayId:     "ocid1.apigateway.oc1..parent",
+		CompartmentId: "ocid1.compartment.oc1..example",
+		DisplayName:   "new-name",
+		PathPrefix:    "/hello",
+	}}
+	resource.Status.OsokStatus.Ocid = deploymentID
+
+	response, err := manager.CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	assert.NoError(t, err)
+	assert.True(t, response.IsSuccessful)
+	assert.Equal(t, deploymentID, updatedID)
+}
+
 func TestDeploymentDeleteUsesSpecID(t *testing.T) {
 	const deploymentID = "ocid1.apigatewaydeployment.oc1..delete"
 	deletedID := ""
+	getCalls := 0
 
 	manager := makeDeploymentManager(&mockDeploymentClient{
 		deleteDeploymentFn: func(_ context.Context, req apigatewaysdk.DeleteDeploymentRequest) (apigatewaysdk.DeleteDeploymentResponse, error) {
@@ -387,10 +509,15 @@ func TestDeploymentDeleteUsesSpecID(t *testing.T) {
 			return apigatewaysdk.DeleteDeploymentResponse{OpcRequestId: common.String("opc-deployment-delete-1")}, nil
 		},
 		getDeploymentFn: func(_ context.Context, req apigatewaysdk.GetDeploymentRequest) (apigatewaysdk.GetDeploymentResponse, error) {
+			getCalls++
+			state := apigatewaysdk.DeploymentLifecycleStateActive
+			if getCalls > 1 {
+				state = apigatewaysdk.DeploymentLifecycleStateDeleted
+			}
 			return apigatewaysdk.GetDeploymentResponse{
 				Deployment: apigatewaysdk.Deployment{
 					Id:             req.DeploymentId,
-					LifecycleState: apigatewaysdk.DeploymentLifecycleStateDeleted,
+					LifecycleState: state,
 				},
 			}, nil
 		},
@@ -407,6 +534,29 @@ func TestDeploymentDeleteUsesSpecID(t *testing.T) {
 	assert.True(t, done)
 	assert.Equal(t, deploymentID, deletedID)
 	assert.Equal(t, "opc-deployment-delete-1", resource.Status.OsokStatus.OpcRequestID)
+}
+
+func TestDeploymentDeleteSkipsRepeatedDeleteWhileDeleting(t *testing.T) {
+	const deploymentID = "ocid1.apigatewaydeployment.oc1..deleting"
+	deleteCalled := false
+	manager := makeDeploymentManager(&mockDeploymentClient{
+		getDeploymentFn: func(_ context.Context, req apigatewaysdk.GetDeploymentRequest) (apigatewaysdk.GetDeploymentResponse, error) {
+			return apigatewaysdk.GetDeploymentResponse{Deployment: apigatewaysdk.Deployment{
+				Id: req.DeploymentId, LifecycleState: apigatewaysdk.DeploymentLifecycleStateDeleting,
+			}}, nil
+		},
+		deleteDeploymentFn: func(context.Context, apigatewaysdk.DeleteDeploymentRequest) (apigatewaysdk.DeleteDeploymentResponse, error) {
+			deleteCalled = true
+			return apigatewaysdk.DeleteDeploymentResponse{}, nil
+		},
+	})
+	resource := &apigatewayv1beta1.ApiGatewayDeployment{}
+	resource.Status.OsokStatus.Ocid = deploymentID
+
+	done, err := manager.Delete(context.Background(), resource)
+	assert.NoError(t, err)
+	assert.False(t, done)
+	assert.False(t, deleteCalled)
 }
 
 func TestGetCrdStatusWrongType(t *testing.T) {

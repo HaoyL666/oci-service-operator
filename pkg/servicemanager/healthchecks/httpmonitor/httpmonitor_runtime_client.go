@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/oracle/oci-go-sdk/v65/common"
 	healthcheckssdk "github.com/oracle/oci-go-sdk/v65/healthchecks"
 	healthchecksv1beta1 "github.com/oracle/oci-service-operator/api/healthchecks/v1beta1"
 	"github.com/oracle/oci-service-operator/pkg/errorutil"
@@ -49,8 +50,9 @@ func applyHttpMonitorRuntimeHooks(hooks *HttpMonitorRuntimeHooks) {
 	hooks.DeleteHooks.ApplyOutcome = applyHttpMonitorDeleteOutcome
 	if hooks.Get.Call != nil {
 		get := hooks.Get.Call
+		list := hooks.List.Call
 		hooks.WrapGeneratedClient = append(hooks.WrapGeneratedClient, func(delegate HttpMonitorServiceClient) HttpMonitorServiceClient {
-			return httpMonitorDeleteGuardClient{delegate: delegate, get: get}
+			return httpMonitorDeleteGuardClient{delegate: delegate, get: get, list: list}
 		})
 	}
 }
@@ -247,6 +249,7 @@ func markHttpMonitorTerminating(resource *healthchecksv1beta1.HttpMonitor, messa
 type httpMonitorDeleteGuardClient struct {
 	delegate HttpMonitorServiceClient
 	get      func(context.Context, healthcheckssdk.GetHttpMonitorRequest) (healthcheckssdk.GetHttpMonitorResponse, error)
+	list     func(context.Context, healthcheckssdk.ListHttpMonitorsRequest) (healthcheckssdk.ListHttpMonitorsResponse, error)
 }
 
 func (c httpMonitorDeleteGuardClient) CreateOrUpdate(ctx context.Context, resource *healthchecksv1beta1.HttpMonitor, req ctrl.Request) (servicemanager.OSOKResponse, error) {
@@ -261,9 +264,50 @@ func (c httpMonitorDeleteGuardClient) Delete(ctx context.Context, resource *heal
 
 	_, err := c.get(ctx, healthcheckssdk.GetHttpMonitorRequest{MonitorId: &currentID})
 	if err != nil && errorutil.ClassifyDeleteError(err).IsAuthShapedNotFound() {
-		return false, handleHttpMonitorDeleteError(resource, err)
+		return c.confirmAuthShapedAbsence(ctx, resource, currentID, err)
 	}
-	return c.delegate.Delete(ctx, resource)
+	deleted, err := c.delegate.Delete(ctx, resource)
+	if err != nil && errorutil.ClassifyDeleteError(err).IsAuthShapedNotFound() {
+		return c.confirmAuthShapedAbsence(ctx, resource, currentID, err)
+	}
+	return deleted, err
+}
+
+func (c httpMonitorDeleteGuardClient) confirmAuthShapedAbsence(
+	ctx context.Context,
+	resource *healthchecksv1beta1.HttpMonitor,
+	currentID string,
+	authShapedErr error,
+) (bool, error) {
+	servicemanager.RecordErrorOpcRequestID(&resource.Status.OsokStatus, authShapedErr)
+	if c.list == nil {
+		return false, handleHttpMonitorDeleteError(resource, authShapedErr)
+	}
+	response, err := c.list(ctx, healthcheckssdk.ListHttpMonitorsRequest{
+		CompartmentId: common.String(resource.Spec.CompartmentId),
+		DisplayName:   common.String(resource.Spec.DisplayName),
+	})
+	if err != nil {
+		return false, fmt.Errorf("confirm HttpMonitor deletion by list: %w", err)
+	}
+	for _, item := range response.Items {
+		if httpMonitorStringValue(item.Id) == currentID {
+			return false, handleHttpMonitorDeleteError(resource, authShapedErr)
+		}
+	}
+	markHttpMonitorDeletedAfterAbsence(resource)
+	return true, nil
+}
+
+func markHttpMonitorDeletedAfterAbsence(resource *healthchecksv1beta1.HttpMonitor) {
+	now := metav1.Now()
+	status := &resource.Status.OsokStatus
+	status.DeletedAt = &now
+	status.UpdatedAt = &now
+	status.Message = "OCI resource deletion confirmed by scoped list absence"
+	status.Reason = string(shared.Terminating)
+	servicemanager.ClearAsyncOperation(status)
+	*status = util.UpdateOSOKStatusCondition(*status, shared.Terminating, corev1.ConditionTrue, "", status.Message, loggerutil.OSOKLogger{})
 }
 
 func httpMonitorTrackedID(resource *healthchecksv1beta1.HttpMonitor) string {

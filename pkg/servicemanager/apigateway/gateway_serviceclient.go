@@ -19,6 +19,8 @@ import (
 	"github.com/oracle/oci-service-operator/pkg/util"
 )
 
+var gatewayRetryInterval = time.Minute
+
 // GatewayClientInterface is the subset of apigateway.GatewayClient methods used by GatewayServiceManager.
 type GatewayClientInterface interface {
 	CreateGateway(ctx context.Context, request apigatewaysdk.CreateGatewayRequest) (apigatewaysdk.CreateGatewayResponse, error)
@@ -284,7 +286,7 @@ func (c *GatewayServiceManager) getGatewayRetryPolicy(attempts uint) common.Retr
 		return true
 	}
 	nextDuration := func(response common.OCIOperationResponse) time.Duration {
-		return time.Duration(1) * time.Minute
+		return gatewayRetryInterval
 	}
 	return common.NewRetryPolicy(attempts, shouldRetry, nextDuration)
 }

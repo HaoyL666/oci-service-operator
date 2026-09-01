@@ -221,6 +221,11 @@ func sensitiveJSONKey(key string) bool {
 		}
 	}
 	value := normalized.String()
+	// This OKE field names a public configuration object, not a credential.
+	// Preserve its shape and recursively sanitize any sensitive child fields.
+	if value == "openidconnecttokenauthenticationconfig" || value == "imagepullsecrets" {
+		return false
+	}
 	for _, marker := range []string{"authorization", "createdby", "password", "passphrase", "privatekey", "token", "secret", "fingerprint"} {
 		if strings.Contains(value, marker) {
 			return true

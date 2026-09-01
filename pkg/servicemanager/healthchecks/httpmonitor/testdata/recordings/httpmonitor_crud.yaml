@@ -1,0 +1,299 @@
+version: 1
+metadata:
+    service: healthchecks
+    resource: HttpMonitor
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-common-http-monitor-v1","freeformTags":{"osok-replay":"create"},"intervalInSeconds":60,"method":"GET","path":"/","port":443,"protocol":"HTTPS","targets":["example.com"],"timeoutInSeconds":10}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"76F3E217BF0015C5ABA364ADFBBAF2A02CF68367CE9B46ECAF43E440BE2D3DF8--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1","freeformTags":{"osok-replay":"create"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":60,"isEnabled":true,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"76F3E217BF0015C5ABA364ADFBBAF2A02CF68367CE9B46ECAF43E440BE2D3DF8--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1","freeformTags":{"osok-replay":"create"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":60,"isEnabled":true,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"76F3E217BF0015C5ABA364ADFBBAF2A02CF68367CE9B46ECAF43E440BE2D3DF8--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1","freeformTags":{"osok-replay":"create"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":60,"isEnabled":true,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: PUT
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"isEnabled":false}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"F7329CDE7494E237E165B7CC32E8CF2C85EF8A758919609B976CDB42AA120B19"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1","freeformTags":{"osok-replay":"create"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":60,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"F7329CDE7494E237E165B7CC32E8CF2C85EF8A758919609B976CDB42AA120B19--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1","freeformTags":{"osok-replay":"create"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":60,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"F7329CDE7494E237E165B7CC32E8CF2C85EF8A758919609B976CDB42AA120B19--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1","freeformTags":{"osok-replay":"create"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":60,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"F7329CDE7494E237E165B7CC32E8CF2C85EF8A758919609B976CDB42AA120B19--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1","freeformTags":{"osok-replay":"create"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":60,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: PUT
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"displayName":"osok-replay-common-http-monitor-v1-updated","freeformTags":{"osok-replay":"update"},"intervalInSeconds":30,"path":"/health"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"94644813F238DE681B60A1339E8F2BE52E23639A46EFF5BE02F2C37C91C77CC9"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1-updated","freeformTags":{"osok-replay":"update"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":30,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/health","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"94644813F238DE681B60A1339E8F2BE52E23639A46EFF5BE02F2C37C91C77CC9--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1-updated","freeformTags":{"osok-replay":"update"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":30,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/health","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"94644813F238DE681B60A1339E8F2BE52E23639A46EFF5BE02F2C37C91C77CC9--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1-updated","freeformTags":{"osok-replay":"update"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":30,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/health","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"94644813F238DE681B60A1339E8F2BE52E23639A46EFF5BE02F2C37C91C77CC9--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1-updated","freeformTags":{"osok-replay":"update"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":30,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/health","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"94644813F238DE681B60A1339E8F2BE52E23639A46EFF5BE02F2C37C91C77CC9--gzip"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:43:32.472Z"}},"displayName":"osok-replay-common-http-monitor-v1-updated","freeformTags":{"osok-replay":"update"},"hash":null,"headers":{},"homeRegion":"us-ashburn-1","id":"<ocid:2>","intervalInSeconds":30,"isEnabled":false,"lastSplatToken":"<redacted>","lifecycleState":"ACTIVE","method":"GET","network":"ip4","path":"/health","port":443,"protocol":"HTTPS","resultsUrl":"20180501/httpProbeResults/<ocid:2>","systemTags":{},"targets":["example.com"],"timeCreated":"2026-09-01T05:43:32.556602Z","timeoutInSeconds":10,"vantagePointNames":["azr-ord","goo-chs","aws-fra"]}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: healthchecks.us-ashburn-1.oci.oraclecloud.com
+        path: /20180501/httpMonitors
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-common-http-monitor-v1-updated
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json

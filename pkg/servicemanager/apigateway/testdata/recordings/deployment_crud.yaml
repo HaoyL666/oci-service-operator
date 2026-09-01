@@ -1,0 +1,544 @@
+version: 1
+metadata:
+    service: apigateway
+    resource: ApiGatewayDeployment
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-deployment-parent-v1&limit=1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[]}'
+        encoding: json
+    - request:
+        method: POST
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","freeformTags":{"osok-replay":"deployment-parent"},"subnetId":"<binding:subnet>"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"8ab956bd24e333f8c3ed983d5773f4eaef246c017535298c0bdfaddcf25d825d--gzip"'
+            location:
+                - https://apigateway.us-ashburn-1.oci.oraclecloud.com/20190501/gateways/<ocid:2>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:3>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddresses":[],"ipMode":"IPV4","lifecycleState":"CREATING","locks":[],"responseCacheDetails":{"type":"NONE"},"securityAttributes":{},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T05:58:38.670Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bf15e73ee87c00d20407edc533736345d6a9dc2d0c2d91c9e52528985fe45c5c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddresses":[],"ipMode":"IPV4","lifecycleState":"CREATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T05:58:38.670Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bf15e73ee87c00d20407edc533736345d6a9dc2d0c2d91c9e52528985fe45c5c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddresses":[],"ipMode":"IPV4","lifecycleState":"CREATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T05:58:38.670Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bf15e73ee87c00d20407edc533736345d6a9dc2d0c2d91c9e52528985fe45c5c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddresses":[],"ipMode":"IPV4","lifecycleState":"CREATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T05:58:38.670Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e715d44a55ebcaf816e420d7f785182ca1006afff5863c0383b288e5f4f94b1f--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddress":"150.136.190.0","ipAddresses":[{"ipAddress":"150.136.190.0"}],"ipMode":"IPV4","lifecycleState":"ACTIVE","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T06:00:40.042Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-common-api-deployment-v1&gatewayId=%3Cocid%3A2%3E&limit=1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[]}'
+        encoding: json
+    - request:
+        method: POST
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-common-api-deployment-v1","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"hello","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]}}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"f342cea462b34c507be97df72806bebf63544cc2bad6f07a6903f6d2dba062c1--gzip"'
+            location:
+                - https://apigateway.us-ashburn-1.oci.oraclecloud.com/20190501/deployments/<ocid:5>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"CREATING","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"hello","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:01:40.411Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 76c584cf670f3881a18e8cdc61f4d7d3277fb47b73352402643193255793deb4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"CREATING","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"hello","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:01:40.411Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 0889c888c78248c208397078c4ce60bf079b1d34ac175dd10f7a340b51c8ea8d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"ACTIVE","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"hello","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:02:38.196Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 0889c888c78248c208397078c4ce60bf079b1d34ac175dd10f7a340b51c8ea8d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"ACTIVE","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"hello","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:02:38.196Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 0889c888c78248c208397078c4ce60bf079b1d34ac175dd10f7a340b51c8ea8d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"ACTIVE","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"hello","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:02:38.196Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+        body: '{"displayName":"osok-replay-common-api-deployment-v1-updated","freeformTags":{"osok-replay":"update"},"specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:6>
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - f06d022525240ba510f4af109837f7191c03168a65c1458f04f8d293877c72ec--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1-updated","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"UPDATING","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:02:41.733Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - f06d022525240ba510f4af109837f7191c03168a65c1458f04f8d293877c72ec--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1-updated","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"UPDATING","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:02:41.733Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - f06d022525240ba510f4af109837f7191c03168a65c1458f04f8d293877c72ec--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1-updated","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"create"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"UPDATING","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:02:41.733Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 79fd788f4021d137713835c702c266f713b5330888546e736e8a9fcf9dc0ecd8--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1-updated","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"update"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"ACTIVE","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:03:52.986Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 79fd788f4021d137713835c702c266f713b5330888546e736e8a9fcf9dc0ecd8--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1-updated","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"update"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"ACTIVE","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:03:52.986Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:7>
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4d71dcdd84e8f398870b5ed8e93408e033350910d4d1542e63f26736a552f2a2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1-updated","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"update"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"DELETING","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:04:13.745Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4d71dcdd84e8f398870b5ed8e93408e033350910d4d1542e63f26736a552f2a2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1-updated","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"update"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"DELETING","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:04:13.745Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/deployments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6940c6b4bd97a170f58075a0a6b2a63447d99996e1aa3c6595b52728f660d3f2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:01:40.342Z"}},"displayName":"osok-replay-common-api-deployment-v1-updated","endpoint":"https://cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com/osok-replay","freeformTags":{"osok-replay":"update"},"gatewayId":"<ocid:2>","id":"<ocid:5>","lifecycleState":"DELETED","locks":[],"pathPrefix":"/osok-replay","specification":{"routes":[{"backend":{"body":"updated","status":200,"type":"STOCK_RESPONSE_BACKEND"},"methods":["GET"],"path":"/hello"}]},"systemTags":{},"timeCreated":"2026-09-01T06:01:40.411Z","timeUpdated":"2026-09-01T06:05:07.667Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6940c6b4bd97a170f58075a0a6b2a63447d99996e1aa3c6595b52728f660d3f2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddress":"150.136.190.0","ipAddresses":[{"ipAddress":"150.136.190.0"}],"ipMode":"IPV4","lifecycleState":"ACTIVE","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T06:05:07.698Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:8>
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5e09516a17f4083fdb8b965bcf0ddd2b56b6a14f09e97b0a354d71057f267999--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddress":"150.136.190.0","ipAddresses":[{"ipAddress":"150.136.190.0"}],"ipMode":"IPV4","lifecycleState":"DELETING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T06:05:15.273Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5e09516a17f4083fdb8b965bcf0ddd2b56b6a14f09e97b0a354d71057f267999--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddress":"150.136.190.0","ipAddresses":[{"ipAddress":"150.136.190.0"}],"ipMode":"IPV4","lifecycleState":"DELETING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T06:05:15.273Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5e09516a17f4083fdb8b965bcf0ddd2b56b6a14f09e97b0a354d71057f267999--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddress":"150.136.190.0","ipAddresses":[{"ipAddress":"150.136.190.0"}],"ipMode":"IPV4","lifecycleState":"DELETING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T06:05:15.273Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5e09516a17f4083fdb8b965bcf0ddd2b56b6a14f09e97b0a354d71057f267999--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddress":"150.136.190.0","ipAddresses":[{"ipAddress":"150.136.190.0"}],"ipMode":"IPV4","lifecycleState":"DELETING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T06:05:15.273Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 01740f92319272b97ca2794b51a955127405f9bf36d355a5928dce295795322f--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:58:38.321Z"}},"displayName":"osok-replay-deployment-parent-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"deployment-parent"},"hostname":"cf2jxo6ko2azk3rck2pwm3xdgq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipAddress":"150.136.190.0","ipAddresses":[{"ipAddress":"150.136.190.0"}],"ipMode":"IPV4","lifecycleState":"DELETED","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:58:38.670Z","timeUpdated":"2026-09-01T06:07:16.472Z"}'
+        encoding: json

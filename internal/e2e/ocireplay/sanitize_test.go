@@ -81,3 +81,52 @@ func TestSanitizerRedactsSensitiveJSONKeysAcrossNamingStyles(t *testing.T) {
 		t.Fatalf("sanitized body lost ordinary value: %s", body)
 	}
 }
+
+func TestSanitizerPreservesOIDCConfigurationShapeAndRedactsSensitiveChildren(t *testing.T) {
+	t.Parallel()
+
+	sanitizer := newSanitizer(nil)
+	body, encoding, err := sanitizer.body([]byte(`{
+		"openIdConnectTokenAuthenticationConfig": {
+			"isOpenIdConnectAuthEnabled": false,
+			"refreshToken": "do-not-store"
+		}
+	}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if encoding != "json" {
+		t.Fatalf("encoding = %q, want json", encoding)
+	}
+	if !strings.Contains(body, `"openIdConnectTokenAuthenticationConfig":{"isOpenIdConnectAuthEnabled":false,"refreshToken":"<redacted>"}`) {
+		t.Fatalf("sanitized body lost OIDC configuration shape: %s", body)
+	}
+	if strings.Contains(body, "do-not-store") {
+		t.Fatalf("sanitized body retained sensitive OIDC child: %s", body)
+	}
+}
+
+func TestSanitizerPreservesImagePullSecretCollectionAndRedactsCredentials(t *testing.T) {
+	t.Parallel()
+
+	sanitizer := newSanitizer(nil)
+	body, encoding, err := sanitizer.body([]byte(`{
+		"imagePullSecrets": [{
+			"registryEndpoint": "registry.example.test",
+			"password": "do-not-store",
+			"secretId": "ocid1.vaultsecret.oc1..sensitive"
+		}]
+	}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if encoding != "json" {
+		t.Fatalf("encoding = %q, want json", encoding)
+	}
+	if !strings.Contains(body, `"imagePullSecrets":[{"password":"<redacted>","registryEndpoint":"registry.example.test","secretId":"<redacted>"}]`) {
+		t.Fatalf("sanitized body lost imagePullSecrets shape: %s", body)
+	}
+	if strings.Contains(body, "do-not-store") || strings.Contains(body, "ocid1.vaultsecret") {
+		t.Fatalf("sanitized body retained image-pull credential: %s", body)
+	}
+}

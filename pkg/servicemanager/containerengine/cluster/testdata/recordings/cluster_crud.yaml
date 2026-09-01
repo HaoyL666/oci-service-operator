@@ -1,0 +1,1185 @@
+version: 1
+metadata:
+    service: containerengine
+    resource: Cluster
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","endpointConfig":{"isPublicIpEnabled":false,"subnetId":"<ocid:2>"},"freeformTags":{"osok-replay":"create"},"kubernetesVersion":"v1.36.1","name":"osok-replay-oke-cluster-v1","options":{"serviceLbSubnetIds":["<ocid:3>"]},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters
+        query: compartmentId=%3Cocid%3A1%3E&name=osok-replay-oke-cluster-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '[{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T03:45:38.173Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.3:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"create"},"id":"<ocid:6>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETED","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:8>","timeCreated":"2026-09-01T03:45:38Z","timeCredentialExpiration":"2031-09-01T03:46:19Z","timeDeleted":"2026-09-01T03:55:18Z","timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"},{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":null,"publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:01:57Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":null,"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}]'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d37a2f8c34e4e4091d2f99bb1061522095268bc549185337cfa9ddf2d784f439--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":null,"publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:01:57Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3367eca06531c872b4536d193e455cc0fe7c923b10999b5b814f8a5b91f2d90d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:01:57Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 21c33fd3c48e1edb433d923fbf51d32e2ca7dc321053bc0c1762a04ee4375b89--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"CREATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8567e346ef679da60a79e66839a035a10256f40f979343f47bb56fef111f6bb0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"ACTIVE","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8567e346ef679da60a79e66839a035a10256f40f979343f47bb56fef111f6bb0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"ACTIVE","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":null,"updatedByUserId":null,"updatedByWorkRequestId":null},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        headers:
+            content-type:
+                - application/json
+        body: '{"freeformTags":{"osok-replay":"update"},"kubernetesVersion":"v1.36.1","name":"osok-replay-oke-cluster-v1","type":"BASIC_CLUSTER"}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:10>
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e950b659012d4361afdecfd3c3ea3f9decf097eb85144360bea881ba94468773--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"create"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"UPDATING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3803a6b00d94b1974d0d5742bdc4910dc84da89dd872e970a5833550f43c9ad5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"ACTIVE","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3803a6b00d94b1974d0d5742bdc4910dc84da89dd872e970a5833550f43c9ad5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":"cedd23too6q.sub2020ddad9.cluster3.oraclevcn.com:6443"},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":null,"lifecycleState":"ACTIVE","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":null,"deletedByWorkRequestId":null,"timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":null,"timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:11>
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e3ade57ad2681d1ad6689fa5957dc8a5204fc40447db71ccd6544fc6bc2cf2d9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:11>","timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":"2026-09-01T04:25:50Z","timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e3ade57ad2681d1ad6689fa5957dc8a5204fc40447db71ccd6544fc6bc2cf2d9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:11>","timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":"2026-09-01T04:25:50Z","timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e3ade57ad2681d1ad6689fa5957dc8a5204fc40447db71ccd6544fc6bc2cf2d9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:11>","timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":"2026-09-01T04:25:50Z","timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e3ade57ad2681d1ad6689fa5957dc8a5204fc40447db71ccd6544fc6bc2cf2d9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:11>","timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":"2026-09-01T04:25:50Z","timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e3ade57ad2681d1ad6689fa5957dc8a5204fc40447db71ccd6544fc6bc2cf2d9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:11>","timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":"2026-09-01T04:25:50Z","timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e3ade57ad2681d1ad6689fa5957dc8a5204fc40447db71ccd6544fc6bc2cf2d9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:11>","timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":"2026-09-01T04:25:50Z","timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e3ade57ad2681d1ad6689fa5957dc8a5204fc40447db71ccd6544fc6bc2cf2d9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETING","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:11>","timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":"2026-09-01T04:25:50Z","timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: containerengine.us-ashburn-1.oci.oraclecloud.com
+        path: /20180222/clusters/<ocid:9>
+        query: shouldIncludeOidcConfigFile=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6244cafa1577b37390bb5e4c474201b7be6384832968f195fa3680c4f2986b20--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availableKubernetesUpgrades":[],"clusterPodNetworkOptions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:01:56.699Z"}},"endpointConfig":{"isPublicIpEnabled":false,"nsgIds":[],"securityAttributes":null,"subnetId":"<ocid:2>"},"endpoints":{"ipv6Endpoint":null,"kubernetes":null,"privateEndpoint":"10.0.0.12:6443","publicEndpoint":null,"vcnHostnameEndpoint":null},"freeformTags":{"osok-replay":"update"},"id":"<ocid:9>","imagePolicyConfig":{"isPolicyEnabled":false,"keyDetails":[]},"kmsKeyId":null,"kubernetesVersion":"v1.36.1","lifecycleDetails":"","lifecycleState":"DELETED","metadata":{"createdByUserId":"<redacted>","createdByWorkRequestId":"<redacted>","deletedByUserId":"<ocid:7>","deletedByWorkRequestId":"<ocid:11>","timeCreated":"2026-09-01T04:01:57Z","timeCredentialExpiration":"2031-09-01T04:03:07Z","timeDeleted":"2026-09-01T04:25:50Z","timeUpdated":"2026-09-01T04:19:44Z","updatedByUserId":"<ocid:7>","updatedByWorkRequestId":"<ocid:10>"},"name":"osok-replay-oke-cluster-v1","openIdConnectDiscoveryEndpoint":null,"openIdConnectDiscoveryKey":null,"options":{"addOns":{"isKubernetesDashboardEnabled":false,"isTillerEnabled":false},"admissionControllerOptions":{"isPodSecurityPolicyEnabled":false},"ipFamilies":["IPv4"],"kubernetesNetworkConfig":{"podsCidr":"10.244.0.0/16","servicesCidr":"10.96.0.0/16"},"openIdConnectDiscovery":null,"openIdConnectTokenAuthenticationConfig":null,"persistentVolumeConfig":{"definedTags":null,"freeformTags":null},"serviceLbConfig":{"backendNsgIds":null,"definedTags":null,"freeformTags":null},"serviceLbSubnetIds":["<ocid:3>"]},"systemTags":{},"type":"BASIC_CLUSTER","vcnId":"<ocid:4>"}'
+        encoding: json

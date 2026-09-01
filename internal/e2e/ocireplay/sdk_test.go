@@ -137,6 +137,21 @@ func TestOpenSDKRecordAttachesAndPublishesSanitizedCassette(t *testing.T) {
 	if _, err := io.ReadAll(response.Body); err != nil {
 		t.Fatal(err)
 	}
+	secondaryClient := common.DefaultBaseClientWithSigner(unsignedReplaySigner{})
+	if err := session.Attach(&secondaryClient); err != nil {
+		t.Fatal(err)
+	}
+	secondaryRequest, err := http.NewRequest(http.MethodGet, "https://related.example.test/resources/ocid1.related.oc1..sensitive", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondaryResponse, err := secondaryClient.HTTPClient.Do(secondaryRequest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := io.ReadAll(secondaryResponse.Body); err != nil {
+		t.Fatal(err)
+	}
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
@@ -146,6 +161,9 @@ func TestOpenSDKRecordAttachesAndPublishesSanitizedCassette(t *testing.T) {
 	}
 	if strings.Contains(string(content), "ocid1.example") || !strings.Contains(string(content), "provenance: recorded") {
 		t.Fatalf("recording was not sanitized or metadata was lost:\n%s", content)
+	}
+	if !strings.Contains(string(content), "related.example.test") {
+		t.Fatalf("secondary base client interaction was not recorded:\n%s", content)
 	}
 }
 

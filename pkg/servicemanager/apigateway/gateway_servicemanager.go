@@ -102,6 +102,22 @@ func (c *GatewayServiceManager) Delete(ctx context.Context, obj runtime.Object) 
 		return true, nil
 	}
 
+	gwInstance, err := c.GetGateway(ctx, targetID, nil)
+	if err != nil {
+		if isGatewayNotFound(err) {
+			servicemanager.RecordErrorOpcRequestID(&gw.Status.OsokStatus, err)
+			return true, nil
+		}
+		servicemanager.RecordErrorOpcRequestID(&gw.Status.OsokStatus, err)
+		return false, err
+	}
+	if gwInstance.LifecycleState == apigatewaysdk.GatewayLifecycleStateDeleted {
+		return true, nil
+	}
+	if gwInstance.LifecycleState == apigatewaysdk.GatewayLifecycleStateDeleting {
+		return false, nil
+	}
+
 	c.Log.InfoLog(fmt.Sprintf("Deleting ApiGateway %s", targetID))
 	if err := c.DeleteGateway(ctx, gw, targetID); err != nil {
 		if isGatewayNotFound(err) {
@@ -111,7 +127,7 @@ func (c *GatewayServiceManager) Delete(ctx context.Context, obj runtime.Object) 
 		return false, err
 	}
 
-	gwInstance, err := c.GetGateway(ctx, targetID, nil)
+	gwInstance, err = c.GetGateway(ctx, targetID, nil)
 	if err != nil {
 		if isGatewayNotFound(err) {
 			servicemanager.RecordErrorOpcRequestID(&gw.Status.OsokStatus, err)
@@ -157,6 +173,16 @@ func (c *GatewayServiceManager) resolveGatewayInstance(ctx context.Context,
 	gw *apigatewayv1beta1.ApiGateway) (*apigatewaysdk.Gateway, error) {
 	if strings.TrimSpace(string(gw.Spec.ApiGatewayId)) != "" {
 		return c.bindGateway(ctx, gw)
+	}
+	if trackedID := strings.TrimSpace(string(gw.Status.OsokStatus.Ocid)); trackedID != "" {
+		instance, err := c.updateResolvedGateway(ctx, gw, shared.OCID(trackedID))
+		if err == nil {
+			return instance, nil
+		}
+		if !isGatewayNotFound(err) {
+			return nil, err
+		}
+		gw.Status.OsokStatus.Ocid = ""
 	}
 	return c.lookupOrCreateGateway(ctx, gw)
 }

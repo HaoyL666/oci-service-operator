@@ -91,6 +91,22 @@ func (c *DeploymentServiceManager) Delete(ctx context.Context, obj runtime.Objec
 		return true, nil
 	}
 
+	depInstance, err := c.GetDeployment(ctx, targetID, nil)
+	if err != nil {
+		if isDeploymentNotFound(err) {
+			servicemanager.RecordErrorOpcRequestID(&dep.Status.OsokStatus, err)
+			return true, nil
+		}
+		servicemanager.RecordErrorOpcRequestID(&dep.Status.OsokStatus, err)
+		return false, err
+	}
+	if depInstance.LifecycleState == apigatewaysdk.DeploymentLifecycleStateDeleted {
+		return true, nil
+	}
+	if depInstance.LifecycleState == apigatewaysdk.DeploymentLifecycleStateDeleting {
+		return false, nil
+	}
+
 	c.Log.InfoLog(fmt.Sprintf("Deleting ApiGatewayDeployment %s", targetID))
 	if err := c.DeleteDeployment(ctx, dep, targetID); err != nil {
 		if isDeploymentNotFound(err) {
@@ -100,7 +116,7 @@ func (c *DeploymentServiceManager) Delete(ctx context.Context, obj runtime.Objec
 		return false, err
 	}
 
-	depInstance, err := c.GetDeployment(ctx, targetID, nil)
+	depInstance, err = c.GetDeployment(ctx, targetID, nil)
 	if err != nil {
 		if isDeploymentNotFound(err) {
 			servicemanager.RecordErrorOpcRequestID(&dep.Status.OsokStatus, err)
@@ -146,6 +162,16 @@ func (c *DeploymentServiceManager) resolveDeploymentInstance(ctx context.Context
 	dep *apigatewayv1beta1.ApiGatewayDeployment) (*apigatewaysdk.Deployment, error) {
 	if strings.TrimSpace(string(dep.Spec.DeploymentId)) != "" {
 		return c.bindDeployment(ctx, dep)
+	}
+	if trackedID := strings.TrimSpace(string(dep.Status.OsokStatus.Ocid)); trackedID != "" {
+		instance, err := c.updateResolvedDeployment(ctx, dep, shared.OCID(trackedID))
+		if err == nil {
+			return instance, nil
+		}
+		if !isDeploymentNotFound(err) {
+			return nil, err
+		}
+		dep.Status.OsokStatus.Ocid = ""
 	}
 	return c.lookupOrCreateDeployment(ctx, dep)
 }

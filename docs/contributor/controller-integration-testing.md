@@ -173,6 +173,33 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   confirmation.
 - hosted DevOps Repository with work-request create/update/delete beneath a
   temporary DevOps Project.
+- BASIC OKE Cluster control plane with private endpoint, tag update, and
+  confirmed deletion.
+- one-node OKE NodePool with an OCI VCN-native pod network and legacy IMDS
+  endpoints explicitly disabled, including tag update and confirmed deletion.
+- Core Dynamic Routing Gateway with display-name/tag update and confirmed
+  deletion.
+- Container Instance with a public BusyBox workload, private VNIC, related
+  container/VNIC reads, mutable metadata update, and confirmed deletion.
+- public API Gateway with endpoint-secret projection, tracked-identity rename,
+  tag update, and idempotent confirmed deletion.
+- File Storage MountTarget with explicit lifecycle semantics, private-subnet
+  placement, reviewed metadata update, and confirmed deletion.
+- Data Science Project with description/name/tag update and confirmed deletion.
+- disabled HTTP Monitor with mutable probe metadata and scoped-list deletion
+  confirmation for eventually consistent auth-shaped 404 responses.
+- standard Bastion with work-request-backed create/update/delete and temporary
+  client CIDR/TTL changes.
+- Certificates Management CA Bundle with a public test certificate,
+  description/tag update, and confirmed deletion.
+- API Gateway Deployment with a stock-response route and an owned temporary
+  parent gateway.
+- File Storage Export with owned temporary FileSystem and MountTarget
+  prerequisites and a read-write to read-only option update.
+- Resource Manager Stack backed by a minimal ZIP-upload Terraform
+  configuration; no Terraform job is run.
+- disabled Events Rule with an owned temporary ONS Topic action target and
+  confirmed cleanup of both resources.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its

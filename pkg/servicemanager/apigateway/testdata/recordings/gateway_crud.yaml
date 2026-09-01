@@ -1,0 +1,361 @@
+version: 1
+metadata:
+    service: apigateway
+    resource: ApiGateway
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-common-api-gateway-v1&limit=1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-next-page:
+                - AAAAAAAAAAJleUpyYVdRaU9pSTBPVFkxSWl3aVpXNWpJam9pUVRJMU5rZERUU0lzSW1Gc1p5STZJbVJwY2lKOS4uSzZMYTNCaXNLb1VVQmlfQy4wb00zdHdQU3I5VkkzbjJqcmpxYTRkYk53NXoycmR1NVpPQTVpQ3Q3SFBkZzlvZnBjQ2t6UTZnVlh2aVZvQXNleU05Q05TZ2FYX3VSWVBTLUVuTnZTRVFPSEw5cWplc1JTTGxhVVo4YWZqTVhhaTNSNE9CMkJvM09CNjlnMFVJa0NxclRrNFlDVGF0VE0wV0dtUzVJTXJhZlI3d1ZJV21tWkJPUy01ZERRbktXU29NQ1dLMnc3Nlp6blFueDNfVWJzSUtHQ09hb3ZMNDNTWkdKamREU3l5UE80LUpzS2ZtYjl4M0NaSVhHSTN6dG9rT1l6RVJrUHd6aVZ5R3E3YlF0RGdqdEZTVkFNQ1pybmFtNWladU1sel9yU3lscDFlWjNOUGtFMTBSVV9kNlhlNVVSd2N5LWtMemdxa25MMUtXQ1lVQ2lWbFVteUZZM0x1QnhXNE9zT2UyMEE5MldnTjlkdjdidENVMWhYTV9aNGx5X3V5TmQ2bjVWRC1ZdWtkM2pBRUx3bmNwREJad21MWmVBcXlrTW1pM3R0bEVIb0xmU0tlTnh0dzNMbVlqUEY1UGhxYVhjaS1pWXI3WGNGWjhEYVM3UURrY1YzTjBScGZjZDU1dHRCcFcxanNXcGdYc1ZiMEtYdkR4YkdUME9wdlpUNDZDenctZUM5bGZTVEVZMkFqbk1xaXdZN0cydUlpMXppams2amNJV2k5UERDSnU4N29HUXY0SHp3Q1dLblJRQnlGd3JLcF9QdWNSbzRUVjBHNzVxQnF0OFRyaVpTMHM1SmhfUlhIUUtPaUw1RThrSC1oRFljUHhKSzNaWFdEMkU1UXhpeWt0XzFMaU1sRjN6Y3hhdVZ3ZTZLNFBuTDdQaU5jU2dyd2d1MWFlU3JaYnZRdGxCRFNiRWhReG16OEVoVHhCbEktRWhWY0xyT2F6SFYwWHJ3aEE4dEw3R2lscVYyVFdyNUd4cUdIQmgzVk9JUUplLW51UW1NcDdkTjd4bmN6MTNQbU43cDl5TjNCQnhzb3Z5Z09tTkYwSnJWdTA4SGdBbFhaQmhqVks1ZnhBMlJQa1lLdFJwTFkwc1h6clZXaFF0TWpBb2FEYXcuZ2V6RnAwUXc0dHBhY2VGaENOTGxEQQ==
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T04:59:30.172Z"}},"displayName":"osok-replay-common-api-gateway-v1","endpointType":"PUBLIC","freeformTags":{"osok-replay":"create"},"hostname":"fh6jtqdygt35vcv3oin6qb3i5q.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:2>","ipMode":"IPV4","lifecycleState":"DELETED","locks":[],"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T04:59:30.449Z","timeUpdated":"2026-09-01T05:05:35.855Z"}]}'
+        encoding: json
+    - request:
+        method: POST
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-common-api-gateway-v1","endpointType":"PUBLIC","freeformTags":{"osok-replay":"create"},"subnetId":"<binding:subnet>"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"1b488eb6fd3d85e09cf28eb9e358d1b5c6cff0f7619b595381508ec9aa1e7af0--gzip"'
+            location:
+                - https://apigateway.us-ashburn-1.oci.oraclecloud.com/20190501/gateways/<ocid:5>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddresses":[],"ipMode":"IPV4","lifecycleState":"CREATING","locks":[],"responseCacheDetails":{"type":"NONE"},"securityAttributes":{},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:10:07.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 50cdb438e2133b4951df99f3a6a0003d41e10545cab5003fd8019251e15e2eb9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddresses":[],"ipMode":"IPV4","lifecycleState":"CREATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:10:07.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 50cdb438e2133b4951df99f3a6a0003d41e10545cab5003fd8019251e15e2eb9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddresses":[],"ipMode":"IPV4","lifecycleState":"CREATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:10:07.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 68422a3ef06160fa24f461bad78ced2a38531b31bf62b4415d4fea85d2964513--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"ACTIVE","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:11:47.158Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 68422a3ef06160fa24f461bad78ced2a38531b31bf62b4415d4fea85d2964513--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"ACTIVE","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:11:47.158Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 68422a3ef06160fa24f461bad78ced2a38531b31bf62b4415d4fea85d2964513--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"ACTIVE","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:11:47.158Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+        body: '{"displayName":"osok-replay-common-api-gateway-v1-updated","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:6>
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 36d61eaa212e3f7ee41f9879e21f829f54388924d9c5cb88d0c016f836ecc58c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"UPDATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:12:09.541Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 36d61eaa212e3f7ee41f9879e21f829f54388924d9c5cb88d0c016f836ecc58c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"UPDATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:12:09.541Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 36d61eaa212e3f7ee41f9879e21f829f54388924d9c5cb88d0c016f836ecc58c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"UPDATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:12:09.541Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 36d61eaa212e3f7ee41f9879e21f829f54388924d9c5cb88d0c016f836ecc58c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"create"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"UPDATING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:12:09.541Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fa1562714e9bfd3d1f4c3232ab6fdffa6dfe8ce97cb99f1db34a3f431d110cd9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"update"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"ACTIVE","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:13:57.604Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fa1562714e9bfd3d1f4c3232ab6fdffa6dfe8ce97cb99f1db34a3f431d110cd9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"update"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"ACTIVE","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:13:57.604Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:7>
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 89d0a63057dfa54de3c4a551540b17cae1f37bd88df87d52317d2849e93be9eb--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"update"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"DELETING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:14:12.047Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 89d0a63057dfa54de3c4a551540b17cae1f37bd88df87d52317d2849e93be9eb--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"update"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"DELETING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:14:12.047Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 89d0a63057dfa54de3c4a551540b17cae1f37bd88df87d52317d2849e93be9eb--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"update"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"DELETING","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:14:12.047Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apigateway.us-ashburn-1.oci.oraclecloud.com
+        path: /20190501/gateways/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7c6f3bc5c6f033e158bd69db67fd5172f145557335934bf0cc1e887d01b3aac0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T05:10:07.389Z"}},"displayName":"osok-replay-common-api-gateway-v1-updated","endpointType":"PUBLIC","environment":"PRODUCTION","freeformTags":{"osok-replay":"update"},"hostname":"nabsoypkd4cj3jvdjhhgcyeopq.apigateway.us-ashburn-1.oci.customer-oci.com","id":"<ocid:5>","ipAddress":"157.151.251.137","ipAddresses":[{"ipAddress":"157.151.251.137"}],"ipMode":"IPV4","lifecycleState":"DELETED","locks":[],"responseCacheDetails":{"type":"NONE"},"subnetId":"<binding:subnet>","systemTags":{},"timeCreated":"2026-09-01T05:10:07.658Z","timeUpdated":"2026-09-01T05:15:35.652Z"}'
+        encoding: json

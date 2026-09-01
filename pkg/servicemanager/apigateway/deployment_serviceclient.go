@@ -19,6 +19,8 @@ import (
 	"github.com/oracle/oci-service-operator/pkg/util"
 )
 
+var deploymentRetryInterval = time.Minute
+
 // DeploymentClientInterface is the subset of apigateway.DeploymentClient methods used by DeploymentServiceManager.
 type DeploymentClientInterface interface {
 	CreateDeployment(ctx context.Context, request apigatewaysdk.CreateDeploymentRequest) (apigatewaysdk.CreateDeploymentResponse, error)
@@ -289,7 +291,7 @@ func (c *DeploymentServiceManager) getDeploymentRetryPolicy(attempts uint) commo
 		return true
 	}
 	nextDuration := func(response common.OCIOperationResponse) time.Duration {
-		return time.Duration(1) * time.Minute
+		return deploymentRetryInterval
 	}
 	return common.NewRetryPolicy(attempts, shouldRetry, nextDuration)
 }
