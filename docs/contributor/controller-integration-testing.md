@@ -132,6 +132,8 @@ external side effects or prerequisites:
   create/delete lifecycles.
 - OCI VMware Solution SDDCs allocate multiple billable bare-metal ESXi hosts
   and require a purpose-built subnet and VLAN topology.
+- OpenSearch clusters allocate several compute nodes plus block storage and
+  require VCN/subnet infrastructure.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
@@ -161,6 +163,10 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - private Network Load Balancer with succeeded-work-request deletion evidence.
 - Functions Application with subnet-backed create, configuration/tag update,
   and confirmed deletion.
+- Logging Log Group with mutable description/tag verification and confirmed
+  deletion.
+- private DNS Zone in a temporary VCN resolver view, including acknowledged
+  delete confirmation for the service's auth-shaped 404 response.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its

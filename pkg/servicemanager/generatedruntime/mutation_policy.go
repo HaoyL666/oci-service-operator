@@ -240,6 +240,7 @@ func unsupportedUpdateDriftPaths(specValues map[string]any, currentValues map[st
 	unsupported := make([]string, 0, len(diffPaths))
 	for _, path := range diffPaths {
 		switch {
+		case zeroValueNullEquivalentDrift(path, specValues, currentValues, semantics):
 		case pathCoveredByAny(path, semantics.Mutable):
 		case pathCoveredByAny(path, semantics.ForceNew):
 		default:
@@ -300,6 +301,50 @@ func comparableDiffPathsForKey(specValues map[string]any, currentValues map[stri
 		return []string{path}
 	}
 	return nil
+}
+
+func zeroValueNullEquivalentDrift(
+	path string,
+	specValues map[string]any,
+	currentValues map[string]any,
+	semantics MutationSemantics,
+) bool {
+	if !pathCoveredByAny(path, semantics.ZeroValueNullEquivalent) {
+		return false
+	}
+	specValue, specFound := lookupValueByPath(specValues, path)
+	currentValue, currentFound := lookupValueByPath(currentValues, path)
+	if !specFound || !currentFound {
+		return false
+	}
+	if _, currentMeaningful := pruneComparableValue(currentValue); currentMeaningful {
+		return false
+	}
+	return zeroOnlyComparableValue(specValue)
+}
+
+func zeroOnlyComparableValue(value any) bool {
+	switch concrete := value.(type) {
+	case nil:
+		return true
+	case string:
+		return strings.TrimSpace(concrete) == ""
+	case bool:
+		return !concrete
+	case float64:
+		return concrete == 0
+	case map[string]any:
+		for _, child := range concrete {
+			if !zeroOnlyComparableValue(child) {
+				return false
+			}
+		}
+		return true
+	case []any:
+		return len(concrete) == 0
+	default:
+		return false
+	}
 }
 
 func pathCoveredByAny(path string, semanticPaths []string) bool {

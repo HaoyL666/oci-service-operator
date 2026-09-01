@@ -205,10 +205,11 @@ type ListSemantics struct {
 }
 
 type MutationSemantics struct {
-	UpdateCandidate []string
-	Mutable         []string
-	ForceNew        []string
-	ConflictsWith   map[string][]string
+	UpdateCandidate         []string
+	Mutable                 []string
+	ForceNew                []string
+	ZeroValueNullEquivalent []string
+	ConflictsWith           map[string][]string
 }
 
 type AuxiliaryOperation struct {

@@ -454,9 +454,71 @@ func TestUnsupportedUpdateDriftPathsIgnoresMeaninglessNestedMaps(t *testing.T) {
 	t.Parallel()
 	spec := map[string]any{"displayName": "example", "preemptibleInstanceConfig": map[string]any{"preemptionAction": map[string]any{"jsonData": "", "type": ""}}}
 	current := map[string]any{"displayName": "example"}
-	paths := unsupportedUpdateDriftPaths(spec, current, MutationSemantics{Mutable: []string{"displayName"}})
+	paths := unsupportedUpdateDriftPaths(spec, current, MutationSemantics{
+		Mutable:                 []string{"displayName"},
+		ZeroValueNullEquivalent: []string{"securitySamlConfig"},
+	})
 	if len(paths) != 0 {
 		t.Fatalf("unsupportedUpdateDriftPaths() = %v, want no drift for meaningless nested maps", paths)
+	}
+}
+
+func TestUnsupportedUpdateDriftPathsTreatsZeroOnlyOptionalObjectAsNull(t *testing.T) {
+	t.Parallel()
+	spec := map[string]any{
+		"displayName": "example",
+		"securitySamlConfig": map[string]any{
+			"isEnabled":          false,
+			"idpMetadataContent": "",
+			"idpEntityId":        "",
+		},
+	}
+	current := map[string]any{
+		"displayName":        "example",
+		"securitySamlConfig": nil,
+	}
+	paths := unsupportedUpdateDriftPaths(spec, current, MutationSemantics{
+		Mutable:                 []string{"displayName"},
+		ZeroValueNullEquivalent: []string{"securitySamlConfig"},
+	})
+	if len(paths) != 0 {
+		t.Fatalf("unsupportedUpdateDriftPaths() = %v, want zero-only object and null to compare equal", paths)
+	}
+}
+
+func TestUnsupportedUpdateDriftPathsRequiresDeclaredNullEquivalence(t *testing.T) {
+	t.Parallel()
+	spec := map[string]any{
+		"securitySamlConfig": map[string]any{
+			"isEnabled":          false,
+			"idpMetadataContent": "",
+			"idpEntityId":        "",
+		},
+	}
+	current := map[string]any{"securitySamlConfig": nil}
+	paths := unsupportedUpdateDriftPaths(spec, current, MutationSemantics{})
+	if len(paths) != 1 || paths[0] != "securitySamlConfig" {
+		t.Fatalf("unsupportedUpdateDriftPaths() = %v, want undeclared null equivalence to remain drift", paths)
+	}
+}
+
+func TestUnsupportedUpdateDriftPathsPreservesNonzeroOptionalObjectIntent(t *testing.T) {
+	t.Parallel()
+	spec := map[string]any{
+		"displayName": "example",
+		"securitySamlConfig": map[string]any{
+			"isEnabled":          true,
+			"idpMetadataContent": "metadata",
+			"idpEntityId":        "provider",
+		},
+	}
+	current := map[string]any{
+		"displayName":        "example",
+		"securitySamlConfig": nil,
+	}
+	paths := unsupportedUpdateDriftPaths(spec, current, MutationSemantics{Mutable: []string{"displayName"}})
+	if len(paths) != 1 || paths[0] != "securitySamlConfig" {
+		t.Fatalf("unsupportedUpdateDriftPaths() = %v, want nonzero optional object drift", paths)
 	}
 }
 
