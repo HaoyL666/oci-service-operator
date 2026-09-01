@@ -165,8 +165,14 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   and confirmed deletion.
 - Logging Log Group with mutable description/tag verification and confirmed
   deletion.
+- custom Logging Log with enabled-state, retention, and tag updates beneath a
+  temporary Log Group.
 - private DNS Zone in a temporary VCN resolver view, including acknowledged
   delete confirmation for the service's auth-shaped 404 response.
+- private DNS View with display-name/tag update and acknowledged delete
+  confirmation.
+- hosted DevOps Repository with work-request create/update/delete beneath a
+  temporary DevOps Project.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
