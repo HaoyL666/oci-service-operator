@@ -128,6 +128,8 @@ external side effects or prerequisites:
 - Rover clusters represent orders for physical appliances.
 - Generative AI dedicated AI clusters consume scarce paid accelerator
   capacity.
+- MySQL DB Systems provision billable compute and block storage and have long
+  create/delete lifecycles.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
