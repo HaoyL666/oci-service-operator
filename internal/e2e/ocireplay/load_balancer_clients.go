@@ -40,8 +40,12 @@ func OpenLoadBalancerSDK(t *testing.T, mode Mode, path string, metadata Metadata
 
 // OpenNetworkLoadBalancerSDK opens the Network Load Balancer SDK against OCI
 // or a checked-in sanitized cassette.
-func OpenNetworkLoadBalancerSDK(t *testing.T, mode Mode, path string, metadata Metadata) (networkloadbalancersdk.NetworkLoadBalancerClient, func() error) {
+func OpenNetworkLoadBalancerSDK(t *testing.T, mode Mode, path string, metadata Metadata, bindingOptions ...map[string]string) (networkloadbalancersdk.NetworkLoadBalancerClient, func() error) {
 	t.Helper()
+	var bindings map[string]string
+	if len(bindingOptions) > 0 {
+		bindings = bindingOptions[0]
+	}
 	if mode == ModeRecord {
 		provider, err := RecordingConfigurationProvider()
 		if err != nil {
@@ -51,13 +55,13 @@ func OpenNetworkLoadBalancerSDK(t *testing.T, mode Mode, path string, metadata M
 		if err != nil {
 			t.Fatal(err)
 		}
-		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Bindings: bindings, Overwrite: RecordingOverwriteRequested()})
 		if err != nil {
 			t.Fatal(err)
 		}
 		return client, session.Close
 	}
-	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://network-load-balancer-api.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200501", Metadata: metadata})
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://network-load-balancer-api.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200501", Metadata: metadata, Bindings: bindings})
 	if err != nil {
 		t.Fatal(err)
 	}

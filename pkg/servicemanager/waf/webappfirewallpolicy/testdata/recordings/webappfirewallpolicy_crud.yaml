@@ -1,0 +1,404 @@
+version: 1
+metadata:
+    service: waf
+    resource: WebAppFirewallPolicy
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"actions":[],"compartmentId":"<ocid:1>","displayName":"osok-replay-waf-policy-v1","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8d719d74a2fcbe2f3fa96254b597425753c5cecd74c19e152cac4589a5bffca0--gzip
+            location:
+                - https://waf.us-ashburn-1.oraclecloud.com/20210930/webAppFirewallPolicies/<ocid:2>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:3>
+        body: '{"actions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T23:08:06.453Z"}},"displayName":"osok-replay-waf-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"CREATING","requestAccessControl":null,"requestProtection":null,"requestRateLimiting":null,"responseAccessControl":null,"responseProtection":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-01T23:08:06.555Z","timeUpdated":"2026-09-01T23:08:06.555Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:3>","operationType":"CREATE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:06.579Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:3>","operationType":"CREATE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:06.579Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:3>","operationType":"CREATE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:06.579Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:3>","operationType":"CREATE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:06.579Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:3>","operationType":"CREATE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:06.579Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:3>","operationType":"CREATE_WAF_POLICY","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-01T23:08:06.579Z","timeFinished":"2026-09-01T23:08:33.896Z","timeStarted":"2026-09-01T23:08:33.729Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 362688e35bc243002c0edc0b52d5a13055f727666ea16147eea5f51f2bc6b5e4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T23:08:06.453Z"}},"displayName":"osok-replay-waf-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"ACTIVE","requestAccessControl":null,"requestProtection":null,"requestRateLimiting":null,"responseAccessControl":null,"responseProtection":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-01T23:08:06.555Z","timeUpdated":"2026-09-01T23:08:33.878Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 362688e35bc243002c0edc0b52d5a13055f727666ea16147eea5f51f2bc6b5e4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T23:08:06.453Z"}},"displayName":"osok-replay-waf-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"ACTIVE","requestAccessControl":null,"requestProtection":null,"requestRateLimiting":null,"responseAccessControl":null,"responseProtection":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-01T23:08:06.555Z","timeUpdated":"2026-09-01T23:08:33.878Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"actions":[],"displayName":"osok-replay-waf-policy-v1-updated","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_WAF_POLICY","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-01T23:08:36.761Z","timeFinished":"2026-09-01T23:08:36.777Z","timeStarted":"2026-09-01T23:08:36.777Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - de6db963b07160adb2f8c350bcbdd632cc1d0ee269d4ea21ae18c68aaf9762a8--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T23:08:06.453Z"}},"displayName":"osok-replay-waf-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"ACTIVE","requestAccessControl":null,"requestProtection":null,"requestRateLimiting":null,"responseAccessControl":null,"responseProtection":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-01T23:08:06.555Z","timeUpdated":"2026-09-01T23:08:36.754Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - de6db963b07160adb2f8c350bcbdd632cc1d0ee269d4ea21ae18c68aaf9762a8--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T23:08:06.453Z"}},"displayName":"osok-replay-waf-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"ACTIVE","requestAccessControl":null,"requestProtection":null,"requestRateLimiting":null,"responseAccessControl":null,"responseProtection":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-01T23:08:06.555Z","timeUpdated":"2026-09-01T23:08:36.754Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - de6db963b07160adb2f8c350bcbdd632cc1d0ee269d4ea21ae18c68aaf9762a8--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T23:08:06.453Z"}},"displayName":"osok-replay-waf-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"ACTIVE","requestAccessControl":null,"requestProtection":null,"requestRateLimiting":null,"responseAccessControl":null,"responseProtection":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-01T23:08:06.555Z","timeUpdated":"2026-09-01T23:08:36.754Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:38.845Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:38.845Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:38.845Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:38.845Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:38.845Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_WAF_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"ACCEPTED","timeAccepted":"2026-09-01T23:08:38.845Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_WAF_POLICY","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"webAppFirewallPolicy","entityUri":"/webAppFirewallPolicies/<ocid:2>","identifier":"<ocid:2>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-01T23:08:38.845Z","timeFinished":"2026-09-01T23:09:12.318Z","timeStarted":"2026-09-01T23:09:12.013Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: waf.us-ashburn-1.oci.oraclecloud.com
+        path: /20210930/webAppFirewallPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7f527c8b29b1d863b32a4ad2187a320bcc95c2975b48e756fa079c6885021e19--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T23:08:06.453Z"}},"displayName":"osok-replay-waf-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"DELETED","requestAccessControl":null,"requestProtection":null,"requestRateLimiting":null,"responseAccessControl":null,"responseProtection":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-01T23:08:06.555Z","timeUpdated":"2026-09-01T23:09:12.284Z"}'
+        encoding: json

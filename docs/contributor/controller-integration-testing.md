@@ -134,6 +134,9 @@ external side effects or prerequisites:
   and require a purpose-built subnet and VLAN topology.
 - OpenSearch clusters allocate several compute nodes plus block storage and
   require VCN/subnet infrastructure.
+- Security Attribute Namespaces use a contract-faithful synthetic lifecycle
+  because the recording principal receives a service-level 404 for both the
+  generated client and the OCI CLI.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
@@ -216,6 +219,14 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   beneath one temporary private load balancer.
 - Cloud Bridge Environment and Cloud Guard Managed List, whose live recordings
   also establish their previously missing generatedruntime lifecycle contracts.
+- WAAS Address List and Custom Protection Rule, plus WAF Network Address List,
+  Web Application Firewall Policy, and Web Application Firewall lifecycles.
+- DevOps Build Pipeline and Deploy Pipeline beneath a temporary project, with
+  scoped-list confirmation for ambiguous post-delete reads.
+- Log Analytics Log Group, ONS Subscription, and Network Load Balancer Backend,
+  including service-specific deletion confirmation behavior.
+- Monitoring Alarm Suppression with its required level preserved, and a
+  Resource Scheduler Schedule whose test action is fixed in the distant future.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its

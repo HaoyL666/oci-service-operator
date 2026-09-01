@@ -1,0 +1,227 @@
+version: 1
+metadata:
+    service: loganalytics
+    resource: LogAnalyticsLogGroup
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a28406650fe3916dbe616bd9be786be98a282adb83212e698dbb63067bae6845
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded create","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:19.024Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a28406650fe3916dbe616bd9be786be98a282adb83212e698dbb63067bae6845
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded create","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:19.024Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a28406650fe3916dbe616bd9be786be98a282adb83212e698dbb63067bae6845
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded create","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:19.024Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a28406650fe3916dbe616bd9be786be98a282adb83212e698dbb63067bae6845
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded create","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:19.024Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ed9c1a1c484aaa827b1684fe4b569f07abfa52401ee88b87d34165d4fb330d6b
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded update","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:25.095Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ed9c1a1c484aaa827b1684fe4b569f07abfa52401ee88b87d34165d4fb330d6b
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded update","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:25.095Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ed9c1a1c484aaa827b1684fe4b569f07abfa52401ee88b87d34165d4fb330d6b
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded update","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:25.095Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ed9c1a1c484aaa827b1684fe4b569f07abfa52401ee88b87d34165d4fb330d6b
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded update","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:25.095Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ed9c1a1c484aaa827b1684fe4b569f07abfa52401ee88b87d34165d4fb330d6b
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T21:50:18.336Z"}},"description":"recorded update","displayName":"osok-replay-log-analytics-group-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","timeCreated":"2026-09-01T21:50:19.024Z","timeUpdated":"2026-09-01T21:50:25.095Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsLogGroups
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-log-analytics-group-v1
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[]}'
+        encoding: json
