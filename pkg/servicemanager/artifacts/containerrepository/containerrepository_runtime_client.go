@@ -202,7 +202,6 @@ func containerRepositoryListFields() []generatedruntime.RequestField {
 	return []generatedruntime.RequestField{
 		{FieldName: "CompartmentId", RequestName: "compartmentId", Contribution: "query", LookupPaths: []string{"status.compartmentId", "spec.compartmentId", "compartmentId"}},
 		{FieldName: "DisplayName", RequestName: "displayName", Contribution: "query", LookupPaths: []string{"status.displayName", "spec.displayName", "displayName"}},
-		{FieldName: "RepositoryId", RequestName: "repositoryId", Contribution: "query", PreferResourceID: true},
 		{FieldName: "Page", RequestName: "page", Contribution: "query"},
 		{FieldName: "Limit", RequestName: "limit", Contribution: "query"},
 	}

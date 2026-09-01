@@ -151,6 +151,7 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - Core Route Table with normalized empty rules;
 - Core Security List with a mutable egress rule;
 - Core NAT Gateway with generated public-IP intent.
+- empty private Artifacts Container Repository with eventually-consistent ID recovery.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
