@@ -159,6 +159,8 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - empty private Artifacts Container Repository with eventually-consistent ID recovery.
 - DevOps Project with generated work-request create, update, and delete handling.
 - private Network Load Balancer with succeeded-work-request deletion evidence.
+- Functions Application with subnet-backed create, configuration/tag update,
+  and confirmed deletion.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
