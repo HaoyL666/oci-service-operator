@@ -7,6 +7,7 @@ package backend
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -14,6 +15,7 @@ import (
 	networkloadbalancersdk "github.com/oracle/oci-go-sdk/v65/networkloadbalancer"
 	networkloadbalancerv1beta1 "github.com/oracle/oci-service-operator/api/networkloadbalancer/v1beta1"
 	"github.com/oracle/oci-service-operator/pkg/errorutil"
+	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
@@ -162,7 +164,65 @@ func (c backendDeleteGuardClient) Delete(ctx context.Context, resource *networkl
 			return false, err
 		}
 	}
-	return c.delegate.Delete(ctx, resource)
+	deleted, err := c.delegate.Delete(ctx, resource)
+	if !isBackendAmbiguousNotFound(err) {
+		return deleted, err
+	}
+	return c.confirmBackendAbsenceByList(ctx, resource, err)
+}
+
+func (c backendDeleteGuardClient) confirmBackendAbsenceByList(
+	ctx context.Context,
+	resource *networkloadbalancerv1beta1.Backend,
+	ambiguousErr error,
+) (bool, error) {
+	identity, err := resolveBackendIdentity(resource)
+	if err != nil {
+		return false, err
+	}
+	request := networkloadbalancersdk.ListBackendsRequest{
+		NetworkLoadBalancerId: common.String(identity.networkLoadBalancerID),
+		BackendSetName:        common.String(identity.backendSetName),
+	}
+	for {
+		response, err := c.client.ListBackends(ctx, request)
+		if err != nil {
+			return false, fmt.Errorf("confirm Backend deletion by scoped list: %w", err)
+		}
+		for _, item := range response.Items {
+			if item.Name != nil && strings.TrimSpace(*item.Name) == identity.backendName {
+				return false, ambiguousErr
+			}
+		}
+		if response.OpcNextPage == nil || strings.TrimSpace(*response.OpcNextPage) == "" {
+			break
+		}
+		request.Page = response.OpcNextPage
+	}
+	markBackendDeleted(resource, "OCI backend no longer exists")
+	return true, nil
+}
+
+func isBackendAmbiguousNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	var ambiguous backendAmbiguousNotFoundError
+	return errors.As(err, &ambiguous) || errorutil.ClassifyDeleteError(err).IsAuthShapedNotFound()
+}
+
+func markBackendDeleted(resource *networkloadbalancerv1beta1.Backend, message string) {
+	if resource == nil {
+		return
+	}
+	now := metav1.Now()
+	status := &resource.Status.OsokStatus
+	status.DeletedAt = &now
+	status.UpdatedAt = &now
+	status.Message = message
+	status.Reason = string(shared.Terminating)
+	status.Async.Current = nil
+	*status = util.UpdateOSOKStatusCondition(*status, shared.Terminating, v1.ConditionTrue, "", message, loggerutil.OSOKLogger{})
 }
 
 func (c backendDeleteGuardClient) guardBackendDelete(ctx context.Context, resource *networkloadbalancerv1beta1.Backend) error {
