@@ -1,0 +1,120 @@
+version: 1
+metadata:
+    service: core
+    resource: SecurityList
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/securityLists
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-common-security-list-v1","egressSecurityRules":[],"freeformTags":{"osok-replay":"create"},"ingressSecurityRules":[],"vcnId":"<ocid:2>"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 468c1c35
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:53:57.343Z"}},"displayName":"osok-replay-common-security-list-v1","egressSecurityRules":[],"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","ingressSecurityRules":[],"lifecycleState":"AVAILABLE","timeCreated":"2026-08-31T23:53:57.472Z","vcnId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/securityLists/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 468c1c35
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T23:53:57.343Z"}},"displayName":"osok-replay-common-security-list-v1","egressSecurityRules":[],"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","ingressSecurityRules":[],"lifecycleState":"AVAILABLE","timeCreated":"2026-08-31T23:53:57.472Z","vcnId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/securityLists/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"definedTags":{},"displayName":"osok-replay-common-security-list-v1-updated","egressSecurityRules":[{"destination":"10.99.0.0/16","protocol":"all"}],"freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6fc0719a
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{},"displayName":"osok-replay-common-security-list-v1-updated","egressSecurityRules":[{"destination":"10.99.0.0/16","destinationType":"CIDR_BLOCK","isStateless":false,"protocol":"all"}],"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","ingressSecurityRules":[],"lifecycleState":"AVAILABLE","timeCreated":"2026-08-31T23:53:57.472Z","vcnId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/securityLists/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6fc0719a
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{},"displayName":"osok-replay-common-security-list-v1-updated","egressSecurityRules":[{"destination":"10.99.0.0/16","destinationType":"CIDR_BLOCK","isStateless":false,"protocol":"all"}],"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","ingressSecurityRules":[],"lifecycleState":"AVAILABLE","timeCreated":"2026-08-31T23:53:57.472Z","vcnId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/securityLists/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/securityLists/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json

@@ -148,6 +148,9 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - disabled Monitoring Alarm with a temporary Topic destination;
 - single-partition Streaming Stream in the default pool;
 - minimally provisioned NoSQL Table.
+- Core Route Table with normalized empty rules;
+- Core Security List with a mutable egress rule;
+- Core NAT Gateway with generated public-IP intent.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its

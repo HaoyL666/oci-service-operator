@@ -425,7 +425,16 @@ func conservativeContainerRepositoryNotFoundError(err error, operation string) e
 	if err == nil {
 		return nil
 	}
-	if !errorutil.ClassifyDeleteError(err).IsAuthShapedNotFound() {
+	classification := errorutil.ClassifyDeleteError(err)
+	if classification.HTTPStatusCode == 404 && classification.ErrorCode == "REPO_ID_UNKNOWN" {
+		return errorutil.NotFoundOciError{
+			HTTPStatusCode: 404,
+			ErrorCode:      errorutil.NotFound,
+			OpcRequestID:   errorutil.OpcRequestID(err),
+			Description:    "Container repository does not exist",
+		}
+	}
+	if !classification.IsAuthShapedNotFound() {
 		return err
 	}
 	message := fmt.Sprintf("ContainerRepository %s returned ambiguous 404 NotAuthorizedOrNotFound: %s", strings.TrimSpace(operation), err.Error())

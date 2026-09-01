@@ -648,6 +648,30 @@ func TestContainerRepositoryServiceClientMarksDeletedAfterUnambiguousNotFound(t 
 	requireLastCondition(t, resource, shared.Terminating)
 }
 
+func TestContainerRepositoryServiceClientMarksDeletedAfterRepoIDUnknown(t *testing.T) {
+	resource := makeContainerRepositoryResource()
+	resource.Status.Id = testContainerRepositoryID
+	resource.Status.OsokStatus.Ocid = shared.OCID(testContainerRepositoryID)
+
+	client := testContainerRepositoryClient(&fakeContainerRepositoryOCIClient{
+		getFn: func(context.Context, artifactssdk.GetContainerRepositoryRequest) (artifactssdk.GetContainerRepositoryResponse, error) {
+			return artifactssdk.GetContainerRepositoryResponse{}, errortest.NewServiceError(
+				404,
+				"REPO_ID_UNKNOWN",
+				"Repository Id Unknown",
+			)
+		},
+	})
+
+	deleted, err := client.Delete(context.Background(), resource)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !deleted {
+		t.Fatal("Delete() deleted = false, want true after REPO_ID_UNKNOWN")
+	}
+}
+
 func TestContainerRepositoryServiceClientTreatsAuthShapedDeleteNotFoundConservatively(t *testing.T) {
 	t.Parallel()
 
