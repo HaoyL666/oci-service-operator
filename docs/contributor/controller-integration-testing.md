@@ -130,6 +130,8 @@ external side effects or prerequisites:
   capacity.
 - MySQL DB Systems provision billable compute and block storage and have long
   create/delete lifecycles.
+- OCI VMware Solution SDDCs allocate multiple billable bare-metal ESXi hosts
+  and require a purpose-built subnet and VLAN topology.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
