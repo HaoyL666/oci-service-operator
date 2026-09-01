@@ -95,7 +95,7 @@ func newProjectRuntimeSemantics() *generatedruntime.Semantics {
 			Hooks:    []generatedruntime.Hook{{Helper: "CreateProject", EntityType: "", Action: ""}},
 		},
 		UpdateFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "GetWorkRequest -> GetProject",
+			Strategy: "GetProject after synchronous 200; GetWorkRequest when supplied",
 			Hooks:    []generatedruntime.Hook{{Helper: "UpdateProject", EntityType: "", Action: ""}},
 		},
 		DeleteFollowUp: generatedruntime.FollowUpSemantics{
