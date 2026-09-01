@@ -1,0 +1,156 @@
+version: 1
+metadata:
+    service: core
+    resource: ServiceGateway
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/serviceGateways
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-common-service-gateway-v1","freeformTags":{"osok-replay":"create"},"services":[{"serviceId":"<ocid:2>"}],"vcnId":"<ocid:3>"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a6ae3ada
+            opc-request-id:
+                - <redacted>
+        body: '{"blockTraffic":false,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T00:17:14.260Z"}},"displayName":"osok-replay-common-service-gateway-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:4>","lifecycleState":"AVAILABLE","securityAttributes":{},"services":[{"serviceId":"<ocid:2>","serviceName":"All IAD Services In Oracle Services Network"}],"timeCreated":"2026-09-01T00:17:15.193Z","vcnId":"<ocid:3>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/serviceGateways/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a6ae3ada
+            opc-request-id:
+                - <redacted>
+        body: '{"blockTraffic":false,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T00:17:14.260Z"}},"displayName":"osok-replay-common-service-gateway-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:4>","lifecycleState":"AVAILABLE","securityAttributes":{},"services":[{"serviceId":"<ocid:2>","serviceName":"All IAD Services In Oracle Services Network"}],"timeCreated":"2026-09-01T00:17:15.193Z","vcnId":"<ocid:3>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/serviceGateways/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a6ae3ada
+            opc-request-id:
+                - <redacted>
+        body: '{"blockTraffic":false,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T00:17:14.260Z"}},"displayName":"osok-replay-common-service-gateway-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:4>","lifecycleState":"AVAILABLE","securityAttributes":{},"services":[{"serviceId":"<ocid:2>","serviceName":"All IAD Services In Oracle Services Network"}],"timeCreated":"2026-09-01T00:17:15.193Z","vcnId":"<ocid:3>"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/serviceGateways/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+        body: '{"blockTraffic":true,"definedTags":{},"displayName":"osok-replay-common-service-gateway-v1-updated","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 69e785a4
+            opc-request-id:
+                - <redacted>
+        body: '{"blockTraffic":true,"compartmentId":"<ocid:1>","definedTags":{},"displayName":"osok-replay-common-service-gateway-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:4>","lifecycleState":"AVAILABLE","securityAttributes":{},"services":[{"serviceId":"<ocid:2>","serviceName":"All IAD Services In Oracle Services Network"}],"timeCreated":"2026-09-01T00:17:15.193Z","vcnId":"<ocid:3>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/serviceGateways/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 69e785a4
+            opc-request-id:
+                - <redacted>
+        body: '{"blockTraffic":true,"compartmentId":"<ocid:1>","definedTags":{},"displayName":"osok-replay-common-service-gateway-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:4>","lifecycleState":"AVAILABLE","securityAttributes":{},"services":[{"serviceId":"<ocid:2>","serviceName":"All IAD Services In Oracle Services Network"}],"timeCreated":"2026-09-01T00:17:15.193Z","vcnId":"<ocid:3>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/serviceGateways/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/serviceGateways/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 69e785a4
+            opc-request-id:
+                - <redacted>
+        body: '{"blockTraffic":true,"compartmentId":"<ocid:1>","definedTags":{},"displayName":"osok-replay-common-service-gateway-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:4>","lifecycleState":"TERMINATING","securityAttributes":{},"services":[{"serviceId":"<ocid:2>","serviceName":"All IAD Services In Oracle Services Network"}],"timeCreated":"2026-09-01T00:17:15.193Z","vcnId":"<ocid:3>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20160918/serviceGateways/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Either Service Gateway with ID <ocid:4> does not exist or you are not authorized to access it."}'
+        encoding: json

@@ -47,7 +47,9 @@ func TestRecordedContainerRepositoryCreateDelete(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
-	if err := ocireplay.Await(ctx, mode, 5*time.Second, func() (bool, error) { return client.Delete(ctx, resource) }); err != nil {
+	if err := ocireplay.Await(ctx, mode, 5*time.Second, func() (bool, error) {
+		return client.Delete(ctx, resource)
+	}); err != nil {
 		t.Fatal(err)
 	}
 	if err := closeSession(); err != nil {
@@ -55,9 +57,22 @@ func TestRecordedContainerRepositoryCreateDelete(t *testing.T) {
 	}
 }
 
-func openRecordedContainerRepositorySDK(t *testing.T, mode ocireplay.Mode) (artifactssdk.ArtifactsClient, func() error) {
+func openRecordedContainerRepositorySDK(
+	t *testing.T,
+	mode ocireplay.Mode,
+) (artifactssdk.ArtifactsClient, func() error) {
 	t.Helper()
-	metadata := ocireplay.Metadata{Service: "artifacts", Resource: "ContainerRepository", Operations: []ocireplay.Operation{ocireplay.OperationCreate, ocireplay.OperationRead, ocireplay.OperationDelete}, SDKVersion: "v65.110.0", Provenance: ocireplay.ProvenanceRecorded}
+	metadata := ocireplay.Metadata{
+		Service:  "artifacts",
+		Resource: "ContainerRepository",
+		Operations: []ocireplay.Operation{
+			ocireplay.OperationCreate,
+			ocireplay.OperationRead,
+			ocireplay.OperationDelete,
+		},
+		SDKVersion: "v65.110.0",
+		Provenance: ocireplay.ProvenanceRecorded,
+	}
 	path := filepath.Join("testdata", "recordings", "containerrepository_crud.yaml")
 	if mode == ocireplay.ModeRecord {
 		provider, err := ocireplay.RecordingConfigurationProvider()
@@ -68,13 +83,27 @@ func openRecordedContainerRepositorySDK(t *testing.T, mode ocireplay.Mode) (arti
 		if err != nil {
 			t.Fatal(err)
 		}
-		session, err := ocireplay.OpenSDKRecord(ocireplay.SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: ocireplay.RecordingOverwriteRequested()})
+		session, err := ocireplay.OpenSDKRecord(
+			ocireplay.SDKRecordOptions{
+				Path:       path,
+				Metadata:   metadata,
+				BaseClient: &client.BaseClient,
+				Overwrite:  ocireplay.RecordingOverwriteRequested(),
+			},
+		)
 		if err != nil {
 			t.Fatal(err)
 		}
 		return client, session.Close
 	}
-	session, err := ocireplay.OpenSDKReplay(ocireplay.SDKReplayOptions{Path: path, Host: "https://artifacts.us-ashburn-1.oci.oraclecloud.com", BasePath: "20160918", Metadata: metadata})
+	session, err := ocireplay.OpenSDKReplay(
+		ocireplay.SDKReplayOptions{
+			Path:     path,
+			Host:     "https://artifacts.us-ashburn-1.oci.oraclecloud.com",
+			BasePath: "20160918",
+			Metadata: metadata,
+		},
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
