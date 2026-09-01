@@ -154,6 +154,7 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - Core Service Gateway with a regional Oracle Services Network attachment.
 - empty private Artifacts Container Repository with eventually-consistent ID recovery.
 - DevOps Project with generated work-request create, update, and delete handling.
+- private Network Load Balancer with succeeded-work-request deletion evidence.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its

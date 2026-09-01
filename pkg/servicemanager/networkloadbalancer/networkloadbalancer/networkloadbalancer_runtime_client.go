@@ -902,7 +902,10 @@ func (c networkLoadBalancerDeleteConfirmationClient) rejectAmbiguousSucceededDel
 	if normalizedClass != shared.OSOKAsyncClassSucceeded {
 		return nil
 	}
-	return c.rejectAmbiguousDeleteConfirmation(ctx, resource)
+	// A succeeded delete work request is stronger evidence than the service's
+	// auth-shaped confirmation response. Let generatedruntime finish the tracked
+	// delete; untracked auth-shaped reads remain conservative below.
+	return nil
 }
 
 func (c networkLoadBalancerDeleteConfirmationClient) rejectAmbiguousDeleteConfirmation(
