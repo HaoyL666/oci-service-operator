@@ -7,6 +7,11 @@ package generatedruntime
 
 import (
 	"context"
+	"io"
+	"reflect"
+	"strings"
+	"testing"
+
 	coresdk "github.com/oracle/oci-go-sdk/v65/core"
 	dashboardservicesdk "github.com/oracle/oci-go-sdk/v65/dashboardservice"
 	databasesdk "github.com/oracle/oci-go-sdk/v65/database"
@@ -16,10 +21,6 @@ import (
 	databasev1beta1 "github.com/oracle/oci-service-operator/api/database/v1beta1"
 	mysqlv1beta1 "github.com/oracle/oci-service-operator/api/mysql/v1beta1"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
-	"io"
-	"reflect"
-	"strings"
-	"testing"
 )
 
 func TestBuildRequestPopulatesAutonomousDatabasePolymorphicCreateBody(t *testing.T) {
@@ -257,6 +258,34 @@ func TestDeterministicRetryTokensAreStablePerOperation(t *testing.T) {
 	}
 	if got, unwanted := updateToken.Elem().String(), createFirstToken.Elem().String(); got == unwanted {
 		t.Fatalf("update token = %q, must differ from create token", got)
+	}
+}
+
+func TestBuildRequestCanDisableSDKRetriesForDeleteConfirmationReads(t *testing.T) {
+	t.Parallel()
+
+	request := &coresdk.GetInstanceRequest{}
+	resource := &corev1beta1.Instance{}
+	resource.Status.Id = "ocid1.instance.oc1..example"
+	values, err := lookupValues(resource)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := buildRequest(
+		request,
+		resource,
+		values,
+		resource.Status.Id,
+		[]RequestField{{FieldName: "InstanceId", RequestName: "instanceId", Contribution: "path", PreferResourceID: true}},
+		nil,
+		requestBuildOptions{Context: context.Background(), DisableRetries: true},
+		nil,
+		false,
+	); err != nil {
+		t.Fatal(err)
+	}
+	if request.RequestMetadata.RetryPolicy == nil || request.RequestMetadata.RetryPolicy.MaximumNumberAttempts != 1 {
+		t.Fatalf("retry policy = %#v, want no-retry policy", request.RequestMetadata.RetryPolicy)
 	}
 }
 

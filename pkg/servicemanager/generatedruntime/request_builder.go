@@ -15,6 +15,7 @@ import (
 	"unicode"
 
 	apmconfigsdk "github.com/oracle/oci-go-sdk/v65/apmconfig"
+	"github.com/oracle/oci-go-sdk/v65/common"
 	dashboardservicesdk "github.com/oracle/oci-go-sdk/v65/dashboardservice"
 	databasesdk "github.com/oracle/oci-go-sdk/v65/database"
 	databasemigrationsdk "github.com/oracle/oci-go-sdk/v65/databasemigration"
@@ -100,6 +101,7 @@ type requestBuildOptions struct {
 	CredentialClient credhelper.CredentialClient
 	Namespace        string
 	CurrentResponse  any
+	DisableRetries   bool
 }
 
 func buildRequest(
@@ -140,6 +142,7 @@ func buildRequest(
 			return err
 		}
 		assignDeterministicRetryToken(requestStruct, resource)
+		applyRequestRetryPolicy(requestStruct, options)
 		return nil
 	}
 
@@ -147,7 +150,26 @@ func buildRequest(
 		return err
 	}
 	assignDeterministicRetryToken(requestStruct, resource)
+	applyRequestRetryPolicy(requestStruct, options)
 	return nil
+}
+
+func applyRequestRetryPolicy(requestStruct reflect.Value, options requestBuildOptions) {
+	if !options.DisableRetries {
+		return
+	}
+	metadata, ok := fieldValue(requestStruct, "RequestMetadata")
+	if !ok || metadata.Kind() != reflect.Struct {
+		return
+	}
+	retryPolicy := metadata.FieldByName("RetryPolicy")
+	if !retryPolicy.IsValid() || !retryPolicy.CanSet() || retryPolicy.Kind() != reflect.Pointer {
+		return
+	}
+	policy := common.NoRetryPolicy()
+	if reflect.TypeOf(&policy).AssignableTo(retryPolicy.Type()) {
+		retryPolicy.Set(reflect.ValueOf(&policy))
+	}
 }
 
 func buildExplicitRequest(requestStruct reflect.Value, values map[string]any, preferredID string, fields []RequestField, resolvedSpec any) error {
