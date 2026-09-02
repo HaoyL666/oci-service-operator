@@ -27,6 +27,9 @@ type SecurityAttributeSpec struct {
 	// See Managing Security Attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/managing-security-attributes.htm).
 	// +kubebuilder:validation:Optional
 	IsRetired bool `json:"isRetired,omitempty"`
+	// The OCID of the security attribute namespace that owns this security attribute.
+	// +kubebuilder:validation:Required
+	SecurityAttributeNamespaceId string `json:"securityAttributeNamespaceId"`
 }
 
 // SecurityAttributeValidator defines nested fields for SecurityAttribute.Validator.

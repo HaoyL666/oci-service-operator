@@ -22,6 +22,9 @@ type RuleSetSpec struct {
 	// An array of rules that compose the rule set.
 	// +kubebuilder:validation:Required
 	Items []RuleSetItem `json:"items"`
+	// The OCID of the load balancer that owns this rule set.
+	// +kubebuilder:validation:Optional
+	LoadBalancerId string `json:"loadBalancerId,omitempty"`
 }
 
 // RuleSetItemCondition defines nested fields for RuleSet.Item.Condition.
@@ -241,6 +244,8 @@ type RuleSetStatus struct {
 	Name string `json:"name,omitempty"`
 	// An array of rules that compose the rule set.
 	Items []RuleSetItem `json:"items,omitempty"`
+	// The bound load balancer OCID used to address this rule set.
+	LoadBalancerId string `json:"loadBalancerId,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -4961,16 +4961,58 @@ services:
                   minimumBandwidthInMbps: 10
                   maximumBandwidthInMbps: 10
         - kind: PathRouteSet
+          specFields:
+            - name: LoadBalancerId
+              type: string
+              tag: 'json:"loadBalancerId,omitempty"'
+              comments:
+                - "The OCID of the load balancer that owns this path route set."
+              markers:
+                - +kubebuilder:validation:Optional
+          statusFields:
+            - name: LoadBalancerId
+              type: string
+              tag: 'json:"loadBalancerId,omitempty"'
+              comments:
+                - The bound load balancer OCID used to address this path route set.
           async:
             strategy: lifecycle
             runtime: generatedruntime
             formalClassification: lifecycle
         - kind: RoutingPolicy
+          specFields:
+            - name: LoadBalancerId
+              type: string
+              tag: 'json:"loadBalancerId,omitempty"'
+              comments:
+                - "The OCID of the load balancer that owns this routing policy."
+              markers:
+                - +kubebuilder:validation:Optional
+          statusFields:
+            - name: LoadBalancerId
+              type: string
+              tag: 'json:"loadBalancerId,omitempty"'
+              comments:
+                - The bound load balancer OCID used to address this routing policy.
           async:
             strategy: lifecycle
             runtime: generatedruntime
             formalClassification: lifecycle
         - kind: RuleSet
+          specFields:
+            - name: LoadBalancerId
+              type: string
+              tag: 'json:"loadBalancerId,omitempty"'
+              comments:
+                - "The OCID of the load balancer that owns this rule set."
+              markers:
+                - +kubebuilder:validation:Optional
+          statusFields:
+            - name: LoadBalancerId
+              type: string
+              tag: 'json:"loadBalancerId,omitempty"'
+              comments:
+                - The bound load balancer OCID used to address this rule set.
           async:
             strategy: lifecycle
             runtime: generatedruntime
@@ -5823,6 +5865,36 @@ services:
                 isBackup: false
                 isDrain: false
                 isOffline: false
+        - kind: BackendSet
+          specFields:
+            - name: NetworkLoadBalancerId
+              type: string
+              tag: 'json:"networkLoadBalancerId,omitempty"'
+              comments:
+                - "The OCID of the network load balancer that owns this backend set."
+              markers:
+                - +kubebuilder:validation:Optional
+          statusFields:
+            - name: NetworkLoadBalancerId
+              type: string
+              tag: 'json:"networkLoadBalancerId,omitempty"'
+              comments:
+                - The bound network load balancer OCID used to address this backend set.
+        - kind: Listener
+          specFields:
+            - name: NetworkLoadBalancerId
+              type: string
+              tag: 'json:"networkLoadBalancerId,omitempty"'
+              comments:
+                - "The OCID of the network load balancer that owns this listener."
+              markers:
+                - +kubebuilder:validation:Optional
+          statusFields:
+            - name: NetworkLoadBalancerId
+              type: string
+              tag: 'json:"networkLoadBalancerId,omitempty"'
+              comments:
+                - The bound network load balancer OCID used to address this listener.
     observedState:
       sdkAliases:
         WorkRequestLog:
@@ -7184,6 +7256,16 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: SecurityAttribute
+          specFields:
+            - name: SecurityAttributeNamespaceId
+              type: string
+              tag: 'json:"securityAttributeNamespaceId"'
+              comments:
+                - "The OCID of the security attribute namespace that owns this security attribute."
+              markers:
+                - +kubebuilder:validation:Required
 
   - service: self
     sdkPackage: github.com/oracle/oci-go-sdk/v65/self
