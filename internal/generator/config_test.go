@@ -1570,6 +1570,36 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 	assertServiceSelection(t, services["zpr"], true, SelectionModeExplicit, []string{"Configuration", "ZprPolicy"})
 }
 
+func TestCheckedInVulnerabilityScanningKeepsOptionalApplicationSettingsNullable(t *testing.T) {
+	t.Parallel()
+
+	service := requireService(t, loadCheckedInConfig(t), "vulnerabilityscanning")
+	override := overridesByKind(service)["HostScanRecipe"]
+	if override.Kind == "" {
+		t.Fatal("vulnerabilityscanning HostScanRecipe override was not found")
+	}
+
+	assertNullable := func(surface string, fields []FieldOverride) {
+		t.Helper()
+		for _, field := range fields {
+			if field.Name != "ApplicationSettings" {
+				continue
+			}
+			if field.Type != "*HostScanRecipeApplicationSettings" {
+				t.Fatalf("%s ApplicationSettings type = %q, want nullable helper pointer", surface, field.Type)
+			}
+			if field.Tag != `json:"applicationSettings,omitempty"` {
+				t.Fatalf("%s ApplicationSettings tag = %q, want omitempty", surface, field.Tag)
+			}
+			return
+		}
+		t.Fatalf("%s ApplicationSettings override was not found", surface)
+	}
+
+	assertNullable("spec", override.SpecFields)
+	assertNullable("status", override.StatusFields)
+}
+
 func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	t.Parallel()
 
