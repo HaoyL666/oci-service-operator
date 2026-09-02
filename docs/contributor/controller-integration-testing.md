@@ -134,9 +134,9 @@ external side effects or prerequisites:
   and require a purpose-built subnet and VLAN topology.
 - OpenSearch clusters allocate several compute nodes plus block storage and
   require VCN/subnet infrastructure.
-- Security Attribute Namespaces use a contract-faithful synthetic lifecycle
-  because the recording principal receives a service-level 404 for both the
-  generated client and the OCI CLI.
+- Security Attribute Namespaces and child Security Attributes use
+  contract-faithful synthetic lifecycles because the recording principal
+  receives a service-level 404 for both the generated client and the OCI CLI.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
@@ -217,6 +217,10 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   verification.
 - classic Load Balancer Backend Set, Hostname, and SSL Cipher Suite children
   beneath one temporary private load balancer.
+- classic Load Balancer Backend, Path Route Set, Routing Policy, and Rule Set
+  children with typed parent identity and eventual read-after-write handling.
+- Network Load Balancer Backend Set and Listener children with typed parent
+  identity and scoped-list confirmation for auth-shaped post-delete reads.
 - Cloud Bridge Environment and Cloud Guard Managed List, whose live recordings
   also establish their previously missing generatedruntime lifecycle contracts.
 - WAAS Address List and Custom Protection Rule, plus WAF Network Address List,

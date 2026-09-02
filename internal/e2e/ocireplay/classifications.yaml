@@ -30,46 +30,10 @@ resources:
     resource: dedicatedaicluster
     classification: synthetic
     reason: Live creation consumes scarce paid accelerator capacity.
-  - service: loadbalancer
-    resource: backend
-    classification: deferred
-    reason: Direct OCI creation succeeds, but the service-manager lifecycle retries create after the child is accepted because the path-only backend identity is not retained for observation.
-    blocker: The handwritten Backend runtime must preserve its synthesized child identity across create follow-up before a complete cassette can be published.
-    nextAction: Correct path-child identity tracking, then re-record beneath a temporary load balancer and backend set.
-  - service: loadbalancer
-    resource: pathrouteset
-    classification: deferred
-    reason: The service-manager create path reaches OCI but the immediate follow-up currently surfaces generated runtime resource-not-found instead of bounded eventual-consistency requeue.
-    blocker: PathRouteSet create follow-up must tolerate the documented child read delay.
-    nextAction: Add bounded create readback handling and re-record beneath a temporary load balancer.
-  - service: loadbalancer
-    resource: routingpolicy
-    classification: deferred
-    reason: The first real service-manager create returned InvalidParameter and requires request-shape comparison with a successful official CLI request.
-    blocker: A reviewed live-valid routing rule payload has not yet been established for the generated request path.
-    nextAction: Compare the SDK payload with a direct CLI create, correct the test or handwritten mapping, and re-record.
-  - service: loadbalancer
-    resource: ruleset
-    classification: deferred
-    reason: Direct OCI creation succeeds, while the service-manager path returns auth-shaped 404 before completing the same child lifecycle.
-    blocker: The path-identity request mapping differs from the successful official CLI operation.
-    nextAction: Correct the handwritten RuleSet path mapping and re-record beneath a temporary load balancer.
   - service: mysql
     resource: dbsystem
     classification: synthetic
     reason: Live creation provisions billable database compute and block storage and has a long lifecycle.
-  - service: networkloadbalancer
-    resource: backendset
-    classification: deferred
-    reason: Direct OCI creation succeeds, but the path-only service-manager create currently performs an auth-shaped missing-child read instead of establishing a new backend set.
-    blocker: Parent path identity and child existence tracking are conflated in status.ocid.
-    nextAction: Separate pre-create parent request identity from post-create child tracking, then re-record.
-  - service: networkloadbalancer
-    resource: listener
-    classification: deferred
-    reason: Live create, update, and delete complete, but a subsequent reconcile still treats the service's auth-shaped post-delete Get as fatal before stable scoped-list absence confirmation.
-    blocker: Delete re-entry must settle eventual list visibility without failing or releasing the finalizer prematurely.
-    nextAction: Refine the existing handwritten delete guard and re-record under a temporary network load balancer.
   - service: objectstorage
     resource: bucket
     classification: recorded
@@ -92,10 +56,9 @@ resources:
     reason: Live creation represents an order for physical appliance infrastructure.
   - service: securityattribute
     resource: securityattribute
-    classification: deferred
-    reason: A child security attribute requires a namespace, while the current generated CR spec exposes no namespace OCID or annotation contract for the mandatory SDK path parameter.
-    blocker: The controller cannot construct CreateSecurityAttributeRequest.SecurityAttributeNamespaceId from the published desired-state surface.
-    nextAction: Add a reviewed parent-namespace identity contract through generator source of truth, regenerate, and then add synthetic coverage because live namespace access is unavailable to the recording principal.
+    classification: synthetic
+    reason: The generated CR now exposes the required namespace identity, but live namespace access remains unavailable because the recording principal receives service-level 404 responses.
+    nextAction: Replace the contract-faithful synthetic lifecycle with a live recording if a service-entitled test tenancy becomes available.
   - service: securityattribute
     resource: securityattributenamespace
     classification: synthetic
