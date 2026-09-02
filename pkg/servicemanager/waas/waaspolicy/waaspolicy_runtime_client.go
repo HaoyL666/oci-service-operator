@@ -285,7 +285,7 @@ func waasPolicyWorkRequestActionMatchesPhase(action waassdk.WorkRequestResourceA
 
 func isWaasPolicyWorkRequestResource(resource waassdk.WorkRequestResource) bool {
 	token := normalizeWaasPolicyWorkRequestToken(waasPolicyStringValue(resource.EntityType))
-	return token == "waaspolicy" || token == "waaspolicies"
+	return token == "waas" || token == "waaspolicy" || token == "waaspolicies"
 }
 
 func normalizeWaasPolicyWorkRequestToken(value string) string {

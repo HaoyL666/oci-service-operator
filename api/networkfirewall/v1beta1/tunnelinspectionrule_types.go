@@ -35,6 +35,9 @@ type TunnelInspectionRuleSpec struct {
 	Condition TunnelInspectionRuleCondition `json:"condition,omitempty"`
 	// +kubebuilder:validation:Optional
 	Profile TunnelInspectionRuleProfile `json:"profile,omitempty"`
+	// The OCID of the Network Firewall policy that owns this resource.
+	// +kubebuilder:validation:Required
+	NetworkFirewallPolicyId string `json:"networkFirewallPolicyId"`
 }
 
 // TunnelInspectionRulePosition defines nested fields for TunnelInspectionRule.Position.

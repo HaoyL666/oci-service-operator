@@ -20,6 +20,7 @@ import (
 	databasesdk "github.com/oracle/oci-go-sdk/v65/database"
 	databasemigrationsdk "github.com/oracle/oci-go-sdk/v65/databasemigration"
 	databasetoolssdk "github.com/oracle/oci-go-sdk/v65/databasetools"
+	networkfirewallsdk "github.com/oracle/oci-go-sdk/v65/networkfirewall"
 	"github.com/oracle/oci-service-operator/pkg/credhelper"
 )
 
@@ -631,9 +632,111 @@ func convertPolymorphicInterfaceValue(payload []byte, targetType reflect.Type) (
 		converted := reflect.New(targetType).Elem()
 		converted.Set(reflect.ValueOf(body))
 		return converted, true, nil
+	case networkFirewallUpdateAddressListType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.UpdateAddressListDetails](payload, "type", map[string]reflect.Type{
+			"FQDN": reflect.TypeOf(networkfirewallsdk.UpdateFqdnAddressListDetails{}),
+			"IP":   reflect.TypeOf(networkfirewallsdk.UpdateIpAddressListDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallCreateApplicationType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.CreateApplicationDetails](payload, "type", map[string]reflect.Type{
+			"ICMP":    reflect.TypeOf(networkfirewallsdk.CreateIcmpApplicationDetails{}),
+			"ICMP_V6": reflect.TypeOf(networkfirewallsdk.CreateIcmp6ApplicationDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallUpdateApplicationType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.UpdateApplicationDetails](payload, "type", map[string]reflect.Type{
+			"ICMP":    reflect.TypeOf(networkfirewallsdk.UpdateIcmpApplicationDetails{}),
+			"ICMP_V6": reflect.TypeOf(networkfirewallsdk.UpdateIcmp6ApplicationDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallCreateDecryptionType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.CreateDecryptionProfileDetails](payload, "type", map[string]reflect.Type{
+			"SSL_FORWARD_PROXY":      reflect.TypeOf(networkfirewallsdk.CreateSslForwardProxyProfileDetails{}),
+			"SSL_INBOUND_INSPECTION": reflect.TypeOf(networkfirewallsdk.CreateSslInboundInspectionProfileDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallUpdateDecryptionType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.UpdateDecryptionProfileDetails](payload, "type", map[string]reflect.Type{
+			"SSL_FORWARD_PROXY":      reflect.TypeOf(networkfirewallsdk.UpdateSslForwardProxyProfileDetails{}),
+			"SSL_INBOUND_INSPECTION": reflect.TypeOf(networkfirewallsdk.UpdateSslInboundInspectionProfileDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallCreateMappedSecretType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.CreateMappedSecretDetails](payload, "source", map[string]reflect.Type{
+			"OCI_VAULT": reflect.TypeOf(networkfirewallsdk.CreateVaultMappedSecretDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallUpdateMappedSecretType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.UpdateMappedSecretDetails](payload, "source", map[string]reflect.Type{
+			"OCI_VAULT": reflect.TypeOf(networkfirewallsdk.UpdateVaultMappedSecretDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallCreateNatRuleType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.CreateNatRuleDetails](payload, "type", map[string]reflect.Type{
+			"NATV4": reflect.TypeOf(networkfirewallsdk.CreateNatV4RuleDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallUpdateNatRuleType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.UpdateNatRuleDetails](payload, "type", map[string]reflect.Type{
+			"NATV4": reflect.TypeOf(networkfirewallsdk.UpdateNatV4RuleDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallCreateServiceType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.CreateServiceDetails](payload, "type", map[string]reflect.Type{
+			"TCP_SERVICE": reflect.TypeOf(networkfirewallsdk.CreateTcpServiceDetails{}),
+			"UDP_SERVICE": reflect.TypeOf(networkfirewallsdk.CreateUdpServiceDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallUpdateServiceType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.UpdateServiceDetails](payload, "type", map[string]reflect.Type{
+			"TCP_SERVICE": reflect.TypeOf(networkfirewallsdk.UpdateTcpServiceDetails{}),
+			"UDP_SERVICE": reflect.TypeOf(networkfirewallsdk.UpdateUdpServiceDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallCreateTunnelRuleType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.CreateTunnelInspectionRuleDetails](payload, "protocol", map[string]reflect.Type{
+			"VXLAN": reflect.TypeOf(networkfirewallsdk.CreateVxlanInspectionRuleDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case networkFirewallUpdateTunnelRuleType:
+		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.UpdateTunnelInspectionRuleDetails](payload, "protocol", map[string]reflect.Type{
+			"VXLAN": reflect.TypeOf(networkfirewallsdk.UpdateVxlanInspectionRuleDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
 	default:
 		return reflect.Value{}, false, nil
 	}
+}
+
+func convertNetworkFirewallPolymorphic[T any](payload []byte, discriminator string, concreteTypes map[string]reflect.Type) (T, error) {
+	var zero T
+	value, err := jsonFieldString(payload, discriminator)
+	if err != nil {
+		return zero, fmt.Errorf("decode Network Firewall %s discriminator: %w", discriminator, err)
+	}
+	concreteType, ok := concreteTypes[strings.ToUpper(strings.TrimSpace(value))]
+	if !ok {
+		return zero, fmt.Errorf("unsupported Network Firewall %s discriminator %q", discriminator, value)
+	}
+	converted := reflect.New(concreteType)
+	if err := json.Unmarshal(payload, converted.Interface()); err != nil {
+		return zero, fmt.Errorf("unmarshal into %s: %w", concreteType, err)
+	}
+	body, ok := converted.Elem().Interface().(T)
+	if !ok {
+		return zero, fmt.Errorf("resolved Network Firewall type %s does not implement %s", concreteType, reflect.TypeOf((*T)(nil)).Elem())
+	}
+	return body, nil
+}
+
+func interfaceValue(targetType reflect.Type, body any, err error) (reflect.Value, bool, error) {
+	if err != nil {
+		return reflect.Value{}, true, err
+	}
+	converted := reflect.New(targetType).Elem()
+	converted.Set(reflect.ValueOf(body))
+	return converted, true, nil
 }
 
 // OCI models CreateAutonomousDatabase with a polymorphic interface body. Resolve the CR spec into

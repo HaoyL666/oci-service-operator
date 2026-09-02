@@ -18,6 +18,7 @@ import (
 	databasesdk "github.com/oracle/oci-go-sdk/v65/database"
 	databasemigrationsdk "github.com/oracle/oci-go-sdk/v65/databasemigration"
 	databasetoolssdk "github.com/oracle/oci-go-sdk/v65/databasetools"
+	networkfirewallsdk "github.com/oracle/oci-go-sdk/v65/networkfirewall"
 	"github.com/oracle/oci-service-operator/pkg/credhelper"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
@@ -57,6 +58,19 @@ var (
 	databaseToolsConnectionUpdateDetailsType = reflect.TypeOf((*databasetoolssdk.UpdateDatabaseToolsConnectionDetails)(nil)).Elem()
 	dashboardCreateDetailsType               = reflect.TypeOf((*dashboardservicesdk.CreateDashboardDetails)(nil)).Elem()
 	dashboardUpdateDetailsType               = reflect.TypeOf((*dashboardservicesdk.UpdateDashboardDetails)(nil)).Elem()
+	networkFirewallCreateApplicationType     = reflect.TypeOf((*networkfirewallsdk.CreateApplicationDetails)(nil)).Elem()
+	networkFirewallUpdateApplicationType     = reflect.TypeOf((*networkfirewallsdk.UpdateApplicationDetails)(nil)).Elem()
+	networkFirewallUpdateAddressListType     = reflect.TypeOf((*networkfirewallsdk.UpdateAddressListDetails)(nil)).Elem()
+	networkFirewallCreateDecryptionType      = reflect.TypeOf((*networkfirewallsdk.CreateDecryptionProfileDetails)(nil)).Elem()
+	networkFirewallUpdateDecryptionType      = reflect.TypeOf((*networkfirewallsdk.UpdateDecryptionProfileDetails)(nil)).Elem()
+	networkFirewallCreateMappedSecretType    = reflect.TypeOf((*networkfirewallsdk.CreateMappedSecretDetails)(nil)).Elem()
+	networkFirewallUpdateMappedSecretType    = reflect.TypeOf((*networkfirewallsdk.UpdateMappedSecretDetails)(nil)).Elem()
+	networkFirewallCreateNatRuleType         = reflect.TypeOf((*networkfirewallsdk.CreateNatRuleDetails)(nil)).Elem()
+	networkFirewallUpdateNatRuleType         = reflect.TypeOf((*networkfirewallsdk.UpdateNatRuleDetails)(nil)).Elem()
+	networkFirewallCreateServiceType         = reflect.TypeOf((*networkfirewallsdk.CreateServiceDetails)(nil)).Elem()
+	networkFirewallUpdateServiceType         = reflect.TypeOf((*networkfirewallsdk.UpdateServiceDetails)(nil)).Elem()
+	networkFirewallCreateTunnelRuleType      = reflect.TypeOf((*networkfirewallsdk.CreateTunnelInspectionRuleDetails)(nil)).Elem()
+	networkFirewallUpdateTunnelRuleType      = reflect.TypeOf((*networkfirewallsdk.UpdateTunnelInspectionRuleDetails)(nil)).Elem()
 )
 
 type createContextKey string

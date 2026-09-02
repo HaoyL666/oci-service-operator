@@ -5803,6 +5803,47 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: AddressList
+          specFields: &networkFirewallPolicyChildSpecFields
+            - name: NetworkFirewallPolicyId
+              type: string
+              tag: 'json:"networkFirewallPolicyId"'
+              comments:
+                - The OCID of the Network Firewall policy that owns this resource.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: Application
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: ApplicationGroup
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: DecryptionProfile
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: DecryptionRule
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: MappedSecret
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: NatRule
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: NetworkFirewall
+          specFields:
+            - name: NatConfiguration
+              type: "*NetworkFirewallNatConfiguration"
+              tag: 'json:"natConfiguration,omitempty"'
+          statusFields:
+            - name: NatConfiguration
+              type: "*NetworkFirewallNatConfiguration"
+              tag: 'json:"natConfiguration,omitempty"'
+        - kind: SecurityRule
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: Service
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: ServiceList
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: TunnelInspectionRule
+          specFields: *networkFirewallPolicyChildSpecFields
+        - kind: UrlList
+          specFields: *networkFirewallPolicyChildSpecFields
 
   - service: networkloadbalancer
     sdkPackage: github.com/oracle/oci-go-sdk/v65/networkloadbalancer

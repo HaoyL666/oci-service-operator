@@ -32,6 +32,9 @@ type NatRuleSpec struct {
 	// * DIPP_SRC_NAT - Dynamic-ip-port source NAT.
 	// +kubebuilder:validation:Optional
 	Action string `json:"action,omitempty"`
+	// The OCID of the Network Firewall policy that owns this resource.
+	// +kubebuilder:validation:Required
+	NetworkFirewallPolicyId string `json:"networkFirewallPolicyId"`
 }
 
 // NatRulePosition defines nested fields for NatRule.Position.

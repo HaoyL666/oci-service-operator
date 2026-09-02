@@ -509,5 +509,53 @@ func (c ServiceClient[T]) filteredUpdateBody(resource T, options requestBuildOpt
 	if len(body) == 0 {
 		return nil, false, nil
 	}
+	preserveNetworkFirewallUpdateDiscriminator(body, specValues, c.config.Update)
 	return body, true, nil
+}
+
+func preserveNetworkFirewallUpdateDiscriminator(body, specValues map[string]any, operation *Operation) {
+	if len(body) == 0 || len(specValues) == 0 || operation == nil || operation.NewRequest == nil {
+		return
+	}
+	request, ok := operationRequestStruct(operation.NewRequest)
+	if !ok {
+		return
+	}
+	for _, field := range operation.Fields {
+		if field.Contribution != "body" {
+			continue
+		}
+		requestField, found := request.Type().FieldByName(field.FieldName)
+		if !found {
+			continue
+		}
+		discriminator, ok := networkFirewallDiscriminatorField(requestField.Type)
+		if !ok {
+			continue
+		}
+		if _, exists := lookupMeaningfulValue(body, discriminator); exists {
+			return
+		}
+		if value, exists := lookupMeaningfulValue(specValues, discriminator); exists {
+			setValueByPath(body, canonicalValuePath(specValues, discriminator), value)
+		}
+		return
+	}
+}
+
+func networkFirewallDiscriminatorField(targetType reflect.Type) (string, bool) {
+	switch targetType {
+	case networkFirewallUpdateAddressListType,
+		networkFirewallUpdateApplicationType,
+		networkFirewallUpdateDecryptionType,
+		networkFirewallUpdateNatRuleType,
+		networkFirewallUpdateServiceType:
+		return "type", true
+	case networkFirewallUpdateMappedSecretType:
+		return "source", true
+	case networkFirewallUpdateTunnelRuleType:
+		return "protocol", true
+	default:
+		return "", false
+	}
 }

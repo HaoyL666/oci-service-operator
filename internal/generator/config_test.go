@@ -1600,6 +1600,36 @@ func TestCheckedInVulnerabilityScanningKeepsOptionalApplicationSettingsNullable(
 	assertNullable("status", override.StatusFields)
 }
 
+func TestCheckedInNetworkFirewallPublishesChildIdentityAndNullableNatConfiguration(t *testing.T) {
+	t.Parallel()
+
+	service := requireService(t, loadCheckedInConfig(t), "networkfirewall")
+	overrides := overridesByKind(service)
+	findField := func(kind, name string, fields []FieldOverride) FieldOverride {
+		t.Helper()
+		for _, field := range fields {
+			if field.Name == name {
+				return field
+			}
+		}
+		t.Fatalf("networkfirewall %s %s override was not found", kind, name)
+		return FieldOverride{}
+	}
+	for _, kind := range []string{"AddressList", "Application", "ApplicationGroup", "DecryptionProfile", "DecryptionRule", "MappedSecret", "NatRule", "SecurityRule", "Service", "ServiceList", "TunnelInspectionRule", "UrlList"} {
+		field := findField(kind, "NetworkFirewallPolicyId", overrides[kind].SpecFields)
+		if field.Type != "string" || field.Tag != `json:"networkFirewallPolicyId"` {
+			t.Fatalf("networkfirewall %s parent field = %#v", kind, field)
+		}
+	}
+	networkFirewall := overrides["NetworkFirewall"]
+	for surface, fields := range map[string][]FieldOverride{"spec": networkFirewall.SpecFields, "status": networkFirewall.StatusFields} {
+		field := findField("NetworkFirewall", "NatConfiguration", fields)
+		if field.Type != "*NetworkFirewallNatConfiguration" || field.Tag != `json:"natConfiguration,omitempty"` {
+			t.Fatalf("networkfirewall NetworkFirewall %s NatConfiguration = %#v", surface, field)
+		}
+	}
+}
+
 func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	t.Parallel()
 
