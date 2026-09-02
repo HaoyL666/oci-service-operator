@@ -76,6 +76,9 @@ func shouldSkipResponseFallback(fieldType reflect.StructField) bool {
 	if !fieldType.IsExported() {
 		return true
 	}
+	if location := fieldType.Tag.Get("presentIn"); location != "" && location != "body" {
+		return true
+	}
 	return fieldType.Name == "RawResponse" || strings.HasPrefix(fieldType.Name, "Opc") || fieldType.Name == "Etag"
 }
 

@@ -126,12 +126,15 @@ type HookSet struct {
 }
 
 type IdentityHooks[T any] struct {
-	Resolve                   func(T) (any, error)
-	RecordPath                func(T, any)
-	RecordTracked             func(T, any, string)
-	GuardExistingBeforeCreate func(context.Context, T) (ExistingBeforeCreateDecision, error)
-	LookupExisting            func(context.Context, T, any) (any, error)
-	SeedSyntheticTrackedID    func(T, any) func()
+	Resolve       func(T) (any, error)
+	RecordPath    func(T, any)
+	RecordTracked func(T, any, string)
+	// RecordBeforeCreateFollowUp preserves a path-addressed child's known identity
+	// when OCI accepts create before the child becomes readable.
+	RecordBeforeCreateFollowUp bool
+	GuardExistingBeforeCreate  func(context.Context, T) (ExistingBeforeCreateDecision, error)
+	LookupExisting             func(context.Context, T, any) (any, error)
+	SeedSyntheticTrackedID     func(T, any) func()
 }
 
 type ReadHooks struct {
