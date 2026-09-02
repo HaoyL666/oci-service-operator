@@ -1,0 +1,150 @@
+version: 1
+metadata:
+    service: loganalytics
+    resource: LogAnalyticsEntityType
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntityTypes
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"category":"osok-replay","name":"<binding:entity-type-name>","properties":[{"description":"recorded hostname","name":"host"}]}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntityTypes/<binding:entity-type-name>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b58ba0a11d46f051bc3e56f338d92ed8d37e33b7a81f80a20a7f8cf154058a99--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"category":"osok-replay","cloudType":"NON_CLOUD","internalName":"custom_osokreplayentitytype1788326489","lifecycleState":"ACTIVE","managementAgentEligibilityStatus":"ELIGIBLE","name":"<binding:entity-type-name>","properties":[{"description":"recorded hostname","name":"host"}],"timeCreated":"2026-09-02T05:21:24.538Z","timeUpdated":"2026-09-02T05:21:24.538Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntityTypes/<binding:entity-type-name>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b58ba0a11d46f051bc3e56f338d92ed8d37e33b7a81f80a20a7f8cf154058a99--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"category":"osok-replay","cloudType":"NON_CLOUD","internalName":"custom_osokreplayentitytype1788326489","lifecycleState":"ACTIVE","managementAgentEligibilityStatus":"ELIGIBLE","name":"<binding:entity-type-name>","properties":[{"description":"recorded hostname","name":"host"}],"timeCreated":"2026-09-02T05:21:24.538Z","timeUpdated":"2026-09-02T05:21:24.538Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntityTypes/<binding:entity-type-name>
+        headers:
+            content-type:
+                - application/json
+        body: '{"category":"osok-replay-updated"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntityTypes/<binding:entity-type-name>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 52f508177be85b15e04e762e80bb96a24508d6d44e09ee9c91abd673c7f318f9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"category":"osok-replay-updated","cloudType":"NON_CLOUD","internalName":"custom_osokreplayentitytype1788326489","lifecycleState":"ACTIVE","managementAgentEligibilityStatus":"ELIGIBLE","name":"<binding:entity-type-name>","properties":[{"description":"recorded hostname","name":"host"}],"timeCreated":"2026-09-02T05:21:24.538Z","timeUpdated":"2026-09-02T05:21:24.993Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntityTypes/<binding:entity-type-name>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 52f508177be85b15e04e762e80bb96a24508d6d44e09ee9c91abd673c7f318f9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"category":"osok-replay-updated","cloudType":"NON_CLOUD","internalName":"custom_osokreplayentitytype1788326489","lifecycleState":"ACTIVE","managementAgentEligibilityStatus":"ELIGIBLE","name":"<binding:entity-type-name>","properties":[{"description":"recorded hostname","name":"host"}],"timeCreated":"2026-09-02T05:21:24.538Z","timeUpdated":"2026-09-02T05:21:24.993Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntityTypes/<binding:entity-type-name>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntityTypes/<binding:entity-type-name>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5950150e756c81d0a9c46b94ca3bf6359b075eea27b042caca4d0426fbd124e3--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"category":"osok-replay-updated","cloudType":"NON_CLOUD","internalName":"custom_osokreplayentitytype1788326489","lifecycleState":"DELETED","managementAgentEligibilityStatus":"ELIGIBLE","name":"<binding:entity-type-name>","properties":[{"description":"recorded hostname","name":"host"}],"timeCreated":"2026-09-02T05:21:24.538Z","timeUpdated":"2026-09-02T05:21:25.310Z"}'
+        encoding: json

@@ -1,0 +1,183 @@
+version: 1
+metadata:
+    service: loadbalancer
+    resource: Certificate
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/certificates
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17872755464"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: POST
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/certificates
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"certificateName":"osok_replay_certificate","privateKey":"<redacted>","publicCertificate":"<binding:public-certificate>"}'
+        encoding: json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:2>","lifecycleState":"SUCCEEDED","loadBalancerId":"<ocid:1>","message":"{\"eventId\":\"c0b8b0d9-273c-477b-bc87-b7f42d892b1c\",\"loadBalancerId\":\"<ocid:1>\",\"workflowName\":\"AddCertificateWorkflow\",\"type\":\"SUCCESS\",\"message\":\"OK\",\"workRequestId\":\"<ocid:2>\"}","timeAccepted":"2026-09-02T05:30:21.609Z","timeFinished":"2026-09-02T05:30:26.601Z","type":"CreateCertificate"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/certificates
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17872828442"'
+            opc-request-id:
+                - <redacted>
+        body: '[{"caCertificate":null,"certificateName":"osok_replay_certificate","publicCertificate":"<binding:public-certificate>"}]'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/certificates
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17872828442"'
+            opc-request-id:
+                - <redacted>
+        body: '[{"caCertificate":null,"certificateName":"osok_replay_certificate","publicCertificate":"<binding:public-certificate>"}]'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/certificates/osok_replay_certificate
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:4>","lifecycleState":"IN_PROGRESS","loadBalancerId":"<ocid:1>","message":null,"timeAccepted":"2026-09-02T05:30:27.700Z","timeFinished":null,"type":"DeleteCertificate"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:4>","lifecycleState":"IN_PROGRESS","loadBalancerId":"<ocid:1>","message":null,"timeAccepted":"2026-09-02T05:30:27.700Z","timeFinished":null,"type":"DeleteCertificate"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancerWorkRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:3>","errorDetails":[],"id":"<ocid:4>","lifecycleState":"SUCCEEDED","loadBalancerId":"<ocid:1>","message":"{\"eventId\":\"963b07df-afe2-4430-b866-a7870f1ea6c3\",\"loadBalancerId\":\"<ocid:1>\",\"workflowName\":\"RemoveCertificateWorkflow\",\"type\":\"SUCCESS\",\"message\":\"OK\",\"workRequestId\":\"<ocid:4>\"}","timeAccepted":"2026-09-02T05:30:27.700Z","timeFinished":"2026-09-02T05:30:40.425Z","type":"DeleteCertificate"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iaas.us-ashburn-1.oraclecloud.com
+        path: /20170115/loadBalancers/<ocid:1>/certificates
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"17872829080"'
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json

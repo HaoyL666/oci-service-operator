@@ -145,8 +145,12 @@ func OpenWAASRedirectSDK(t *testing.T, mode Mode, path string, metadata Metadata
 }
 
 // OpenUsageAPISDK opens the Usage API SDK against either OCI or a checked-in cassette.
-func OpenUsageAPISDK(t *testing.T, mode Mode, path string, metadata Metadata) (usageapisdk.UsageapiClient, func() error) {
+func OpenUsageAPISDK(t *testing.T, mode Mode, path string, metadata Metadata, bindingOptions ...map[string]string) (usageapisdk.UsageapiClient, func() error) {
 	t.Helper()
+	var bindings map[string]string
+	if len(bindingOptions) > 0 {
+		bindings = bindingOptions[0]
+	}
 	if mode == ModeRecord {
 		provider, err := RecordingConfigurationProvider()
 		if err != nil {
@@ -156,13 +160,13 @@ func OpenUsageAPISDK(t *testing.T, mode Mode, path string, metadata Metadata) (u
 		if err != nil {
 			t.Fatal(err)
 		}
-		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Bindings: bindings, Overwrite: RecordingOverwriteRequested()})
 		if err != nil {
 			t.Fatal(err)
 		}
 		return client, session.Close
 	}
-	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://usageapi.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200107", Metadata: metadata})
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://usageapi.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200107", Metadata: metadata, Bindings: bindings})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -217,6 +221,31 @@ func OpenOSManagementHubProfileSDK(t *testing.T, mode Mode, path string, metadat
 		t.Fatal(err)
 	}
 	return osmanagementhubsdk.OnboardingClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenOSManagementHubScheduledJobSDK opens the OS Management Hub scheduled-job SDK against OCI or replay.
+func OpenOSManagementHubScheduledJobSDK(t *testing.T, mode Mode, path string, metadata Metadata) (osmanagementhubsdk.ScheduledJobClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := osmanagementhubsdk.NewScheduledJobClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://osmh.us-ashburn-1.oci.oraclecloud.com", BasePath: "20220901", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return osmanagementhubsdk.ScheduledJobClient{BaseClient: session.BaseClient()}, session.Close
 }
 
 // OpenVulnerabilityScanningSDK opens the Vulnerability Scanning SDK against either OCI or a checked-in cassette.

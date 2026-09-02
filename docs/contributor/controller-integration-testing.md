@@ -238,6 +238,9 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - WAAS HTTP Redirect and Certificate, Logging Unified Agent Configuration, and
   Log Analytics Entity, including work-request, sensitive-PEM, and typed
   service-configuration replay.
+- Classic Load Balancer Listener and Certificate, OSMH Scheduled Job, Usage
+  Schedule, and Log Analytics Entity Type. Their live prerequisites are
+  injected only while recording; replay uses sanitized placeholder identities.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
@@ -247,6 +250,11 @@ limit.
 
 Do not commit raw recordings. Review the sanitized cassette before adding it to
 the repository.
+
+Usage Schedule recording additionally requires a destination bucket and a
+least-privilege compartment policy allowing `service metering_overlay` to
+manage objects in that compartment. Remove the policy and bucket after the
+cassette is published; neither is needed for replay.
 
 Run only the SDK HTTP replay layer with:
 

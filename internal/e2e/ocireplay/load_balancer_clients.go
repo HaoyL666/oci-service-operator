@@ -38,6 +38,44 @@ func OpenLoadBalancerSDK(t *testing.T, mode Mode, path string, metadata Metadata
 	return loadbalancersdk.LoadBalancerClient{BaseClient: session.BaseClient()}, session.Close
 }
 
+// OpenLoadBalancerSDKWithBindings opens the classic Load Balancer SDK with
+// explicit cassette bindings for public but recording-specific values.
+func OpenLoadBalancerSDKWithBindings(t *testing.T, mode Mode, path string, metadata Metadata, bindings map[string]string) (loadbalancersdk.LoadBalancerClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := loadbalancersdk.NewLoadBalancerClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{
+			Path:       path,
+			Metadata:   metadata,
+			BaseClient: &client.BaseClient,
+			Bindings:   bindings,
+			Overwrite:  RecordingOverwriteRequested(),
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{
+		Path:     path,
+		Host:     "https://iaas.us-ashburn-1.oraclecloud.com",
+		BasePath: "20170115",
+		Metadata: metadata,
+		Bindings: bindings,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return loadbalancersdk.LoadBalancerClient{BaseClient: session.BaseClient()}, session.Close
+}
+
 // OpenNetworkLoadBalancerSDK opens the Network Load Balancer SDK against OCI
 // or a checked-in sanitized cassette.
 func OpenNetworkLoadBalancerSDK(t *testing.T, mode Mode, path string, metadata Metadata, bindingOptions ...map[string]string) (networkloadbalancersdk.NetworkLoadBalancerClient, func() error) {
