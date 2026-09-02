@@ -1,0 +1,99 @@
+version: 1
+metadata:
+  service: psql
+  resource: DbSystem
+  operations: [create, read, update, delete]
+  sdkVersion: v65.110.0
+  provenance: synthetic
+interactions:
+  - request:
+      method: GET
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems
+      query: compartmentId=%3Cocid%3A1%3E&displayName=sample-db&limit=100
+      headers: {content-type: [application/json]}
+    response:
+      statusCode: 200
+      headers: {content-type: [application/json]}
+      body: '{"items":[]}'
+      encoding: json
+  - request:
+      method: POST
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems
+      headers: {content-type: [application/json], opc-retry-token: [<redacted>]}
+      body: '{"compartmentId":"<ocid:1>","credentials":{"passwordDetails":{"password":"<redacted>","passwordType":"<redacted>"},"username":"postgres"},"dbVersion":"14","displayName":"sample-db","networkDetails":{"subnetId":"<ocid:2>"},"shape":"VM.Standard.E4.Flex","storageDetails":{"iops":10,"isRegionallyDurable":true,"systemType":"OCI_OPTIMIZED_STORAGE"}}'
+      encoding: json
+    response:
+      statusCode: 200
+      headers: {content-type: [application/json]}
+      body: '{"id":"<ocid:3>","displayName":"sample-db","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","systemType":"OCI_OPTIMIZED_STORAGE","dbVersion":"14","shape":"VM.Standard.E4.Flex","instanceOcpuCount":2,"instanceMemorySizeInGBs":16,"instanceCount":1,"storageDetails":{"systemType":"OCI_OPTIMIZED_STORAGE","isRegionallyDurable":true,"iops":10},"networkDetails":{"subnetId":"<ocid:2>"},"adminUsername":"postgres","freeformTags":{},"definedTags":{},"instances":[]}'
+      encoding: json
+  - request:
+      method: GET
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems/<ocid:3>
+      headers: {content-type: [application/json]}
+    response:
+      statusCode: 200
+      headers: {content-type: [application/json]}
+      body: '{"id":"<ocid:3>","displayName":"sample-db","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","systemType":"OCI_OPTIMIZED_STORAGE","dbVersion":"14","shape":"VM.Standard.E4.Flex","instanceOcpuCount":2,"instanceMemorySizeInGBs":16,"instanceCount":1,"storageDetails":{"systemType":"OCI_OPTIMIZED_STORAGE","isRegionallyDurable":true,"iops":10},"networkDetails":{"subnetId":"<ocid:2>"},"adminUsername":"postgres","freeformTags":{},"definedTags":{},"instances":[]}'
+      encoding: json
+  - request:
+      method: PUT
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems/<ocid:3>
+      headers: {content-type: [application/json], opc-retry-token: [<redacted>]}
+      body: '{"displayName":"sample-db-updated"}'
+      encoding: json
+    response:
+      statusCode: 200
+      headers: {content-type: [application/json]}
+      body: '{"id":"<ocid:3>","displayName":"sample-db-updated","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","systemType":"OCI_OPTIMIZED_STORAGE","dbVersion":"14","shape":"VM.Standard.E4.Flex","instanceOcpuCount":2,"instanceMemorySizeInGBs":16,"instanceCount":1,"storageDetails":{"systemType":"OCI_OPTIMIZED_STORAGE","isRegionallyDurable":true,"iops":10},"networkDetails":{"subnetId":"<ocid:2>"},"adminUsername":"postgres","freeformTags":{},"definedTags":{},"instances":[]}'
+      encoding: json
+  - request:
+      method: GET
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems/<ocid:3>
+      headers: {content-type: [application/json]}
+    response:
+      statusCode: 200
+      headers: {content-type: [application/json]}
+      body: '{"id":"<ocid:3>","displayName":"sample-db-updated","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","systemType":"OCI_OPTIMIZED_STORAGE","dbVersion":"14","shape":"VM.Standard.E4.Flex","instanceOcpuCount":2,"instanceMemorySizeInGBs":16,"instanceCount":1,"storageDetails":{"systemType":"OCI_OPTIMIZED_STORAGE","isRegionallyDurable":true,"iops":10},"networkDetails":{"subnetId":"<ocid:2>"},"adminUsername":"postgres","freeformTags":{},"definedTags":{},"instances":[]}'
+      encoding: json
+  - request:
+      method: GET
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems/<ocid:3>
+      headers: {content-type: [application/json]}
+    response:
+      statusCode: 200
+      headers: {content-type: [application/json]}
+      body: '{"id":"<ocid:3>","displayName":"sample-db-updated","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","systemType":"OCI_OPTIMIZED_STORAGE","dbVersion":"14","shape":"VM.Standard.E4.Flex","instanceOcpuCount":2,"instanceMemorySizeInGBs":16,"instanceCount":1,"storageDetails":{"systemType":"OCI_OPTIMIZED_STORAGE","isRegionallyDurable":true,"iops":10},"networkDetails":{"subnetId":"<ocid:2>"},"adminUsername":"postgres","freeformTags":{},"definedTags":{},"instances":[]}'
+      encoding: json
+  - request:
+      method: GET
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems/<ocid:3>
+      headers: {content-type: [application/json]}
+    response:
+      statusCode: 200
+      headers: {content-type: [application/json]}
+      body: '{"id":"<ocid:3>","displayName":"sample-db-updated","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","systemType":"OCI_OPTIMIZED_STORAGE","dbVersion":"14","shape":"VM.Standard.E4.Flex","instanceOcpuCount":2,"instanceMemorySizeInGBs":16,"instanceCount":1,"storageDetails":{"systemType":"OCI_OPTIMIZED_STORAGE","isRegionallyDurable":true,"iops":10},"networkDetails":{"subnetId":"<ocid:2>"},"adminUsername":"postgres","freeformTags":{},"definedTags":{},"instances":[]}'
+      encoding: json
+  - request:
+      method: DELETE
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems/<ocid:3>
+      headers: {content-type: [application/json]}
+    response: {statusCode: 202}
+  - request:
+      method: GET
+      host: postgresql.us-ashburn-1.oci.oraclecloud.com
+      path: /20220915/dbSystems/<ocid:3>
+      headers: {content-type: [application/json]}
+    response:
+      statusCode: 404
+      headers: {content-type: [application/json]}
+      body: '{"code":"NotFound","message":"DbSystem deleted"}'
+      encoding: json

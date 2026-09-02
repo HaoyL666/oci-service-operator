@@ -8,11 +8,23 @@ package ocireplay
 import (
 	"testing"
 
+	announcementsservicesdk "github.com/oracle/oci-go-sdk/v65/announcementsservice"
+	apmconfigsdk "github.com/oracle/oci-go-sdk/v65/apmconfig"
+	apmsyntheticssdk "github.com/oracle/oci-go-sdk/v65/apmsynthetics"
+	apmtracessdk "github.com/oracle/oci-go-sdk/v65/apmtraces"
+	artifactssdk "github.com/oracle/oci-go-sdk/v65/artifacts"
+	bastionsdk "github.com/oracle/oci-go-sdk/v65/bastion"
+	cloudguardsdk "github.com/oracle/oci-go-sdk/v65/cloudguard"
+	dataflowsdk "github.com/oracle/oci-go-sdk/v65/dataflow"
 	devopssdk "github.com/oracle/oci-go-sdk/v65/devops"
 	dnssdk "github.com/oracle/oci-go-sdk/v65/dns"
 	filestoragesdk "github.com/oracle/oci-go-sdk/v65/filestorage"
+	genericartifactscontentsdk "github.com/oracle/oci-go-sdk/v65/genericartifactscontent"
+	iotsdk "github.com/oracle/oci-go-sdk/v65/iot"
+	jmssdk "github.com/oracle/oci-go-sdk/v65/jms"
 	loganalyticssdk "github.com/oracle/oci-go-sdk/v65/loganalytics"
 	loggingsdk "github.com/oracle/oci-go-sdk/v65/logging"
+	managementdashboardsdk "github.com/oracle/oci-go-sdk/v65/managementdashboard"
 	monitoringsdk "github.com/oracle/oci-go-sdk/v65/monitoring"
 	networkfirewallsdk "github.com/oracle/oci-go-sdk/v65/networkfirewall"
 	onssdk "github.com/oracle/oci-go-sdk/v65/ons"
@@ -20,11 +32,358 @@ import (
 	recoverysdk "github.com/oracle/oci-go-sdk/v65/recovery"
 	resourceschedulersdk "github.com/oracle/oci-go-sdk/v65/resourcescheduler"
 	securityattributesdk "github.com/oracle/oci-go-sdk/v65/securityattribute"
+	stackmonitoringsdk "github.com/oracle/oci-go-sdk/v65/stackmonitoring"
 	usageapisdk "github.com/oracle/oci-go-sdk/v65/usageapi"
 	vulnerabilityscanningsdk "github.com/oracle/oci-go-sdk/v65/vulnerabilityscanning"
 	waassdk "github.com/oracle/oci-go-sdk/v65/waas"
 	wafsdk "github.com/oracle/oci-go-sdk/v65/waf"
 )
+
+// OpenAnnouncementSubscriptionSDK opens the Announcements subscription SDK against OCI or replay.
+func OpenAnnouncementSubscriptionSDK(t *testing.T, mode Mode, path string, metadata Metadata) (announcementsservicesdk.AnnouncementSubscriptionClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := announcementsservicesdk.NewAnnouncementSubscriptionClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://announcements.us-ashburn-1.oci.oraclecloud.com", BasePath: "20180904", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return announcementsservicesdk.AnnouncementSubscriptionClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenAPMConfigSDK opens the APM Configuration SDK against OCI or replay.
+func OpenAPMConfigSDK(t *testing.T, mode Mode, path string, metadata Metadata) (apmconfigsdk.ConfigClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := apmconfigsdk.NewConfigClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://apm-config.us-ashburn-1.oci.oraclecloud.com", BasePath: "20210201", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return apmconfigsdk.ConfigClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenAPMSyntheticsSDK opens the APM Synthetics SDK against OCI or replay.
+func OpenAPMSyntheticsSDK(t *testing.T, mode Mode, path string, metadata Metadata) (apmsyntheticssdk.ApmSyntheticClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := apmsyntheticssdk.NewApmSyntheticClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://apm-synthetic.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200630", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return apmsyntheticssdk.ApmSyntheticClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenAPMTracesSDK opens the APM Trace Explorer SDK against OCI or replay.
+func OpenAPMTracesSDK(t *testing.T, mode Mode, path string, metadata Metadata) (apmtracessdk.ScheduledQueryClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := apmtracessdk.NewScheduledQueryClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://apm-trace.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200630", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return apmtracessdk.ScheduledQueryClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenBastionSDK opens the Bastion SDK against OCI or replay.
+func OpenBastionSDK(t *testing.T, mode Mode, path string, metadata Metadata) (bastionsdk.BastionClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := bastionsdk.NewBastionClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://bastion.us-ashburn-1.oci.oraclecloud.com", BasePath: "20210331", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return bastionsdk.BastionClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenCloudGuardSDK opens the Cloud Guard SDK against OCI or replay.
+func OpenCloudGuardSDK(t *testing.T, mode Mode, path string, metadata Metadata) (cloudguardsdk.CloudGuardClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := cloudguardsdk.NewCloudGuardClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200131", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return cloudguardsdk.CloudGuardClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenDataFlowSDK opens the Data Flow SDK against OCI or replay.
+func OpenDataFlowSDK(t *testing.T, mode Mode, path string, metadata Metadata) (dataflowsdk.DataFlowClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := dataflowsdk.NewDataFlowClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://dataflow.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200129", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return dataflowsdk.DataFlowClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenGenericArtifactsContentSDK opens the Generic Artifacts content SDK against OCI or replay.
+func OpenGenericArtifactsContentSDK(t *testing.T, mode Mode, path string, metadata Metadata) (genericartifactscontentsdk.GenericArtifactsContentClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := genericartifactscontentsdk.NewGenericArtifactsContentClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://generic.artifacts.us-ashburn-1.oci.oraclecloud.com", BasePath: "20160918", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return genericartifactscontentsdk.GenericArtifactsContentClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// GenericArtifactContentByPathClients combines the content and metadata clients used by path-addressed artifact uploads.
+type GenericArtifactContentByPathClients struct {
+	Content   genericartifactscontentsdk.GenericArtifactsContentClient
+	Artifacts artifactssdk.ArtifactsClient
+}
+
+// OpenGenericArtifactContentByPathSDK opens both Generic Artifacts clients against one OCI recording or replay cassette.
+func OpenGenericArtifactContentByPathSDK(t *testing.T, mode Mode, path string, metadata Metadata, bindings map[string]string) (GenericArtifactContentByPathClients, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		contentClient, err := genericartifactscontentsdk.NewGenericArtifactsContentClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		artifactsClient, err := artifactssdk.NewArtifactsClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &contentClient.BaseClient, Bindings: bindings, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := session.Attach(&artifactsClient.BaseClient); err != nil {
+			t.Fatal(err)
+		}
+		return GenericArtifactContentByPathClients{Content: contentClient, Artifacts: artifactsClient}, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://generic.artifacts.us-ashburn-1.oci.oraclecloud.com", BasePath: "20160918", Metadata: metadata, Bindings: bindings})
+	if err != nil {
+		t.Fatal(err)
+	}
+	contentBaseClient := session.BaseClient()
+	artifactsBaseClient, err := session.BaseClientFor("https://artifacts.us-ashburn-1.oci.oraclecloud.com", "20160918")
+	if err != nil {
+		t.Fatal(err)
+	}
+	return GenericArtifactContentByPathClients{
+		Content:   genericartifactscontentsdk.GenericArtifactsContentClient{BaseClient: contentBaseClient},
+		Artifacts: artifactssdk.ArtifactsClient{BaseClient: artifactsBaseClient},
+	}, session.Close
+}
+
+// OpenIoTSDK opens the IoT SDK against OCI or replay.
+func OpenIoTSDK(t *testing.T, mode Mode, path string, metadata Metadata) (iotsdk.IotClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := iotsdk.NewIotClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://iot.us-ashburn-1.oci.oraclecloud.com", BasePath: "20250531", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return iotsdk.IotClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenJMSSDK opens the Java Management Service SDK against OCI or replay.
+func OpenJMSSDK(t *testing.T, mode Mode, path string, metadata Metadata) (jmssdk.JavaManagementServiceClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := jmssdk.NewJavaManagementServiceClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://javamanagement.us-ashburn-1.oci.oraclecloud.com", BasePath: "20210610", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return jmssdk.JavaManagementServiceClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenManagementDashboardSDK opens the Management Dashboard SDK against OCI or replay.
+func OpenManagementDashboardSDK(t *testing.T, mode Mode, path string, metadata Metadata) (managementdashboardsdk.DashxApisClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := managementdashboardsdk.NewDashxApisClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://managementdashboard.us-ashburn-1.oci.oraclecloud.com", BasePath: "20200901", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return managementdashboardsdk.DashxApisClient{BaseClient: session.BaseClient()}, session.Close
+}
+
+// OpenStackMonitoringSDK opens the Stack Monitoring SDK against OCI or replay.
+func OpenStackMonitoringSDK(t *testing.T, mode Mode, path string, metadata Metadata) (stackmonitoringsdk.StackMonitoringClient, func() error) {
+	t.Helper()
+	if mode == ModeRecord {
+		provider, err := RecordingConfigurationProvider()
+		if err != nil {
+			t.Fatal(err)
+		}
+		client, err := stackmonitoringsdk.NewStackMonitoringClientWithConfigurationProvider(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		session, err := OpenSDKRecord(SDKRecordOptions{Path: path, Metadata: metadata, BaseClient: &client.BaseClient, Overwrite: RecordingOverwriteRequested()})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return client, session.Close
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{Path: path, Host: "https://stack-monitoring.us-ashburn-1.oci.oraclecloud.com", BasePath: "20210330", Metadata: metadata})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return stackmonitoringsdk.StackMonitoringClient{BaseClient: session.BaseClient()}, session.Close
+}
 
 // OpenRecoverySDK opens the Database Recovery SDK against OCI or replay.
 func OpenRecoverySDK(t *testing.T, mode Mode, path string, metadata Metadata) (recoverysdk.DatabaseRecoveryClient, func() error) {
@@ -255,7 +614,7 @@ func OpenUsageAPISDK(t *testing.T, mode Mode, path string, metadata Metadata, bi
 	return usageapisdk.UsageapiClient{BaseClient: session.BaseClient()}, session.Close
 }
 
-// OpenOSManagementHubManagedInstanceGroupSDK opens the OS Management Hub managed-instance-group SDK against OCI or replay.
+// OpenOSManagementHubLifecycleEnvironmentSDK opens the OS Management Hub lifecycle-environment SDK against OCI or replay.
 func OpenOSManagementHubLifecycleEnvironmentSDK(t *testing.T, mode Mode, path string, metadata Metadata) (osmanagementhubsdk.LifecycleEnvironmentClient, func() error) {
 	t.Helper()
 	if mode == ModeRecord {

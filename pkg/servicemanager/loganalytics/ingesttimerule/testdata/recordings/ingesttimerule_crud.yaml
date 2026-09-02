@@ -1,0 +1,227 @@
+version: 1
+metadata:
+    service: loganalytics
+    resource: IngestTimeRule
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[{"compartmentId":"<ocid:1>","isArchivingEnabled":false,"isDataEverIngested":false,"isLogSetEnabled":false,"isOnboarded":true,"namespaceName":"iddevjmhjw0n"}]}'
+        encoding: json
+    - request:
+        method: POST
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"description":"OSOK recorded ingest-time rule","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bf34e6000f9e29ce583870c0470c0e7948c796c9a1e8e10e8e780b40a084ff27
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"additionalConditions":[],"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isEnabled":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-02T21:18:14.597Z","timeUpdated":"2026-09-02T21:18:14.597Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bf34e6000f9e29ce583870c0470c0e7948c796c9a1e8e10e8e780b40a084ff27
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"additionalConditions":[],"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isEnabled":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-02T21:18:14.597Z","timeUpdated":"2026-09-02T21:18:14.597Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[{"compartmentId":"<ocid:1>","isArchivingEnabled":false,"isDataEverIngested":false,"isLogSetEnabled":false,"isOnboarded":true,"namespaceName":"iddevjmhjw0n"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bf34e6000f9e29ce583870c0470c0e7948c796c9a1e8e10e8e780b40a084ff27
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"additionalConditions":[],"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isEnabled":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-02T21:18:14.597Z","timeUpdated":"2026-09-02T21:18:14.597Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:2>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule updated","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29405a79654eacde0d4ec72b588bf211be95a0b717a3fc059d56b3d99697a6e9
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"additionalConditions":[],"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule updated","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isEnabled":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-02T21:18:14.597Z","timeUpdated":"2026-09-02T21:18:15.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29405a79654eacde0d4ec72b588bf211be95a0b717a3fc059d56b3d99697a6e9
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"additionalConditions":[],"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule updated","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isEnabled":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-02T21:18:14.597Z","timeUpdated":"2026-09-02T21:18:15.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[{"compartmentId":"<ocid:1>","isArchivingEnabled":false,"isDataEverIngested":false,"isLogSetEnabled":false,"isOnboarded":true,"namespaceName":"iddevjmhjw0n"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29405a79654eacde0d4ec72b588bf211be95a0b717a3fc059d56b3d99697a6e9
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"additionalConditions":[],"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule updated","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isEnabled":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-02T21:18:14.597Z","timeUpdated":"2026-09-02T21:18:15.658Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29405a79654eacde0d4ec72b588bf211be95a0b717a3fc059d56b3d99697a6e9
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"additionalConditions":[],"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule updated","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isEnabled":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-02T21:18:14.597Z","timeUpdated":"2026-09-02T21:18:15.658Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/iddevjmhjw0n/ingestTimeRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 29405a79654eacde0d4ec72b588bf211be95a0b717a3fc059d56b3d99697a6e9
+            opc-request-id:
+                - <redacted>
+        body: '{"actions":[{"compartmentId":"<ocid:2>","dimensions":["SOURCE_NAME"],"metricName":"matched_records","namespace":"osok_replay","resourceGroup":"integration","type":"METRIC_EXTRACTION"}],"compartmentId":"<ocid:2>","conditions":{"additionalConditions":[],"fieldName":"mtag","fieldOperator":"EQUAL","fieldValue":"osok-replay","kind":"FIELD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:18:14.486Z"}},"description":"OSOK recorded ingest-time rule updated","displayName":"osok-replay-ingest-time-rule","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isEnabled":true,"lifecycleState":"DELETED","timeCreated":"2026-09-02T21:18:14.597Z","timeUpdated":"2026-09-02T21:18:15.658Z"}'
+        encoding: json

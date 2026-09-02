@@ -1,0 +1,662 @@
+version: 1
+metadata:
+    service: iot
+    resource: IotDomain
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"OSOK recorded IoT domain","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"create"},"iotDomainGroupId":"<ocid:2>"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 839be3ca7b57efac86c64f125e5981308f5a7fc0a3a17afb062ddfd3bc7113e8
+            location:
+                - https://iot.us-ashburn-1.oci.oraclecloud.com/20250531/iotDomains/<ocid:3>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+        body: '{"compartmentId":"<ocid:1>","dataRetentionPeriodsInDays":{"historizedData":30,"rawCommandData":16,"rawData":16,"rejectedData":16},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:18:34.350Z"}},"description":"OSOK recorded IoT domain","deviceHost":"o4wwpd7oojrxo.device.iot.us-ashburn-1.oci.oraclecloud.com","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","iotDomainGroupId":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:18:34.504Z","timeUpdated":"2026-09-02T20:18:34.504Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:18:34.518Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:18:34.518Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":50,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:18:49.835Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":50,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:18:59.953Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":50,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:18:59.953Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":50,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:18:59.953Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":50,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:19:30.257Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":50,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:19:40.925Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":50,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:19:51.675Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":70,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:20:04.696Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":70,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:20:16.650Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":70,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:20:16.650Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":70,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:20:16.650Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":70,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:18:34.518Z","timeUpdated":"2026-09-02T20:20:47.581Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_IOT_DOMAIN","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T20:18:34.518Z","timeFinished":"2026-09-02T20:20:58.922Z","timeStarted":"2026-09-02T20:18:48.552Z","timeUpdated":"2026-09-02T20:20:58.922Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 43c9e1a4a3f03bbe00e464142e4ee7338c982bfbea917b618d26c1e5a28e037f
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataRetentionPeriodsInDays":{"historizedData":30,"rawCommandData":16,"rawData":16,"rejectedData":16},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:18:34.350Z"}},"description":"OSOK recorded IoT domain","deviceHost":"o4wwpd7oojrxo.device.iot.us-ashburn-1.oci.oraclecloud.com","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","iotDomainGroupId":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:18:34.504Z","timeUpdated":"2026-09-02T20:20:58.934Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 43c9e1a4a3f03bbe00e464142e4ee7338c982bfbea917b618d26c1e5a28e037f
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataRetentionPeriodsInDays":{"historizedData":30,"rawCommandData":16,"rawData":16,"rejectedData":16},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:18:34.350Z"}},"description":"OSOK recorded IoT domain","deviceHost":"o4wwpd7oojrxo.device.iot.us-ashburn-1.oci.oraclecloud.com","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","iotDomainGroupId":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:18:34.504Z","timeUpdated":"2026-09-02T20:20:58.934Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"OSOK recorded IoT domain updated","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"UPDATE_IOT_DOMAIN","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T20:21:01.254Z","timeFinished":"2026-09-02T20:21:01.282Z","timeStarted":"2026-09-02T20:21:01.282Z","timeUpdated":"2026-09-02T20:21:01.282Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 41348303cc99e3b4b8bd6015855c6177053e50eb62acbded42e692e4ed11b270
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataRetentionPeriodsInDays":{"historizedData":30,"rawCommandData":16,"rawData":16,"rejectedData":16},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:18:34.350Z"}},"description":"OSOK recorded IoT domain updated","deviceHost":"o4wwpd7oojrxo.device.iot.us-ashburn-1.oci.oraclecloud.com","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","iotDomainGroupId":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:18:34.504Z","timeUpdated":"2026-09-02T20:21:01.276Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 41348303cc99e3b4b8bd6015855c6177053e50eb62acbded42e692e4ed11b270
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataRetentionPeriodsInDays":{"historizedData":30,"rawCommandData":16,"rawData":16,"rejectedData":16},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:18:34.350Z"}},"description":"OSOK recorded IoT domain updated","deviceHost":"o4wwpd7oojrxo.device.iot.us-ashburn-1.oci.oraclecloud.com","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","iotDomainGroupId":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:18:34.504Z","timeUpdated":"2026-09-02T20:21:01.276Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 41348303cc99e3b4b8bd6015855c6177053e50eb62acbded42e692e4ed11b270
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataRetentionPeriodsInDays":{"historizedData":30,"rawCommandData":16,"rawData":16,"rejectedData":16},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:18:34.350Z"}},"description":"OSOK recorded IoT domain updated","deviceHost":"o4wwpd7oojrxo.device.iot.us-ashburn-1.oci.oraclecloud.com","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","iotDomainGroupId":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:18:34.504Z","timeUpdated":"2026-09-02T20:21:01.276Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:6>
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:05.155Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":30,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:57.982Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":30,"resources":[{"actionType":"IN_PROGRESS","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T20:21:05.155Z","timeUpdated":"2026-09-02T20:21:58.167Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T20:21:05.155Z","timeFinished":"2026-09-02T20:22:07.837Z","timeStarted":"2026-09-02T20:21:57.734Z","timeUpdated":"2026-09-02T20:22:07.837Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5adbe882f40d0299c04ed7c795ee3d309ca93a253a714bb11906140180c68707
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataRetentionPeriodsInDays":{"historizedData":30,"rawCommandData":16,"rawData":16,"rejectedData":16},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:18:34.350Z"}},"description":"OSOK recorded IoT domain updated","deviceHost":"o4wwpd7oojrxo.device.iot.us-ashburn-1.oci.oraclecloud.com","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","iotDomainGroupId":"<ocid:2>","lifecycleState":"DELETED","systemTags":{},"timeCreated":"2026-09-02T20:18:34.504Z","timeUpdated":"2026-09-02T20:22:07.856Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"DELETE_IOT_DOMAIN","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"iotDomain","entityUri":"/20250531/iotDomains/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T20:21:05.155Z","timeFinished":"2026-09-02T20:22:07.837Z","timeStarted":"2026-09-02T20:21:57.734Z","timeUpdated":"2026-09-02T20:22:07.837Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomains/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5adbe882f40d0299c04ed7c795ee3d309ca93a253a714bb11906140180c68707
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataRetentionPeriodsInDays":{"historizedData":30,"rawCommandData":16,"rawData":16,"rejectedData":16},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:18:34.350Z"}},"description":"OSOK recorded IoT domain updated","deviceHost":"o4wwpd7oojrxo.device.iot.us-ashburn-1.oci.oraclecloud.com","displayName":"osok-replay-iot-domain","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","iotDomainGroupId":"<ocid:2>","lifecycleState":"DELETED","systemTags":{},"timeCreated":"2026-09-02T20:18:34.504Z","timeUpdated":"2026-09-02T20:22:07.856Z"}'
+        encoding: json

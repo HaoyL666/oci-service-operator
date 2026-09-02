@@ -1,0 +1,296 @@
+version: 1
+metadata:
+    service: bastion
+    resource: Session
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","displayName":"osok-replay-port-forwarding-session","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","sessionTtlInSeconds":1800,"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            location:
+                - https://bastion.us-ashburn-1.oci.oraclecloud.com/20210331/sessions/<ocid:3>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":null,"displayName":"osok-replay-port-forwarding-session","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"CREATING","sessionTtlInSeconds":1800,"sshMetadata":null,"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:29.450Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:4>","id":"<ocid:2>","operationType":"CREATE_SESSION","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"SessionResource","entityUri":"/sessions/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T21:21:29.454Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:4>","id":"<ocid:2>","operationType":"CREATE_SESSION","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"SessionResource","entityUri":"/sessions/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T21:21:29.454Z","timeFinished":"2026-09-02T21:21:32.514Z","timeStarted":"2026-09-02T21:21:32.108Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 76a258b008d9e5b874f178fa0169c7aa42a2e23ad951c6f36bdf0ad47cb7c816--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"ACTIVE","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:32.514Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 76a258b008d9e5b874f178fa0169c7aa42a2e23ad951c6f36bdf0ad47cb7c816--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"ACTIVE","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:32.514Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"displayName":"osok-replay-port-forwarding-session-updated"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c6ce1c36afa2f87623131d98dac9c7b0815426baa590b21ecf69da3209e568ca
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session-updated","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"ACTIVE","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:36.028Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c6ce1c36afa2f87623131d98dac9c7b0815426baa590b21ecf69da3209e568ca--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session-updated","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"ACTIVE","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:36.028Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c6ce1c36afa2f87623131d98dac9c7b0815426baa590b21ecf69da3209e568ca--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session-updated","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"ACTIVE","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:36.028Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c6ce1c36afa2f87623131d98dac9c7b0815426baa590b21ecf69da3209e568ca--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session-updated","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"ACTIVE","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:36.028Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:4>","id":"<ocid:5>","operationType":"DELETE_SESSION","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"SessionResource","entityUri":"/sessions/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T21:21:36.997Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 82f297726c41b9272a38271a5fb29b3ae23f8a3ff20e58e02b4579eb2826ba69--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session-updated","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"DELETING","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:36.994Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:4>","id":"<ocid:5>","operationType":"DELETE_SESSION","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"SessionResource","entityUri":"/sessions/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T21:21:36.997Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fef4526348dfffdd0a055bb23279ef732127a2ab241828df590db65f2d708686--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session-updated","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"DELETED","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:42.793Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:4>","id":"<ocid:5>","operationType":"DELETE_SESSION","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"SessionResource","entityUri":"/sessions/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T21:21:36.997Z","timeFinished":"2026-09-02T21:21:42.793Z","timeStarted":"2026-09-02T21:21:42.725Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: bastion.us-ashburn-1.oci.oraclecloud.com
+        path: /20210331/sessions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fef4526348dfffdd0a055bb23279ef732127a2ab241828df590db65f2d708686--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"bastionId":"<ocid:1>","bastionName":"osok-replay-batch5-bastion","bastionPublicHostKeyInfo":null,"bastionUserName":"<ocid:3>","displayName":"osok-replay-port-forwarding-session-updated","id":"<ocid:3>","keyDetails":{"publicKeyContent":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+41fa69AexhQVkrvqibhTb317Sd3K/i6j/ARj1cMNS osok-replay"},"keyType":"PUB","lifecycleDetails":null,"lifecycleState":"DELETED","sessionTtlInSeconds":1800,"sshMetadata":{"command":"ssh -i <privateKey> -N -L <localPort>:10.99.1.10:22 -p 22 <ocid:3>@host.bastion.us-ashburn-1.oci.oraclecloud.com"},"targetResourceDetails":{"sessionType":"PORT_FORWARDING","targetResourceDisplayName":null,"targetResourceFqdn":null,"targetResourceId":null,"targetResourcePort":22,"targetResourcePrivateIpAddress":"10.99.1.10"},"timeCreated":"2026-09-02T21:21:29.450Z","timeUpdated":"2026-09-02T21:21:42.793Z"}'
+        encoding: json

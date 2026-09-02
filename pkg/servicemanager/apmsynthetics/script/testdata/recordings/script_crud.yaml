@@ -1,0 +1,164 @@
+version: 1
+metadata:
+    service: apmsynthetics
+    resource: Script
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: apm-synthetic.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/scripts
+        query: apmDomainId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"content":"{\"id\":\"0d346d5f-b5e0-41b8-a739-d37ecf0f8b31\",\"version\":\"2.0\",\"name\":\"OSOK replay\",\"url\":\"https://example.com\",\"tests\":[{\"id\":\"e2376b10-696c-4c74-aef0-78c710cedca9\",\"name\":\"Replay\",\"commands\":[{\"id\":\"d8a96cb7-044f-421a-96dd-b8731841e87e\",\"comment\":\"\",\"command\":\"open\",\"target\":\"/\",\"targets\":[],\"value\":\"\"}]}],\"suites\":[{\"id\":\"84222275-96b0-4f46-a8ee-7300c78f91bd\",\"name\":\"Default Suite\",\"persistSession\":false,\"parallel\":false,\"timeout\":300,\"tests\":[\"e2376b10-696c-4c74-aef0-78c710cedca9\"]}],\"urls\":[\"https://example.com\"],\"plugins\":[]}","contentFileName":"osok-replay.side","contentType":"SIDE","displayName":"osok-replay-apm-script","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a03e987e2a3b5e8cd8d2dbcd1c530b94562dff9a167e750b3f55ca0de7362a47--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"content":"{\"id\":\"0d346d5f-b5e0-41b8-a739-d37ecf0f8b31\",\"version\":\"2.0\",\"name\":\"OSOK replay\",\"url\":\"https://example.com\",\"tests\":[{\"id\":\"e2376b10-696c-4c74-aef0-78c710cedca9\",\"name\":\"Replay\",\"commands\":[{\"id\":\"d8a96cb7-044f-421a-96dd-b8731841e87e\",\"comment\":\"\",\"command\":\"open\",\"target\":\"/\",\"targets\":[],\"value\":\"\"}]}],\"suites\":[{\"id\":\"84222275-96b0-4f46-a8ee-7300c78f91bd\",\"name\":\"Default Suite\",\"persistSession\":false,\"parallel\":false,\"timeout\":300,\"tests\":[\"e2376b10-696c-4c74-aef0-78c710cedca9\"]}],\"urls\":[\"https://example.com\"],\"plugins\":[]}","contentFileName":"osok-replay.side","contentSizeInBytes":535,"contentType":"SIDE","definedTags":{},"displayName":"osok-replay-apm-script","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","monitorStatusCountMap":{"disabled":null,"enabled":null,"invalid":null,"total":null},"parameters":[],"timeCreated":"2026-09-02T21:34:51.612Z","timeUpdated":"2026-09-02T21:34:51.612Z","timeUploaded":"2026-09-02T21:34:51.612Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apm-synthetic.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/scripts/<ocid:2>
+        query: apmDomainId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a03e987e2a3b5e8cd8d2dbcd1c530b94562dff9a167e750b3f55ca0de7362a47--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"content":"{\"id\":\"0d346d5f-b5e0-41b8-a739-d37ecf0f8b31\",\"version\":\"2.0\",\"name\":\"OSOK replay\",\"url\":\"https://example.com\",\"tests\":[{\"id\":\"e2376b10-696c-4c74-aef0-78c710cedca9\",\"name\":\"Replay\",\"commands\":[{\"id\":\"d8a96cb7-044f-421a-96dd-b8731841e87e\",\"comment\":\"\",\"command\":\"open\",\"target\":\"/\",\"targets\":[],\"value\":\"\"}]}],\"suites\":[{\"id\":\"84222275-96b0-4f46-a8ee-7300c78f91bd\",\"name\":\"Default Suite\",\"persistSession\":false,\"parallel\":false,\"timeout\":300,\"tests\":[\"e2376b10-696c-4c74-aef0-78c710cedca9\"]}],\"urls\":[\"https://example.com\"],\"plugins\":[]}","contentFileName":"osok-replay.side","contentSizeInBytes":535,"contentType":"SIDE","definedTags":{},"displayName":"osok-replay-apm-script","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","monitorStatusCountMap":{"disabled":0,"enabled":0,"invalid":0,"total":0},"parameters":[],"timeCreated":"2026-09-02T21:34:51.612Z","timeUpdated":"2026-09-02T21:34:51.612Z","timeUploaded":"2026-09-02T21:34:51.612Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apm-synthetic.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/scripts/<ocid:2>
+        query: apmDomainId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a03e987e2a3b5e8cd8d2dbcd1c530b94562dff9a167e750b3f55ca0de7362a47--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"content":"{\"id\":\"0d346d5f-b5e0-41b8-a739-d37ecf0f8b31\",\"version\":\"2.0\",\"name\":\"OSOK replay\",\"url\":\"https://example.com\",\"tests\":[{\"id\":\"e2376b10-696c-4c74-aef0-78c710cedca9\",\"name\":\"Replay\",\"commands\":[{\"id\":\"d8a96cb7-044f-421a-96dd-b8731841e87e\",\"comment\":\"\",\"command\":\"open\",\"target\":\"/\",\"targets\":[],\"value\":\"\"}]}],\"suites\":[{\"id\":\"84222275-96b0-4f46-a8ee-7300c78f91bd\",\"name\":\"Default Suite\",\"persistSession\":false,\"parallel\":false,\"timeout\":300,\"tests\":[\"e2376b10-696c-4c74-aef0-78c710cedca9\"]}],\"urls\":[\"https://example.com\"],\"plugins\":[]}","contentFileName":"osok-replay.side","contentSizeInBytes":535,"contentType":"SIDE","definedTags":{},"displayName":"osok-replay-apm-script","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","monitorStatusCountMap":{"disabled":0,"enabled":0,"invalid":0,"total":0},"parameters":[],"timeCreated":"2026-09-02T21:34:51.612Z","timeUpdated":"2026-09-02T21:34:51.612Z","timeUploaded":"2026-09-02T21:34:51.612Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: apm-synthetic.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/scripts/<ocid:2>
+        query: apmDomainId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+        body: '{"content":"{\"id\":\"0d346d5f-b5e0-41b8-a739-d37ecf0f8b31\",\"version\":\"2.0\",\"name\":\"OSOK replay updated\",\"url\":\"https://example.com\",\"tests\":[{\"id\":\"e2376b10-696c-4c74-aef0-78c710cedca9\",\"name\":\"Replay\",\"commands\":[{\"id\":\"d8a96cb7-044f-421a-96dd-b8731841e87e\",\"comment\":\"\",\"command\":\"open\",\"target\":\"/\",\"targets\":[],\"value\":\"\"}]}],\"suites\":[{\"id\":\"84222275-96b0-4f46-a8ee-7300c78f91bd\",\"name\":\"Default Suite\",\"persistSession\":false,\"parallel\":false,\"timeout\":300,\"tests\":[\"e2376b10-696c-4c74-aef0-78c710cedca9\"]}],\"urls\":[\"https://example.com\"],\"plugins\":[]}","displayName":"osok-replay-apm-script-updated","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b94f6003f65aed8a12704ee4eefdcfb0aa8782b330d83ca4e20cfb423371d21
+            opc-request-id:
+                - <redacted>
+        body: '{"content":"{\"id\":\"0d346d5f-b5e0-41b8-a739-d37ecf0f8b31\",\"version\":\"2.0\",\"name\":\"OSOK replay updated\",\"url\":\"https://example.com\",\"tests\":[{\"id\":\"e2376b10-696c-4c74-aef0-78c710cedca9\",\"name\":\"Replay\",\"commands\":[{\"id\":\"d8a96cb7-044f-421a-96dd-b8731841e87e\",\"comment\":\"\",\"command\":\"open\",\"target\":\"/\",\"targets\":[],\"value\":\"\"}]}],\"suites\":[{\"id\":\"84222275-96b0-4f46-a8ee-7300c78f91bd\",\"name\":\"Default Suite\",\"persistSession\":false,\"parallel\":false,\"timeout\":300,\"tests\":[\"e2376b10-696c-4c74-aef0-78c710cedca9\"]}],\"urls\":[\"https://example.com\"],\"plugins\":[]}","contentFileName":"osok-replay.side","contentSizeInBytes":543,"contentType":"SIDE","definedTags":{},"displayName":"osok-replay-apm-script-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","monitorStatusCountMap":{"disabled":0,"enabled":0,"invalid":0,"total":0},"parameters":[],"timeCreated":"2026-09-02T21:34:51.612Z","timeUpdated":"2026-09-02T21:34:52.854Z","timeUploaded":"2026-09-02T21:34:52.854Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apm-synthetic.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/scripts/<ocid:2>
+        query: apmDomainId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b94f6003f65aed8a12704ee4eefdcfb0aa8782b330d83ca4e20cfb423371d21--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"content":"{\"id\":\"0d346d5f-b5e0-41b8-a739-d37ecf0f8b31\",\"version\":\"2.0\",\"name\":\"OSOK replay updated\",\"url\":\"https://example.com\",\"tests\":[{\"id\":\"e2376b10-696c-4c74-aef0-78c710cedca9\",\"name\":\"Replay\",\"commands\":[{\"id\":\"d8a96cb7-044f-421a-96dd-b8731841e87e\",\"comment\":\"\",\"command\":\"open\",\"target\":\"/\",\"targets\":[],\"value\":\"\"}]}],\"suites\":[{\"id\":\"84222275-96b0-4f46-a8ee-7300c78f91bd\",\"name\":\"Default Suite\",\"persistSession\":false,\"parallel\":false,\"timeout\":300,\"tests\":[\"e2376b10-696c-4c74-aef0-78c710cedca9\"]}],\"urls\":[\"https://example.com\"],\"plugins\":[]}","contentFileName":"osok-replay.side","contentSizeInBytes":543,"contentType":"SIDE","definedTags":{},"displayName":"osok-replay-apm-script-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","monitorStatusCountMap":{"disabled":0,"enabled":0,"invalid":0,"total":0},"parameters":[],"timeCreated":"2026-09-02T21:34:51.612Z","timeUpdated":"2026-09-02T21:34:52.854Z","timeUploaded":"2026-09-02T21:34:52.854Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: apm-synthetic.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/scripts/<ocid:2>
+        query: apmDomainId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5b94f6003f65aed8a12704ee4eefdcfb0aa8782b330d83ca4e20cfb423371d21--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"content":"{\"id\":\"0d346d5f-b5e0-41b8-a739-d37ecf0f8b31\",\"version\":\"2.0\",\"name\":\"OSOK replay updated\",\"url\":\"https://example.com\",\"tests\":[{\"id\":\"e2376b10-696c-4c74-aef0-78c710cedca9\",\"name\":\"Replay\",\"commands\":[{\"id\":\"d8a96cb7-044f-421a-96dd-b8731841e87e\",\"comment\":\"\",\"command\":\"open\",\"target\":\"/\",\"targets\":[],\"value\":\"\"}]}],\"suites\":[{\"id\":\"84222275-96b0-4f46-a8ee-7300c78f91bd\",\"name\":\"Default Suite\",\"persistSession\":false,\"parallel\":false,\"timeout\":300,\"tests\":[\"e2376b10-696c-4c74-aef0-78c710cedca9\"]}],\"urls\":[\"https://example.com\"],\"plugins\":[]}","contentFileName":"osok-replay.side","contentSizeInBytes":543,"contentType":"SIDE","definedTags":{},"displayName":"osok-replay-apm-script-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","monitorStatusCountMap":{"disabled":0,"enabled":0,"invalid":0,"total":0},"parameters":[],"timeCreated":"2026-09-02T21:34:51.612Z","timeUpdated":"2026-09-02T21:34:52.854Z","timeUploaded":"2026-09-02T21:34:52.854Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: apm-synthetic.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/scripts/<ocid:2>
+        query: apmDomainId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: apm-synthetic.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/scripts/<ocid:2>
+        query: apmDomainId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Unknown resource <ocid:2>"}'
+        encoding: json

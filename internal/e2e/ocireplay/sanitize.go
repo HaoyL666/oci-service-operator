@@ -191,7 +191,7 @@ func (s *sanitizer) jsonValue(value any, key string) any {
 		return nil
 	}
 	if sensitiveJSONKey(key) {
-		return "<redacted>"
+		return redactedJSONShape(value)
 	}
 	switch typed := value.(type) {
 	case map[string]any:
@@ -216,6 +216,27 @@ func (s *sanitizer) jsonValue(value any, key string) any {
 	}
 }
 
+func redactedJSONShape(value any) any {
+	switch typed := value.(type) {
+	case nil:
+		return nil
+	case map[string]any:
+		redacted := make(map[string]any, len(typed))
+		for key, child := range typed {
+			redacted[key] = redactedJSONShape(child)
+		}
+		return redacted
+	case []any:
+		redacted := make([]any, len(typed))
+		for index, child := range typed {
+			redacted[index] = redactedJSONShape(child)
+		}
+		return redacted
+	default:
+		return "<redacted>"
+	}
+}
+
 func sensitiveJSONKey(key string) bool {
 	var normalized strings.Builder
 	for _, r := range strings.ToLower(key) {
@@ -229,7 +250,7 @@ func sensitiveJSONKey(key string) bool {
 	if value == "openidconnecttokenauthenticationconfig" || value == "imagepullsecrets" {
 		return false
 	}
-	for _, marker := range []string{"authorization", "createdby", "password", "passphrase", "privatekey", "token", "secret", "fingerprint"} {
+	for _, marker := range []string{"authorization", "createdby", "ownerusername", "updatedby", "password", "passphrase", "privatekey", "token", "secret", "fingerprint"} {
 		if strings.Contains(value, marker) {
 			return true
 		}

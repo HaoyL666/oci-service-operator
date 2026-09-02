@@ -1,0 +1,354 @@
+version: 1
+metadata:
+    service: jms
+    resource: Fleet
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/fleets
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"OSOK recorded JMS fleet","displayName":"osok-replay-jms-fleet","freeformTags":{"osok-replay":"create"},"inventoryLog":{"logGroupId":"<ocid:2>","logId":"<ocid:3>"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - eeea302af979a5e94d744945eea93c37f17817c284aa99ece4d7d14f0b624f93--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:4>","operationType":"CREATE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:51:21.999Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:51:21.999Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - eeea302af979a5e94d744945eea93c37f17817c284aa99ece4d7d14f0b624f93--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:4>","operationType":"CREATE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:51:21.999Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:51:21.999Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - eeea302af979a5e94d744945eea93c37f17817c284aa99ece4d7d14f0b624f93--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:4>","operationType":"CREATE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:51:21.999Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:51:21.999Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6e61a3c531ac02654613551a6dd0833cc69dd56fa3e8f9404013eb79b2bfe057--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":1,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:4>","operationType":"CREATE_FLEET","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"CREATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"CREATED","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T19:51:21.999Z","timeFinished":"2026-09-02T19:51:48.474Z","timeLastUpdated":"2026-09-02T19:51:48.474Z","timeStarted":"2026-09-02T19:51:47.889Z","totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/fleets/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d7f3996005386c16dd0ff7ba899019bddb997809cd2c1268c49dc63dd7b924c3--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateApplicationCount":0,"approximateInstallationCount":0,"approximateJavaServerCount":0,"approximateJreCount":0,"approximateLibraryCount":0,"approximateLibraryVulnerabilityCount":0,"approximateManagedInstanceCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T19:51:21.696Z"}},"description":"OSOK recorded JMS fleet","displayName":"osok-replay-jms-fleet","freeformTags":{"osok-replay":"create"},"id":"<ocid:7>","inventoryLog":{"logGroupId":"<ocid:2>","logId":"<ocid:3>"},"isAdvancedFeaturesEnabled":false,"isExportSettingEnabled":false,"lifecycleState":"ACTIVE","operationLog":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-02T19:51:21.999Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/fleets/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d7f3996005386c16dd0ff7ba899019bddb997809cd2c1268c49dc63dd7b924c3--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateApplicationCount":0,"approximateInstallationCount":0,"approximateJavaServerCount":0,"approximateJreCount":0,"approximateLibraryCount":0,"approximateLibraryVulnerabilityCount":0,"approximateManagedInstanceCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T19:51:21.696Z"}},"description":"OSOK recorded JMS fleet","displayName":"osok-replay-jms-fleet","freeformTags":{"osok-replay":"create"},"id":"<ocid:7>","inventoryLog":{"logGroupId":"<ocid:2>","logId":"<ocid:3>"},"isAdvancedFeaturesEnabled":false,"isExportSettingEnabled":false,"lifecycleState":"ACTIVE","operationLog":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-02T19:51:21.999Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/fleets/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"OSOK recorded JMS fleet updated","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:8>
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:8>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ef973b42e66d0c762401034f2771e476a183e37dc83f02e9b88f26473d0c181a--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:8>","operationType":"UPDATE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:51:53.990Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:51:53.990Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:8>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ef973b42e66d0c762401034f2771e476a183e37dc83f02e9b88f26473d0c181a--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:8>","operationType":"UPDATE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:51:53.990Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:51:53.990Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:8>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ef973b42e66d0c762401034f2771e476a183e37dc83f02e9b88f26473d0c181a--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:8>","operationType":"UPDATE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:51:53.990Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:51:53.990Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:8>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 36104481cbcfe5ec7dc7017e9d4c79c3056f771815ca0350755db4404ab60316--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":1,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:8>","operationType":"UPDATE_FLEET","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"UPDATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"UPDATED","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T19:51:53.990Z","timeFinished":"2026-09-02T19:52:17.994Z","timeLastUpdated":"2026-09-02T19:52:17.994Z","timeStarted":"2026-09-02T19:52:17.362Z","totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/fleets/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6ce2d1481b7967e254d66967c0713700b8c34dfa9a4dd04f42f68c645fa29ed6--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateApplicationCount":0,"approximateInstallationCount":0,"approximateJavaServerCount":0,"approximateJreCount":0,"approximateLibraryCount":0,"approximateLibraryVulnerabilityCount":0,"approximateManagedInstanceCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T19:51:21.696Z"}},"description":"OSOK recorded JMS fleet updated","displayName":"osok-replay-jms-fleet","freeformTags":{"osok-replay":"update"},"id":"<ocid:7>","inventoryLog":{"logGroupId":"<ocid:2>","logId":"<ocid:3>"},"isAdvancedFeaturesEnabled":false,"isExportSettingEnabled":false,"lifecycleState":"ACTIVE","operationLog":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-02T19:51:21.999Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/fleets/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:9>
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:9>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 557dd813f3531f2923967752d4745cf60db3174a1319a4a7eaaa81c8f3941b30--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:9>","operationType":"DELETE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:52:26.132Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:52:26.132Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:9>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 557dd813f3531f2923967752d4745cf60db3174a1319a4a7eaaa81c8f3941b30--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:9>","operationType":"DELETE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:52:26.132Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:52:26.132Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:9>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 557dd813f3531f2923967752d4745cf60db3174a1319a4a7eaaa81c8f3941b30--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":0,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:9>","operationType":"DELETE_FLEET","percentComplete":0,"resources":[{"actionType":"RELATED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"RELATED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"IN_PROGRESS","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T19:52:26.132Z","timeFinished":null,"timeLastUpdated":"2026-09-02T19:52:26.132Z","timeStarted":null,"totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/workRequests/<ocid:9>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fb8f22812b985e37dd71b02f2fbdb1116a37a90970d90d0f11282f0091b117e6--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","completedTaskCount":1,"createdBy":{"displayName":"<redacted>","id":"<redacted>"},"id":"<ocid:9>","operationType":"DELETE_FLEET","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"user","entityUri":"https://cloud.oracle.com/identity/users/<ocid:5>","identifier":"<ocid:5>"},{"actionType":"DELETED","entityType":"tenancy","entityUri":"https://cloud.oracle.com/tenancy","identifier":"<ocid:6>"},{"actionType":"DELETED","entityType":"fleet","entityUri":"/fleets/<ocid:7>","identifier":"<ocid:7>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T19:52:26.132Z","timeFinished":"2026-09-02T19:52:54.361Z","timeLastUpdated":"2026-09-02T19:52:54.361Z","timeStarted":"2026-09-02T19:52:53.942Z","totalTaskCount":1}'
+        encoding: json
+    - request:
+        method: GET
+        host: javamanagement.us-ashburn-1.oci.oraclecloud.com
+        path: /20210610/fleets/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a12234773be12b050e36d6e7e6cf15f997292491b6385db39e2c21dffdf6cbad--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"approximateApplicationCount":0,"approximateInstallationCount":0,"approximateJavaServerCount":0,"approximateJreCount":0,"approximateLibraryCount":0,"approximateLibraryVulnerabilityCount":0,"approximateManagedInstanceCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T19:51:21.696Z"}},"description":"OSOK recorded JMS fleet updated","displayName":"osok-replay-jms-fleet","freeformTags":{"osok-replay":"update"},"id":"<ocid:7>","inventoryLog":{"logGroupId":"<ocid:2>","logId":"<ocid:3>"},"isAdvancedFeaturesEnabled":false,"isExportSettingEnabled":false,"lifecycleState":"DELETED","operationLog":null,"systemTags":{"orcl-cloud":{"free-tier-retained":"false"}},"timeCreated":"2026-09-02T19:51:21.999Z"}'
+        encoding: json

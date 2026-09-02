@@ -64,6 +64,8 @@ func TestSanitizerRedactsSensitiveJSONKeysAcrossNamingStyles(t *testing.T) {
 		"security_token":"security-value",
 		"refresh-token":"refresh-value",
 		"nested":{"privateKey":"private-value"},
+		"ownerUserName":"person-name",
+		"lastUpdatedBy":"person-id",
 		"displayName":"safe-value"
 	}`))
 	if err != nil {
@@ -72,7 +74,7 @@ func TestSanitizerRedactsSensitiveJSONKeysAcrossNamingStyles(t *testing.T) {
 	if encoding != "json" {
 		t.Fatalf("encoding = %q, want json", encoding)
 	}
-	for _, secret := range []string{"idcs-value", "security-value", "refresh-value", "private-value"} {
+	for _, secret := range []string{"idcs-value", "security-value", "refresh-value", "private-value", "person-name", "person-id"} {
 		if strings.Contains(body, secret) {
 			t.Fatalf("sanitized body contains %q: %s", secret, body)
 		}
@@ -144,5 +146,21 @@ func TestSanitizerPreservesNullSensitiveFields(t *testing.T) {
 	}
 	if body != `{"password":"<redacted>","secret":null,"token":null}` {
 		t.Fatalf("body = %s", body)
+	}
+}
+
+func TestSanitizerPreservesSensitiveObjectShape(t *testing.T) {
+	t.Parallel()
+
+	sanitizer := newSanitizer(nil)
+	body, encoding, err := sanitizer.body([]byte(`{"createdBy":{"id":"ocid1.user.oc1..sensitive","displayName":"person@example.com"}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if encoding != "json" {
+		t.Fatalf("encoding = %q, want json", encoding)
+	}
+	if body != `{"createdBy":{"displayName":"<redacted>","id":"<redacted>"}}` {
+		t.Fatalf("sanitized body = %s, want redacted object shape", body)
 	}
 }

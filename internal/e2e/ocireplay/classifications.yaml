@@ -4,6 +4,18 @@ resources:
     resource: governanceinstance
     classification: synthetic
     reason: Live creation requires a service entitlement and an IDCS administrator token.
+  - service: analytics
+    resource: analyticsinstance
+    classification: synthetic
+    reason: Live creation allocates paid Oracle Analytics capacity and has a long managed-service lifecycle.
+  - service: apmtraces
+    resource: scheduledquery
+    classification: synthetic
+    reason: An independent live create reached the service but free APM domains reject background scheduled queries; a paid domain should not be provisioned for portable tests.
+  - service: bds
+    resource: bdsinstance
+    classification: synthetic
+    reason: Live creation allocates multiple paid Big Data Service compute nodes and block volumes.
   - service: database
     resource: autonomousdatabase
     classification: synthetic
@@ -40,6 +52,14 @@ resources:
     resource: dedicatedaicluster
     classification: synthetic
     reason: Live creation consumes scarce paid accelerator capacity.
+  - service: integration
+    resource: integrationinstance
+    classification: synthetic
+    reason: Live creation allocates paid Oracle Integration capacity and provisions identity resources.
+  - service: managedkafka
+    resource: kafkacluster
+    classification: synthetic
+    reason: Live creation allocates paid Kafka broker compute, storage, and private-network resources.
   - service: mysql
     resource: dbsystem
     classification: synthetic
@@ -58,10 +78,22 @@ resources:
     resource: bucket
     classification: recorded
     syntheticReason: Throttling recovery and disappearance-before-delete are failure paths that should not be induced against live OCI.
+  - service: oce
+    resource: oceinstance
+    classification: synthetic
+    reason: Live creation allocates paid Oracle Content Management capacity and provisions IDCS resources.
   - service: ocvp
     resource: sddc
     classification: synthetic
     reason: Live creation allocates multiple billable bare-metal ESXi hosts and requires a purpose-built VLAN topology.
+  - service: oda
+    resource: odainstance
+    classification: synthetic
+    reason: Live creation allocates paid Oracle Digital Assistant service capacity.
+  - service: opa
+    resource: opainstance
+    classification: synthetic
+    reason: Live creation allocates paid Process Automation capacity and provisions IDCS resources.
   - service: opensearch
     resource: opensearchcluster
     classification: synthetic
@@ -71,10 +103,18 @@ resources:
     classification: synthetic
     reason: A management station requires a dedicated managed compute instance, network configuration, proxy/mirror storage, and ongoing agent infrastructure.
     nextAction: Add a contract-faithful synthetic lifecycle for the management-station configuration and work-request states.
+  - service: psql
+    resource: dbsystem
+    classification: synthetic
+    reason: Live creation allocates paid PostgreSQL database compute, block storage, and private-network resources.
   - service: queue
     resource: queue
     classification: recorded
     syntheticReason: A terminal failed work request should be replayed deterministically rather than deliberately induced in live OCI.
+  - service: redis
+    resource: rediscluster
+    classification: synthetic
+    reason: Live creation allocates paid cache nodes and private-network capacity.
   - service: rover
     resource: rovercluster
     classification: synthetic
@@ -95,6 +135,10 @@ resources:
     reason: Direct service-manager and official OCI CLI creates both fail with MissingParameter even though the serialized request contains displayName.
     blocker: The live Service Catalog endpoint rejects a valid SDK request before creating a resource.
     nextAction: Retry recording after the Service Catalog API accepts its documented CreateServiceCatalog payload.
+  - service: visualbuilder
+    resource: vbinstance
+    classification: synthetic
+    reason: Live creation allocates paid Visual Builder managed application capacity.
   - service: vulnerabilityscanning
     resource: containerscantarget
     classification: synthetic

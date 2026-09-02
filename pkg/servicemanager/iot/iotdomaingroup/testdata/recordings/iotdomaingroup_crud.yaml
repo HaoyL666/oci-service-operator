@@ -1,0 +1,1350 @@
+version: 1
+metadata:
+    service: iot
+    resource: IotDomainGroup
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"type":"LIGHTWEIGHT"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            location:
+                - https://iot.us-ashburn-1.oci.oraclecloud.com/20250531/iotDomainGroups/<ocid:2>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:3>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 1ab6efb9a13955f4158807cdfa6c9501d507081c7f05d1da9f1bbfdbe6cc063d
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"CREATING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:02:11.895Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d1802c4bb8751da903b073a3734a802357a5f04c132c119f2496c505d81bdcb1
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:03.867Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d1802c4bb8751da903b073a3734a802357a5f04c132c119f2496c505d81bdcb1
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:03.867Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c55df63a3230d638687af77cc206dfbf3672e7c4e77988ab4d1694e96a280e1a
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:08.330Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c55df63a3230d638687af77cc206dfbf3672e7c4e77988ab4d1694e96a280e1a
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:08.330Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c55df63a3230d638687af77cc206dfbf3672e7c4e77988ab4d1694e96a280e1a
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:08.330Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6eeb4b18eb20c33a6322033c6a9269f3142f170e58e7c72daf35fddb6bd57bd6
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:07:11.897Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3a2d33e1e5d8d07dff0784b391081bf9a1788174d265ed10e0e0c6b85baa8287
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETED","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:10:43.680Z","type":"LIGHTWEIGHT"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/iotDomainGroups/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3a2d33e1e5d8d07dff0784b391081bf9a1788174d265ed10e0e0c6b85baa8287
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataHost":"dsmyijd3s23eu.data.iot.us-ashburn-1.oci.oraclecloud.com","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:02:11.724Z"}},"description":"OSOK recorded IoT domain group updated","displayName":"osok-replay-iot-domain-group","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETED","systemTags":{},"timeCreated":"2026-09-02T20:02:11.895Z","timeUpdated":"2026-09-02T20:10:43.680Z","type":"LIGHTWEIGHT"}'
+        encoding: json

@@ -1,0 +1,212 @@
+version: 1
+metadata:
+    service: iot
+    resource: DigitalTwinModel
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"description":"OSOK recorded digital twin model","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"create"},"iotDomainId":"<ocid:1>","spec":{"@context":"dtmi:dtdl:context;3","@id":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","@type":"Interface","contents":[{"@type":"Property","name":"temperature","schema":"double"}],"displayName":"OSOK Replay Thermostat"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:52:20.926Z"}},"description":"OSOK recorded digital twin model","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","iotDomainId":"<ocid:1>","lifecycleState":"ACTIVE","specUri":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","systemTags":{},"timeCreated":"2026-09-02T20:52:21.154Z","timeUpdated":"2026-09-02T20:52:21.154Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:52:20.926Z"}},"description":"OSOK recorded digital twin model","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","iotDomainId":"<ocid:1>","lifecycleState":"ACTIVE","specUri":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","systemTags":{},"timeCreated":"2026-09-02T20:52:21.154Z","timeUpdated":"2026-09-02T20:52:21.154Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:52:20.926Z"}},"description":"OSOK recorded digital twin model","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","iotDomainId":"<ocid:1>","lifecycleState":"ACTIVE","specUri":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","systemTags":{},"timeCreated":"2026-09-02T20:52:21.154Z","timeUpdated":"2026-09-02T20:52:21.154Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>/spec
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0
+            opc-request-id:
+                - <redacted>
+        body: '{"@context":"dtmi:dtdl:context;3","@id":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","@type":"Interface","contents":[{"@id":"dtmi:com:oracle:osok:ReplayLifecycleThermostat:_contents:__temperature;1","@type":"Property","name":"temperature","schema":"double"}],"displayName":"OSOK Replay Thermostat"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>/spec
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0
+            opc-request-id:
+                - <redacted>
+        body: '{"@context":"dtmi:dtdl:context;3","@id":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","@type":"Interface","contents":[{"@id":"dtmi:com:oracle:osok:ReplayLifecycleThermostat:_contents:__temperature;1","@type":"Property","name":"temperature","schema":"double"}],"displayName":"OSOK Replay Thermostat"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"OSOK recorded digital twin model updated","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:52:20.926Z"}},"description":"OSOK recorded digital twin model updated","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","iotDomainId":"<ocid:1>","lifecycleState":"ACTIVE","specUri":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","systemTags":{},"timeCreated":"2026-09-02T20:52:21.154Z","timeUpdated":"2026-09-02T20:52:25.360Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:52:20.926Z"}},"description":"OSOK recorded digital twin model updated","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","iotDomainId":"<ocid:1>","lifecycleState":"ACTIVE","specUri":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","systemTags":{},"timeCreated":"2026-09-02T20:52:21.154Z","timeUpdated":"2026-09-02T20:52:25.360Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:52:20.926Z"}},"description":"OSOK recorded digital twin model updated","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","iotDomainId":"<ocid:1>","lifecycleState":"ACTIVE","specUri":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","systemTags":{},"timeCreated":"2026-09-02T20:52:21.154Z","timeUpdated":"2026-09-02T20:52:25.360Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:52:20.926Z"}},"description":"OSOK recorded digital twin model updated","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","iotDomainId":"<ocid:1>","lifecycleState":"ACTIVE","specUri":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","systemTags":{},"timeCreated":"2026-09-02T20:52:21.154Z","timeUpdated":"2026-09-02T20:52:25.360Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: iot.us-ashburn-1.oci.oraclecloud.com
+        path: /20250531/digitalTwinModels/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7591b3eaa0034e78c8dc2e6ad82eb89cbe4e866250d665b56f1021935244bd4f
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:52:20.926Z"}},"description":"OSOK recorded digital twin model updated","displayName":"osok-replay-digital-twin-model","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","iotDomainId":"<ocid:1>","lifecycleState":"DELETED","specUri":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","systemTags":{},"timeCreated":"2026-09-02T20:52:21.154Z","timeUpdated":"2026-09-02T20:52:28.938Z"}'
+        encoding: json

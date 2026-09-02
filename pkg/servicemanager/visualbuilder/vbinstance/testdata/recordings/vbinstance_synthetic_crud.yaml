@@ -1,0 +1,25 @@
+version: 1
+metadata: {service: visualbuilder, resource: VbInstance, operations: [create, read, update, delete], sdkVersion: v65.110.0, provenance: synthetic}
+interactions:
+  - request: {method: POST, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/vbInstances, headers: {content-type: [application/json], opc-retry-token: [<redacted>]}, body: '{"alternateCustomEndpoints":[],"compartmentId":"<ocid:1>","displayName":"vb-instance-minimal","nodeCount":2}', encoding: json}
+    response: {statusCode: 202, headers: {opc-work-request-id: [<ocid:2>]}}
+  - request: {method: GET, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/workRequests/<ocid:2>, headers: {content-type: [application/json]}}
+    response: {statusCode: 200, headers: {content-type: [application/json]}, body: '{"id":"<ocid:2>","operationType":"CREATE_VB_INSTANCE","status":"SUCCEEDED","compartmentId":"<ocid:1>","resources":[{"entityType":"VbInstance","actionType":"CREATED","identifier":"<ocid:3>"}],"percentComplete":100}', encoding: json}
+  - request: {method: GET, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/vbInstances/<ocid:3>, headers: {content-type: [application/json]}}
+    response: {statusCode: 200, headers: {content-type: [application/json]}, body: '{"id":"<ocid:3>","displayName":"vb-instance-minimal","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","nodeCount":2,"freeformTags":{},"definedTags":{}}', encoding: json}
+  - request: {method: GET, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/vbInstances/<ocid:3>, headers: {content-type: [application/json]}}
+    response: {statusCode: 200, headers: {content-type: [application/json]}, body: '{"id":"<ocid:3>","displayName":"vb-instance-minimal","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","nodeCount":2,"freeformTags":{},"definedTags":{}}', encoding: json}
+  - request: {method: PUT, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/vbInstances/<ocid:3>, headers: {content-type: [application/json]}, body: '{"alternateCustomEndpoints":[],"displayName":"vb-instance-updated","nodeCount":2}', encoding: json}
+    response: {statusCode: 202, headers: {opc-work-request-id: [<ocid:4>]}}
+  - request: {method: GET, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/workRequests/<ocid:4>, headers: {content-type: [application/json]}}
+    response: {statusCode: 200, headers: {content-type: [application/json]}, body: '{"id":"<ocid:4>","operationType":"UPDATE_VB_INSTANCE","status":"SUCCEEDED","compartmentId":"<ocid:1>","resources":[{"entityType":"VbInstance","actionType":"UPDATED","identifier":"<ocid:3>"}],"percentComplete":100}', encoding: json}
+  - request: {method: GET, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/vbInstances/<ocid:3>, headers: {content-type: [application/json]}}
+    response: {statusCode: 200, headers: {content-type: [application/json]}, body: '{"id":"<ocid:3>","displayName":"vb-instance-updated","compartmentId":"<ocid:1>","lifecycleState":"ACTIVE","nodeCount":2,"freeformTags":{},"definedTags":{}}', encoding: json}
+  - request: {method: DELETE, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/vbInstances/<ocid:3>, headers: {content-type: [application/json]}}
+    response: {statusCode: 202, headers: {opc-work-request-id: [<ocid:5>]}}
+  - request: {method: GET, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/workRequests/<ocid:5>, headers: {content-type: [application/json]}}
+    response: {statusCode: 200, headers: {content-type: [application/json]}, body: '{"id":"<ocid:5>","operationType":"DELETE_VB_INSTANCE","status":"SUCCEEDED","compartmentId":"<ocid:1>","resources":[{"entityType":"VbInstance","actionType":"DELETED","identifier":"<ocid:3>"}],"percentComplete":100}', encoding: json}
+  - request: {method: GET, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/vbInstances/<ocid:3>, headers: {content-type: [application/json]}}
+    response: {statusCode: 404, headers: {content-type: [application/json]}, body: '{"code":"NotFound","message":"VB instance deleted"}', encoding: json}
+  - request: {method: GET, host: visualbuilder.us-ashburn-1.ocp.oraclecloud.com, path: /20210601/vbInstances, query: compartmentId=%3Cocid%3A1%3E&displayName=vb-instance-updated&lifecycleState=ACTIVE, headers: {content-type: [application/json]}}
+    response: {statusCode: 200, headers: {content-type: [application/json]}, body: '{"items":[]}', encoding: json}

@@ -1,0 +1,187 @@
+version: 1
+metadata:
+    service: managementdashboard
+    resource: ManagementDashboard
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","dataConfig":[{"source":"log-analytics"}],"description":"OSOK recorded management dashboard","displayName":"osok-replay-management-dashboard","featuresConfig":{"crossService":{"shared":false}},"freeformTags":{"osok-replay":"create"},"isFavorite":false,"isOobDashboard":false,"isShowDescription":true,"isShowInHome":false,"metadataVersion":"2.0","nls":{"title":"OSOK replay dashboard"},"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","screenImage":"none","tiles":[{"column":1,"dataConfig":[{"query":"*"}],"displayName":"OSOK replay tile","drilldownConfig":[],"height":4,"nls":{"title":"OSOK replay tile"},"parametersMap":{},"row":1,"savedSearchId":"<ocid:2>","state":"DEFAULT","uiConfig":{"visualization":"table"},"width":6}],"type":"NORMAL","uiConfig":{"layout":"grid"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e21c0e767111a38acbe59c5ac460232d7a0bd378a6423e4c5d57d8c7566c6081--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dashboardId":"<ocid:3>","dataConfig":[{"source":"log-analytics"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:55:16.003Z"}},"description":"OSOK recorded management dashboard","displayName":"osok-replay-management-dashboard","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isFavorite":false,"isOobDashboard":false,"isShowDescription":true,"isShowInHome":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay dashboard"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","savedSearches":[{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dataConfig":[{"query":"*"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:28:07.817Z"}},"description":"Temporary OSOK replay prerequisite","displayName":"osok-replay-batch5-dashboard-prerequisite","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{},"id":"<ocid:2>","isOobSavedSearch":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","screenImage":"none","systemTags":{},"timeCreated":"2026-09-02T20:28:07.963Z","timeUpdated":"2026-09-02T20:28:07.963Z","type":"WIDGET_SHOW_IN_DASHBOARD","uiConfig":{"visualization":"table"},"updatedBy":"<ocid:4>","widgetTemplate":"<div></div>","widgetVM":"{}"}],"screenImage":"none","systemTags":{},"tiles":[{"column":1,"dataConfig":[{"query":"*"}],"description":null,"displayName":"OSOK replay tile","drilldownConfig":[],"height":4,"nls":{"title":"OSOK replay tile"},"parametersMap":{},"row":1,"savedSearchId":"<ocid:2>","state":"DEFAULT","uiConfig":{"visualization":"table"},"width":6}],"timeCreated":"2026-09-02T20:55:16.101Z","timeUpdated":"2026-09-02T20:55:16.101Z","type":"NORMAL","uiConfig":{"layout":"grid"},"updatedBy":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e21c0e767111a38acbe59c5ac460232d7a0bd378a6423e4c5d57d8c7566c6081--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dashboardId":"<ocid:3>","dataConfig":[{"source":"log-analytics"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:55:16.003Z"}},"description":"OSOK recorded management dashboard","displayName":"osok-replay-management-dashboard","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isFavorite":false,"isOobDashboard":false,"isShowDescription":true,"isShowInHome":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay dashboard"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","savedSearches":[{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dataConfig":[{"query":"*"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:28:07.817Z"}},"description":"Temporary OSOK replay prerequisite","displayName":"osok-replay-batch5-dashboard-prerequisite","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{},"id":"<ocid:2>","isOobSavedSearch":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","screenImage":"none","systemTags":{},"timeCreated":"2026-09-02T20:28:07.963Z","timeUpdated":"2026-09-02T20:28:07.963Z","type":"WIDGET_SHOW_IN_DASHBOARD","uiConfig":{"visualization":"table"},"updatedBy":"<ocid:4>","widgetTemplate":"<div></div>","widgetVM":"{}"}],"screenImage":"none","systemTags":{},"tiles":[{"column":1,"dataConfig":[{"query":"*"}],"description":null,"displayName":"OSOK replay tile","drilldownConfig":[],"height":4,"nls":{"title":"OSOK replay tile"},"parametersMap":{},"row":1,"savedSearchId":"<ocid:2>","state":"DEFAULT","uiConfig":{"visualization":"table"},"width":6}],"timeCreated":"2026-09-02T20:55:16.101Z","timeUpdated":"2026-09-02T20:55:16.101Z","type":"NORMAL","uiConfig":{"layout":"grid"},"updatedBy":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e21c0e767111a38acbe59c5ac460232d7a0bd378a6423e4c5d57d8c7566c6081--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dashboardId":"<ocid:3>","dataConfig":[{"source":"log-analytics"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:55:16.003Z"}},"description":"OSOK recorded management dashboard","displayName":"osok-replay-management-dashboard","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isFavorite":false,"isOobDashboard":false,"isShowDescription":true,"isShowInHome":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay dashboard"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","savedSearches":[{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dataConfig":[{"query":"*"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:28:07.817Z"}},"description":"Temporary OSOK replay prerequisite","displayName":"osok-replay-batch5-dashboard-prerequisite","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{},"id":"<ocid:2>","isOobSavedSearch":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","screenImage":"none","systemTags":{},"timeCreated":"2026-09-02T20:28:07.963Z","timeUpdated":"2026-09-02T20:28:07.963Z","type":"WIDGET_SHOW_IN_DASHBOARD","uiConfig":{"visualization":"table"},"updatedBy":"<ocid:4>","widgetTemplate":"<div></div>","widgetVM":"{}"}],"screenImage":"none","systemTags":{},"tiles":[{"column":1,"dataConfig":[{"query":"*"}],"description":null,"displayName":"OSOK replay tile","drilldownConfig":[],"height":4,"nls":{"title":"OSOK replay tile"},"parametersMap":{},"row":1,"savedSearchId":"<ocid:2>","state":"DEFAULT","uiConfig":{"visualization":"table"},"width":6}],"timeCreated":"2026-09-02T20:55:16.101Z","timeUpdated":"2026-09-02T20:55:16.101Z","type":"NORMAL","uiConfig":{"layout":"grid"},"updatedBy":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"description":"OSOK recorded management dashboard updated","freeformTags":{"osok-replay":"update"},"isFavorite":true}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 89720062209c413bb527fe4021b026ec4e3214f907fdde33290aa01c8bc93a2f
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dashboardId":"<ocid:3>","dataConfig":[{"source":"log-analytics"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:55:16.003Z"}},"description":"OSOK recorded management dashboard updated","displayName":"osok-replay-management-dashboard","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isFavorite":true,"isOobDashboard":false,"isShowDescription":true,"isShowInHome":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay dashboard"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","savedSearches":[{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dataConfig":[{"query":"*"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:28:07.817Z"}},"description":"Temporary OSOK replay prerequisite","displayName":"osok-replay-batch5-dashboard-prerequisite","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{},"id":"<ocid:2>","isOobSavedSearch":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","screenImage":"none","systemTags":{},"timeCreated":"2026-09-02T20:28:07.963Z","timeUpdated":"2026-09-02T20:28:07.963Z","type":"WIDGET_SHOW_IN_DASHBOARD","uiConfig":{"visualization":"table"},"updatedBy":"<ocid:4>","widgetTemplate":"<div></div>","widgetVM":"{}"}],"screenImage":"none","systemTags":{},"tiles":[{"column":1,"dataConfig":[{"query":"*"}],"description":null,"displayName":"OSOK replay tile","drilldownConfig":[],"height":4,"nls":{"title":"OSOK replay tile"},"parametersMap":{},"row":1,"savedSearchId":"<ocid:2>","state":"DEFAULT","uiConfig":{"visualization":"table"},"width":6}],"timeCreated":"2026-09-02T20:55:16.101Z","timeUpdated":"2026-09-02T20:55:17.065Z","type":"NORMAL","uiConfig":{"layout":"grid"},"updatedBy":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 89720062209c413bb527fe4021b026ec4e3214f907fdde33290aa01c8bc93a2f--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dashboardId":"<ocid:3>","dataConfig":[{"source":"log-analytics"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:55:16.003Z"}},"description":"OSOK recorded management dashboard updated","displayName":"osok-replay-management-dashboard","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isFavorite":true,"isOobDashboard":false,"isShowDescription":true,"isShowInHome":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay dashboard"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","savedSearches":[{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dataConfig":[{"query":"*"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:28:07.817Z"}},"description":"Temporary OSOK replay prerequisite","displayName":"osok-replay-batch5-dashboard-prerequisite","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{},"id":"<ocid:2>","isOobSavedSearch":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","screenImage":"none","systemTags":{},"timeCreated":"2026-09-02T20:28:07.963Z","timeUpdated":"2026-09-02T20:28:07.963Z","type":"WIDGET_SHOW_IN_DASHBOARD","uiConfig":{"visualization":"table"},"updatedBy":"<ocid:4>","widgetTemplate":"<div></div>","widgetVM":"{}"}],"screenImage":"none","systemTags":{},"tiles":[{"column":1,"dataConfig":[{"query":"*"}],"description":null,"displayName":"OSOK replay tile","drilldownConfig":[],"height":4,"nls":{"title":"OSOK replay tile"},"parametersMap":{},"row":1,"savedSearchId":"<ocid:2>","state":"DEFAULT","uiConfig":{"visualization":"table"},"width":6}],"timeCreated":"2026-09-02T20:55:16.101Z","timeUpdated":"2026-09-02T20:55:17.065Z","type":"NORMAL","uiConfig":{"layout":"grid"},"updatedBy":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 89720062209c413bb527fe4021b026ec4e3214f907fdde33290aa01c8bc93a2f--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dashboardId":"<ocid:3>","dataConfig":[{"source":"log-analytics"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:55:16.003Z"}},"description":"OSOK recorded management dashboard updated","displayName":"osok-replay-management-dashboard","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isFavorite":true,"isOobDashboard":false,"isShowDescription":true,"isShowInHome":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay dashboard"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","savedSearches":[{"compartmentId":"<ocid:1>","createdBy":"<redacted>","dataConfig":[{"query":"*"}],"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T20:28:07.817Z"}},"description":"Temporary OSOK replay prerequisite","displayName":"osok-replay-batch5-dashboard-prerequisite","drilldownConfig":[],"featuresConfig":{"crossService":{"shared":false}},"freeformTags":{},"id":"<ocid:2>","isOobSavedSearch":false,"lifecycleState":"ACTIVE","metadataVersion":"2.0","nls":{"title":"OSOK replay"},"parametersConfig":[],"providerId":"log-analytics","providerName":"Logging Analytics","providerVersion":"3.0.0","screenImage":"none","systemTags":{},"timeCreated":"2026-09-02T20:28:07.963Z","timeUpdated":"2026-09-02T20:28:07.963Z","type":"WIDGET_SHOW_IN_DASHBOARD","uiConfig":{"visualization":"table"},"updatedBy":"<ocid:4>","widgetTemplate":"<div></div>","widgetVM":"{}"}],"screenImage":"none","systemTags":{},"tiles":[{"column":1,"dataConfig":[{"query":"*"}],"description":null,"displayName":"OSOK replay tile","drilldownConfig":[],"height":4,"nls":{"title":"OSOK replay tile"},"parametersMap":{},"row":1,"savedSearchId":"<ocid:2>","state":"DEFAULT","uiConfig":{"visualization":"table"},"width":6}],"timeCreated":"2026-09-02T20:55:16.101Z","timeUpdated":"2026-09-02T20:55:17.065Z","type":"NORMAL","uiConfig":{"layout":"grid"},"updatedBy":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '"/dashboardId/<ocid:3>"'
+        encoding: json
+    - request:
+        method: GET
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: managementdashboard.us-ashburn-1.oci.oraclecloud.com
+        path: /20200901/managementDashboards
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-management-dashboard
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[]}'
+        encoding: json

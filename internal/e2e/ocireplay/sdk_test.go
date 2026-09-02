@@ -98,6 +98,79 @@ func TestOpenSDKReplayRejectsInvalidHostAndMetadata(t *testing.T) {
 	}
 }
 
+func TestSDKReplaySessionSupportsRelatedEndpoint(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "sdk-related.yaml")
+	content := `version: 1
+metadata:
+  service: artifacts
+  resource: GenericArtifactContentByPath
+  operations: [read, delete]
+  sdkVersion: v65.110.0
+  provenance: recorded
+interactions:
+  - request:
+      method: GET
+      host: generic.artifacts.example.test
+      path: /20160918/content
+    response:
+      statusCode: 200
+      body: content
+      encoding: text
+  - request:
+      method: DELETE
+      host: artifacts.example.test
+      path: /20160918/artifacts
+    response:
+      statusCode: 204
+`
+	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	metadata := Metadata{
+		Service:    "artifacts",
+		Resource:   "GenericArtifactContentByPath",
+		Operations: []Operation{OperationRead, OperationDelete},
+		SDKVersion: "v65.110.0",
+		Provenance: ProvenanceRecorded,
+	}
+	session, err := OpenSDKReplay(SDKReplayOptions{
+		Path:     path,
+		Host:     "https://generic.artifacts.example.test",
+		BasePath: "20160918",
+		Metadata: metadata,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	related, err := session.BaseClientFor("https://artifacts.example.test", "20160918")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, request := range []struct {
+		client common.BaseClient
+		method string
+		path   string
+	}{
+		{client: session.BaseClient(), method: http.MethodGet, path: "content"},
+		{client: related, method: http.MethodDelete, path: "artifacts"},
+	} {
+		httpRequest, err := http.NewRequest(request.method, request.client.Host+"/"+request.client.BasePath+"/"+request.path, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		response, err := request.client.HTTPClient.Do(httpRequest)
+		if err != nil {
+			t.Fatal(err)
+		}
+		_ = response.Body.Close()
+	}
+	if err := session.Close(); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestOpenSDKRecordAttachesAndPublishesSanitizedCassette(t *testing.T) {
 	t.Parallel()
 

@@ -122,6 +122,23 @@ func (s *SDKReplaySession) BaseClient() common.BaseClient {
 	return s.baseClient
 }
 
+// BaseClientFor returns another credential-free SDK base client attached to
+// the same cassette for a related OCI endpoint.
+func (s *SDKReplaySession) BaseClientFor(host string, basePath string) (common.BaseClient, error) {
+	if s == nil || s.cassette == nil {
+		return common.BaseClient{}, fmt.Errorf("OCI replay session is not initialized")
+	}
+	normalizedHost, err := replayHost(host)
+	if err != nil {
+		return common.BaseClient{}, err
+	}
+	baseClient := s.baseClient
+	baseClient.Host = normalizedHost
+	baseClient.BasePath = strings.Trim(basePath, "/")
+	s.cassette.Attach(&baseClient)
+	return baseClient, nil
+}
+
 // Metadata returns the cassette metadata.
 func (s *SDKReplaySession) Metadata() *Metadata {
 	if s == nil || s.cassette == nil {
