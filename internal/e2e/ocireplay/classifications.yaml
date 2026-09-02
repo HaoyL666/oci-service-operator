@@ -20,6 +20,16 @@ resources:
     classification: synthetic
     reason: Suppressions are tenancy-level resources, and direct ListSuppressions and CreateSuppression calls independently confirmed that the recording principal lacks permission.
     nextAction: Add a contract-faithful synthetic create, read, and delete replay from the pinned Email SDK surface.
+  - service: filestorage
+    resource: outboundconnector
+    classification: synthetic
+    reason: A live outbound connector requires a reachable LDAP directory, bind credentials, and a mount-target network path that should not be embedded in a portable recorder.
+    nextAction: Add a contract-faithful synthetic lifecycle covering LDAP configuration and credential redaction.
+  - service: filestorage
+    resource: replication
+    classification: synthetic
+    reason: Live replication provisions and continuously operates a destination file system across availability domains, adding storage cost and a long synchronization lifecycle.
+    nextAction: Add a contract-faithful synthetic lifecycle for create, update, replication-state observation, and delete.
   - service: functions
     resource: function
     classification: deferred
@@ -30,6 +40,20 @@ resources:
     resource: dedicatedaicluster
     classification: synthetic
     reason: Live creation consumes scarce paid accelerator capacity.
+  - service: loadbalancer
+    resource: certificate
+    classification: recorded
+    nextAction: Record the certificate lifecycle after packaging a reusable classic Load Balancer fixture and sanitized test key material.
+  - service: loadbalancer
+    resource: listener
+    classification: recorded
+    nextAction: Record the listener lifecycle after packaging a reusable classic Load Balancer and backend-set fixture.
+  - service: loganalytics
+    resource: loganalyticsentitytype
+    classification: deferred
+    reason: Live create proved that OCI path operations accept the external entity type name and reject internalName, but terminal delete reconciliation did not converge within the bounded recorder run.
+    blocker: The service manager still needs a complete terminal-delete contract for name-addressed entity types before a stable cassette can be published.
+    nextAction: Complete the name-addressed delete confirmation fix and re-record create, update, and delete against a fresh custom entity type name.
   - service: mysql
     resource: dbsystem
     classification: synthetic
@@ -46,6 +70,15 @@ resources:
     resource: opensearchcluster
     classification: synthetic
     reason: Live creation allocates several compute nodes, block storage, and VCN infrastructure.
+  - service: osmanagementhub
+    resource: managementstation
+    classification: synthetic
+    reason: A management station requires a dedicated managed compute instance, network configuration, proxy/mirror storage, and ongoing agent infrastructure.
+    nextAction: Add a contract-faithful synthetic lifecycle for the management-station configuration and work-request states.
+  - service: osmanagementhub
+    resource: scheduledjob
+    classification: recorded
+    nextAction: Record a bounded scheduled-job lifecycle after packaging a reusable managed-instance-group target that does not execute disruptive package operations.
   - service: queue
     resource: queue
     classification: recorded
@@ -70,3 +103,9 @@ resources:
     reason: Direct service-manager and official OCI CLI creates both fail with MissingParameter even though the serialized request contains displayName.
     blocker: The live Service Catalog endpoint rejects a valid SDK request before creating a resource.
     nextAction: Retry recording after the Service Catalog API accepts its documented CreateServiceCatalog payload.
+  - service: usageapi
+    resource: schedule
+    classification: deferred
+    reason: Both the service-manager request and an independent official OCI CLI request with a saved report, future recurrence, and valid Object Storage destination returned InvalidParameter.
+    blocker: The Usage API endpoint rejects its documented schedule payload without identifying the invalid field, so no resource is created for lifecycle recording.
+    nextAction: Re-record after confirming the tenancy-specific Usage Schedule prerequisites or after the service returns actionable parameter diagnostics.

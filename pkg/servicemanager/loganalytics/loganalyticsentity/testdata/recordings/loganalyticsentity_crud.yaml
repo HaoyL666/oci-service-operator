@@ -1,0 +1,228 @@
+version: 1
+metadata:
+    service: loganalytics
+    resource: LogAnalyticsEntity
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[{"compartmentId":"<ocid:1>","isArchivingEnabled":false,"isDataEverIngested":false,"isLogSetEnabled":false,"isOnboarded":true,"namespaceName":"<binding:loganalytics-namespace>"}]}'
+        encoding: json
+    - request:
+        method: POST
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"create"},"hostname":"osok-replay-create.example.com","name":"osok-replay-log-analytics-entity","timezoneRegion":"UTC"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fed8b4c8826aa854ba10e078d283f11e46669249b22697bdcd22a658d625d191--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"areLogsCollected":false,"associatedSourcesCount":null,"cloudResourceId":null,"compartmentId":"<ocid:1>","creationSource":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:02:43.967Z"}},"entityTypeInternalName":"oci_palo_alto","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"create"},"hostname":"osok-replay-create.example.com","id":"<ocid:2>","lifecycleDetails":"READY","lifecycleState":"ACTIVE","managementAgentCompartmentId":null,"managementAgentDisplayName":null,"managementAgentId":null,"metadata":null,"name":"osok-replay-log-analytics-entity","properties":null,"sourceId":null,"timeCreated":"2026-09-02T04:02:44.150Z","timeLastDiscovered":null,"timeUpdated":"2026-09-02T04:02:44.150Z","timezoneRegion":"UTC"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fed8b4c8826aa854ba10e078d283f11e46669249b22697bdcd22a658d625d191--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"areLogsCollected":false,"associatedSourcesCount":null,"cloudResourceId":null,"compartmentId":"<ocid:1>","creationSource":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:02:43.967Z"}},"entityTypeInternalName":"oci_palo_alto","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"create"},"hostname":"osok-replay-create.example.com","id":"<ocid:2>","lifecycleDetails":"READY","lifecycleState":"ACTIVE","managementAgentCompartmentId":null,"managementAgentDisplayName":null,"managementAgentId":null,"metadata":{"items":[]},"name":"osok-replay-log-analytics-entity","properties":{},"sourceId":null,"timeCreated":"2026-09-02T04:02:44.150Z","timeLastDiscovered":null,"timeUpdated":"2026-09-02T04:02:44.150Z","timezoneRegion":"UTC"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[{"compartmentId":"<ocid:1>","isArchivingEnabled":false,"isDataEverIngested":false,"isLogSetEnabled":false,"isOnboarded":true,"namespaceName":"<binding:loganalytics-namespace>"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fed8b4c8826aa854ba10e078d283f11e46669249b22697bdcd22a658d625d191--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"areLogsCollected":false,"associatedSourcesCount":null,"cloudResourceId":null,"compartmentId":"<ocid:1>","creationSource":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:02:43.967Z"}},"entityTypeInternalName":"oci_palo_alto","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"create"},"hostname":"osok-replay-create.example.com","id":"<ocid:2>","lifecycleDetails":"READY","lifecycleState":"ACTIVE","managementAgentCompartmentId":null,"managementAgentDisplayName":null,"managementAgentId":null,"metadata":{"items":[]},"name":"osok-replay-log-analytics-entity","properties":{},"sourceId":null,"timeCreated":"2026-09-02T04:02:44.150Z","timeLastDiscovered":null,"timeUpdated":"2026-09-02T04:02:44.150Z","timezoneRegion":"UTC"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"freeformTags":{"osok-replay":"update"},"hostname":"osok-replay-update.example.com"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8debb5dfc933cec6d23d195023586397ea736b87adbe99764827ac2dd05c66ca
+            opc-request-id:
+                - <redacted>
+        body: '{"areLogsCollected":false,"associatedSourcesCount":null,"cloudResourceId":null,"compartmentId":"<ocid:1>","creationSource":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:02:43.967Z"}},"entityTypeInternalName":"oci_palo_alto","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"update"},"hostname":"osok-replay-update.example.com","id":"<ocid:2>","lifecycleDetails":"READY","lifecycleState":"ACTIVE","managementAgentCompartmentId":null,"managementAgentDisplayName":null,"managementAgentId":null,"metadata":{"items":[]},"name":"osok-replay-log-analytics-entity","properties":{},"sourceId":null,"timeCreated":"2026-09-02T04:02:44.150Z","timeLastDiscovered":null,"timeUpdated":"2026-09-02T04:02:44.739Z","timezoneRegion":"UTC"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8debb5dfc933cec6d23d195023586397ea736b87adbe99764827ac2dd05c66ca--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"areLogsCollected":false,"associatedSourcesCount":null,"cloudResourceId":null,"compartmentId":"<ocid:1>","creationSource":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:02:43.967Z"}},"entityTypeInternalName":"oci_palo_alto","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"update"},"hostname":"osok-replay-update.example.com","id":"<ocid:2>","lifecycleDetails":"READY","lifecycleState":"ACTIVE","managementAgentCompartmentId":null,"managementAgentDisplayName":null,"managementAgentId":null,"metadata":{"items":[]},"name":"osok-replay-log-analytics-entity","properties":{},"sourceId":null,"timeCreated":"2026-09-02T04:02:44.150Z","timeLastDiscovered":null,"timeUpdated":"2026-09-02T04:02:44.739Z","timezoneRegion":"UTC"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[{"compartmentId":"<ocid:1>","isArchivingEnabled":false,"isDataEverIngested":false,"isLogSetEnabled":false,"isOnboarded":true,"namespaceName":"<binding:loganalytics-namespace>"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities/<ocid:2>
+        query: isShowAssociatedSourcesCount=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8debb5dfc933cec6d23d195023586397ea736b87adbe99764827ac2dd05c66ca--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"areLogsCollected":false,"associatedSourcesCount":0,"cloudResourceId":null,"compartmentId":"<ocid:1>","creationSource":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:02:43.967Z"}},"entityTypeInternalName":"oci_palo_alto","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"update"},"hostname":"osok-replay-update.example.com","id":"<ocid:2>","lifecycleDetails":"READY","lifecycleState":"ACTIVE","managementAgentCompartmentId":null,"managementAgentDisplayName":null,"managementAgentId":null,"metadata":{"items":[]},"name":"osok-replay-log-analytics-entity","properties":{},"sourceId":null,"timeCreated":"2026-09-02T04:02:44.150Z","timeLastDiscovered":null,"timeUpdated":"2026-09-02T04:02:44.739Z","timezoneRegion":"UTC"}'
+        encoding: json
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8debb5dfc933cec6d23d195023586397ea736b87adbe99764827ac2dd05c66ca--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"areLogsCollected":false,"associatedSourcesCount":null,"cloudResourceId":null,"compartmentId":"<ocid:1>","creationSource":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:02:43.967Z"}},"entityTypeInternalName":"oci_palo_alto","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"update"},"hostname":"osok-replay-update.example.com","id":"<ocid:2>","lifecycleDetails":"READY","lifecycleState":"ACTIVE","managementAgentCompartmentId":null,"managementAgentDisplayName":null,"managementAgentId":null,"metadata":{"items":[]},"name":"osok-replay-log-analytics-entity","properties":{},"sourceId":null,"timeCreated":"2026-09-02T04:02:44.150Z","timeLastDiscovered":null,"timeUpdated":"2026-09-02T04:02:44.739Z","timezoneRegion":"UTC"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: loganalytics.us-ashburn-1.oci.oraclecloud.com
+        path: /20200601/namespaces/<binding:loganalytics-namespace>/logAnalyticsEntities/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - edcc762cabd929db79f4bbb41b4c615c0380435166a69a1fb4ae1f3caa7f12c4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"areLogsCollected":false,"associatedSourcesCount":null,"cloudResourceId":null,"compartmentId":"<ocid:1>","creationSource":null,"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:02:43.967Z"}},"entityTypeInternalName":"oci_palo_alto","entityTypeName":"Palo Alto Networks","freeformTags":{"osok-replay":"update"},"hostname":"osok-replay-update.example.com","id":"<ocid:2>","lifecycleDetails":"READY","lifecycleState":"DELETED","managementAgentCompartmentId":null,"managementAgentDisplayName":null,"managementAgentId":null,"metadata":{"items":[]},"name":"osok-replay-log-analytics-entity","properties":{},"sourceId":null,"timeCreated":"2026-09-02T04:02:44.150Z","timeLastDiscovered":null,"timeUpdated":"2026-09-02T04:02:45.291Z","timezoneRegion":"UTC"}'
+        encoding: json

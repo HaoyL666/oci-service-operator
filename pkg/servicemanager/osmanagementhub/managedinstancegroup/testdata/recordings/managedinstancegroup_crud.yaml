@@ -1,0 +1,191 @@
+version: 1
+metadata:
+    service: osmanagementhub
+    resource: ManagedInstanceGroup
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"archType":"X86_64","autonomousSettings":{"isDataCollectionAuthorized":false},"compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-managed-instance-group","location":"OCI_COMPUTE","osFamily":"ORACLE_LINUX_8","softwareSourceIds":["<ocid:2>"],"vendorName":"ORACLE"}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:3>
+        body: '{"archType":"X86_64","autonomousSettings":{"isDataCollectionAuthorized":false,"scheduledJobId":"<ocid:4>"},"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:13:41.809Z"}},"description":"recorded create","displayName":"osok-replay-managed-instance-group","freeformTags":{},"id":"<ocid:5>","isManagedByAutonomousLinux":true,"lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceCount":0,"managedInstanceIds":[],"notificationTopicId":null,"osFamily":"ORACLE_LINUX_8","pendingJobCount":0,"softwareSourceIds":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"softwareSources":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"systemTags":{},"timeCreated":"2026-09-02T03:13:42.157Z","timeModified":"2026-09-02T03:13:42.157Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","autonomousSettings":{"isDataCollectionAuthorized":false,"scheduledJobId":"<ocid:4>"},"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:13:41.809Z"}},"description":"recorded create","displayName":"osok-replay-managed-instance-group","freeformTags":{},"id":"<ocid:5>","isManagedByAutonomousLinux":true,"lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceCount":0,"managedInstanceIds":[],"notificationTopicId":null,"osFamily":"ORACLE_LINUX_8","pendingJobCount":1,"softwareSourceIds":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"softwareSources":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"systemTags":{},"timeCreated":"2026-09-02T03:13:42.157Z","timeModified":"2026-09-02T03:13:42.157Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","autonomousSettings":{"isDataCollectionAuthorized":false,"scheduledJobId":"<ocid:4>"},"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:13:41.809Z"}},"description":"recorded create","displayName":"osok-replay-managed-instance-group","freeformTags":{},"id":"<ocid:5>","isManagedByAutonomousLinux":true,"lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceCount":0,"managedInstanceIds":[],"notificationTopicId":null,"osFamily":"ORACLE_LINUX_8","pendingJobCount":1,"softwareSourceIds":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"softwareSources":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"systemTags":{},"timeCreated":"2026-09-02T03:13:42.157Z","timeModified":"2026-09-02T03:13:42.157Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","autonomousSettings":{"isDataCollectionAuthorized":false,"scheduledJobId":"<ocid:4>"},"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:13:41.809Z"}},"description":"recorded update","displayName":"osok-replay-managed-instance-group","freeformTags":{},"id":"<ocid:5>","isManagedByAutonomousLinux":true,"lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceCount":0,"managedInstanceIds":[],"notificationTopicId":null,"osFamily":"ORACLE_LINUX_8","pendingJobCount":1,"softwareSourceIds":[{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"softwareSources":[{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"systemTags":{},"timeCreated":"2026-09-02T03:13:42.157Z","timeModified":"2026-09-02T03:13:46.232Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","autonomousSettings":{"isDataCollectionAuthorized":false,"scheduledJobId":"<ocid:4>"},"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:13:41.809Z"}},"description":"recorded update","displayName":"osok-replay-managed-instance-group","freeformTags":{},"id":"<ocid:5>","isManagedByAutonomousLinux":true,"lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceCount":0,"managedInstanceIds":[],"notificationTopicId":null,"osFamily":"ORACLE_LINUX_8","pendingJobCount":1,"softwareSourceIds":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"softwareSources":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"systemTags":{},"timeCreated":"2026-09-02T03:13:42.157Z","timeModified":"2026-09-02T03:13:46.232Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","autonomousSettings":{"isDataCollectionAuthorized":false,"scheduledJobId":"<ocid:4>"},"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:13:41.809Z"}},"description":"recorded update","displayName":"osok-replay-managed-instance-group","freeformTags":{},"id":"<ocid:5>","isManagedByAutonomousLinux":true,"lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceCount":0,"managedInstanceIds":[],"notificationTopicId":null,"osFamily":"ORACLE_LINUX_8","pendingJobCount":1,"softwareSourceIds":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"softwareSources":[{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"systemTags":{},"timeCreated":"2026-09-02T03:13:42.157Z","timeModified":"2026-09-02T03:13:46.232Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","autonomousSettings":{"isDataCollectionAuthorized":false,"scheduledJobId":"<ocid:4>"},"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:13:41.809Z"}},"description":"recorded update","displayName":"osok-replay-managed-instance-group","freeformTags":{},"id":"<ocid:5>","isManagedByAutonomousLinux":true,"lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceCount":0,"managedInstanceIds":[],"notificationTopicId":null,"osFamily":"ORACLE_LINUX_8","pendingJobCount":1,"softwareSourceIds":[{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"softwareSources":[{"description":"Oracle Linux 8 Application Stream Packages  (x86_64)","displayName":"ol8_appstream-x86_64","id":"<ocid:7>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 BaseOS Latest  (x86_64)","displayName":"ol8_baseos_latest-x86_64","id":"<ocid:9>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Java SE 8 for Oracle Linux 8 (x86_64) (Public)","displayName":"ol8_javase8_public-x86_64","id":"<ocid:2>","isMandatoryForAutonomousLinux":false,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 UEK Release 7 (x86_64)","displayName":"ol8_uekr7-x86_64","id":"<ocid:6>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 OCI Included Packages (x86_64)","displayName":"ol8_oci_included-x86_64","id":"<ocid:12>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice aware userspace packages for Oracle Linux 8 (x86_64)","displayName":"ol8_x86_64_userspace_ksplice-x86_64","id":"<ocid:10>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Ksplice for Oracle Linux 8 (x86_64)","displayName":"ol8_ksplice-x86_64","id":"<ocid:8>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"},{"description":"Oracle Linux 8 Addons (x86_64)","displayName":"ol8_addons-x86_64","id":"<ocid:11>","isMandatoryForAutonomousLinux":true,"softwareSourceType":"VENDOR"}],"systemTags":{},"timeCreated":"2026-09-02T03:13:42.157Z","timeModified":"2026-09-02T03:13:46.232Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/managedInstanceGroups
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-managed-instance-group
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[]}'
+        encoding: json

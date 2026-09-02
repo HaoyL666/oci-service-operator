@@ -1,0 +1,256 @@
+version: 1
+metadata:
+    service: logging
+    resource: UnifiedAgentConfiguration
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/unifiedAgentConfigurations
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"OSOK recorded unified agent configuration","displayName":"osok-replay-unified-agent-config","groupAssociation":{"groupList":["<ocid:2>"]},"isEnabled":true,"serviceConfiguration":{"configurationType":"LOGGING","destination":{"logObjectId":"<ocid:3>"},"filter":[],"sources":[{"name":"osok-replay-application","parser":{"parserType":"NONE"},"paths":["/var/log/osok-replay.log"],"sourceType":"LOG_TAIL"}]}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+        body: '{}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_CONFIGURATION","percentComplete":0,"resources":[{"actionType":"CREATED","entityType":"unifiedagentconfiguration","entityUri":"/unifiedAgentConfigurations/<ocid:5>","identifier":"<ocid:5>"}],"status":"IN_PROGRESS","timeAccepted":"2026-09-02T03:41:14.987Z","timeFinished":"2026-09-02T03:41:14.987Z","timeStarted":"2026-09-02T03:41:14.987Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"CREATE_CONFIGURATION","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"unifiedagentconfiguration","entityUri":"/unifiedAgentConfigurations/<ocid:5>","identifier":"<ocid:5>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T03:41:14.987Z","timeFinished":"2026-09-02T03:41:17.823Z","timeStarted":"2026-09-02T03:41:14.987Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/unifiedAgentConfigurations/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5aa1b5e8-e658-4d2a-abb2-00952fc55bf3
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","configurationState":"VALID","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:41:14.890Z"}},"description":"OSOK recorded unified agent configuration","displayName":"osok-replay-unified-agent-config","freeformTags":{},"groupAssociation":{"groupList":["<ocid:2>"]},"id":"<ocid:5>","isEnabled":true,"lifecycleState":"ACTIVE","serviceConfiguration":{"configurationType":"LOGGING","destination":{"isEnrichmentEnabled":null,"isMetadataHidden":null,"logObjectId":"<ocid:3>","operationalMetricsConfiguration":null},"filter":[],"isSourceDecoration":null,"sources":[{"advancedOptions":null,"name":"osok-replay-application","parser":{"fieldTimeKey":null,"isEstimateCurrentEvent":null,"isKeepTimeKey":null,"isNullEmptyString":null,"messageKey":null,"nullValuePattern":null,"parserType":"NONE","timeoutInMilliseconds":null,"types":null},"paths":["/var/log/osok-replay.log"],"sourceType":"LOG_TAIL"}]},"systemTags":{},"timeCreated":"2026-09-02T03:41:14.959Z","timeLastModified":"2026-09-02T03:41:14.959Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/unifiedAgentConfigurations/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 5aa1b5e8-e658-4d2a-abb2-00952fc55bf3
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","configurationState":"VALID","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:41:14.890Z"}},"description":"OSOK recorded unified agent configuration","displayName":"osok-replay-unified-agent-config","freeformTags":{},"groupAssociation":{"groupList":["<ocid:2>"]},"id":"<ocid:5>","isEnabled":true,"lifecycleState":"ACTIVE","serviceConfiguration":{"configurationType":"LOGGING","destination":{"isEnrichmentEnabled":null,"isMetadataHidden":null,"logObjectId":"<ocid:3>","operationalMetricsConfiguration":null},"filter":[],"isSourceDecoration":null,"sources":[{"advancedOptions":null,"name":"osok-replay-application","parser":{"fieldTimeKey":null,"isEstimateCurrentEvent":null,"isKeepTimeKey":null,"isNullEmptyString":null,"messageKey":null,"nullValuePattern":null,"parserType":"NONE","timeoutInMilliseconds":null,"types":null},"paths":["/var/log/osok-replay.log"],"sourceType":"LOG_TAIL"}]},"systemTags":{},"timeCreated":"2026-09-02T03:41:14.959Z","timeLastModified":"2026-09-02T03:41:14.959Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/unifiedAgentConfigurations/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:41:14.890Z"}},"description":"OSOK recorded unified agent configuration","displayName":"osok-replay-unified-agent-config-updated","freeformTags":{},"groupAssociation":{"groupList":["<ocid:2>"]},"isEnabled":true,"serviceConfiguration":{"configurationType":"LOGGING","destination":{"logObjectId":"<ocid:3>"},"filter":[],"sources":[{"name":"osok-replay-application","parser":{"parserType":"NONE"},"paths":["/var/log/osok-replay.log"],"sourceType":"LOG_TAIL"}]}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:6>
+        body: '{}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"UPDATE_CONFIGURATION","percentComplete":0,"resources":[{"actionType":"UPDATED","entityType":"unifiedagentconfiguration","entityUri":"/unifiedAgentConfigurations/<ocid:5>","identifier":"<ocid:5>"}],"status":"IN_PROGRESS","timeAccepted":"2026-09-02T03:41:21.067Z","timeFinished":"2026-09-02T03:41:21.067Z","timeStarted":"2026-09-02T03:41:21.067Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:6>","operationType":"UPDATE_CONFIGURATION","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"unifiedagentconfiguration","entityUri":"/unifiedAgentConfigurations/<ocid:5>","identifier":"<ocid:5>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T03:41:21.067Z","timeFinished":"2026-09-02T03:41:24.432Z","timeStarted":"2026-09-02T03:41:21.067Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/unifiedAgentConfigurations/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 79937e1c-b45f-4556-9b06-d342d7a69627
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","configurationState":"VALID","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:41:14.890Z"}},"description":"OSOK recorded unified agent configuration","displayName":"osok-replay-unified-agent-config-updated","freeformTags":{},"groupAssociation":{"groupList":["<ocid:2>"]},"id":"<ocid:5>","isEnabled":true,"lifecycleState":"ACTIVE","serviceConfiguration":{"configurationType":"LOGGING","destination":{"isEnrichmentEnabled":null,"isMetadataHidden":null,"logObjectId":"<ocid:3>","operationalMetricsConfiguration":null},"filter":[],"isSourceDecoration":null,"sources":[{"advancedOptions":null,"name":"osok-replay-application","parser":{"fieldTimeKey":null,"isEstimateCurrentEvent":null,"isKeepTimeKey":null,"isNullEmptyString":null,"messageKey":null,"nullValuePattern":null,"parserType":"NONE","timeoutInMilliseconds":null,"types":null},"paths":["/var/log/osok-replay.log"],"sourceType":"LOG_TAIL"}]},"systemTags":{},"timeCreated":"2026-09-02T03:41:14.959Z","timeLastModified":"2026-09-02T03:41:21.067Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/unifiedAgentConfigurations/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 79937e1c-b45f-4556-9b06-d342d7a69627
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","configurationState":"VALID","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T03:41:14.890Z"}},"description":"OSOK recorded unified agent configuration","displayName":"osok-replay-unified-agent-config-updated","freeformTags":{},"groupAssociation":{"groupList":["<ocid:2>"]},"id":"<ocid:5>","isEnabled":true,"lifecycleState":"ACTIVE","serviceConfiguration":{"configurationType":"LOGGING","destination":{"isEnrichmentEnabled":null,"isMetadataHidden":null,"logObjectId":"<ocid:3>","operationalMetricsConfiguration":null},"filter":[],"isSourceDecoration":null,"sources":[{"advancedOptions":null,"name":"osok-replay-application","parser":{"fieldTimeKey":null,"isEstimateCurrentEvent":null,"isKeepTimeKey":null,"isNullEmptyString":null,"messageKey":null,"nullValuePattern":null,"parserType":"NONE","timeoutInMilliseconds":null,"types":null},"paths":["/var/log/osok-replay.log"],"sourceType":"LOG_TAIL"}]},"systemTags":{},"timeCreated":"2026-09-02T03:41:14.959Z","timeLastModified":"2026-09-02T03:41:21.067Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/unifiedAgentConfigurations/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:7>
+        body: '{}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/workRequests/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:7>","operationType":"DELETE_CONFIGURATION","percentComplete":0,"resources":[{"actionType":"DELETED","entityType":"unifiedagentconfiguration","entityUri":"/unifiedAgentConfigurations/<ocid:5>","identifier":"<ocid:5>"}],"status":"IN_PROGRESS","timeAccepted":"2026-09-02T03:41:27.061Z","timeFinished":"2026-09-02T03:41:27.061Z","timeStarted":"2026-09-02T03:41:27.061Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/workRequests/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:7>","operationType":"DELETE_CONFIGURATION","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"unifiedagentconfiguration","entityUri":"/unifiedAgentConfigurations/<ocid:5>","identifier":"<ocid:5>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T03:41:27.061Z","timeFinished":"2026-09-02T03:41:30.468Z","timeStarted":"2026-09-02T03:41:27.061Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: logging.us-ashburn-1.oci.oraclecloud.com
+        path: /20200531/unifiedAgentConfigurations/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json

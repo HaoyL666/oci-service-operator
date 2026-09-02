@@ -231,6 +231,13 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   including service-specific deletion confirmation behavior.
 - Monitoring Alarm Suppression with its required level preserved, and a
   Resource Scheduler Schedule whose test action is fixed in the distant future.
+- Vulnerability Scanning container and host recipes; Usage API saved query,
+  custom table, and carbon-emissions query; and a File Storage snapshot.
+- OS Management Hub managed-instance-group and registration-profile lifecycles,
+  including mandatory software-source preservation and scoped delete checks.
+- WAAS HTTP Redirect and Certificate, Logging Unified Agent Configuration, and
+  Log Analytics Entity, including work-request, sensitive-PEM, and typed
+  service-configuration replay.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
