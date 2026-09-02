@@ -1,0 +1,268 @@
+version: 1
+metadata:
+    service: networkfirewall
+    resource: NetworkFirewallPolicy
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"OSOK recorded Network Firewall policy","displayName":"osok-replay-network-firewall-policy","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 53ff0fe2454cbb60050d83b65131c2e7517db3d318da9db63117e7888e1b7adc--gzip
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy","displayName":"osok-replay-network-firewall-policy","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:37.691Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 53ff0fe2454cbb60050d83b65131c2e7517db3d318da9db63117e7888e1b7adc--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy","displayName":"osok-replay-network-firewall-policy","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:37.691Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 53ff0fe2454cbb60050d83b65131c2e7517db3d318da9db63117e7888e1b7adc--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy","displayName":"osok-replay-network-firewall-policy","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:37.691Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 0fb0e7939c4c77bf124f89e1fdbe1b9d0ac77c12e7450e57e677ce7447fb76bd--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:38.611Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 0fb0e7939c4c77bf124f89e1fdbe1b9d0ac77c12e7450e57e677ce7447fb76bd--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:38.611Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 34ab5becd19af1873fd424a50caa2bd5bf67a74c4cf470faa693132133ee5838--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:38.611Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 34ab5becd19af1873fd424a50caa2bd5bf67a74c4cf470faa693132133ee5838--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:38.611Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 34ab5becd19af1873fd424a50caa2bd5bf67a74c4cf470faa693132133ee5838--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:38.611Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 34ab5becd19af1873fd424a50caa2bd5bf67a74c4cf470faa693132133ee5838--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:38.611Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 34ab5becd19af1873fd424a50caa2bd5bf67a74c4cf470faa693132133ee5838--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:38.611Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 34ab5becd19af1873fd424a50caa2bd5bf67a74c4cf470faa693132133ee5838--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"DELETING","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:22:38.611Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 43cd4256aeb08502c2b294bfddb62b04fb46a0ba34a517d9a5dd72c4ee7511a9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attachedNetworkFirewallCount":0,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T16:22:37.514Z"}},"description":"OSOK recorded Network Firewall policy updated","displayName":"osok-replay-network-firewall-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"DELETED","systemTags":{},"timeCreated":"2026-09-02T16:22:37.691Z","timeUpdated":"2026-09-02T16:23:06.405Z"}'
+        encoding: json

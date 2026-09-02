@@ -130,3 +130,19 @@ func TestSanitizerPreservesImagePullSecretCollectionAndRedactsCredentials(t *tes
 		t.Fatalf("sanitized body retained image-pull credential: %s", body)
 	}
 }
+
+func TestSanitizerPreservesNullSensitiveFields(t *testing.T) {
+	t.Parallel()
+
+	sanitizer := newSanitizer(nil)
+	body, encoding, err := sanitizer.body([]byte(`{"password":"sensitive","secret":null,"token":null}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if encoding != "json" {
+		t.Fatalf("encoding = %q, want json", encoding)
+	}
+	if body != `{"password":"<redacted>","secret":null,"token":null}` {
+		t.Fatalf("body = %s", body)
+	}
+}

@@ -1,0 +1,208 @@
+version: 1
+metadata:
+    service: dns
+    resource: SteeringPolicyAttachment
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"displayName":"osok-replay-steering-attachment","domainName":"app.osok-replay-batch4.invalid","steeringPolicyId":"<ocid:1>","zoneId":"<ocid:2>"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"1#application/json"'
+            location:
+                - https://dns.us-ashburn-1.oci.oraclecloud.com/20180115/steeringPolicyAttachments/<ocid:3>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+        body: '{"compartmentId":"<ocid:5>","displayName":"osok-replay-steering-attachment","domainName":"app.osok-replay-batch4.invalid","id":"<ocid:3>","lifecycleState":"ACTIVE","rtypes":["A"],"self":"https://dns.us-ashburn-1.oci.oraclecloud.com/20180115/steeringPolicyAttachments/<ocid:3>","steeringPolicyId":"<ocid:1>","timeCreated":"2026-09-02T17:33:31.271Z","zoneId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments/<ocid:3>
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"1#application/json"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:5>","displayName":"osok-replay-steering-attachment","domainName":"app.osok-replay-batch4.invalid","id":"<ocid:3>","lifecycleState":"ACTIVE","rtypes":["A"],"self":"https://dns.us-ashburn-1.oci.oraclecloud.com/20180115/steeringPolicyAttachments/<ocid:3>","steeringPolicyId":"<ocid:1>","timeCreated":"2026-09-02T17:33:31.271Z","zoneId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments/<ocid:3>
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"1#application/json"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:5>","displayName":"osok-replay-steering-attachment","domainName":"app.osok-replay-batch4.invalid","id":"<ocid:3>","lifecycleState":"ACTIVE","rtypes":["A"],"self":"https://dns.us-ashburn-1.oci.oraclecloud.com/20180115/steeringPolicyAttachments/<ocid:3>","steeringPolicyId":"<ocid:1>","timeCreated":"2026-09-02T17:33:31.271Z","zoneId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments/<ocid:3>
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+        body: '{"displayName":"osok-replay-steering-attachment-updated"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"2#application/json"'
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:6>
+        body: '{"compartmentId":"<ocid:5>","displayName":"osok-replay-steering-attachment-updated","domainName":"app.osok-replay-batch4.invalid","id":"<ocid:3>","lifecycleState":"ACTIVE","rtypes":["A"],"self":"https://dns.us-ashburn-1.oci.oraclecloud.com/20180115/steeringPolicyAttachments/<ocid:3>","steeringPolicyId":"<ocid:1>","timeCreated":"2026-09-02T17:33:31.271Z","zoneId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments/<ocid:3>
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"2#application/json"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:5>","displayName":"osok-replay-steering-attachment-updated","domainName":"app.osok-replay-batch4.invalid","id":"<ocid:3>","lifecycleState":"ACTIVE","rtypes":["A"],"self":"https://dns.us-ashburn-1.oci.oraclecloud.com/20180115/steeringPolicyAttachments/<ocid:3>","steeringPolicyId":"<ocid:1>","timeCreated":"2026-09-02T17:33:31.271Z","zoneId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments/<ocid:3>
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"2#application/json"'
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:5>","displayName":"osok-replay-steering-attachment-updated","domainName":"app.osok-replay-batch4.invalid","id":"<ocid:3>","lifecycleState":"ACTIVE","rtypes":["A"],"self":"https://dns.us-ashburn-1.oci.oraclecloud.com/20180115/steeringPolicyAttachments/<ocid:3>","steeringPolicyId":"<ocid:1>","timeCreated":"2026-09-02T17:33:31.271Z","zoneId":"<ocid:2>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments/<ocid:3>
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:7>
+    - request:
+        method: GET
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments/<ocid:3>
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicies/<ocid:1>
+        query: scope=GLOBAL
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"1#application/json"'
+            opc-request-id:
+                - <redacted>
+        body: '{"answers":[{"isDisabled":false,"name":"primary","pool":"blue","rdata":"192.0.2.10","rtype":"A"}],"compartmentId":"<ocid:5>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:29:36.279Z"}},"displayName":"osok-replay-batch4-attachment-policy","freeformTags":{},"healthCheckMonitorId":null,"id":"<ocid:1>","lifecycleState":"ACTIVE","rules":[{"cases":null,"defaultAnswerData":[{"answerCondition":"answer.isDisabled != true","shouldKeep":true}],"description":null,"ruleType":"FILTER"},{"cases":null,"defaultCount":1,"description":null,"ruleType":"LIMIT"}],"self":"https://dns.us-ashburn-1.oci.oraclecloud.com/20180115/steeringPolicies/<ocid:1>","template":"CUSTOM","timeCreated":"2026-09-02T17:29:36.371Z","ttl":30}'
+        encoding: json
+    - request:
+        method: GET
+        host: dns.us-ashburn-1.oci.oraclecloud.com
+        path: /20180115/steeringPolicyAttachments
+        query: compartmentId=%3Cocid%3A5%3E&domain=app.osok-replay-batch4.invalid&scope=GLOBAL&steeringPolicyId=%3Cocid%3A1%3E&zoneId=%3Cocid%3A2%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json

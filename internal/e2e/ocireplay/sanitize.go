@@ -187,6 +187,9 @@ func (s *sanitizer) body(body []byte) (string, string, error) {
 }
 
 func (s *sanitizer) jsonValue(value any, key string) any {
+	if value == nil {
+		return nil
+	}
 	if sensitiveJSONKey(key) {
 		return "<redacted>"
 	}

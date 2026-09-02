@@ -1,0 +1,191 @@
+version: 1
+metadata:
+    service: osmanagementhub
+    resource: LifecycleEnvironment
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","description":"OSOK recorded lifecycle environment","displayName":"osok-replay-lifecycle-environment","location":"OCI_COMPUTE","osFamily":"ORACLE_LINUX_8","stages":[{"displayName":"Development","rank":1},{"displayName":"Testing","rank":2},{"displayName":"Production","rank":3}],"vendorName":"ORACLE"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:52:13.683Z"}},"description":"OSOK recorded lifecycle environment","displayName":"osok-replay-lifecycle-environment","freeformTags":{},"id":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":null,"osFamily":"ORACLE_LINUX_8","stages":[{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Development","freeformTags":{},"id":"<ocid:3>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":1,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Testing","freeformTags":{},"id":"<ocid:4>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":2,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Production","freeformTags":{},"id":"<ocid:5>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":3,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.207Z","timeModified":"2026-09-02T17:52:14.207Z","vendorName":"ORACLE"}],"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:52:13.683Z"}},"description":"OSOK recorded lifecycle environment","displayName":"osok-replay-lifecycle-environment","freeformTags":{},"id":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":null,"osFamily":"ORACLE_LINUX_8","stages":[{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Development","freeformTags":{},"id":"<ocid:3>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":1,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Testing","freeformTags":{},"id":"<ocid:4>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":2,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Production","freeformTags":{},"id":"<ocid:5>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":3,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.207Z","timeModified":"2026-09-02T17:52:14.207Z","vendorName":"ORACLE"}],"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 06a4a140a4c7d6d8cc66bc5cb5bc591dc89c98feb78fbdd947ac37e56d4c04d0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:52:13.683Z"}},"description":"OSOK recorded lifecycle environment","displayName":"osok-replay-lifecycle-environment","freeformTags":{},"id":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":null,"osFamily":"ORACLE_LINUX_8","stages":[{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Development","freeformTags":{},"id":"<ocid:3>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":1,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Testing","freeformTags":{},"id":"<ocid:4>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":2,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Production","freeformTags":{},"id":"<ocid:5>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":3,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.207Z","timeModified":"2026-09-02T17:52:14.207Z","vendorName":"ORACLE"}],"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"OSOK recorded lifecycle environment updated","displayName":"osok-replay-lifecycle-environment-updated"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:52:13.683Z"}},"description":"OSOK recorded lifecycle environment updated","displayName":"osok-replay-lifecycle-environment-updated","freeformTags":{},"id":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":null,"osFamily":"ORACLE_LINUX_8","stages":[{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Development","freeformTags":{},"id":"<ocid:3>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":1,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Testing","freeformTags":{},"id":"<ocid:4>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":2,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Production","freeformTags":{},"id":"<ocid:5>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":3,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.207Z","timeModified":"2026-09-02T17:52:14.207Z","vendorName":"ORACLE"}],"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:15.279Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:52:13.683Z"}},"description":"OSOK recorded lifecycle environment updated","displayName":"osok-replay-lifecycle-environment-updated","freeformTags":{},"id":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":null,"osFamily":"ORACLE_LINUX_8","stages":[{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Development","freeformTags":{},"id":"<ocid:3>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":1,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Testing","freeformTags":{},"id":"<ocid:4>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":2,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Production","freeformTags":{},"id":"<ocid:5>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":3,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.207Z","timeModified":"2026-09-02T17:52:14.207Z","vendorName":"ORACLE"}],"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:15.279Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:52:13.683Z"}},"description":"OSOK recorded lifecycle environment updated","displayName":"osok-replay-lifecycle-environment-updated","freeformTags":{},"id":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":null,"osFamily":"ORACLE_LINUX_8","stages":[{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Development","freeformTags":{},"id":"<ocid:3>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":1,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Testing","freeformTags":{},"id":"<ocid:4>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":2,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Production","freeformTags":{},"id":"<ocid:5>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":3,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.207Z","timeModified":"2026-09-02T17:52:14.207Z","vendorName":"ORACLE"}],"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:15.279Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d6c3e7a7e4d47ef14c57a2ac56d8ef349660793712f0d1a13c5d5cc15c5eb19d--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:52:13.683Z"}},"description":"OSOK recorded lifecycle environment updated","displayName":"osok-replay-lifecycle-environment-updated","freeformTags":{},"id":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":null,"osFamily":"ORACLE_LINUX_8","stages":[{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Development","freeformTags":{},"id":"<ocid:3>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":1,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Testing","freeformTags":{},"id":"<ocid:4>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":2,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:14.206Z","vendorName":"ORACLE"},{"archType":"X86_64","compartmentId":"<ocid:1>","definedTags":{},"displayName":"Production","freeformTags":{},"id":"<ocid:5>","lifecycleEnvironmentId":"<ocid:2>","lifecycleState":"ACTIVE","location":"OCI_COMPUTE","managedInstanceIds":[],"osFamily":"ORACLE_LINUX_8","rank":3,"softwareSourceId":null,"systemTags":{},"timeCreated":"2026-09-02T17:52:14.207Z","timeModified":"2026-09-02T17:52:14.207Z","vendorName":"ORACLE"}],"systemTags":{},"timeCreated":"2026-09-02T17:52:14.206Z","timeModified":"2026-09-02T17:52:15.279Z","vendorName":"ORACLE"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/lifecycleEnvironments
+        query: compartmentId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[]}'
+        encoding: json

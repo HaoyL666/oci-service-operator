@@ -44,6 +44,16 @@ resources:
     resource: dbsystem
     classification: synthetic
     reason: Live creation provisions billable database compute and block storage and has a long lifecycle.
+  - service: networkfirewall
+    resource: mappedsecret
+    classification: synthetic
+    reason: A live mapped secret requires a Vault key and secret; OCI key deletion is scheduled rather than immediate, so recording would leave a billable prerequisite after the test.
+    nextAction: Replace the synthetic cassette if an operator-managed disposable Vault secret becomes available for recording.
+  - service: networkfirewall
+    resource: networkfirewall
+    classification: synthetic
+    reason: Live creation provisions a billable Network Firewall endpoint in a subnet and has a long infrastructure lifecycle.
+    nextAction: Replace the synthetic cassette when an operator-approved disposable firewall environment is available.
   - service: objectstorage
     resource: bucket
     classification: recorded
@@ -85,3 +95,14 @@ resources:
     reason: Direct service-manager and official OCI CLI creates both fail with MissingParameter even though the serialized request contains displayName.
     blocker: The live Service Catalog endpoint rejects a valid SDK request before creating a resource.
     nextAction: Retry recording after the Service Catalog API accepts its documented CreateServiceCatalog payload.
+  - service: vulnerabilityscanning
+    resource: containerscantarget
+    classification: synthetic
+    reason: Both the service manager and an independent OCI CLI create return NotAuthorizedOrNotFound because the operator-access session cannot resolve the delegated tenancy's OCIR compartment inside Vulnerability Scanning.
+    nextAction: Replace the synthetic cassette when recording credentials belong directly to the target tenancy.
+  - service: waas
+    resource: waaspolicy
+    classification: deferred
+    reason: Live creation reached ACTIVE and exposed the real work-request entity type, but deletion exceeded the 15-minute recording window before later completing successfully.
+    blocker: The interrupted recording has no terminal delete interactions, so it cannot be published as a complete portable lifecycle cassette.
+    nextAction: Re-record with a longer bounded delete timeout and capture the successful work request plus final absence confirmation.

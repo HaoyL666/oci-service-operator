@@ -137,6 +137,10 @@ external side effects or prerequisites:
 - Security Attribute Namespaces and child Security Attributes use
   contract-faithful synthetic lifecycles because the recording principal
   receives a service-level 404 for both the generated client and the OCI CLI.
+- Network Firewall endpoints provision billable infrastructure, and mapped
+  secrets require Vault prerequisites whose deletion is delayed.
+- Vulnerability Scanning Container Scan Targets cannot resolve the delegated
+  tenancy's OCIR compartment with the available operator-access credentials.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
@@ -241,6 +245,13 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - Classic Load Balancer Listener and Certificate, OSMH Scheduled Job, Usage
   Schedule, and Log Analytics Entity Type. Their live prerequisites are
   injected only while recording; replay uses sanitized placeholder identities.
+- Network Firewall Policy plus its bounded Address List, Application,
+  Application Group, Decryption Profile, Decryption Rule, NAT Rule, Security
+  Rule, Service, Service List, Tunnel Inspection Rule, and URL List children.
+- DNS Steering Policy and Steering Policy Attachment, including scoped
+  confirmation for auth-shaped post-delete reads.
+- Vulnerability Scanning Host Scan Target, OS Management Hub Lifecycle
+  Environment, and Database Recovery Protection Policy lifecycles.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its

@@ -1,0 +1,451 @@
+version: 1
+metadata:
+    service: recovery
+    resource: ProtectionPolicy
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-protection-policy&owner=customer
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[]}'
+        encoding: json
+    - request:
+        method: POST
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"backupRetentionPeriodInDays":14,"compartmentId":"<ocid:1>","displayName":"osok-replay-protection-policy","freeformTags":{"osok-replay":"create"},"mustEnforceCloudLocality":false}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 795015592--gzip
+            location:
+                - https://recovery.us-ashburn-1.oci.oraclecloud.com/protectionPolicies/<ocid:3>
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"backupRetentionPeriodInDays":14,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:53:56.756Z"}},"displayName":"osok-replay-protection-policy","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isArchivalEnabled":false,"isPredefinedPolicy":false,"lifecycleDetails":null,"lifecycleState":"CREATING","mustEnforceCloudLocality":false,"policyLockedDateTime":null,"schedules":null,"systemTags":{},"targetRegions":null,"timeCreated":"2026-09-02T17:53:57.039Z","timeUpdated":"2026-09-02T17:53:57.039Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:53:57.036Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:53:57.036Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:53:57.036Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:53:57.036Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_PROTECTION_POLICY","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T17:53:57.036Z","timeFinished":"2026-09-02T17:54:16.867Z","timeStarted":"2026-09-02T17:54:16.686Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ce8f599f4071870e45ad1735afc798a038f65227f7913b3fb6bc4782c3ed662b--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"backupRetentionPeriodInDays":14,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:53:56.756Z"}},"displayName":"osok-replay-protection-policy","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isArchivalEnabled":false,"isPredefinedPolicy":false,"lifecycleDetails":"ProtectionPolicy was created successfully","lifecycleState":"ACTIVE","mustEnforceCloudLocality":false,"policyLockedDateTime":null,"schedules":null,"systemTags":{},"targetRegions":null,"timeCreated":"2026-09-02T17:53:57.039Z","timeUpdated":"2026-09-02T17:54:16.874Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - ce8f599f4071870e45ad1735afc798a038f65227f7913b3fb6bc4782c3ed662b--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"backupRetentionPeriodInDays":14,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:53:56.756Z"}},"displayName":"osok-replay-protection-policy","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isArchivalEnabled":false,"isPredefinedPolicy":false,"lifecycleDetails":"ProtectionPolicy was created successfully","lifecycleState":"ACTIVE","mustEnforceCloudLocality":false,"policyLockedDateTime":null,"schedules":null,"systemTags":{},"targetRegions":null,"timeCreated":"2026-09-02T17:53:57.039Z","timeUpdated":"2026-09-02T17:54:16.874Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"backupRetentionPeriodInDays":15,"displayName":"osok-replay-protection-policy-updated","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:19.558Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:19.558Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:19.558Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:19.558Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:19.558Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:19.558Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_PROTECTION_POLICY","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T17:54:19.558Z","timeFinished":"2026-09-02T17:54:48.631Z","timeStarted":"2026-09-02T17:54:48.385Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - db6a55471d36fec88bd2a3b7298fef5ed743d7ac260f37ce2fe5535c5d5eada1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"backupRetentionPeriodInDays":15,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:53:56.756Z"}},"displayName":"osok-replay-protection-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isArchivalEnabled":false,"isPredefinedPolicy":false,"lifecycleDetails":"ProtectionPolicy was updated successfully","lifecycleState":"ACTIVE","mustEnforceCloudLocality":false,"policyLockedDateTime":null,"schedules":null,"systemTags":{},"targetRegions":null,"timeCreated":"2026-09-02T17:53:57.039Z","timeUpdated":"2026-09-02T17:54:48.640Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - db6a55471d36fec88bd2a3b7298fef5ed743d7ac260f37ce2fe5535c5d5eada1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"backupRetentionPeriodInDays":15,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:53:56.756Z"}},"displayName":"osok-replay-protection-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isArchivalEnabled":false,"isPredefinedPolicy":false,"lifecycleDetails":"ProtectionPolicy was updated successfully","lifecycleState":"ACTIVE","mustEnforceCloudLocality":false,"policyLockedDateTime":null,"schedules":null,"systemTags":{},"targetRegions":null,"timeCreated":"2026-09-02T17:53:57.039Z","timeUpdated":"2026-09-02T17:54:48.640Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:52.089Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:52.089Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:52.089Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_PROTECTION_POLICY","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-02T17:54:52.089Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_PROTECTION_POLICY","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"protectionPolicy","entityUri":"/protectionPolicies/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-02T17:54:52.089Z","timeFinished":"2026-09-02T17:55:08.751Z","timeStarted":"2026-09-02T17:55:08.662Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectionPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 580aa5cc5b7e2550dc19e0ccf51e11af67ec2f47928157933cfbf887f2b87b2a--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"backupRetentionPeriodInDays":15,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T17:53:56.756Z"}},"displayName":"osok-replay-protection-policy-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isArchivalEnabled":false,"isPredefinedPolicy":false,"lifecycleDetails":"ProtectionPolicy was deleted successfully","lifecycleState":"DELETED","mustEnforceCloudLocality":false,"policyLockedDateTime":null,"schedules":null,"systemTags":{},"targetRegions":null,"timeCreated":"2026-09-02T17:53:57.039Z","timeUpdated":"2026-09-02T17:55:08.762Z"}'
+        encoding: json

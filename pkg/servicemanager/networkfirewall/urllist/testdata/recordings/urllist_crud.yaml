@@ -1,0 +1,192 @@
+version: 1
+metadata:
+    service: networkfirewall
+    resource: UrlList
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"description":"OSOK recorded URL list","name":"osok_replay_url_list","urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3da0b085eeeec7b1e9ab18c6a0de3f9c3b8d17476b6af5ddbc3621f979f2379c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"description":"OSOK recorded URL list","name":"osok_replay_url_list","parentResourceId":"<ocid:1>","totalUrls":1,"urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3da0b085eeeec7b1e9ab18c6a0de3f9c3b8d17476b6af5ddbc3621f979f2379c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"description":"OSOK recorded URL list","name":"osok_replay_url_list","parentResourceId":"<ocid:1>","totalUrls":1,"urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3da0b085eeeec7b1e9ab18c6a0de3f9c3b8d17476b6af5ddbc3621f979f2379c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"description":"OSOK recorded URL list","name":"osok_replay_url_list","parentResourceId":"<ocid:1>","totalUrls":1,"urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3da0b085eeeec7b1e9ab18c6a0de3f9c3b8d17476b6af5ddbc3621f979f2379c--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"description":"OSOK recorded URL list","name":"osok_replay_url_list","parentResourceId":"<ocid:1>","totalUrls":1,"urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+    - request:
+        method: PUT
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"OSOK recorded UrlList updated","urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a8f5d78c46b381f311af27e31c90eedb807ab3a791032e21c308b41b83678c66
+            opc-request-id:
+                - <redacted>
+        body: '{"description":"OSOK recorded UrlList updated","name":"osok_replay_url_list","parentResourceId":"<ocid:1>","totalUrls":1,"urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a8f5d78c46b381f311af27e31c90eedb807ab3a791032e21c308b41b83678c66--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"description":"OSOK recorded UrlList updated","name":"osok_replay_url_list","parentResourceId":"<ocid:1>","totalUrls":1,"urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a8f5d78c46b381f311af27e31c90eedb807ab3a791032e21c308b41b83678c66--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"description":"OSOK recorded UrlList updated","name":"osok_replay_url_list","parentResourceId":"<ocid:1>","totalUrls":1,"urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - a8f5d78c46b381f311af27e31c90eedb807ab3a791032e21c308b41b83678c66--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"description":"OSOK recorded UrlList updated","name":"osok_replay_url_list","parentResourceId":"<ocid:1>","totalUrls":1,"urls":[{"pattern":"*.example.com/*","type":"SIMPLE"}]}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource osok_replay_url_list not found"}'
+        encoding: json

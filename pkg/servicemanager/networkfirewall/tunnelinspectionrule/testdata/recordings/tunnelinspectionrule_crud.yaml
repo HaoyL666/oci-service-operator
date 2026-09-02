@@ -1,0 +1,192 @@
+version: 1
+metadata:
+    service: networkfirewall
+    resource: TunnelInspectionRule
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"name":"osok_replay_tunnel_rule","profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 975924e47b6480e3b89454d9e6377cb81137cee3d7c1ffe7433295cd26a10586--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 975924e47b6480e3b89454d9e6377cb81137cee3d7c1ffe7433295cd26a10586--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 975924e47b6480e3b89454d9e6377cb81137cee3d7c1ffe7433295cd26a10586--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 975924e47b6480e3b89454d9e6377cb81137cee3d7c1ffe7433295cd26a10586--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+        body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"position":{},"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fc9b6ed9660bcdf202487bf1faff336d4b5435cd41e022e2b7351a2b63c77be4
+            opc-request-id:
+                - <redacted>
+        body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fc9b6ed9660bcdf202487bf1faff336d4b5435cd41e022e2b7351a2b63c77be4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fc9b6ed9660bcdf202487bf1faff336d4b5435cd41e022e2b7351a2b63c77be4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - fc9b6ed9660bcdf202487bf1faff336d4b5435cd41e022e2b7351a2b63c77be4--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: network-firewall.us-ashburn-1.ocs.oraclecloud.com
+        path: /20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource osok_replay_tunnel_rule not found"}'
+        encoding: json
