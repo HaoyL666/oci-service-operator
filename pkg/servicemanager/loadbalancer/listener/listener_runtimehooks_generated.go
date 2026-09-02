@@ -53,9 +53,13 @@ func newListenerRuntimeSemantics() *generatedruntime.Semantics {
 		FormalService: "loadbalancer",
 		FormalSlug:    "listener",
 		Async: &generatedruntime.AsyncSemantics{
-			Strategy:             "lifecycle",
+			Strategy:             "workrequest",
 			Runtime:              "generatedruntime",
-			FormalClassification: "lifecycle",
+			FormalClassification: "workrequest",
+			WorkRequest: &generatedruntime.WorkRequestSemantics{
+				Source: "service-sdk",
+				Phases: []string{"create", "update", "delete"},
+			},
 		},
 		StatusProjection:  "required",
 		SecretSideEffects: "none",

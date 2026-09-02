@@ -589,6 +589,9 @@ func selectLogAnalyticsEntityTypeSummary(
 		if !stringsEqual(name, items[i].Name) {
 			continue
 		}
+		if items[i].LifecycleState == loganalyticssdk.EntityLifecycleStatesDeleted {
+			continue
+		}
 		if matched != nil {
 			return loganalyticssdk.LogAnalyticsEntityTypeSummary{}, false, fmt.Errorf("LogAnalyticsEntityType list response returned multiple matches for name %q", name)
 		}

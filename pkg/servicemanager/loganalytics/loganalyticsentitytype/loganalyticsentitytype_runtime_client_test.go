@@ -122,6 +122,34 @@ func TestLogAnalyticsEntityTypeBindsExistingThroughPaginatedList(t *testing.T) {
 	assertString(t, "status.internalName", resource.Status.InternalName, "custom_internal")
 }
 
+func TestLogAnalyticsEntityTypeBindIgnoresDeletedTombstone(t *testing.T) {
+	resource := newLogAnalyticsEntityTypeResource()
+	fake := &fakeLogAnalyticsEntityTypeOCIClient{
+		listFunc: func(context.Context, loganalyticssdk.ListLogAnalyticsEntityTypesRequest) (loganalyticssdk.ListLogAnalyticsEntityTypesResponse, error) {
+			return loganalyticssdk.ListLogAnalyticsEntityTypesResponse{LogAnalyticsEntityTypeCollection: loganalyticssdk.LogAnalyticsEntityTypeCollection{Items: []loganalyticssdk.LogAnalyticsEntityTypeSummary{
+				logAnalyticsEntityTypeSummary(resource.Spec.Name, "custom_deleted", resource.Spec.Category, string(loganalyticssdk.EntityLifecycleStatesDeleted)),
+			}}}, nil
+		},
+		createFunc: func(context.Context, loganalyticssdk.CreateLogAnalyticsEntityTypeRequest) (loganalyticssdk.CreateLogAnalyticsEntityTypeResponse, error) {
+			return loganalyticssdk.CreateLogAnalyticsEntityTypeResponse{}, nil
+		},
+		getFunc: func(context.Context, loganalyticssdk.GetLogAnalyticsEntityTypeRequest) (loganalyticssdk.GetLogAnalyticsEntityTypeResponse, error) {
+			return loganalyticssdk.GetLogAnalyticsEntityTypeResponse{LogAnalyticsEntityType: logAnalyticsEntityTypeBody(resource.Spec.Name, "custom_new", resource.Spec.Category, string(loganalyticssdk.EntityLifecycleStatesActive), logAnalyticsEntityTypePropertiesFromSpec(resource.Spec.Properties))}, nil
+		},
+	}
+
+	response, err := newTestLogAnalyticsEntityTypeClient(fake).CreateOrUpdate(context.Background(), resource, ctrl.Request{})
+	if err != nil {
+		t.Fatalf("CreateOrUpdate() error = %v", err)
+	}
+	if !response.IsSuccessful {
+		t.Fatalf("CreateOrUpdate() response = %+v, want success", response)
+	}
+	if len(fake.createRequests) != 1 {
+		t.Fatalf("CreateLogAnalyticsEntityType calls = %d, want 1 after deleted tombstone", len(fake.createRequests))
+	}
+}
+
 func TestLogAnalyticsEntityTypeBindListUsesExternalNameForSameReconcileUpdate(t *testing.T) {
 	resource := newLogAnalyticsEntityTypeResource()
 	resource.Spec.Category = "updated"

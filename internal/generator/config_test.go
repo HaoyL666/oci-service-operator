@@ -2427,7 +2427,8 @@ func TestCheckedInConfigSelectedKindsHaveExplicitAsyncContracts(t *testing.T) {
 		strategy string
 		runtime  string
 	}{
-		"jms/JmsPlugin": {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
+		"jms/JmsPlugin":                              {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
+		"loadbalancer/Listener":                      {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
 		"tenantmanagercontrolplane/DomainGovernance": {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
 		"wlms/ManagedInstance":                       {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
 	}
