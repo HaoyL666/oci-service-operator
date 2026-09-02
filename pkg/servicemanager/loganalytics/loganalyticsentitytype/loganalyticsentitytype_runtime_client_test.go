@@ -83,7 +83,7 @@ func TestLogAnalyticsEntityTypeBindsExistingThroughPaginatedList(t *testing.T) {
 	resource := newLogAnalyticsEntityTypeResource()
 	fake := &fakeLogAnalyticsEntityTypeOCIClient{
 		getFunc: func(_ context.Context, request loganalyticssdk.GetLogAnalyticsEntityTypeRequest) (loganalyticssdk.GetLogAnalyticsEntityTypeResponse, error) {
-			assertGetLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, "custom_internal")
+			assertGetLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, resource.Spec.Name)
 			return loganalyticssdk.GetLogAnalyticsEntityTypeResponse{
 				LogAnalyticsEntityType: logAnalyticsEntityTypeBody(resource.Spec.Name, "custom_internal", resource.Spec.Category, string(loganalyticssdk.EntityLifecycleStatesActive), logAnalyticsEntityTypePropertiesFromSpec(resource.Spec.Properties)),
 			}, nil
@@ -122,7 +122,7 @@ func TestLogAnalyticsEntityTypeBindsExistingThroughPaginatedList(t *testing.T) {
 	assertString(t, "status.internalName", resource.Status.InternalName, "custom_internal")
 }
 
-func TestLogAnalyticsEntityTypeBindListUsesInternalNameForSameReconcileUpdate(t *testing.T) {
+func TestLogAnalyticsEntityTypeBindListUsesExternalNameForSameReconcileUpdate(t *testing.T) {
 	resource := newLogAnalyticsEntityTypeResource()
 	resource.Spec.Category = "updated"
 	resource.Spec.Properties = []loganalyticsv1beta1.LogAnalyticsEntityTypeProperty{{Name: "host", Description: "updated host"}}
@@ -140,7 +140,7 @@ func TestLogAnalyticsEntityTypeBindListUsesInternalNameForSameReconcileUpdate(t 
 			}, nil
 		},
 		getFunc: func(_ context.Context, request loganalyticssdk.GetLogAnalyticsEntityTypeRequest) (loganalyticssdk.GetLogAnalyticsEntityTypeResponse, error) {
-			assertGetLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, "custom_internal")
+			assertGetLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, resource.Spec.Name)
 			getCalls++
 			if getCalls == 1 {
 				return loganalyticssdk.GetLogAnalyticsEntityTypeResponse{
@@ -152,7 +152,7 @@ func TestLogAnalyticsEntityTypeBindListUsesInternalNameForSameReconcileUpdate(t 
 			}, nil
 		},
 		updateFunc: func(_ context.Context, request loganalyticssdk.UpdateLogAnalyticsEntityTypeRequest) (loganalyticssdk.UpdateLogAnalyticsEntityTypeResponse, error) {
-			assertUpdateLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, "custom_internal", resource.Spec.Category, 1)
+			assertUpdateLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, resource.Spec.Name, resource.Spec.Category, 1)
 			return loganalyticssdk.UpdateLogAnalyticsEntityTypeResponse{OpcRequestId: stringPtr("opc-update")}, nil
 		},
 	}
@@ -164,7 +164,7 @@ func TestLogAnalyticsEntityTypeBindListUsesInternalNameForSameReconcileUpdate(t 
 	assertString(t, "status.internalName", resource.Status.InternalName, "custom_internal")
 }
 
-func TestLogAnalyticsEntityTypeMutableUpdateUsesInternalNamePath(t *testing.T) {
+func TestLogAnalyticsEntityTypeMutableUpdateUsesExternalNamePath(t *testing.T) {
 	resource := newLogAnalyticsEntityTypeResource()
 	resource.Status.InternalName = "custom_internal"
 	resource.Status.OsokStatus.Ocid = shared.OCID("custom_internal")
@@ -174,7 +174,7 @@ func TestLogAnalyticsEntityTypeMutableUpdateUsesInternalNamePath(t *testing.T) {
 	getCalls := 0
 	fake := &fakeLogAnalyticsEntityTypeOCIClient{
 		getFunc: func(_ context.Context, request loganalyticssdk.GetLogAnalyticsEntityTypeRequest) (loganalyticssdk.GetLogAnalyticsEntityTypeResponse, error) {
-			assertGetLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, "custom_internal")
+			assertGetLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, resource.Spec.Name)
 			getCalls++
 			if getCalls == 1 {
 				return loganalyticssdk.GetLogAnalyticsEntityTypeResponse{
@@ -186,7 +186,7 @@ func TestLogAnalyticsEntityTypeMutableUpdateUsesInternalNamePath(t *testing.T) {
 			}, nil
 		},
 		updateFunc: func(_ context.Context, request loganalyticssdk.UpdateLogAnalyticsEntityTypeRequest) (loganalyticssdk.UpdateLogAnalyticsEntityTypeResponse, error) {
-			assertUpdateLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, "custom_internal", resource.Spec.Category, 1)
+			assertUpdateLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, resource.Spec.Name, resource.Spec.Category, 1)
 			return loganalyticssdk.UpdateLogAnalyticsEntityTypeResponse{OpcRequestId: stringPtr("opc-update")}, nil
 		},
 	}
@@ -244,7 +244,7 @@ func TestLogAnalyticsEntityTypeDeleteWaitsAndThenConfirmsDeleted(t *testing.T) {
 			}, nil
 		},
 		deleteFunc: func(_ context.Context, request loganalyticssdk.DeleteLogAnalyticsEntityTypeRequest) (loganalyticssdk.DeleteLogAnalyticsEntityTypeResponse, error) {
-			assertDeleteLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, "custom_internal")
+			assertDeleteLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, resource.Spec.Name)
 			return loganalyticssdk.DeleteLogAnalyticsEntityTypeResponse{OpcRequestId: stringPtr("opc-delete")}, nil
 		},
 	}
@@ -371,7 +371,7 @@ func TestLogAnalyticsEntityTypeDeleteWithoutTrackedInternalNameUsesPaginatedList
 			}, nil
 		},
 		getFunc: func(_ context.Context, request loganalyticssdk.GetLogAnalyticsEntityTypeRequest) (loganalyticssdk.GetLogAnalyticsEntityTypeResponse, error) {
-			assertGetLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, "custom_internal")
+			assertGetLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, resource.Spec.Name)
 			getCalls++
 			state := string(loganalyticssdk.EntityLifecycleStatesActive)
 			if getCalls == 2 {
@@ -382,7 +382,7 @@ func TestLogAnalyticsEntityTypeDeleteWithoutTrackedInternalNameUsesPaginatedList
 			}, nil
 		},
 		deleteFunc: func(_ context.Context, request loganalyticssdk.DeleteLogAnalyticsEntityTypeRequest) (loganalyticssdk.DeleteLogAnalyticsEntityTypeResponse, error) {
-			assertDeleteLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, "custom_internal")
+			assertDeleteLogAnalyticsEntityTypeRequest(t, request, resolvedLogAnalyticsEntityTypeNamespace, resource.Spec.Name)
 			return loganalyticssdk.DeleteLogAnalyticsEntityTypeResponse{OpcRequestId: stringPtr("opc-delete")}, nil
 		},
 	}

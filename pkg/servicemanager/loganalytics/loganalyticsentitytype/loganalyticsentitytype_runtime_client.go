@@ -290,8 +290,8 @@ func logAnalyticsEntityTypeGetFields() []generatedruntime.RequestField {
 			FieldName:        "EntityTypeName",
 			RequestName:      "entityTypeName",
 			Contribution:     "path",
-			PreferResourceID: true,
-			LookupPaths:      []string{"status.internalName", "internalName", "spec.name", "name"},
+			PreferResourceID: false,
+			LookupPaths:      []string{"spec.name", "status.name", "name"},
 		},
 	}
 }
@@ -310,8 +310,8 @@ func logAnalyticsEntityTypeUpdateFields() []generatedruntime.RequestField {
 			FieldName:        "EntityTypeName",
 			RequestName:      "entityTypeName",
 			Contribution:     "path",
-			PreferResourceID: true,
-			LookupPaths:      []string{"status.internalName", "internalName", "spec.name", "name"},
+			PreferResourceID: false,
+			LookupPaths:      []string{"spec.name", "status.name", "name"},
 		},
 		{FieldName: "UpdateLogAnalyticsEntityTypeDetails", RequestName: "UpdateLogAnalyticsEntityTypeDetails", Contribution: "body"},
 	}
@@ -323,8 +323,8 @@ func logAnalyticsEntityTypeDeleteFields() []generatedruntime.RequestField {
 			FieldName:        "EntityTypeName",
 			RequestName:      "entityTypeName",
 			Contribution:     "path",
-			PreferResourceID: true,
-			LookupPaths:      []string{"status.internalName", "internalName", "spec.name", "name"},
+			PreferResourceID: false,
+			LookupPaths:      []string{"spec.name", "status.name", "name"},
 		},
 	}
 }
@@ -638,7 +638,10 @@ func logAnalyticsEntityTypeDeleteConfirmRead(
 		if resource == nil {
 			return nil, fmt.Errorf("LogAnalyticsEntityType resource is nil")
 		}
-		entityTypeName := strings.TrimSpace(currentID)
+		entityTypeName := strings.TrimSpace(resource.Spec.Name)
+		if entityTypeName == "" {
+			entityTypeName = strings.TrimSpace(currentID)
+		}
 		if entityTypeName == "" {
 			entityTypeName = logAnalyticsEntityTypeTrackedName(resource)
 		}
