@@ -843,6 +843,13 @@ services:
                 - The APM Domain ID the request is intended for.
               markers:
                 - +kubebuilder:validation:Required
+            - name: ScheduledQueryRetentionCriteria
+              type: string
+              tag: 'json:"scheduledQueryRetentionCriteria"'
+              comments:
+                - Retention criteria for the scheduled query. The live service rejects create requests when this value is omitted.
+              markers:
+                - +kubebuilder:validation:Required
           statusFields:
             - name: ApmDomainId
               type: string
@@ -864,9 +871,13 @@ services:
                 apmDomainId: ocid1.apmdomain.oc1..exampleuniqueID
                 scheduledQueryName: scheduled-query-sample
                 scheduledQueryProcessingType: QUERY
-                scheduledQueryText: 'show spans where service.name = "checkout"'
-                scheduledQuerySchedule: '0 */12 * * *'
+                scheduledQueryProcessingSubType: NONE
+                scheduledQueryText: 'SHOW SPANS * FIRST 100 ROWS BETWEEN now() - 2 HOURS AND now()'
+                scheduledQuerySchedule: 'SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 720 MINUTES'
                 scheduledQueryDescription: Sample scheduled query managed by OCI Service Operator
+                scheduledQueryMaximumRuntimeInSeconds: 60
+                scheduledQueryRetentionCriteria: KEEP_DATA_UNTIL_RETENTION_PERIOD
+                scheduledQueryRetentionPeriodInMs: 86400000
 
   - service: appmgmtcontrol
     sdkPackage: github.com/oracle/oci-go-sdk/v65/appmgmtcontrol
@@ -5089,6 +5100,16 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: IngestTimeRule
+          specFields:
+            - name: Id
+              type: string
+              tag: 'json:"id,omitempty"'
+              comments:
+                - Optional existing ingest-time-rule identifier. Leave empty when creating a new rule.
+              markers:
+                - +kubebuilder:validation:Optional
 
   - service: logging
     sdkPackage: github.com/oracle/oci-go-sdk/v65/logging

@@ -197,10 +197,20 @@ func TestServiceClientDeleteResumesGeneratedWorkRequestAndMarksDeleted(t *testin
 		},
 	}
 	config := newFakeWorkRequestConfig(workRequests)
+	confirmReadCalls := 0
+	config.DeleteHooks.UseConfirmReadAfterWorkRequest = true
+	config.DeleteHooks.ConfirmRead = func(_ context.Context, _ *fakeResource, currentID string) (any, error) {
+		confirmReadCalls++
+		if currentID != "ocid1.thing.oc1..delete" {
+			t.Fatalf("DeleteHooks.ConfirmRead() currentID = %q", currentID)
+		}
+		return nil, errResourceNotFound
+	}
 	config.Get = &Operation{
 		NewRequest: func() any { return &fakeGetThingRequest{} },
 		Call: func(_ context.Context, _ any) (any, error) {
-			return nil, errResourceNotFound
+			t.Fatal("Get operation called instead of DeleteHooks.ConfirmRead")
+			return nil, nil
 		},
 		Fields: []RequestField{
 			{FieldName: "ThingId", RequestName: "thingId", Contribution: "path", PreferResourceID: true},
@@ -240,5 +250,8 @@ func TestServiceClientDeleteResumesGeneratedWorkRequestAndMarksDeleted(t *testin
 	}
 	if resource.Status.OsokStatus.DeletedAt == nil {
 		t.Fatal("status.deletedAt = nil, want delete timestamp")
+	}
+	if confirmReadCalls != 1 {
+		t.Fatalf("DeleteHooks.ConfirmRead() calls = %d, want 1", confirmReadCalls)
 	}
 }

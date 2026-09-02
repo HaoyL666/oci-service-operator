@@ -40,9 +40,9 @@ type ScheduledQuerySpec struct {
 	ScheduledQueryProcessingSubType string `json:"scheduledQueryProcessingSubType,omitempty"`
 	// +kubebuilder:validation:Optional
 	ScheduledQueryProcessingConfiguration ScheduledQueryProcessingConfiguration `json:"scheduledQueryProcessingConfiguration,omitempty"`
-	// Retention criteria for the scheduled query.
-	// +kubebuilder:validation:Optional
-	ScheduledQueryRetentionCriteria string `json:"scheduledQueryRetentionCriteria,omitempty"`
+	// Retention criteria for the scheduled query. The live service rejects create requests when this value is omitted.
+	// +kubebuilder:validation:Required
+	ScheduledQueryRetentionCriteria string `json:"scheduledQueryRetentionCriteria"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional

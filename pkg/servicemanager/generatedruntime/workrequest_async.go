@@ -416,7 +416,13 @@ func (c ServiceClient[T]) completeGeneratedWorkRequestDelete(
 		return true, nil
 	}
 
-	response, err := c.readResource(ctx, resource, currentID, readPhaseDelete)
+	var response any
+	var err error
+	if c.config.DeleteHooks.UseConfirmReadAfterWorkRequest && c.config.DeleteHooks.ConfirmRead != nil {
+		response, err = c.confirmDeleteRead(ctx, resource, currentID)
+	} else {
+		response, err = c.readResource(ctx, resource, currentID, readPhaseDelete)
+	}
 	if err != nil {
 		if isDeleteNotFound(err) || errors.Is(err, errResourceNotFound) {
 			c.recordErrorRequestID(resource, err)

@@ -199,9 +199,13 @@ type DeleteOutcome struct {
 }
 
 type DeleteHooks[T any] struct {
-	ConfirmRead  func(context.Context, T, string) (any, error)
-	HandleError  func(T, error) error
-	ApplyOutcome func(T, any, DeleteConfirmStage) (DeleteOutcome, error)
+	ConfirmRead func(context.Context, T, string) (any, error)
+	// UseConfirmReadAfterWorkRequest opts a resource into its scoped confirmation
+	// hook after an asynchronous delete completes. The default preserves the
+	// generated Get-based confirmation used by existing resources.
+	UseConfirmReadAfterWorkRequest bool
+	HandleError                    func(T, error) error
+	ApplyOutcome                   func(T, any, DeleteConfirmStage) (DeleteOutcome, error)
 }
 
 type LifecycleSemantics struct {

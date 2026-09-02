@@ -1600,6 +1600,41 @@ func TestCheckedInVulnerabilityScanningKeepsOptionalApplicationSettingsNullable(
 	assertNullable("status", override.StatusFields)
 }
 
+func TestCheckedInAPMTracesRequiresScheduledQueryRetentionAndPublishesValidSample(t *testing.T) {
+	t.Parallel()
+
+	service := requireService(t, loadCheckedInConfig(t), "apmtraces")
+	override := overridesByKind(service)["ScheduledQuery"]
+	var retention *FieldOverride
+	for index := range override.SpecFields {
+		if override.SpecFields[index].Name == "ScheduledQueryRetentionCriteria" {
+			retention = &override.SpecFields[index]
+			break
+		}
+	}
+	if retention == nil || retention.Tag != `json:"scheduledQueryRetentionCriteria"` || !slices.Contains(retention.Markers, "+kubebuilder:validation:Required") {
+		t.Fatalf("apmtraces ScheduledQuery retention override = %#v, want required field", retention)
+	}
+	assertSampleOverrideContains(t, service, "ScheduledQuery", "scheduledQueryProcessingSubType: NONE", "KEEP_DATA_UNTIL_RETENTION_PERIOD", "EVERY 720 MINUTES")
+}
+
+func TestCheckedInLogAnalyticsMakesIngestTimeRuleIDOptional(t *testing.T) {
+	t.Parallel()
+
+	service := requireService(t, loadCheckedInConfig(t), "loganalytics")
+	override := overridesByKind(service)["IngestTimeRule"]
+	for _, field := range override.SpecFields {
+		if field.Name != "Id" {
+			continue
+		}
+		if field.Tag != `json:"id,omitempty"` || !slices.Contains(field.Markers, "+kubebuilder:validation:Optional") {
+			t.Fatalf("loganalytics IngestTimeRule Id override = %#v, want optional omitempty field", field)
+		}
+		return
+	}
+	t.Fatalf("loganalytics IngestTimeRule specFields = %#v, want Id override", override.SpecFields)
+}
+
 func TestCheckedInNetworkFirewallPublishesChildIdentityAndNullableNatConfiguration(t *testing.T) {
 	t.Parallel()
 
