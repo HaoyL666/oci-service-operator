@@ -27,7 +27,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - d3034807e17fcd10b9e31aff92d750eb5029402c83b0577c1c55361c04124926--gzip
+                - f6b6e782c973307cca6906286790de86eaa0c07d9d0906cc2ef8418eb6d2b557--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"decryptionProfile":null,"description":null,"name":"osok_replay_decryption_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"secret":null,"secrets":null}'
@@ -45,7 +45,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - d3034807e17fcd10b9e31aff92d750eb5029402c83b0577c1c55361c04124926--gzip
+                - f6b6e782c973307cca6906286790de86eaa0c07d9d0906cc2ef8418eb6d2b557--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"decryptionProfile":null,"description":null,"name":"osok_replay_decryption_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"secret":null,"secrets":null}'
@@ -63,7 +63,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - d3034807e17fcd10b9e31aff92d750eb5029402c83b0577c1c55361c04124926--gzip
+                - f6b6e782c973307cca6906286790de86eaa0c07d9d0906cc2ef8418eb6d2b557--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"decryptionProfile":null,"description":null,"name":"osok_replay_decryption_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"secret":null,"secrets":null}'
@@ -81,7 +81,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - d3034807e17fcd10b9e31aff92d750eb5029402c83b0577c1c55361c04124926--gzip
+                - f6b6e782c973307cca6906286790de86eaa0c07d9d0906cc2ef8418eb6d2b557--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"decryptionProfile":null,"description":null,"name":"osok_replay_decryption_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"secret":null,"secrets":null}'
@@ -93,7 +93,7 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"sourceAddress":["osok_replay_prereq_addresses"]},"position":{}}'
+        body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"sourceAddress":["osok_replay_prereq_addresses"]}}'
         encoding: json
       response:
         statusCode: 200
@@ -101,7 +101,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - a4be2fa16f5830467b4f692a0211ea7a7df6e6b4c3d7e5490d6d28651d6ee207
+                - bfb742dd99a77f91a957b3121b708526378e34ca209df9fd8ad4f04a508245c6
             opc-request-id:
                 - <redacted>
         body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"sourceAddress":["osok_replay_prereq_addresses"]},"decryptionProfile":null,"description":null,"name":"osok_replay_decryption_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"secret":null,"secrets":null}'
@@ -119,7 +119,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - a4be2fa16f5830467b4f692a0211ea7a7df6e6b4c3d7e5490d6d28651d6ee207--gzip
+                - bfb742dd99a77f91a957b3121b708526378e34ca209df9fd8ad4f04a508245c6--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"sourceAddress":["osok_replay_prereq_addresses"]},"decryptionProfile":null,"description":null,"name":"osok_replay_decryption_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"secret":null,"secrets":null}'
@@ -137,7 +137,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - a4be2fa16f5830467b4f692a0211ea7a7df6e6b4c3d7e5490d6d28651d6ee207--gzip
+                - bfb742dd99a77f91a957b3121b708526378e34ca209df9fd8ad4f04a508245c6--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"sourceAddress":["osok_replay_prereq_addresses"]},"decryptionProfile":null,"description":null,"name":"osok_replay_decryption_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"secret":null,"secrets":null}'
@@ -155,7 +155,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - a4be2fa16f5830467b4f692a0211ea7a7df6e6b4c3d7e5490d6d28651d6ee207--gzip
+                - bfb742dd99a77f91a957b3121b708526378e34ca209df9fd8ad4f04a508245c6--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"NO_DECRYPT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"sourceAddress":["osok_replay_prereq_addresses"]},"decryptionProfile":null,"description":null,"name":"osok_replay_decryption_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"secret":null,"secrets":null}'

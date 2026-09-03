@@ -12,6 +12,7 @@ import (
 	"testing"
 	"time"
 
+	apmtracessdk "github.com/oracle/oci-go-sdk/v65/apmtraces"
 	apmtracesv1beta1 "github.com/oracle/oci-service-operator/api/apmtraces/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/e2e/ocireplay"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
@@ -33,12 +34,6 @@ func TestSyntheticScheduledQueryCreateUpdateDelete(t *testing.T) {
 		Provenance: ocireplay.ProvenanceSynthetic,
 	}
 	domainID := "ocid1.apmdomain.oc1..replay"
-	sdkClient, closeSession := ocireplay.OpenAPMTracesSDK(
-		t,
-		ocireplay.ModeReplay,
-		filepath.Join("testdata", "recordings", "scheduledquery_synthetic_crud.yaml"),
-		metadata,
-	)
 	resource := &apmtracesv1beta1.ScheduledQuery{
 		Spec: apmtracesv1beta1.ScheduledQuerySpec{
 			ApmDomainId:                           domainID,
@@ -54,6 +49,40 @@ func TestSyntheticScheduledQueryCreateUpdateDelete(t *testing.T) {
 			FreeformTags:                          map[string]string{"osok-replay": "create"},
 		},
 	}
+	createdBody, err := ocireplay.SyntheticObservedBody(resource.Spec, "ocid1.scheduledquery.oc1..synthetic", "ACTIVE", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	updatedSpec := resource.Spec
+	updatedSpec.ScheduledQueryDescription = "OSOK synthetic scheduled query updated"
+	updatedSpec.ScheduledQuerySchedule = "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 360 MINUTES"
+	updatedSpec.FreeformTags = map[string]string{"osok-replay": "update"}
+	updatedBody, err := ocireplay.SyntheticObservedBody(updatedSpec, "ocid1.scheduledquery.oc1..synthetic", "ACTIVE", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, err := ocireplay.OpenSDKSynthetic(ocireplay.SDKSyntheticOptions{
+		Path:     filepath.Join("testdata", "recordings", "scheduledquery_synthetic_crud.yaml"),
+		Host:     "https://apm-trace.us-ashburn-1.oci.oraclecloud.com",
+		BasePath: "20200630",
+		Metadata: metadata,
+		Responses: []ocireplay.SyntheticResponse{
+			{StatusCode: 201, Body: createdBody},
+			{StatusCode: 200, Body: createdBody},
+			{StatusCode: 200, Body: createdBody},
+			{StatusCode: 200, Body: updatedBody},
+			{StatusCode: 200, Body: updatedBody},
+			{StatusCode: 200, Body: updatedBody},
+			{StatusCode: 204},
+			{StatusCode: 404, Body: `{"code":"NotFound","message":"scheduled query not found"}`},
+			{StatusCode: 200, Body: `{"items":[]}`},
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	sdkClient := apmtracessdk.ScheduledQueryClient{BaseClient: session.BaseClient()}
+	closeSession := session.Close
 	client := newScheduledQueryServiceClientWithOCIClient(
 		loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("recorded-integration")},
 		sdkClient,

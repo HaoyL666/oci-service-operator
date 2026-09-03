@@ -27,7 +27,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - fc0d6524d7c87569943a7fa6b7c1e69f9a976eb0895fd7bc4c908e63d057b69f--gzip
+                - 3af3d42c530ea6fab7bccb812326cdab84f679da23a9629a9d52184a060ebf53--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_nat_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"type":"NATV4"}'
@@ -45,7 +45,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - fc0d6524d7c87569943a7fa6b7c1e69f9a976eb0895fd7bc4c908e63d057b69f--gzip
+                - 3af3d42c530ea6fab7bccb812326cdab84f679da23a9629a9d52184a060ebf53--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_nat_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"type":"NATV4"}'
@@ -63,7 +63,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - fc0d6524d7c87569943a7fa6b7c1e69f9a976eb0895fd7bc4c908e63d057b69f--gzip
+                - 3af3d42c530ea6fab7bccb812326cdab84f679da23a9629a9d52184a060ebf53--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_nat_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"type":"NATV4"}'
@@ -81,7 +81,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - fc0d6524d7c87569943a7fa6b7c1e69f9a976eb0895fd7bc4c908e63d057b69f--gzip
+                - 3af3d42c530ea6fab7bccb812326cdab84f679da23a9629a9d52184a060ebf53--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_nat_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"type":"NATV4"}'
@@ -93,7 +93,7 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"position":{},"type":"NATV4"}'
+        body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"type":"NATV4"}'
         encoding: json
       response:
         statusCode: 200
@@ -101,7 +101,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 250cfd2ef9912c23ab4c38d423a846d9b3749fc11d77e47a40404e3ea78d820d
+                - 4077eb26be83cb644806fcd66ec37564356fa62abf16daa410bcd67c382d8529
             opc-request-id:
                 - <redacted>
         body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_nat_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"type":"NATV4"}'
@@ -119,7 +119,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 250cfd2ef9912c23ab4c38d423a846d9b3749fc11d77e47a40404e3ea78d820d--gzip
+                - 4077eb26be83cb644806fcd66ec37564356fa62abf16daa410bcd67c382d8529--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_nat_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"type":"NATV4"}'
@@ -137,7 +137,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 250cfd2ef9912c23ab4c38d423a846d9b3749fc11d77e47a40404e3ea78d820d--gzip
+                - 4077eb26be83cb644806fcd66ec37564356fa62abf16daa410bcd67c382d8529--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_nat_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"type":"NATV4"}'
@@ -155,7 +155,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 250cfd2ef9912c23ab4c38d423a846d9b3749fc11d77e47a40404e3ea78d820d--gzip
+                - 4077eb26be83cb644806fcd66ec37564356fa62abf16daa410bcd67c382d8529--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DIPP_SRC_NAT","condition":{"destinationAddress":["osok_replay_prereq_addresses","osok_replay_addresses2"],"service":"osok_replay_prereq_tcp","sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_nat_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"type":"NATV4"}'

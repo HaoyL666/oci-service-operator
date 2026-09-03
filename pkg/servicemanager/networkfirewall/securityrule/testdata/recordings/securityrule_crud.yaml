@@ -27,7 +27,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 15329107cb57b672de97961e8d2e24255aeb4131a8f8f24d9c6f1acfc2afde14--gzip
+                - 966fbb722cbb34bb4acf7eceeb0dfcd4db477effd33b556872c32f8eb84b819d--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"ALLOW","condition":{"application":null,"destinationAddress":["osok_replay_prereq_addresses"],"service":null,"sourceAddress":["osok_replay_prereq_addresses"],"url":null},"description":null,"inspection":null,"name":"osok_replay_security_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null}}'
@@ -45,7 +45,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 15329107cb57b672de97961e8d2e24255aeb4131a8f8f24d9c6f1acfc2afde14--gzip
+                - 966fbb722cbb34bb4acf7eceeb0dfcd4db477effd33b556872c32f8eb84b819d--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"ALLOW","condition":{"application":null,"destinationAddress":["osok_replay_prereq_addresses"],"service":null,"sourceAddress":["osok_replay_prereq_addresses"],"url":null},"description":null,"inspection":null,"name":"osok_replay_security_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null}}'
@@ -63,7 +63,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 15329107cb57b672de97961e8d2e24255aeb4131a8f8f24d9c6f1acfc2afde14--gzip
+                - 966fbb722cbb34bb4acf7eceeb0dfcd4db477effd33b556872c32f8eb84b819d--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"ALLOW","condition":{"application":null,"destinationAddress":["osok_replay_prereq_addresses"],"service":null,"sourceAddress":["osok_replay_prereq_addresses"],"url":null},"description":null,"inspection":null,"name":"osok_replay_security_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null}}'
@@ -81,7 +81,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 15329107cb57b672de97961e8d2e24255aeb4131a8f8f24d9c6f1acfc2afde14--gzip
+                - 966fbb722cbb34bb4acf7eceeb0dfcd4db477effd33b556872c32f8eb84b819d--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"ALLOW","condition":{"application":null,"destinationAddress":["osok_replay_prereq_addresses"],"service":null,"sourceAddress":["osok_replay_prereq_addresses"],"url":null},"description":null,"inspection":null,"name":"osok_replay_security_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null}}'
@@ -93,7 +93,7 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"action":"DROP","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"position":{}}'
+        body: '{"action":"DROP","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]}}'
         encoding: json
       response:
         statusCode: 200
@@ -101,7 +101,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 3aa30adaa9022b20cc14ce1cf255cf6e2aad715f1dc158d72c0edd71268ddabb
+                - b41ddb1bab99d3486605563a37d3bfc77f1803116f9c1d4e163f45b9f80e6029
             opc-request-id:
                 - <redacted>
         body: '{"action":"DROP","condition":{"application":null,"destinationAddress":["osok_replay_prereq_addresses"],"service":null,"sourceAddress":["osok_replay_prereq_addresses"],"url":null},"description":null,"inspection":null,"name":"osok_replay_security_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null}}'
@@ -119,7 +119,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 3aa30adaa9022b20cc14ce1cf255cf6e2aad715f1dc158d72c0edd71268ddabb--gzip
+                - b41ddb1bab99d3486605563a37d3bfc77f1803116f9c1d4e163f45b9f80e6029--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DROP","condition":{"application":null,"destinationAddress":["osok_replay_prereq_addresses"],"service":null,"sourceAddress":["osok_replay_prereq_addresses"],"url":null},"description":null,"inspection":null,"name":"osok_replay_security_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null}}'
@@ -137,7 +137,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 3aa30adaa9022b20cc14ce1cf255cf6e2aad715f1dc158d72c0edd71268ddabb--gzip
+                - b41ddb1bab99d3486605563a37d3bfc77f1803116f9c1d4e163f45b9f80e6029--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DROP","condition":{"application":null,"destinationAddress":["osok_replay_prereq_addresses"],"service":null,"sourceAddress":["osok_replay_prereq_addresses"],"url":null},"description":null,"inspection":null,"name":"osok_replay_security_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null}}'
@@ -155,7 +155,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 3aa30adaa9022b20cc14ce1cf255cf6e2aad715f1dc158d72c0edd71268ddabb--gzip
+                - b41ddb1bab99d3486605563a37d3bfc77f1803116f9c1d4e163f45b9f80e6029--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"DROP","condition":{"application":null,"destinationAddress":["osok_replay_prereq_addresses"],"service":null,"sourceAddress":["osok_replay_prereq_addresses"],"url":null},"description":null,"inspection":null,"name":"osok_replay_security_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null}}'

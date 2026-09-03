@@ -27,7 +27,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 975924e47b6480e3b89454d9e6377cb81137cee3d7c1ffe7433295cd26a10586--gzip
+                - fa11cbdbd768b7aef276c9e724a30d2e48c8ce0875c2b273fa144d38110fd29a--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
@@ -45,7 +45,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 975924e47b6480e3b89454d9e6377cb81137cee3d7c1ffe7433295cd26a10586--gzip
+                - fa11cbdbd768b7aef276c9e724a30d2e48c8ce0875c2b273fa144d38110fd29a--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
@@ -63,7 +63,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 975924e47b6480e3b89454d9e6377cb81137cee3d7c1ffe7433295cd26a10586--gzip
+                - fa11cbdbd768b7aef276c9e724a30d2e48c8ce0875c2b273fa144d38110fd29a--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
@@ -81,7 +81,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 975924e47b6480e3b89454d9e6377cb81137cee3d7c1ffe7433295cd26a10586--gzip
+                - fa11cbdbd768b7aef276c9e724a30d2e48c8ce0875c2b273fa144d38110fd29a--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"INSPECT","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
@@ -93,7 +93,7 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"position":{},"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
+        body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
         encoding: json
       response:
         statusCode: 200
@@ -101,7 +101,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - fc9b6ed9660bcdf202487bf1faff336d4b5435cd41e022e2b7351a2b63c77be4
+                - 2a1c3cca392f62b2a2b63daff737062d325925572b5fcf599007676f36abd022
             opc-request-id:
                 - <redacted>
         body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
@@ -119,7 +119,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - fc9b6ed9660bcdf202487bf1faff336d4b5435cd41e022e2b7351a2b63c77be4--gzip
+                - 2a1c3cca392f62b2a2b63daff737062d325925572b5fcf599007676f36abd022--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
@@ -137,7 +137,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - fc9b6ed9660bcdf202487bf1faff336d4b5435cd41e022e2b7351a2b63c77be4--gzip
+                - 2a1c3cca392f62b2a2b63daff737062d325925572b5fcf599007676f36abd022--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
@@ -155,7 +155,7 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - fc9b6ed9660bcdf202487bf1faff336d4b5435cd41e022e2b7351a2b63c77be4--gzip
+                - 2a1c3cca392f62b2a2b63daff737062d325925572b5fcf599007676f36abd022--gzip
             opc-request-id:
                 - <redacted>
         body: '{"action":"INSPECT_AND_CAPTURE_LOG","condition":{"destinationAddress":["osok_replay_prereq_addresses"],"sourceAddress":["osok_replay_prereq_addresses"]},"description":null,"name":"osok_replay_tunnel_rule","parentResourceId":"<ocid:1>","position":{"afterRule":null,"beforeRule":null},"priorityOrder":1,"profile":{"mustReturnTrafficToSource":true},"protocol":"VXLAN"}'
