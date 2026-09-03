@@ -159,11 +159,38 @@ func (s *fieldSynthesizer) buildGeneratedField(
 
 	fieldModel := buildFieldModel(field, jsonName, options)
 	fieldModel.Type = renderedType
+	if shouldOmitZeroGeneratedField(field, renderedType, options) {
+		fieldModel.Tag = jsonTagWithOmitZero(renderedFieldJSONName(jsonName, options))
+	}
 	if isObservedStateRequiredPointerField(fieldPath, options) {
 		fieldModel.Type = pointerRenderedType(renderedType)
 		fieldModel.Tag = jsonTag(renderedFieldJSONName(jsonName, options), false)
 	}
 	return fieldModel, true
+}
+
+// shouldOmitZeroGeneratedField preserves the SDK's absent-vs-present contract
+// for optional nested objects while keeping the existing value-shaped CRD API.
+// encoding/json's omitempty does not omit zero-value structs, so without
+// omitzero an absent SDK pointer is serialized as an empty object. That empty
+// object can then violate required validation rules on its nested fields.
+func shouldOmitZeroGeneratedField(field ocisdk.Field, renderedType string, options fieldRenderingOptions) bool {
+	if options.scope != fieldScopeSpec || field.Mandatory {
+		return false
+	}
+	if field.Kind != ocisdk.FieldKindStruct && field.Kind != ocisdk.FieldKindInterface {
+		return false
+	}
+
+	trimmed := strings.TrimSpace(renderedType)
+	return trimmed != "" &&
+		!strings.HasPrefix(trimmed, "*") &&
+		!strings.HasPrefix(trimmed, "[]") &&
+		!strings.HasPrefix(trimmed, "map[")
+}
+
+func jsonTagWithOmitZero(name string) string {
+	return fmt.Sprintf(`json:"%s,omitempty,omitzero"`, name)
 }
 
 func (s *fieldSynthesizer) renderFieldType(

@@ -359,6 +359,13 @@ from the OCI schema model when the generator can infer them. Any exception
 should be expressed as a structured override in generator inputs, not as a
 one-off file edit under `api/`.
 
+Optional single nested objects in generated specs remain value-shaped for API
+compatibility and use `json:"<field>,omitempty,omitzero"`. This preserves the
+OCI SDK's absent-vs-present contract: an omitted object stays absent rather
+than being serialized as `{}` and accidentally triggering validation on its
+nested required fields. Required objects, collections, scalar fields, and
+status fields keep their existing JSON tags.
+
 ### Structured field and sample overrides
 
 - `generation.resources[].specFields` and `generation.resources[].statusFields`

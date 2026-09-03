@@ -39,7 +39,7 @@ type ScheduledQuerySpec struct {
 	// +kubebuilder:validation:Optional
 	ScheduledQueryProcessingSubType string `json:"scheduledQueryProcessingSubType,omitempty"`
 	// +kubebuilder:validation:Optional
-	ScheduledQueryProcessingConfiguration ScheduledQueryProcessingConfiguration `json:"scheduledQueryProcessingConfiguration,omitempty"`
+	ScheduledQueryProcessingConfiguration ScheduledQueryProcessingConfiguration `json:"scheduledQueryProcessingConfiguration,omitempty,omitzero"`
 	// Retention criteria for the scheduled query. The live service rejects create requests when this value is omitted.
 	// +kubebuilder:validation:Required
 	ScheduledQueryRetentionCriteria string `json:"scheduledQueryRetentionCriteria"`
@@ -111,11 +111,11 @@ type ScheduledQueryProcessingConfigurationCustomMetric struct {
 // ScheduledQueryProcessingConfiguration defines nested fields for ScheduledQuery.ScheduledQueryProcessingConfiguration.
 type ScheduledQueryProcessingConfiguration struct {
 	// +kubebuilder:validation:Optional
-	Streaming ScheduledQueryProcessingConfigurationStreaming `json:"streaming,omitempty"`
+	Streaming ScheduledQueryProcessingConfigurationStreaming `json:"streaming,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	ObjectStorage ScheduledQueryProcessingConfigurationObjectStorage `json:"objectStorage,omitempty"`
+	ObjectStorage ScheduledQueryProcessingConfigurationObjectStorage `json:"objectStorage,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	CustomMetric ScheduledQueryProcessingConfigurationCustomMetric `json:"customMetric,omitempty"`
+	CustomMetric ScheduledQueryProcessingConfigurationCustomMetric `json:"customMetric,omitempty,omitzero"`
 }
 
 // ScheduledQueryStatus defines the observed state of ScheduledQuery.

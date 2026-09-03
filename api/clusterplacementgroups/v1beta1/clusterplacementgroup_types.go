@@ -30,7 +30,7 @@ type ClusterPlacementGroupSpec struct {
 	// +kubebuilder:validation:Required
 	CompartmentId string `json:"compartmentId"`
 	// +kubebuilder:validation:Optional
-	PlacementInstruction ClusterPlacementGroupPlacementInstruction `json:"placementInstruction,omitempty"`
+	PlacementInstruction ClusterPlacementGroupPlacementInstruction `json:"placementInstruction,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	Capabilities *ClusterPlacementGroupCapabilities `json:"capabilities,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type, or scope. Exists for cross-compatibility only.

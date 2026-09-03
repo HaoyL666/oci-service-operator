@@ -35,7 +35,7 @@ type DataAssetSpec struct {
 	// +kubebuilder:validation:Optional
 	AssetProperties map[string]string `json:"assetProperties,omitempty"`
 	// +kubebuilder:validation:Optional
-	RegistryMetadata DataAssetRegistryMetadata `json:"registryMetadata,omitempty"`
+	RegistryMetadata DataAssetRegistryMetadata `json:"registryMetadata,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Required
 	Name string `json:"name"`
@@ -54,7 +54,7 @@ type DataAssetSpec struct {
 	// +kubebuilder:validation:Optional
 	Protocol string `json:"protocol,omitempty"`
 	// +kubebuilder:validation:Optional
-	DefaultConnection DataAssetDefaultConnection `json:"defaultConnection,omitempty"`
+	DefaultConnection DataAssetDefaultConnection `json:"defaultConnection,omitempty,omitzero"`
 	// Specifies whether certificate validation is needed
 	// +kubebuilder:validation:Optional
 	ValidateCertificate bool `json:"validateCertificate,omitempty"`
@@ -86,9 +86,9 @@ type DataAssetSpec struct {
 	// +kubebuilder:validation:Optional
 	Sid string `json:"sid,omitempty"`
 	// +kubebuilder:validation:Optional
-	WalletSecret DataAssetWalletSecret `json:"walletSecret,omitempty"`
+	WalletSecret DataAssetWalletSecret `json:"walletSecret,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	WalletPasswordSecret DataAssetWalletPasswordSecret `json:"walletPasswordSecret,omitempty"`
+	WalletPasswordSecret DataAssetWalletPasswordSecret `json:"walletPasswordSecret,omitempty,omitzero"`
 	// The data asset type for the generic JDBC data asset.
 	// +kubebuilder:validation:Optional
 	DataAssetType string `json:"dataAssetType,omitempty"`
@@ -108,11 +108,11 @@ type DataAssetSpec struct {
 	// +kubebuilder:validation:Optional
 	AutonomousDbId string `json:"autonomousDbId,omitempty"`
 	// +kubebuilder:validation:Optional
-	StagingDataAsset DataAssetStagingDataAsset `json:"stagingDataAsset,omitempty"`
+	StagingDataAsset DataAssetStagingDataAsset `json:"stagingDataAsset,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	StagingConnection DataAssetStagingConnection `json:"stagingConnection,omitempty"`
+	StagingConnection DataAssetStagingConnection `json:"stagingConnection,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	BucketSchema DataAssetBucketSchema `json:"bucketSchema,omitempty"`
+	BucketSchema DataAssetBucketSchema `json:"bucketSchema,omitempty,omitzero"`
 	// The generic JDBC host name.
 	// +kubebuilder:validation:Optional
 	ServiceUrl string `json:"serviceUrl,omitempty"`
@@ -202,7 +202,7 @@ type DataAssetDefaultConnectionKeyTabContentSecretConfig struct {
 // DataAssetDefaultConnectionKeyTabContent defines nested fields for DataAsset.DefaultConnection.KeyTabContent.
 type DataAssetDefaultConnectionKeyTabContent struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetDefaultConnectionKeyTabContentSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetDefaultConnectionKeyTabContentSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -232,7 +232,7 @@ type DataAssetDefaultConnection struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetDefaultConnectionParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetDefaultConnectionParentRef `json:"parentRef,omitempty,omitzero"`
 	// User-defined description for the connection.
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
@@ -243,7 +243,7 @@ type DataAssetDefaultConnection struct {
 	// +kubebuilder:validation:Optional
 	ConnectionProperties []DataAssetDefaultConnectionConnectionProperty `json:"connectionProperties,omitempty"`
 	// +kubebuilder:validation:Optional
-	RegistryMetadata DataAssetDefaultConnectionRegistryMetadata `json:"registryMetadata,omitempty"`
+	RegistryMetadata DataAssetDefaultConnectionRegistryMetadata `json:"registryMetadata,omitempty,omitzero"`
 	// HDFS Realm name.
 	// +kubebuilder:validation:Optional
 	Realm string `json:"realm,omitempty"`
@@ -251,7 +251,7 @@ type DataAssetDefaultConnection struct {
 	// +kubebuilder:validation:Optional
 	KeyDistributionCenter string `json:"keyDistributionCenter,omitempty"`
 	// +kubebuilder:validation:Optional
-	KeyTabContent DataAssetDefaultConnectionKeyTabContent `json:"keyTabContent,omitempty"`
+	KeyTabContent DataAssetDefaultConnectionKeyTabContent `json:"keyTabContent,omitempty,omitzero"`
 }
 
 // DataAssetWalletSecretSecretConfig defines nested fields for DataAsset.WalletSecret.SecretConfig.
@@ -268,7 +268,7 @@ type DataAssetWalletSecretSecretConfig struct {
 // DataAssetWalletSecret defines nested fields for DataAsset.WalletSecret.
 type DataAssetWalletSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetWalletSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetWalletSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -288,7 +288,7 @@ type DataAssetWalletPasswordSecretSecretConfig struct {
 // DataAssetWalletPasswordSecret defines nested fields for DataAsset.WalletPasswordSecret.
 type DataAssetWalletPasswordSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetWalletPasswordSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetWalletPasswordSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -372,7 +372,7 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 	// +kubebuilder:validation:Optional
 	ConfigParamValues map[string]DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeConfigValuesConfigParamValues `json:"configParamValues,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeConfigValuesParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeConfigValuesParentRef `json:"parentRef,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerParentRef defines nested fields for DataAsset.StagingDataAsset.NativeTypeSystem.Type.ConfigDefinition.ConfigParameterDefinitions.ParameterType.TypeHandler.ParentRef.
@@ -423,7 +423,7 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 	// +kubebuilder:validation:Optional
 	ConfigParamValues map[string]DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerConfigValuesConfigParamValues `json:"configParamValues,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerConfigValuesParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerConfigValuesParentRef `json:"parentRef,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerScopeReference defines nested fields for DataAsset.StagingDataAsset.NativeTypeSystem.Type.ConfigDefinition.ConfigParameterDefinitions.ParameterType.TypeHandler.ScopeReference.
@@ -487,7 +487,7 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 	// +kubebuilder:validation:Optional
 	ConfigParamValues map[string]DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerProjectionRuleConfigValuesConfigParamValues `json:"configParamValues,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerProjectionRuleConfigValuesParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerProjectionRuleConfigValuesParentRef `json:"parentRef,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerProjectionRule defines nested fields for DataAsset.StagingDataAsset.NativeTypeSystem.Type.ConfigDefinition.ConfigParameterDefinitions.ParameterType.TypeHandler.ProjectionRule.
@@ -501,12 +501,12 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerProjectionRuleParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerProjectionRuleParentRef `json:"parentRef,omitempty,omitzero"`
 	// Specifies whether the rule uses a java regex syntax.
 	// +kubebuilder:validation:Optional
 	IsJavaRegexSyntax bool `json:"isJavaRegexSyntax,omitempty"`
 	// +kubebuilder:validation:Optional
-	ConfigValues DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerProjectionRuleConfigValues `json:"configValues,omitempty"`
+	ConfigValues DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerProjectionRuleConfigValues `json:"configValues,omitempty,omitzero"`
 	// The status of an object that can be set to value 1 for shallow references across objects, other values reserved.
 	// +kubebuilder:validation:Optional
 	ObjectStatus int `json:"objectStatus,omitempty"`
@@ -566,7 +566,7 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerParentRef `json:"parentRef,omitempty,omitzero"`
 	// Reference key for the typed object.
 	// +kubebuilder:validation:Optional
 	Scope string `json:"scope,omitempty"`
@@ -574,12 +574,12 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 	// +kubebuilder:validation:Optional
 	FlattenDetails string `json:"flattenDetails,omitempty"`
 	// +kubebuilder:validation:Optional
-	ConfigValues DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerConfigValues `json:"configValues,omitempty"`
+	ConfigValues DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerConfigValues `json:"configValues,omitempty,omitzero"`
 	// The status of an object that can be set to value 1 for shallow references across objects, other values reserved.
 	// +kubebuilder:validation:Optional
 	ObjectStatus int `json:"objectStatus,omitempty"`
 	// +kubebuilder:validation:Optional
-	ScopeReference DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerScopeReference `json:"scopeReference,omitempty"`
+	ScopeReference DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandlerScopeReference `json:"scopeReference,omitempty,omitzero"`
 	// Specifies whether it is ordered by rule.
 	// +kubebuilder:validation:Optional
 	IsOrderByRule bool `json:"isOrderByRule,omitempty"`
@@ -599,7 +599,7 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -618,14 +618,14 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 	// +kubebuilder:validation:Optional
 	WrappedType shared.JSONValue `json:"wrappedType,omitempty"`
 	// +kubebuilder:validation:Optional
-	ConfigValues DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeConfigValues `json:"configValues,omitempty"`
+	ConfigValues DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeConfigValues `json:"configValues,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	ConfigDefinition shared.JSONValue `json:"configDefinition,omitempty"`
+	ConfigDefinition shared.JSONValue `json:"configDefinition,omitempty,omitzero"`
 	// The java type name.
 	// +kubebuilder:validation:Optional
 	JavaTypeName string `json:"javaTypeName,omitempty"`
 	// +kubebuilder:validation:Optional
-	TypeHandler DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandler `json:"typeHandler,omitempty"`
+	TypeHandler DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterTypeTypeHandler `json:"typeHandler,omitempty,omitzero"`
 	// The data type system name.
 	// +kubebuilder:validation:Optional
 	TypeSystemName string `json:"typeSystemName,omitempty"`
@@ -652,7 +652,7 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParamete
 // DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitions defines nested fields for DataAsset.StagingDataAsset.NativeTypeSystem.Type.ConfigDefinition.ConfigParameterDefinitions.
 type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitions struct {
 	// +kubebuilder:validation:Optional
-	ParameterType DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterType `json:"parameterType,omitempty"`
+	ParameterType DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionConfigParameterDefinitionsParameterType `json:"parameterType,omitempty,omitzero"`
 	// This object represents the configurable properties for an object type.
 	// +kubebuilder:validation:Optional
 	ParameterName string `json:"parameterName,omitempty"`
@@ -685,7 +685,7 @@ type DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinition struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinitionParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -709,7 +709,7 @@ type DataAssetStagingDataAssetNativeTypeSystemType struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemTypeParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -723,7 +723,7 @@ type DataAssetStagingDataAssetNativeTypeSystemType struct {
 	// +kubebuilder:validation:Optional
 	TypeSystemName string `json:"typeSystemName,omitempty"`
 	// +kubebuilder:validation:Optional
-	ConfigDefinition DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinition `json:"configDefinition,omitempty"`
+	ConfigDefinition DataAssetStagingDataAssetNativeTypeSystemTypeConfigDefinition `json:"configDefinition,omitempty,omitzero"`
 	// The data type.
 	// +kubebuilder:validation:Optional
 	DtType string `json:"dtType,omitempty"`
@@ -741,7 +741,7 @@ type DataAssetStagingDataAssetNativeTypeSystem struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetNativeTypeSystemParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetNativeTypeSystemParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -838,7 +838,7 @@ type DataAssetStagingDataAssetMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetStagingDataAssetMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetStagingDataAssetMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -855,7 +855,7 @@ type DataAssetStagingDataAssetMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetStagingDataAssetMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetStagingDataAssetMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetDefaultConnectionParentRef defines nested fields for DataAsset.StagingDataAsset.DefaultConnection.ParentRef.
@@ -938,7 +938,7 @@ type DataAssetStagingDataAssetDefaultConnectionPrimarySchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetStagingDataAssetDefaultConnectionPrimarySchemaMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetStagingDataAssetDefaultConnectionPrimarySchemaMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -955,7 +955,7 @@ type DataAssetStagingDataAssetDefaultConnectionPrimarySchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetStagingDataAssetDefaultConnectionPrimarySchemaMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetStagingDataAssetDefaultConnectionPrimarySchemaMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetDefaultConnectionPrimarySchema defines nested fields for DataAsset.StagingDataAsset.DefaultConnection.PrimarySchema.
@@ -970,7 +970,7 @@ type DataAssetStagingDataAssetDefaultConnectionPrimarySchema struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetDefaultConnectionPrimarySchemaParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetDefaultConnectionPrimarySchemaParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -999,7 +999,7 @@ type DataAssetStagingDataAssetDefaultConnectionPrimarySchema struct {
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetStagingDataAssetDefaultConnectionPrimarySchemaMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetStagingDataAssetDefaultConnectionPrimarySchemaMetadata `json:"metadata,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetDefaultConnectionConnectionProperty defines nested fields for DataAsset.StagingDataAsset.DefaultConnection.ConnectionProperty.
@@ -1072,7 +1072,7 @@ type DataAssetStagingDataAssetDefaultConnectionMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetStagingDataAssetDefaultConnectionMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetStagingDataAssetDefaultConnectionMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -1089,7 +1089,7 @@ type DataAssetStagingDataAssetDefaultConnectionMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetStagingDataAssetDefaultConnectionMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetStagingDataAssetDefaultConnectionMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetDefaultConnection defines nested fields for DataAsset.StagingDataAsset.DefaultConnection.
@@ -1101,7 +1101,7 @@ type DataAssetStagingDataAssetDefaultConnection struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetDefaultConnectionParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetDefaultConnectionParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -1118,7 +1118,7 @@ type DataAssetStagingDataAssetDefaultConnection struct {
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
 	// +kubebuilder:validation:Optional
-	PrimarySchema DataAssetStagingDataAssetDefaultConnectionPrimarySchema `json:"primarySchema,omitempty"`
+	PrimarySchema DataAssetStagingDataAssetDefaultConnectionPrimarySchema `json:"primarySchema,omitempty,omitzero"`
 	// The properties for the connection.
 	// +kubebuilder:validation:Optional
 	ConnectionProperties []DataAssetStagingDataAssetDefaultConnectionConnectionProperty `json:"connectionProperties,omitempty"`
@@ -1126,7 +1126,7 @@ type DataAssetStagingDataAssetDefaultConnection struct {
 	// +kubebuilder:validation:Optional
 	IsDefault bool `json:"isDefault,omitempty"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetStagingDataAssetDefaultConnectionMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetStagingDataAssetDefaultConnectionMetadata `json:"metadata,omitempty,omitzero"`
 	// The user name for the connection.
 	// +kubebuilder:validation:Optional
 	Username string `json:"username,omitempty"`
@@ -1146,7 +1146,7 @@ type DataAssetStagingDataAssetWalletSecretSecretConfig struct {
 // DataAssetStagingDataAssetWalletSecret defines nested fields for DataAsset.StagingDataAsset.WalletSecret.
 type DataAssetStagingDataAssetWalletSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingDataAssetWalletSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingDataAssetWalletSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -1166,7 +1166,7 @@ type DataAssetStagingDataAssetWalletPasswordSecretSecretConfig struct {
 // DataAssetStagingDataAssetWalletPasswordSecret defines nested fields for DataAsset.StagingDataAsset.WalletPasswordSecret.
 type DataAssetStagingDataAssetWalletPasswordSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingDataAssetWalletPasswordSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingDataAssetWalletPasswordSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -1252,7 +1252,7 @@ type DataAssetStagingDataAssetStagingConnectionPrimarySchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetStagingDataAssetStagingConnectionPrimarySchemaMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetStagingDataAssetStagingConnectionPrimarySchemaMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -1269,7 +1269,7 @@ type DataAssetStagingDataAssetStagingConnectionPrimarySchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetStagingDataAssetStagingConnectionPrimarySchemaMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetStagingDataAssetStagingConnectionPrimarySchemaMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetStagingConnectionPrimarySchema defines nested fields for DataAsset.StagingDataAsset.StagingConnection.PrimarySchema.
@@ -1284,7 +1284,7 @@ type DataAssetStagingDataAssetStagingConnectionPrimarySchema struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetStagingConnectionPrimarySchemaParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetStagingConnectionPrimarySchemaParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -1313,7 +1313,7 @@ type DataAssetStagingDataAssetStagingConnectionPrimarySchema struct {
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetStagingDataAssetStagingConnectionPrimarySchemaMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetStagingDataAssetStagingConnectionPrimarySchemaMetadata `json:"metadata,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetStagingConnectionConnectionProperty defines nested fields for DataAsset.StagingDataAsset.StagingConnection.ConnectionProperty.
@@ -1386,7 +1386,7 @@ type DataAssetStagingDataAssetStagingConnectionMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetStagingDataAssetStagingConnectionMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetStagingDataAssetStagingConnectionMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -1403,7 +1403,7 @@ type DataAssetStagingDataAssetStagingConnectionMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetStagingDataAssetStagingConnectionMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetStagingDataAssetStagingConnectionMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetStagingConnectionAccessKeySecretConfig defines nested fields for DataAsset.StagingDataAsset.StagingConnection.AccessKey.SecretConfig.
@@ -1420,7 +1420,7 @@ type DataAssetStagingDataAssetStagingConnectionAccessKeySecretConfig struct {
 // DataAssetStagingDataAssetStagingConnectionAccessKey defines nested fields for DataAsset.StagingDataAsset.StagingConnection.AccessKey.
 type DataAssetStagingDataAssetStagingConnectionAccessKey struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingDataAssetStagingConnectionAccessKeySecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingDataAssetStagingConnectionAccessKeySecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -1440,7 +1440,7 @@ type DataAssetStagingDataAssetStagingConnectionSecretKeySecretConfig struct {
 // DataAssetStagingDataAssetStagingConnectionSecretKey defines nested fields for DataAsset.StagingDataAsset.StagingConnection.SecretKey.
 type DataAssetStagingDataAssetStagingConnectionSecretKey struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingDataAssetStagingConnectionSecretKeySecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingDataAssetStagingConnectionSecretKeySecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -1460,7 +1460,7 @@ type DataAssetStagingDataAssetStagingConnectionPasswordSecretSecretConfig struct
 // DataAssetStagingDataAssetStagingConnectionPasswordSecret defines nested fields for DataAsset.StagingDataAsset.StagingConnection.PasswordSecret.
 type DataAssetStagingDataAssetStagingConnectionPasswordSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingDataAssetStagingConnectionPasswordSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingDataAssetStagingConnectionPasswordSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -1480,7 +1480,7 @@ type DataAssetStagingDataAssetStagingConnectionClientSecretSecretConfig struct {
 // DataAssetStagingDataAssetStagingConnectionClientSecret defines nested fields for DataAsset.StagingDataAsset.StagingConnection.ClientSecret.
 type DataAssetStagingDataAssetStagingConnectionClientSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingDataAssetStagingConnectionClientSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingDataAssetStagingConnectionClientSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -1522,7 +1522,7 @@ type DataAssetStagingDataAssetStagingConnectionKeyTabContentSecretConfig struct 
 // DataAssetStagingDataAssetStagingConnectionKeyTabContent defines nested fields for DataAsset.StagingDataAsset.StagingConnection.KeyTabContent.
 type DataAssetStagingDataAssetStagingConnectionKeyTabContent struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingDataAssetStagingConnectionKeyTabContentSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingDataAssetStagingConnectionKeyTabContentSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -1539,7 +1539,7 @@ type DataAssetStagingDataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetStagingConnectionParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetStagingConnectionParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -1556,7 +1556,7 @@ type DataAssetStagingDataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
 	// +kubebuilder:validation:Optional
-	PrimarySchema DataAssetStagingDataAssetStagingConnectionPrimarySchema `json:"primarySchema,omitempty"`
+	PrimarySchema DataAssetStagingDataAssetStagingConnectionPrimarySchema `json:"primarySchema,omitempty,omitzero"`
 	// The properties for the connection.
 	// +kubebuilder:validation:Optional
 	ConnectionProperties []DataAssetStagingDataAssetStagingConnectionConnectionProperty `json:"connectionProperties,omitempty"`
@@ -1564,21 +1564,21 @@ type DataAssetStagingDataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	IsDefault bool `json:"isDefault,omitempty"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetStagingDataAssetStagingConnectionMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetStagingDataAssetStagingConnectionMetadata `json:"metadata,omitempty,omitzero"`
 	// A key map. If provided, key is replaced with generated key. This structure provides mapping between user provided key and generated key.
 	// +kubebuilder:validation:Optional
 	KeyMap map[string]string `json:"keyMap,omitempty"`
 	// +kubebuilder:validation:Optional
 	ModelType string `json:"modelType,omitempty"`
 	// +kubebuilder:validation:Optional
-	AccessKey DataAssetStagingDataAssetStagingConnectionAccessKey `json:"accessKey,omitempty"`
+	AccessKey DataAssetStagingDataAssetStagingConnectionAccessKey `json:"accessKey,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	SecretKey DataAssetStagingDataAssetStagingConnectionSecretKey `json:"secretKey,omitempty"`
+	SecretKey DataAssetStagingDataAssetStagingConnectionSecretKey `json:"secretKey,omitempty,omitzero"`
 	// The user name for the connection.
 	// +kubebuilder:validation:Optional
 	Username string `json:"username,omitempty"`
 	// +kubebuilder:validation:Optional
-	PasswordSecret DataAssetStagingDataAssetStagingConnectionPasswordSecret `json:"passwordSecret,omitempty"`
+	PasswordSecret DataAssetStagingDataAssetStagingConnectionPasswordSecret `json:"passwordSecret,omitempty,omitzero"`
 	// Specifies the endpoint used to exchange authentication credentials for access tokens
 	// +kubebuilder:validation:Optional
 	AccessTokenUrl string `json:"accessTokenUrl,omitempty"`
@@ -1586,7 +1586,7 @@ type DataAssetStagingDataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	ClientId string `json:"clientId,omitempty"`
 	// +kubebuilder:validation:Optional
-	ClientSecret DataAssetStagingDataAssetStagingConnectionClientSecret `json:"clientSecret,omitempty"`
+	ClientSecret DataAssetStagingDataAssetStagingConnectionClientSecret `json:"clientSecret,omitempty,omitzero"`
 	// Specifies the OAuth scopes that limit the permissions granted by an access token.
 	// +kubebuilder:validation:Optional
 	Scope string `json:"scope,omitempty"`
@@ -1594,7 +1594,7 @@ type DataAssetStagingDataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	GrantType string `json:"grantType,omitempty"`
 	// +kubebuilder:validation:Optional
-	DefaultExternalStorage DataAssetStagingDataAssetStagingConnectionDefaultExternalStorage `json:"defaultExternalStorage,omitempty"`
+	DefaultExternalStorage DataAssetStagingDataAssetStagingConnectionDefaultExternalStorage `json:"defaultExternalStorage,omitempty,omitzero"`
 	// The password for the connection.
 	// +kubebuilder:validation:Optional
 	Password string `json:"password,omitempty"`
@@ -1635,7 +1635,7 @@ type DataAssetStagingDataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	KeyDistributionCenter string `json:"keyDistributionCenter,omitempty"`
 	// +kubebuilder:validation:Optional
-	KeyTabContent DataAssetStagingDataAssetStagingConnectionKeyTabContent `json:"keyTabContent,omitempty"`
+	KeyTabContent DataAssetStagingDataAssetStagingConnectionKeyTabContent `json:"keyTabContent,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetBucketSchemaParentRef defines nested fields for DataAsset.StagingDataAsset.BucketSchema.ParentRef.
@@ -1708,7 +1708,7 @@ type DataAssetStagingDataAssetBucketSchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetStagingDataAssetBucketSchemaMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetStagingDataAssetBucketSchemaMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -1725,7 +1725,7 @@ type DataAssetStagingDataAssetBucketSchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetStagingDataAssetBucketSchemaMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetStagingDataAssetBucketSchemaMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAssetBucketSchema defines nested fields for DataAsset.StagingDataAsset.BucketSchema.
@@ -1740,7 +1740,7 @@ type DataAssetStagingDataAssetBucketSchema struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetBucketSchemaParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetBucketSchemaParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -1769,7 +1769,7 @@ type DataAssetStagingDataAssetBucketSchema struct {
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetStagingDataAssetBucketSchemaMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetStagingDataAssetBucketSchemaMetadata `json:"metadata,omitempty,omitzero"`
 }
 
 // DataAssetStagingDataAsset defines nested fields for DataAsset.StagingDataAsset.
@@ -1801,14 +1801,14 @@ type DataAssetStagingDataAsset struct {
 	// +kubebuilder:validation:Optional
 	AssetProperties map[string]string `json:"assetProperties,omitempty"`
 	// +kubebuilder:validation:Optional
-	NativeTypeSystem DataAssetStagingDataAssetNativeTypeSystem `json:"nativeTypeSystem,omitempty"`
+	NativeTypeSystem DataAssetStagingDataAssetNativeTypeSystem `json:"nativeTypeSystem,omitempty,omitzero"`
 	// The version of the object that is used to track changes in the object instance.
 	// +kubebuilder:validation:Optional
 	ObjectVersion int `json:"objectVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingDataAssetParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingDataAssetParentRef `json:"parentRef,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetStagingDataAssetMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetStagingDataAssetMetadata `json:"metadata,omitempty,omitzero"`
 	// A key map. If provided, key is replaced with generated key. This structure provides mapping between user provided key and generated key.
 	// +kubebuilder:validation:Optional
 	KeyMap map[string]string `json:"keyMap,omitempty"`
@@ -1824,7 +1824,7 @@ type DataAssetStagingDataAsset struct {
 	// +kubebuilder:validation:Optional
 	DataAssetType string `json:"dataAssetType,omitempty"`
 	// +kubebuilder:validation:Optional
-	DefaultConnection DataAssetStagingDataAssetDefaultConnection `json:"defaultConnection,omitempty"`
+	DefaultConnection DataAssetStagingDataAssetDefaultConnection `json:"defaultConnection,omitempty,omitzero"`
 	// The Oracle Database service name.
 	// +kubebuilder:validation:Optional
 	ServiceName string `json:"serviceName,omitempty"`
@@ -1838,9 +1838,9 @@ type DataAssetStagingDataAsset struct {
 	// +kubebuilder:validation:Optional
 	CredentialFileContent string `json:"credentialFileContent,omitempty"`
 	// +kubebuilder:validation:Optional
-	WalletSecret DataAssetStagingDataAssetWalletSecret `json:"walletSecret,omitempty"`
+	WalletSecret DataAssetStagingDataAssetWalletSecret `json:"walletSecret,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	WalletPasswordSecret DataAssetStagingDataAssetWalletPasswordSecret `json:"walletPasswordSecret,omitempty"`
+	WalletPasswordSecret DataAssetStagingDataAssetWalletPasswordSecret `json:"walletPasswordSecret,omitempty,omitzero"`
 	// The region for Amazon s3
 	// +kubebuilder:validation:Optional
 	Region string `json:"region,omitempty"`
@@ -1854,11 +1854,11 @@ type DataAssetStagingDataAsset struct {
 	// +kubebuilder:validation:Optional
 	ServiceNames []string `json:"serviceNames,omitempty"`
 	// +kubebuilder:validation:Optional
-	StagingDataAsset shared.JSONValue `json:"stagingDataAsset,omitempty"`
+	StagingDataAsset shared.JSONValue `json:"stagingDataAsset,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	StagingConnection DataAssetStagingDataAssetStagingConnection `json:"stagingConnection,omitempty"`
+	StagingConnection DataAssetStagingDataAssetStagingConnection `json:"stagingConnection,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	BucketSchema DataAssetStagingDataAssetBucketSchema `json:"bucketSchema,omitempty"`
+	BucketSchema DataAssetStagingDataAssetBucketSchema `json:"bucketSchema,omitempty,omitzero"`
 	// The HDFS Protocol name.
 	// +kubebuilder:validation:Optional
 	Protocol string `json:"protocol,omitempty"`
@@ -1971,7 +1971,7 @@ type DataAssetStagingConnectionPrimarySchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetStagingConnectionPrimarySchemaMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetStagingConnectionPrimarySchemaMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -1988,7 +1988,7 @@ type DataAssetStagingConnectionPrimarySchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetStagingConnectionPrimarySchemaMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetStagingConnectionPrimarySchemaMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetStagingConnectionPrimarySchema defines nested fields for DataAsset.StagingConnection.PrimarySchema.
@@ -2003,7 +2003,7 @@ type DataAssetStagingConnectionPrimarySchema struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingConnectionPrimarySchemaParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingConnectionPrimarySchemaParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -2032,7 +2032,7 @@ type DataAssetStagingConnectionPrimarySchema struct {
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetStagingConnectionPrimarySchemaMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetStagingConnectionPrimarySchemaMetadata `json:"metadata,omitempty,omitzero"`
 }
 
 // DataAssetStagingConnectionConnectionProperty defines nested fields for DataAsset.StagingConnection.ConnectionProperty.
@@ -2105,7 +2105,7 @@ type DataAssetStagingConnectionMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetStagingConnectionMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetStagingConnectionMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -2122,7 +2122,7 @@ type DataAssetStagingConnectionMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetStagingConnectionMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetStagingConnectionMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetStagingConnectionAccessKeySecretConfig defines nested fields for DataAsset.StagingConnection.AccessKey.SecretConfig.
@@ -2139,7 +2139,7 @@ type DataAssetStagingConnectionAccessKeySecretConfig struct {
 // DataAssetStagingConnectionAccessKey defines nested fields for DataAsset.StagingConnection.AccessKey.
 type DataAssetStagingConnectionAccessKey struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingConnectionAccessKeySecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingConnectionAccessKeySecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -2159,7 +2159,7 @@ type DataAssetStagingConnectionSecretKeySecretConfig struct {
 // DataAssetStagingConnectionSecretKey defines nested fields for DataAsset.StagingConnection.SecretKey.
 type DataAssetStagingConnectionSecretKey struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingConnectionSecretKeySecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingConnectionSecretKeySecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -2179,7 +2179,7 @@ type DataAssetStagingConnectionPasswordSecretSecretConfig struct {
 // DataAssetStagingConnectionPasswordSecret defines nested fields for DataAsset.StagingConnection.PasswordSecret.
 type DataAssetStagingConnectionPasswordSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingConnectionPasswordSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingConnectionPasswordSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -2199,7 +2199,7 @@ type DataAssetStagingConnectionClientSecretSecretConfig struct {
 // DataAssetStagingConnectionClientSecret defines nested fields for DataAsset.StagingConnection.ClientSecret.
 type DataAssetStagingConnectionClientSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingConnectionClientSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingConnectionClientSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -2241,7 +2241,7 @@ type DataAssetStagingConnectionKeyTabContentSecretConfig struct {
 // DataAssetStagingConnectionKeyTabContent defines nested fields for DataAsset.StagingConnection.KeyTabContent.
 type DataAssetStagingConnectionKeyTabContent struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetStagingConnectionKeyTabContentSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetStagingConnectionKeyTabContentSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -2258,7 +2258,7 @@ type DataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetStagingConnectionParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetStagingConnectionParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -2275,7 +2275,7 @@ type DataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
 	// +kubebuilder:validation:Optional
-	PrimarySchema DataAssetStagingConnectionPrimarySchema `json:"primarySchema,omitempty"`
+	PrimarySchema DataAssetStagingConnectionPrimarySchema `json:"primarySchema,omitempty,omitzero"`
 	// The properties for the connection.
 	// +kubebuilder:validation:Optional
 	ConnectionProperties []DataAssetStagingConnectionConnectionProperty `json:"connectionProperties,omitempty"`
@@ -2283,21 +2283,21 @@ type DataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	IsDefault bool `json:"isDefault,omitempty"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetStagingConnectionMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetStagingConnectionMetadata `json:"metadata,omitempty,omitzero"`
 	// A key map. If provided, key is replaced with generated key. This structure provides mapping between user provided key and generated key.
 	// +kubebuilder:validation:Optional
 	KeyMap map[string]string `json:"keyMap,omitempty"`
 	// +kubebuilder:validation:Optional
 	ModelType string `json:"modelType,omitempty"`
 	// +kubebuilder:validation:Optional
-	AccessKey DataAssetStagingConnectionAccessKey `json:"accessKey,omitempty"`
+	AccessKey DataAssetStagingConnectionAccessKey `json:"accessKey,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	SecretKey DataAssetStagingConnectionSecretKey `json:"secretKey,omitempty"`
+	SecretKey DataAssetStagingConnectionSecretKey `json:"secretKey,omitempty,omitzero"`
 	// The user name for the connection.
 	// +kubebuilder:validation:Optional
 	Username string `json:"username,omitempty"`
 	// +kubebuilder:validation:Optional
-	PasswordSecret DataAssetStagingConnectionPasswordSecret `json:"passwordSecret,omitempty"`
+	PasswordSecret DataAssetStagingConnectionPasswordSecret `json:"passwordSecret,omitempty,omitzero"`
 	// Specifies the endpoint used to exchange authentication credentials for access tokens
 	// +kubebuilder:validation:Optional
 	AccessTokenUrl string `json:"accessTokenUrl,omitempty"`
@@ -2305,7 +2305,7 @@ type DataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	ClientId string `json:"clientId,omitempty"`
 	// +kubebuilder:validation:Optional
-	ClientSecret DataAssetStagingConnectionClientSecret `json:"clientSecret,omitempty"`
+	ClientSecret DataAssetStagingConnectionClientSecret `json:"clientSecret,omitempty,omitzero"`
 	// Specifies the OAuth scopes that limit the permissions granted by an access token.
 	// +kubebuilder:validation:Optional
 	Scope string `json:"scope,omitempty"`
@@ -2313,7 +2313,7 @@ type DataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	GrantType string `json:"grantType,omitempty"`
 	// +kubebuilder:validation:Optional
-	DefaultExternalStorage DataAssetStagingConnectionDefaultExternalStorage `json:"defaultExternalStorage,omitempty"`
+	DefaultExternalStorage DataAssetStagingConnectionDefaultExternalStorage `json:"defaultExternalStorage,omitempty,omitzero"`
 	// The password for the connection.
 	// +kubebuilder:validation:Optional
 	Password string `json:"password,omitempty"`
@@ -2354,7 +2354,7 @@ type DataAssetStagingConnection struct {
 	// +kubebuilder:validation:Optional
 	KeyDistributionCenter string `json:"keyDistributionCenter,omitempty"`
 	// +kubebuilder:validation:Optional
-	KeyTabContent DataAssetStagingConnectionKeyTabContent `json:"keyTabContent,omitempty"`
+	KeyTabContent DataAssetStagingConnectionKeyTabContent `json:"keyTabContent,omitempty,omitzero"`
 }
 
 // DataAssetBucketSchemaParentRef defines nested fields for DataAsset.BucketSchema.ParentRef.
@@ -2427,7 +2427,7 @@ type DataAssetBucketSchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DataAssetBucketSchemaMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DataAssetBucketSchemaMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -2444,7 +2444,7 @@ type DataAssetBucketSchemaMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DataAssetBucketSchemaMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DataAssetBucketSchemaMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DataAssetBucketSchema defines nested fields for DataAsset.BucketSchema.
@@ -2459,7 +2459,7 @@ type DataAssetBucketSchema struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataAssetBucketSchemaParentRef `json:"parentRef,omitempty"`
+	ParentRef DataAssetBucketSchemaParentRef `json:"parentRef,omitempty,omitzero"`
 	// Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
@@ -2488,7 +2488,7 @@ type DataAssetBucketSchema struct {
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
 	// +kubebuilder:validation:Optional
-	Metadata DataAssetBucketSchemaMetadata `json:"metadata,omitempty"`
+	Metadata DataAssetBucketSchemaMetadata `json:"metadata,omitempty,omitzero"`
 }
 
 // DataAssetDefaultConnectionPasswordSecretSecretConfig defines nested fields for DataAsset.DefaultConnection.PasswordSecret.SecretConfig.
@@ -2505,7 +2505,7 @@ type DataAssetDefaultConnectionPasswordSecretSecretConfig struct {
 // DataAssetDefaultConnectionPasswordSecret defines nested fields for DataAsset.DefaultConnection.PasswordSecret.
 type DataAssetDefaultConnectionPasswordSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetDefaultConnectionPasswordSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetDefaultConnectionPasswordSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -2547,7 +2547,7 @@ type DataAssetDefaultConnectionClientSecretSecretConfig struct {
 // DataAssetDefaultConnectionClientSecret defines nested fields for DataAsset.DefaultConnection.ClientSecret.
 type DataAssetDefaultConnectionClientSecret struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetDefaultConnectionClientSecretSecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetDefaultConnectionClientSecretSecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -2567,7 +2567,7 @@ type DataAssetDefaultConnectionAccessKeySecretConfig struct {
 // DataAssetDefaultConnectionAccessKey defines nested fields for DataAsset.DefaultConnection.AccessKey.
 type DataAssetDefaultConnectionAccessKey struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetDefaultConnectionAccessKeySecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetDefaultConnectionAccessKeySecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
@@ -2587,7 +2587,7 @@ type DataAssetDefaultConnectionSecretKeySecretConfig struct {
 // DataAssetDefaultConnectionSecretKey defines nested fields for DataAsset.DefaultConnection.SecretKey.
 type DataAssetDefaultConnectionSecretKey struct {
 	// +kubebuilder:validation:Optional
-	SecretConfig DataAssetDefaultConnectionSecretKeySecretConfig `json:"secretConfig,omitempty"`
+	SecretConfig DataAssetDefaultConnectionSecretKeySecretConfig `json:"secretConfig,omitempty,omitzero"`
 	// Attribute to provide sensitive content.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`

@@ -33,7 +33,7 @@ type ProjectSpec struct {
 	// +kubebuilder:validation:Optional
 	Key string `json:"key,omitempty"`
 	// +kubebuilder:validation:Optional
-	RegistryMetadata ProjectRegistryMetadata `json:"registryMetadata,omitempty"`
+	RegistryMetadata ProjectRegistryMetadata `json:"registryMetadata,omitempty,omitzero"`
 	// The type of the object.
 	// +kubebuilder:validation:Required
 	ModelType string `json:"modelType"`
@@ -41,7 +41,7 @@ type ProjectSpec struct {
 	// +kubebuilder:validation:Required
 	ObjectVersion int `json:"objectVersion"`
 	// +kubebuilder:validation:Optional
-	ParentRef ProjectParentRef `json:"parentRef,omitempty"`
+	ParentRef ProjectParentRef `json:"parentRef,omitempty,omitzero"`
 }
 
 // ProjectRegistryMetadata defines nested fields for Project.RegistryMetadata.

@@ -18,7 +18,7 @@ type AutoScalingPolicySpec struct {
 	JsonData string `json:"jsonData,omitempty"`
 	// The capacity requirements of the autoscaling policy.
 	// +kubebuilder:validation:Optional
-	Capacity AutoScalingPolicyCapacity `json:"capacity,omitempty"`
+	Capacity AutoScalingPolicyCapacity `json:"capacity,omitempty,omitzero"`
 	// A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information.
 	// +kubebuilder:validation:Optional
 	DisplayName string `json:"displayName,omitempty"`
@@ -28,9 +28,9 @@ type AutoScalingPolicySpec struct {
 	// +kubebuilder:validation:Optional
 	PolicyType string `json:"policyType,omitempty"`
 	// +kubebuilder:validation:Optional
-	ExecutionSchedule AutoScalingPolicyExecutionSchedule `json:"executionSchedule,omitempty"`
+	ExecutionSchedule AutoScalingPolicyExecutionSchedule `json:"executionSchedule,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	ResourceAction AutoScalingPolicyResourceAction `json:"resourceAction,omitempty"`
+	ResourceAction AutoScalingPolicyResourceAction `json:"resourceAction,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	Rules []AutoScalingPolicyRule `json:"rules,omitempty"`
 }
@@ -143,7 +143,7 @@ type AutoScalingPolicyRuleMetric struct {
 	// +kubebuilder:validation:Optional
 	ResourceGroup string `json:"resourceGroup,omitempty"`
 	// +kubebuilder:validation:Optional
-	Threshold AutoScalingPolicyRuleMetricThreshold `json:"threshold,omitempty"`
+	Threshold AutoScalingPolicyRuleMetricThreshold `json:"threshold,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	MetricType string `json:"metricType,omitempty"`
 }

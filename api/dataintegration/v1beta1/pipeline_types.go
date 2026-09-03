@@ -29,7 +29,7 @@ type PipelineSpec struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef PipelineParentRef `json:"parentRef,omitempty"`
+	ParentRef PipelineParentRef `json:"parentRef,omitempty,omitzero"`
 	// Detailed description for the object.
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`

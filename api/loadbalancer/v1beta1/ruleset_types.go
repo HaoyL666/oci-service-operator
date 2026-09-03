@@ -178,7 +178,7 @@ type RuleSetItem struct {
 	// +kubebuilder:validation:Optional
 	ResponseCode int `json:"responseCode,omitempty"`
 	// +kubebuilder:validation:Optional
-	RedirectUri RuleSetItemRedirectUri `json:"redirectUri,omitempty"`
+	RedirectUri RuleSetItemRedirectUri `json:"redirectUri,omitempty,omitzero"`
 	// A string to prepend to the header value. The resulting header value must conform to RFC 7230.
 	// With the following exceptions:
 	// *  value cannot contain `$`

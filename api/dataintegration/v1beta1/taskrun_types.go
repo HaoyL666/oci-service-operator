@@ -30,7 +30,7 @@ type TaskRunSpec struct {
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
 	// +kubebuilder:validation:Optional
-	ConfigProvider TaskRunConfigProvider `json:"configProvider,omitempty"`
+	ConfigProvider TaskRunConfigProvider `json:"configProvider,omitempty,omitzero"`
 	// Value can only contain upper case letters, underscore, and numbers. It should begin with upper case letter or underscore. The value can be modified.
 	// +kubebuilder:validation:Optional
 	Identifier string `json:"identifier,omitempty"`
@@ -47,7 +47,7 @@ type TaskRunSpec struct {
 	// +kubebuilder:validation:Optional
 	StepId string `json:"stepId,omitempty"`
 	// +kubebuilder:validation:Optional
-	RegistryMetadata TaskRunRegistryMetadata `json:"registryMetadata,omitempty"`
+	RegistryMetadata TaskRunRegistryMetadata `json:"registryMetadata,omitempty,omitzero"`
 	// The status of the object.
 	// +kubebuilder:validation:Optional
 	Status string `json:"status,omitempty"`

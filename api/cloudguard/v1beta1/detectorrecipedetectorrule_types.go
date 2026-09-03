@@ -15,7 +15,7 @@ import (
 // DetectorRecipeDetectorRuleSpec defines the desired state of DetectorRecipeDetectorRule.
 type DetectorRecipeDetectorRuleSpec struct {
 	// +kubebuilder:validation:Optional
-	Details DetectorRecipeDetectorRuleDetailsFields `json:"details,omitempty"`
+	Details DetectorRecipeDetectorRuleDetailsFields `json:"details,omitempty,omitzero"`
 	// The OCID of the detector recipe containing the detector rule.
 	// +kubebuilder:validation:Required
 	DetectorRecipeId string `json:"detectorRecipeId"`
@@ -107,9 +107,9 @@ type DetectorRecipeDetectorRuleDetailsConditionFields struct {
 	// +kubebuilder:validation:Optional
 	ValueType string `json:"valueType,omitempty"`
 	// +kubebuilder:validation:Optional
-	LeftOperand shared.JSONValue `json:"leftOperand,omitempty"`
+	LeftOperand shared.JSONValue `json:"leftOperand,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	RightOperand shared.JSONValue `json:"rightOperand,omitempty"`
+	RightOperand shared.JSONValue `json:"rightOperand,omitempty,omitzero"`
 	// Composite condition operator
 	// +kubebuilder:validation:Optional
 	CompositeOperator string `json:"compositeOperator,omitempty"`
@@ -149,7 +149,7 @@ type DetectorRecipeDetectorRuleDetailsFields struct {
 	// +kubebuilder:validation:Optional
 	Configurations []DetectorRecipeDetectorRuleDetailsConfigurationFields `json:"configurations,omitempty"`
 	// +kubebuilder:validation:Optional
-	Condition DetectorRecipeDetectorRuleDetailsConditionFields `json:"condition,omitempty"`
+	Condition DetectorRecipeDetectorRuleDetailsConditionFields `json:"condition,omitempty,omitzero"`
 	// User-defined labels for the detector rule
 	// +kubebuilder:validation:Optional
 	Labels []string `json:"labels,omitempty"`

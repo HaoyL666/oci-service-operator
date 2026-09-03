@@ -22,7 +22,7 @@ type SecurityAttributeSpec struct {
 	// +kubebuilder:validation:Required
 	Description string `json:"description"`
 	// +kubebuilder:validation:Optional
-	Validator SecurityAttributeValidator `json:"validator,omitempty"`
+	Validator SecurityAttributeValidator `json:"validator,omitempty,omitzero"`
 	// Whether the security attribute is retired.
 	// See Managing Security Attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/managing-security-attributes.htm).
 	// +kubebuilder:validation:Optional

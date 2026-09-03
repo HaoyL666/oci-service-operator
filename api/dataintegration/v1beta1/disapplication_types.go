@@ -53,9 +53,9 @@ type DisApplicationSpec struct {
 	// +kubebuilder:validation:Optional
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// +kubebuilder:validation:Optional
-	SourceApplicationInfo DisApplicationSourceApplicationInfo `json:"sourceApplicationInfo,omitempty"`
+	SourceApplicationInfo DisApplicationSourceApplicationInfo `json:"sourceApplicationInfo,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	RegistryMetadata DisApplicationRegistryMetadata `json:"registryMetadata,omitempty"`
+	RegistryMetadata DisApplicationRegistryMetadata `json:"registryMetadata,omitempty,omitzero"`
 	// The version of the object that is used to track changes in the object instance.
 	// +kubebuilder:validation:Required
 	ObjectVersion int `json:"objectVersion"`
@@ -63,9 +63,9 @@ type DisApplicationSpec struct {
 	// +kubebuilder:validation:Optional
 	ApplicationVersion int `json:"applicationVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DisApplicationParentRef `json:"parentRef,omitempty"`
+	ParentRef DisApplicationParentRef `json:"parentRef,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	Metadata DisApplicationMetadata `json:"metadata,omitempty"`
+	Metadata DisApplicationMetadata `json:"metadata,omitempty,omitzero"`
 }
 
 // DisApplicationSourceApplicationInfo defines nested fields for DisApplication.SourceApplicationInfo.
@@ -170,7 +170,7 @@ type DisApplicationMetadata struct {
 	// +kubebuilder:validation:Optional
 	AggregatorKey string `json:"aggregatorKey,omitempty"`
 	// +kubebuilder:validation:Optional
-	Aggregator DisApplicationMetadataAggregator `json:"aggregator,omitempty"`
+	Aggregator DisApplicationMetadataAggregator `json:"aggregator,omitempty,omitzero"`
 	// The full path to identify this object.
 	// +kubebuilder:validation:Optional
 	IdentifierPath string `json:"identifierPath,omitempty"`
@@ -187,7 +187,7 @@ type DisApplicationMetadata struct {
 	// +kubebuilder:validation:Optional
 	IsFavorite bool `json:"isFavorite,omitempty"`
 	// +kubebuilder:validation:Optional
-	CountStatistics DisApplicationMetadataCountStatistics `json:"countStatistics,omitempty"`
+	CountStatistics DisApplicationMetadataCountStatistics `json:"countStatistics,omitempty,omitzero"`
 }
 
 // DisApplicationDependentObjectMetadata defines nested fields for DisApplication.DependentObjectMetadata.

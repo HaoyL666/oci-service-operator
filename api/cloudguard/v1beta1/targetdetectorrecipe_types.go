@@ -50,9 +50,9 @@ type TargetDetectorRecipeDetectorRuleDetailsConditionGroupConditionFields struct
 	// +kubebuilder:validation:Optional
 	ValueType string `json:"valueType,omitempty"`
 	// +kubebuilder:validation:Optional
-	LeftOperand shared.JSONValue `json:"leftOperand,omitempty"`
+	LeftOperand shared.JSONValue `json:"leftOperand,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	RightOperand shared.JSONValue `json:"rightOperand,omitempty"`
+	RightOperand shared.JSONValue `json:"rightOperand,omitempty,omitzero"`
 	// Composite condition operator
 	// +kubebuilder:validation:Optional
 	CompositeOperator string `json:"compositeOperator,omitempty"`

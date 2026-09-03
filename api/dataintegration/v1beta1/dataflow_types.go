@@ -29,7 +29,7 @@ type DataFlowSpec struct {
 	// +kubebuilder:validation:Optional
 	ModelVersion string `json:"modelVersion,omitempty"`
 	// +kubebuilder:validation:Optional
-	ParentRef DataFlowParentRef `json:"parentRef,omitempty"`
+	ParentRef DataFlowParentRef `json:"parentRef,omitempty,omitzero"`
 	// An array of nodes.
 	// +kubebuilder:validation:Optional
 	Nodes []shared.JSONValue `json:"nodes,omitempty"`

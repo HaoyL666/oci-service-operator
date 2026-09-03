@@ -6,6 +6,7 @@
 package targetdatabasegroup
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -22,6 +23,36 @@ import (
 )
 
 const recordedTargetDatabaseGroupName = "osok-replay-target-database-group-v1"
+
+func TestTargetDatabaseGroupOmitsAbsentOptionalExcludeCriteria(t *testing.T) {
+	resource := datasafev1beta1.TargetDatabaseGroup{
+		Spec: datasafev1beta1.TargetDatabaseGroupSpec{
+			MatchingCriteria: datasafev1beta1.TargetDatabaseGroupMatchingCriteria{
+				Include: datasafev1beta1.TargetDatabaseGroupMatchingCriteriaInclude{},
+			},
+		},
+	}
+
+	content, err := json.Marshal(resource)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document map[string]any
+	if err := json.Unmarshal(content, &document); err != nil {
+		t.Fatal(err)
+	}
+	spec, ok := document["spec"].(map[string]any)
+	if !ok {
+		t.Fatalf("serialized resource has no spec object: %s", content)
+	}
+	criteria, ok := spec["matchingCriteria"].(map[string]any)
+	if !ok {
+		t.Fatalf("serialized resource has no matchingCriteria object: %s", content)
+	}
+	if _, exists := criteria["exclude"]; exists {
+		t.Fatalf("serialized resource contains absent optional exclude criteria: %s", content)
+	}
+}
 
 func TestRecordedTargetDatabaseGroupCreateUpdateDelete(t *testing.T) {
 	mode, err := ocireplay.RequestedMode()

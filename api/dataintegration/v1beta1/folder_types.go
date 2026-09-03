@@ -44,7 +44,7 @@ type FolderSpec struct {
 	// +kubebuilder:validation:Required
 	ObjectVersion int `json:"objectVersion"`
 	// +kubebuilder:validation:Optional
-	ParentRef FolderParentRef `json:"parentRef,omitempty"`
+	ParentRef FolderParentRef `json:"parentRef,omitempty,omitzero"`
 }
 
 // FolderRegistryMetadata defines nested fields for Folder.RegistryMetadata.

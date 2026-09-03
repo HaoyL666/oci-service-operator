@@ -126,7 +126,7 @@ type BackendSetHealthChecker struct {
 	// +kubebuilder:validation:Optional
 	ResponseData string `json:"responseData,omitempty"`
 	// +kubebuilder:validation:Optional
-	Dns BackendSetHealthCheckerDns `json:"dns,omitempty"`
+	Dns BackendSetHealthCheckerDns `json:"dns,omitempty,omitzero"`
 }
 
 // BackendSetBackend defines nested fields for BackendSet.Backend.
