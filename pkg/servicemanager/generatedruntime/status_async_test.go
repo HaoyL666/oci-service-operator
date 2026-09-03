@@ -7,11 +7,21 @@ package generatedruntime
 
 import (
 	"context"
+	"github.com/oracle/oci-go-sdk/v65/common"
+	"github.com/oracle/oci-go-sdk/v65/datacatalog"
 	"github.com/oracle/oci-service-operator/pkg/errorutil/errortest"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"testing"
 )
+
+type keyedThingResponse struct {
+	Thing keyedThing `presentIn:"body"`
+}
+
+type keyedThing struct {
+	Key string `json:"key"`
+}
 
 func TestApplySuccessSetsLifecycleAsyncTrackerWhilePending(t *testing.T) {
 	t.Parallel()
@@ -200,6 +210,23 @@ func TestResponseWorkRequestIDReadsOCIHeader(t *testing.T) {
 	}
 	if got := responseWorkRequestID(fakeDeleteThingResponse{}); got != "" {
 		t.Fatalf("responseWorkRequestID(delete) = %q, want empty string", got)
+	}
+}
+
+func TestResponseIDFallsBackToKeyedResourceIdentity(t *testing.T) {
+	t.Parallel()
+	if got := responseID(keyedThingResponse{Thing: keyedThing{Key: "catalog-key"}}); got != "catalog-key" {
+		t.Fatalf("responseID(keyed resource) = %q, want catalog-key", got)
+	}
+}
+
+func TestResponseIDReadsOCIKeyedResponseBody(t *testing.T) {
+	t.Parallel()
+	response := datacatalog.CreateAttributeTagResponse{
+		AttributeTag: datacatalog.AttributeTag{Key: common.String("tag-key")},
+	}
+	if got := responseID(response); got != "tag-key" {
+		t.Fatalf("responseID(CreateAttributeTagResponse) = %q, want tag-key", got)
 	}
 }
 

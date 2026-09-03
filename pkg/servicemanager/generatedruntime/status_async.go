@@ -178,7 +178,7 @@ func responseID(response any) string {
 		return ""
 	}
 	values := jsonMap(body)
-	return firstNonEmpty(values, "id", "ocid")
+	return firstNonEmpty(values, "id", "ocid", "key")
 }
 
 func responseWorkRequestID(response any) string {

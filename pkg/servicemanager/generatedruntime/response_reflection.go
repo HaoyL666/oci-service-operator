@@ -103,6 +103,44 @@ func mergeResponseIntoStatus(resource any, response any) error {
 	return nil
 }
 
+// ProjectResponseBodyWithAliases projects an OCI response into Status after
+// renaming collision-prone JSON fields. It is an opt-in hook helper; default
+// generatedruntime projection behavior is unchanged.
+func ProjectResponseBodyWithAliases(resource any, response any, aliases map[string]string) error {
+	body, ok := responseBody(response)
+	if !ok || body == nil {
+		return nil
+	}
+	statusValue, err := statusStruct(resource)
+	if err != nil {
+		return err
+	}
+	payload, err := json.Marshal(body)
+	if err != nil {
+		return fmt.Errorf("marshal OCI response body: %w", err)
+	}
+	values := map[string]any{}
+	if err := json.Unmarshal(payload, &values); err != nil {
+		return fmt.Errorf("decode OCI response body for aliased projection: %w", err)
+	}
+	for source, target := range aliases {
+		value, exists := values[source]
+		if !exists {
+			continue
+		}
+		values[target] = value
+		delete(values, source)
+	}
+	payload, err = json.Marshal(values)
+	if err != nil {
+		return fmt.Errorf("marshal aliased OCI response body: %w", err)
+	}
+	if err := json.Unmarshal(payload, statusValue.Addr().Interface()); err != nil {
+		return fmt.Errorf("project aliased OCI response body into status: %w", err)
+	}
+	return nil
+}
+
 func normalizeOCIError(err error) error {
 	var serviceErr common.ServiceError
 	if !errors.As(err, &serviceErr) {
