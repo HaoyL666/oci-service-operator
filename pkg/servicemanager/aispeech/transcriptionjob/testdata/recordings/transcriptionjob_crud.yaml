@@ -1,0 +1,174 @@
+version: 1
+metadata:
+    service: aispeech
+    resource: TranscriptionJob
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-transcription-job-v3","freeformTags":{"osok-replay":"create"},"inputLocation":{"locationType":"OBJECT_LIST_INLINE_INPUT_LOCATION","objectLocations":[{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","objectNames":["audio.wav"]}]},"modelDetails":{"domain":"GENERIC","languageCode":"en-US"},"outputLocation":{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","prefix":"transcripts/"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalTranscriptionFormats":[],"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T04:07:44.987Z"}},"description":"recorded create","displayName":"osok-replay-transcription-job-v3","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","inputLocation":{"locationType":"OBJECT_LIST_INLINE_INPUT_LOCATION","objectLocations":[{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","objectNames":["audio.wav"]}]},"lifecycleDetails":null,"lifecycleState":"ACCEPTED","modelDetails":{"domain":"GENERIC","languageCode":"en-US","modelType":"ORACLE","transcriptionSettings":{"additionalSettings":null,"diarization":{"isDiarizationEnabled":false,"numberOfSpeakers":null}}},"normalization":{"filters":[],"isPunctuationEnabled":true},"outputLocation":{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","prefix":"transcripts/job-amaaaaaasr3o6kaakdht4uas2up2t52ubz2tiurlwtt3bjakhhny6pbgl5ea/"},"outstandingTasks":1,"percentComplete":0,"successfulTasks":0,"systemTags":{},"timeAccepted":"2026-09-03T04:07:45.095Z","timeFinished":null,"timeStarted":null,"totalTasks":1,"ttlInDays":90}'
+        encoding: json
+    - request:
+        method: GET
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"e72b1ebe969344a9a1e1f676237f946fef77881226c0f89857997725b5143e13"'
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalTranscriptionFormats":[],"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T04:07:44.987Z"}},"description":"recorded create","displayName":"osok-replay-transcription-job-v3","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","inputLocation":{"locationType":"OBJECT_LIST_INLINE_INPUT_LOCATION","objectLocations":[{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","objectNames":["audio.wav"]}]},"lifecycleDetails":null,"lifecycleState":"ACCEPTED","modelDetails":{"domain":"GENERIC","languageCode":"en-US","modelType":"ORACLE","transcriptionSettings":{"additionalSettings":null,"diarization":{"isDiarizationEnabled":false,"numberOfSpeakers":null}}},"normalization":{"filters":[],"isPunctuationEnabled":true},"outputLocation":{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","prefix":"transcripts/job-amaaaaaasr3o6kaakdht4uas2up2t52ubz2tiurlwtt3bjakhhny6pbgl5ea/"},"outstandingTasks":1,"percentComplete":0,"successfulTasks":0,"systemTags":{},"timeAccepted":"2026-09-03T04:07:45.095Z","timeFinished":null,"timeStarted":null,"totalTasks":1,"ttlInDays":90}'
+        encoding: json
+    - request:
+        method: GET
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"e72b1ebe969344a9a1e1f676237f946fef77881226c0f89857997725b5143e13"'
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalTranscriptionFormats":[],"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T04:07:44.987Z"}},"description":"recorded create","displayName":"osok-replay-transcription-job-v3","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","inputLocation":{"locationType":"OBJECT_LIST_INLINE_INPUT_LOCATION","objectLocations":[{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","objectNames":["audio.wav"]}]},"lifecycleDetails":null,"lifecycleState":"SUCCEEDED","modelDetails":{"domain":"GENERIC","languageCode":"en-US","modelType":"ORACLE","transcriptionSettings":{"additionalSettings":null,"diarization":{"isDiarizationEnabled":false,"numberOfSpeakers":null}}},"normalization":{"filters":[],"isPunctuationEnabled":true},"outputLocation":{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","prefix":"transcripts/job-amaaaaaasr3o6kaakdht4uas2up2t52ubz2tiurlwtt3bjakhhny6pbgl5ea/"},"outstandingTasks":0,"percentComplete":0,"successfulTasks":1,"systemTags":{},"timeAccepted":"2026-09-03T04:07:45.095Z","timeFinished":"2026-09-03T04:07:46.872Z","timeStarted":"2026-09-03T04:07:45.403Z","totalTasks":1,"ttlInDays":90}'
+        encoding: json
+    - request:
+        method: GET
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"e72b1ebe969344a9a1e1f676237f946fef77881226c0f89857997725b5143e13"'
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalTranscriptionFormats":[],"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T04:07:44.987Z"}},"description":"recorded create","displayName":"osok-replay-transcription-job-v3","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","inputLocation":{"locationType":"OBJECT_LIST_INLINE_INPUT_LOCATION","objectLocations":[{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","objectNames":["audio.wav"]}]},"lifecycleDetails":null,"lifecycleState":"SUCCEEDED","modelDetails":{"domain":"GENERIC","languageCode":"en-US","modelType":"ORACLE","transcriptionSettings":{"additionalSettings":null,"diarization":{"isDiarizationEnabled":false,"numberOfSpeakers":null}}},"normalization":{"filters":[],"isPunctuationEnabled":true},"outputLocation":{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","prefix":"transcripts/job-amaaaaaasr3o6kaakdht4uas2up2t52ubz2tiurlwtt3bjakhhny6pbgl5ea/"},"outstandingTasks":0,"percentComplete":0,"successfulTasks":1,"systemTags":{},"timeAccepted":"2026-09-03T04:07:45.095Z","timeFinished":"2026-09-03T04:07:46.872Z","timeStarted":"2026-09-03T04:07:45.403Z","totalTasks":1,"ttlInDays":90}'
+        encoding: json
+    - request:
+        method: PUT
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"526ad5f658a337ea4ec9eca7a5e6ce8bfd611a993820fa93cd0316c99b4e2df1"'
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalTranscriptionFormats":[],"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T04:07:44.987Z"}},"description":"recorded update","displayName":"osok-replay-transcription-job-v3","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","inputLocation":{"locationType":"OBJECT_LIST_INLINE_INPUT_LOCATION","objectLocations":[{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","objectNames":["audio.wav"]}]},"lifecycleDetails":null,"lifecycleState":"SUCCEEDED","modelDetails":{"domain":"GENERIC","languageCode":"en-US","modelType":"ORACLE","transcriptionSettings":{"additionalSettings":null,"diarization":{"isDiarizationEnabled":false,"numberOfSpeakers":null}}},"normalization":{"filters":[],"isPunctuationEnabled":true},"outputLocation":{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","prefix":"transcripts/job-amaaaaaasr3o6kaakdht4uas2up2t52ubz2tiurlwtt3bjakhhny6pbgl5ea/"},"outstandingTasks":0,"percentComplete":0,"successfulTasks":1,"systemTags":{},"timeAccepted":"2026-09-03T04:07:45.095Z","timeFinished":"2026-09-03T04:07:46.872Z","timeStarted":"2026-09-03T04:07:45.403Z","totalTasks":1,"ttlInDays":90}'
+        encoding: json
+    - request:
+        method: GET
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"526ad5f658a337ea4ec9eca7a5e6ce8bfd611a993820fa93cd0316c99b4e2df1"'
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalTranscriptionFormats":[],"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T04:07:44.987Z"}},"description":"recorded update","displayName":"osok-replay-transcription-job-v3","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","inputLocation":{"locationType":"OBJECT_LIST_INLINE_INPUT_LOCATION","objectLocations":[{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","objectNames":["audio.wav"]}]},"lifecycleDetails":null,"lifecycleState":"SUCCEEDED","modelDetails":{"domain":"GENERIC","languageCode":"en-US","modelType":"ORACLE","transcriptionSettings":{"additionalSettings":null,"diarization":{"isDiarizationEnabled":false,"numberOfSpeakers":null}}},"normalization":{"filters":[],"isPunctuationEnabled":true},"outputLocation":{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","prefix":"transcripts/job-amaaaaaasr3o6kaakdht4uas2up2t52ubz2tiurlwtt3bjakhhny6pbgl5ea/"},"outstandingTasks":0,"percentComplete":0,"successfulTasks":1,"systemTags":{},"timeAccepted":"2026-09-03T04:07:45.095Z","timeFinished":"2026-09-03T04:07:46.872Z","timeStarted":"2026-09-03T04:07:45.403Z","totalTasks":1,"ttlInDays":90}'
+        encoding: json
+    - request:
+        method: GET
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - '"526ad5f658a337ea4ec9eca7a5e6ce8bfd611a993820fa93cd0316c99b4e2df1"'
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalTranscriptionFormats":[],"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T04:07:44.987Z"}},"description":"recorded update","displayName":"osok-replay-transcription-job-v3","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","inputLocation":{"locationType":"OBJECT_LIST_INLINE_INPUT_LOCATION","objectLocations":[{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","objectNames":["audio.wav"]}]},"lifecycleDetails":null,"lifecycleState":"SUCCEEDED","modelDetails":{"domain":"GENERIC","languageCode":"en-US","modelType":"ORACLE","transcriptionSettings":{"additionalSettings":null,"diarization":{"isDiarizationEnabled":false,"numberOfSpeakers":null}}},"normalization":{"filters":[],"isPunctuationEnabled":true},"outputLocation":{"bucketName":"<binding:speech-bucket>","namespaceName":"<binding:speech-namespace>","prefix":"transcripts/job-amaaaaaasr3o6kaakdht4uas2up2t52ubz2tiurlwtt3bjakhhny6pbgl5ea/"},"outstandingTasks":0,"percentComplete":0,"successfulTasks":1,"systemTags":{},"timeAccepted":"2026-09-03T04:07:45.095Z","timeFinished":"2026-09-03T04:07:46.872Z","timeStarted":"2026-09-03T04:07:45.403Z","totalTasks":1,"ttlInDays":90}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: speech.aiservice.us-ashburn-1.oci.oraclecloud.com
+        path: /20220101/transcriptionJobs/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json

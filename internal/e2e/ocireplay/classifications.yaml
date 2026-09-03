@@ -6,8 +6,7 @@ resources:
     reason: Live creation requires a service entitlement and an IDCS administrator token.
   - service: aispeech
     resource: transcriptionjob
-    classification: synthetic
-    reason: A live transcription job requires a durable Object Storage audio fixture and invokes paid speech-processing work.
+    classification: recorded
   - service: analytics
     resource: analyticsinstance
     classification: synthetic
@@ -51,7 +50,7 @@ resources:
   - service: cloudguard
     resource: detectorrecipe
     classification: synthetic
-    reason: A live detector recipe changes tenancy Cloud Guard detection policy and requires a reporting-region security configuration.
+    reason: A live SDK create from the visible Oracle-managed activity recipe fails with a resource-not-found-or-not-authorized response, and the recording principal cannot read the tenancy Cloud Guard configuration.
   - service: cloudguard
     resource: detectorrecipedetectorrule
     classification: synthetic
@@ -139,8 +138,7 @@ resources:
     reason: A live term relationship requires a provisioned catalog, glossary, and two existing terms.
   - service: datasafe
     resource: alertpolicy
-    classification: synthetic
-    reason: A live alert policy changes tenant Data Safe security alerting behavior.
+    classification: recorded
   - service: datasafe
     resource: discoveryjob
     classification: synthetic
@@ -152,7 +150,7 @@ resources:
   - service: datasafe
     resource: onpremconnector
     classification: synthetic
-    reason: A live on-premises connector requires external network reachability and connector infrastructure.
+    reason: A live create returned an OCI identity and its update work request succeeded, but the recording principal receives NotAuthorizedOrNotFound for subsequent get and delete operations on that exact connector.
   - service: datasafe
     resource: securityassessment
     classification: synthetic
@@ -163,8 +161,7 @@ resources:
     reason: A live security-policy deployment changes controls on a registered target database.
   - service: datasafe
     resource: sensitivetypesexport
-    classification: synthetic
-    reason: A live sensitive-types export depends on tenant-authored sensitive type inventory and creates export content.
+    classification: recorded
   - service: datasafe
     resource: sqlcollection
     classification: synthetic
@@ -175,8 +172,7 @@ resources:
     reason: A live target database registration requires database credentials, network connectivity, and a provisioned database.
   - service: datasafe
     resource: targetdatabasegroup
-    classification: synthetic
-    reason: A live target database group changes grouping policy for registered tenant databases.
+    classification: recorded
   - service: datasafe
     resource: unifiedauditpolicy
     classification: synthetic

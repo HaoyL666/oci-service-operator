@@ -268,6 +268,12 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   confirmation for auth-shaped post-delete reads.
 - Vulnerability Scanning Host Scan Target, OS Management Hub Lifecycle
   Environment, and Database Recovery Protection Policy lifecycles.
+- AI Speech Transcription Job with a temporary private Object Storage audio
+  fixture, canonical service-generated output prefix, metadata update, and
+  confirmed deletion.
+- Data Safe Alert Policy, Sensitive Types Export, and Target Database Group,
+  including their service work-request create/update paths and terminal
+  cleanup without requiring a registered target database.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
@@ -282,6 +288,12 @@ Usage Schedule recording additionally requires a destination bucket and a
 least-privilege compartment policy allowing `service metering_overlay` to
 manage objects in that compartment. Remove the policy and bucket after the
 cassette is published; neither is needed for replay.
+
+Transcription Job recording requires a private bucket containing a small WAV
+fixture. Set `OCI_REPLAY_SPEECH_NAMESPACE`, `OCI_REPLAY_SPEECH_BUCKET`, and
+`OCI_REPLAY_SPEECH_OBJECT`; remove the input and generated transcript objects
+and bucket after the cassette is published. Replay substitutes portable
+bindings and does not need the bucket.
 
 Run only the SDK HTTP replay layer with:
 
