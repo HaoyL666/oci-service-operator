@@ -274,6 +274,9 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - Data Safe Alert Policy, Sensitive Types Export, and Target Database Group,
   including their service work-request create/update paths and terminal
   cleanup without requiring a registered target database.
+- OCI Batch Task Profile and Task Environment definitions, including mutable
+  metadata, service throttling during delete confirmation, and terminal
+  deletion without submitting a Batch job or allocating task compute.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
@@ -294,6 +297,10 @@ fixture. Set `OCI_REPLAY_SPEECH_NAMESPACE`, `OCI_REPLAY_SPEECH_BUCKET`, and
 `OCI_REPLAY_SPEECH_OBJECT`; remove the input and generated transcript objects
 and bucket after the cassette is published. Replay substitutes portable
 bindings and does not need the bucket.
+
+Batch Task Environment recording requires an existing public OCIR image URL in
+`OCI_REPLAY_BATCH_IMAGE_URL`. The lifecycle records only the environment
+definition; it does not submit a job or run the image.
 
 Run only the SDK HTTP replay layer with:
 

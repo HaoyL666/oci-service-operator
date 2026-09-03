@@ -18,19 +18,17 @@ resources:
   - service: batch
     resource: batchcontext
     classification: synthetic
-    reason: OCI Batch contexts are prerequisites for runnable batch workloads and depend on service capacity that portable tests must not allocate.
+    reason: A bounded live probe confirmed that context creation provisions compute infrastructure, remained nonterminal beyond 15 minutes, and could not be deleted while the create work request was in progress.
   - service: batch
     resource: batchjobpool
     classification: synthetic
-    reason: A live job pool depends on an OCI Batch context and compute execution capacity.
+    reason: A live job pool requires a Batch Context whose creation was confirmed to provision long-lived compute infrastructure.
   - service: batch
     resource: batchtaskenvironment
-    classification: synthetic
-    reason: A live task environment depends on a runnable registry image and is intended to launch OCI Batch compute workloads.
+    classification: recorded
   - service: batch
     resource: batchtaskprofile
-    classification: synthetic
-    reason: A live task profile depends on a Batch task environment and workload execution prerequisites.
+    classification: recorded
   - service: bds
     resource: bdsinstance
     classification: synthetic
