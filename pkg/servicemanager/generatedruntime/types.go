@@ -170,11 +170,17 @@ type StatusHooks[T any] struct {
 	MarkTerminating        func(T, any)
 }
 
+// UnsupportedDriftEquivalent recognizes a resource-specific canonical form
+// without weakening mutable or force-new comparisons. The first result says
+// the hook owns the path; the second says the values are equivalent.
+type UnsupportedDriftEquivalent func(path string, desired any, observed any) (handled bool, equivalent bool)
+
 type ParityHooks[T any] struct {
-	NormalizeDesiredState   func(T, any)
-	ValidateCreateOnlyDrift func(T, any) error
-	RequiresParityHandling  func(T, any) bool
-	ApplyParityUpdate       func(context.Context, T, any) (servicemanager.OSOKResponse, error)
+	NormalizeDesiredState      func(T, any)
+	ValidateCreateOnlyDrift    func(T, any) error
+	UnsupportedDriftEquivalent UnsupportedDriftEquivalent
+	RequiresParityHandling     func(T, any) bool
+	ApplyParityUpdate          func(context.Context, T, any) (servicemanager.OSOKResponse, error)
 }
 
 type AsyncHooks[T any] struct {

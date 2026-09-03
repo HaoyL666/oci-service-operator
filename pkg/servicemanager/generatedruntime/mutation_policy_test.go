@@ -522,6 +522,35 @@ func TestUnsupportedUpdateDriftPathsPreservesNonzeroOptionalObjectIntent(t *test
 	}
 }
 
+func TestUnsupportedUpdateDriftPathsUsesOptInEquivalence(t *testing.T) {
+	t.Parallel()
+	spec := map[string]any{"outputLocation": map[string]any{"prefix": "transcripts"}}
+	current := map[string]any{"outputLocation": map[string]any{"prefix": "transcripts/job-123/"}}
+
+	paths := unsupportedUpdateDriftPathsWithEquivalence(spec, current, MutationSemantics{}, func(path string, desired any, observed any) (bool, bool) {
+		if path != "outputLocation.prefix" {
+			return false, false
+		}
+		return true, desired == "transcripts" && observed == "transcripts/job-123/"
+	})
+	if len(paths) != 0 {
+		t.Fatalf("unsupportedUpdateDriftPathsWithEquivalence() = %v, want no drift", paths)
+	}
+}
+
+func TestUnsupportedUpdateDriftPathsRetainsHandledNonEquivalentValue(t *testing.T) {
+	t.Parallel()
+	spec := map[string]any{"outputLocation": map[string]any{"prefix": "changed"}}
+	current := map[string]any{"outputLocation": map[string]any{"prefix": "transcripts/job-123/"}}
+
+	paths := unsupportedUpdateDriftPathsWithEquivalence(spec, current, MutationSemantics{}, func(path string, _ any, _ any) (bool, bool) {
+		return path == "outputLocation.prefix", false
+	})
+	if len(paths) != 1 || paths[0] != "outputLocation.prefix" {
+		t.Fatalf("unsupportedUpdateDriftPathsWithEquivalence() = %v, want outputLocation.prefix", paths)
+	}
+}
+
 func TestServiceClientRejectsForceNewChangesAgainstLiveOCIState(t *testing.T) {
 	t.Parallel()
 	client := NewServiceClient[*fakeResource](Config[*fakeResource]{Kind: "Thing", SDKName: "Thing", Semantics: &Semantics{Mutation: MutationSemantics{ForceNew: []string{"compartmentId"}}}, Get: &Operation{NewRequest: func() any {

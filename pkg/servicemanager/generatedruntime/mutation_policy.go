@@ -72,7 +72,12 @@ func (c ServiceClient[T]) validateMutationPolicy(resource T, existing bool, curr
 		return nil
 	}
 
-	unsupportedPaths := unsupportedUpdateDriftPaths(specValues, currentValues, semantics.Mutation)
+	unsupportedPaths := unsupportedUpdateDriftPathsWithEquivalence(
+		specValues,
+		currentValues,
+		semantics.Mutation,
+		c.config.ParityHooks.UnsupportedDriftEquivalent,
+	)
 	if len(unsupportedPaths) == 0 {
 		return nil
 	}
@@ -239,9 +244,28 @@ func (c ServiceClient[T]) hasMutableDrift(resource T, currentResponse any) (bool
 }
 
 func unsupportedUpdateDriftPaths(specValues map[string]any, currentValues map[string]any, semantics MutationSemantics) []string {
+	return unsupportedUpdateDriftPathsWithEquivalence(specValues, currentValues, semantics, nil)
+}
+
+func unsupportedUpdateDriftPathsWithEquivalence(
+	specValues map[string]any,
+	currentValues map[string]any,
+	semantics MutationSemantics,
+	equivalent UnsupportedDriftEquivalent,
+) []string {
 	diffPaths := comparableDiffPaths(specValues, currentValues, "")
 	unsupported := make([]string, 0, len(diffPaths))
 	for _, path := range diffPaths {
+		if equivalent != nil {
+			desired, desiredFound := lookupValueByPath(specValues, path)
+			observed, observedFound := lookupValueByPath(currentValues, path)
+			if desiredFound && observedFound {
+				handled, equal := equivalent(path, desired, observed)
+				if handled && equal {
+					continue
+				}
+			}
+		}
 		switch {
 		case zeroValueNullEquivalentDrift(path, specValues, currentValues, semantics):
 		case pathCoveredByAny(path, semantics.Mutable):
