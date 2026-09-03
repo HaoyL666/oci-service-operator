@@ -1,0 +1,230 @@
+version: 1
+metadata:
+    service: datasafe
+    resource: SecurityPolicy
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded create","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleState":"CREATING","securityPolicyType":"DATASAFE_MANAGED","systemTags":{},"timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:24.580Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - dd8a910b7e0dbb95506665bd0ea1297e9775a5fbe6bf0031bbcfff6099f383c0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded create","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":"Creating the security policy resource","lifecycleState":"CREATING","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:24.580Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - dd8a910b7e0dbb95506665bd0ea1297e9775a5fbe6bf0031bbcfff6099f383c0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded create","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":"Creating the security policy resource","lifecycleState":"CREATING","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:24.580Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - aafc506863f52fb6d679df39d24971bbd966d3098289adde2e4680a50bb7c346--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded create","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":"Security policy is active","lifecycleState":"ACTIVE","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:33.053Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - aafc506863f52fb6d679df39d24971bbd966d3098289adde2e4680a50bb7c346--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded create","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":"Security policy is active","lifecycleState":"ACTIVE","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:33.053Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3bed19d4b22fa53ae4abf71bf3e0ab7197f168cb71fc3a39293564b11a80c5ba--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded create","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleDetails":"Updating the security policy resource","lifecycleState":"UPDATING","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:37.256Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 14ecf533476718db424462052f5140fb1fde333c3ebaa0f019ffb90cb7ecb8e0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded update","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":"Security policy is active","lifecycleState":"ACTIVE","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:41.793Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 14ecf533476718db424462052f5140fb1fde333c3ebaa0f019ffb90cb7ecb8e0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded update","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":"Security policy is active","lifecycleState":"ACTIVE","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:41.793Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e42b16456c1e4a939258d8bacd0f96942b3e619a913d7b85b77010aa5464b190--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded update","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":"Deleting the security policy resource","lifecycleState":"DELETING","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:43.530Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/securityPolicies/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 80f359d6e4b131be725d98d93aa0a78c7ce608c0aa14f99cff6434ca846e716f--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:19:24.520Z"}},"description":"recorded update","displayName":"osok-replay-security-policy-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","lifecycleDetails":"Security policy is deleted","lifecycleState":"DELETED","securityPolicyType":"DATASAFE_MANAGED","timeCreated":"2026-09-03T17:19:24.580Z","timeUpdated":"2026-09-03T17:19:47.288Z"}'
+        encoding: json

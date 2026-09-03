@@ -1,0 +1,268 @@
+version: 1
+metadata:
+    service: datasafe
+    resource: AttributeSet
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/attributeSets
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"attributeSetType":"DATABASE_USER","attributeSetValues":["OSOK_REPLAY_USER"],"compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-attribute-set-v2","freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"attributeSetType":"DATABASE_USER","attributeSetValues":["OSOK_REPLAY_USER"],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:12:43.070Z"}},"description":"recorded create","displayName":"osok-replay-attribute-set-v2","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","lifecycleState":"CREATING","systemTags":{}}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_ATTRIBUTE_SET","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"/attributeSets","entityUri":"/attributeSets/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-03T17:12:43.149Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_ATTRIBUTE_SET","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"/attributeSets","entityUri":"/attributeSets/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-03T17:12:43.149Z","timeFinished":"2026-09-03T17:12:46.712Z","timeStarted":"2026-09-03T17:12:45.731Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/attributeSets/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 61c20cd45587756467baceb9f74c9c543fdd587192581846bb449167ca21d0d5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attributeSetType":"DATABASE_USER","attributeSetValues":["OSOK_REPLAY_USER"],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:12:43.070Z"}},"description":"recorded create","displayName":"osok-replay-attribute-set-v2","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","inUse":"NO","isUserDefined":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-03T17:12:43.131Z","timeUpdated":"2026-09-03T17:12:46.667Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/attributeSets/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 61c20cd45587756467baceb9f74c9c543fdd587192581846bb449167ca21d0d5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attributeSetType":"DATABASE_USER","attributeSetValues":["OSOK_REPLAY_USER"],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:12:43.070Z"}},"description":"recorded create","displayName":"osok-replay-attribute-set-v2","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","inUse":"NO","isUserDefined":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-03T17:12:43.131Z","timeUpdated":"2026-09-03T17:12:46.667Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/attributeSets/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"attributeSetValues":["OSOK_REPLAY_USER","OSOK_REPLAY_USER_2"],"description":"recorded update","freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_ATTRIBUTE_SET","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"/attributeSets","entityUri":"/attributeSets/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-03T17:12:50.165Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_ATTRIBUTE_SET","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"/attributeSets","entityUri":"/attributeSets/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-03T17:12:50.165Z","timeFinished":"2026-09-03T17:12:52.665Z","timeStarted":"2026-09-03T17:12:52.530Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/attributeSets/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - abbab7ea15500a0087b1365de53f5e5ad23c90571970a72a93866aa7c7b19fb9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attributeSetType":"DATABASE_USER","attributeSetValues":["OSOK_REPLAY_USER","OSOK_REPLAY_USER_2"],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:12:43.070Z"}},"description":"recorded update","displayName":"osok-replay-attribute-set-v2","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","inUse":"NO","isUserDefined":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-03T17:12:43.131Z","timeUpdated":"2026-09-03T17:12:52.617Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/attributeSets/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - abbab7ea15500a0087b1365de53f5e5ad23c90571970a72a93866aa7c7b19fb9--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"attributeSetType":"DATABASE_USER","attributeSetValues":["OSOK_REPLAY_USER","OSOK_REPLAY_USER_2"],"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:12:43.070Z"}},"description":"recorded update","displayName":"osok-replay-attribute-set-v2","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","inUse":"NO","isUserDefined":true,"lifecycleState":"ACTIVE","timeCreated":"2026-09-03T17:12:43.131Z","timeUpdated":"2026-09-03T17:12:52.617Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/attributeSets/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_ATTRIBUTE_SET","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"/attributeSets","entityUri":"/attributeSets/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-03T17:12:56.670Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_ATTRIBUTE_SET","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"/attributeSets","entityUri":"/attributeSets/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-03T17:12:56.670Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_ATTRIBUTE_SET","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"/attributeSets","entityUri":"/attributeSets/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-03T17:12:56.670Z","timeFinished":"2026-09-03T17:13:03.033Z","timeStarted":"2026-09-03T17:13:02.491Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/attributeSets/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json

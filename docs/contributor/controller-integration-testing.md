@@ -277,6 +277,12 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - OCI Batch Task Profile and Task Environment definitions, including mutable
   metadata, service throttling during delete confirmation, and terminal
   deletion without submitting a Batch job or allocating task compute.
+- Data Safe Attribute Set, Library Masking Format, Security Policy, Security
+  Policy Config, and Sensitive Type lifecycles, including polymorphic
+  sensitive-type requests and work-request-backed delete confirmation.
+- Managed Access Approval Template and Resource Manager Template and Private
+  Endpoint lifecycles. The private endpoint recorder uses temporary VCN and
+  subnet prerequisites and verifies conflict-aware terminal deletion.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
@@ -297,6 +303,12 @@ fixture. Set `OCI_REPLAY_SPEECH_NAMESPACE`, `OCI_REPLAY_SPEECH_BUCKET`, and
 `OCI_REPLAY_SPEECH_OBJECT`; remove the input and generated transcript objects
 and bucket after the cassette is published. Replay substitutes portable
 bindings and does not need the bucket.
+
+Security Policy Config recording requires a temporary user-defined Data Safe
+Security Policy in `OCI_REPLAY_SECURITY_POLICY_ID`. Resource Manager Private
+Endpoint recording requires temporary VCN and subnet OCIDs in
+`OCI_REPLAY_VCN_ID` and `OCI_REPLAY_SUBNET_ID`. Remove those prerequisites after
+their child recording has completed; replay substitutes portable bindings.
 
 Batch Task Environment recording requires an existing public OCIR image URL in
 `OCI_REPLAY_BATCH_IMAGE_URL`. The lifecycle records only the environment

@@ -138,9 +138,15 @@ resources:
     resource: alertpolicy
     classification: recorded
   - service: datasafe
+    resource: attributeset
+    classification: recorded
+  - service: datasafe
     resource: discoveryjob
     classification: synthetic
     reason: A live discovery job scans a registered target database and requires an existing sensitive data model.
+  - service: datasafe
+    resource: librarymaskingformat
+    classification: recorded
   - service: datasafe
     resource: maskingpolicy
     classification: synthetic
@@ -154,9 +160,18 @@ resources:
     classification: synthetic
     reason: A live security assessment executes against a registered target database or database group.
   - service: datasafe
+    resource: securitypolicy
+    classification: recorded
+  - service: datasafe
+    resource: securitypolicyconfig
+    classification: recorded
+  - service: datasafe
     resource: securitypolicydeployment
     classification: synthetic
     reason: A live security-policy deployment changes controls on a registered target database.
+  - service: datasafe
+    resource: sensitivetype
+    classification: recorded
   - service: datasafe
     resource: sensitivetypesexport
     classification: recorded
@@ -214,6 +229,9 @@ resources:
     resource: integrationinstance
     classification: synthetic
     reason: Live creation allocates paid Oracle Integration capacity and provisions identity resources.
+  - service: lockbox
+    resource: approvaltemplate
+    classification: recorded
   - service: managedkafka
     resource: kafkacluster
     classification: synthetic
@@ -277,6 +295,12 @@ resources:
     resource: rediscluster
     classification: synthetic
     reason: Live creation allocates paid cache nodes and private-network capacity.
+  - service: resourcemanager
+    resource: privateendpoint
+    classification: recorded
+  - service: resourcemanager
+    resource: template
+    classification: recorded
   - service: rover
     resource: rovercluster
     classification: synthetic
