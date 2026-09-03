@@ -828,7 +828,9 @@ func (c attributeSetDeleteGuardClient) confirmDeleteAfterSucceededWorkRequest(
 			markAttributeSetDeleted(resource, "OCI resource deleted")
 			return true, nil
 		case classification.IsAuthShapedNotFound():
-			return false, rejectAttributeSetAuthShapedNotFound(resource, err)
+			servicemanager.RecordErrorOpcRequestID(&resource.Status.OsokStatus, err)
+			markAttributeSetDeleted(resource, "OCI AttributeSet delete work request completed and the resource is no longer readable")
+			return true, nil
 		default:
 			servicemanager.RecordErrorOpcRequestID(&resource.Status.OsokStatus, err)
 			return false, err

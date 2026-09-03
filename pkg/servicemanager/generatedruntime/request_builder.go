@@ -20,6 +20,7 @@ import (
 	databasesdk "github.com/oracle/oci-go-sdk/v65/database"
 	databasemigrationsdk "github.com/oracle/oci-go-sdk/v65/databasemigration"
 	databasetoolssdk "github.com/oracle/oci-go-sdk/v65/databasetools"
+	datasafesdk "github.com/oracle/oci-go-sdk/v65/datasafe"
 	networkfirewallsdk "github.com/oracle/oci-go-sdk/v65/networkfirewall"
 	"github.com/oracle/oci-service-operator/pkg/credhelper"
 )
@@ -632,6 +633,18 @@ func convertPolymorphicInterfaceValue(payload []byte, targetType reflect.Type) (
 		converted := reflect.New(targetType).Elem()
 		converted.Set(reflect.ValueOf(body))
 		return converted, true, nil
+	case sensitiveTypeCreateDetailsType:
+		body, err := convertSensitiveTypePolymorphic[datasafesdk.CreateSensitiveTypeDetails](payload, map[string]reflect.Type{
+			"SENSITIVE_TYPE":     reflect.TypeOf(datasafesdk.CreateSensitiveTypePatternDetails{}),
+			"SENSITIVE_CATEGORY": reflect.TypeOf(datasafesdk.CreateSensitiveCategoryDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case sensitiveTypeUpdateDetailsType:
+		body, err := convertSensitiveTypePolymorphic[datasafesdk.UpdateSensitiveTypeDetails](payload, map[string]reflect.Type{
+			"SENSITIVE_TYPE":     reflect.TypeOf(datasafesdk.UpdateSensitiveTypePatternDetails{}),
+			"SENSITIVE_CATEGORY": reflect.TypeOf(datasafesdk.UpdateSensitiveCategoryDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
 	case networkFirewallUpdateAddressListType:
 		body, err := convertNetworkFirewallPolymorphic[networkfirewallsdk.UpdateAddressListDetails](payload, "type", map[string]reflect.Type{
 			"FQDN": reflect.TypeOf(networkfirewallsdk.UpdateFqdnAddressListDetails{}),
@@ -707,6 +720,27 @@ func convertPolymorphicInterfaceValue(payload []byte, targetType reflect.Type) (
 	default:
 		return reflect.Value{}, false, nil
 	}
+}
+
+func convertSensitiveTypePolymorphic[T any](payload []byte, concreteTypes map[string]reflect.Type) (T, error) {
+	var zero T
+	entityType, err := jsonFieldString(payload, "entityType")
+	if err != nil {
+		return zero, fmt.Errorf("decode Data Safe SensitiveType entityType discriminator: %w", err)
+	}
+	concreteType, ok := concreteTypes[strings.ToUpper(strings.TrimSpace(entityType))]
+	if !ok {
+		return zero, fmt.Errorf("unsupported Data Safe SensitiveType entityType discriminator %q", entityType)
+	}
+	converted := reflect.New(concreteType)
+	if err := json.Unmarshal(payload, converted.Interface()); err != nil {
+		return zero, fmt.Errorf("unmarshal into %s: %w", concreteType, err)
+	}
+	body, ok := converted.Elem().Interface().(T)
+	if !ok {
+		return zero, fmt.Errorf("resolved Data Safe SensitiveType type %s does not implement %s", concreteType, reflect.TypeOf((*T)(nil)).Elem())
+	}
+	return body, nil
 }
 
 func convertNetworkFirewallPolymorphic[T any](payload []byte, discriminator string, concreteTypes map[string]reflect.Type) (T, error) {

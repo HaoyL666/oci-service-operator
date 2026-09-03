@@ -18,6 +18,7 @@ import (
 	databasesdk "github.com/oracle/oci-go-sdk/v65/database"
 	databasemigrationsdk "github.com/oracle/oci-go-sdk/v65/databasemigration"
 	databasetoolssdk "github.com/oracle/oci-go-sdk/v65/databasetools"
+	datasafesdk "github.com/oracle/oci-go-sdk/v65/datasafe"
 	networkfirewallsdk "github.com/oracle/oci-go-sdk/v65/networkfirewall"
 	"github.com/oracle/oci-service-operator/pkg/credhelper"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
@@ -58,6 +59,8 @@ var (
 	databaseToolsConnectionUpdateDetailsType = reflect.TypeOf((*databasetoolssdk.UpdateDatabaseToolsConnectionDetails)(nil)).Elem()
 	dashboardCreateDetailsType               = reflect.TypeOf((*dashboardservicesdk.CreateDashboardDetails)(nil)).Elem()
 	dashboardUpdateDetailsType               = reflect.TypeOf((*dashboardservicesdk.UpdateDashboardDetails)(nil)).Elem()
+	sensitiveTypeCreateDetailsType           = reflect.TypeOf((*datasafesdk.CreateSensitiveTypeDetails)(nil)).Elem()
+	sensitiveTypeUpdateDetailsType           = reflect.TypeOf((*datasafesdk.UpdateSensitiveTypeDetails)(nil)).Elem()
 	networkFirewallCreateApplicationType     = reflect.TypeOf((*networkfirewallsdk.CreateApplicationDetails)(nil)).Elem()
 	networkFirewallUpdateApplicationType     = reflect.TypeOf((*networkfirewallsdk.UpdateApplicationDetails)(nil)).Elem()
 	networkFirewallUpdateAddressListType     = reflect.TypeOf((*networkfirewallsdk.UpdateAddressListDetails)(nil)).Elem()
