@@ -1,0 +1,176 @@
+version: 1
+metadata:
+    service: stackmonitoring
+    resource: MonitoredResourceType
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"create"},"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 2a08aa51f3b73cf3bb0b076b6dee2c030f3059ca80057ddc3f286bf514f8bf02--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalNamespaceMap":null,"availabilityMetricsConfig":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T20:49:41.624Z"}},"description":"recorded create","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"create"},"handlerConfig":null,"id":"<ocid:2>","isSystemDefined":null,"lifecycleState":"ACTIVE","metadata":null,"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY","systemTags":{},"tenancyId":"<ocid:3>","timeCreated":"2026-09-03T20:49:41.717Z","timeUpdated":"2026-09-03T20:49:41.717Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b2773181a086f96d2757df791bc6f51bab30db57f1c570357d39ec64110bec41--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalNamespaceMap":{"meNamespace":"oracle_metric_extensions_appmgmt"},"availabilityMetricsConfig":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T20:49:41.624Z"}},"description":"recorded create","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"create"},"handlerConfig":null,"id":"<ocid:2>","isSystemDefined":false,"lifecycleState":"ACTIVE","metadata":{"agentProperties":null,"format":"SYSTEM_FORMAT","requiredProperties":null,"uniquePropertySets":null,"validPropertiesForCreate":null,"validPropertiesForUpdate":null,"validPropertyValues":null,"validSubResourceTypes":[]},"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY","systemTags":{},"tenancyId":"<ocid:3>","timeCreated":"2026-09-03T20:49:41.717Z","timeUpdated":"2026-09-03T20:49:41.717Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b2773181a086f96d2757df791bc6f51bab30db57f1c570357d39ec64110bec41--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalNamespaceMap":{"meNamespace":"oracle_metric_extensions_appmgmt"},"availabilityMetricsConfig":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T20:49:41.624Z"}},"description":"recorded create","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"create"},"handlerConfig":null,"id":"<ocid:2>","isSystemDefined":false,"lifecycleState":"ACTIVE","metadata":{"agentProperties":null,"format":"SYSTEM_FORMAT","requiredProperties":null,"uniquePropertySets":null,"validPropertiesForCreate":null,"validPropertiesForUpdate":null,"validPropertyValues":null,"validSubResourceTypes":[]},"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY","systemTags":{},"tenancyId":"<ocid:3>","timeCreated":"2026-09-03T20:49:41.717Z","timeUpdated":"2026-09-03T20:49:41.717Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"update"},"metricNamespace":"osok_replay","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d9ed466fd857a741781f2c7e178ad4583dcb9deec0633389afd9ce73fcee375e
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalNamespaceMap":null,"availabilityMetricsConfig":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T20:49:41.624Z"}},"description":"recorded update","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"update"},"handlerConfig":null,"id":"<ocid:2>","isSystemDefined":false,"lifecycleState":"ACTIVE","metadata":{"agentProperties":null,"format":"SYSTEM_FORMAT","requiredProperties":null,"uniquePropertySets":null,"validPropertiesForCreate":null,"validPropertiesForUpdate":null,"validPropertyValues":null,"validSubResourceTypes":[]},"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY","systemTags":{},"tenancyId":"<ocid:3>","timeCreated":"2026-09-03T20:49:41.717Z","timeUpdated":"2026-09-03T20:49:42.517Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c67de7787d48ef61c9ab3046b60cb1c7fcea2982f433213a00d20cb953ae8e0e--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalNamespaceMap":{"meNamespace":"oracle_metric_extensions_appmgmt"},"availabilityMetricsConfig":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T20:49:41.624Z"}},"description":"recorded update","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"update"},"handlerConfig":null,"id":"<ocid:2>","isSystemDefined":false,"lifecycleState":"ACTIVE","metadata":{"agentProperties":null,"format":"SYSTEM_FORMAT","requiredProperties":null,"uniquePropertySets":null,"validPropertiesForCreate":null,"validPropertiesForUpdate":null,"validPropertyValues":null,"validSubResourceTypes":[]},"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY","systemTags":{},"tenancyId":"<ocid:3>","timeCreated":"2026-09-03T20:49:41.717Z","timeUpdated":"2026-09-03T20:49:42.517Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c67de7787d48ef61c9ab3046b60cb1c7fcea2982f433213a00d20cb953ae8e0e--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalNamespaceMap":{"meNamespace":"oracle_metric_extensions_appmgmt"},"availabilityMetricsConfig":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T20:49:41.624Z"}},"description":"recorded update","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"update"},"handlerConfig":null,"id":"<ocid:2>","isSystemDefined":false,"lifecycleState":"ACTIVE","metadata":{"agentProperties":null,"format":"SYSTEM_FORMAT","requiredProperties":null,"uniquePropertySets":null,"validPropertiesForCreate":null,"validPropertiesForUpdate":null,"validPropertyValues":null,"validSubResourceTypes":[]},"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY","systemTags":{},"tenancyId":"<ocid:3>","timeCreated":"2026-09-03T20:49:41.717Z","timeUpdated":"2026-09-03T20:49:42.517Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c67de7787d48ef61c9ab3046b60cb1c7fcea2982f433213a00d20cb953ae8e0e--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalNamespaceMap":{"meNamespace":"oracle_metric_extensions_appmgmt"},"availabilityMetricsConfig":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T20:49:41.624Z"}},"description":"recorded update","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"update"},"handlerConfig":null,"id":"<ocid:2>","isSystemDefined":false,"lifecycleState":"ACTIVE","metadata":{"agentProperties":null,"format":"SYSTEM_FORMAT","requiredProperties":null,"uniquePropertySets":null,"validPropertiesForCreate":null,"validPropertiesForUpdate":null,"validPropertyValues":null,"validSubResourceTypes":[]},"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY","systemTags":{},"tenancyId":"<ocid:3>","timeCreated":"2026-09-03T20:49:41.717Z","timeUpdated":"2026-09-03T20:49:42.517Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoredResourceTypes/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - e1e425902bcb5c19ba9a6dadd818649c42d6d919f35d8c538b9a64a4b3a4037e--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"additionalNamespaceMap":{"meNamespace":"oracle_metric_extensions_appmgmt"},"availabilityMetricsConfig":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T20:49:41.624Z"}},"description":"recorded update","displayName":"OSOK replay custom type","freeformTags":{"osok-replay":"update"},"handlerConfig":null,"id":"<ocid:2>","isSystemDefined":false,"lifecycleState":"DELETED","metadata":{"agentProperties":null,"format":"SYSTEM_FORMAT","requiredProperties":null,"uniquePropertySets":null,"validPropertiesForCreate":null,"validPropertiesForUpdate":null,"validPropertyValues":null,"validSubResourceTypes":[]},"metricNamespace":"osok_replay","name":"osok_replay_custom_type","resourceCategory":"APPLICATION","sourceType":"SM_REPO_ONLY","systemTags":{},"tenancyId":"<ocid:3>","timeCreated":"2026-09-03T20:49:41.717Z","timeUpdated":"2026-09-03T20:49:43.554Z"}'
+        encoding: json

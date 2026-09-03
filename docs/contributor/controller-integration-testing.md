@@ -172,6 +172,21 @@ or prerequisites:
   Operator Access Controls perform legal, customer-facing, or tenancy
   governance actions.
 - Rover Nodes, like Rover Clusters, represent orders for physical appliances.
+- Database Tools connections, Data Safe report definitions, IoT digital twins,
+  and Log Analytics collection/scheduling resources require external databases,
+  parent resources, device identities, or continuously executing data flows.
+- License Manager records and product licenses change tenancy compliance data;
+  Optimizer profiles change recommendation scope across compartments.
+- Media assets, workflows, and workflow configurations reference customer
+  media and executable processing definitions.
+- Distributed Database resources and Generative AI models require paid database
+  or model-training infrastructure; Resource Analytics region and tenancy
+  attachments enable telemetry across regional or tenancy boundaries.
+- Service Catalog private applications and Marketplace publications, listing
+  revisions, attachments, notes, and terms publish customer-facing, commercial,
+  or legal content.
+- OS Management Hub management stations require dedicated compute, networking,
+  proxy, mirror, and agent infrastructure.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
@@ -298,6 +313,15 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - Managed Access Approval Template and Resource Manager Template and Private
   Endpoint lifecycles. The private endpoint recorder uses temporary VCN and
   subnet prerequisites and verifies conflict-aware terminal deletion.
+- Compute Cloud@Customer Upgrade Schedule and VCN Path Analyzer Test
+  lifecycles, including the schedule's resource-local terminal-state contract.
+- Stack Monitoring Monitored Resource Type and Process Set definitions; Process
+  Set deletion uses scoped-list confirmation for OCI's auth-shaped terminal
+  read and delete responses.
+- OS Management Hub private Software Source metadata, including scoped-list
+  terminal deletion confirmation without mirroring repository content.
+- Recovery Service Subnet with temporary VCN and subnet prerequisites, mutable
+  display-name/tag validation, and work-request-backed terminal cleanup.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its

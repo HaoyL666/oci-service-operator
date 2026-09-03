@@ -1,0 +1,109 @@
+version: 1
+metadata:
+    service: marketplacepublisher
+    resource: ListingRevisionAttachment
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: marketplace-publisher.us-ashburn-1.oci.oraclecloud.com
+        path: /20241201/listingRevisionAttachments
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"attachmentType":"SUPPORTED_SERVICES","definedTags":{"Operations":{"CostCenter":"42"}},"description":"initial description","displayName":"listing-revision-attachment","freeformTags":{"env":"test"},"listingRevisionId":"<ocid:1>","serviceName":"implementation services","type":"IMPLEMENTATION_SERVICE","url":"https://example.com/service"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"attachmentType":"SUPPORTED_SERVICES","definedTags":{"Operations":{"CostCenter":"42"}},"description":"initial description","displayName":"listing-revision-attachment","freeformTags":{"env":"test"},"id":"<ocid:2>","lifecycleState":"ACTIVE","listingRevisionId":"<ocid:1>","serviceName":"implementation services","type":"IMPLEMENTATION_SERVICE","url":"https://example.com/service"}'
+        encoding: json
+    - request:
+        method: GET
+        host: marketplace-publisher.us-ashburn-1.oci.oraclecloud.com
+        path: /20241201/listingRevisionAttachments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"attachmentType":"SUPPORTED_SERVICES","definedTags":{"Operations":{"CostCenter":"42"}},"description":"initial description","displayName":"listing-revision-attachment","freeformTags":{"env":"test"},"id":"<ocid:2>","lifecycleState":"ACTIVE","listingRevisionId":"<ocid:1>","serviceName":"implementation services","type":"IMPLEMENTATION_SERVICE","url":"https://example.com/service"}'
+        encoding: json
+    - request:
+        method: GET
+        host: marketplace-publisher.us-ashburn-1.oci.oraclecloud.com
+        path: /20241201/listingRevisionAttachments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"attachmentType":"SUPPORTED_SERVICES","definedTags":{"Operations":{"CostCenter":"42"}},"description":"initial description","displayName":"listing-revision-attachment","freeformTags":{"env":"test"},"id":"<ocid:2>","lifecycleState":"ACTIVE","listingRevisionId":"<ocid:1>","serviceName":"implementation services","type":"IMPLEMENTATION_SERVICE","url":"https://example.com/service"}'
+        encoding: json
+    - request:
+        method: GET
+        host: marketplace-publisher.us-ashburn-1.oci.oraclecloud.com
+        path: /20241201/listingRevisionAttachments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"attachmentType":"SUPPORTED_SERVICES","definedTags":{"Operations":{"CostCenter":"42"}},"description":"initial description","displayName":"listing-revision-attachment","freeformTags":{"env":"test"},"id":"<ocid:2>","lifecycleState":"ACTIVE","listingRevisionId":"<ocid:1>","serviceName":"implementation services","type":"IMPLEMENTATION_SERVICE","url":"https://example.com/service"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: marketplace-publisher.us-ashburn-1.oci.oraclecloud.com
+        path: /20241201/listingRevisionAttachments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: marketplace-publisher.us-ashburn-1.oci.oraclecloud.com
+        path: /20241201/listingRevisionAttachments/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: marketplace-publisher.us-ashburn-1.oci.oraclecloud.com
+        path: /20241201/listingRevisionAttachments
+        query: displayName=listing-revision-attachment&lifecycleState=ACTIVE&listingRevisionId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

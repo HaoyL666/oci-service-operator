@@ -1,0 +1,109 @@
+version: 1
+metadata:
+    service: optimizer
+    resource: Profile
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: optimizer.us-ashburn-1.oci.oraclecloud.com
+        path: /20200606/profiles
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"aggregationIntervalInDays":60,"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"runtime profile","freeformTags":{"env":"dev"},"levelsConfiguration":{"items":[{"level":"HIGH","recommendationId":"<ocid:2>"}]},"name":"profile-alpha","targetCompartments":{"items":["<ocid:3>"]},"targetTags":{"items":[{"tagDefinitionName":"CostCenter","tagNamespaceName":"Operations","tagValueType":"VALUE","tagValues":["42"]}]}}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"aggregationIntervalInDays":60,"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"runtime profile","freeformTags":{"env":"dev"},"id":"<ocid:4>","levelsConfiguration":{"items":[{"level":"HIGH","recommendationId":"<ocid:2>"}]},"lifecycleState":"ACTIVE","name":"profile-alpha","targetCompartments":{"items":["<ocid:3>"]},"targetTags":{"items":[{"tagDefinitionName":"CostCenter","tagNamespaceName":"Operations","tagValueType":"VALUE","tagValues":["42"]}]}}'
+        encoding: json
+    - request:
+        method: GET
+        host: optimizer.us-ashburn-1.oci.oraclecloud.com
+        path: /20200606/profiles/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"aggregationIntervalInDays":60,"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"runtime profile","freeformTags":{"env":"dev"},"id":"<ocid:4>","levelsConfiguration":{"items":[{"level":"HIGH","recommendationId":"<ocid:2>"}]},"lifecycleState":"ACTIVE","name":"profile-alpha","targetCompartments":{"items":["<ocid:3>"]},"targetTags":{"items":[{"tagDefinitionName":"CostCenter","tagNamespaceName":"Operations","tagValueType":"VALUE","tagValues":["42"]}]}}'
+        encoding: json
+    - request:
+        method: GET
+        host: optimizer.us-ashburn-1.oci.oraclecloud.com
+        path: /20200606/profiles/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"aggregationIntervalInDays":60,"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"runtime profile","freeformTags":{"env":"dev"},"id":"<ocid:4>","levelsConfiguration":{"items":[{"level":"HIGH","recommendationId":"<ocid:2>"}]},"lifecycleState":"ACTIVE","name":"profile-alpha","targetCompartments":{"items":["<ocid:3>"]},"targetTags":{"items":[{"tagDefinitionName":"CostCenter","tagNamespaceName":"Operations","tagValueType":"VALUE","tagValues":["42"]}]}}'
+        encoding: json
+    - request:
+        method: GET
+        host: optimizer.us-ashburn-1.oci.oraclecloud.com
+        path: /20200606/profiles/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"aggregationIntervalInDays":60,"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"runtime profile","freeformTags":{"env":"dev"},"id":"<ocid:4>","levelsConfiguration":{"items":[{"level":"HIGH","recommendationId":"<ocid:2>"}]},"lifecycleState":"ACTIVE","name":"profile-alpha","targetCompartments":{"items":["<ocid:3>"]},"targetTags":{"items":[{"tagDefinitionName":"CostCenter","tagNamespaceName":"Operations","tagValueType":"VALUE","tagValues":["42"]}]}}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: optimizer.us-ashburn-1.oci.oraclecloud.com
+        path: /20200606/profiles/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: optimizer.us-ashburn-1.oci.oraclecloud.com
+        path: /20200606/profiles/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: optimizer.us-ashburn-1.oci.oraclecloud.com
+        path: /20200606/profiles
+        query: compartmentId=%3Cocid%3A1%3E&name=profile-alpha
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

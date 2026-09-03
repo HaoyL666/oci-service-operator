@@ -1,0 +1,191 @@
+version: 1
+metadata:
+    service: osmanagementhub
+    resource: SoftwareSource
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"archType":"X86_64","compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"osFamily":"ORACLE_LINUX_8","softwareSourceType":"PRIVATE","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 26cfc0982a9e25c73fd4c462cfefe22e635ad044d9cc148f6270f1eee9833d00--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"advancedRepoOptions":null,"archType":"X86_64","availability":"SELECTED","availabilityAtOci":"SELECTED","checksumType":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:03:20.456Z"}},"description":"recorded create","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"gpgKeyFingerprint":null,"gpgKeyId":null,"gpgKeyUrl":null,"id":"<ocid:2>","isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"lifecycleState":"ACTIVE","osFamily":"ORACLE_LINUX_8","packageCount":null,"repoId":"private.osok-replay-private-source.20260903210320577","size":null,"softwareSourceType":"PRIVATE","systemTags":{},"timeCreated":"2026-09-03T21:03:20.577Z","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c63a9bb5ec56a8b9a05a5bb2f678fe3c3f18b5d329cb0e5a243c15a066a4f7cf--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"advancedRepoOptions":null,"archType":"X86_64","availability":"SELECTED","availabilityAtOci":"SELECTED","checksumType":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:03:20.456Z"}},"description":"recorded create","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"gpgKeyFingerprint":null,"gpgKeyId":null,"gpgKeyUrl":null,"id":"<ocid:2>","isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"lifecycleState":"ACTIVE","osFamily":"ORACLE_LINUX_8","packageCount":null,"repoId":"private.osok-replay-private-source.20260903210320577","size":null,"softwareSourceType":"PRIVATE","systemTags":{},"timeCreated":"2026-09-03T21:03:20.577Z","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c63a9bb5ec56a8b9a05a5bb2f678fe3c3f18b5d329cb0e5a243c15a066a4f7cf--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"advancedRepoOptions":null,"archType":"X86_64","availability":"SELECTED","availabilityAtOci":"SELECTED","checksumType":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:03:20.456Z"}},"description":"recorded create","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"gpgKeyFingerprint":null,"gpgKeyId":null,"gpgKeyUrl":null,"id":"<ocid:2>","isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"lifecycleState":"ACTIVE","osFamily":"ORACLE_LINUX_8","packageCount":null,"repoId":"private.osok-replay-private-source.20260903210320577","size":null,"softwareSourceType":"PRIVATE","systemTags":{},"timeCreated":"2026-09-03T21:03:20.577Z","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"softwareSourceType":"PRIVATE","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/"}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7629e586db86d16efe5d0f9156c7d2fdb08e76b0fae2398fbca1682ba58de4a5
+            opc-request-id:
+                - <redacted>
+        body: '{"advancedRepoOptions":null,"archType":"X86_64","availability":"SELECTED","availabilityAtOci":"SELECTED","checksumType":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:03:20.456Z"}},"description":"recorded update","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"gpgKeyFingerprint":null,"gpgKeyId":null,"gpgKeyUrl":null,"id":"<ocid:2>","isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"lifecycleState":"ACTIVE","osFamily":"ORACLE_LINUX_8","packageCount":null,"repoId":"private.osok-replay-private-source.20260903210320577","size":null,"softwareSourceType":"PRIVATE","systemTags":{},"timeCreated":"2026-09-03T21:03:20.577Z","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7629e586db86d16efe5d0f9156c7d2fdb08e76b0fae2398fbca1682ba58de4a5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"advancedRepoOptions":null,"archType":"X86_64","availability":"SELECTED","availabilityAtOci":"SELECTED","checksumType":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:03:20.456Z"}},"description":"recorded update","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"gpgKeyFingerprint":null,"gpgKeyId":null,"gpgKeyUrl":null,"id":"<ocid:2>","isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"lifecycleState":"ACTIVE","osFamily":"ORACLE_LINUX_8","packageCount":null,"repoId":"private.osok-replay-private-source.20260903210320577","size":null,"softwareSourceType":"PRIVATE","systemTags":{},"timeCreated":"2026-09-03T21:03:20.577Z","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7629e586db86d16efe5d0f9156c7d2fdb08e76b0fae2398fbca1682ba58de4a5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"advancedRepoOptions":null,"archType":"X86_64","availability":"SELECTED","availabilityAtOci":"SELECTED","checksumType":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:03:20.456Z"}},"description":"recorded update","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"gpgKeyFingerprint":null,"gpgKeyId":null,"gpgKeyUrl":null,"id":"<ocid:2>","isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"lifecycleState":"ACTIVE","osFamily":"ORACLE_LINUX_8","packageCount":null,"repoId":"private.osok-replay-private-source.20260903210320577","size":null,"softwareSourceType":"PRIVATE","systemTags":{},"timeCreated":"2026-09-03T21:03:20.577Z","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64"}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7629e586db86d16efe5d0f9156c7d2fdb08e76b0fae2398fbca1682ba58de4a5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"advancedRepoOptions":null,"archType":"X86_64","availability":"SELECTED","availabilityAtOci":"SELECTED","checksumType":null,"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:03:20.456Z"}},"description":"recorded update","displayName":"osok-replay-private-source","freeformTags":{"osok-replay":"create"},"gpgKeyFingerprint":null,"gpgKeyId":null,"gpgKeyUrl":null,"id":"<ocid:2>","isGpgCheckEnabled":false,"isMirrorSyncAllowed":false,"isSslVerifyEnabled":true,"lifecycleState":"ACTIVE","osFamily":"ORACLE_LINUX_8","packageCount":null,"repoId":"private.osok-replay-private-source.20260903210320577","size":null,"softwareSourceType":"PRIVATE","systemTags":{},"timeCreated":"2026-09-03T21:03:20.577Z","url":"https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json
+    - request:
+        method: GET
+        host: osmh.us-ashburn-1.oci.oraclecloud.com
+        path: /20220901/softwareSources
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-private-source
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"items":[]}'
+        encoding: json

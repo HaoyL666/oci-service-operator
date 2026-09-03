@@ -1,0 +1,97 @@
+version: 1
+metadata:
+    service: distributeddatabase
+    resource: DistributedDatabasePrivateEndpoint
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: globaldb.us-ashburn-1.oci.oraclecloud.com
+        path: /20250101/distributedDatabasePrivateEndpoints
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"private endpoint for distributed database","displayName":"ddb-private-endpoint","freeformTags":{"managed-by":"oci-service-operator"},"nsgIds":["<ocid:2>","<ocid:3>"],"subnetId":"<ocid:4>"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"private endpoint for distributed database","displayName":"ddb-private-endpoint","freeformTags":{"managed-by":"oci-service-operator"},"id":"<ocid:5>","lifecycleState":"ACTIVE","nsgIds":["<ocid:2>","<ocid:3>"],"subnetId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: globaldb.us-ashburn-1.oci.oraclecloud.com
+        path: /20250101/distributedDatabasePrivateEndpoints/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"private endpoint for distributed database","displayName":"ddb-private-endpoint","freeformTags":{"managed-by":"oci-service-operator"},"id":"<ocid:5>","lifecycleState":"ACTIVE","nsgIds":["<ocid:2>","<ocid:3>"],"subnetId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: globaldb.us-ashburn-1.oci.oraclecloud.com
+        path: /20250101/distributedDatabasePrivateEndpoints/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"private endpoint for distributed database","displayName":"ddb-private-endpoint","freeformTags":{"managed-by":"oci-service-operator"},"id":"<ocid:5>","lifecycleState":"ACTIVE","nsgIds":["<ocid:2>","<ocid:3>"],"subnetId":"<ocid:4>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: globaldb.us-ashburn-1.oci.oraclecloud.com
+        path: /20250101/distributedDatabasePrivateEndpoints/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: globaldb.us-ashburn-1.oci.oraclecloud.com
+        path: /20250101/distributedDatabasePrivateEndpoints/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: globaldb.us-ashburn-1.oci.oraclecloud.com
+        path: /20250101/distributedDatabasePrivateEndpoints
+        query: compartmentId=%3Cocid%3A1%3E&displayName=ddb-private-endpoint&lifecycleState=ACTIVE
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

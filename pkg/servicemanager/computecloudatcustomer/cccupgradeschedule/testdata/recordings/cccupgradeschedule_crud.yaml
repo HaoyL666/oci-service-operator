@@ -1,0 +1,154 @@
+version: 1
+metadata:
+    service: computecloudatcustomer
+    resource: CccUpgradeSchedule
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: ccc.us-ashburn-1.oci.oraclecloud.com
+        path: /20221208/cccUpgradeSchedules
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","description":"recorded create","displayName":"osok-replay-ccc-schedule","events":[{"description":"OSOK replay maintenance window","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00Z"}],"freeformTags":{"osok-replay":"create"}}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:11:39.772Z"}},"description":"recorded create","displayName":"osok-replay-ccc-schedule","events":[{"description":"OSOK replay maintenance window","name":"26a7217c-6b89-4077-9158-e06a7b8f31aa","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00.000Z"}],"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","infrastructureIds":null,"lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-03T21:11:39.919Z","timeUpdated":"2026-09-03T21:11:39.919Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ccc.us-ashburn-1.oci.oraclecloud.com
+        path: /20221208/cccUpgradeSchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bd21d1dd76cfb20c5b2f5ce4bb41c22b0e21307d594514e6ec54ef1434673468--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:11:39.772Z"}},"description":"recorded create","displayName":"osok-replay-ccc-schedule","events":[{"description":"OSOK replay maintenance window","name":"26a7217c-6b89-4077-9158-e06a7b8f31aa","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00.000Z"}],"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","infrastructureIds":null,"lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-03T21:11:39.919Z","timeUpdated":"2026-09-03T21:11:39.919Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ccc.us-ashburn-1.oci.oraclecloud.com
+        path: /20221208/cccUpgradeSchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - bd21d1dd76cfb20c5b2f5ce4bb41c22b0e21307d594514e6ec54ef1434673468--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:11:39.772Z"}},"description":"recorded create","displayName":"osok-replay-ccc-schedule","events":[{"description":"OSOK replay maintenance window","name":"26a7217c-6b89-4077-9158-e06a7b8f31aa","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00.000Z"}],"freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","infrastructureIds":null,"lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-03T21:11:39.919Z","timeUpdated":"2026-09-03T21:11:39.919Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: ccc.us-ashburn-1.oci.oraclecloud.com
+        path: /20221208/cccUpgradeSchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"description":"recorded update","events":[{"description":"OSOK replay maintenance window","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00Z"}],"freeformTags":{"osok-replay":"update"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:11:39.772Z"}},"description":"recorded update","displayName":"osok-replay-ccc-schedule","events":[{"description":"OSOK replay maintenance window","name":"abc678cb-a487-4714-b0ae-f7ca6aea0066","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00.000Z"}],"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","infrastructureIds":null,"lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-03T21:11:39.919Z","timeUpdated":"2026-09-03T21:11:41.487Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ccc.us-ashburn-1.oci.oraclecloud.com
+        path: /20221208/cccUpgradeSchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6d215fd79e4132769946c0ac8f0c70cce616a62cf27e3944d0f1f6b7cf828494--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:11:39.772Z"}},"description":"recorded update","displayName":"osok-replay-ccc-schedule","events":[{"description":"OSOK replay maintenance window","name":"abc678cb-a487-4714-b0ae-f7ca6aea0066","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00.000Z"}],"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","infrastructureIds":null,"lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-03T21:11:39.919Z","timeUpdated":"2026-09-03T21:11:41.487Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: ccc.us-ashburn-1.oci.oraclecloud.com
+        path: /20221208/cccUpgradeSchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 6d215fd79e4132769946c0ac8f0c70cce616a62cf27e3944d0f1f6b7cf828494--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:11:39.772Z"}},"description":"recorded update","displayName":"osok-replay-ccc-schedule","events":[{"description":"OSOK replay maintenance window","name":"abc678cb-a487-4714-b0ae-f7ca6aea0066","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00.000Z"}],"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","infrastructureIds":null,"lifecycleDetails":null,"lifecycleState":"ACTIVE","systemTags":{},"timeCreated":"2026-09-03T21:11:39.919Z","timeUpdated":"2026-09-03T21:11:41.487Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: ccc.us-ashburn-1.oci.oraclecloud.com
+        path: /20221208/cccUpgradeSchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: ccc.us-ashburn-1.oci.oraclecloud.com
+        path: /20221208/cccUpgradeSchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 63db1bde81edc84b30330d181b024850d3af7de2cb199798a657422417623251--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T21:11:39.772Z"}},"description":"recorded update","displayName":"osok-replay-ccc-schedule","events":[{"description":"OSOK replay maintenance window","name":"abc678cb-a487-4714-b0ae-f7ca6aea0066","scheduleEventDuration":"PT49H","scheduleEventRecurrences":"FREQ=MONTHLY","timeStart":"2026-09-05T00:00:00.000Z"}],"freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","infrastructureIds":null,"lifecycleDetails":null,"lifecycleState":"DELETED","systemTags":{},"timeCreated":"2026-09-03T21:11:39.919Z","timeUpdated":"2026-09-03T21:11:42.959Z"}'
+        encoding: json

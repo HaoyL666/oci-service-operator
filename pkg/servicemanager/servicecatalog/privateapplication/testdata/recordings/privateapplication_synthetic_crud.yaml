@@ -1,0 +1,124 @@
+version: 1
+metadata:
+    service: servicecatalog
+    resource: PrivateApplication
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: GET
+        host: service-catalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20210527/privateApplications
+        query: compartmentId=%3Cocid%3A1%3E&displayName=private-app-alpha
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json
+    - request:
+        method: POST
+        host: service-catalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20210527/privateApplications
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"private-app-alpha","freeformTags":{"env":"dev"},"longDescription":"long description","packageDetails":{"packageType":"STACK","version":"1.0.0","zipFileBase64Encoded":"zip-payload"},"shortDescription":"short description"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"private-app-alpha","freeformTags":{"env":"dev"},"id":"<ocid:2>","lifecycleState":"ACTIVE","longDescription":"long description","packageDetails":{"packageType":"STACK","version":"1.0.0","zipFileBase64Encoded":"zip-payload"},"shortDescription":"short description"}'
+        encoding: json
+    - request:
+        method: GET
+        host: service-catalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20210527/privateApplications/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"private-app-alpha","freeformTags":{"env":"dev"},"id":"<ocid:2>","lifecycleState":"ACTIVE","longDescription":"long description","packageDetails":{"packageType":"STACK","version":"1.0.0","zipFileBase64Encoded":"zip-payload"},"shortDescription":"short description"}'
+        encoding: json
+    - request:
+        method: GET
+        host: service-catalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20210527/privateApplications/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"private-app-alpha","freeformTags":{"env":"dev"},"id":"<ocid:2>","lifecycleState":"ACTIVE","longDescription":"long description","packageDetails":{"packageType":"STACK","version":"1.0.0","zipFileBase64Encoded":"zip-payload"},"shortDescription":"short description"}'
+        encoding: json
+    - request:
+        method: GET
+        host: service-catalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20210527/privateApplications/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"private-app-alpha","freeformTags":{"env":"dev"},"id":"<ocid:2>","lifecycleState":"ACTIVE","longDescription":"long description","packageDetails":{"packageType":"STACK","version":"1.0.0","zipFileBase64Encoded":"zip-payload"},"shortDescription":"short description"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: service-catalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20210527/privateApplications/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: service-catalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20210527/privateApplications/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: service-catalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20210527/privateApplications
+        query: compartmentId=%3Cocid%3A1%3E&displayName=private-app-alpha&privateApplicationId=%3Cocid%3A2%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json
