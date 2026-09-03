@@ -66,25 +66,25 @@ func newDataSourceDefaultRuntimeHooks(sdkClient managementagentsdk.ManagementAge
 			},
 		},
 		Get: runtimeOperationHooks[managementagentsdk.GetDataSourceRequest, managementagentsdk.GetDataSourceResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "ManagementAgentId", RequestName: "managementAgentId", Contribution: "path", PreferResourceID: false}, {FieldName: "DataSourceKey", RequestName: "dataSourceKey", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "ManagementAgentId", RequestName: "managementAgentId", Contribution: "path", PreferResourceID: false}, {FieldName: "DataSourceKey", RequestName: "dataSourceKey", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request managementagentsdk.GetDataSourceRequest) (managementagentsdk.GetDataSourceResponse, error) {
 				return sdkClient.GetDataSource(ctx, request)
 			},
 		},
 		List: runtimeOperationHooks[managementagentsdk.ListDataSourcesRequest, managementagentsdk.ListDataSourcesResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "ManagementAgentId", RequestName: "managementAgentId", Contribution: "path", PreferResourceID: true}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}, {FieldName: "Name", RequestName: "name", Contribution: "query", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "ManagementAgentId", RequestName: "managementAgentId", Contribution: "path", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}, {FieldName: "Name", RequestName: "name", Contribution: "query", PreferResourceID: false}},
 			Call: func(ctx context.Context, request managementagentsdk.ListDataSourcesRequest) (managementagentsdk.ListDataSourcesResponse, error) {
 				return sdkClient.ListDataSources(ctx, request)
 			},
 		},
 		Update: runtimeOperationHooks[managementagentsdk.UpdateDataSourceRequest, managementagentsdk.UpdateDataSourceResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "ManagementAgentId", RequestName: "managementAgentId", Contribution: "path", PreferResourceID: false}, {FieldName: "DataSourceKey", RequestName: "dataSourceKey", Contribution: "path", PreferResourceID: false}, {FieldName: "UpdateDataSourceDetails", RequestName: "UpdateDataSourceDetails", Contribution: "body", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "ManagementAgentId", RequestName: "managementAgentId", Contribution: "path", PreferResourceID: false}, {FieldName: "DataSourceKey", RequestName: "dataSourceKey", Contribution: "path", PreferResourceID: true}, {FieldName: "UpdateDataSourceDetails", RequestName: "UpdateDataSourceDetails", Contribution: "body", PreferResourceID: false}},
 			Call: func(ctx context.Context, request managementagentsdk.UpdateDataSourceRequest) (managementagentsdk.UpdateDataSourceResponse, error) {
 				return sdkClient.UpdateDataSource(ctx, request)
 			},
 		},
 		Delete: runtimeOperationHooks[managementagentsdk.DeleteDataSourceRequest, managementagentsdk.DeleteDataSourceResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "ManagementAgentId", RequestName: "managementAgentId", Contribution: "path", PreferResourceID: false}, {FieldName: "DataSourceKey", RequestName: "dataSourceKey", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "ManagementAgentId", RequestName: "managementAgentId", Contribution: "path", PreferResourceID: false}, {FieldName: "DataSourceKey", RequestName: "dataSourceKey", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request managementagentsdk.DeleteDataSourceRequest) (managementagentsdk.DeleteDataSourceResponse, error) {
 				return sdkClient.DeleteDataSource(ctx, request)
 			},

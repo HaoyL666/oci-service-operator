@@ -470,12 +470,13 @@ func runtimeRequestStructFields(pkg *ocisdk.Package, rawName string, operation s
 	}
 
 	pathFieldCount := countFieldsByContribution(requestStruct.Fields, ocisdk.FieldContributionPath)
+	identityRequestName := terminalPathParameter(method.Path)
 	fields := make([]RuntimeRequestFieldModel, 0, len(requestStruct.Fields))
 	for _, field := range requestStruct.Fields {
 		if !includeRuntimeRequestField(field) {
 			continue
 		}
-		fields = append(fields, buildRuntimeRequestFieldModel(field, shouldPreferResourceID(operation, rawName, field, pathFieldCount)))
+		fields = append(fields, buildRuntimeRequestFieldModel(field, shouldPreferResourceID(operation, rawName, field, pathFieldCount, identityRequestName)))
 	}
 
 	return fields
@@ -525,8 +526,8 @@ func buildRuntimeRequestFieldModel(field ocisdk.Field, preferResourceID bool) Ru
 	}
 }
 
-func shouldPreferResourceID(operation string, rawName string, field ocisdk.Field, pathFieldCount int) bool {
-	if operation == "Create" || field.Contribution != ocisdk.FieldContributionPath {
+func shouldPreferResourceID(operation string, rawName string, field ocisdk.Field, pathFieldCount int, identityRequestName string) bool {
+	if operation == "Create" || operation == "List" || field.Contribution != ocisdk.FieldContributionPath {
 		return false
 	}
 	requestName := strings.ToLower(strings.TrimSpace(field.RequestName))
@@ -534,11 +535,26 @@ func shouldPreferResourceID(operation string, rawName string, field ocisdk.Field
 		requestName = strings.ToLower(strings.TrimSpace(field.Name))
 	}
 	rawName = strings.ToLower(strings.TrimSpace(rawName))
+	identityRequestName = strings.ToLower(strings.TrimSpace(identityRequestName))
+	if identityRequestName != "" {
+		return requestName == identityRequestName
+	}
 	matchesResourceID := requestName != "" && rawName != "" && strings.Contains(requestName, rawName) && strings.HasSuffix(requestName, "id")
 	if pathFieldCount == 1 {
 		return true
 	}
 	return matchesResourceID
+}
+
+func terminalPathParameter(path string) string {
+	segments := strings.Split(strings.TrimSpace(path), "/")
+	for index := len(segments) - 1; index >= 0; index-- {
+		segment := strings.TrimSpace(segments[index])
+		if len(segment) > 2 && strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") {
+			return segment[1 : len(segment)-1]
+		}
+	}
+	return ""
 }
 
 func hasField(fields []FieldModel, name string) bool {

@@ -66,25 +66,25 @@ func newListenerDefaultRuntimeHooks(sdkClient networkloadbalancersdk.NetworkLoad
 			},
 		},
 		Get: runtimeOperationHooks[networkloadbalancersdk.GetListenerRequest, networkloadbalancersdk.GetListenerResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.GetListenerRequest) (networkloadbalancersdk.GetListenerResponse, error) {
 				return sdkClient.GetListener(ctx, request)
 			},
 		},
 		List: runtimeOperationHooks[networkloadbalancersdk.ListListenersRequest, networkloadbalancersdk.ListListenersResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: true}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.ListListenersRequest) (networkloadbalancersdk.ListListenersResponse, error) {
 				return sdkClient.ListListeners(ctx, request)
 			},
 		},
 		Update: runtimeOperationHooks[networkloadbalancersdk.UpdateListenerRequest, networkloadbalancersdk.UpdateListenerResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: false}, {FieldName: "UpdateListenerDetails", RequestName: "UpdateListenerDetails", Contribution: "body", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: true}, {FieldName: "UpdateListenerDetails", RequestName: "UpdateListenerDetails", Contribution: "body", PreferResourceID: false}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.UpdateListenerRequest) (networkloadbalancersdk.UpdateListenerResponse, error) {
 				return sdkClient.UpdateListener(ctx, request)
 			},
 		},
 		Delete: runtimeOperationHooks[networkloadbalancersdk.DeleteListenerRequest, networkloadbalancersdk.DeleteListenerResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.DeleteListenerRequest) (networkloadbalancersdk.DeleteListenerResponse, error) {
 				return sdkClient.DeleteListener(ctx, request)
 			},

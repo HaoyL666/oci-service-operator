@@ -1375,6 +1375,55 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: DetectorRecipeDetectorRule
+          specFields:
+            - name: DetectorRecipeId
+              type: string
+              tag: 'json:"detectorRecipeId"'
+              comments:
+                - The OCID of the detector recipe containing the detector rule.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: CompartmentId
+              type: string
+              tag: 'json:"compartmentId"'
+              comments:
+                - The OCID of the compartment used to confirm the detector rule through its recipe collection.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: TargetDetectorRecipe
+          specFields:
+            - name: TargetId
+              type: string
+              tag: 'json:"targetId"'
+              comments:
+                - The OCID of the Cloud Guard target receiving the detector recipe.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: CompartmentId
+              type: string
+              tag: 'json:"compartmentId"'
+              comments:
+                - The OCID of the compartment used to confirm the target detector recipe through its collection endpoint.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: TargetResponderRecipe
+          specFields:
+            - name: TargetId
+              type: string
+              tag: 'json:"targetId"'
+              comments:
+                - The OCID of the Cloud Guard target receiving the responder recipe.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: CompartmentId
+              type: string
+              tag: 'json:"compartmentId"'
+              comments:
+                - The OCID of the compartment used to confirm the target responder recipe through its collection endpoint.
+              markers:
+                - +kubebuilder:validation:Required
 
   - service: cloudmigrations
     sdkPackage: github.com/oracle/oci-go-sdk/v65/cloudmigrations
@@ -2357,6 +2406,181 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: AttributeTag
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the tagged attribute.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: DataAssetKey
+              type: string
+              tag: 'json:"dataAssetKey"'
+              comments:
+                - The key of the data asset containing the tagged attribute.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: EntityKey
+              type: string
+              tag: 'json:"entityKey"'
+              comments:
+                - The key of the entity containing the tagged attribute.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: AttributeKey
+              type: string
+              tag: 'json:"attributeKey"'
+              comments:
+                - The key of the attribute receiving the tag.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: CustomProperty
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the custom property.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: NamespaceId
+              type: string
+              tag: 'json:"namespaceId"'
+              comments:
+                - The key of the namespace containing the custom property.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: DataAssetTag
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the tagged data asset.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: DataAssetKey
+              type: string
+              tag: 'json:"dataAssetKey"'
+              comments:
+                - The key of the data asset receiving the tag.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: EntityTag
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the tagged entity.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: DataAssetKey
+              type: string
+              tag: 'json:"dataAssetKey"'
+              comments:
+                - The key of the data asset containing the tagged entity.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: EntityKey
+              type: string
+              tag: 'json:"entityKey"'
+              comments:
+                - The key of the entity receiving the tag.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: FolderTag
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the tagged folder.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: DataAssetKey
+              type: string
+              tag: 'json:"dataAssetKey"'
+              comments:
+                - The key of the data asset containing the tagged folder.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: FolderKey
+              type: string
+              tag: 'json:"folderKey"'
+              comments:
+                - The key of the folder receiving the tag.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: Glossary
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the glossary.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: Namespace
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the namespace.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: Pattern
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the pattern.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: Term
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the term.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: GlossaryKey
+              type: string
+              tag: 'json:"glossaryKey"'
+              comments:
+                - The key of the glossary containing the term.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: TermRelationship
+          specFields:
+            - name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing the term relationship.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: GlossaryKey
+              type: string
+              tag: 'json:"glossaryKey"'
+              comments:
+                - The key of the glossary containing the related terms.
+              markers:
+                - +kubebuilder:validation:Required
+            - name: TermKey
+              type: string
+              tag: 'json:"termKey"'
+              comments:
+                - The key of the source term for the relationship.
+              markers:
+                - +kubebuilder:validation:Required
 
   - service: dataflow
     sdkPackage: github.com/oracle/oci-go-sdk/v65/dataflow

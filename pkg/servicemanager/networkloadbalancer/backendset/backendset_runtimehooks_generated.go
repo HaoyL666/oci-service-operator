@@ -66,25 +66,25 @@ func newBackendSetDefaultRuntimeHooks(sdkClient networkloadbalancersdk.NetworkLo
 			},
 		},
 		Get: runtimeOperationHooks[networkloadbalancersdk.GetBackendSetRequest, networkloadbalancersdk.GetBackendSetResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.GetBackendSetRequest) (networkloadbalancersdk.GetBackendSetResponse, error) {
 				return sdkClient.GetBackendSet(ctx, request)
 			},
 		},
 		List: runtimeOperationHooks[networkloadbalancersdk.ListBackendSetsRequest, networkloadbalancersdk.ListBackendSetsResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: true}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.ListBackendSetsRequest) (networkloadbalancersdk.ListBackendSetsResponse, error) {
 				return sdkClient.ListBackendSets(ctx, request)
 			},
 		},
 		Update: runtimeOperationHooks[networkloadbalancersdk.UpdateBackendSetRequest, networkloadbalancersdk.UpdateBackendSetResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}, {FieldName: "UpdateBackendSetDetails", RequestName: "UpdateBackendSetDetails", Contribution: "body", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: true}, {FieldName: "UpdateBackendSetDetails", RequestName: "UpdateBackendSetDetails", Contribution: "body", PreferResourceID: false}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.UpdateBackendSetRequest) (networkloadbalancersdk.UpdateBackendSetResponse, error) {
 				return sdkClient.UpdateBackendSet(ctx, request)
 			},
 		},
 		Delete: runtimeOperationHooks[networkloadbalancersdk.DeleteBackendSetRequest, networkloadbalancersdk.DeleteBackendSetResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.DeleteBackendSetRequest) (networkloadbalancersdk.DeleteBackendSetResponse, error) {
 				return sdkClient.DeleteBackendSet(ctx, request)
 			},

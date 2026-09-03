@@ -66,7 +66,7 @@ func newBackendDefaultRuntimeHooks(sdkClient networkloadbalancersdk.NetworkLoadB
 			},
 		},
 		Get: runtimeOperationHooks[networkloadbalancersdk.GetBackendRequest, networkloadbalancersdk.GetBackendResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendName", RequestName: "backendName", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendName", RequestName: "backendName", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.GetBackendRequest) (networkloadbalancersdk.GetBackendResponse, error) {
 				return sdkClient.GetBackend(ctx, request)
 			},
@@ -78,13 +78,13 @@ func newBackendDefaultRuntimeHooks(sdkClient networkloadbalancersdk.NetworkLoadB
 			},
 		},
 		Update: runtimeOperationHooks[networkloadbalancersdk.UpdateBackendRequest, networkloadbalancersdk.UpdateBackendResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendName", RequestName: "backendName", Contribution: "path", PreferResourceID: false}, {FieldName: "UpdateBackendDetails", RequestName: "UpdateBackendDetails", Contribution: "body", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendName", RequestName: "backendName", Contribution: "path", PreferResourceID: true}, {FieldName: "UpdateBackendDetails", RequestName: "UpdateBackendDetails", Contribution: "body", PreferResourceID: false}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.UpdateBackendRequest) (networkloadbalancersdk.UpdateBackendResponse, error) {
 				return sdkClient.UpdateBackend(ctx, request)
 			},
 		},
 		Delete: runtimeOperationHooks[networkloadbalancersdk.DeleteBackendRequest, networkloadbalancersdk.DeleteBackendResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendName", RequestName: "backendName", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "NetworkLoadBalancerId", RequestName: "networkLoadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendSetName", RequestName: "backendSetName", Contribution: "path", PreferResourceID: false}, {FieldName: "BackendName", RequestName: "backendName", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request networkloadbalancersdk.DeleteBackendRequest) (networkloadbalancersdk.DeleteBackendResponse, error) {
 				return sdkClient.DeleteBackend(ctx, request)
 			},

@@ -16,6 +16,12 @@ import (
 type DetectorRecipeDetectorRuleSpec struct {
 	// +kubebuilder:validation:Optional
 	Details DetectorRecipeDetectorRuleDetailsFields `json:"details,omitempty"`
+	// The OCID of the detector recipe containing the detector rule.
+	// +kubebuilder:validation:Required
+	DetectorRecipeId string `json:"detectorRecipeId"`
+	// The OCID of the compartment used to confirm the detector rule through its recipe collection.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
 }
 
 // DetectorRecipeDetectorRuleDetailsConfigurationValueFields defines nested fields for DetectorRecipeDetectorRule.Details.Configuration.Value.
@@ -164,22 +170,6 @@ type DetectorRecipeDetectorRuleRuleTypeFields struct {
 	Key string `json:"key,omitempty"`
 	// Detector rule type value
 	Value []string `json:"value,omitempty"`
-}
-
-// DetectorRecipeDetectorRuleDetailsSightingTypeFields defines nested fields for DetectorRecipeDetectorRule.Details.SightingType.
-type DetectorRecipeDetectorRuleDetailsSightingTypeFields struct {
-	// The unique identifier of the sighting type
-	Id string `json:"id,omitempty"`
-	// Display name of the sighting type
-	DisplayName string `json:"displayName,omitempty"`
-	// Description of the sighting type
-	Description string `json:"description,omitempty"`
-	// MITRE ATT@CK framework link for the sighting type
-	MitreLink string `json:"mitreLink,omitempty"`
-	// MITRE ATT@CK framework tactic for the sighting type
-	Tactic string `json:"tactic,omitempty"`
-	// List of MITRE ATT@CK framework techniques for the sighting type
-	Techniques []string `json:"techniques,omitempty"`
 }
 
 // DetectorRecipeDetectorRuleCandidateResponderRuleFields defines nested fields for DetectorRecipeDetectorRule.CandidateResponderRule.

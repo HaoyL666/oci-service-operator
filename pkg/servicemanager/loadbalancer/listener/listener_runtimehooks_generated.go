@@ -117,13 +117,13 @@ func newListenerDefaultRuntimeHooks(sdkClient loadbalancersdk.LoadBalancerClient
 			},
 		},
 		Update: runtimeOperationHooks[loadbalancersdk.UpdateListenerRequest, loadbalancersdk.UpdateListenerResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "LoadBalancerId", RequestName: "loadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: false}, {FieldName: "UpdateListenerDetails", RequestName: "UpdateListenerDetails", Contribution: "body", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "LoadBalancerId", RequestName: "loadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: true}, {FieldName: "UpdateListenerDetails", RequestName: "UpdateListenerDetails", Contribution: "body", PreferResourceID: false}},
 			Call: func(ctx context.Context, request loadbalancersdk.UpdateListenerRequest) (loadbalancersdk.UpdateListenerResponse, error) {
 				return sdkClient.UpdateListener(ctx, request)
 			},
 		},
 		Delete: runtimeOperationHooks[loadbalancersdk.DeleteListenerRequest, loadbalancersdk.DeleteListenerResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "LoadBalancerId", RequestName: "loadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "LoadBalancerId", RequestName: "loadBalancerId", Contribution: "path", PreferResourceID: false}, {FieldName: "ListenerName", RequestName: "listenerName", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request loadbalancersdk.DeleteListenerRequest) (loadbalancersdk.DeleteListenerResponse, error) {
 				return sdkClient.DeleteListener(ctx, request)
 			},

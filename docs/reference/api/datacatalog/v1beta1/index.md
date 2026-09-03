@@ -245,6 +245,10 @@ AttributeTagSpec defines the desired state of AttributeTag.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `attributeKey` | The key of the attribute receiving the tag. | `string` | Yes | - | - |
+| `catalogId` | The OCID of the catalog containing the tagged attribute. | `string` | Yes | - | - |
+| `dataAssetKey` | The key of the data asset containing the tagged attribute. | `string` | Yes | - | - |
+| `entityKey` | The key of the entity containing the tagged attribute. | `string` | Yes | - | - |
 | `name` | The name of the tag in the case of a free form tag. When linking to a glossary term, this field is not specified. | `string` | No | - | - |
 | `termKey` | Unique key of the related term or null in the case of a free form tag. | `string` | No | - | - |
 
@@ -727,6 +731,7 @@ CustomPropertySpec defines the desired state of CustomProperty.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `allowedValues` | Allowed values for the custom property if any | `list[string]` | No | - | - |
+| `catalogId` | The OCID of the catalog containing the custom property. | `string` | Yes | - | - |
 | `dataType` | The data type of the custom property | `string` | No | - | - |
 | `description` | Detailed description of the custom property. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
@@ -738,6 +743,7 @@ CustomPropertySpec defines the desired state of CustomProperty.
 | `isMultiValued` | If this field allows multiple values to be set | `boolean` | No | - | - |
 | `isShownInList` | If this field is displayed in a list view of applicable objects. | `boolean` | No | - | - |
 | `isSortable` | If this field allows to sort from UI | `boolean` | No | - | - |
+| `namespaceId` | The key of the namespace containing the custom property. | `string` | Yes | - | - |
 | `properties` | A map of maps that contains the properties which are specific to the data asset type. Each data asset type definition defines it's set of required and optional properties. The map keys are category names and the values are maps of property name to property value. Every property is contained inside of a category. Most data assets have required properties within the "default" category. To determine the set of optional and required properties for a data asset type, a query can be done on '/types?type=dataAsset' that returns a collection of all data asset types. The appropriate data asset type, which includes definitions of all of it's properties, can be identified from this collection. Example: `{"properties": { "default": { "host": "host1", "port": "1521", "database": "orcl"}}}` | `map[string, map[string, string]]` | No | - | - |
 
 <a id="kind-customproperty-status"></a>
@@ -1039,6 +1045,8 @@ DataAssetTagSpec defines the desired state of DataAssetTag.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing the tagged data asset. | `string` | Yes | - | - |
+| `dataAssetKey` | The key of the data asset receiving the tag. | `string` | Yes | - | - |
 | `name` | The name of the tag in the case of a free form tag. When linking to a glossary term, this field is not specified. | `string` | No | - | - |
 | `termKey` | Unique key of the related term or null in the case of a free form tag. | `string` | No | - | - |
 
@@ -1318,6 +1326,9 @@ EntityTagSpec defines the desired state of EntityTag.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing the tagged entity. | `string` | Yes | - | - |
+| `dataAssetKey` | The key of the data asset containing the tagged entity. | `string` | Yes | - | - |
+| `entityKey` | The key of the entity receiving the tag. | `string` | Yes | - | - |
 | `name` | The name of the tag in the case of a free form tag. When linking to a glossary term, this field is not specified. | `string` | No | - | - |
 | `termKey` | Unique key of the related term or null in the case of a free form tag. | `string` | No | - | - |
 
@@ -1587,6 +1598,9 @@ FolderTagSpec defines the desired state of FolderTag.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing the tagged folder. | `string` | Yes | - | - |
+| `dataAssetKey` | The key of the data asset containing the tagged folder. | `string` | Yes | - | - |
+| `folderKey` | The key of the folder receiving the tag. | `string` | Yes | - | - |
 | `name` | The name of the tag in the case of a free form tag. When linking to a glossary term, this field is not specified. | `string` | No | - | - |
 | `termKey` | Unique key of the related term or null in the case of a free form tag. | `string` | No | - | - |
 
@@ -1687,6 +1701,7 @@ GlossarySpec defines the desired state of Glossary.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing the glossary. | `string` | Yes | - | - |
 | [`customPropertyMembers`](#kind-glossary-spec-custompropertymembers) | The list of customized properties along with the values for this object | `list[object]` | No | - | - |
 | `description` | Detailed description of the glossary. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
@@ -2204,6 +2219,7 @@ NamespaceSpec defines the desired state of Namespace.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing the namespace. | `string` | Yes | - | - |
 | `description` | Detailed description of the Namespace. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
 | `isServiceDefined` | If this field is defined by service or by a user | `boolean` | No | - | - |
@@ -2303,6 +2319,7 @@ PatternSpec defines the desired state of Pattern.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing the pattern. | `string` | Yes | - | - |
 | `checkFailureLimit` | The maximum number of UNMATCHED files, in checkFilePathList, above which the check fails. Optional, if checkFilePathList is provided - but if isEnableCheckFailureLimit is set to true it is required. | `integer` | No | - | - |
 | `checkFilePathList` | List of file paths against which the pattern can be tried, as a check. This documents, for reference purposes, some example objects a pattern is meant to work with. If isEnableCheckFailureLimit is set to true, this will be run as a validation during the request, such that if the check fails the request fails. If isEnableCheckFailureLimit instead is set to (the default) false, a pattern will still be created or updated even if the check fails, with a lifecycleState of FAILED. | `list[string]` | No | - | - |
 | `description` | Detailed description of the Pattern. | `string` | No | - | - |
@@ -2413,9 +2430,11 @@ TermSpec defines the desired state of Term.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing the term. | `string` | Yes | - | - |
 | [`customPropertyMembers`](#kind-term-spec-custompropertymembers) | The list of customized properties along with the values for this object | `list[object]` | No | - | - |
 | `description` | Detailed description of the term. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Is changeable. The combination of 'displayName' and 'parentTermKey' must be unique. Avoid entering confidential information. | `string` | Yes | - | - |
+| `glossaryKey` | The key of the glossary containing the term. | `string` | Yes | - | - |
 | `isAllowedToHaveChildTerms` | Indicates whether a term may contain child terms. | `boolean` | No | - | - |
 | `owner` | OCID of the user who is the owner of this business terminology. | `string` | No | - | - |
 | `parentTermKey` | The parent key of the term. In the case of a root-level category only, the term would have no parent and this should be left unset. | `string` | No | - | - |
@@ -2566,9 +2585,12 @@ TermRelationshipSpec defines the desired state of TermRelationship.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing the term relationship. | `string` | Yes | - | - |
 | `description` | Detailed description of the term relationship usually defined at the time of creation. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Is changeable. The combination of 'displayName' and 'parentTermKey' must be unique. Avoid entering confidential information. This is the same as 'relationshipType' for 'termRelationship'. | `string` | Yes | - | - |
+| `glossaryKey` | The key of the glossary containing the related terms. | `string` | Yes | - | - |
 | `relatedTermKey` | Unique id of the related term. | `string` | Yes | - | - |
+| `termKey` | The key of the source term for the relationship. | `string` | Yes | - | - |
 
 <a id="kind-termrelationship-status"></a>
 ### Status

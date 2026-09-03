@@ -507,6 +507,9 @@ func TestPackageResourceOperations(t *testing.T) {
 				if create.MethodName != "CreateRepository" {
 					t.Fatalf("Repository create method = %q, want CreateRepository", create.MethodName)
 				}
+				if create.Path != "/repositories" {
+					t.Fatalf("Repository create path = %q, want /repositories", create.Path)
+				}
 				update := operations["Update"]
 				if update.MethodName != "UpdateRepository" {
 					t.Fatalf("Repository update method = %q, want UpdateRepository", update.MethodName)

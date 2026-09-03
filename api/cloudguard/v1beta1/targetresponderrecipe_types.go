@@ -20,6 +20,12 @@ type TargetResponderRecipeSpec struct {
 	// List of overrides to be applied to responder rules associated with the target
 	// +kubebuilder:validation:Optional
 	ResponderRules []TargetResponderRecipeResponderRuleFields `json:"responderRules,omitempty"`
+	// The OCID of the Cloud Guard target receiving the responder recipe.
+	// +kubebuilder:validation:Required
+	TargetId string `json:"targetId"`
+	// The OCID of the compartment used to confirm the target responder recipe through its collection endpoint.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
 }
 
 // TargetResponderRecipeResponderRuleDetailsConditionFields defines nested fields for TargetResponderRecipe.ResponderRule.Details.Condition.

@@ -72,7 +72,7 @@ func newOsnDefaultRuntimeHooks(sdkClient blockchainsdk.BlockchainPlatformClient)
 			},
 		},
 		List: runtimeOperationHooks[blockchainsdk.ListOsnsRequest, blockchainsdk.ListOsnsResponse]{
-			Fields: []generatedruntime.RequestField{{FieldName: "BlockchainPlatformId", RequestName: "blockchainPlatformId", Contribution: "path", PreferResourceID: true}, {FieldName: "DisplayName", RequestName: "displayName", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}},
+			Fields: []generatedruntime.RequestField{{FieldName: "BlockchainPlatformId", RequestName: "blockchainPlatformId", Contribution: "path", PreferResourceID: false}, {FieldName: "DisplayName", RequestName: "displayName", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}},
 			Call: func(ctx context.Context, request blockchainsdk.ListOsnsRequest) (blockchainsdk.ListOsnsResponse, error) {
 				return sdkClient.ListOsns(ctx, request)
 			},

@@ -69,6 +69,7 @@ type OperationMethod struct {
 	ClientType   string
 	RequestType  string
 	ResponseType string
+	Path         string
 	UsesRequest  bool
 }
 
@@ -572,6 +573,7 @@ func parsePackage(dir string) (*Package, error) {
 	}
 	exportedTypes := make(map[string]struct{})
 	requestBodyPayloadExprs := make(map[string][]ast.Expr)
+	operationPaths := make(map[string]string)
 	for _, parsedPackage := range pkgs {
 		for _, fileNode := range parsedPackage.Files {
 			for _, declaration := range fileNode.Decls {
@@ -600,6 +602,9 @@ func parsePackage(dir string) (*Package, error) {
 						}
 					}
 				case *ast.FuncDecl:
+					if clientType, methodName, path, ok := operationImplementationPath(typedDeclaration); ok {
+						operationPaths[operationPathKey(clientType, methodName)] = path
+					}
 					receiverName, implementations := polymorphicMethod(typedDeclaration)
 					if receiverName != "" && len(implementations) > 0 {
 						pkg.polymorphic[receiverName] = appendUniqueNames(pkg.polymorphic[receiverName], implementations...)
@@ -613,6 +618,10 @@ func parsePackage(dir string) (*Package, error) {
 				}
 			}
 		}
+	}
+	for requestType, method := range pkg.requestMethods {
+		method.Path = operationPaths[operationPathKey(method.ClientType, method.MethodName)]
+		pkg.requestMethods[requestType] = method
 	}
 
 	for typeName, exprs := range requestBodyPayloadExprs {
@@ -631,6 +640,48 @@ func parsePackage(dir string) (*Package, error) {
 	sort.Strings(pkg.typeNames)
 
 	return pkg, nil
+}
+
+func operationImplementationPath(decl *ast.FuncDecl) (string, string, string, bool) {
+	if decl == nil || decl.Name == nil || decl.Body == nil || decl.Recv == nil || len(decl.Recv.List) == 0 {
+		return "", "", "", false
+	}
+	clientType := receiverTypeName(decl.Recv.List[0].Type)
+	if clientType == "" {
+		return "", "", "", false
+	}
+	var path string
+	ast.Inspect(decl.Body, func(node ast.Node) bool {
+		if path != "" {
+			return false
+		}
+		call, ok := node.(*ast.CallExpr)
+		if !ok || len(call.Args) < 2 {
+			return true
+		}
+		selector, ok := call.Fun.(*ast.SelectorExpr)
+		if !ok || selector.Sel == nil || selector.Sel.Name != "HTTPRequest" {
+			return true
+		}
+		literal, ok := call.Args[1].(*ast.BasicLit)
+		if !ok || literal.Kind != token.STRING {
+			return true
+		}
+		value, err := strconv.Unquote(literal.Value)
+		if err != nil {
+			return true
+		}
+		path = value
+		return false
+	})
+	if path == "" {
+		return "", "", "", false
+	}
+	return clientType, decl.Name.Name, path, true
+}
+
+func operationPathKey(clientType string, methodName string) string {
+	return strings.ToLower(strings.TrimSpace(clientType)) + "\x00" + strings.ToLower(strings.TrimSpace(methodName))
 }
 
 func parseStruct(structType *ast.StructType) structDefinition {

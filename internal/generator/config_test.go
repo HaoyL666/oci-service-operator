@@ -3815,3 +3815,57 @@ func TestCheckedInConfigAddsODAChannelOdaInstanceIDSpecField(t *testing.T) {
 		t.Fatalf("oda Channel OdaInstanceId markers = %v, want required marker", odaInstanceID.Markers)
 	}
 }
+
+func TestCheckedInConfigPublishesNestedResourcePathIdentityFields(t *testing.T) {
+	t.Parallel()
+
+	cfgPath := filepath.Join(repoRoot(t), "internal", "generator", "config", "services.yaml")
+	cfg, err := LoadConfig(cfgPath)
+	if err != nil {
+		t.Fatalf("LoadConfig(%q) error = %v", cfgPath, err)
+	}
+
+	expected := map[string]map[string][]string{
+		"cloudguard": {
+			"DetectorRecipeDetectorRule": {"DetectorRecipeId", "CompartmentId"},
+			"TargetDetectorRecipe":       {"TargetId", "CompartmentId"},
+			"TargetResponderRecipe":      {"TargetId", "CompartmentId"},
+		},
+		"datacatalog": {
+			"AttributeTag":     {"CatalogId", "DataAssetKey", "EntityKey", "AttributeKey"},
+			"CustomProperty":   {"CatalogId", "NamespaceId"},
+			"DataAssetTag":     {"CatalogId", "DataAssetKey"},
+			"EntityTag":        {"CatalogId", "DataAssetKey", "EntityKey"},
+			"FolderTag":        {"CatalogId", "DataAssetKey", "FolderKey"},
+			"Glossary":         {"CatalogId"},
+			"Namespace":        {"CatalogId"},
+			"Pattern":          {"CatalogId"},
+			"Term":             {"CatalogId", "GlossaryKey"},
+			"TermRelationship": {"CatalogId", "GlossaryKey", "TermKey"},
+		},
+	}
+
+	for serviceName, kinds := range expected {
+		service := requireService(t, cfg, serviceName)
+		overrides := overridesByKind(service)
+		for kind, names := range kinds {
+			override, ok := overrides[kind]
+			if !ok {
+				t.Fatalf("%s/%s override was not found", serviceName, kind)
+			}
+			fields := make(map[string]FieldOverride, len(override.SpecFields))
+			for _, field := range override.SpecFields {
+				fields[field.Name] = field
+			}
+			for _, name := range names {
+				field, ok := fields[name]
+				if !ok {
+					t.Fatalf("%s/%s specFields = %#v, want %s", serviceName, kind, override.SpecFields, name)
+				}
+				if field.Type != "string" || !slices.Contains(field.Markers, "+kubebuilder:validation:Required") {
+					t.Fatalf("%s/%s %s override = %#v, want required string", serviceName, kind, name, field)
+				}
+			}
+		}
+	}
+}
