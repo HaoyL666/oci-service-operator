@@ -136,8 +136,8 @@ real OCI SDK client against the test's contract-authored response function,
 then writes the sanitized cassette atomically. Always rerun the same test with
 both variables unset to prove strict replay of the generated fixture.
 
-The initial synthetic matrix is intentionally limited to resources with clear
-external side effects or prerequisites:
+The synthetic matrix is limited to resources with clear external side effects
+or prerequisites:
 
 - Access Governance instances require a service entitlement and an IDCS
   administrator token.
@@ -157,6 +157,21 @@ external side effects or prerequisites:
   secrets require Vault prerequisites whose deletion is delayed.
 - Vulnerability Scanning Container Scan Targets cannot resolve the delegated
   tenancy's OCIR compartment with the available operator-access credentials.
+- API Platform instances, GoldenGate deployments, and Generative AI endpoints
+  require paid managed capacity or paid model-hosting prerequisites.
+- Compute Cloud@Customer infrastructures require a physical customer rack and
+  its network connection.
+- Cloud Bridge Agents and Agent Dependencies require installed external agents
+  and customer-supplied binaries. Cloud Bridge Inventory also remains
+  synthetic because bounded live creates returned `InvalidParameter` in the
+  test compartment and `NotAuthorizedOrNotFound` at the tenancy root.
+- Vault deletion is scheduled at least seven days in the future, so its
+  synthetic contract covers create and read while resource-local unit tests
+  cover deletion scheduling.
+- Marketplace Accepted Agreements, Marketplace Publisher Listings, and
+  Operator Access Controls perform legal, customer-facing, or tenancy
+  governance actions.
+- Rover Nodes, like Rover Clusters, represent orders for physical appliances.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.

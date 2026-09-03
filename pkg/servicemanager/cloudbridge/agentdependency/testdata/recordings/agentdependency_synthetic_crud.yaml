@@ -1,0 +1,81 @@
+version: 1
+metadata:
+    service: cloudbridge
+    resource: AgentDependency
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/agentDependencies
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"bucket":"replay-agent-dependencies","compartmentId":"<ocid:1>","dependencyName":"VDDK","dependencyVersion":"1.0","displayName":"osok-replay-agent-dependency","namespace":"replay","objectName":"vddk.zip"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"bucket":"replay-agent-dependencies","compartmentId":"<ocid:1>","dependencyName":"VDDK","dependencyVersion":"1.0","displayName":"osok-replay-agent-dependency","id":"<ocid:2>","lifecycleState":"ACTIVE","namespace":"replay","objectName":"vddk.zip"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/agentDependencies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"bucket":"replay-agent-dependencies","compartmentId":"<ocid:1>","dependencyName":"VDDK","dependencyVersion":"1.0","displayName":"osok-replay-agent-dependency","id":"<ocid:2>","lifecycleState":"ACTIVE","namespace":"replay","objectName":"vddk.zip"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/agentDependencies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/agentDependencies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/agentDependencies
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-agent-dependency&lifecycleState=ACTIVE
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

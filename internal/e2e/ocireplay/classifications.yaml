@@ -11,6 +11,10 @@ resources:
     resource: analyticsinstance
     classification: synthetic
     reason: Live creation allocates paid Oracle Analytics capacity and has a long managed-service lifecycle.
+  - service: apiplatform
+    resource: apiplatforminstance
+    classification: synthetic
+    reason: Live creation allocates paid managed API Platform capacity and has a long infrastructure lifecycle.
   - service: apmtraces
     resource: scheduledquery
     classification: synthetic
@@ -34,9 +38,21 @@ resources:
     classification: synthetic
     reason: Live creation allocates multiple paid Big Data Service compute nodes and block volumes.
   - service: cloudbridge
+    resource: agent
+    classification: synthetic
+    reason: A live agent registration requires an installed Cloud Bridge agent in an external environment.
+  - service: cloudbridge
+    resource: agentdependency
+    classification: synthetic
+    reason: A live agent dependency requires a customer-supplied supported binary in Object Storage and changes the software used by external discovery agents.
+  - service: cloudbridge
     resource: discoveryschedule
     classification: synthetic
     reason: A discovery schedule operates against an external Cloud Bridge environment and asset source that a portable test cannot provision.
+  - service: cloudbridge
+    resource: inventory
+    classification: synthetic
+    reason: Bounded live creates returned InvalidParameter in the test compartment and NotAuthorizedOrNotFound at the tenancy root, so the portable fixture exercises the SDK contract without claiming a live lifecycle.
   - service: cloudguard
     resource: adhocquery
     classification: synthetic
@@ -85,6 +101,10 @@ resources:
     resource: migration
     classification: synthetic
     reason: A live migration requires discovered VMware assets, replication infrastructure, and billable migration execution.
+  - service: computecloudatcustomer
+    resource: cccinfrastructure
+    classification: synthetic
+    reason: Live creation requires an installed Compute Cloud@Customer rack and its customer network connection.
   - service: database
     resource: autonomousdatabase
     classification: synthetic
@@ -225,10 +245,22 @@ resources:
     resource: dedicatedaicluster
     classification: synthetic
     reason: Live creation consumes scarce paid accelerator capacity.
+  - service: generativeai
+    resource: endpoint
+    classification: synthetic
+    reason: Live creation requires both a model and a paid dedicated AI hosting cluster.
+  - service: goldengate
+    resource: deployment
+    classification: synthetic
+    reason: Live creation allocates paid GoldenGate deployment compute and private-network capacity.
   - service: integration
     resource: integrationinstance
     classification: synthetic
     reason: Live creation allocates paid Oracle Integration capacity and provisions identity resources.
+  - service: keymanagement
+    resource: vault
+    classification: synthetic
+    reason: A live vault cannot be deleted immediately; OCI schedules vault deletion at least seven days in the future, so a portable test cannot clean up its resource.
   - service: lockbox
     resource: approvaltemplate
     classification: recorded
@@ -236,6 +268,14 @@ resources:
     resource: kafkacluster
     classification: synthetic
     reason: Live creation allocates paid Kafka broker compute, storage, and private-network resources.
+  - service: marketplace
+    resource: acceptedagreement
+    classification: synthetic
+    reason: Live creation accepts legal and commercial terms for a Marketplace listing on behalf of the tenancy.
+  - service: marketplacepublisher
+    resource: listing
+    classification: synthetic
+    reason: Live creation changes a publisher's customer-facing Marketplace catalog and requires an entitled publisher account.
   - service: mysql
     resource: dbsystem
     classification: synthetic
@@ -278,6 +318,10 @@ resources:
     resource: opensearchcluster
     classification: synthetic
     reason: Live creation allocates several compute nodes, block storage, and VCN infrastructure.
+  - service: operatoraccesscontrol
+    resource: operatorcontrol
+    classification: synthetic
+    reason: Live creation changes tenancy governance and approval policy for privileged operator access.
   - service: osmanagementhub
     resource: managementstation
     classification: synthetic
@@ -305,6 +349,10 @@ resources:
     resource: rovercluster
     classification: synthetic
     reason: Live creation represents an order for physical appliance infrastructure.
+  - service: rover
+    resource: rovernode
+    classification: synthetic
+    reason: Live creation represents an order for a physical Roving Edge Infrastructure appliance.
   - service: securityattribute
     resource: securityattribute
     classification: synthetic

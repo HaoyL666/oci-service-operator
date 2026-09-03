@@ -1,0 +1,94 @@
+version: 1
+metadata:
+    service: operatoraccesscontrol
+    resource: OperatorControl
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: operator-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operatorControls
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"approverGroupsList":["<ocid:1>"],"compartmentId":"<ocid:2>","description":"synthetic operator control","isFullyPreApproved":false,"numberOfApprovers":1,"operatorControlName":"osok-replay-operator-control","resourceType":"EXACC"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"approverGroupsList":["<ocid:1>"],"compartmentId":"<ocid:2>","description":"synthetic operator control","id":"<ocid:3>","isFullyPreApproved":false,"lifecycleState":"CREATED","numberOfApprovers":1,"operatorControlName":"osok-replay-operator-control","resourceType":"EXACC"}'
+        encoding: json
+    - request:
+        method: GET
+        host: operator-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operatorControls/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"approverGroupsList":["<ocid:1>"],"compartmentId":"<ocid:2>","description":"synthetic operator control","id":"<ocid:3>","isFullyPreApproved":false,"lifecycleState":"CREATED","numberOfApprovers":1,"operatorControlName":"osok-replay-operator-control","resourceType":"EXACC"}'
+        encoding: json
+    - request:
+        method: GET
+        host: operator-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operatorControls/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"approverGroupsList":["<ocid:1>"],"compartmentId":"<ocid:2>","description":"synthetic operator control","id":"<ocid:3>","isFullyPreApproved":false,"lifecycleState":"CREATED","numberOfApprovers":1,"operatorControlName":"osok-replay-operator-control","resourceType":"EXACC"}'
+        encoding: json
+    - request:
+        method: GET
+        host: operator-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operatorControls/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"approverGroupsList":["<ocid:1>"],"compartmentId":"<ocid:2>","description":"synthetic operator control","id":"<ocid:3>","isFullyPreApproved":false,"lifecycleState":"CREATED","numberOfApprovers":1,"operatorControlName":"osok-replay-operator-control","resourceType":"EXACC"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: operator-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operatorControls/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: operator-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operatorControls/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
