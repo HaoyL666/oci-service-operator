@@ -120,6 +120,22 @@ availability, or external prerequisites. Name their tests `TestSynthetic...`,
 set `provenance: synthetic`, and do not provide record-mode behavior. They prove
 request construction and response handling, not live OCI behavior.
 
+Use `ocireplay.OpenSDKSynthetic` when a synthetic lifecycle needs a
+reproducible fixture. Normal test runs still perform strict replay. To refresh
+the cassette explicitly, run the test with:
+
+```bash
+OSOK_OCI_SYNTHETIC_RECORD=true \
+OSOK_OCI_CASSETTE_OVERWRITE=true \
+go test ./pkg/servicemanager/SERVICE/RESOURCE \
+  -run '^TestSyntheticRESOURCECreateReadDelete$' -count=1
+```
+
+This mode never contacts OCI. It captures the exact requests emitted by the
+real OCI SDK client against the test's contract-authored response function,
+then writes the sanitized cassette atomically. Always rerun the same test with
+both variables unset to prove strict replay of the generated fixture.
+
 The initial synthetic matrix is intentionally limited to resources with clear
 external side effects or prerequisites:
 

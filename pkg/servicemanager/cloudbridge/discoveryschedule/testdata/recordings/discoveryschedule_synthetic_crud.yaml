@@ -1,0 +1,81 @@
+version: 1
+metadata:
+    service: cloudbridge
+    resource: DiscoverySchedule
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/discoverySchedules
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-discovery-schedule","executionRecurrences":"FREQ=DAILY;INTERVAL=1"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-discovery-schedule","executionRecurrences":"FREQ=DAILY;INTERVAL=1","id":"<ocid:2>","lifecycleState":"ACTIVE"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/discoverySchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-discovery-schedule","executionRecurrences":"FREQ=DAILY;INTERVAL=1","id":"<ocid:2>","lifecycleState":"ACTIVE"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/discoverySchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/discoverySchedules/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudbridge.us-ashburn-1.oci.oraclecloud.com
+        path: /20220509/discoverySchedules
+        query: compartmentId=%3Cocid%3A1%3E&displayName=osok-replay-discovery-schedule&lifecycleState=ACTIVE
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

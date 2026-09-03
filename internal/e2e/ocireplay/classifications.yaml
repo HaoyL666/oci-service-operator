@@ -4,6 +4,10 @@ resources:
     resource: governanceinstance
     classification: synthetic
     reason: Live creation requires a service entitlement and an IDCS administrator token.
+  - service: aispeech
+    resource: transcriptionjob
+    classification: synthetic
+    reason: A live transcription job requires a durable Object Storage audio fixture and invokes paid speech-processing work.
   - service: analytics
     resource: analyticsinstance
     classification: synthetic
@@ -12,15 +16,175 @@ resources:
     resource: scheduledquery
     classification: synthetic
     reason: An independent live create reached the service but free APM domains reject background scheduled queries; a paid domain should not be provisioned for portable tests.
+  - service: batch
+    resource: batchcontext
+    classification: synthetic
+    reason: OCI Batch contexts are prerequisites for runnable batch workloads and depend on service capacity that portable tests must not allocate.
+  - service: batch
+    resource: batchjobpool
+    classification: synthetic
+    reason: A live job pool depends on an OCI Batch context and compute execution capacity.
+  - service: batch
+    resource: batchtaskenvironment
+    classification: synthetic
+    reason: A live task environment depends on a runnable registry image and is intended to launch OCI Batch compute workloads.
+  - service: batch
+    resource: batchtaskprofile
+    classification: synthetic
+    reason: A live task profile depends on a Batch task environment and workload execution prerequisites.
   - service: bds
     resource: bdsinstance
     classification: synthetic
     reason: Live creation allocates multiple paid Big Data Service compute nodes and block volumes.
+  - service: cloudbridge
+    resource: discoveryschedule
+    classification: synthetic
+    reason: A discovery schedule operates against an external Cloud Bridge environment and asset source that a portable test cannot provision.
+  - service: cloudguard
+    resource: adhocquery
+    classification: synthetic
+    reason: A live ad hoc query executes across tenancy resources and can expose security inventory; the fixture validates the SDK contract without querying live assets.
+  - service: cloudguard
+    resource: datamaskrule
+    classification: synthetic
+    reason: A live data-mask rule changes tenancy Cloud Guard security policy for an IAM group.
+  - service: cloudguard
+    resource: detectorrecipe
+    classification: synthetic
+    reason: A live detector recipe changes tenancy Cloud Guard detection policy and requires a reporting-region security configuration.
+  - service: cloudguard
+    resource: detectorrecipedetectorrule
+    classification: synthetic
+    reason: A live detector rule mutates an existing Cloud Guard detector recipe and its security posture.
+  - service: cloudguard
+    resource: responderrecipe
+    classification: synthetic
+    reason: A live responder recipe changes automated Cloud Guard remediation policy.
+  - service: cloudguard
+    resource: securityrecipe
+    classification: synthetic
+    reason: A live security recipe changes Security Zones policy composition for the tenancy.
+  - service: cloudguard
+    resource: securityzone
+    classification: synthetic
+    reason: A live security zone applies restrictive tenancy controls to a compartment and is unsafe for portable recording.
+  - service: cloudguard
+    resource: target
+    classification: synthetic
+    reason: A live Cloud Guard target enrolls a compartment into monitoring and changes its security posture.
+  - service: cloudguard
+    resource: targetdetectorrecipe
+    classification: synthetic
+    reason: A live target detector recipe attaches detection policy to an enrolled Cloud Guard target.
+  - service: cloudguard
+    resource: targetresponderrecipe
+    classification: synthetic
+    reason: A live target responder recipe attaches automated remediation policy to an enrolled Cloud Guard target.
+  - service: cloudguard
+    resource: wlpagent
+    classification: synthetic
+    reason: A live WLP agent registration requires an external host agent and a real certificate signing request.
+  - service: cloudmigrations
+    resource: migration
+    classification: synthetic
+    reason: A live migration requires discovered VMware assets, replication infrastructure, and billable migration execution.
   - service: database
     resource: autonomousdatabase
     classification: synthetic
     reason: A production-tier Autonomous Database provisions billable database compute and storage with long create/delete lifecycles.
     nextAction: Add a contract-faithful synthetic create, update, and delete replay for a non-free-tier serverless database.
+  - service: datacatalog
+    resource: attributetag
+    classification: synthetic
+    reason: A live attribute tag requires a provisioned Data Catalog hierarchy with a data asset, entity, and attribute.
+  - service: datacatalog
+    resource: catalog
+    classification: synthetic
+    reason: A live catalog provisions a managed Data Catalog instance with a long service lifecycle.
+  - service: datacatalog
+    resource: customproperty
+    classification: synthetic
+    reason: A live custom property requires a provisioned catalog and namespace hierarchy.
+  - service: datacatalog
+    resource: dataassettag
+    classification: synthetic
+    reason: A live data-asset tag requires harvested catalog data and an existing data asset.
+  - service: datacatalog
+    resource: entitytag
+    classification: synthetic
+    reason: A live entity tag requires harvested catalog data and an existing entity.
+  - service: datacatalog
+    resource: foldertag
+    classification: synthetic
+    reason: A live folder tag requires harvested catalog data and an existing folder.
+  - service: datacatalog
+    resource: glossary
+    classification: synthetic
+    reason: A live glossary requires a provisioned managed Data Catalog instance.
+  - service: datacatalog
+    resource: namespace
+    classification: synthetic
+    reason: A live namespace requires a provisioned managed Data Catalog instance.
+  - service: datacatalog
+    resource: pattern
+    classification: synthetic
+    reason: A live pattern requires a provisioned catalog and may validate against harvested object paths.
+  - service: datacatalog
+    resource: term
+    classification: synthetic
+    reason: A live term requires a provisioned catalog and glossary hierarchy.
+  - service: datacatalog
+    resource: termrelationship
+    classification: synthetic
+    reason: A live term relationship requires a provisioned catalog, glossary, and two existing terms.
+  - service: datasafe
+    resource: alertpolicy
+    classification: synthetic
+    reason: A live alert policy changes tenant Data Safe security alerting behavior.
+  - service: datasafe
+    resource: discoveryjob
+    classification: synthetic
+    reason: A live discovery job scans a registered target database and requires an existing sensitive data model.
+  - service: datasafe
+    resource: maskingpolicy
+    classification: synthetic
+    reason: A live masking policy requires a registered database or sensitive data model and governs destructive masking work.
+  - service: datasafe
+    resource: onpremconnector
+    classification: synthetic
+    reason: A live on-premises connector requires external network reachability and connector infrastructure.
+  - service: datasafe
+    resource: securityassessment
+    classification: synthetic
+    reason: A live security assessment executes against a registered target database or database group.
+  - service: datasafe
+    resource: securitypolicydeployment
+    classification: synthetic
+    reason: A live security-policy deployment changes controls on a registered target database.
+  - service: datasafe
+    resource: sensitivetypesexport
+    classification: synthetic
+    reason: A live sensitive-types export depends on tenant-authored sensitive type inventory and creates export content.
+  - service: datasafe
+    resource: sqlcollection
+    classification: synthetic
+    reason: A live SQL collection captures workload SQL from a registered target database.
+  - service: datasafe
+    resource: targetdatabase
+    classification: synthetic
+    reason: A live target database registration requires database credentials, network connectivity, and a provisioned database.
+  - service: datasafe
+    resource: targetdatabasegroup
+    classification: synthetic
+    reason: A live target database group changes grouping policy for registered tenant databases.
+  - service: datasafe
+    resource: unifiedauditpolicy
+    classification: synthetic
+    reason: A live unified audit policy changes audit collection on a registered target database.
+  - service: datasafe
+    resource: userassessment
+    classification: synthetic
+    reason: A live user assessment executes against a registered target database or database group.
   - service: email
     resource: dkim
     classification: deferred
@@ -87,6 +251,10 @@ resources:
     classification: synthetic
     reason: Live creation allocates multiple billable bare-metal ESXi hosts and requires a purpose-built VLAN topology.
   - service: oda
+    resource: authenticationprovider
+    classification: synthetic
+    reason: Authentication providers are children of a paid ODA instance and require live external identity-provider client credentials that cannot be published in a portable recording.
+  - service: oda
     resource: odainstance
     classification: synthetic
     reason: Live creation allocates paid Oracle Digital Assistant service capacity.
@@ -135,6 +303,10 @@ resources:
     reason: Direct service-manager and official OCI CLI creates both fail with MissingParameter even though the serialized request contains displayName.
     blocker: The live Service Catalog endpoint rejects a valid SDK request before creating a resource.
     nextAction: Retry recording after the Service Catalog API accepts its documented CreateServiceCatalog payload.
+  - service: stackmonitoring
+    resource: config
+    classification: synthetic
+    reason: A live Stack Monitoring configuration changes tenancy-wide onboarding, dynamic-group, and policy behavior.
   - service: visualbuilder
     resource: vbinstance
     classification: synthetic

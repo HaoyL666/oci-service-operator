@@ -1,0 +1,81 @@
+version: 1
+metadata:
+    service: datacatalog
+    resource: FolderTag
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/dataAssets/asset-key/folders/folder-key/tags
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"name":"osok-replay-tag"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"catalogId":"<ocid:1>","dataAssetKey":"asset-key","folderKey":"folder-key","id":"<ocid:2>","key":"tag-key","lifecycleState":"ACTIVE","name":"osok-replay-tag"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/dataAssets/asset-key/folders/folder-key/tags/tag-key
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"catalogId":"<ocid:1>","dataAssetKey":"asset-key","folderKey":"folder-key","id":"<ocid:2>","key":"tag-key","lifecycleState":"ACTIVE","name":"osok-replay-tag"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/dataAssets/asset-key/folders/folder-key/tags/tag-key
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/dataAssets/asset-key/folders/folder-key/tags/tag-key
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/dataAssets/asset-key/folders/folder-key/tags
+        query: lifecycleState=ACTIVE&name=osok-replay-tag
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

@@ -1,0 +1,95 @@
+version: 1
+metadata:
+    service: oda
+    resource: AuthenticationProvider
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/authenticationProviders
+        query: identityProvider=GENERIC&name=test-auth-provider
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json
+    - request:
+        method: POST
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/authenticationProviders
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"clientId":"client-id","clientSecret":"<redacted>","grantType":"CLIENT_CREDENTIALS","identityProvider":"GENERIC","name":"test-auth-provider","scopes":"openid","tokenEndpointUrl":"<redacted>"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"authorizationEndpointUrl":null,"clientId":"client-id","definedTags":null,"freeformTags":null,"grantType":"CLIENT_CREDENTIALS","id":"<ocid:2>","identityProvider":"GENERIC","isVisible":false,"lifecycleState":"ACTIVE","name":"test-auth-provider","redirectUrl":null,"refreshTokenRetentionPeriodInDays":null,"revokeTokenEndpointUrl":null,"scopes":"openid","shortAuthorizationCodeRequestUrl":null,"subjectClaim":null,"timeCreated":null,"timeUpdated":null,"tokenEndpointUrl":"<redacted>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/authenticationProviders/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"authorizationEndpointUrl":null,"clientId":"client-id","definedTags":null,"freeformTags":null,"grantType":"CLIENT_CREDENTIALS","id":"<ocid:2>","identityProvider":"GENERIC","isVisible":false,"lifecycleState":"ACTIVE","name":"test-auth-provider","redirectUrl":null,"refreshTokenRetentionPeriodInDays":null,"revokeTokenEndpointUrl":null,"scopes":"openid","shortAuthorizationCodeRequestUrl":null,"subjectClaim":null,"timeCreated":null,"timeUpdated":null,"tokenEndpointUrl":"<redacted>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/authenticationProviders/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"authorizationEndpointUrl":null,"clientId":"client-id","definedTags":null,"freeformTags":null,"grantType":"CLIENT_CREDENTIALS","id":"<ocid:2>","identityProvider":"GENERIC","isVisible":false,"lifecycleState":"ACTIVE","name":"test-auth-provider","redirectUrl":null,"refreshTokenRetentionPeriodInDays":null,"revokeTokenEndpointUrl":null,"scopes":"openid","shortAuthorizationCodeRequestUrl":null,"subjectClaim":null,"timeCreated":null,"timeUpdated":null,"tokenEndpointUrl":"<redacted>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/authenticationProviders/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/authenticationProviders/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json

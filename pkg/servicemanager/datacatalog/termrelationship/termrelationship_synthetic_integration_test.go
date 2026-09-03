@@ -1,0 +1,64 @@
+/*
+  Copyright (c) 2026, Oracle and/or its affiliates. All rights reserved.
+  Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+*/
+
+package termrelationship
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"path/filepath"
+	"testing"
+	"time"
+
+	datacatalogsdk "github.com/oracle/oci-go-sdk/v65/datacatalog"
+	datacatalogv1beta1 "github.com/oracle/oci-service-operator/api/datacatalog/v1beta1"
+	"github.com/oracle/oci-service-operator/internal/e2e/ocireplay"
+	"github.com/oracle/oci-service-operator/pkg/loggerutil"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	ctrl "sigs.k8s.io/controller-runtime"
+)
+
+func TestSyntheticTermRelationshipCreateReadDelete(t *testing.T) {
+	resource := &datacatalogv1beta1.TermRelationship{}
+	if err := json.Unmarshal([]byte(`{"metadata":{"name":"osok-replay-termrelationship"},"spec":{"catalogId":"ocid1.datacatalog.oc1..synthetic","glossaryKey":"glossary-key","termKey":"term-key","displayName":"RELATED_TO","relatedTermKey":"related-term-key"}}`), resource); err != nil {
+		t.Fatal(err)
+	}
+	createdBody, err := ocireplay.SyntheticObservedBody(resource.Spec, "ocid1.termrelationship.oc1..synthetic", "ACTIVE", map[string]any{"key": "relationship-key"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	metadata := ocireplay.Metadata{
+		Service: "datacatalog", Resource: "TermRelationship",
+		Operations: []ocireplay.Operation{ocireplay.OperationCreate, ocireplay.OperationRead, ocireplay.OperationDelete},
+		SDKVersion: "v65.110.0", Provenance: ocireplay.ProvenanceSynthetic,
+	}
+	session, err := ocireplay.OpenSDKSynthetic(ocireplay.SDKSyntheticOptions{
+		Path: filepath.Join("testdata", "recordings", "termrelationship_synthetic_crud.yaml"), Host: "https://datacatalog.us-ashburn-1.oci.oraclecloud.com", BasePath: "20190325", Metadata: metadata,
+		Responder: ocireplay.NewSyntheticCRUDResponder(ocireplay.SyntheticCRUDOptions{
+			CreatedBody: createdBody, EmptyCollectionBody: "{\"items\":[]}", PresentCollectionBody: "{\"items\":[" + createdBody + "]}", CreateStatus: 0, DeleteStatus: 0,
+		}),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	sdkClient := datacatalogsdk.DataCatalogClient{BaseClient: session.BaseClient()}
+	manager := &TermRelationshipServiceManager{Log: loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("synthetic-integration")}}
+	hooks := newTermRelationshipRuntimeHooks(manager, sdkClient)
+	client := wrapTermRelationshipGeneratedClient(hooks, defaultTermRelationshipServiceClient{
+		ServiceClient: generatedruntime.NewServiceClient[*datacatalogv1beta1.TermRelationship](buildTermRelationshipGeneratedRuntimeConfig(manager, hooks)),
+	})
+	ocireplay.RunLifecycle(t, ocireplay.LifecycleScenario[*datacatalogv1beta1.TermRelationship]{
+		Mode: ocireplay.ModeReplay, Resource: resource, Client: client, CloseSession: session.Close, Timeout: time.Minute,
+		CreateContext: func(ctx context.Context) context.Context { return generatedruntime.WithSkipExistingBeforeCreate(ctx) },
+		HasIdentity:   func(current *datacatalogv1beta1.TermRelationship) bool { return current.Status.OsokStatus.Ocid != "" },
+		ValidateCreated: func(current *datacatalogv1beta1.TermRelationship) error {
+			if current.Status.OsokStatus.Ocid == "" {
+				return fmt.Errorf("created TermRelationship status has no OCI identity: %+v", current.Status)
+			}
+			return nil
+		},
+	})
+}

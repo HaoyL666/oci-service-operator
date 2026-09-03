@@ -1,0 +1,81 @@
+version: 1
+metadata:
+    service: datacatalog
+    resource: TermRelationship
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/glossaries/glossary-key/terms/term-key/termRelationships
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"displayName":"RELATED_TO","relatedTermKey":"related-term-key"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"catalogId":"<ocid:1>","displayName":"RELATED_TO","glossaryKey":"glossary-key","id":"<ocid:2>","key":"relationship-key","lifecycleState":"ACTIVE","relatedTermKey":"related-term-key","termKey":"term-key"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/glossaries/glossary-key/terms/term-key/termRelationships/relationship-key
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"catalogId":"<ocid:1>","displayName":"RELATED_TO","glossaryKey":"glossary-key","id":"<ocid:2>","key":"relationship-key","lifecycleState":"ACTIVE","relatedTermKey":"related-term-key","termKey":"term-key"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/glossaries/glossary-key/terms/term-key/termRelationships/relationship-key
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/glossaries/glossary-key/terms/term-key/termRelationships/relationship-key
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/glossaries/glossary-key/terms/term-key/termRelationships
+        query: displayName=RELATED_TO&lifecycleState=ACTIVE
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json
