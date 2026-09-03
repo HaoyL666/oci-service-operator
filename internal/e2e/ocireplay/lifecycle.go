@@ -26,19 +26,20 @@ type LifecycleClient[T any] interface {
 // while leaving resource construction, mutation, and assertions typed in the
 // owning service-manager package.
 type LifecycleScenario[T any] struct {
-	Mode            Mode
-	Resource        T
-	Client          LifecycleClient[T]
-	CloseSession    func() error
-	PollInterval    time.Duration
-	Timeout         time.Duration
-	CleanupTimeout  time.Duration
-	CreateContext   func(context.Context) context.Context
-	HasIdentity     func(T) bool
-	ValidateCreated func(T) error
-	Mutate          func(T)
-	ValidateUpdated func(T) error
-	RetryError      func(error) bool
+	Mode             Mode
+	Resource         T
+	Client           LifecycleClient[T]
+	CloseSession     func() error
+	PollInterval     time.Duration
+	Timeout          time.Duration
+	CleanupTimeout   time.Duration
+	CreateContext    func(context.Context) context.Context
+	HasIdentity      func(T) bool
+	ValidateCreated  func(T) error
+	Mutate           func(T)
+	ValidateUpdated  func(T) error
+	RetryError       func(error) bool
+	RetryDeleteError func(error) bool
 }
 
 // RunLifecycle records or replays create, read, update, and confirmed delete.
@@ -74,7 +75,7 @@ func RunLifecycle[T any](t *testing.T, scenario LifecycleScenario[T]) {
 			cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), scenario.CleanupTimeout)
 			defer cleanupCancel()
 			_ = Await(cleanupCtx, scenario.Mode, scenario.PollInterval, func() (bool, error) {
-				return scenario.Client.Delete(cleanupCtx, scenario.Resource)
+				return deleteLifecycleResource(cleanupCtx, scenario)
 			})
 		})
 	}
@@ -103,7 +104,7 @@ func RunLifecycle[T any](t *testing.T, scenario LifecycleScenario[T]) {
 		}
 	}
 	if err := Await(ctx, scenario.Mode, scenario.PollInterval, func() (bool, error) {
-		return scenario.Client.Delete(ctx, scenario.Resource)
+		return deleteLifecycleResource(ctx, scenario)
 	}); err != nil {
 		t.Fatal(err)
 	}
@@ -112,6 +113,14 @@ func RunLifecycle[T any](t *testing.T, scenario LifecycleScenario[T]) {
 		t.Fatal(err)
 	}
 	closed = true
+}
+
+func deleteLifecycleResource[T any](ctx context.Context, scenario LifecycleScenario[T]) (bool, error) {
+	deleted, err := scenario.Client.Delete(ctx, scenario.Resource)
+	if err != nil && scenario.RetryDeleteError != nil && scenario.RetryDeleteError(err) {
+		return false, nil
+	}
+	return deleted, err
 }
 
 func awaitLifecycleConvergence[T any](ctx context.Context, scenario LifecycleScenario[T]) error {
