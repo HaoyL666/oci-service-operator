@@ -232,6 +232,12 @@ func redactedJSONShape(value any) any {
 			redacted[index] = redactedJSONShape(child)
 		}
 		return redacted
+	case bool:
+		return false
+	case float64:
+		return float64(0)
+	case string:
+		return "<redacted>"
 	default:
 		return "<redacted>"
 	}
@@ -247,7 +253,7 @@ func sensitiveJSONKey(key string) bool {
 	value := normalized.String()
 	// This OKE field names a public configuration object, not a credential.
 	// Preserve its shape and recursively sanitize any sensitive child fields.
-	if value == "openidconnecttokenauthenticationconfig" || value == "imagepullsecrets" {
+	if value == "openidconnecttokenauthenticationconfig" || value == "imagepullsecrets" || value == "devicefingerprintchallenge" {
 		return false
 	}
 	for _, marker := range []string{"authorization", "createdby", "ownerusername", "updatedby", "password", "passphrase", "privatekey", "token", "secret", "fingerprint"} {

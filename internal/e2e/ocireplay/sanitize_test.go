@@ -164,3 +164,35 @@ func TestSanitizerPreservesSensitiveObjectShape(t *testing.T) {
 		t.Fatalf("sanitized body = %s, want redacted object shape", body)
 	}
 }
+
+func TestSanitizerPreservesRedactedScalarTypes(t *testing.T) {
+	t.Parallel()
+
+	sanitizer := newSanitizer(nil)
+	body, encoding, err := sanitizer.body([]byte(`{"secretConfig":{"enabled":true,"count":42,"value":"do-not-store"}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if encoding != "json" {
+		t.Fatalf("encoding = %q, want json", encoding)
+	}
+	if body != `{"secretConfig":{"count":0,"enabled":false,"value":"<redacted>"}}` {
+		t.Fatalf("sanitized body = %s, want type-preserving redaction", body)
+	}
+}
+
+func TestSanitizerPreservesDeviceFingerprintChallengeConfiguration(t *testing.T) {
+	t.Parallel()
+
+	sanitizer := newSanitizer(nil)
+	body, encoding, err := sanitizer.body([]byte(`{"deviceFingerprintChallenge":{"action":"DETECT","actionExpirationInSeconds":60,"isEnabled":false}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if encoding != "json" {
+		t.Fatalf("encoding = %q, want json", encoding)
+	}
+	if body != `{"deviceFingerprintChallenge":{"action":"DETECT","actionExpirationInSeconds":60,"isEnabled":false}}` {
+		t.Fatalf("sanitized body lost public challenge configuration: %s", body)
+	}
+}
