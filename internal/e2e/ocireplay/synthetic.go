@@ -16,6 +16,7 @@ import (
 	"sync"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 )
 
 const syntheticRecordEnv = "OSOK_OCI_SYNTHETIC_RECORD"
@@ -171,6 +172,52 @@ func SeedSyntheticTrackedResource(resource any, resourceID string, pathValues ma
 		return fmt.Errorf("seed synthetic tracked resource: %w", err)
 	}
 	return nil
+}
+
+// PreferTrackedIdentityForUnrepresentedPaths keeps real spec/status path
+// values when a generated CR exposes them and falls back to the tracked
+// identity only for parent path parameters that the CR cannot represent.
+// This is intended for portable tracked-resource replay tests, not create
+// coverage.
+func PreferTrackedIdentityForUnrepresentedPaths(resource any, fields []generatedruntime.RequestField) []generatedruntime.RequestField {
+	updated := append([]generatedruntime.RequestField(nil), fields...)
+	exposed := syntheticResourceJSONFields(resource)
+	for index := range updated {
+		field := &updated[index]
+		if field.Contribution != "path" || field.PreferResourceID {
+			continue
+		}
+		name := strings.TrimSpace(field.RequestName)
+		if name == "" && field.FieldName != "" {
+			name = strings.ToLower(field.FieldName[:1]) + field.FieldName[1:]
+		}
+		if _, exists := exposed[name]; !exists {
+			field.PreferResourceID = true
+		}
+	}
+	return updated
+}
+
+func syntheticResourceJSONFields(resource any) map[string]struct{} {
+	fields := map[string]struct{}{}
+	payload, err := json.Marshal(resource)
+	if err != nil {
+		return fields
+	}
+	root := map[string]json.RawMessage{}
+	if err := json.Unmarshal(payload, &root); err != nil {
+		return fields
+	}
+	for _, section := range []string{"spec", "status"} {
+		object := map[string]json.RawMessage{}
+		if err := json.Unmarshal(root[section], &object); err != nil {
+			continue
+		}
+		for name := range object {
+			fields[name] = struct{}{}
+		}
+	}
+	return fields
 }
 
 // SDKSyntheticSession owns either a strict replay cassette or an explicitly

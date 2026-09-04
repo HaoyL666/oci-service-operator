@@ -38,6 +38,10 @@ resources:
     resource: autoscalingconfiguration
     classification: synthetic
     reason: A live configuration requires a disposable instance pool or other scalable resource and can change compute capacity.
+  - service: autoscaling
+    resource: autoscalingpolicy
+    classification: synthetic
+    reason: Live creation requires an autoscaling configuration backed by a disposable instance pool or other scalable resource; no reusable configuration exists in the recording compartment.
   - service: batch
     resource: batchcontext
     classification: synthetic
@@ -60,6 +64,14 @@ resources:
     resource: blockchainplatform
     classification: synthetic
     reason: Live creation requires an IDCS access token and allocates paid Blockchain Platform compute capacity.
+  - service: blockchain
+    resource: osn
+    classification: synthetic
+    reason: Live creation requires an existing paid Blockchain Platform and changes its ordering-service topology.
+  - service: blockchain
+    resource: peer
+    classification: synthetic
+    reason: Live creation requires an existing paid Blockchain Platform and changes its peer topology.
   - service: capacitymanagement
     resource: occcapacityrequest
     classification: synthetic
@@ -188,6 +200,10 @@ resources:
     classification: synthetic
     reason: A live Database Tools connection requires reachable external database infrastructure, Vault secrets, and often a private endpoint.
   - service: datacatalog
+    resource: attribute
+    classification: synthetic
+    reason: Live creation requires a catalog plus harvested data-asset and entity parents backed by an external data source; no catalog exists in the recording compartment.
+  - service: datacatalog
     resource: attributetag
     classification: synthetic
     reason: A live attribute tag requires a provisioned Data Catalog hierarchy with a data asset, entity, and attribute.
@@ -200,17 +216,33 @@ resources:
     classification: synthetic
     reason: Live creation provisions private Data Catalog networking and requires a VCN subnet plus managed catalog access.
   - service: datacatalog
+    resource: connection
+    classification: synthetic
+    reason: Live creation requires a catalog and data-asset parent plus external data-source connection details; no catalog exists in the recording compartment.
+  - service: datacatalog
     resource: customproperty
     classification: synthetic
     reason: A live custom property requires a provisioned catalog and namespace hierarchy.
+  - service: datacatalog
+    resource: dataasset
+    classification: synthetic
+    reason: Live creation requires a Data Catalog instance and valid external data-source type properties; no catalog exists in the recording compartment.
   - service: datacatalog
     resource: dataassettag
     classification: synthetic
     reason: A live data-asset tag requires harvested catalog data and an existing data asset.
   - service: datacatalog
+    resource: entity
+    classification: synthetic
+    reason: Live creation requires a catalog and harvested data-asset parent backed by an external data source; no catalog exists in the recording compartment.
+  - service: datacatalog
     resource: entitytag
     classification: synthetic
     reason: A live entity tag requires harvested catalog data and an existing entity.
+  - service: datacatalog
+    resource: folder
+    classification: synthetic
+    reason: Live creation requires a catalog and harvested data-asset parent backed by an external data source; no catalog exists in the recording compartment.
   - service: datacatalog
     resource: foldertag
     classification: synthetic
@@ -219,6 +251,14 @@ resources:
     resource: glossary
     classification: synthetic
     reason: A live glossary requires a provisioned managed Data Catalog instance.
+  - service: datacatalog
+    resource: job
+    classification: synthetic
+    reason: Live creation requires a catalog, harvested data assets, and a valid job definition; no catalog exists in the recording compartment.
+  - service: datacatalog
+    resource: jobdefinition
+    classification: synthetic
+    reason: Live creation requires a catalog and valid harvest targets backed by an external data source; no catalog exists in the recording compartment.
   - service: datacatalog
     resource: metastore
     classification: synthetic
@@ -240,6 +280,114 @@ resources:
     classification: synthetic
     reason: A live term relationship requires a provisioned catalog, glossary, and two existing terms.
   - service: dataintegration
+    resource: application
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and an application; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: applicationdetaileddescription
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and an application detailed description; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: connection
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a connection with external credentials; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: connectionvalidation
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a connection-validation run against an external data source; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: copyobjectrequest
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a copy-object operation over workspace content; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: dataasset
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a data asset backed by an external data source; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: dataflow
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a data flow and its referenced operators; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: dataflowvalidation
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a data-flow validation operation; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: disapplication
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a DIS application; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: disapplicationdetaileddescription
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a DIS application detailed description; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: exportrequest
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and an export request plus an Object Storage destination; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: externalpublication
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and an external publication and publish target; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: externalpublicationvalidation
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and an external-publication validation operation; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: folder
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a workspace folder; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: functionlibrary
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a function library and uploaded content; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: importrequest
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and an import request plus an Object Storage source; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: patch
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and an application patch; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: pipeline
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a pipeline and its referenced tasks; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: pipelinevalidation
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a pipeline-validation operation; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: project
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a project; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: schedule
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and an application schedule; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: task
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a task and its referenced data assets; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: taskrun
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a task run that executes customer data processing; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: taskschedule
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a task schedule; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: taskvalidation
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a task-validation operation; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: userdefinedfunction
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a user-defined function and implementation content; no workspace exists in the recording compartment.
+  - service: dataintegration
+    resource: userdefinedfunctionvalidation
+    classification: synthetic
+    reason: Live creation requires a paid Data Integration workspace and a user-defined-function validation operation; no workspace exists in the recording compartment.
+  - service: dataintegration
     resource: workspace
     classification: synthetic
     reason: Live creation provisions a paid Data Integration workspace with a long managed-service lifecycle.
@@ -259,6 +407,10 @@ resources:
     resource: alertpolicy
     classification: recorded
   - service: datasafe
+    resource: alertpolicyrule
+    classification: synthetic
+    reason: Live mutation changes tenancy Data Safe alerting policy rather than disposable resource state.
+  - service: datasafe
     resource: attributeset
     classification: recorded
   - service: datasafe
@@ -269,6 +421,10 @@ resources:
     resource: auditprofile
     classification: synthetic
     reason: A live audit profile is owned by a registered target database and changes its audit retention and collection configuration.
+  - service: datasafe
+    resource: datasafeprivateendpoint
+    classification: synthetic
+    reason: Live creation allocates a Data Safe private endpoint and VNIC in a customer subnet; no reusable endpoint exists in the recording compartment.
   - service: datasafe
     resource: discoveryjob
     classification: synthetic
@@ -447,6 +603,10 @@ resources:
     reason: A live outbound connector requires a reachable LDAP directory, bind credentials, and a mount-target network path that should not be embedded in a portable recorder.
     nextAction: Add a contract-faithful synthetic lifecycle covering LDAP configuration and credential redaction.
   - service: filestorage
+    resource: quotarule
+    classification: synthetic
+    reason: A bounded live probe reached File Storage, but quota enforcement remained ENABLING beyond the recording window; the generated CR also exposes the required fileSystemId parent path only in status.
+  - service: filestorage
     resource: replication
     classification: synthetic
     reason: Live replication provisions and continuously operates a destination file system across availability domains, adding storage cost and a long synchronization lifecycle.
@@ -463,6 +623,18 @@ resources:
     resource: fleet
     classification: synthetic
     reason: A live fleet enrolls customer compute resources for centralized application and patch management.
+  - service: fleetappsmanagement
+    resource: fleetcredential
+    classification: synthetic
+    reason: Live creation requires a Fleet Apps Management fleet plus customer credential material.
+  - service: fleetappsmanagement
+    resource: fleetproperty
+    classification: synthetic
+    reason: Live creation requires an onboarded Fleet Apps Management fleet and changes its operational properties.
+  - service: fleetappsmanagement
+    resource: fleetresource
+    classification: synthetic
+    reason: Live creation requires an onboarded Fleet Apps Management fleet and registered external fleet resource.
   - service: fleetappsmanagement
     resource: maintenancewindow
     classification: synthetic
@@ -530,6 +702,14 @@ resources:
     resource: fusionenvironmentfamily
     classification: synthetic
     reason: A live environment family requires commercial Fusion Applications subscriptions and governs paid environments.
+  - service: fusionapps
+    resource: refreshactivity
+    classification: synthetic
+    reason: Live creation requires paid source and target Fusion environments and starts a disruptive environment refresh.
+  - service: fusionapps
+    resource: serviceattachment
+    classification: synthetic
+    reason: Live creation requires a paid Fusion environment and changes its service attachment topology.
   - service: gdp
     resource: gdppipeline
     classification: synthetic
@@ -571,6 +751,10 @@ resources:
     resource: enrichmentjob
     classification: synthetic
     reason: A live enrichment job requires an existing semantic store and customer database schema and initiates billable processing.
+  - service: goldengate
+    resource: certificate
+    classification: synthetic
+    reason: Live creation requires a paid GoldenGate deployment plus reviewed certificate material.
   - service: goldengate
     resource: connection
     classification: synthetic
@@ -624,9 +808,23 @@ resources:
     classification: synthetic
     reason: A bounded live create reached OCI but requires an operator-accepted Java license and compatible release combination.
   - service: jmsutils
+    resource: analyzeapplicationsconfiguration
+    classification: recorded
+  - service: jmsutils
+    resource: javamigrationanalysis
+    classification: synthetic
+    reason: Live creation requires uploaded application artifacts and starts a Java migration analysis work request.
+  - service: jmsutils
     resource: performancetuninganalysis
     classification: synthetic
     reason: A live analysis requires a customer JFR artifact in Object Storage and processes application performance data.
+  - service: jmsutils
+    resource: subscriptionacknowledgmentconfiguration
+    classification: recorded
+  - service: keymanagement
+    resource: ekmsprivateendpoint
+    classification: synthetic
+    reason: Live creation requires an external key-management appliance, customer network configuration, and a private endpoint.
   - service: keymanagement
     resource: vault
     classification: synthetic

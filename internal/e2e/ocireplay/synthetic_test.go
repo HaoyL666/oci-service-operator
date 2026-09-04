@@ -11,6 +11,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 )
 
 func TestOpenSDKSyntheticRequiresSyntheticProvenance(t *testing.T) {
@@ -177,6 +179,35 @@ func TestSeedSyntheticTrackedResourceSetsIdentityAndKnownPaths(t *testing.T) {
 	}
 	if resource.Spec.Parent != "ocid1.parent.oc1..synthetic" || resource.Status.Parent != resource.Spec.Parent {
 		t.Fatalf("seeded parent path = spec %q status %q", resource.Spec.Parent, resource.Status.Parent)
+	}
+}
+
+func TestPreferTrackedIdentityForUnrepresentedPathsPreservesExposedParents(t *testing.T) {
+	type spec struct {
+		ParentID string `json:"parentId,omitempty"`
+	}
+	type status struct {
+		ParentID string `json:"parentId,omitempty"`
+	}
+	type resource struct {
+		Spec   spec   `json:"spec"`
+		Status status `json:"status"`
+	}
+	value := &resource{Spec: spec{ParentID: "ocid1.parent.oc1..test"}}
+	fields := []generatedruntime.RequestField{
+		{FieldName: "ParentId", RequestName: "parentId", Contribution: "path"},
+		{FieldName: "MissingParentId", RequestName: "missingParentId", Contribution: "path"},
+		{FieldName: "ThingId", RequestName: "thingId", Contribution: "path", PreferResourceID: true},
+	}
+	updated := PreferTrackedIdentityForUnrepresentedPaths(value, fields)
+	if updated[0].PreferResourceID {
+		t.Fatal("exposed parent path unexpectedly prefers tracked identity")
+	}
+	if !updated[1].PreferResourceID || !updated[2].PreferResourceID {
+		t.Fatalf("unrepresented path preferences = %+v", updated)
+	}
+	if fields[1].PreferResourceID {
+		t.Fatal("input fields were mutated")
 	}
 }
 
