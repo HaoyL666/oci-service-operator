@@ -19,6 +19,14 @@ resources:
     resource: scheduledquery
     classification: synthetic
     reason: An independent live create reached the service but free APM domains reject background scheduled queries; a paid domain should not be provisioned for portable tests.
+  - service: appmgmtcontrol
+    resource: monitoredinstance
+    classification: synthetic
+    reason: MonitoredInstance is observe-only and requires an externally registered application-management agent; the fixture verifies binding without an external host.
+  - service: artifacts
+    resource: containerimagesignature
+    classification: synthetic
+    reason: A live signature requires a container image, KMS key version, and valid cryptographic signature that cannot be published in a portable fixture.
   - service: batch
     resource: batchcontext
     classification: synthetic
@@ -37,6 +45,10 @@ resources:
     resource: bdsinstance
     classification: synthetic
     reason: Live creation allocates multiple paid Big Data Service compute nodes and block volumes.
+  - service: capacitymanagement
+    resource: occcapacityrequest
+    classification: synthetic
+    reason: A live request reserves constrained OCI capacity and changes tenancy allocation commitments; the fixture validates the service-manager contract without consuming capacity.
   - service: cloudbridge
     resource: agent
     classification: synthetic
@@ -101,6 +113,18 @@ resources:
     resource: migration
     classification: synthetic
     reason: A live migration requires discovered VMware assets, replication infrastructure, and billable migration execution.
+  - service: cloudmigrations
+    resource: migrationasset
+    classification: synthetic
+    reason: A live migration asset requires discovered VMware inventory, replication infrastructure, and Object Storage snapshots.
+  - service: cloudmigrations
+    resource: migrationplan
+    classification: synthetic
+    reason: A live migration plan requires a provisioned migration and discovered source assets and can allocate target infrastructure.
+  - service: cloudmigrations
+    resource: replicationschedule
+    classification: synthetic
+    reason: A live replication schedule operates on migration assets and initiates recurring replication work.
   - service: computecloudatcustomer
     resource: cccinfrastructure
     classification: synthetic
@@ -108,6 +132,10 @@ resources:
   - service: computecloudatcustomer
     resource: cccupgradeschedule
     classification: recorded
+  - service: computeinstanceagent
+    resource: instanceagentplugin
+    classification: synthetic
+    reason: InstanceAgentPlugin is observe-only and requires an externally provisioned compute instance with Oracle Cloud Agent installed.
   - service: database
     resource: autonomousdatabase
     classification: synthetic
@@ -161,12 +189,28 @@ resources:
     resource: termrelationship
     classification: synthetic
     reason: A live term relationship requires a provisioned catalog, glossary, and two existing terms.
+  - service: dataintegration
+    resource: workspace
+    classification: synthetic
+    reason: Live creation provisions a paid Data Integration workspace with a long managed-service lifecycle.
+  - service: datalabelingservice
+    resource: dataset
+    classification: synthetic
+    reason: Both the service-manager create and an independent OCI CLI list returned service-level NotAuthorizedOrNotFound for the recording principal.
   - service: datasafe
     resource: alertpolicy
     classification: recorded
   - service: datasafe
     resource: attributeset
     classification: recorded
+  - service: datasafe
+    resource: auditarchiveretrieval
+    classification: synthetic
+    reason: A live archive retrieval requires a registered target database with archived audit data and initiates retrieval work.
+  - service: datasafe
+    resource: auditprofile
+    classification: synthetic
+    reason: A live audit profile is owned by a registered target database and changes its audit retention and collection configuration.
   - service: datasafe
     resource: discoveryjob
     classification: synthetic
@@ -183,9 +227,21 @@ resources:
     classification: synthetic
     reason: A live create returned an OCI identity and its update work request succeeded, but the recording principal receives NotAuthorizedOrNotFound for subsequent get and delete operations on that exact connector.
   - service: datasafe
+    resource: peertargetdatabase
+    classification: synthetic
+    reason: A live peer target database requires two registered Data Safe target databases and changes their association.
+  - service: datasafe
+    resource: referentialrelation
+    classification: synthetic
+    reason: A live referential relation requires an existing sensitive-data model with compatible sensitive columns.
+  - service: datasafe
     resource: reportdefinition
     classification: synthetic
     reason: A live report definition requires a compatible parent report definition and changes Data Safe reporting configuration.
+  - service: datasafe
+    resource: sdmmaskingpolicydifference
+    classification: synthetic
+    reason: A live comparison requires an existing sensitive-data model and masking policy and launches Data Safe analysis work.
   - service: datasafe
     resource: securityassessment
     classification: synthetic
@@ -200,6 +256,10 @@ resources:
     resource: securitypolicydeployment
     classification: synthetic
     reason: A live security-policy deployment changes controls on a registered target database.
+  - service: datasafe
+    resource: sensitivedatamodel
+    classification: synthetic
+    reason: A live sensitive-data model requires a registered target database and initiates Data Safe discovery state.
   - service: datasafe
     resource: sensitivetype
     classification: recorded
@@ -272,10 +332,22 @@ resources:
     resource: model
     classification: synthetic
     reason: Live creation fine-tunes a model using paid dedicated AI capacity and customer training data.
+  - service: generativeaiagentruntime
+    resource: session
+    classification: synthetic
+    reason: A live session requires an existing Generative AI Agent endpoint and can process customer prompts; the fixture avoids invoking a model.
+  - service: generativeaidata
+    resource: enrichmentjob
+    classification: synthetic
+    reason: A live enrichment job requires an existing semantic store and customer database schema and initiates billable processing.
   - service: goldengate
     resource: deployment
     classification: synthetic
     reason: Live creation allocates paid GoldenGate deployment compute and private-network capacity.
+  - service: governancerulescontrolplane
+    resource: inclusioncriterion
+    classification: synthetic
+    reason: A live inclusion criterion changes the tenancy scope governed by an existing governance rule.
   - service: integration
     resource: integrationinstance
     classification: synthetic
@@ -288,6 +360,10 @@ resources:
     resource: digitaltwinrelationship
     classification: synthetic
     reason: A live relationship requires a provisioned IoT domain and two compatible digital twin instances.
+  - service: jms
+    resource: jmsplugin
+    classification: synthetic
+    reason: A live JMS plugin registration requires an external Fleet Application Management agent installation and plugin deployment.
   - service: keymanagement
     resource: vault
     classification: synthetic
@@ -300,9 +376,21 @@ resources:
     resource: productlicense
     classification: synthetic
     reason: Live creation changes tenancy-level product licensing and marketplace-image attribution.
+  - service: limits
+    resource: quota
+    classification: synthetic
+    reason: A live quota changes enforceable service limits for a compartment and is unsafe for portable recording.
+  - service: limitsincrease
+    resource: limitsincreaserequest
+    classification: synthetic
+    reason: A live limits-increase request submits an external capacity request for operator review and is not disposable test data.
   - service: lockbox
     resource: approvaltemplate
     classification: recorded
+  - service: lockbox
+    resource: lockbox
+    classification: synthetic
+    reason: A live Lockbox changes privileged-access governance and requires an operator-control configuration that is unsafe to create for portable tests.
   - service: loganalytics
     resource: loganalyticsobjectcollectionrule
     classification: synthetic
@@ -315,6 +403,10 @@ resources:
     resource: kafkacluster
     classification: synthetic
     reason: Live creation allocates paid Kafka broker compute, storage, and private-network resources.
+  - service: managedkafka
+    resource: kafkaclusterconfig
+    classification: synthetic
+    reason: A live Kafka cluster configuration is applied through a billable managed Kafka cluster, which portable replay tests do not provision.
   - service: marketplace
     resource: acceptedagreement
     classification: synthetic
@@ -323,6 +415,14 @@ resources:
     resource: publication
     classification: synthetic
     reason: Live creation submits customer-facing Marketplace publication content and requires publisher entitlement and package artifacts.
+  - service: marketplaceprivateoffer
+    resource: attachment
+    classification: synthetic
+    reason: A live attachment requires an entitled Marketplace private offer and publishes seller-supplied document content.
+  - service: marketplaceprivateoffer
+    resource: offer
+    classification: synthetic
+    reason: A live private offer changes commercial terms for a buyer tenancy and requires Marketplace seller entitlement.
   - service: marketplacepublisher
     resource: listing
     classification: synthetic
@@ -340,6 +440,10 @@ resources:
     classification: synthetic
     reason: Live creation adds publisher-authored notes to a customer-facing Marketplace listing revision.
   - service: marketplacepublisher
+    resource: listingrevisionpackage
+    classification: synthetic
+    reason: A live package requires an entitled Marketplace listing revision, artifact, and reviewed commercial terms.
+  - service: marketplacepublisher
     resource: term
     classification: synthetic
     reason: Live creation establishes publisher legal terms that can later be attached to Marketplace packages.
@@ -355,6 +459,10 @@ resources:
     resource: mediaworkflowconfiguration
     classification: synthetic
     reason: A live media workflow configuration affects executable processing parameters for customer media workflows.
+  - service: mngdmac
+    resource: macdevice
+    classification: synthetic
+    reason: MacDevice is bound to physical Dedicated Mac hardware from an existing order; the fixture observes it without allocating or terminating hardware.
   - service: mysql
     resource: dbsystem
     classification: synthetic
@@ -378,6 +486,14 @@ resources:
     classification: synthetic
     reason: Live creation allocates paid Oracle Content Management capacity and provisions IDCS resources.
   - service: ocvp
+    resource: cluster
+    classification: synthetic
+    reason: Live creation requires a paid SDDC and allocates multiple bare-metal ESXi hosts plus VLAN infrastructure.
+  - service: ocvp
+    resource: esxihost
+    classification: synthetic
+    reason: Live creation allocates a billable bare-metal ESXi host inside an existing paid SDDC cluster.
+  - service: ocvp
     resource: sddc
     classification: synthetic
     reason: Live creation allocates multiple billable bare-metal ESXi hosts and requires a purpose-built VLAN topology.
@@ -389,6 +505,26 @@ resources:
     resource: odainstance
     classification: synthetic
     reason: Live creation allocates paid Oracle Digital Assistant service capacity.
+  - service: oda
+    resource: odaprivateendpoint
+    classification: synthetic
+    reason: A live ODA private endpoint requires a paid ODA instance and provisions private-network connectivity.
+  - service: oda
+    resource: odaprivateendpointattachment
+    classification: synthetic
+    reason: A live attachment requires an existing paid ODA private endpoint and mutates its network attachment set.
+  - service: oda
+    resource: skillparameter
+    classification: synthetic
+    reason: A live skill parameter requires a paid ODA instance and imported skill; the fixture validates its composite identity without that parent hierarchy.
+  - service: oda
+    resource: translator
+    classification: synthetic
+    reason: A live translator is scoped to an existing paid ODA instance that portable replay tests do not provision.
+  - service: onesubscription
+    resource: subscription
+    classification: synthetic
+    reason: Subscription is observe-only and reads commercial tenancy subscription data that cannot be created as disposable test state.
   - service: opa
     resource: opainstance
     classification: synthetic
@@ -401,6 +537,14 @@ resources:
     resource: operatorcontrol
     classification: synthetic
     reason: Live creation changes tenancy governance and approval policy for privileged operator access.
+  - service: operatoraccesscontrol
+    resource: operatorcontrolassignment
+    classification: synthetic
+    reason: A live assignment attaches privileged operator-control governance to a target resource and is unsafe for a portable recording.
+  - service: opsi
+    resource: databaseinsight
+    classification: synthetic
+    reason: A live Database Insight requires an Operations Insights-enabled database and its monitoring credentials.
   - service: optimizer
     resource: profile
     classification: synthetic
@@ -412,6 +556,18 @@ resources:
   - service: osmanagementhub
     resource: softwaresource
     classification: recorded
+  - service: osubbillingschedule
+    resource: billingschedule
+    classification: synthetic
+    reason: BillingSchedule is observe-only and exposes commercial invoicing data that cannot be created as disposable test state.
+  - service: osuborganizationsubscription
+    resource: organizationsubscription
+    classification: synthetic
+    reason: OrganizationSubscription is observe-only and reads existing commercial subscription records for an organization.
+  - service: osubsubscription
+    resource: subscription
+    classification: synthetic
+    reason: Subscription is query-backed and observe-only; its commercial records cannot be created for a portable test.
   - service: psql
     resource: dbsystem
     classification: synthetic
@@ -449,6 +605,10 @@ resources:
     resource: rovernode
     classification: synthetic
     reason: Live creation represents an order for a physical Roving Edge Infrastructure appliance.
+  - service: sch
+    resource: serviceconnector
+    classification: synthetic
+    reason: A bounded live probe confirmed create and delete work requests, including an IN_PROGRESS resource action, but later reads returned stale deleted summaries and could not produce a stable portable recording.
   - service: securityattribute
     resource: securityattribute
     classification: synthetic
@@ -465,20 +625,42 @@ resources:
     reason: Live creation publishes a private application package into a tenancy Service Catalog and requires reviewed package content.
   - service: servicecatalog
     resource: servicecatalog
-    classification: deferred
-    reason: Direct service-manager and official OCI CLI creates both fail with MissingParameter even though the serialized request contains displayName.
-    blocker: The live Service Catalog endpoint rejects a valid SDK request before creating a resource.
-    nextAction: Retry recording after the Service Catalog API accepts its documented CreateServiceCatalog payload.
+    classification: synthetic
+    reason: Direct service-manager and official OCI CLI creates both fail with MissingParameter even though the serialized request contains displayName; the fixture preserves the documented SDK lifecycle.
+  - service: servicemanagerproxy
+    resource: serviceenvironment
+    classification: synthetic
+    reason: ServiceEnvironment is observe-only and binds an existing commercial service entitlement that cannot be created as disposable test state.
+  - service: stackmonitoring
+    resource: alarmcondition
+    classification: synthetic
+    reason: A live alarm condition requires an existing monitoring template and monitored metrics and changes operational alerting.
+  - service: stackmonitoring
+    resource: baselineablemetric
+    classification: synthetic
+    reason: A live baselineable metric requires an existing monitored resource with metric telemetry and changes its baseline configuration.
   - service: stackmonitoring
     resource: config
     classification: synthetic
     reason: A live Stack Monitoring configuration changes tenancy-wide onboarding, dynamic-group, and policy behavior.
   - service: stackmonitoring
+    resource: discoveryjob
+    classification: synthetic
+    reason: A live discovery job requires a deployed management agent and scans an external monitored-resource environment.
+  - service: stackmonitoring
     resource: monitoredresourcetype
     classification: recorded
   - service: stackmonitoring
+    resource: monitoringtemplate
+    classification: synthetic
+    reason: A live monitoring template requires monitored resources and notification destinations and changes operational alarms.
+  - service: stackmonitoring
     resource: processset
     classification: recorded
+  - service: tenantmanagercontrolplane
+    resource: domaingovernance
+    classification: synthetic
+    reason: A live domain-governance association changes tenant-domain subscription governance and requires real notification subscriptions.
   - service: visualbuilder
     resource: vbinstance
     classification: synthetic
@@ -491,9 +673,21 @@ resources:
     classification: synthetic
     reason: Both the service manager and an independent OCI CLI create return NotAuthorizedOrNotFound because the operator-access session cannot resolve the delegated tenancy's OCIR compartment inside Vulnerability Scanning.
     nextAction: Replace the synthetic cassette when recording credentials belong directly to the target tenancy.
+  - service: waa
+    resource: webappacceleration
+    classification: synthetic
+    reason: A live web-app acceleration endpoint requires an existing load balancer and changes public traffic routing.
+  - service: waa
+    resource: webappaccelerationpolicy
+    classification: synthetic
+    reason: A live acceleration policy is exercised through an existing load balancer-backed web-app acceleration endpoint.
   - service: waas
     resource: waaspolicy
     classification: deferred
     reason: Live creation reached ACTIVE and exposed the real work-request entity type, but deletion exceeded the 15-minute recording window before later completing successfully.
     blocker: The interrupted recording has no terminal delete interactions, so it cannot be published as a complete portable lifecycle cassette.
     nextAction: Re-record with a longer bounded delete timeout and capture the successful work request plus final absence confirmation.
+  - service: wlms
+    resource: managedinstance
+    classification: synthetic
+    reason: ManagedInstance is observe-only and requires an external WebLogic host registered through a management agent.

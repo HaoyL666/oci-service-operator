@@ -1,0 +1,45 @@
+version: 1
+metadata:
+    service: datasafe
+    resource: PeerTargetDatabase
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: GET
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/targetDatabases/<ocid:1>/peerTargetDatabases
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json
+    - request:
+        method: POST
+        host: datasafe.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/targetDatabases/<ocid:1>/peerTargetDatabases
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"databaseDetails":{"databaseType":"INSTALLED_DATABASE","infrastructureType":"ON_PREMISES","ipAddresses":["192.0.2.10"],"listenerPort":1521,"serviceName":"salespdb"},"dataguardAssociationId":"<ocid:2>","description":"initial description","displayName":"peer-target","tlsConfig":{"certificateStoreType":"JKS","keyStoreContent":"key-store-content","status":"ENABLED","storePassword":"<redacted>","trustStoreContent":"trust-store-content"}}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"databaseDetails":{"databaseType":"INSTALLED_DATABASE","infrastructureType":"ON_PREMISES","ipAddresses":["192.0.2.10"],"listenerPort":1521,"serviceName":"salespdb"},"dataguardAssociationId":"<ocid:2>","description":"initial description","displayName":"peer-target","id":"<ocid:3>","lifecycleState":"ACTIVE","tlsConfig":{"certificateStoreType":"JKS","keyStoreContent":"key-store-content","status":"ENABLED","storePassword":"<redacted>","trustStoreContent":"trust-store-content"}}'
+        encoding: json

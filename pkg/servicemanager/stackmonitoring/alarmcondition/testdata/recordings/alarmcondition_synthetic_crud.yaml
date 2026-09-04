@@ -1,0 +1,94 @@
+version: 1
+metadata:
+    service: stackmonitoring
+    resource: AlarmCondition
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoringTemplates/<ocid:2>/alarmConditions
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"conditionType":"FIXED","conditions":[{"body":"CPU too high","query":"CpuUtilization[1m].mean() > 90","severity":"CRITICAL","shouldAppendNote":false,"shouldAppendUrl":true,"triggerDelay":"PT5M"}],"definedTags":{"Operations":{"CostCenter":"42"}},"freeformTags":{"env":"dev"},"metricName":"CpuUtilization","namespace":"oracle_oci_database","resourceType":"<ocid:1>"}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+        body: '{"conditionType":"FIXED","conditions":[{"body":"CPU too high","query":"CpuUtilization[1m].mean() > 90","severity":"CRITICAL","shouldAppendUrl":true,"triggerDelay":"PT5M"}],"definedTags":{"Operations":{"CostCenter":"42"}},"freeformTags":{"env":"dev"},"id":"<ocid:3>","lifecycleState":"ACTIVE","metricName":"CpuUtilization","monitoringTemplateId":"<ocid:2>","namespace":"oracle_oci_database","resourceType":"<ocid:1>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoringTemplates/<ocid:2>/alarmConditions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"conditionType":"FIXED","conditions":[{"body":"CPU too high","query":"CpuUtilization[1m].mean() > 90","severity":"CRITICAL","shouldAppendUrl":true,"triggerDelay":"PT5M"}],"definedTags":{"Operations":{"CostCenter":"42"}},"freeformTags":{"env":"dev"},"id":"<ocid:3>","lifecycleState":"ACTIVE","metricName":"CpuUtilization","monitoringTemplateId":"<ocid:2>","namespace":"oracle_oci_database","resourceType":"<ocid:1>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoringTemplates/<ocid:2>/alarmConditions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"conditionType":"FIXED","conditions":[{"body":"CPU too high","query":"CpuUtilization[1m].mean() > 90","severity":"CRITICAL","shouldAppendUrl":true,"triggerDelay":"PT5M"}],"definedTags":{"Operations":{"CostCenter":"42"}},"freeformTags":{"env":"dev"},"id":"<ocid:3>","lifecycleState":"ACTIVE","metricName":"CpuUtilization","monitoringTemplateId":"<ocid:2>","namespace":"oracle_oci_database","resourceType":"<ocid:1>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoringTemplates/<ocid:2>/alarmConditions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"conditionType":"FIXED","conditions":[{"body":"CPU too high","query":"CpuUtilization[1m].mean() > 90","severity":"CRITICAL","shouldAppendUrl":true,"triggerDelay":"PT5M"}],"definedTags":{"Operations":{"CostCenter":"42"}},"freeformTags":{"env":"dev"},"id":"<ocid:3>","lifecycleState":"ACTIVE","metricName":"CpuUtilization","monitoringTemplateId":"<ocid:2>","namespace":"oracle_oci_database","resourceType":"<ocid:1>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoringTemplates/<ocid:2>/alarmConditions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+    - request:
+        method: GET
+        host: stack-monitoring.us-ashburn-1.oci.oraclecloud.com
+        path: /20210330/monitoringTemplates/<ocid:2>/alarmConditions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json

@@ -1,0 +1,24 @@
+version: 1
+metadata:
+    service: osuborganizationsubscription
+    resource: OrganizationSubscription
+    operations:
+        - read
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: GET
+        host: organizationsubscription.us-ashburn-1.oci.oraclecloud.com
+        path: /oalapp/service/onesubs/proxy/20210501/organizationSubscription
+        query: compartmentId=%3Cocid%3A1%3E&limit=50&subscriptionIds=sub-active
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '[{"id":"sub-active","serviceName":"COMPUTE","status":"ACTIVE"}]'
+        encoding: json

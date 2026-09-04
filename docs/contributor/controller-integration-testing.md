@@ -187,6 +187,18 @@ or prerequisites:
   or legal content.
 - OS Management Hub management stations require dedicated compute, networking,
   proxy, mirror, and agent infrastructure.
+- Data Integration workspaces, OCVP clusters and ESXi hosts, and Generative AI
+  enrichment jobs require paid parent infrastructure or initiate billable work.
+- OCI quota, limits-increase, governance-rule, Service Catalog, Marketplace
+  private-offer, and Marketplace Publisher package resources change tenancy,
+  commercial, or customer-facing state.
+- Application Management Monitored Instances, Compute Instance Agent plugins,
+  Dedicated Mac devices, subscription and billing projections, Service Manager
+  environments, and WebLogic Managed Instances are observe-only or bind
+  externally provisioned resources rather than creating disposable test state.
+- ODA Skill Parameters, Stack Monitoring Alarm Conditions and Monitoring
+  Templates, and Tenant Manager Domain Governance require paid parents,
+  monitored resources, notification destinations, or subscription governance.
 
 Do not replace these with live recordings unless a service owner provides an
 isolated entitlement and explicitly approves the external side effects.
