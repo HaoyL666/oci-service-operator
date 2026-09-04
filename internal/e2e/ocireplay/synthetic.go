@@ -138,6 +138,41 @@ func SyntheticWorkRequestBody(id string, operationType string, status string, ac
 	})
 }
 
+// SeedSyntheticTrackedResource initializes a CR with an already-known OCI
+// identity so a synthetic scenario can exercise the normal SDK get and status
+// projection path without pretending to cover create or delete. Optional path
+// values are written to both spec and status; unknown JSON fields are ignored
+// by resource types that do not use them.
+func SeedSyntheticTrackedResource(resource any, resourceID string, pathValues map[string]any) error {
+	if resource == nil {
+		return fmt.Errorf("synthetic tracked resource is nil")
+	}
+	if strings.TrimSpace(resourceID) == "" {
+		return fmt.Errorf("synthetic tracked resource ID is empty")
+	}
+	spec := make(map[string]any, len(pathValues))
+	status := make(map[string]any, len(pathValues)+3)
+	for key, value := range pathValues {
+		spec[key] = value
+		status[key] = value
+	}
+	status["id"] = resourceID
+	status["key"] = resourceID
+	status["status"] = map[string]any{"ocid": resourceID}
+	payload, err := json.Marshal(map[string]any{
+		"metadata": map[string]any{"name": "synthetic-read", "namespace": "default"},
+		"spec":     spec,
+		"status":   status,
+	})
+	if err != nil {
+		return fmt.Errorf("marshal synthetic tracked resource: %w", err)
+	}
+	if err := json.Unmarshal(payload, resource); err != nil {
+		return fmt.Errorf("seed synthetic tracked resource: %w", err)
+	}
+	return nil
+}
+
 // SDKSyntheticSession owns either a strict replay cassette or an explicitly
 // requested synthetic cassette refresh.
 type SDKSyntheticSession struct {

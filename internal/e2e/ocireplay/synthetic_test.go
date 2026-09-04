@@ -153,6 +153,33 @@ func TestSyntheticWorkRequestBodyUsesCommonOCIShape(t *testing.T) {
 	}
 }
 
+func TestSeedSyntheticTrackedResourceSetsIdentityAndKnownPaths(t *testing.T) {
+	t.Parallel()
+	type trackedStatus struct {
+		ID     string `json:"id"`
+		Parent string `json:"parentId"`
+		Status struct {
+			OCID string `json:"ocid"`
+		} `json:"status"`
+	}
+	type trackedResource struct {
+		Spec struct {
+			Parent string `json:"parentId"`
+		} `json:"spec"`
+		Status trackedStatus `json:"status"`
+	}
+	resource := &trackedResource{}
+	if err := SeedSyntheticTrackedResource(resource, "ocid1.thing.oc1..synthetic", map[string]any{"parentId": "ocid1.parent.oc1..synthetic"}); err != nil {
+		t.Fatal(err)
+	}
+	if resource.Status.ID != "ocid1.thing.oc1..synthetic" || resource.Status.Status.OCID != "ocid1.thing.oc1..synthetic" {
+		t.Fatalf("seeded identity = %+v", resource.Status)
+	}
+	if resource.Spec.Parent != "ocid1.parent.oc1..synthetic" || resource.Status.Parent != resource.Spec.Parent {
+		t.Fatalf("seeded parent path = spec %q status %q", resource.Spec.Parent, resource.Status.Parent)
+	}
+}
+
 func TestSyntheticCRUDResponderTracksCreateAndDelete(t *testing.T) {
 	responder := NewSyntheticCRUDResponder(SyntheticCRUDOptions{
 		CollectionPath:      "/v1/things",

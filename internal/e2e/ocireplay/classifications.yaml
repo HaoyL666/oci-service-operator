@@ -34,6 +34,10 @@ resources:
     resource: containerimagesignature
     classification: synthetic
     reason: A live signature requires a container image, KMS key version, and valid cryptographic signature that cannot be published in a portable fixture.
+  - service: autoscaling
+    resource: autoscalingconfiguration
+    classification: synthetic
+    reason: A live configuration requires a disposable instance pool or other scalable resource and can change compute capacity.
   - service: batch
     resource: batchcontext
     classification: synthetic
@@ -52,6 +56,10 @@ resources:
     resource: bdsinstance
     classification: synthetic
     reason: Live creation allocates multiple paid Big Data Service compute nodes and block volumes.
+  - service: blockchain
+    resource: blockchainplatform
+    classification: synthetic
+    reason: Live creation requires an IDCS access token and allocates paid Blockchain Platform compute capacity.
   - service: capacitymanagement
     resource: occcapacityrequest
     classification: synthetic
@@ -64,6 +72,14 @@ resources:
     resource: agentdependency
     classification: synthetic
     reason: A live agent dependency requires a customer-supplied supported binary in Object Storage and changes the software used by external discovery agents.
+  - service: cloudbridge
+    resource: asset
+    classification: synthetic
+    reason: A live asset is populated from an external Cloud Bridge inventory and cannot be created as independent disposable OCI state.
+  - service: cloudbridge
+    resource: assetsource
+    classification: synthetic
+    reason: A live asset source requires an installed external discovery agent, environment, and inventory hierarchy.
   - service: cloudbridge
     resource: discoveryschedule
     classification: synthetic
@@ -136,6 +152,10 @@ resources:
     resource: replicationschedule
     classification: synthetic
     reason: A live replication schedule operates on migration assets and initiates recurring replication work.
+  - service: cloudmigrations
+    resource: targetasset
+    classification: synthetic
+    reason: A live target asset requires a migration plan and discovered source asset and can allocate migration infrastructure.
   - service: computecloudatcustomer
     resource: cccinfrastructure
     classification: synthetic
@@ -176,6 +196,10 @@ resources:
     classification: synthetic
     reason: A live catalog provisions a managed Data Catalog instance with a long service lifecycle.
   - service: datacatalog
+    resource: catalogprivateendpoint
+    classification: synthetic
+    reason: Live creation provisions private Data Catalog networking and requires a VCN subnet plus managed catalog access.
+  - service: datacatalog
     resource: customproperty
     classification: synthetic
     reason: A live custom property requires a provisioned catalog and namespace hierarchy.
@@ -195,6 +219,10 @@ resources:
     resource: glossary
     classification: synthetic
     reason: A live glossary requires a provisioned managed Data Catalog instance.
+  - service: datacatalog
+    resource: metastore
+    classification: synthetic
+    reason: A live metastore requires managed Data Catalog entitlement and customer Object Storage table locations.
   - service: datacatalog
     resource: namespace
     classification: synthetic
@@ -219,6 +247,14 @@ resources:
     resource: dataset
     classification: synthetic
     reason: Both the service-manager create and an independent OCI CLI list returned service-level NotAuthorizedOrNotFound for the recording principal.
+  - service: datalabelingservicedataplane
+    resource: annotation
+    classification: synthetic
+    reason: A live annotation requires an existing Data Labeling dataset record and contains customer-authored labeling data.
+  - service: datalabelingservicedataplane
+    resource: record
+    classification: synthetic
+    reason: A live record requires an existing Data Labeling dataset and customer source content.
   - service: datasafe
     resource: alertpolicy
     classification: recorded
@@ -323,10 +359,62 @@ resources:
     resource: userassessment
     classification: synthetic
     reason: A live user assessment executes against a registered target database or database group.
+  - service: dbmulticloud
+    resource: multicloudresourcediscovery
+    classification: synthetic
+    reason: A live discovery requires an Oracle Database multicloud connector and inventories external-cloud database resources.
+  - service: dbmulticloud
+    resource: oracledbawsidentityconnector
+    classification: synthetic
+    reason: A live identity connector changes AWS workload federation and requires customer AWS role and OIDC configuration.
+  - service: dbmulticloud
+    resource: oracledbawskey
+    classification: synthetic
+    reason: A live key requires an existing Oracle Database AWS connector and customer key-management configuration.
+  - service: dbmulticloud
+    resource: oracledbazureblobcontainer
+    classification: synthetic
+    reason: A live blob container binds customer Azure Storage account and container resources.
+  - service: dbmulticloud
+    resource: oracledbazureblobmount
+    classification: synthetic
+    reason: A live blob mount requires an Azure connector and blob container and changes database storage attachments.
+  - service: dbmulticloud
+    resource: oracledbazureconnector
+    classification: synthetic
+    reason: A live connector changes Azure workload identity and requires a customer Azure subscription, tenant, resource group, and database cluster.
+  - service: dbmulticloud
+    resource: oracledbazurevault
+    classification: synthetic
+    reason: A live vault binding requires an existing multicloud database connector and customer Azure Key Vault.
+  - service: dbmulticloud
+    resource: oracledbazurevaultassociation
+    classification: synthetic
+    reason: A live association links an Azure vault to a database connector and changes external-cloud key-management state.
+  - service: dbmulticloud
+    resource: oracledbgcpidentityconnector
+    classification: synthetic
+    reason: A live identity connector changes Google Cloud workload federation and requires customer project, pool, provider, and service-agent identities.
+  - service: dbmulticloud
+    resource: oracledbgcpkeyring
+    classification: synthetic
+    reason: A live key ring requires an existing Oracle Database GCP connector and customer Cloud KMS configuration.
   - service: delegateaccesscontrol
     resource: delegationcontrol
     classification: synthetic
     reason: Live creation changes tenancy delegation and privileged support-access policy and requires tenancy-specific approvers.
+  - service: demandsignal
+    resource: occdemandsignal
+    classification: synthetic
+    reason: A live demand signal changes OCI capacity-planning input and is not disposable resource state.
+  - service: desktops
+    resource: desktoppool
+    classification: synthetic
+    reason: Live creation allocates paid desktop compute, storage, image, and VCN resources.
+  - service: dif
+    resource: stack
+    classification: synthetic
+    reason: A live Data Intelligence Foundation stack provisions a selected set of managed data services.
   - service: disasterrecovery
     resource: drplan
     classification: synthetic
@@ -349,6 +437,10 @@ resources:
   - service: email
     resource: suppression
     classification: recorded
+  - service: emwarehouse
+    resource: emwarehouse
+    classification: synthetic
+    reason: A live EM warehouse requires both an Enterprise Manager bridge and a paid Operations Insights warehouse.
   - service: filestorage
     resource: outboundconnector
     classification: synthetic
@@ -359,9 +451,85 @@ resources:
     classification: synthetic
     reason: Live replication provisions and continuously operates a destination file system across availability domains, adding storage cost and a long synchronization lifecycle.
     nextAction: Add a contract-faithful synthetic lifecycle for create, update, replication-state observation, and delete.
+  - service: fleetappsmanagement
+    resource: catalogitem
+    classification: synthetic
+    reason: A live catalog item publishes installable package configuration and requires reviewed artifact sources.
+  - service: fleetappsmanagement
+    resource: compliancepolicyrule
+    classification: synthetic
+    reason: A live rule changes fleet patch-compliance policy and requires an existing policy plus product-version inventory.
+  - service: fleetappsmanagement
+    resource: fleet
+    classification: synthetic
+    reason: A live fleet enrolls customer compute resources for centralized application and patch management.
+  - service: fleetappsmanagement
+    resource: maintenancewindow
+    classification: synthetic
+    reason: A live maintenance window schedules operations against enrolled fleet resources.
+  - service: fleetappsmanagement
+    resource: onboarding
+    classification: synthetic
+    reason: A live onboarding resource changes tenancy Fleet Application Management enablement and supporting infrastructure.
+  - service: fleetappsmanagement
+    resource: patch
+    classification: synthetic
+    reason: A live patch references publisher artifacts and product metadata used for fleet updates.
+  - service: fleetappsmanagement
+    resource: platformconfiguration
+    classification: synthetic
+    reason: A live platform configuration changes tenancy Fleet Application Management service behavior.
+  - service: fleetappsmanagement
+    resource: property
+    classification: synthetic
+    reason: A live property changes selectable Fleet Application Management configuration.
+  - service: fleetappsmanagement
+    resource: provision
+    classification: synthetic
+    reason: A live provision request launches Terraform-backed fleet infrastructure from catalog items.
+  - service: fleetappsmanagement
+    resource: runbook
+    classification: synthetic
+    reason: A live runbook publishes executable operational automation for managed fleets.
+  - service: fleetappsmanagement
+    resource: runbookversion
+    classification: synthetic
+    reason: A live runbook version publishes executable task groups and workflow definitions.
+  - service: fleetappsmanagement
+    resource: schedulerdefinition
+    classification: synthetic
+    reason: A live scheduler definition schedules runbooks and actions against enrolled fleets.
+  - service: fleetappsmanagement
+    resource: taskrecord
+    classification: synthetic
+    reason: A live task record represents execution state produced by Fleet Application Management automation.
+  - service: fleetsoftwareupdate
+    resource: fsuaction
+    classification: synthetic
+    reason: A live action initiates software maintenance against a fleet collection.
+  - service: fleetsoftwareupdate
+    resource: fsucollection
+    classification: synthetic
+    reason: A live collection enrolls database or infrastructure targets into fleet software maintenance.
+  - service: fleetsoftwareupdate
+    resource: fsudiscovery
+    classification: synthetic
+    reason: A live discovery scans tenancy database infrastructure for fleet software update eligibility.
+  - service: fleetsoftwareupdate
+    resource: fsureadinesscheck
+    classification: synthetic
+    reason: A live readiness check executes validation against managed fleet resources.
   - service: functions
     resource: function
     classification: recorded
+  - service: fusionapps
+    resource: fusionenvironment
+    classification: synthetic
+    reason: Live creation provisions a paid Fusion Applications environment under an entitled environment family.
+  - service: fusionapps
+    resource: fusionenvironmentfamily
+    classification: synthetic
+    reason: A live environment family requires commercial Fusion Applications subscriptions and governs paid environments.
   - service: gdp
     resource: gdppipeline
     classification: synthetic
@@ -404,9 +572,29 @@ resources:
     classification: synthetic
     reason: A live enrichment job requires an existing semantic store and customer database schema and initiates billable processing.
   - service: goldengate
+    resource: connection
+    classification: synthetic
+    reason: A live connection requires customer database or messaging endpoints and credentials.
+  - service: goldengate
+    resource: connectionassignment
+    classification: synthetic
+    reason: A live assignment requires an existing paid GoldenGate deployment and connection.
+  - service: goldengate
+    resource: databaseregistration
+    classification: synthetic
+    reason: A live database registration requires reachable customer database infrastructure and credentials.
+  - service: goldengate
     resource: deployment
     classification: synthetic
     reason: Live creation allocates paid GoldenGate deployment compute and private-network capacity.
+  - service: goldengate
+    resource: deploymentbackup
+    classification: synthetic
+    reason: A live backup requires an existing paid GoldenGate deployment and customer Object Storage location.
+  - service: goldengate
+    resource: pipeline
+    classification: synthetic
+    reason: A live pipeline requires source and target connections and runs paid GoldenGate data movement.
   - service: governancerulescontrolplane
     resource: governancerule
     classification: synthetic
