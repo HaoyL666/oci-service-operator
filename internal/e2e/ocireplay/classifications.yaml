@@ -684,6 +684,10 @@ resources:
     classification: synthetic
     reason: A live collection enrolls database or infrastructure targets into fleet software maintenance.
   - service: fleetsoftwareupdate
+    resource: fsucycle
+    classification: synthetic
+    reason: A live cycle requires an existing Exadata Fleet Update collection and target infrastructure; the recording compartment has no reusable cycles.
+  - service: fleetsoftwareupdate
     resource: fsudiscovery
     classification: synthetic
     reason: A live discovery scans tenancy database infrastructure for fleet software update eligibility.
@@ -821,6 +825,10 @@ resources:
   - service: jmsutils
     resource: subscriptionacknowledgmentconfiguration
     classification: recorded
+  - service: jmsutils
+    resource: workitem
+    classification: synthetic
+    reason: WorkItem is observe-only and exists only under a JMS Utils analysis work request with customer application artifacts; no reusable work request exists.
   - service: keymanagement
     resource: ekmsprivateendpoint
     classification: synthetic
@@ -865,6 +873,10 @@ resources:
     classification: synthetic
     reason: A live scheduled task executes saved-search streaming, acceleration, or purge behavior on a recurring schedule.
   - service: lustrefilestorage
+    resource: lustrefilesystem
+    classification: synthetic
+    reason: Live creation allocates paid Lustre storage capacity, networking, and a long-running managed file-system lifecycle.
+  - service: lustrefilestorage
     resource: objectstoragelink
     classification: synthetic
     reason: A live link requires a paid Lustre file system and customer Object Storage data synchronization.
@@ -876,6 +888,10 @@ resources:
     resource: kafkaclusterconfig
     classification: synthetic
     reason: A live Kafka cluster configuration is applied through a billable managed Kafka cluster, which portable replay tests do not provision.
+  - service: managementagent
+    resource: datasource
+    classification: synthetic
+    reason: Live creation requires a deployed Management Agent and an external monitored data source; no reusable agent exists in the recording compartment.
   - service: managementagent
     resource: namedcredential
     classification: synthetic
@@ -972,6 +988,14 @@ resources:
     resource: multicloudsubscription
     classification: synthetic
     reason: This read-only resource exposes an existing commercial external-cloud subscription that cannot be created as test data.
+  - service: multicloud
+    resource: networkanchor
+    classification: synthetic
+    reason: NetworkAnchor is observe-only and requires an external-cloud subscription and provisioned multicloud network; no reusable anchor exists.
+  - service: multicloud
+    resource: resourceanchor
+    classification: synthetic
+    reason: ResourceAnchor is observe-only and requires an external-cloud subscription and linked customer compartment; no reusable anchor exists.
   - service: mysql
     resource: dbsystem
     classification: synthetic
@@ -998,6 +1022,10 @@ resources:
     resource: metricproperty
     classification: synthetic
     reason: A bounded live namespace query returned OCI Control Center 503 Service Unavailable, so no readable metric namespace was available for a real recording.
+  - service: ocicontrolcenter
+    resource: namespace
+    classification: synthetic
+    reason: Namespace is observe-only, and the recording principal receives a service-level unavailable response from OCI Control Center.
   - service: ocvp
     resource: cluster
     classification: synthetic
@@ -1014,6 +1042,10 @@ resources:
     resource: authenticationprovider
     classification: synthetic
     reason: Authentication providers are children of a paid ODA instance and require live external identity-provider client credentials that cannot be published in a portable recording.
+  - service: oda
+    resource: channel
+    classification: synthetic
+    reason: Live creation requires a paid Digital Assistant instance and channel-specific credentials or external messaging integration; no instance exists in the recording compartment.
   - service: oda
     resource: digitalassistant
     classification: synthetic
@@ -1038,6 +1070,14 @@ resources:
     resource: odaprivateendpointattachment
     classification: synthetic
     reason: A live attachment requires an existing paid ODA private endpoint and mutates its network attachment set.
+  - service: oda
+    resource: odaprivateendpointscanproxy
+    classification: synthetic
+    reason: Live creation requires an existing Digital Assistant private endpoint and customer subnet connectivity; no reusable parent exists.
+  - service: oda
+    resource: skill
+    classification: synthetic
+    reason: Live creation requires a paid Digital Assistant instance plus a reviewed skill package; no instance exists in the recording compartment.
   - service: oda
     resource: skillparameter
     classification: synthetic
@@ -1071,6 +1111,14 @@ resources:
     classification: synthetic
     reason: A live AWR Hub requires a paid Operations Insights warehouse and customer database workload repository data.
   - service: opsi
+    resource: awrhubsource
+    classification: synthetic
+    reason: Live creation requires an AWR Hub and a source database with wallet or database credentials; no reusable parent exists.
+  - service: opsi
+    resource: chargebackplan
+    classification: synthetic
+    reason: Live creation changes Ops Insights chargeback allocation policy and requires populated operational telemetry.
+  - service: opsi
     resource: chargebackplanreport
     classification: synthetic
     reason: A live chargeback report requires Operations Insights resources and processes customer utilization data.
@@ -1083,6 +1131,10 @@ resources:
     classification: synthetic
     reason: A bounded live create with a real Object Storage bucket did not produce a usable bridge and cleanup confirmed no resource remained; a valid bridge requires an Enterprise Manager deployment and Operations Insights enablement.
   - service: opsi
+    resource: exadatainsight
+    classification: synthetic
+    reason: Live creation requires registered Exadata infrastructure and telemetry credentials; the recording compartment has no reusable insight.
+  - service: opsi
     resource: hostinsight
     classification: synthetic
     reason: A live Host Insight requires a registered Management Agent or Enterprise Manager host and monitoring credentials.
@@ -1091,9 +1143,17 @@ resources:
     classification: synthetic
     reason: A live news report requires populated Operations Insights telemetry and can schedule customer-facing analysis.
   - service: opsi
+    resource: operationsinsightsprivateendpoint
+    classification: synthetic
+    reason: Live creation allocates an Ops Insights private endpoint and VNIC in a customer subnet; no reusable endpoint exists.
+  - service: opsi
     resource: operationsinsightswarehouse
     classification: synthetic
     reason: Live creation allocates paid Operations Insights warehouse compute and storage capacity.
+  - service: opsi
+    resource: operationsinsightswarehouseuser
+    classification: synthetic
+    reason: Live creation requires a paid Operations Insights warehouse and provisions database user credentials; no reusable warehouse exists.
   - service: opsi
     resource: opsiconfiguration
     classification: synthetic
@@ -1149,9 +1209,17 @@ resources:
     classification: synthetic
     reason: Live creation enables regional telemetry collection for a Resource Analytics instance.
   - service: resourceanalytics
+    resource: resourceanalyticsinstance
+    classification: synthetic
+    reason: Live creation provisions paid Resource Analytics and Autonomous Data Warehouse capacity; no reusable instance exists.
+  - service: resourceanalytics
     resource: tenancyattachment
     classification: synthetic
     reason: Live creation authorizes cross-tenancy Resource Analytics reporting and requires an existing paid analytics instance.
+  - service: resourcemanager
+    resource: configurationsourceprovider
+    classification: synthetic
+    reason: Live creation stores an external version-control credential in Resource Manager; the recording compartment has no reusable provider and credentials are intentionally not created for portable replay.
   - service: resourcemanager
     resource: privateendpoint
     classification: recorded
@@ -1213,6 +1281,14 @@ resources:
     classification: synthetic
     reason: A live discovery job requires a deployed management agent and scans an external monitored-resource environment.
   - service: stackmonitoring
+    resource: maintenancewindow
+    classification: synthetic
+    reason: Live creation requires monitored resources and suppresses their alarms during the window; the recording compartment has no reusable monitored resources.
+  - service: stackmonitoring
+    resource: monitoredresource
+    classification: synthetic
+    reason: Live creation requires a deployed Management Agent or reachable external monitored system; the recording compartment has no reusable resource.
+  - service: stackmonitoring
     resource: monitoredresourcetype
     classification: recorded
   - service: stackmonitoring
@@ -1263,3 +1339,15 @@ resources:
     resource: managedinstance
     classification: synthetic
     reason: ManagedInstance is observe-only and requires an external WebLogic host registered through a management agent.
+  - service: wlms
+    resource: wlsdomain
+    classification: synthetic
+    reason: WlsDomain is discovered from an externally deployed WebLogic domain and management agent; no reusable domain exists in the recording compartment.
+  - service: zpr
+    resource: configuration
+    classification: synthetic
+    reason: Live creation enables tenancy-level Zero Trust Packet Routing security behavior, and the recording principal has no ZPR service entitlement.
+  - service: zpr
+    resource: zprpolicy
+    classification: synthetic
+    reason: Live creation changes tenancy network-security enforcement policy, and the recording principal has no ZPR service entitlement.

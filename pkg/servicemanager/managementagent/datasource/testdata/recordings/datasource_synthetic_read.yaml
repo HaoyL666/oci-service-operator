@@ -1,0 +1,25 @@
+version: 1
+metadata:
+    service: managementagent
+    resource: DataSource
+    operations:
+        - read
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: GET
+        host: management-agent.us-ashburn-1.oci.oraclecloud.com
+        path: /20200202/managementAgents/<ocid:1>/dataSources/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<binding:compartment>","id":"<ocid:2>","key":"<ocid:2>","managementAgentId":"<ocid:1>","name":"synthetic-data-source","resourceId":"<ocid:2>","state":"ACTIVE","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z","type":"PROMETHEUS_EMITTER"}'
+        encoding: json

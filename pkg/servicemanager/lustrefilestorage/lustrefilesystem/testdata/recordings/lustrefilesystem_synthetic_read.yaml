@@ -1,0 +1,23 @@
+version: 1
+metadata:
+    service: lustrefilestorage
+    resource: LustreFileSystem
+    operations:
+        - read
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: GET
+        host: lustre-file-storage.us-ashburn-1.oci.oraclecloud.com
+        path: /20250228/lustreFileSystems/<ocid:1>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
+        encoding: json
