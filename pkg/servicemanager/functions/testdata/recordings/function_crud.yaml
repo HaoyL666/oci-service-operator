@@ -1,0 +1,117 @@
+version: 1
+metadata:
+    service: functions
+    resource: Function
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: GET
+        host: functions.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/functions
+        query: applicationId=%3Cocid%3A1%3E&displayName=osok-replay-function-v1&limit=50
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '[]'
+        encoding: json
+    - request:
+        method: POST
+        host: functions.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/functions
+        headers:
+            content-type:
+                - application/json
+        body: '{"applicationId":"<ocid:1>","config":{"REPLAY_PHASE":"create"},"displayName":"osok-replay-function-v1","freeformTags":{"osok-replay":"create"},"image":"<binding:function-image>","memoryInMBs":256,"timeoutInSeconds":30,"traceConfig":{"isEnabled":false}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 532bd10028a63c71cc841fab28087a51937979e8d72ce81dd519050421887228--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"applicationId":"<ocid:1>","compartmentId":"<ocid:2>","config":{"REPLAY_PHASE":"create"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-04T03:54:23.702Z"}},"detachedModeTimeoutInSeconds":null,"displayName":"osok-replay-function-v1","dualStackInvokeEndpoint":"<binding:function-dualstack-endpoint>","failureDestination":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","image":"<binding:function-image>","imageDigest":"sha256:481b2001c8b10e55c0482c27489ec26d7e101586691a7c2716fe3bb40f0c2388","invokeEndpoint":"<binding:function-invoke-endpoint>","lifecycleState":"ACTIVE","memoryInMBs":256,"provisionedConcurrencyConfig":null,"shape":"GENERIC_X86","sourceDetails":null,"successDestination":null,"systemTags":{},"timeCreated":"2026-09-04T03:54:23.831Z","timeUpdated":"2026-09-04T03:54:23.831Z","timeoutInSeconds":30,"traceConfig":{"isEnabled":false}}'
+        encoding: json
+    - request:
+        method: GET
+        host: functions.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/functions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 532bd10028a63c71cc841fab28087a51937979e8d72ce81dd519050421887228--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"applicationId":"<ocid:1>","compartmentId":"<ocid:2>","config":{"REPLAY_PHASE":"create"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-04T03:54:23.702Z"}},"detachedModeTimeoutInSeconds":null,"displayName":"osok-replay-function-v1","dualStackInvokeEndpoint":"<binding:function-dualstack-endpoint>","failureDestination":null,"freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","image":"<binding:function-image>","imageDigest":"sha256:481b2001c8b10e55c0482c27489ec26d7e101586691a7c2716fe3bb40f0c2388","invokeEndpoint":"<binding:function-invoke-endpoint>","lifecycleState":"ACTIVE","memoryInMBs":256,"provisionedConcurrencyConfig":null,"shape":"GENERIC_X86","sourceDetails":null,"successDestination":null,"systemTags":{},"timeCreated":"2026-09-04T03:54:23.831Z","timeUpdated":"2026-09-04T03:54:23.831Z","timeoutInSeconds":30,"traceConfig":{"isEnabled":false}}'
+        encoding: json
+    - request:
+        method: PUT
+        host: functions.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/functions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"config":{"REPLAY_PHASE":"update"},"freeformTags":{"osok-replay":"update"},"timeoutInSeconds":45}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - c03f8e48c0c43b8337f5f892bb4d21f7dc807123f37e5274dcab7c85b3221306
+            opc-request-id:
+                - <redacted>
+        body: '{"applicationId":"<ocid:1>","compartmentId":"<ocid:2>","config":{"REPLAY_PHASE":"update"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-04T03:54:23.702Z"}},"detachedModeTimeoutInSeconds":null,"displayName":"osok-replay-function-v1","dualStackInvokeEndpoint":"<binding:function-dualstack-endpoint>","failureDestination":null,"freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","image":"<binding:function-image>","imageDigest":"sha256:481b2001c8b10e55c0482c27489ec26d7e101586691a7c2716fe3bb40f0c2388","invokeEndpoint":"<binding:function-invoke-endpoint>","lifecycleState":"ACTIVE","memoryInMBs":256,"provisionedConcurrencyConfig":null,"shape":"GENERIC_X86","sourceDetails":null,"successDestination":null,"systemTags":{},"timeCreated":"2026-09-04T03:54:23.831Z","timeUpdated":"2026-09-04T03:54:24.276Z","timeoutInSeconds":45,"traceConfig":{"isEnabled":false}}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: functions.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/functions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 204
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+    - request:
+        method: GET
+        host: functions.us-ashburn-1.oci.oraclecloud.com
+        path: /20181201/functions/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        encoding: json

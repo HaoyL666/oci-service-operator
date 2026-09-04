@@ -192,10 +192,10 @@ or prerequisites:
 - OCI quota, limits-increase, governance-rule, Service Catalog, Marketplace
   private-offer, and Marketplace Publisher package resources change tenancy,
   commercial, or customer-facing state.
-- Application Management Monitored Instances, Compute Instance Agent plugins,
-  Dedicated Mac devices, subscription and billing projections, Service Manager
-  environments, and WebLogic Managed Instances are observe-only or bind
-  externally provisioned resources rather than creating disposable test state.
+- Application Management Monitored Instances, Dedicated Mac devices,
+  subscription and billing projections, Service Manager environments, and
+  WebLogic Managed Instances are observe-only or bind externally provisioned
+  resources rather than creating disposable test state.
 - ODA Skill Parameters, Stack Monitoring Alarm Conditions and Monitoring
   Templates, and Tenant Manager Domain Governance require paid parents,
   monitored resources, notification destinations, or subscription governance.
@@ -227,7 +227,8 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - DevOps Project with generated work-request create, update, and delete handling.
 - private Network Load Balancer with succeeded-work-request deletion evidence.
 - Functions Application with subnet-backed create, configuration/tag update,
-  and confirmed deletion.
+  and confirmed deletion; and Function with a packaged minimal FDK image,
+  configuration update, image-digest observation, and confirmed deletion.
 - Logging Log Group with mutable description/tag verification and confirmed
   deletion.
 - custom Logging Log with enabled-state, retention, and tag updates beneath a
@@ -275,8 +276,8 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   synchronous-update response variant.
 - Dashboard Group and Dashboard, with the child recording using one temporary
   shared group.
-- Email Domain and Sender without sending mail or requiring external DNS
-  verification.
+- Email Domain, DKIM, Sender, and tenancy-scoped Suppression without sending
+  mail; DKIM records the expected unverified-domain state before cleanup.
 - classic Load Balancer Backend Set, Hostname, and SSL Cipher Suite children
   beneath one temporary private load balancer.
 - classic Load Balancer Backend, Path Route Set, Routing Policy, and Rule Set
@@ -334,6 +335,15 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
   terminal deletion confirmation without mirroring repository content.
 - Recovery Service Subnet with temporary VCN and subnet prerequisites, mutable
   display-name/tag validation, and work-request-backed terminal cleanup.
+- Application Management Monitored Instance and Compute Instance Agent Plugin
+  as read-only bindings against a disposable OKE worker and its Oracle Cloud
+  Agent plugins.
+- Service Connector with an owned ONS topic, audit-log source, mutable metadata,
+  work-request convergence, and terminal deletion.
+- Web App Acceleration Policy and Web App Acceleration with a temporary private
+  Load Balancer prerequisite and confirmed cleanup.
+- WAAS Policy with a reserved documentation origin, complete work-request
+  evidence, and extended terminal-deletion recording.
 
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
@@ -364,6 +374,20 @@ their child recording has completed; replay substitutes portable bindings.
 Batch Task Environment recording requires an existing public OCIR image URL in
 `OCI_REPLAY_BATCH_IMAGE_URL`. The lifecycle records only the environment
 definition; it does not submit a job or run the image.
+
+Function recording uses the minimal FDK fixture under
+`internal/e2e/ocireplay/fixtures/functions/python`. Publish it to a public OCIR
+repository, then set `OCI_REPLAY_FUNCTION_IMAGE` and an owned temporary
+`OCI_REPLAY_FUNCTION_APPLICATION_ID`. DKIM requires
+`OCI_REPLAY_EMAIL_DOMAIN_ID`; Suppression requires the root tenancy OCID in
+`OCI_REPLAY_TENANCY_ID`. Service Connector requires an owned temporary
+`OCI_REPLAY_ONS_TOPIC_ID`. Web App Acceleration requires owned temporary
+`OCI_REPLAY_WAA_POLICY_ID` and `OCI_REPLAY_LOAD_BALANCER_ID`. Application
+Management Monitored Instance requires `OCI_REPLAY_MONITORED_INSTANCE_NAME`.
+Compute Instance Agent Plugin requires `OCI_REPLAY_INSTANCE_ID` and optionally
+`OCI_REPLAY_INSTANCE_AGENT_PLUGIN_NAME`. The cassette stores bindings instead
+of operator-specific image and invocation endpoint values. Delete temporary
+prerequisites after their recording completes.
 
 Run only the SDK HTTP replay layer with:
 
