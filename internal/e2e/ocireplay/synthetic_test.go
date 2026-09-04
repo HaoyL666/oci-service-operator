@@ -127,6 +127,32 @@ func TestSyntheticObservedBodyProjectsSpecAndObservedFields(t *testing.T) {
 	}
 }
 
+func TestSyntheticJSONBodySerializesTypedModel(t *testing.T) {
+	t.Parallel()
+	body, err := SyntheticJSONBody(struct {
+		ID string `json:"id"`
+	}{ID: "resource-1"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if body != `{"id":"resource-1"}` {
+		t.Fatalf("SyntheticJSONBody() = %s", body)
+	}
+}
+
+func TestSyntheticWorkRequestBodyUsesCommonOCIShape(t *testing.T) {
+	t.Parallel()
+	body, err := SyntheticWorkRequestBody("work-1", "CREATE_THING", "SUCCEEDED", "CREATED", "Thing", "thing-1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, field := range []string{`"operationType":"CREATE_THING"`, `"status":"SUCCEEDED"`, `"identifier":"thing-1"`} {
+		if !strings.Contains(body, field) {
+			t.Fatalf("work-request body %s does not contain %s", body, field)
+		}
+	}
+}
+
 func TestSyntheticCRUDResponderTracksCreateAndDelete(t *testing.T) {
 	responder := NewSyntheticCRUDResponder(SyntheticCRUDOptions{
 		CollectionPath:      "/v1/things",
@@ -154,6 +180,132 @@ func TestSyntheticCRUDResponderTracksCreateAndDelete(t *testing.T) {
 	if err != nil || response.StatusCode != http.StatusNotFound {
 		t.Fatalf("post-delete response = %#v, %v", response, err)
 	}
+}
+
+func TestSyntheticCRUDResponderCanStartWithExistingResource(t *testing.T) {
+	t.Parallel()
+	responder := NewSyntheticCRUDResponder(SyntheticCRUDOptions{
+		CollectionPath:        "/resources",
+		InitiallyPresent:      true,
+		PresentCollectionBody: `{"items":[{"id":"resource-1"}]}`,
+	})
+	request := syntheticRequest(t, http.MethodGet, "https://example.test/resources")
+	response, err := responder(request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if response.Body != `{"items":[{"id":"resource-1"}]}` {
+		t.Fatalf("existing collection body = %s", response.Body)
+	}
+}
+
+func TestSyntheticWorkRequestCRUDResponderTracksLifecycle(t *testing.T) {
+	t.Parallel()
+	responder := NewSyntheticWorkRequestCRUDResponder(SyntheticWorkRequestCRUDOptions{
+		CollectionPath:        "/resources",
+		CreatedBody:           `{"id":"resource-1"}`,
+		CreateWorkRequestBody: `{"status":"SUCCEEDED","operationType":"CREATE"}`,
+		DeleteWorkRequestBody: `{"status":"SUCCEEDED","operationType":"DELETE"}`,
+	})
+
+	list := syntheticRequest(t, http.MethodGet, "https://example.test/resources")
+	response, err := responder(list)
+	if err != nil || response.Body != `{"items":[]}` {
+		t.Fatalf("initial list response = %#v, %v", response, err)
+	}
+	create := syntheticRequest(t, http.MethodPost, "https://example.test/resources")
+	response, err = responder(create)
+	if err != nil || response.StatusCode != http.StatusAccepted || response.Headers.Get("Opc-Work-Request-Id") == "" {
+		t.Fatalf("create response = %#v, %v", response, err)
+	}
+	workRequest := syntheticRequest(t, http.MethodGet, "https://example.test/workRequests/create")
+	response, err = responder(workRequest)
+	if err != nil || !strings.Contains(response.Body, `"CREATE"`) {
+		t.Fatalf("create work-request response = %#v, %v", response, err)
+	}
+	item := syntheticRequest(t, http.MethodGet, "https://example.test/resources/resource-1")
+	response, err = responder(item)
+	if err != nil || response.Body != `{"id":"resource-1"}` {
+		t.Fatalf("item response = %#v, %v", response, err)
+	}
+	deleteRequest := syntheticRequest(t, http.MethodDelete, "https://example.test/resources/resource-1")
+	response, err = responder(deleteRequest)
+	if err != nil || response.StatusCode != http.StatusAccepted {
+		t.Fatalf("delete response = %#v, %v", response, err)
+	}
+	response, err = responder(workRequest)
+	if err != nil || !strings.Contains(response.Body, `"DELETE"`) {
+		t.Fatalf("delete work-request response = %#v, %v", response, err)
+	}
+	response, err = responder(item)
+	if err != nil || response.StatusCode != http.StatusNotFound {
+		t.Fatalf("deleted item response = %#v, %v", response, err)
+	}
+}
+
+func TestSyntheticWorkRequestCRUDResponderSupportsSynchronousDelete(t *testing.T) {
+	t.Parallel()
+	responder := NewSyntheticWorkRequestCRUDResponder(SyntheticWorkRequestCRUDOptions{
+		CreatedBody:  `{"id":"resource-1"}`,
+		DeleteStatus: http.StatusNoContent,
+	})
+	deleteRequest := syntheticRequest(t, http.MethodDelete, "https://example.test/resources/resource-1")
+	response, err := responder(deleteRequest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if response.StatusCode != http.StatusNoContent {
+		t.Fatalf("delete status = %d, want %d", response.StatusCode, http.StatusNoContent)
+	}
+	if response.Headers.Get("Opc-Work-Request-Id") != "" {
+		t.Fatalf("synchronous delete returned work request header %q", response.Headers.Get("Opc-Work-Request-Id"))
+	}
+}
+
+func TestSyntheticWorkRequestCRUDResponderSupportsSynchronousCreate(t *testing.T) {
+	t.Parallel()
+	responder := NewSyntheticWorkRequestCRUDResponder(SyntheticWorkRequestCRUDOptions{
+		CreatedBody:  `{"id":"resource-1"}`,
+		CreateStatus: http.StatusCreated,
+	})
+	request := syntheticRequest(t, http.MethodPost, "https://example.test/resources")
+	response, err := responder(request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if response.StatusCode != http.StatusCreated {
+		t.Fatalf("create status = %d, want %d", response.StatusCode, http.StatusCreated)
+	}
+	if response.Headers.Get("Opc-Work-Request-Id") != "" {
+		t.Fatalf("synchronous create returned work request header %q", response.Headers.Get("Opc-Work-Request-Id"))
+	}
+}
+
+func TestSyntheticWorkRequestCRUDResponderSupportsActionDelete(t *testing.T) {
+	t.Parallel()
+	responder := NewSyntheticWorkRequestCRUDResponder(SyntheticWorkRequestCRUDOptions{
+		CreatedBody:            `{"id":"resource-1"}`,
+		CreateWorkRequestBody:  `{"status":"SUCCEEDED"}`,
+		DeleteWorkRequestBody:  `{"status":"SUCCEEDED"}`,
+		DeleteActionPathMarker: "/actions/cancel",
+	})
+	request := syntheticRequest(t, http.MethodPost, "https://example.test/resources/resource-1/actions/cancel")
+	response, err := responder(request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if response.Headers.Get("Opc-Work-Request-Id") != "ocid1.workrequest.oc1..syntheticdelete" {
+		t.Fatalf("action delete work request = %q", response.Headers.Get("Opc-Work-Request-Id"))
+	}
+}
+
+func syntheticRequest(t *testing.T, method string, target string) *http.Request {
+	t.Helper()
+	request, err := http.NewRequest(method, target, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return request
 }
 
 func newSyntheticRequest(t *testing.T, method string, target string) *http.Request {

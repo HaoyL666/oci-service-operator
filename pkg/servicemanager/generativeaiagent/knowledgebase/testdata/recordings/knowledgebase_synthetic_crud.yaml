@@ -1,0 +1,114 @@
+version: 1
+metadata:
+    service: generativeaiagent
+    resource: KnowledgeBase
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: generative-ai-agent.us-ashburn-1.oci.oraclecloud.com
+        path: /20240531/knowledgeBases
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"knowledge-base description","displayName":"knowledge-base-sample","freeformTags":{"environment":"dev"},"indexConfig":{"indexConfigType":"DEFAULT_INDEX_CONFIG","shouldEnableHybridSearch":false}}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"knowledge-base description","displayName":"knowledge-base-sample","freeformTags":{"environment":"dev"},"id":"<ocid:3>","indexConfig":{"indexConfigType":"DEFAULT_INDEX_CONFIG","shouldEnableHybridSearch":false},"knowledgeBaseStatistics":{"sizeInBytes":128,"totalIngestedFiles":4},"lifecycleDetails":"lifecycle detail","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"1970-01-01T00:00:00Z","timeUpdated":"1970-01-01T00:00:00Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: generative-ai-agent.us-ashburn-1.oci.oraclecloud.com
+        path: /20240531/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_KNOWLEDGE_BASE","percentComplete":50,"resources":[{"actionType":"CREATED","entityType":"KnowledgeBase","entityUri":null,"identifier":"<ocid:3>","metadata":null}],"status":"SUCCEEDED","timeAccepted":"1970-01-01T00:00:00Z","timeFinished":null,"timeStarted":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: generative-ai-agent.us-ashburn-1.oci.oraclecloud.com
+        path: /20240531/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"description":"knowledge-base description","displayName":"knowledge-base-sample","freeformTags":{"environment":"dev"},"id":"<ocid:3>","indexConfig":{"indexConfigType":"DEFAULT_INDEX_CONFIG","shouldEnableHybridSearch":false},"knowledgeBaseStatistics":{"sizeInBytes":128,"totalIngestedFiles":4},"lifecycleDetails":"lifecycle detail","lifecycleState":"ACTIVE","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"1970-01-01T00:00:00Z","timeUpdated":"1970-01-01T00:00:00Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: generative-ai-agent.us-ashburn-1.oci.oraclecloud.com
+        path: /20240531/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: generative-ai-agent.us-ashburn-1.oci.oraclecloud.com
+        path: /20240531/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"DELETE_KNOWLEDGE_BASE","percentComplete":50,"resources":[{"actionType":"DELETED","entityType":"KnowledgeBase","entityUri":null,"identifier":"<ocid:3>","metadata":null}],"status":"SUCCEEDED","timeAccepted":"1970-01-01T00:00:00Z","timeFinished":null,"timeStarted":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: generative-ai-agent.us-ashburn-1.oci.oraclecloud.com
+        path: /20240531/knowledgeBases/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: generative-ai-agent.us-ashburn-1.oci.oraclecloud.com
+        path: /20240531/knowledgeBases
+        query: compartmentId=%3Cocid%3A1%3E&displayName=knowledge-base-sample
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

@@ -1,0 +1,128 @@
+version: 1
+metadata:
+    service: governancerulescontrolplane
+    resource: GovernanceRule
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: governance-rules.organizations.us-ashburn-1.oci.oraclecloud.com
+        path: /20220504/governanceRules
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","creationOption":"TEMPLATE","definedTags":{"Operations":{"CostCenter":"42"}},"description":"governance quota rule","displayName":"rule-alpha","freeformTags":{"env":"dev"},"template":{"description":"quota template","displayName":"quota-alpha","statements":["set compute-core quota standard-e4-core-count to 10 in tenancy"],"type":"QUOTA"},"type":"QUOTA"}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"compartmentId":"<ocid:1>","creationOption":"TEMPLATE","definedTags":{"Operations":{"CostCenter":"42"}},"description":"governance quota rule","displayName":"rule-alpha","freeformTags":{"env":"dev"},"id":"<ocid:3>","lifecycleState":"ACTIVE","relatedResourceId":null,"systemTags":null,"template":{"description":"quota template","displayName":"quota-alpha","statements":["set compute-core quota standard-e4-core-count to 10 in tenancy"],"type":"QUOTA"},"timeCreated":"2026-04-29T12:00:00Z","timeUpdated":"2026-04-29T12:00:00Z","type":"QUOTA"}'
+        encoding: json
+    - request:
+        method: GET
+        host: governance-rules.organizations.us-ashburn-1.oci.oraclecloud.com
+        path: /20220504/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_GOVERNANCE_RULE","percentComplete":50,"resources":[{"actionType":"CREATED","entityType":"GovernanceRule","entityUri":null,"identifier":"<ocid:3>","metadata":null}],"status":"SUCCEEDED","timeAccepted":null,"timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: governance-rules.organizations.us-ashburn-1.oci.oraclecloud.com
+        path: /20220504/governanceRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","creationOption":"TEMPLATE","definedTags":{"Operations":{"CostCenter":"42"}},"description":"governance quota rule","displayName":"rule-alpha","freeformTags":{"env":"dev"},"id":"<ocid:3>","lifecycleState":"ACTIVE","relatedResourceId":null,"systemTags":null,"template":{"description":"quota template","displayName":"quota-alpha","statements":["set compute-core quota standard-e4-core-count to 10 in tenancy"],"type":"QUOTA"},"timeCreated":"2026-04-29T12:00:00Z","timeUpdated":"2026-04-29T12:00:00Z","type":"QUOTA"}'
+        encoding: json
+    - request:
+        method: GET
+        host: governance-rules.organizations.us-ashburn-1.oci.oraclecloud.com
+        path: /20220504/governanceRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","creationOption":"TEMPLATE","definedTags":{"Operations":{"CostCenter":"42"}},"description":"governance quota rule","displayName":"rule-alpha","freeformTags":{"env":"dev"},"id":"<ocid:3>","lifecycleState":"ACTIVE","relatedResourceId":null,"systemTags":null,"template":{"description":"quota template","displayName":"quota-alpha","statements":["set compute-core quota standard-e4-core-count to 10 in tenancy"],"type":"QUOTA"},"timeCreated":"2026-04-29T12:00:00Z","timeUpdated":"2026-04-29T12:00:00Z","type":"QUOTA"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: governance-rules.organizations.us-ashburn-1.oci.oraclecloud.com
+        path: /20220504/governanceRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: governance-rules.organizations.us-ashburn-1.oci.oraclecloud.com
+        path: /20220504/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"DELETE_GOVERNANCE_RULE","percentComplete":50,"resources":[{"actionType":"DELETED","entityType":"GovernanceRule","entityUri":null,"identifier":"<ocid:3>","metadata":null}],"status":"SUCCEEDED","timeAccepted":null,"timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: governance-rules.organizations.us-ashburn-1.oci.oraclecloud.com
+        path: /20220504/governanceRules/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: governance-rules.organizations.us-ashburn-1.oci.oraclecloud.com
+        path: /20220504/governanceRules
+        query: compartmentId=%3Cocid%3A1%3E&displayName=rule-alpha&governanceRuleId=%3Cocid%3A3%3E&governanceRuleType=QUOTA
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

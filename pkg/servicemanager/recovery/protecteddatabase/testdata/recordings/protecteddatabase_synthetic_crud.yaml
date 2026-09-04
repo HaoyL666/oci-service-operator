@@ -1,0 +1,142 @@
+version: 1
+metadata:
+    service: recovery
+    resource: ProtectedDatabase
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectedDatabases
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"changeRate":0.25,"compartmentId":"<ocid:1>","compressionRatio":1.5,"databaseId":"<ocid:2>","databaseSize":"M","dbUniqueName":"CDB01","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"protected-db","freeformTags":{"env":"test"},"isRedoLogsShipped":true,"password":"<redacted>","protectionPolicyId":"<ocid:3>","recoveryServiceSubnets":[{"recoveryServiceSubnetId":"<ocid:4>"}],"subscriptionId":"subscription-1"}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:5>
+        body: '{"changeRate":0.25,"compartmentId":"<ocid:1>","compressionRatio":1.5,"databaseId":"<ocid:2>","databaseSize":"M","databaseSizeInGBs":null,"dbUniqueName":"CDB01","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"protected-db","freeformTags":{"env":"test"},"healthDetails":null,"id":"<ocid:6>","isReadOnlyResource":null,"isRedoLogsShipped":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","metrics":null,"policyLockedDateTime":null,"protectionPolicyId":"<ocid:3>","recoveryServiceSubnets":[{"lifecycleState":"ACTIVE","recoveryServiceSubnetId":"<ocid:4>"}],"subscriptionId":"subscription-1","systemTags":null,"timeCreated":null,"timeUpdated":null,"vpcUserName":"vpc-user"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"CREATE_PROTECTED_DATABASE","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"protectedDatabase","entityUri":"/protectedDatabases/<ocid:6>","identifier":"<ocid:6>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-04T11:18:38.465282-05:00","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectedDatabases/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"changeRate":0.25,"compartmentId":"<ocid:1>","compressionRatio":1.5,"databaseId":"<ocid:2>","databaseSize":"M","databaseSizeInGBs":null,"dbUniqueName":"CDB01","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"protected-db","freeformTags":{"env":"test"},"healthDetails":null,"id":"<ocid:6>","isReadOnlyResource":null,"isRedoLogsShipped":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","metrics":null,"policyLockedDateTime":null,"protectionPolicyId":"<ocid:3>","recoveryServiceSubnets":[{"lifecycleState":"ACTIVE","recoveryServiceSubnetId":"<ocid:4>"}],"subscriptionId":"subscription-1","systemTags":null,"timeCreated":null,"timeUpdated":null,"vpcUserName":"vpc-user"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectedDatabases/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"changeRate":0.25,"compartmentId":"<ocid:1>","compressionRatio":1.5,"databaseId":"<ocid:2>","databaseSize":"M","databaseSizeInGBs":null,"dbUniqueName":"CDB01","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"protected-db","freeformTags":{"env":"test"},"healthDetails":null,"id":"<ocid:6>","isReadOnlyResource":null,"isRedoLogsShipped":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","metrics":null,"policyLockedDateTime":null,"protectionPolicyId":"<ocid:3>","recoveryServiceSubnets":[{"lifecycleState":"ACTIVE","recoveryServiceSubnetId":"<ocid:4>"}],"subscriptionId":"subscription-1","systemTags":null,"timeCreated":null,"timeUpdated":null,"vpcUserName":"vpc-user"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectedDatabases/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"changeRate":0.25,"compartmentId":"<ocid:1>","compressionRatio":1.5,"databaseId":"<ocid:2>","databaseSize":"M","databaseSizeInGBs":null,"dbUniqueName":"CDB01","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"protected-db","freeformTags":{"env":"test"},"healthDetails":null,"id":"<ocid:6>","isReadOnlyResource":null,"isRedoLogsShipped":true,"lifecycleDetails":null,"lifecycleState":"ACTIVE","metrics":null,"policyLockedDateTime":null,"protectionPolicyId":"<ocid:3>","recoveryServiceSubnets":[{"lifecycleState":"ACTIVE","recoveryServiceSubnetId":"<ocid:4>"}],"subscriptionId":"subscription-1","systemTags":null,"timeCreated":null,"timeUpdated":null,"vpcUserName":"vpc-user"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectedDatabases/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:7>
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/workRequests/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:7>","operationType":"DELETE_PROTECTED_DATABASE","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"protectedDatabase","entityUri":"/protectedDatabases/<ocid:6>","identifier":"<ocid:6>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-04T11:18:38.465512-05:00","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectedDatabases/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20210216/protectedDatabases
+        query: compartmentId=%3Cocid%3A1%3E&id=%3Cocid%3A6%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

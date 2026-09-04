@@ -1,0 +1,114 @@
+version: 1
+metadata:
+    service: databasemigration
+    resource: Connection
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: database-migration.us-ashburn-1.oci.oraclecloud.com
+        path: /20230518/connections
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"additionalAttributes":[{"name":"tlsVersion","value":"TLSv1.2"}],"compartmentId":"<ocid:1>","connectionType":"MYSQL","databaseName":"appdb","definedTags":{"Operations":{"CostCenter":"42"}},"description":"mysql source connection","displayName":"mysql-source","freeformTags":{"env":"test"},"host":"mysql.example.com","keyId":"<ocid:2>","nsgIds":["<ocid:3>"],"password":"<redacted>","port":3306,"replicationPassword":"<redacted>","replicationUsername":"replication-user","securityProtocol":"TLS","sslMode":"REQUIRED","subnetId":"<ocid:4>","technologyType":"OCI_MYSQL","username":"migration-user","vaultId":"<ocid:5>"}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:6>
+        body: '{"additionalAttributes":[{"name":"tlsVersion","value":"TLSv1.2"}],"compartmentId":"<ocid:1>","connectionType":"MYSQL","databaseName":"appdb","definedTags":{"Operations":{"CostCenter":"42"}},"description":"mysql source connection","displayName":"mysql-source","freeformTags":{"env":"test"},"host":"mysql.example.com","id":"<ocid:7>","keyId":"<ocid:2>","lifecycleState":"ACTIVE","nsgIds":["<ocid:3>"],"password":"<redacted>","port":3306,"replicationPassword":"<redacted>","replicationUsername":"replication-user","securityProtocol":"TLS","sslMode":"REQUIRED","subnetId":"<ocid:4>","technologyType":"OCI_MYSQL","username":"migration-user","vaultId":"<ocid:5>"}'
+        encoding: json
+    - request:
+        method: GET
+        host: database-migration.us-ashburn-1.oci.oraclecloud.com
+        path: /20230518/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:8>","id":"<ocid:6>","operationType":"CREATE_CONNECTION","percentComplete":25,"resources":[{"actionType":"CREATED","entityType":"Connection","entityUri":null,"identifier":"<ocid:7>"}],"status":"SUCCEEDED","timeAccepted":"2024-04-16T04:00:00Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: database-migration.us-ashburn-1.oci.oraclecloud.com
+        path: /20230518/connections/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"additionalAttributes":[{"name":"tlsVersion","value":"TLSv1.2"}],"compartmentId":"<ocid:1>","connectionType":"MYSQL","databaseName":"appdb","definedTags":{"Operations":{"CostCenter":"42"}},"description":"mysql source connection","displayName":"mysql-source","freeformTags":{"env":"test"},"host":"mysql.example.com","id":"<ocid:7>","keyId":"<ocid:2>","lifecycleState":"ACTIVE","nsgIds":["<ocid:3>"],"password":"<redacted>","port":3306,"replicationPassword":"<redacted>","replicationUsername":"replication-user","securityProtocol":"TLS","sslMode":"REQUIRED","subnetId":"<ocid:4>","technologyType":"OCI_MYSQL","username":"migration-user","vaultId":"<ocid:5>"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: database-migration.us-ashburn-1.oci.oraclecloud.com
+        path: /20230518/connections/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:9>
+    - request:
+        method: GET
+        host: database-migration.us-ashburn-1.oci.oraclecloud.com
+        path: /20230518/workRequests/<ocid:9>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:8>","id":"<ocid:9>","operationType":"DELETE_CONNECTION","percentComplete":25,"resources":[{"actionType":"DELETED","entityType":"Connection","entityUri":null,"identifier":"<ocid:7>"}],"status":"SUCCEEDED","timeAccepted":"2024-04-16T04:00:00Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: database-migration.us-ashburn-1.oci.oraclecloud.com
+        path: /20230518/connections/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: database-migration.us-ashburn-1.oci.oraclecloud.com
+        path: /20230518/connections
+        query: compartmentId=%3Cocid%3A1%3E&displayName=mysql-source
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

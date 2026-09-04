@@ -1,0 +1,114 @@
+version: 1
+metadata:
+    service: delegateaccesscontrol
+    resource: DelegationControl
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: delegate-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/delegationControls
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"delegationSubscriptionIds":["<ocid:2>","<ocid:3>"],"description":"delegate managed access to an Exadata resource","displayName":"delegation-control-sample","freeformTags":{"environment":"dev"},"isAutoApproveDuringMaintenance":true,"notificationMessageFormat":"JSON","notificationTopicId":"<ocid:4>","numApprovalsRequired":2,"preApprovedServiceProviderActionNames":["PATCH_CLUSTER","VIEW_CLUSTER"],"resourceIds":["<ocid:5>","<ocid:6>"],"resourceType":"VMCLUSTER"}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:7>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"delegationSubscriptionIds":["<ocid:2>","<ocid:3>"],"description":"delegate managed access to an Exadata resource","displayName":"delegation-control-sample","freeformTags":{"environment":"dev"},"id":"<ocid:8>","isAutoApproveDuringMaintenance":true,"lifecycleState":"ACTIVE","lifecycleStateDetails":"reviewed runtime","notificationMessageFormat":"JSON","notificationTopicId":"<ocid:4>","numApprovalsRequired":2,"preApprovedServiceProviderActionNames":["PATCH_CLUSTER","VIEW_CLUSTER"],"resourceIds":["<ocid:5>","<ocid:6>"],"resourceType":"VMCLUSTER","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"1970-01-01T00:00:00Z","timeDeleted":null,"timeUpdated":"1970-01-01T00:00:00Z","vaultId":null,"vaultKeyId":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: delegate-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/workRequests/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:7>","operationType":"CREATE_DELEGATION_CONTROL","percentComplete":50,"resources":[{"actionType":"CREATED","entityType":"DelegationControl","entityUri":null,"identifier":"<ocid:8>","metadata":null}],"status":"SUCCEEDED","timeAccepted":"1970-01-01T00:00:00Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: delegate-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/delegationControls/<ocid:8>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"delegationSubscriptionIds":["<ocid:2>","<ocid:3>"],"description":"delegate managed access to an Exadata resource","displayName":"delegation-control-sample","freeformTags":{"environment":"dev"},"id":"<ocid:8>","isAutoApproveDuringMaintenance":true,"lifecycleState":"ACTIVE","lifecycleStateDetails":"reviewed runtime","notificationMessageFormat":"JSON","notificationTopicId":"<ocid:4>","numApprovalsRequired":2,"preApprovedServiceProviderActionNames":["PATCH_CLUSTER","VIEW_CLUSTER"],"resourceIds":["<ocid:5>","<ocid:6>"],"resourceType":"VMCLUSTER","systemTags":{"orcl-cloud":{"free-tier-retained":"true"}},"timeCreated":"1970-01-01T00:00:00Z","timeDeleted":null,"timeUpdated":"1970-01-01T00:00:00Z","vaultId":null,"vaultKeyId":null}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: delegate-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/delegationControls/<ocid:8>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:9>
+    - request:
+        method: GET
+        host: delegate-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/workRequests/<ocid:9>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:9>","operationType":"DELETE_DELEGATION_CONTROL","percentComplete":50,"resources":[{"actionType":"DELETED","entityType":"DelegationControl","entityUri":null,"identifier":"<ocid:8>","metadata":null}],"status":"SUCCEEDED","timeAccepted":"1970-01-01T00:00:00Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: delegate-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/delegationControls/<ocid:8>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: delegate-access-control.us-ashburn-1.oci.oraclecloud.com
+        path: /20230801/delegationControls
+        query: compartmentId=%3Cocid%3A1%3E&displayName=delegation-control-sample&resourceType=VMCLUSTER
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

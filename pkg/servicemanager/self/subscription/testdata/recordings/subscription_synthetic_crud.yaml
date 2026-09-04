@@ -1,0 +1,114 @@
+version: 1
+metadata:
+    service: self
+    resource: Subscription
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: self.us-ashburn-1.oci.oraclecloud.com
+        path: /20260129/subscriptions
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"additionalDetails":[{"key":"contract","value":"gold"}],"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"self-subscription","freeformTags":{"env":"dev"},"productId":"<ocid:2>","realm":"OC1","region":"us-chicago-1","sellerId":"<ocid:3>","sourceType":"OCI_NATIVE","subscriptionDetails":{"billingDetails":{"meters":[{"name":"meter-a","rateAllocation":100}],"metricType":"OCPU_HOURS","rateAllocation":100,"sku":"gold-sku"},"partnerRegistrationUrl":"https://partner.example.com/register","pricingPlan":{"billingFrequency":"YEARLY","planName":"gold-plan","planType":"FIXED","rates":[{"currency":"USD","rate":42.5}]}},"tenantId":"<ocid:4>"}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:5>
+        body: '{"additionalDetails":[{"key":"contract","value":"gold"}],"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"self-subscription","freeformTags":{"env":"dev"},"id":"<ocid:6>","lifecycleDetails":"ACTIVE","lifecycleState":"ACTIVE","productId":"<ocid:2>","realm":"OC1","region":"us-chicago-1","sellerId":"<ocid:3>","sourceType":"OCI_NATIVE","subscriptionDetails":{"amount":null,"billingDetails":{"hasGovSku":null,"meters":[{"extendedMetadata":null,"name":"meter-a","rateAllocation":100}],"metricType":"OCPU_HOURS","rateAllocation":100,"sku":"gold-sku"},"currency":null,"isAutoRenew":null,"partnerRegistrationUrl":"https://partner.example.com/register","pricingPlan":{"billingFrequency":"YEARLY","planDescription":null,"planName":"gold-plan","planType":"FIXED","rates":[{"currency":"USD","rate":42.5}]}},"systemTags":null,"tenantId":"<ocid:4>","timeCreated":null,"timeEnded":null,"timeStarted":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: self.us-ashburn-1.oci.oraclecloud.com
+        path: /20260129/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"CREATE_SUBSCRIPTION","percentComplete":42,"resources":[{"actionType":"CREATED","entityType":"subscription","entityUri":"/subscriptions/<ocid:6>","identifier":"<ocid:6>","metadata":null}],"status":"SUCCEEDED","timeAccepted":null,"timeFinished":null,"timeStarted":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: self.us-ashburn-1.oci.oraclecloud.com
+        path: /20260129/subscriptions/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"additionalDetails":[{"key":"contract","value":"gold"}],"compartmentId":"<ocid:1>","definedTags":{"Operations":{"CostCenter":"42"}},"displayName":"self-subscription","freeformTags":{"env":"dev"},"id":"<ocid:6>","lifecycleDetails":"ACTIVE","lifecycleState":"ACTIVE","productId":"<ocid:2>","realm":"OC1","region":"us-chicago-1","sellerId":"<ocid:3>","sourceType":"OCI_NATIVE","subscriptionDetails":{"amount":null,"billingDetails":{"hasGovSku":null,"meters":[{"extendedMetadata":null,"name":"meter-a","rateAllocation":100}],"metricType":"OCPU_HOURS","rateAllocation":100,"sku":"gold-sku"},"currency":null,"isAutoRenew":null,"partnerRegistrationUrl":"https://partner.example.com/register","pricingPlan":{"billingFrequency":"YEARLY","planDescription":null,"planName":"gold-plan","planType":"FIXED","rates":[{"currency":"USD","rate":42.5}]}},"systemTags":null,"tenantId":"<ocid:4>","timeCreated":null,"timeEnded":null,"timeStarted":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: self.us-ashburn-1.oci.oraclecloud.com
+        path: /20260129/subscriptions/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:7>
+    - request:
+        method: GET
+        host: self.us-ashburn-1.oci.oraclecloud.com
+        path: /20260129/workRequests/<ocid:7>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:7>","operationType":"DELETE_SUBSCRIPTION","percentComplete":42,"resources":[{"actionType":"DELETED","entityType":"subscription","entityUri":"/subscriptions/<ocid:6>","identifier":"<ocid:6>","metadata":null}],"status":"SUCCEEDED","timeAccepted":null,"timeFinished":null,"timeStarted":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: self.us-ashburn-1.oci.oraclecloud.com
+        path: /20260129/subscriptions/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: self.us-ashburn-1.oci.oraclecloud.com
+        path: /20260129/subscriptions
+        query: compartmentId=%3Cocid%3A1%3E&displayName=self-subscription&id=%3Cocid%3A6%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

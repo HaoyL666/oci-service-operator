@@ -356,6 +356,15 @@ func TestHostInsightCreateUsesPolymorphicBodyAndWorkRequest(t *testing.T) {
 	requireHostInsightNoCurrentAsync(t, resource)
 }
 
+func TestHostInsightListFieldsExcludeRepeatedObservedID(t *testing.T) {
+	t.Parallel()
+	for _, field := range hostInsightListFields() {
+		if field.FieldName == "Id" {
+			t.Fatal("list fields map scalar observed id into the repeated OCI id filter")
+		}
+	}
+}
+
 func TestHostInsightCreateRejectsJsonDataBeforeOCI(t *testing.T) {
 	t.Parallel()
 

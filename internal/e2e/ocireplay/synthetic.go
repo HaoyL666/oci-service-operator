@@ -37,6 +37,7 @@ type SyntheticResponder func(*http.Request) (SyntheticResponse, error)
 // authoring; checked-in tests replay the resulting requests strictly.
 type SyntheticCRUDOptions struct {
 	CollectionPath        string
+	InitiallyPresent      bool
 	CreatedBody           string
 	UpdatedBody           string
 	EmptyCollectionBody   string
@@ -45,6 +46,25 @@ type SyntheticCRUDOptions struct {
 	UpdateStatus          int
 	DeleteStatus          int
 	NotFoundCode          string
+}
+
+// SyntheticWorkRequestCRUDOptions describes the common asynchronous CRUD
+// surface used by OCI services that return an opc-work-request-id from create
+// and delete operations.
+type SyntheticWorkRequestCRUDOptions struct {
+	CollectionPath         string
+	CreatedBody            string
+	EmptyCollectionBody    string
+	PresentCollectionBody  string
+	CreateWorkRequestBody  string
+	DeleteWorkRequestBody  string
+	WorkRequestPathMarker  string
+	CreateWorkRequestID    string
+	DeleteWorkRequestID    string
+	CreateStatus           int
+	DeleteStatus           int
+	DeleteActionPathMarker string
+	NotFoundCode           string
 }
 
 // SDKSyntheticOptions configures a strict replay session by default. Setting
@@ -88,6 +108,34 @@ func SyntheticObservedBody(spec any, id string, lifecycleState string, extra map
 		return "", fmt.Errorf("marshal synthetic observed body: %w", err)
 	}
 	return string(observed), nil
+}
+
+// SyntheticJSONBody serializes a typed SDK model for a contract-authored
+// synthetic response. Using the SDK type keeps fixtures aligned with the
+// response shape consumed by the service manager.
+func SyntheticJSONBody(value any) (string, error) {
+	encoded, err := json.Marshal(value)
+	if err != nil {
+		return "", fmt.Errorf("marshal synthetic SDK body: %w", err)
+	}
+	return string(encoded), nil
+}
+
+// SyntheticWorkRequestBody creates the common OCI work-request JSON shape for
+// services whose SDK follows the standard operation/resource contract.
+func SyntheticWorkRequestBody(id string, operationType string, status string, actionType string, entityType string, resourceID string) (string, error) {
+	resource := map[string]any{
+		"actionType": actionType,
+		"entityType": entityType,
+		"identifier": resourceID,
+	}
+	return SyntheticJSONBody(map[string]any{
+		"id":              id,
+		"operationType":   operationType,
+		"percentComplete": 100,
+		"resources":       []any{resource},
+		"status":          status,
+	})
 }
 
 // SDKSyntheticSession owns either a strict replay cassette or an explicitly
@@ -156,7 +204,7 @@ func OpenSDKSynthetic(options SDKSyntheticOptions) (*SDKSyntheticSession, error)
 // NewSyntheticCRUDResponder creates a stateful cassette-authoring responder
 // for a synchronous resource with standard collection and item endpoints.
 func NewSyntheticCRUDResponder(options SyntheticCRUDOptions) SyntheticResponder {
-	created := false
+	created := options.InitiallyPresent
 	deleted := false
 	collectionPath := strings.TrimSuffix(options.CollectionPath, "/")
 	return func(request *http.Request) (SyntheticResponse, error) {
@@ -213,6 +261,90 @@ func NewSyntheticCRUDResponder(options SyntheticCRUDOptions) SyntheticResponder 
 			return SyntheticResponse{StatusCode: http.StatusOK, Body: options.CreatedBody}, nil
 		default:
 			return SyntheticResponse{}, fmt.Errorf("unsupported synthetic CRUD request %s %s", request.Method, request.URL.String())
+		}
+	}
+}
+
+// NewSyntheticWorkRequestCRUDResponder creates a stateful cassette-authoring
+// responder for an asynchronous resource with standard collection, item, and
+// work-request endpoints.
+func NewSyntheticWorkRequestCRUDResponder(options SyntheticWorkRequestCRUDOptions) SyntheticResponder {
+	created := false
+	deleted := false
+	collectionPath := strings.TrimSuffix(options.CollectionPath, "/")
+	workRequestMarker := options.WorkRequestPathMarker
+	if workRequestMarker == "" {
+		workRequestMarker = "/workRequests/"
+	}
+	createWorkRequestID := options.CreateWorkRequestID
+	if createWorkRequestID == "" {
+		createWorkRequestID = "ocid1.workrequest.oc1..syntheticcreate"
+	}
+	deleteWorkRequestID := options.DeleteWorkRequestID
+	if deleteWorkRequestID == "" {
+		deleteWorkRequestID = "ocid1.workrequest.oc1..syntheticdelete"
+	}
+	return func(request *http.Request) (SyntheticResponse, error) {
+		requestPath := strings.TrimSuffix(request.URL.Path, "/")
+		collection := collectionPath != "" && requestPath == collectionPath
+		switch {
+		case request.Method == http.MethodGet && strings.Contains(requestPath, workRequestMarker):
+			body := options.CreateWorkRequestBody
+			if deleted {
+				body = options.DeleteWorkRequestBody
+			}
+			if body == "" {
+				return SyntheticResponse{}, fmt.Errorf("synthetic work-request response is not configured for %s", requestPath)
+			}
+			return SyntheticResponse{StatusCode: http.StatusOK, Body: body}, nil
+		case request.Method == http.MethodPost && options.DeleteActionPathMarker != "" && strings.Contains(requestPath, options.DeleteActionPathMarker):
+			deleted = true
+			return SyntheticResponse{StatusCode: http.StatusAccepted, Headers: http.Header{"Opc-Work-Request-Id": []string{deleteWorkRequestID}}}, nil
+		case request.Method == http.MethodPost:
+			if collectionPath == "" {
+				collectionPath = requestPath
+			}
+			created = true
+			deleted = false
+			status := defaultHTTPStatus(options.CreateStatus, http.StatusAccepted)
+			headers := http.Header{}
+			if status == http.StatusAccepted {
+				headers.Set("Opc-Work-Request-Id", createWorkRequestID)
+			}
+			return SyntheticResponse{StatusCode: status, Headers: headers, Body: options.CreatedBody}, nil
+		case request.Method == http.MethodPut || request.Method == http.MethodPatch:
+			return SyntheticResponse{StatusCode: http.StatusOK, Body: options.CreatedBody}, nil
+		case request.Method == http.MethodDelete:
+			deleted = true
+			status := defaultHTTPStatus(options.DeleteStatus, http.StatusAccepted)
+			headers := http.Header{}
+			if status == http.StatusAccepted {
+				headers.Set("Opc-Work-Request-Id", deleteWorkRequestID)
+			}
+			return SyntheticResponse{StatusCode: status, Headers: headers}, nil
+		case request.Method == http.MethodGet && collection:
+			if !created || deleted {
+				body := options.EmptyCollectionBody
+				if body == "" {
+					body = `{"items":[]}`
+				}
+				return SyntheticResponse{StatusCode: http.StatusOK, Body: body}, nil
+			}
+			body := options.PresentCollectionBody
+			if body == "" {
+				body = `{"items":[` + options.CreatedBody + `]}`
+			}
+			return SyntheticResponse{StatusCode: http.StatusOK, Body: body}, nil
+		case request.Method == http.MethodGet && deleted:
+			code := options.NotFoundCode
+			if code == "" {
+				code = "NotFound"
+			}
+			return SyntheticResponse{StatusCode: http.StatusNotFound, Body: fmt.Sprintf(`{"code":%q,"message":"resource deleted"}`, code)}, nil
+		case request.Method == http.MethodGet && created:
+			return SyntheticResponse{StatusCode: http.StatusOK, Body: options.CreatedBody}, nil
+		default:
+			return SyntheticResponse{}, fmt.Errorf("unsupported synthetic work-request CRUD request %s %s", request.Method, request.URL.String())
 		}
 	}
 }

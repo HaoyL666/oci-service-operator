@@ -1,0 +1,113 @@
+version: 1
+metadata:
+    service: opsi
+    resource: NewsReport
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/newsReports
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"areChildCompartmentsIncluded":false,"compartmentId":"compartment-1","contentTypes":{"actionableInsightsResources":["NEW_HIGHS"],"capacityPlanningResources":["DATABASE"]},"dayOfWeek":"MONDAY","definedTags":{"ns":{"key":"value"}},"description":"weekly report","freeformTags":{"env":"dev"},"locale":"EN","matchRule":"MATCH_ANY","name":"weekly-news","newsFrequency":"WEEKLY","onsTopicId":"ons-topic-1","status":"ENABLED","tagFilters":["department=finance"]}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:1>
+        body: '{"areChildCompartmentsIncluded":false,"compartmentId":"compartment-1","contentTypes":{"actionableInsightsResources":["NEW_HIGHS"],"capacityPlanningResources":["DATABASE"],"sqlInsightsFleetAnalysisResources":null,"sqlInsightsPerformanceDegradationResources":null,"sqlInsightsPlanChangesResources":null,"sqlInsightsTopDatabasesResources":null,"sqlInsightsTopSqlByInsightsResources":null,"sqlInsightsTopSqlResources":null},"dayOfWeek":"MONDAY","definedTags":{"ns":{"key":"value"}},"description":"weekly report","freeformTags":{"env":"dev"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"ACTIVE","locale":"EN","matchRule":"MATCH_ANY","name":"weekly-news","newsFrequency":"WEEKLY","onsTopicId":"ons-topic-1","status":"ENABLED","systemTags":null,"tagFilters":["department=finance"],"timeCreated":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/workRequests/<ocid:1>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"compartment-1","id":"<ocid:1>","operationType":"CREATE_NEWS_REPORT","percentComplete":50,"resources":[{"actionType":"CREATED","entityType":"NewsReport","entityUri":"/newsReports/<ocid:2>","identifier":"<ocid:2>","metadata":null}],"status":"SUCCEEDED","timeAccepted":null,"timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/newsReports/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"areChildCompartmentsIncluded":false,"compartmentId":"compartment-1","contentTypes":{"actionableInsightsResources":["NEW_HIGHS"],"capacityPlanningResources":["DATABASE"],"sqlInsightsFleetAnalysisResources":null,"sqlInsightsPerformanceDegradationResources":null,"sqlInsightsPlanChangesResources":null,"sqlInsightsTopDatabasesResources":null,"sqlInsightsTopSqlByInsightsResources":null,"sqlInsightsTopSqlResources":null},"dayOfWeek":"MONDAY","definedTags":{"ns":{"key":"value"}},"description":"weekly report","freeformTags":{"env":"dev"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"ACTIVE","locale":"EN","matchRule":"MATCH_ANY","name":"weekly-news","newsFrequency":"WEEKLY","onsTopicId":"ons-topic-1","status":"ENABLED","systemTags":null,"tagFilters":["department=finance"],"timeCreated":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/newsReports/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"areChildCompartmentsIncluded":false,"compartmentId":"compartment-1","contentTypes":{"actionableInsightsResources":["NEW_HIGHS"],"capacityPlanningResources":["DATABASE"],"sqlInsightsFleetAnalysisResources":null,"sqlInsightsPerformanceDegradationResources":null,"sqlInsightsPlanChangesResources":null,"sqlInsightsTopDatabasesResources":null,"sqlInsightsTopSqlByInsightsResources":null,"sqlInsightsTopSqlResources":null},"dayOfWeek":"MONDAY","definedTags":{"ns":{"key":"value"}},"description":"weekly report","freeformTags":{"env":"dev"},"id":"<ocid:2>","lifecycleDetails":null,"lifecycleState":"ACTIVE","locale":"EN","matchRule":"MATCH_ANY","name":"weekly-news","newsFrequency":"WEEKLY","onsTopicId":"ons-topic-1","status":"ENABLED","systemTags":null,"tagFilters":["department=finance"],"timeCreated":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/newsReports/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:3>
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/workRequests/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"compartment-1","id":"<ocid:3>","operationType":"DELETE_NEWS_REPORT","percentComplete":50,"resources":[{"actionType":"DELETED","entityType":"NewsReport","entityUri":"/newsReports/<ocid:2>","identifier":"<ocid:2>","metadata":null}],"status":"SUCCEEDED","timeAccepted":null,"timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/newsReports/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json

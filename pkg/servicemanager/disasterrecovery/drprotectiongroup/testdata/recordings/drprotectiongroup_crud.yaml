@@ -1,0 +1,500 @@
+version: 1
+metadata:
+    service: disasterrecovery
+    resource: DrProtectionGroup
+    operations:
+        - create
+        - read
+        - update
+        - delete
+    sdkVersion: v65.110.0
+    provenance: recorded
+interactions:
+    - request:
+        method: POST
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drProtectionGroups
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","displayName":"osok-replay-dr-protection-group-v1","freeformTags":{"managed-by":"osok-replay"},"logLocation":{"bucket":"<binding:dr-log-bucket>","namespace":"<binding:objectstorage-namespace>"},"members":[]}'
+        encoding: json
+      response:
+        statusCode: 201
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"authType":"OBO","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-04T17:43:17.317Z"}},"displayName":"osok-replay-dr-protection-group-v1","freeformTags":{"managed-by":"osok-replay"},"id":"<ocid:3>","lifeCycleDetails":null,"lifecycleState":"CREATING","lifecycleSubState":null,"logLocation":{"bucket":"<binding:dr-log-bucket>","namespace":"<binding:objectstorage-namespace>","object":null},"members":null,"peerId":null,"peerRegion":null,"role":"UNCONFIGURED","systemTags":{},"timeCreated":"2026-09-04T17:43:18.257Z","timeUpdated":"2026-09-04T17:43:18.257Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d30b64fb3bcec1943b3de553845041ab945d7510d36f4a663ec6e9ad9d23cdd2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d30b64fb3bcec1943b3de553845041ab945d7510d36f4a663ec6e9ad9d23cdd2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d30b64fb3bcec1943b3de553845041ab945d7510d36f4a663ec6e9ad9d23cdd2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d30b64fb3bcec1943b3de553845041ab945d7510d36f4a663ec6e9ad9d23cdd2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d30b64fb3bcec1943b3de553845041ab945d7510d36f4a663ec6e9ad9d23cdd2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d30b64fb3bcec1943b3de553845041ab945d7510d36f4a663ec6e9ad9d23cdd2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d30b64fb3bcec1943b3de553845041ab945d7510d36f4a663ec6e9ad9d23cdd2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - d30b64fb3bcec1943b3de553845041ab945d7510d36f4a663ec6e9ad9d23cdd2--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7e0f79ff9aa532925edf0cd52dee8ecb1300f9463a2f5f1fde3793c591175cb0--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_DR_PROTECTION_GROUP","percentComplete":100,"resources":[{"actionType":"CREATED","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-04T17:43:18.258Z","timeFinished":"2026-09-04T17:44:01.955Z","timeStarted":"2026-09-04T17:43:59.412Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drProtectionGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 11a8fd8ecacd09b66033bc60bd4a85e8fa16d2ef8bb09bff73e0a54482cb408f--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"authType":"OBO","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-04T17:43:17.317Z"}},"displayName":"osok-replay-dr-protection-group-v1","freeformTags":{"managed-by":"osok-replay"},"id":"<ocid:3>","lifeCycleDetails":null,"lifecycleState":"ACTIVE","lifecycleSubState":null,"logLocation":{"bucket":"<binding:dr-log-bucket>","namespace":"<binding:objectstorage-namespace>","object":null},"members":null,"peerId":null,"peerRegion":null,"role":"UNCONFIGURED","systemTags":{},"timeCreated":"2026-09-04T17:43:18.257Z","timeUpdated":"2026-09-04T17:44:01.955Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drProtectionGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 11a8fd8ecacd09b66033bc60bd4a85e8fa16d2ef8bb09bff73e0a54482cb408f--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"authType":"OBO","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-04T17:43:17.317Z"}},"displayName":"osok-replay-dr-protection-group-v1","freeformTags":{"managed-by":"osok-replay"},"id":"<ocid:3>","lifeCycleDetails":null,"lifecycleState":"ACTIVE","lifecycleSubState":null,"logLocation":{"bucket":"<binding:dr-log-bucket>","namespace":"<binding:objectstorage-namespace>","object":null},"members":null,"peerId":null,"peerRegion":null,"role":"UNCONFIGURED","systemTags":{},"timeCreated":"2026-09-04T17:43:18.257Z","timeUpdated":"2026-09-04T17:44:01.955Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drProtectionGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+        body: '{"definedTags":{},"displayName":"osok-replay-dr-protection-group-v1-updated","freeformTags":{"managed-by":"osok-replay"},"logLocation":{"bucket":"<binding:dr-log-bucket>","namespace":"<binding:objectstorage-namespace>"},"members":[]}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4930a5c196db923b14ccb639eaa31c6aee8d71d5fd995922e281dc6b83c0d687--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:07.889Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4930a5c196db923b14ccb639eaa31c6aee8d71d5fd995922e281dc6b83c0d687--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:07.889Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4930a5c196db923b14ccb639eaa31c6aee8d71d5fd995922e281dc6b83c0d687--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:07.889Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4930a5c196db923b14ccb639eaa31c6aee8d71d5fd995922e281dc6b83c0d687--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:07.889Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 4930a5c196db923b14ccb639eaa31c6aee8d71d5fd995922e281dc6b83c0d687--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:07.889Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 82a433971d22aed9bccbacb56ef04e3c81112b128475d80c20f32c14dce2dc86--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"UPDATE_DR_PROTECTION_GROUP","percentComplete":100,"resources":[{"actionType":"UPDATED","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-04T17:44:07.889Z","timeFinished":"2026-09-04T17:44:37.119Z","timeStarted":"2026-09-04T17:44:34.138Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drProtectionGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - b50642bd8f357ad692939b0a818ef4611ea5e2c27fb32c9c5318b19c5e466ee1--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"authType":"OBO","compartmentId":"<ocid:1>","definedTags":{},"displayName":"osok-replay-dr-protection-group-v1-updated","freeformTags":{"managed-by":"osok-replay"},"id":"<ocid:3>","lifeCycleDetails":null,"lifecycleState":"ACTIVE","lifecycleSubState":null,"logLocation":{"bucket":"<binding:dr-log-bucket>","namespace":"<binding:objectstorage-namespace>","object":null},"members":null,"peerId":null,"peerRegion":null,"role":"UNCONFIGURED","systemTags":{},"timeCreated":"2026-09-04T17:43:18.257Z","timeUpdated":"2026-09-04T17:44:37.119Z"}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drProtectionGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/octet-stream
+            opc-request-id:
+                - <redacted>
+            opc-work-request-id:
+                - <ocid:5>
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3e93e9f4f6ac1eb6ff9a87271af5bc41e14c301b3ca5bfd926838a56fb6df6b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:38.581Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3e93e9f4f6ac1eb6ff9a87271af5bc41e14c301b3ca5bfd926838a56fb6df6b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:38.581Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3e93e9f4f6ac1eb6ff9a87271af5bc41e14c301b3ca5bfd926838a56fb6df6b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:38.581Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 3e93e9f4f6ac1eb6ff9a87271af5bc41e14c301b3ca5bfd926838a56fb6df6b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_DR_PROTECTION_GROUP","percentComplete":0,"resources":[{"actionType":"IN_PROGRESS","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"ACCEPTED","timeAccepted":"2026-09-04T17:44:38.581Z","timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/workRequests/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7be82d3d07ed4e607a24f75a29533bda9cf804c462e86cfdf6e8a4b12c4418b5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:5>","operationType":"DELETE_DR_PROTECTION_GROUP","percentComplete":100,"resources":[{"actionType":"DELETED","entityType":"drProtectionGroup","entityUri":"/drProtectionGroups/<ocid:3>","identifier":"<ocid:3>"}],"status":"SUCCEEDED","timeAccepted":"2026-09-04T17:44:38.581Z","timeFinished":"2026-09-04T17:44:59.864Z","timeStarted":"2026-09-04T17:44:59.212Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drProtectionGroups/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 12b3ac45b5f22cfc5976375c4f90b9c4efea5dc6e22804dbe77d03992989bdaa--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"authType":"OBO","compartmentId":"<ocid:1>","definedTags":{},"displayName":"osok-replay-dr-protection-group-v1-updated","freeformTags":{"managed-by":"osok-replay"},"id":"<ocid:3>","lifeCycleDetails":null,"lifecycleState":"DELETED","lifecycleSubState":null,"logLocation":{"bucket":"<binding:dr-log-bucket>","namespace":"<binding:objectstorage-namespace>","object":null},"members":null,"peerId":null,"peerRegion":null,"role":"UNCONFIGURED","systemTags":{},"timeCreated":"2026-09-04T17:43:18.257Z","timeUpdated":"2026-09-04T17:44:59.874Z"}'
+        encoding: json

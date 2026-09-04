@@ -1,0 +1,142 @@
+version: 1
+metadata:
+    service: opsi
+    resource: OperationsInsightsWarehouse
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: POST
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operationsInsightsWarehouses
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","computeModel":"OCPU","cpuAllocated":2,"displayName":"opsi-warehouse","storageAllocatedInGBs":256}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:2>
+        body: '{"compartmentId":"<ocid:1>","computeModel":"OCPU","cpuAllocated":2,"cpuUsed":null,"definedTags":{},"displayName":"opsi-warehouse","dynamicGroupId":null,"freeformTags":null,"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","operationsInsightsTenancyId":null,"storageAllocatedInGBs":256,"storageUsedInGBs":null,"systemTags":null,"timeCreated":null,"timeLastWalletRotated":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/workRequests/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:2>","operationType":"CREATE_OPSI_WAREHOUSE","percentComplete":50,"resources":[{"actionType":"CREATED","entityType":"opsiWarehouse","entityUri":null,"identifier":"<ocid:3>","metadata":null}],"status":"SUCCEEDED","timeAccepted":null,"timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operationsInsightsWarehouses/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","computeModel":"OCPU","cpuAllocated":2,"cpuUsed":null,"definedTags":{},"displayName":"opsi-warehouse","dynamicGroupId":null,"freeformTags":null,"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","operationsInsightsTenancyId":null,"storageAllocatedInGBs":256,"storageUsedInGBs":null,"systemTags":null,"timeCreated":null,"timeLastWalletRotated":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operationsInsightsWarehouses/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","computeModel":"OCPU","cpuAllocated":2,"cpuUsed":null,"definedTags":{},"displayName":"opsi-warehouse","dynamicGroupId":null,"freeformTags":null,"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","operationsInsightsTenancyId":null,"storageAllocatedInGBs":256,"storageUsedInGBs":null,"systemTags":null,"timeCreated":null,"timeLastWalletRotated":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operationsInsightsWarehouses/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","computeModel":"OCPU","cpuAllocated":2,"cpuUsed":null,"definedTags":{},"displayName":"opsi-warehouse","dynamicGroupId":null,"freeformTags":null,"id":"<ocid:3>","lifecycleDetails":null,"lifecycleState":"ACTIVE","operationsInsightsTenancyId":null,"storageAllocatedInGBs":256,"storageUsedInGBs":null,"systemTags":null,"timeCreated":null,"timeLastWalletRotated":null,"timeUpdated":null}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operationsInsightsWarehouses/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:4>
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":"<ocid:1>","id":"<ocid:4>","operationType":"DELETE_OPSI_WAREHOUSE","percentComplete":50,"resources":[{"actionType":"DELETED","entityType":"opsiWarehouse","entityUri":null,"identifier":"<ocid:3>","metadata":null}],"status":"SUCCEEDED","timeAccepted":null,"timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operationsInsightsWarehouses/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: operationsinsights.us-ashburn-1.oci.oraclecloud.com
+        path: /20200630/operationsInsightsWarehouses
+        query: compartmentId=%3Cocid%3A1%3E&displayName=opsi-warehouse&id=%3Cocid%3A3%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json

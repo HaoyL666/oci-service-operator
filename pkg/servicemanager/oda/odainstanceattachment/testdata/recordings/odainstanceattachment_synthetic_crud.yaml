@@ -1,0 +1,131 @@
+version: 1
+metadata:
+    service: oda
+    resource: OdaInstanceAttachment
+    operations:
+        - create
+        - read
+        - delete
+    sdkVersion: v65.110.0
+    provenance: synthetic
+interactions:
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/attachments
+        query: includeOwnerMetadata=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json
+    - request:
+        method: POST
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/attachments
+        headers:
+            content-type:
+                - application/json
+            opc-retry-token:
+                - <redacted>
+        body: '{"attachToId":"<ocid:2>","attachmentMetadata":"metadata-v1","attachmentType":"FUSION","owner":{"ownerServiceName":"owner-service-v1","ownerServiceTenancy":"<ocid:3>"},"restrictedOperations":["DELETE"]}'
+        encoding: json
+      response:
+        statusCode: 202
+        headers:
+            content-type:
+                - application/json
+            opc-work-request-id:
+                - <ocid:4>
+        body: '{"attachToId":"<ocid:2>","attachmentMetadata":"metadata-v1","attachmentType":"FUSION","definedTags":null,"freeformTags":null,"id":"<ocid:5>","instanceId":"<ocid:1>","lifecycleState":"ACTIVE","owner":{"ownerServiceName":"owner-service-v1","ownerServiceTenancy":"<ocid:3>"},"restrictedOperations":["DELETE"],"timeCreated":null,"timeLastUpdate":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/workRequests/<ocid:4>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":null,"id":"<ocid:4>","odaInstanceId":"<ocid:1>","percentComplete":50,"requestAction":"CREATE_ODA_INSTANCE_ATTACHMENT","resourceId":"<ocid:5>","resources":[{"resourceAction":"CREATE_ODA_INSTANCE_ATTACHMENT","resourceId":"<ocid:5>","resourceType":null,"resourceUri":null,"status":"","statusMessage":null}],"status":"SUCCEEDED","statusMessage":null,"timeAccepted":null,"timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/attachments/<ocid:5>
+        query: includeOwnerMetadata=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"attachToId":"<ocid:2>","attachmentMetadata":"metadata-v1","attachmentType":"FUSION","definedTags":null,"freeformTags":null,"id":"<ocid:5>","instanceId":"<ocid:1>","lifecycleState":"ACTIVE","owner":{"ownerServiceName":"owner-service-v1","ownerServiceTenancy":"<ocid:3>"},"restrictedOperations":["DELETE"],"timeCreated":null,"timeLastUpdate":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/attachments/<ocid:5>
+        query: includeOwnerMetadata=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"attachToId":"<ocid:2>","attachmentMetadata":"metadata-v1","attachmentType":"FUSION","definedTags":null,"freeformTags":null,"id":"<ocid:5>","instanceId":"<ocid:1>","lifecycleState":"ACTIVE","owner":{"ownerServiceName":"owner-service-v1","ownerServiceTenancy":"<ocid:3>"},"restrictedOperations":["DELETE"],"timeCreated":null,"timeLastUpdate":null}'
+        encoding: json
+    - request:
+        method: DELETE
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/attachments/<ocid:5>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 202
+        headers:
+            opc-work-request-id:
+                - <ocid:6>
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/workRequests/<ocid:6>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"compartmentId":null,"id":"<ocid:6>","odaInstanceId":"<ocid:1>","percentComplete":50,"requestAction":"DELETE_ODA_INSTANCE_ATTACHMENT","resourceId":"<ocid:5>","resources":[{"resourceAction":"DELETE_ODA_INSTANCE_ATTACHMENT","resourceId":"<ocid:5>","resourceType":null,"resourceUri":null,"status":"","statusMessage":null}],"status":"SUCCEEDED","statusMessage":null,"timeAccepted":null,"timeFinished":null,"timeStarted":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: digitalassistant-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20190506/odaInstances/<ocid:1>/attachments/<ocid:5>
+        query: includeOwnerMetadata=true
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"resource deleted"}'
+        encoding: json
