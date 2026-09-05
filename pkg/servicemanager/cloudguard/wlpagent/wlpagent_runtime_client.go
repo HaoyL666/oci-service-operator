@@ -11,7 +11,6 @@ import (
 	cloudguardv1beta1 "github.com/oracle/oci-service-operator/api/cloudguard/v1beta1"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
-	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
 	"github.com/oracle/oci-service-operator/pkg/util"
 	v1 "k8s.io/api/core/v1"
@@ -21,37 +20,8 @@ import (
 
 func init() {
 	registerWlpAgentRuntimeHooksMutator(func(_ *WlpAgentServiceManager, hooks *WlpAgentRuntimeHooks) {
-		hooks.Semantics = newWlpAgentRuntimeSemantics()
 		hooks.WrapGeneratedClient = append(hooks.WrapGeneratedClient, wrapWlpAgentStateFreeClient)
 	})
-}
-
-func newWlpAgentRuntimeSemantics() *generatedruntime.Semantics {
-	return &generatedruntime.Semantics{
-		FormalService:     "cloudguard",
-		FormalSlug:        "wlpagent",
-		StatusProjection:  "required",
-		SecretSideEffects: "none",
-		FinalizerPolicy:   "retain-until-confirmed-delete",
-		Async: &generatedruntime.AsyncSemantics{
-			Strategy:             "none",
-			Runtime:              "generatedruntime",
-			FormalClassification: "none",
-		},
-		Delete: generatedruntime.DeleteSemantics{Policy: "required", TerminalStates: []string{"DELETED"}},
-		List: &generatedruntime.ListSemantics{
-			ResponseItemsField: "Items",
-			MatchFields:        []string{"compartmentId", "agentVersion"},
-		},
-		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{"certificateSignedRequest", "freeformTags", "definedTags"},
-			ForceNew:      []string{"compartmentId", "agentVersion", "osInfo"},
-			ConflictsWith: map[string][]string{},
-		},
-		CreateFollowUp: generatedruntime.FollowUpSemantics{Strategy: "read-after-write"},
-		UpdateFollowUp: generatedruntime.FollowUpSemantics{Strategy: "read-after-write"},
-		DeleteFollowUp: generatedruntime.FollowUpSemantics{Strategy: "confirm-delete"},
-	}
 }
 
 type wlpAgentStateFreeClient struct {

@@ -27,10 +27,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - b9e15e8077bd5603e94a30ab4745c3ae3b35549de8e4f463bde99c07a103fece--gzip
+                - fcc6f848348de6b179d457f9737bac785a4eb702276353cb417e791d2f34383b--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:44:26.246Z"}},"description":"OSOK recorded Cloud Guard saved query","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-02T21:44:26.388Z","timeUpdated":"2026-09-02T21:44:26.388Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T04:53:00.826Z"}},"description":"OSOK recorded Cloud Guard saved query","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-05T04:53:00.920Z","timeUpdated":"2026-09-05T04:53:00.920Z"}'
         encoding: json
     - request:
         method: GET
@@ -45,10 +45,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - b9e15e8077bd5603e94a30ab4745c3ae3b35549de8e4f463bde99c07a103fece--gzip
+                - fcc6f848348de6b179d457f9737bac785a4eb702276353cb417e791d2f34383b--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:44:26.246Z"}},"description":"OSOK recorded Cloud Guard saved query","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-02T21:44:26.388Z","timeUpdated":"2026-09-02T21:44:26.388Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T04:53:00.826Z"}},"description":"OSOK recorded Cloud Guard saved query","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-05T04:53:00.920Z","timeUpdated":"2026-09-05T04:53:00.920Z"}'
         encoding: json
     - request:
         method: GET
@@ -63,10 +63,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - b9e15e8077bd5603e94a30ab4745c3ae3b35549de8e4f463bde99c07a103fece--gzip
+                - fcc6f848348de6b179d457f9737bac785a4eb702276353cb417e791d2f34383b--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:44:26.246Z"}},"description":"OSOK recorded Cloud Guard saved query","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-02T21:44:26.388Z","timeUpdated":"2026-09-02T21:44:26.388Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T04:53:00.826Z"}},"description":"OSOK recorded Cloud Guard saved query","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-05T04:53:00.920Z","timeUpdated":"2026-09-05T04:53:00.920Z"}'
         encoding: json
     - request:
         method: PUT
@@ -85,10 +85,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 780740b6190f014e8578bb55f1b3ccb4182d43c56d8994fd8209765ec3dded30
+                - 7c3fa287ce74ad5bcef9edb24aacc55e925f3c7a5ff6fd1d5669461a1cfc9331
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:44:26.246Z"}},"description":"OSOK recorded Cloud Guard saved query updated","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-02T21:44:26.388Z","timeUpdated":"2026-09-02T21:44:26.388Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T04:53:00.826Z"}},"description":"OSOK recorded Cloud Guard saved query updated","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-05T04:53:00.920Z","timeUpdated":"2026-09-05T04:53:00.920Z"}'
         encoding: json
     - request:
         method: GET
@@ -103,10 +103,28 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - e20a613f7b04332e4fd7d807ee74f7ec4f98669f8f43c12cbf792e64f7b5c18f--gzip
+                - 35009133990c13bda0f2f3193b15b4b926361649ec05fd91add1542c061775ad--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T21:44:26.246Z"}},"description":"OSOK recorded Cloud Guard saved query updated","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-02T21:44:26.388Z","timeUpdated":"2026-09-02T21:44:27.499Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T04:53:00.826Z"}},"description":"OSOK recorded Cloud Guard saved query updated","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-05T04:53:00.920Z","timeUpdated":"2026-09-05T04:53:02.034Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: cloudguard-cp-api.us-ashburn-1.oci.oraclecloud.com
+        path: /20200131/savedQueries/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 35009133990c13bda0f2f3193b15b4b926361649ec05fd91add1542c061775ad--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T04:53:00.826Z"}},"description":"OSOK recorded Cloud Guard saved query updated","displayName":"osok-replay-cloud-guard-query","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","query":"select name, pid from processes","systemTags":{},"timeCreated":"2026-09-05T04:53:00.920Z","timeUpdated":"2026-09-05T04:53:02.034Z"}'
         encoding: json
     - request:
         method: DELETE

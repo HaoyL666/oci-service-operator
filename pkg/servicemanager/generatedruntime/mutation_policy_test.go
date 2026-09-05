@@ -450,6 +450,49 @@ func TestForceNewValuesEqualIgnoresMeaninglessNestedMapsInSlices(t *testing.T) {
 	}
 }
 
+func TestForceNewValuesEqualIgnoresObservedOnlyFieldsInSlices(t *testing.T) {
+	t.Parallel()
+	spec := []any{
+		map[string]any{
+			"policyType":  "scheduled",
+			"displayName": "nightly-stop",
+			"executionSchedule": map[string]any{
+				"type":       "cron",
+				"expression": "0 0 0 ? * * *",
+				"timezone":   "UTC",
+			},
+		},
+	}
+	current := []any{
+		map[string]any{
+			"id":          "ocid1.autoscalingpolicy.oc1..generated",
+			"timeCreated": "2026-09-04T12:00:00Z",
+			"policyType":  "scheduled",
+			"displayName": "nightly-stop",
+			"executionSchedule": map[string]any{
+				"type":       "cron",
+				"expression": "0 0 0 ? * * *",
+				"timezone":   "UTC",
+			},
+		},
+	}
+	if !forceNewValuesEqual(spec, current) {
+		t.Fatal("forceNewValuesEqual() = false, want observed-only list-item fields ignored")
+	}
+}
+
+func TestForceNewValuesEqualRejectsDesiredDriftInSlices(t *testing.T) {
+	t.Parallel()
+	spec := []any{map[string]any{"displayName": "nightly-stop"}}
+	current := []any{map[string]any{
+		"id":          "ocid1.autoscalingpolicy.oc1..generated",
+		"displayName": "morning-start",
+	}}
+	if forceNewValuesEqual(spec, current) {
+		t.Fatal("forceNewValuesEqual() = true, want desired list-item drift rejected")
+	}
+}
+
 func TestUnsupportedUpdateDriftPathsIgnoresMeaninglessNestedMaps(t *testing.T) {
 	t.Parallel()
 	spec := map[string]any{"displayName": "example", "preemptibleInstanceConfig": map[string]any{"preemptionAction": map[string]any{"jsonData": "", "type": ""}}}

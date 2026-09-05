@@ -155,13 +155,41 @@ func forceNewValuesEqual(specValue any, currentValue any) bool {
 	if !specMeaningful || !currentMeaningful {
 		return !specMeaningful && !currentMeaningful
 	}
+	return desiredComparableValueMatches(specValue, currentValue)
+}
 
-	specMap, specIsMap := specValue.(map[string]any)
-	currentMap, currentIsMap := currentValue.(map[string]any)
-	if specIsMap && currentIsMap {
-		return len(comparableDiffPaths(specMap, currentMap, "")) == 0
+// desiredComparableValueMatches compares only fields represented by the
+// desired CR. OCI responses may add observed-only fields such as generated
+// identifiers and timestamps to nested objects. Those fields must not turn a
+// converged replacement-only collection into false drift.
+func desiredComparableValueMatches(specValue any, currentValue any) bool {
+	switch desired := specValue.(type) {
+	case map[string]any:
+		observed, ok := currentValue.(map[string]any)
+		if !ok {
+			return false
+		}
+		for key, desiredChild := range desired {
+			observedChild, found := lookupMapKey(observed, key)
+			if !found || !desiredComparableValueMatches(desiredChild, observedChild) {
+				return false
+			}
+		}
+		return true
+	case []any:
+		observed, ok := currentValue.([]any)
+		if !ok || len(desired) != len(observed) {
+			return false
+		}
+		for index := range desired {
+			if !desiredComparableValueMatches(desired[index], observed[index]) {
+				return false
+			}
+		}
+		return true
+	default:
+		return valuesEqual(specValue, currentValue)
 	}
-	return valuesEqual(specValue, currentValue)
 }
 
 func pruneComparableValue(value any) (any, bool) {
@@ -533,8 +561,54 @@ func (c ServiceClient[T]) filteredUpdateBody(resource T, options requestBuildOpt
 	if len(body) == 0 {
 		return nil, false, nil
 	}
+	includeMandatoryUpdateBodyFields(body, specValues, c.config.Update)
 	preserveNetworkFirewallUpdateDiscriminator(body, specValues, c.config.Update)
 	return body, true, nil
+}
+
+// includeMandatoryUpdateBodyFields carries required SDK update fields from the
+// desired spec when some mutable field actually drifted. OCI update models can
+// require an unchanged identity or configuration value alongside the changed
+// fields; adding it only after drift detection avoids no-op update loops.
+func includeMandatoryUpdateBodyFields(body, specValues map[string]any, operation *Operation) {
+	if len(body) == 0 || len(specValues) == 0 || operation == nil {
+		return
+	}
+	request, ok := operationRequestStruct(operation.NewRequest)
+	if !ok {
+		return
+	}
+	for _, requestField := range operation.Fields {
+		if requestField.Contribution != "body" {
+			continue
+		}
+		bodyField, found := request.Type().FieldByName(requestField.FieldName)
+		if !found {
+			continue
+		}
+		bodyType := indirectType(bodyField.Type)
+		if bodyType == nil || bodyType.Kind() != reflect.Struct {
+			continue
+		}
+		for index := 0; index < bodyType.NumField(); index++ {
+			field := bodyType.Field(index)
+			if !field.IsExported() || field.Tag.Get("mandatory") != "true" {
+				continue
+			}
+			path := fieldJSONName(field)
+			if path == "" {
+				path = lowerCamel(field.Name)
+			}
+			if _, exists := lookupValueByPath(body, path); exists {
+				continue
+			}
+			value, exists := lookupValueByPath(specValues, path)
+			if !exists {
+				continue
+			}
+			setValueByPath(body, canonicalValuePath(specValues, path), value)
+		}
+	}
 }
 
 func preserveNetworkFirewallUpdateDiscriminator(body, specValues map[string]any, operation *Operation) {

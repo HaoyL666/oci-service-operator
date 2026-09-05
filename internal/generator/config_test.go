@@ -1669,11 +1669,13 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	t.Parallel()
 
 	cfg := loadCheckedInConfig(t)
-	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "bds", "containerengine", "containerinstances", "core", "dataflow", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "disasterrecovery", "distributeddatabase", "functions", "generativeaiagent", "identity", "jms", "keymanagement", "mediaservices", "mysql", "nosql", "oce", "ocvp", "psql", "redis", "streaming", "tenantmanagercontrolplane")
+	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "autoscaling", "bds", "cloudguard", "containerengine", "containerinstances", "core", "dataflow", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "disasterrecovery", "distributeddatabase", "functions", "generativeaiagent", "healthchecks", "identity", "jms", "keymanagement", "mediaservices", "mysql", "nosql", "oce", "ocvp", "psql", "redis", "streaming", "tenantmanagercontrolplane")
 	assertAIDocumentRuntimeRolloutMetadata(t, services["aidocument"])
 	assertAILanguageRuntimeRolloutMetadata(t, services["ailanguage"])
 	assertAISpeechRuntimeRolloutMetadata(t, services["aispeech"])
 	assertAIVisionRuntimeRolloutMetadata(t, services["aivision"])
+	assertAsyncContract(t, services["autoscaling"], "AutoScalingConfiguration", AsyncStrategyNone, AsyncRuntimeGeneratedRuntime)
+	assertAsyncContract(t, services["cloudguard"], "WlpAgent", AsyncStrategyNone, AsyncRuntimeGeneratedRuntime)
 	assertBDSRuntimeRolloutMetadata(t, services["bds"])
 	assertDatabaseMigrationRuntimeRolloutMetadata(t, services["databasemigration"])
 	assertDatabaseToolsRuntimeRolloutMetadata(t, services["databasetools"])
@@ -1682,6 +1684,7 @@ func TestCheckedInConfigIncludesRuntimeRolloutMetadata(t *testing.T) {
 	assertAsyncContract(t, services["distributeddatabase"], "DistributedDatabase", AsyncStrategyLifecycle, AsyncRuntimeGeneratedRuntime)
 	assertAsyncContract(t, services["generativeaiagent"], "AgentEndpoint", AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)
 	assertAsyncContract(t, services["generativeaiagent"], "DataSource", AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)
+	assertAsyncContract(t, services["healthchecks"], "HttpMonitor", AsyncStrategyNone, AsyncRuntimeGeneratedRuntime)
 	assertAsyncContract(t, services["jms"], "JmsPlugin", AsyncStrategyLifecycle, AsyncRuntimeGeneratedRuntime)
 	assertAsyncContract(t, services["mediaservices"], "MediaWorkflowConfiguration", AsyncStrategyLifecycle, AsyncRuntimeGeneratedRuntime)
 	assertAsyncContract(t, services["tenantmanagercontrolplane"], "DomainGovernance", AsyncStrategyLifecycle, AsyncRuntimeGeneratedRuntime)
@@ -1775,14 +1778,17 @@ func TestCheckedInConfigPromotesFormalSpecReferences(t *testing.T) {
 	t.Parallel()
 
 	cfg := loadCheckedInConfig(t)
-	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "analytics", "apiaccesscontrol", "bds", "containerengine", "containerinstances", "core", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "dataflow", "disasterrecovery", "distributeddatabase", "generativeaiagent", "identity", "jms", "mediaservices", "mysql", "objectstorage", "oce", "ocvp", "opa", "opensearch", "psql", "redis", "streaming", "tenantmanagercontrolplane")
+	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "analytics", "apiaccesscontrol", "autoscaling", "bds", "cloudguard", "containerengine", "containerinstances", "core", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "dataflow", "disasterrecovery", "distributeddatabase", "generativeaiagent", "healthchecks", "identity", "jms", "mediaservices", "mysql", "objectstorage", "oce", "ocvp", "opa", "opensearch", "psql", "redis", "streaming", "tenantmanagercontrolplane")
 	assertFormalSpecFor(t, services["aidocument"], "Project", "project")
 	assertFormalSpecFor(t, services["ailanguage"], "Project", "project")
 	assertFormalSpecFor(t, services["aispeech"], "TranscriptionJob", "transcriptionjob")
 	assertFormalSpecFor(t, services["aivision"], "Project", "project")
 	assertFormalSpecFor(t, services["analytics"], "AnalyticsInstance", "analyticsinstance")
 	assertFormalSpecFor(t, services["apiaccesscontrol"], "PrivilegedApiControl", "privilegedapicontrol")
+	assertFormalSpecFor(t, services["autoscaling"], "AutoScalingConfiguration", "autoscalingconfiguration")
 	assertFormalSpecFor(t, services["bds"], "BdsInstance", "bdsinstance")
+	assertFormalSpecFor(t, services["cloudguard"], "SavedQuery", "savedquery")
+	assertFormalSpecFor(t, services["cloudguard"], "WlpAgent", "wlpagent")
 	assertFormalSpecFor(t, services["containerengine"], "Cluster", "cluster")
 	assertFormalSpecFor(t, services["containerengine"], "NodePool", "nodepool")
 	assertFormalSpecFor(t, services["containerinstances"], "ContainerInstance", "")
@@ -1795,6 +1801,7 @@ func TestCheckedInConfigPromotesFormalSpecReferences(t *testing.T) {
 	assertFormalSpecFor(t, services["distributeddatabase"], "DistributedDatabase", "distributeddatabase")
 	assertFormalSpecFor(t, services["generativeaiagent"], "AgentEndpoint", "agentendpoint")
 	assertFormalSpecFor(t, services["generativeaiagent"], "DataSource", "datasource")
+	assertFormalSpecFor(t, services["healthchecks"], "HttpMonitor", "httpmonitor")
 	assertFormalSpecFor(t, services["identity"], "Compartment", "compartment")
 	assertFormalSpecFor(t, services["jms"], "JmsPlugin", "jmsplugin")
 	assertFormalSpecFor(t, services["mediaservices"], "MediaWorkflowConfiguration", "mediaworkflowconfiguration")
@@ -2522,6 +2529,9 @@ func TestCheckedInConfigSelectedKindsHaveExplicitAsyncContracts(t *testing.T) {
 		strategy string
 		runtime  string
 	}{
+		"autoscaling/AutoScalingConfiguration":       {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
+		"cloudguard/WlpAgent":                        {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
+		"healthchecks/HttpMonitor":                   {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
 		"jms/JmsPlugin":                              {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
 		"loadbalancer/Listener":                      {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
 		"tenantmanagercontrolplane/DomainGovernance": {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},

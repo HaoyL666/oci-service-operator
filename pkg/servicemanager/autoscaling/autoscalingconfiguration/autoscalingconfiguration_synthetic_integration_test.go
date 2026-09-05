@@ -11,27 +11,41 @@ import (
 	"net/http"
 	"path/filepath"
 	"testing"
+	"time"
 
 	autoscalingsdk "github.com/oracle/oci-go-sdk/v65/autoscaling"
+	"github.com/oracle/oci-go-sdk/v65/common"
 	autoscalingv1beta1 "github.com/oracle/oci-service-operator/api/autoscaling/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/e2e/ocireplay"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	shared "github.com/oracle/oci-service-operator/pkg/shared"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
 func TestSyntheticAutoScalingConfigurationReconcilesTracked(t *testing.T) {
-	resource := &autoscalingv1beta1.AutoScalingConfiguration{}
+	resource := newMockAutoScalingConfigurationResource()
 	resourceID := "ocid1.autoscalingconfiguration.oc1..synthetic"
-	if err := ocireplay.SeedSyntheticTrackedResource(resource, resourceID, nil); err != nil {
-		t.Fatal(err)
-	}
-	observedBody, err := ocireplay.SyntheticObservedBody(resource.Spec, resourceID, "ACTIVE", map[string]any{"key": resourceID, "resourceId": resourceID, "status": "ACTIVE", "timeCreated": "2026-01-02T03:04:05Z", "timeUpdated": "2026-01-03T03:04:05Z", "timeScheduleStart": "2026-01-02T03:04:05Z", "timeReleased": "2026-01-02T03:04:05Z"})
+	resource.Status.Id = resourceID
+	resource.Status.OsokStatus.Ocid = shared.OCID(resourceID)
+	createdAt := common.SDKTime{Time: time.Date(2026, time.January, 2, 3, 4, 5, 0, time.UTC)}
+	details := mockCreateAutoScalingConfigurationDetails(resource)
+	observedBody, err := ocireplay.SyntheticJSONBody(autoscalingsdk.AutoScalingConfiguration{
+		Id:                common.String(resourceID),
+		CompartmentId:     details.CompartmentId,
+		Resource:          details.Resource,
+		Policies:          mockObservedAutoScalingPolicies(details.Policies, createdAt),
+		TimeCreated:       &createdAt,
+		DisplayName:       details.DisplayName,
+		FreeformTags:      details.FreeformTags,
+		CoolDownInSeconds: details.CoolDownInSeconds,
+		IsEnabled:         details.IsEnabled,
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	metadata := ocireplay.Metadata{Service: "autoscaling", Resource: "AutoScalingConfiguration", Operations: []ocireplay.Operation{ocireplay.OperationRead, ocireplay.OperationUpdate}, SDKVersion: "v65.110.0", Provenance: ocireplay.ProvenanceSynthetic}
-	session, err := ocireplay.OpenSDKSynthetic(ocireplay.SDKSyntheticOptions{Path: filepath.Join("testdata", "recordings", "autoscalingconfiguration_synthetic_reconcile.yaml"), Host: "https://autoscaling.us-ashburn-1.oci.oraclecloud.com", BasePath: "20181001", Metadata: metadata, Responses: []ocireplay.SyntheticResponse{{StatusCode: http.StatusOK, Body: observedBody}, {StatusCode: http.StatusOK, Body: observedBody}, {StatusCode: http.StatusOK, Body: observedBody}}})
+	metadata := ocireplay.Metadata{Service: "autoscaling", Resource: "AutoScalingConfiguration", Operations: []ocireplay.Operation{ocireplay.OperationRead}, SDKVersion: "v65.110.0", Provenance: ocireplay.ProvenanceSynthetic}
+	session, err := ocireplay.OpenSDKSynthetic(ocireplay.SDKSyntheticOptions{Path: filepath.Join("testdata", "recordings", "autoscalingconfiguration_synthetic_reconcile.yaml"), Host: "https://autoscaling.us-ashburn-1.oci.oraclecloud.com", BasePath: "20181001", Metadata: metadata, Bindings: map[string]string{"compartment": resource.Spec.CompartmentId, "instance-pool": mockInstancePoolID}, Responses: []ocireplay.SyntheticResponse{{StatusCode: http.StatusOK, Body: observedBody}}})
 	if err != nil {
 		t.Fatal(err)
 	}

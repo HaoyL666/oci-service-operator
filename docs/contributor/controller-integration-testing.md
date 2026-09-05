@@ -22,6 +22,10 @@ Neither test replaces the other. Replay detects request, response, mapping, and
 reconciliation regressions. Live CRUD detects OCI behavior that an older
 recording cannot represent.
 
+The broader service-manager contract suite uses a dynamic in-memory OCI mock
+while retaining selected cassettes as fidelity evidence. See
+[Service-Manager Mock Integration](service-manager-mock-integration.md).
+
 ## OCI Cassettes
 
 The `internal/e2e/ocireplay` package implements the OCI SDK HTTP dispatcher

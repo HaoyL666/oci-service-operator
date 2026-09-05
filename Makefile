@@ -408,16 +408,28 @@ test: manifests generate fmt vet ## Run tests.
 	go tool cover -func cover.out | grep total | awk '{print substr($$3, 1, length($$3)-1)}' > unittests.percent
 
 REPLAY_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f \( -name '*_recorded_integration_test.go' -o -name '*_synthetic_integration_test.go' \) -exec dirname {} \;))
+MOCK_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f -name '*_mock_integration_test.go' -exec dirname {} \;))
 
 replay-coverage: ## Report OCI HTTP replay coverage and classification without enforcing completeness.
 	go run ./cmd/osok-replay-coverage
+
+mock-integration-inventory: ## Classify generated CRUD resources for OCI mock integration migration.
+	go run ./cmd/osok-mock-integration-inventory
+
+mock-integration-coverage: ## Require every explicitly immediate CRUD resource to have a dynamic mock scenario.
+	go run ./cmd/osok-mock-integration-inventory --check-immediate
 
 replaytest: replay-coverage ## Run credential-free OCI SDK HTTP replay tests.
 	go test ./internal/e2e/ocireplay
 	@[ -n "$(REPLAY_INTEGRATION_PACKAGES)" ] || { echo "No replay integration tests found"; exit 1; }
 	go test $(addprefix ./,$(REPLAY_INTEGRATION_PACKAGES)) -run '^Test(Recorded|Synthetic)' -count=1
 
-integrationtest: replaytest ## Run OCI cassette and resource lifecycle integration tests without live cloud access.
+mockintegrationtest: mock-integration-coverage ## Run dynamic service-manager integration tests against the in-memory OCI HTTP mock.
+	go test ./internal/integration/ocimock
+	@[ -n "$(MOCK_INTEGRATION_PACKAGES)" ] || { echo "No OCI mock integration tests found"; exit 1; }
+	go test $(addprefix ./,$(MOCK_INTEGRATION_PACKAGES)) -run '^TestMockIntegration' -count=1
+
+integrationtest: replaytest mockintegrationtest ## Run credential-free OCI service-manager and lifecycle integration tests.
 	go test ./internal/e2e/lifecycle
 
 functionaltest: integrationtest ## Run deterministic controller integration tests.

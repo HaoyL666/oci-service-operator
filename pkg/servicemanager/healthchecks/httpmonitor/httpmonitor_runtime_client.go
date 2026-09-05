@@ -43,7 +43,6 @@ func applyHttpMonitorRuntimeHooks(hooks *HttpMonitorRuntimeHooks) {
 		return
 	}
 
-	hooks.Semantics = newHttpMonitorRuntimeSemantics()
 	hooks.List.Fields = httpMonitorListFields()
 	hooks.List.Call = paginatedHttpMonitorListCall(hooks.List.Call)
 	hooks.DeleteHooks.HandleError = handleHttpMonitorDeleteError
@@ -54,56 +53,6 @@ func applyHttpMonitorRuntimeHooks(hooks *HttpMonitorRuntimeHooks) {
 		hooks.WrapGeneratedClient = append(hooks.WrapGeneratedClient, func(delegate HttpMonitorServiceClient) HttpMonitorServiceClient {
 			return httpMonitorDeleteGuardClient{delegate: delegate, get: get, list: list}
 		})
-	}
-}
-
-func newHttpMonitorRuntimeSemantics() *generatedruntime.Semantics {
-	return &generatedruntime.Semantics{
-		FormalService:       "healthchecks",
-		FormalSlug:          "httpmonitor",
-		StatusProjection:    "required",
-		SecretSideEffects:   "none",
-		FinalizerPolicy:     "retain-until-confirmed-delete",
-		Lifecycle:           generatedruntime.LifecycleSemantics{},
-		Delete:              generatedruntime.DeleteSemantics{Policy: "best-effort"},
-		List:                &generatedruntime.ListSemantics{ResponseItemsField: "Items", MatchFields: []string{"compartmentId", "displayName", "protocol", "id"}},
-		Mutation:            httpMonitorMutationSemantics(),
-		Hooks:               httpMonitorHookSet(),
-		CreateFollowUp:      generatedruntime.FollowUpSemantics{Strategy: "read-after-write", Hooks: []generatedruntime.Hook{{Helper: "tfresource.CreateResource"}}},
-		UpdateFollowUp:      generatedruntime.FollowUpSemantics{Strategy: "read-after-write", Hooks: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource"}}},
-		DeleteFollowUp:      generatedruntime.FollowUpSemantics{Strategy: "confirm-delete", Hooks: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource"}}},
-		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
-		Unsupported:         []generatedruntime.UnsupportedSemantic{},
-	}
-}
-
-func httpMonitorMutationSemantics() generatedruntime.MutationSemantics {
-	return generatedruntime.MutationSemantics{
-		Mutable: []string{
-			"targets",
-			"vantagePointNames",
-			"port",
-			"timeoutInSeconds",
-			"protocol",
-			"method",
-			"path",
-			"headers",
-			"displayName",
-			"intervalInSeconds",
-			"isEnabled",
-			"freeformTags",
-			"definedTags",
-		},
-		ForceNew:      []string{"compartmentId"},
-		ConflictsWith: map[string][]string{},
-	}
-}
-
-func httpMonitorHookSet() generatedruntime.HookSet {
-	return generatedruntime.HookSet{
-		Create: []generatedruntime.Hook{{Helper: "tfresource.CreateResource"}},
-		Update: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource"}},
-		Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource"}},
 	}
 }
 
@@ -333,6 +282,7 @@ func newHttpMonitorServiceClientWithOCIClient(log loggerutil.OSOKLogger, client 
 
 func newHttpMonitorRuntimeHooksWithOCIClient(client httpMonitorOCIClient) HttpMonitorRuntimeHooks {
 	return HttpMonitorRuntimeHooks{
+		Semantics: newHttpMonitorRuntimeSemantics(),
 		Create: runtimeOperationHooks[healthcheckssdk.CreateHttpMonitorRequest, healthcheckssdk.CreateHttpMonitorResponse]{
 			Fields: httpMonitorCreateFields(),
 			Call: func(ctx context.Context, request healthcheckssdk.CreateHttpMonitorRequest) (healthcheckssdk.CreateHttpMonitorResponse, error) {

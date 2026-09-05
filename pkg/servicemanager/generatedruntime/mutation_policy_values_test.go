@@ -9,9 +9,11 @@ import (
 	"strings"
 	"testing"
 
+	cloudguardsdk "github.com/oracle/oci-go-sdk/v65/cloudguard"
 	"github.com/oracle/oci-go-sdk/v65/common"
 	containerenginesdk "github.com/oracle/oci-go-sdk/v65/containerengine"
 	mysqlsdk "github.com/oracle/oci-go-sdk/v65/mysql"
+	cloudguardv1beta1 "github.com/oracle/oci-service-operator/api/cloudguard/v1beta1"
 	containerenginev1beta1 "github.com/oracle/oci-service-operator/api/containerengine/v1beta1"
 	mysqlv1beta1 "github.com/oracle/oci-service-operator/api/mysql/v1beta1"
 	shared "github.com/oracle/oci-service-operator/pkg/shared"
@@ -93,6 +95,79 @@ func TestFilteredUpdateBodyPreservesNestedFalseClusterBool(t *testing.T) {
 		t.Fatal("filteredUpdateBody() omitted imagePolicyConfig.isPolicyEnabled")
 	} else if boolValue, ok := got.(bool); !ok || boolValue {
 		t.Fatalf("filteredUpdateBody() imagePolicyConfig.isPolicyEnabled = %#v, want false", got)
+	}
+}
+
+func TestFilteredUpdateBodyIncludesUnchangedMandatorySDKFieldsAfterDrift(t *testing.T) {
+	t.Parallel()
+	client := ServiceClient[*cloudguardv1beta1.WlpAgent]{config: Config[*cloudguardv1beta1.WlpAgent]{
+		Kind: "WlpAgent",
+		Semantics: &Semantics{Mutation: MutationSemantics{
+			Mutable: []string{"certificateSignedRequest", "freeformTags"},
+		}},
+		Update: &Operation{
+			NewRequest: func() any { return &cloudguardsdk.UpdateWlpAgentRequest{} },
+			Fields: []RequestField{{
+				FieldName:    "UpdateWlpAgentDetails",
+				Contribution: "body",
+			}},
+		},
+	}}
+	resource := &cloudguardv1beta1.WlpAgent{Spec: cloudguardv1beta1.WlpAgentSpec{
+		CertificateSignedRequest: "unchanged-csr",
+		FreeformTags:             map[string]string{"phase": "updated"},
+	}}
+	current := cloudguardsdk.GetWlpAgentResponse{WlpAgent: cloudguardsdk.WlpAgent{
+		CertificateSignedRequest: common.String("unchanged-csr"),
+		FreeformTags:             map[string]string{"phase": "created"},
+	}}
+
+	body, ok, err := client.filteredUpdateBody(resource, requestBuildOptions{CurrentResponse: current})
+	if err != nil {
+		t.Fatalf("filteredUpdateBody() error = %v", err)
+	}
+	if !ok {
+		t.Fatal("filteredUpdateBody() ok = false, want tag drift update")
+	}
+	values := body.(map[string]any)
+	if got, exists := lookupValueByPath(values, "certificateSignedRequest"); !exists || got != "unchanged-csr" {
+		t.Fatalf("mandatory certificateSignedRequest = %#v, exists=%t", got, exists)
+	}
+	if got, exists := lookupValueByPath(values, "freeformTags.phase"); !exists || got != "updated" {
+		t.Fatalf("freeformTags.phase = %#v, exists=%t", got, exists)
+	}
+}
+
+func TestFilteredUpdateBodyDoesNotEmitMandatoryFieldsWithoutDrift(t *testing.T) {
+	t.Parallel()
+	client := ServiceClient[*cloudguardv1beta1.WlpAgent]{config: Config[*cloudguardv1beta1.WlpAgent]{
+		Kind: "WlpAgent",
+		Semantics: &Semantics{Mutation: MutationSemantics{
+			Mutable: []string{"certificateSignedRequest", "freeformTags"},
+		}},
+		Update: &Operation{
+			NewRequest: func() any { return &cloudguardsdk.UpdateWlpAgentRequest{} },
+			Fields: []RequestField{{
+				FieldName:    "UpdateWlpAgentDetails",
+				Contribution: "body",
+			}},
+		},
+	}}
+	resource := &cloudguardv1beta1.WlpAgent{Spec: cloudguardv1beta1.WlpAgentSpec{
+		CertificateSignedRequest: "same-csr",
+		FreeformTags:             map[string]string{"phase": "same"},
+	}}
+	current := cloudguardsdk.GetWlpAgentResponse{WlpAgent: cloudguardsdk.WlpAgent{
+		CertificateSignedRequest: common.String("same-csr"),
+		FreeformTags:             map[string]string{"phase": "same"},
+	}}
+
+	body, ok, err := client.filteredUpdateBody(resource, requestBuildOptions{CurrentResponse: current})
+	if err != nil {
+		t.Fatalf("filteredUpdateBody() error = %v", err)
+	}
+	if ok || body != nil {
+		t.Fatalf("filteredUpdateBody() = (%#v, %t), want no update", body, ok)
 	}
 }
 

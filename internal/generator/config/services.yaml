@@ -998,6 +998,13 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: AutoScalingConfiguration
+          formalSpec: autoscalingconfiguration
+          async:
+            strategy: none
+            runtime: generatedruntime
+            formalClassification: none
 
   - service: bastion
     sdkPackage: github.com/oracle/oci-go-sdk/v65/bastion
@@ -1376,6 +1383,14 @@ services:
       webhooks:
         strategy: none
       resources:
+        - kind: SavedQuery
+          formalSpec: savedquery
+        - kind: WlpAgent
+          formalSpec: wlpagent
+          async:
+            strategy: none
+            runtime: generatedruntime
+            formalClassification: none
         - kind: DetectorRecipeDetectorRule
           specFields:
             - name: DetectorRecipeId
@@ -4547,6 +4562,13 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: HttpMonitor
+          formalSpec: httpmonitor
+          async:
+            strategy: none
+            runtime: generatedruntime
+            formalClassification: none
 
   - service: identity
     sdkPackage: github.com/oracle/oci-go-sdk/v65/identity
