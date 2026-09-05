@@ -141,3 +141,13 @@ details such as Container Registry's `REPO_ID_UNKNOWN`, parent-aware DNS
 attachment deletion, TSIG scoped absence confirmation, the live-observed DNS
 `UPDATING` value, and File Storage client-option normalization. The suite now
 covers 59 service-manager packages.
+
+The following recorded-evidence wave promotes eight additional S2 resources:
+OS Management Hub `LifecycleEnvironment`, `ManagedInstanceGroup`, `Profile`,
+`ScheduledJob`, and `SoftwareSource`, plus Stack Monitoring
+`MetricExtension`, `MonitoredResourceType`, and `ProcessSet`. These scenarios
+exercise polymorphic profile, software-source, and metric-query payloads,
+managed-instance-group membership state, scheduled operations, and the Stack
+Monitoring APIs that require a terminal `DELETED` read instead of treating an
+authorization-shaped 404 as absence. The credential-free dynamic suite now
+covers 67 service-manager packages.
