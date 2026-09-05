@@ -586,10 +586,7 @@ func desiredContainerRepositoryFreeformTagsForUpdate(spec map[string]string, cur
 	if spec != nil {
 		return cloneContainerRepositoryStringMap(spec)
 	}
-	if current != nil {
-		return map[string]string{}
-	}
-	return nil
+	return cloneContainerRepositoryStringMap(current)
 }
 
 func desiredContainerRepositoryDefinedTagsForUpdate(
@@ -599,10 +596,7 @@ func desiredContainerRepositoryDefinedTagsForUpdate(
 	if spec != nil {
 		return *util.ConvertToOciDefinedTags(&spec)
 	}
-	if current != nil {
-		return map[string]map[string]interface{}{}
-	}
-	return nil
+	return cloneContainerRepositoryDefinedTags(current)
 }
 
 func cloneContainerRepositoryStringMap(source map[string]string) map[string]string {

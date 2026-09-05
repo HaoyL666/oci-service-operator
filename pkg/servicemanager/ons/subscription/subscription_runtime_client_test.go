@@ -474,6 +474,72 @@ func TestSubscriptionCreateOrUpdateAppliesMutableUpdate(t *testing.T) {
 	assertSubscriptionMetadataFingerprint(t, resource, "owner=ops")
 }
 
+func TestSubscriptionUpdatePreservesOmittedDefinedTags(t *testing.T) {
+	t.Parallel()
+
+	resource := makeSubscriptionResource()
+	resource.Spec.FreeformTags = map[string]string{"env": "prod"}
+	resource.Spec.DefinedTags = nil
+	current := makeSDKSubscription(testSubscriptionID, onssdk.SubscriptionLifecycleStateActive)
+	current.FreeformTags = map[string]string{"env": "dev"}
+	current.DefinedTags = map[string]map[string]interface{}{
+		"Oracle-Tags": {"CreatedBy": "osok-replay"},
+	}
+
+	body, updateNeeded, err := buildSubscriptionUpdateBody(
+		resource,
+		onssdk.GetSubscriptionResponse{Subscription: current},
+	)
+	if err != nil {
+		t.Fatalf("build update body: %v", err)
+	}
+	if !updateNeeded {
+		t.Fatal("updateNeeded = false, want true")
+	}
+	update, ok := body.(onssdk.UpdateSubscriptionDetails)
+	if !ok {
+		t.Fatalf("update body type = %T", body)
+	}
+	if got, want := update.FreeformTags, map[string]string{"env": "prod"}; !jsonEqual(got, want) {
+		t.Fatalf("update freeformTags = %#v, want %#v", got, want)
+	}
+	if got, want := update.DefinedTags, current.DefinedTags; !jsonEqual(got, want) {
+		t.Fatalf("update definedTags = %#v, want preserved %#v", got, want)
+	}
+}
+
+func TestSubscriptionUpdatePreservesOmittedFreeformTags(t *testing.T) {
+	t.Parallel()
+
+	resource := makeSubscriptionResource()
+	resource.Spec.FreeformTags = nil
+	resource.Spec.DefinedTags = map[string]shared.MapValue{"Operations": {"CostCenter": "99"}}
+	current := makeSDKSubscription(testSubscriptionID, onssdk.SubscriptionLifecycleStateActive)
+	current.FreeformTags = map[string]string{"env": "dev"}
+	current.DefinedTags = map[string]map[string]interface{}{"Operations": {"CostCenter": "42"}}
+
+	body, updateNeeded, err := buildSubscriptionUpdateBody(
+		resource,
+		onssdk.GetSubscriptionResponse{Subscription: current},
+	)
+	if err != nil {
+		t.Fatalf("build update body: %v", err)
+	}
+	if !updateNeeded {
+		t.Fatal("updateNeeded = false, want true")
+	}
+	update, ok := body.(onssdk.UpdateSubscriptionDetails)
+	if !ok {
+		t.Fatalf("update body type = %T", body)
+	}
+	if got, want := update.FreeformTags, current.FreeformTags; !jsonEqual(got, want) {
+		t.Fatalf("update freeformTags = %#v, want preserved %#v", got, want)
+	}
+	if got, want := update.DefinedTags, subscriptionDefinedTags(resource.Spec.DefinedTags); !jsonEqual(got, want) {
+		t.Fatalf("update definedTags = %#v, want %#v", got, want)
+	}
+}
+
 func TestSubscriptionCreateOrUpdateRejectsCreateOnlyDriftBeforeUpdate(t *testing.T) {
 	t.Parallel()
 

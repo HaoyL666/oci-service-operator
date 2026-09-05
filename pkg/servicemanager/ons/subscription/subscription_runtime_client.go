@@ -337,6 +337,14 @@ func buildSubscriptionUpdateBody(resource *onsv1beta1.Subscription, currentRespo
 		update.DeliveryPolicy = desiredDeliveryPolicy
 		updateNeeded = true
 	}
+	if updateNeeded {
+		if resource.Spec.FreeformTags == nil && current.freeformTags != nil {
+			update.FreeformTags = cloneStringMap(current.freeformTags)
+		}
+		if resource.Spec.DefinedTags == nil && current.definedTags != nil {
+			update.DefinedTags = cloneInterfaceTags(current.definedTags)
+		}
+	}
 
 	return update, updateNeeded, nil
 }
