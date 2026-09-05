@@ -114,3 +114,8 @@ the provider-documented `CREATING` and `DELETING` transitions without cloud
 latency. The newer S2 scenarios apply the same contract while distinguishing
 formal provider-backed resources from SDK-and-recording-backed resources whose
 Terraform provider has no matching resource implementation.
+
+Compute `Instance` extends the S2 surface through the polymorphic image launch
+path. Its dynamic scenario validates shape and IMDSv2 options, lifecycle
+requeues from `PROVISIONING` to `RUNNING`, a name-and-tags update, and finalizer
+retention through `TERMINATING` to `TERMINATED`.
