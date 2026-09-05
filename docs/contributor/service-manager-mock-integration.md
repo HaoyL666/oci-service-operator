@@ -47,7 +47,7 @@ candidates are divided into:
 
 Ownership and evidence are cross-cutting attributes: 123 of the synchronous
 resources use only their generated baseline, 202 have resource-local production
-override, 115 have recorded evidence, 210 are synthetic-only, and 90 currently
+override, 115 have recorded evidence, 210 are synthetic-only, and 139 currently
 have formal catalog rows.
 
 Start with S1, and classify evidence-backed resources from the unclassified
@@ -151,3 +151,23 @@ managed-instance-group membership state, scheduled operations, and the Stack
 Monitoring APIs that require a terminal `DELETED` read instead of treating an
 authorization-shaped 404 as absence. The credential-free dynamic suite now
 covers 67 service-manager packages.
+
+The final recorded S2 wave covers all 30 remaining resources. Resource Manager
+`Stack` already had a dynamic scenario; 29 new scenarios cover Announcements,
+Batch, Certificates Management, Compute Cloud at Customer, Data Safe, Events,
+Health Checks, IoT, Lockbox, Management Agent and Dashboard, Network Firewall,
+Resource Manager and Scheduler, Vulnerability Scanning, WAA, WAAS, and WAF.
+The shared evidence responder turns each sanitized live trace into a stateful
+mock: production code may reread a lifecycle phase without consuming a finite
+replay sequence, while create and update request bodies must still agree with
+the recorded OCI contract. The real SDK continues to serialize every request
+and decode every response.
+
+Twenty-one rows have mechanically imported facts from the pinned Terraform
+provider. The other nine stay explicitly scaffolded: five provider resources
+use nonstandard helpers that `formal-import` cannot resolve, while Lockbox
+`ApprovalTemplate`, both Management Dashboard resources, and Resource Manager
+`Stack` have no corresponding provider resource. Their executable evidence is
+the recorded SDK lifecycle rather than invented provider semantics. The suite
+now covers 96 service-manager packages, and no recorded S2 resource lacks a
+dynamic scenario or formal catalog row.
