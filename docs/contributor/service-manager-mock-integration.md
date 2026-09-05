@@ -103,7 +103,11 @@ references deliberately cover different evidence boundaries:
 
 The S2 references include `SavedQuery`, Data Safe `SensitiveType`, the File
 Storage `FileSystem`, `FilesystemSnapshotPolicy`, and `Snapshot` resources, and
-Resource Manager `Stack`. `SavedQuery`'s refreshed live cassette verifies
+Resource Manager `Stack`. The core-networking batch adds `Vcn`, `Subnet`,
+`InternetGateway`, `NatGateway`, `ServiceGateway`, `RouteTable`, `SecurityList`,
+and `NetworkSecurityGroup`, retaining each package's handwritten parity layer
+while replacing only OCI HTTP transport. `SavedQuery`'s refreshed live cassette
+verifies
 the formal-backed full update request, the pre-delete state read, accepted
 delete, and final 404 confirmation; its dynamic scenario additionally exercises
 the provider-documented `CREATING` and `DELETING` transitions without cloud
