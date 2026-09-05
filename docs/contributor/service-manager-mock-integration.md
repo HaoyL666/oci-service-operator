@@ -119,3 +119,15 @@ Compute `Instance` extends the S2 surface through the polymorphic image launch
 path. Its dynamic scenario validates shape and IMDSv2 options, lifecycle
 requeues from `PROVISIONING` to `RUNNING`, a name-and-tags update, and finalizer
 retention through `TERMINATING` to `TERMINATED`.
+
+The recorded-and-formal S2 migration is complete. The 25-resource expansion
+adds OKE `Cluster` and `NodePool`, Load Balancer, Streaming `Stream`, NoSQL
+`Table`, Monitoring `Alarm`, Email `Dkim`/`EmailDomain`/`Sender`, AI Document
+and AI Vision projects, Speech `TranscriptionJob`, Cloud Bridge `Environment`,
+Cloud Guard `ManagedList`, DRG, Dashboard and DashboardGroup, Data Flow
+`Application`, Data Science `Project`, Identity `Compartment`, Logging
+`LogSavedSearch`, and the four Usage API resources. The scenarios preserve
+resource-specific behavior such as OKE work-request breadcrumbs, polymorphic
+dashboard and speech payloads, state-free Usage API wrappers, and
+Compartment's intentional best-effort delete contract. The dynamic suite now
+covers 48 service-manager packages without OCI credentials.
