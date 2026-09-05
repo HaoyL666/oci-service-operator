@@ -5,6 +5,7 @@ metadata:
     operations:
         - create
         - read
+        - update
         - delete
     sdkVersion: v65.110.0
     provenance: recorded
@@ -26,10 +27,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - '"dxxog4lbs6t67f3esjtbsnnsqgmt5q-1"'
+                - '"uxcg5r3w5odl6yihkjyrg5cwoibwwa-1"'
             opc-request-id:
                 - <redacted>
-        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T00:08:53.311Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":false,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","systemTags":{},"timeCreated":"2026-09-01T00:09:56.820Z"}'
+        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T00:43:40.583Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":false,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","systemTags":{},"timeCreated":"2026-09-05T00:46:00.411Z"}'
         encoding: json
     - request:
         method: GET
@@ -44,10 +45,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - dxxog4lbs6t67f3esjtbsnnsqgmt5q-1
+                - uxcg5r3w5odl6yihkjyrg5cwoibwwa-1
             opc-request-id:
                 - <redacted>
-        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T00:08:53.311Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":false,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","systemTags":{},"timeCreated":"2026-09-01T00:09:56.820Z"}'
+        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T00:43:40.583Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":false,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","systemTags":{},"timeCreated":"2026-09-05T00:46:00.411Z"}'
         encoding: json
     - request:
         method: GET
@@ -62,10 +63,66 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - dxxog4lbs6t67f3esjtbsnnsqgmt5q-1
+                - uxcg5r3w5odl6yihkjyrg5cwoibwwa-1
             opc-request-id:
                 - <redacted>
-        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T00:08:53.311Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":false,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","systemTags":{},"timeCreated":"2026-09-01T00:09:56.820Z"}'
+        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T00:43:40.583Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":false,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","systemTags":{},"timeCreated":"2026-09-05T00:46:00.411Z"}'
+        encoding: json
+    - request:
+        method: PUT
+        host: artifacts.us-ashburn-1.oci.oraclecloud.com
+        path: /20160918/container/repositories/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+        body: '{"freeformTags":{"osok-replay":"update"},"isPublic":true,"readme":{"content":"AI Factory OCI replay lifecycle","format":"TEXT_MARKDOWN"}}'
+        encoding: json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - uxcg5r3w5odl6yihkjyrg5cwoibwwa-2
+            opc-request-id:
+                - <redacted>
+        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T00:43:40.583Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":true,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","readme":{"content":"AI Factory OCI replay lifecycle","format":"TEXT_MARKDOWN"},"systemTags":{},"timeCreated":"2026-09-05T00:46:00.411Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: artifacts.us-ashburn-1.oci.oraclecloud.com
+        path: /20160918/container/repositories/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - uxcg5r3w5odl6yihkjyrg5cwoibwwa-2
+            opc-request-id:
+                - <redacted>
+        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T00:43:40.583Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":true,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","readme":{"content":"AI Factory OCI replay lifecycle","format":"TEXT_MARKDOWN"},"systemTags":{},"timeCreated":"2026-09-05T00:46:00.411Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: artifacts.us-ashburn-1.oci.oraclecloud.com
+        path: /20160918/container/repositories/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - uxcg5r3w5odl6yihkjyrg5cwoibwwa-2
+            opc-request-id:
+                - <redacted>
+        body: '{"billableSizeInGBs":0,"compartmentId":"<ocid:1>","createdBy":"<redacted>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T00:43:40.583Z"}},"displayName":"osok-replay-common-repository-v1","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","imageCount":0,"isImmutable":false,"isPublic":true,"isTopLevel":false,"layerCount":0,"layersSizeInBytes":0,"lifecycleState":"AVAILABLE","namespace":"iddevjmhjw0n","readme":{"content":"AI Factory OCI replay lifecycle","format":"TEXT_MARKDOWN"},"systemTags":{},"timeCreated":"2026-09-05T00:46:00.411Z"}'
         encoding: json
     - request:
         method: DELETE

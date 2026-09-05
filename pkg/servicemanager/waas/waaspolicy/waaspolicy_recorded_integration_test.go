@@ -20,11 +20,11 @@ import (
 )
 
 const (
-	recordedWaasPolicyName   = "osok-replay-waas-policy-recorded-v2"
-	recordedWaasPolicyDomain = "osok-replay-waas-recorded-v2.example.com"
+	recordedWaasPolicyName   = "osok-replay-waas-policy-recorded-v3"
+	recordedWaasPolicyDomain = "osok-replay-waas-recorded-v3.example.com"
 )
 
-func TestRecordedWaasPolicyCreateReadDelete(t *testing.T) {
+func TestRecordedWaasPolicyCreateUpdateDelete(t *testing.T) {
 	mode, err := ocireplay.RequestedMode()
 	if err != nil {
 		t.Fatal(err)
@@ -34,7 +34,7 @@ func TestRecordedWaasPolicyCreateReadDelete(t *testing.T) {
 	resource.Spec.CompartmentId = "ocid1.compartment.oc1..replay"
 	resource.Spec.DisplayName = recordedWaasPolicyName
 	resource.Spec.Domain = recordedWaasPolicyDomain
-	resource.Spec.Origins["primary"] = waasv1beta1.WaasPolicyOrigins{Uri: "192.0.2.10"}
+	resource.Spec.Origins["primary"] = waasv1beta1.WaasPolicyOrigins{Uri: "www.example.com"}
 	resource.Spec.FreeformTags = map[string]string{"osok-replay": "create"}
 	if mode == ocireplay.ModeRecord {
 		resource.UID = k8stypes.UID(fmt.Sprintf("waas-policy-recorded-%d", time.Now().UnixNano()))
@@ -51,8 +51,22 @@ func TestRecordedWaasPolicyCreateReadDelete(t *testing.T) {
 			return current.Status.OsokStatus.Ocid != "" || current.Status.Id != ""
 		},
 		ValidateCreated: func(current *waasv1beta1.WaasPolicy) error {
-			if current.Status.Id == "" || current.Status.LifecycleState != string(waassdk.LifecycleStatesActive) {
+			if current.Status.Id == "" ||
+				current.Status.LifecycleState != string(waassdk.LifecycleStatesActive) ||
+				current.Status.DisplayName != recordedWaasPolicyName ||
+				current.Status.FreeformTags["osok-replay"] != "create" {
 				return fmt.Errorf("created WaasPolicy status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *waasv1beta1.WaasPolicy) {
+			current.Spec.FreeformTags = map[string]string{"osok-replay": "update"}
+		},
+		ValidateUpdated: func(current *waasv1beta1.WaasPolicy) error {
+			if current.Status.LifecycleState != string(waassdk.LifecycleStatesActive) ||
+				current.Status.DisplayName != recordedWaasPolicyName ||
+				current.Status.FreeformTags["osok-replay"] != "update" {
+				return fmt.Errorf("updated WaasPolicy status = %+v", current.Status)
 			}
 			return nil
 		},
@@ -65,7 +79,7 @@ func openRecordedWaasPolicySDK(t *testing.T, mode ocireplay.Mode) (waassdk.WaasC
 	t.Helper()
 	metadata := ocireplay.Metadata{
 		Service: "waas", Resource: "WaasPolicy",
-		Operations: []ocireplay.Operation{ocireplay.OperationCreate, ocireplay.OperationRead, ocireplay.OperationDelete},
+		Operations: []ocireplay.Operation{ocireplay.OperationCreate, ocireplay.OperationRead, ocireplay.OperationUpdate, ocireplay.OperationDelete},
 		SDKVersion: "v65.110.0", Provenance: ocireplay.ProvenanceRecorded,
 	}
 	path := filepath.Join("testdata", "recordings", "waaspolicy_crud.yaml")

@@ -345,6 +345,10 @@ The expanded recorded matrix also covers commonly used, bounded OCI resources:
 - WAAS Policy with a reserved documentation origin, complete work-request
   evidence, and extended terminal-deletion recording.
 
+WAAS Policy update and delete work requests can each take more than 30 minutes.
+Run its live recorder with `go test -timeout 120m`; the ordinary replay remains
+credential-free and completes without live polling delays.
+
 Each live recorder owns fixed test naming, update assertions, best-effort
 failure cleanup, and confirmed terminal deletion before publishing its
 cassette. Service-specific limits remain part of the recorder: NoSQL uses a
@@ -380,7 +384,10 @@ Function recording uses the minimal FDK fixture under
 repository, then set `OCI_REPLAY_FUNCTION_IMAGE` and an owned temporary
 `OCI_REPLAY_FUNCTION_APPLICATION_ID`. DKIM requires
 `OCI_REPLAY_EMAIL_DOMAIN_ID`; Suppression requires the root tenancy OCID in
-`OCI_REPLAY_TENANCY_ID`. Service Connector requires an owned temporary
+`OCI_REPLAY_TENANCY_ID`. ONS Subscription requires an owned temporary topic and
+active Function in `OCI_REPLAY_ONS_TOPIC_ID` and
+`OCI_REPLAY_ONS_FUNCTION_ID`; the Function protocol avoids an external
+confirmation step. Service Connector requires an owned temporary
 `OCI_REPLAY_ONS_TOPIC_ID`. Web App Acceleration requires owned temporary
 `OCI_REPLAY_WAA_POLICY_ID` and `OCI_REPLAY_LOAD_BALANCER_ID`. Application
 Management Monitored Instance requires `OCI_REPLAY_MONITORED_INSTANCE_NAME`.

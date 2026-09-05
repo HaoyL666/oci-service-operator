@@ -2,7 +2,6 @@
 package containerrepository
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -15,10 +14,9 @@ import (
 	"github.com/oracle/oci-service-operator/internal/e2e/ocireplay"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
-	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-func TestRecordedContainerRepositoryCreateDelete(t *testing.T) {
+func TestRecordedContainerRepositoryCreateUpdateDelete(t *testing.T) {
 	mode, err := ocireplay.RequestedMode()
 	if err != nil {
 		t.Fatal(err)
@@ -33,28 +31,45 @@ func TestRecordedContainerRepositoryCreateDelete(t *testing.T) {
 		FreeformTags: map[string]string{"osok-replay": "create"},
 	}}
 	client := newContainerRepositoryServiceClientWithOCIClient(loggerutil.OSOKLogger{Logger: logr.Discard()}, sdkClient)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
-	defer cancel()
-	if err := ocireplay.Await(ctx, mode, 5*time.Second, func() (bool, error) {
-		response, err := client.CreateOrUpdate(generatedruntime.WithSkipExistingBeforeCreate(ctx), resource, ctrl.Request{})
-		if err != nil {
-			return false, err
-		}
-		if !response.IsSuccessful {
-			return false, fmt.Errorf("create failed: %+v", response)
-		}
-		return !response.ShouldRequeue, nil
-	}); err != nil {
-		t.Fatal(err)
-	}
-	if err := ocireplay.Await(ctx, mode, 5*time.Second, func() (bool, error) {
-		return client.Delete(ctx, resource)
-	}); err != nil {
-		t.Fatal(err)
-	}
-	if err := closeSession(); err != nil {
-		t.Fatal(err)
-	}
+	ocireplay.RunLifecycle(t, ocireplay.LifecycleScenario[*artifactsv1beta1.ContainerRepository]{
+		Mode:          mode,
+		Resource:      resource,
+		Client:        client,
+		CloseSession:  closeSession,
+		PollInterval:  5 * time.Second,
+		Timeout:       10 * time.Minute,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		HasIdentity: func(current *artifactsv1beta1.ContainerRepository) bool {
+			return current.Status.OsokStatus.Ocid != "" || current.Status.Id != ""
+		},
+		ValidateCreated: func(current *artifactsv1beta1.ContainerRepository) error {
+			if current.Status.Id == "" ||
+				current.Status.LifecycleState != string(artifactssdk.ContainerRepositoryLifecycleStateAvailable) ||
+				current.Status.DisplayName != current.Spec.DisplayName ||
+				current.Status.IsPublic ||
+				current.Status.FreeformTags["osok-replay"] != "create" {
+				return fmt.Errorf("created ContainerRepository status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *artifactsv1beta1.ContainerRepository) {
+			current.Spec.IsPublic = true
+			current.Spec.Readme = artifactsv1beta1.ContainerRepositoryReadme{
+				Content: "AI Factory OCI replay lifecycle",
+				Format:  "text/markdown",
+			}
+			current.Spec.FreeformTags = map[string]string{"osok-replay": "update"}
+		},
+		ValidateUpdated: func(current *artifactsv1beta1.ContainerRepository) error {
+			if !current.Status.IsPublic ||
+				current.Status.Readme.Content != current.Spec.Readme.Content ||
+				current.Status.Readme.Format != string(artifactssdk.ContainerRepositoryReadmeFormatMarkdown) ||
+				current.Status.FreeformTags["osok-replay"] != "update" {
+				return fmt.Errorf("updated ContainerRepository status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
 }
 
 func openRecordedContainerRepositorySDK(
@@ -68,6 +83,7 @@ func openRecordedContainerRepositorySDK(
 		Operations: []ocireplay.Operation{
 			ocireplay.OperationCreate,
 			ocireplay.OperationRead,
+			ocireplay.OperationUpdate,
 			ocireplay.OperationDelete,
 		},
 		SDKVersion: "v65.110.0",
