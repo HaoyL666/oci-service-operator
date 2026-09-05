@@ -30,7 +30,7 @@ interactions:
                 - <redacted>
             opc-work-request-id:
                 - <ocid:2>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:42:31.620Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"CREATING","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","systemTags":{},"timeCreated":"2026-09-03T17:42:31.694Z","timeUpdated":"2026-09-03T17:42:31.694Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:26:01.345Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"CREATING","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","systemTags":{},"timeCreated":"2026-09-05T06:26:01.422Z","timeUpdated":"2026-09-05T06:26:01.422Z"}'
         encoding: json
     - request:
         method: GET
@@ -45,10 +45,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 186d777eb955b6920f201e8d4d1fb16bdd94047aa1adbf9858e455849afd81e5--gzip
+                - cda180d3d44f84eaac102a39d117f056d87779ec751361375df2de3fa686f470--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:42:31.620Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"CREATING","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-03T17:42:31.694Z","timeUpdated":"2026-09-03T17:42:31.694Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:26:01.345Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"CREATING","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-05T06:26:01.422Z","timeUpdated":"2026-09-05T06:26:01.422Z"}'
         encoding: json
     - request:
         method: GET
@@ -63,28 +63,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 186d777eb955b6920f201e8d4d1fb16bdd94047aa1adbf9858e455849afd81e5--gzip
+                - 8eebf2f0da39b590f224382f6b2f326e39b14f7cf48da5152b325b3ecdf129f2--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:42:31.620Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"CREATING","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-03T17:42:31.694Z","timeUpdated":"2026-09-03T17:42:31.694Z"}'
-        encoding: json
-    - request:
-        method: PUT
-        host: datasafe.us-ashburn-1.oci.oraclecloud.com
-        path: /20181201/sensitiveTypes/<ocid:3>
-        headers:
-            content-type:
-                - application/json
-        body: '{"commentPattern":"(?i).*replay comment.*","description":"recorded update","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"update"},"namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1"}'
-        encoding: json
-      response:
-        statusCode: 409
-        headers:
-            content-type:
-                - application/json
-            opc-request-id:
-                - <redacted>
-        body: '{"code":"Conflict","message":"Resource <ocid:3> is currently being modified."}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:26:01.345Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"ACTIVE","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-05T06:26:01.422Z","timeUpdated":"2026-09-05T06:26:04.990Z"}'
         encoding: json
     - request:
         method: GET
@@ -99,10 +81,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 2cfa0fc880d5cec2d107e0abffe8cba58aea7cfb2452638eb8838e86f5844dbe--gzip
+                - 8eebf2f0da39b590f224382f6b2f326e39b14f7cf48da5152b325b3ecdf129f2--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:42:31.620Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"ACTIVE","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-03T17:42:31.694Z","timeUpdated":"2026-09-03T17:42:35.509Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:26:01.345Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"ACTIVE","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-05T06:26:01.422Z","timeUpdated":"2026-09-05T06:26:04.990Z"}'
         encoding: json
     - request:
         method: PUT
@@ -135,10 +117,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 119e9c5a9729b97fe2e772b7b7ffaab34b7877ab638908a37883f994d9ea9c00--gzip
+                - a5ecd1363f182a7eda3f11c6ebafbe7b33fbde1e58c980e44d77b1d61b9ce852--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:42:31.620Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"UPDATING","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-03T17:42:31.694Z","timeUpdated":"2026-09-03T17:42:38.983Z"}'
+        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:26:01.345Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"UPDATING","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-05T06:26:01.422Z","timeUpdated":"2026-09-05T06:26:10.465Z"}'
         encoding: json
     - request:
         method: GET
@@ -153,28 +135,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 119e9c5a9729b97fe2e772b7b7ffaab34b7877ab638908a37883f994d9ea9c00--gzip
+                - 17cbe36ac07fd62f98d5cf376598063f3d6fb1cfb3b86ea071619ce48949dcda--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:42:31.620Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"UPDATING","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-03T17:42:31.694Z","timeUpdated":"2026-09-03T17:42:38.983Z"}'
-        encoding: json
-    - request:
-        method: PUT
-        host: datasafe.us-ashburn-1.oci.oraclecloud.com
-        path: /20181201/sensitiveTypes/<ocid:3>
-        headers:
-            content-type:
-                - application/json
-        body: '{"commentPattern":"(?i).*replay comment.*","description":"recorded update","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"update"},"namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1"}'
-        encoding: json
-      response:
-        statusCode: 409
-        headers:
-            content-type:
-                - application/json
-            opc-request-id:
-                - <redacted>
-        body: '{"code":"Conflict","message":"Resource <ocid:3> is currently being modified."}'
+        body: '{"commentPattern":"(?i).*replay comment.*","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:26:01.345Z"}},"description":"recorded update","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"ACTIVE","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-05T06:26:01.422Z","timeUpdated":"2026-09-05T06:26:14.079Z"}'
         encoding: json
     - request:
         method: GET
@@ -189,46 +153,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 119e9c5a9729b97fe2e772b7b7ffaab34b7877ab638908a37883f994d9ea9c00--gzip
+                - 17cbe36ac07fd62f98d5cf376598063f3d6fb1cfb3b86ea071619ce48949dcda--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:42:31.620Z"}},"description":"recorded create","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"create"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"UPDATING","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-03T17:42:31.694Z","timeUpdated":"2026-09-03T17:42:38.983Z"}'
-        encoding: json
-    - request:
-        method: PUT
-        host: datasafe.us-ashburn-1.oci.oraclecloud.com
-        path: /20181201/sensitiveTypes/<ocid:3>
-        headers:
-            content-type:
-                - application/json
-        body: '{"commentPattern":"(?i).*replay comment.*","description":"recorded update","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"update"},"namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1"}'
-        encoding: json
-      response:
-        statusCode: 409
-        headers:
-            content-type:
-                - application/json
-            opc-request-id:
-                - <redacted>
-        body: '{"code":"Conflict","message":"Resource <ocid:3> is currently being modified."}'
-        encoding: json
-    - request:
-        method: GET
-        host: datasafe.us-ashburn-1.oci.oraclecloud.com
-        path: /20181201/sensitiveTypes/<ocid:3>
-        headers:
-            content-type:
-                - application/json
-      response:
-        statusCode: 200
-        headers:
-            content-type:
-                - application/json
-            etag:
-                - 4a83490d084d526a6b9f65437417cb2dc8c4d44ac194a499336c6b8703e1c7c7--gzip
-            opc-request-id:
-                - <redacted>
-        body: '{"commentPattern":"(?i).*replay comment.*","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:42:31.620Z"}},"description":"recorded update","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"ACTIVE","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-03T17:42:31.694Z","timeUpdated":"2026-09-03T17:42:53.192Z"}'
+        body: '{"commentPattern":"(?i).*replay comment.*","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:26:01.345Z"}},"description":"recorded update","displayName":"osok-replay-sensitive-type-v1","entityType":"SENSITIVE_TYPE","freeformTags":{"osok-replay":"update"},"id":"<ocid:3>","isCommon":false,"lifecycleState":"ACTIVE","namePattern":"(?i).*osok_replay.*","searchType":"OR","shortName":"OSOK_REPLAY_TYPE_V1","source":"USER","timeCreated":"2026-09-05T06:26:01.422Z","timeUpdated":"2026-09-05T06:26:14.079Z"}'
         encoding: json
     - request:
         method: DELETE

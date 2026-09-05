@@ -40,14 +40,14 @@ candidates are divided into:
 
 | Group | Count | Contract |
 | --- | ---: | --- |
-| S1: immediate top-level | 7 | One collection and item route with an explicit reviewed synchronous semantic contract; a steady response can complete create/update immediately. |
-| Needs contract classification | 79 | No work request or composite path is visible, but the resource has no explicit runtime semantics. Do not assume it is immediate; reconcile its recorded/SDK/provider behavior first. |
-| S2: lifecycle-polled | 159 | No work request, but create/update/delete convergence depends on lifecycle-state reads. |
+| S1: immediate top-level | 8 | One collection and item route with an explicit reviewed synchronous semantic contract; a steady response can complete create/update immediately. |
+| Needs contract classification | 73 | No work request or composite path is visible, but the resource has no explicit runtime semantics. Do not assume it is immediate; reconcile its recorded/SDK/provider behavior first. |
+| S2: lifecycle-polled | 164 | No work request, but create/update/delete convergence depends on lifecycle-state reads. |
 | S3: composite or nested path | 80 | Parent or composite path identity must be preserved across CRUD and deletion confirmation. |
 
-Ownership and evidence are cross-cutting attributes: 125 of the synchronous
-resources use only their generated baseline, 200 have resource-local production
-override, 115 have recorded evidence, 210 are synthetic-only, and 86 currently
+Ownership and evidence are cross-cutting attributes: 123 of the synchronous
+resources use only their generated baseline, 202 have resource-local production
+override, 115 have recorded evidence, 210 are synthetic-only, and 90 currently
 have formal catalog rows.
 
 Start with S1, and classify evidence-backed resources from the unclassified
@@ -86,7 +86,7 @@ classified S1 resource lacks a package-local dynamic scenario. Resources with
 missing semantic metadata stay in `needs-contract-classification` and cannot
 silently satisfy the S1 coverage check.
 
-All seven explicitly classified S1 resources have dynamic CRUD scenarios. The
+All eight explicitly classified S1 resources have dynamic CRUD scenarios. The
 references deliberately cover different evidence boundaries:
 
 - `Budget` starts from recorded OCI evidence plus a seeded formal contract.
@@ -97,9 +97,16 @@ references deliberately cover different evidence boundaries:
 - `AutoScalingConfiguration` starts from synthetic evidence and demonstrates
   how migration must first correct missing formal semantics instead of treating
   absent metadata as proof of immediate behavior.
+- Resource Manager `Template` starts from a real OCI recording and reviewed
+  SDK-backed local semantics because the pinned Terraform provider exposes no
+  corresponding resource implementation.
 
-`SavedQuery` is the first S2 reference. Its refreshed live cassette verifies
+The S2 references include `SavedQuery`, Data Safe `SensitiveType`, the File
+Storage `FileSystem`, `FilesystemSnapshotPolicy`, and `Snapshot` resources, and
+Resource Manager `Stack`. `SavedQuery`'s refreshed live cassette verifies
 the formal-backed full update request, the pre-delete state read, accepted
 delete, and final 404 confirmation; its dynamic scenario additionally exercises
 the provider-documented `CREATING` and `DELETING` transitions without cloud
-latency.
+latency. The newer S2 scenarios apply the same contract while distinguishing
+formal provider-backed resources from SDK-and-recording-backed resources whose
+Terraform provider has no matching resource implementation.

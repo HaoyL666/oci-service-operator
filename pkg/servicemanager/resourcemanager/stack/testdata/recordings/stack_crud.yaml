@@ -27,10 +27,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - badc934b8426e5a24f2748eafdc3fe5598ecadfe71ff3fceb9d0c066c216f868--gzip
+                - 1c1eb605555468b17ca1a2ae4d6dfe819464037c51f08407cf5c9c722f16ccea--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:13:06.163Z"}},"description":"recorded create","displayName":"osok-replay-common-resource-manager-stack-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-01T06:13:06.317Z","variables":{},"vendor":"HASHICORP"}'
+        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.290Z"}},"description":"recorded create","displayName":"osok-replay-common-resource-manager-stack-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-05T06:59:31.555Z","variables":{},"vendor":"HASHICORP"}'
         encoding: json
     - request:
         method: GET
@@ -45,10 +45,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - badc934b8426e5a24f2748eafdc3fe5598ecadfe71ff3fceb9d0c066c216f868--gzip
+                - 1c1eb605555468b17ca1a2ae4d6dfe819464037c51f08407cf5c9c722f16ccea--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:13:06.163Z"}},"description":"recorded create","displayName":"osok-replay-common-resource-manager-stack-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-01T06:13:06.317Z","variables":{},"vendor":"HASHICORP"}'
+        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.290Z"}},"description":"recorded create","displayName":"osok-replay-common-resource-manager-stack-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-05T06:59:31.555Z","variables":{},"vendor":"HASHICORP"}'
         encoding: json
     - request:
         method: GET
@@ -63,10 +63,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - badc934b8426e5a24f2748eafdc3fe5598ecadfe71ff3fceb9d0c066c216f868--gzip
+                - 1c1eb605555468b17ca1a2ae4d6dfe819464037c51f08407cf5c9c722f16ccea--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:13:06.163Z"}},"description":"recorded create","displayName":"osok-replay-common-resource-manager-stack-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-01T06:13:06.317Z","variables":{},"vendor":"HASHICORP"}'
+        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.290Z"}},"description":"recorded create","displayName":"osok-replay-common-resource-manager-stack-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-05T06:59:31.555Z","variables":{},"vendor":"HASHICORP"}'
         encoding: json
     - request:
         method: PUT
@@ -83,10 +83,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 5c4e0bd192aed8f55827318f933dfd06c2be1e827f4420bfd3bb8976857ba6d7
+                - 655fb26c832edba2c83f9051a820f7df92e6af15574448e74d2f18e2175ea309
             opc-request-id:
                 - <redacted>
-        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:13:06.163Z"}},"description":"recorded update","displayName":"osok-replay-common-resource-manager-stack-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-01T06:13:06.317Z","variables":{},"vendor":"HASHICORP"}'
+        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.290Z"}},"description":"recorded update","displayName":"osok-replay-common-resource-manager-stack-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-05T06:59:31.555Z","variables":{},"vendor":"HASHICORP"}'
         encoding: json
     - request:
         method: GET
@@ -101,10 +101,28 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 5c4e0bd192aed8f55827318f933dfd06c2be1e827f4420bfd3bb8976857ba6d7--gzip
+                - 655fb26c832edba2c83f9051a820f7df92e6af15574448e74d2f18e2175ea309--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T06:13:06.163Z"}},"description":"recorded update","displayName":"osok-replay-common-resource-manager-stack-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-01T06:13:06.317Z","variables":{},"vendor":"HASHICORP"}'
+        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.290Z"}},"description":"recorded update","displayName":"osok-replay-common-resource-manager-stack-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-05T06:59:31.555Z","variables":{},"vendor":"HASHICORP"}'
+        encoding: json
+    - request:
+        method: GET
+        host: resourcemanager.us-ashburn-1.oraclecloud.com
+        path: /20180917/stacks/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 655fb26c832edba2c83f9051a820f7df92e6af15574448e74d2f18e2175ea309--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"canRunOnArm":"UNPROCESSED","compartmentId":"<ocid:1>","configSource":{"configSourceType":"ZIP_UPLOAD"},"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.290Z"}},"description":"recorded update","displayName":"osok-replay-common-resource-manager-stack-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isDriftDetectionPossible":false,"isThirdPartyProviderExperienceEnabled":true,"lifecycleState":"ACTIVE","locks":[],"stackDriftStatus":"NOT_CHECKED","systemTags":{},"terraformVersion":"1.5.x","timeCreated":"2026-09-05T06:59:31.555Z","variables":{},"vendor":"HASHICORP"}'
         encoding: json
     - request:
         method: DELETE

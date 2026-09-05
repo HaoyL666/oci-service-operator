@@ -27,10 +27,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 4336a89e517eb990f365975ef2e7c07bd008550dd4277a8ad11f5f99547f7e6e--gzip
+                - 270a929ddbe41d50bf73aa6adfc2f87e1e41fca3bab1e765a0c7764669d06502--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:08:10.408Z"}},"displayName":"osok-replay-async-fs-v1","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-08-31T21:08:10.611Z"}'
+        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.844Z"}},"displayName":"osok-replay-async-fs-v1","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-09-05T06:48:59.985Z"}'
         encoding: json
     - request:
         method: GET
@@ -45,10 +45,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 877f416356ee682d0eb0e22d17e94d4d7f293a1040612a32f6f12ff8bfa0b43b--gzip
+                - 916bbbd84deca3d5c644c451df065ac97ce187a69d0bf0f1cce02626753ed4dc--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:08:10.408Z"}},"displayName":"osok-replay-async-fs-v1","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-08-31T21:08:10.611Z"}'
+        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.844Z"}},"displayName":"osok-replay-async-fs-v1","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-09-05T06:48:59.985Z"}'
         encoding: json
     - request:
         method: GET
@@ -63,10 +63,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 877f416356ee682d0eb0e22d17e94d4d7f293a1040612a32f6f12ff8bfa0b43b--gzip
+                - 916bbbd84deca3d5c644c451df065ac97ce187a69d0bf0f1cce02626753ed4dc--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:08:10.408Z"}},"displayName":"osok-replay-async-fs-v1","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-08-31T21:08:10.611Z"}'
+        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.844Z"}},"displayName":"osok-replay-async-fs-v1","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-09-05T06:48:59.985Z"}'
         encoding: json
     - request:
         method: PUT
@@ -83,10 +83,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 53bc0a839a2686f8e69beec19c01b135e4acc4614b3379b8fa813e4795da237a
+                - 8cb896d22085bd90d0603994142b90ed295d6ec6dec82b0f2157a22c2b9d2cce
             opc-request-id:
                 - <redacted>
-        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:08:10.408Z"}},"displayName":"osok-replay-async-fs-v1-updated","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-08-31T21:08:10.611Z"}'
+        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.844Z"}},"displayName":"osok-replay-async-fs-v1-updated","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-09-05T06:48:59.985Z"}'
         encoding: json
     - request:
         method: GET
@@ -101,10 +101,28 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 53bc0a839a2686f8e69beec19c01b135e4acc4614b3379b8fa813e4795da237a--gzip
+                - 8cb896d22085bd90d0603994142b90ed295d6ec6dec82b0f2157a22c2b9d2cce--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:08:10.408Z"}},"displayName":"osok-replay-async-fs-v1-updated","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-08-31T21:08:10.611Z"}'
+        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.844Z"}},"displayName":"osok-replay-async-fs-v1-updated","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-09-05T06:48:59.985Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: filestorage.us-ashburn-1.oci.oraclecloud.com
+        path: /20171215/fileSystems/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 8cb896d22085bd90d0603994142b90ed295d6ec6dec82b0f2157a22c2b9d2cce--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.844Z"}},"displayName":"osok-replay-async-fs-v1-updated","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"","lifecycleState":"ACTIVE","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-09-05T06:48:59.985Z"}'
         encoding: json
     - request:
         method: DELETE
@@ -133,24 +151,8 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - a623a802597927589c58191a6be890b4fb9ca11ba17b35ffd13705b1a4e0c20c--gzip
+                - 91e081685b81b7b68e6781fd34559e5a331fe84bfc88f888a5b64ac334c906a9--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-08-31T21:08:10.408Z"}},"displayName":"osok-replay-async-fs-v1-updated","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"FileSystem will remain in DELETING state until there are no remaining hydrations from this filesystem.","lifecycleState":"DELETED","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-08-31T21:08:10.611Z"}'
-        encoding: json
-    - request:
-        method: DELETE
-        host: filestorage.us-ashburn-1.oci.oraclecloud.com
-        path: /20171215/fileSystems/<ocid:2>
-        headers:
-            content-type:
-                - application/json
-      response:
-        statusCode: 404
-        headers:
-            content-type:
-                - application/json
-            opc-request-id:
-                - <redacted>
-        body: '{"code":"NotAuthorizedOrNotFound","message":"file system <ocid:2> not found"}'
+        body: '{"areQuotaRulesEnabled":false,"availabilityDomain":"<binding:availability-domain>","cloneAttachStatus":"DETACHED","cloneCount":0,"clusterPlacementGroupId":null,"compartmentId":"<ocid:1>","compartmentQuotaEnforcementState":"NOT_BLOCKED","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.844Z"}},"displayName":"osok-replay-async-fs-v1-updated","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneParent":false,"isHydrated":true,"isTargetable":true,"kmsKeyId":"","lastEnforcedCompartmentQuotaTime":"1970-01-01T00:00:00.000Z","lifecycleDetails":"FileSystem will remain in DELETING state until there are no remaining hydrations from this filesystem.","lifecycleState":"DELETED","locks":[],"meteredBytes":0,"quotaEnforcementState":"DISABLED","replicationSourceCount":0,"replicationTargetId":"","sourceDetails":{"parentFileSystemId":"","sourceSnapshotId":""},"systemTags":{},"timeCreated":"2026-09-05T06:48:59.985Z"}'
         encoding: json

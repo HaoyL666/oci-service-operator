@@ -27,10 +27,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 85b63187c2277d5ada7f6420a68f14bd5393aa0d0acc4e91809b5561ff6df020--gzip
+                - b87b5c2de14808d5eb9dcf945ae2423d88114871e140cae6297820a884b9c376--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.693Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"replay","schedules":null,"systemTags":{},"timeCreated":"2026-09-01T17:53:35.807Z"}'
+        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.845Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"replay","schedules":null,"systemTags":{},"timeCreated":"2026-09-05T06:48:59.927Z"}'
         encoding: json
     - request:
         method: GET
@@ -45,10 +45,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 85b63187c2277d5ada7f6420a68f14bd5393aa0d0acc4e91809b5561ff6df020--gzip
+                - b87b5c2de14808d5eb9dcf945ae2423d88114871e140cae6297820a884b9c376--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.693Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"replay","schedules":null,"systemTags":{},"timeCreated":"2026-09-01T17:53:35.807Z"}'
+        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.845Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"replay","schedules":null,"systemTags":{},"timeCreated":"2026-09-05T06:48:59.927Z"}'
         encoding: json
     - request:
         method: GET
@@ -63,10 +63,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 85b63187c2277d5ada7f6420a68f14bd5393aa0d0acc4e91809b5561ff6df020--gzip
+                - b87b5c2de14808d5eb9dcf945ae2423d88114871e140cae6297820a884b9c376--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.693Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"replay","schedules":null,"systemTags":{},"timeCreated":"2026-09-01T17:53:35.807Z"}'
+        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.845Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"replay","schedules":null,"systemTags":{},"timeCreated":"2026-09-05T06:48:59.927Z"}'
         encoding: json
     - request:
         method: PUT
@@ -83,10 +83,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 85b63187c2277d5ada7f6420a68f14bd5393aa0d0acc4e91809b5561ff6df020
+                - b87b5c2de14808d5eb9dcf945ae2423d88114871e140cae6297820a884b9c376
             opc-request-id:
                 - <redacted>
-        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.693Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"updated","schedules":null,"systemTags":{},"timeCreated":"2026-09-01T17:53:35.807Z"}'
+        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.845Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"updated","schedules":null,"systemTags":{},"timeCreated":"2026-09-05T06:48:59.927Z"}'
         encoding: json
     - request:
         method: GET
@@ -101,10 +101,28 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - ad52b1345c546af296a65988a31b4bb83c915a4192fd4b1752e0b8654c29563d--gzip
+                - 2ba03e63bd53c7a55af5596872a0e8f2692187a5d234dfc7d736bbf0d9c130d5--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.693Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"updated","schedules":null,"systemTags":{},"timeCreated":"2026-09-01T17:53:35.807Z"}'
+        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.845Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"updated","schedules":null,"systemTags":{},"timeCreated":"2026-09-05T06:48:59.927Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: filestorage.us-ashburn-1.oci.oraclecloud.com
+        path: /20171215/filesystemSnapshotPolicies/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 2ba03e63bd53c7a55af5596872a0e8f2692187a5d234dfc7d736bbf0d9c130d5--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.845Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"ACTIVE","locks":[],"policyPrefix":"updated","schedules":null,"systemTags":{},"timeCreated":"2026-09-05T06:48:59.927Z"}'
         encoding: json
     - request:
         method: DELETE
@@ -133,24 +151,8 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 52b1f4a0c8511829eb459b7eed0148c7b3499bdc14bc888b823a9ec0c9943b85--gzip
+                - 03b9fc2a75dad6cd3d4eca9fd0bfe805ee0292a94a10453099da53cb8f268718--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-01T17:53:35.693Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETED","locks":[],"policyPrefix":"updated","schedules":null,"systemTags":{},"timeCreated":"2026-09-01T17:53:35.807Z"}'
-        encoding: json
-    - request:
-        method: DELETE
-        host: filestorage.us-ashburn-1.oci.oraclecloud.com
-        path: /20171215/filesystemSnapshotPolicies/<ocid:2>
-        headers:
-            content-type:
-                - application/json
-      response:
-        statusCode: 404
-        headers:
-            content-type:
-                - application/json
-            opc-request-id:
-                - <redacted>
-        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        body: '{"availabilityDomain":"<binding:availability-domain>","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:48:59.845Z"}},"displayName":"osok-replay-filesystem-snapshot-policy-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","lifecycleState":"DELETED","locks":[],"policyPrefix":"updated","schedules":null,"systemTags":{},"timeCreated":"2026-09-05T06:48:59.927Z"}'
         encoding: json

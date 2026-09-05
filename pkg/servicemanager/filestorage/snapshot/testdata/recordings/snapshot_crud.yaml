@@ -27,10 +27,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - f9991ff5d3a5a5e45b3494fc26b7c78a417e7c8ee21fa5eb1c4b6e015c1ab698--gzip
+                - 6e85d7bd19f0337a82f2efb612b391a9ddd5a3ce3c4194d63dc869ddbb052bda--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:04:07.629Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"","snapshotTime":"1970-01-01T00:00:00.000Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-02T04:04:07.813Z","timeLocked":null}'
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:49:45.961Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-05T06:49:46.107Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-05T06:49:46.107Z","timeLocked":null}'
         encoding: json
     - request:
         method: GET
@@ -45,10 +45,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 0a819bbde82f24d44024e8769765d49b6aa6677ee7c87f3c94ff21789e3b4b05--gzip
+                - 6e85d7bd19f0337a82f2efb612b391a9ddd5a3ce3c4194d63dc869ddbb052bda--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:04:07.629Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-02T04:04:07Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-02T04:04:07Z","timeLocked":null}'
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:49:45.961Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-05T06:49:46Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-05T06:49:46Z","timeLocked":null}'
         encoding: json
     - request:
         method: GET
@@ -63,10 +63,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 0a819bbde82f24d44024e8769765d49b6aa6677ee7c87f3c94ff21789e3b4b05--gzip
+                - 6e85d7bd19f0337a82f2efb612b391a9ddd5a3ce3c4194d63dc869ddbb052bda--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:04:07.629Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-02T04:04:07Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-02T04:04:07Z","timeLocked":null}'
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:49:45.961Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-05T06:49:46Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-05T06:49:46Z","timeLocked":null}'
         encoding: json
     - request:
         method: PUT
@@ -83,10 +83,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 3632d45917f12cceda2ec4e9794c996b9686d0b7a0d7e4daaeadd12276d692e2
+                - 7de47c5a2188dce118d50947a0d783dad71190999af371d0313113f65ef7c6ae
             opc-request-id:
                 - <redacted>
-        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:04:07.629Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-02T04:04:07.813Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-02T04:04:07.813Z","timeLocked":null}'
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:49:45.961Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-05T06:49:46.107Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-05T06:49:46.107Z","timeLocked":null}'
         encoding: json
     - request:
         method: GET
@@ -101,10 +101,28 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 3632d45917f12cceda2ec4e9794c996b9686d0b7a0d7e4daaeadd12276d692e2--gzip
+                - 7de47c5a2188dce118d50947a0d783dad71190999af371d0313113f65ef7c6ae--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:04:07.629Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-02T04:04:07Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-02T04:04:07Z","timeLocked":null}'
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:49:45.961Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-05T06:49:46Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-05T06:49:46Z","timeLocked":null}'
+        encoding: json
+    - request:
+        method: GET
+        host: filestorage.us-ashburn-1.oci.oraclecloud.com
+        path: /20171215/snapshots/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            etag:
+                - 7de47c5a2188dce118d50947a0d783dad71190999af371d0313113f65ef7c6ae--gzip
+            opc-request-id:
+                - <redacted>
+        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:49:45.961Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"ACTIVE","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-05T06:49:46Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-05T06:49:46Z","timeLocked":null}'
         encoding: json
     - request:
         method: DELETE
@@ -133,24 +151,8 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - ce2f593b34c5d02af027047850877cd91cd20e0be5e421cfca21fa22ab1f552f--gzip
+                - 8c036c0a20441e478b5e2e7c8282d47a824a5c1ee279badfab36634e7466eb6a--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-02T04:04:07.629Z"}},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"DELETING","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-02T04:04:07Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-02T04:04:07Z","timeLocked":null}'
-        encoding: json
-    - request:
-        method: DELETE
-        host: filestorage.us-ashburn-1.oci.oraclecloud.com
-        path: /20171215/snapshots/<ocid:2>
-        headers:
-            content-type:
-                - application/json
-      response:
-        statusCode: 404
-        headers:
-            content-type:
-                - application/json
-            opc-request-id:
-                - <redacted>
-        body: '{"code":"NotAuthorizedOrNotFound","message":"Authorization failed or requested resource not found."}'
+        body: '{"definedTags":{},"exclusiveBytes":0,"expirationTime":null,"fileSystemId":"<ocid:1>","filesystemSnapshotPolicyId":"","freeformTags":{},"id":"<ocid:2>","isCloneSource":false,"lifecycleDetails":"","lifecycleState":"DELETED","lockDurationDetails":null,"locks":[],"name":"osok-replay-snapshot","provenanceId":"<ocid:2>","snapshotTime":"2026-09-05T06:49:46Z","snapshotType":"USER","systemTags":{},"timeCreated":"2026-09-05T06:49:46Z","timeLocked":null}'
         encoding: json

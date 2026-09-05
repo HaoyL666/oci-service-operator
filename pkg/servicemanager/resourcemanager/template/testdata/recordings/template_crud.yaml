@@ -27,10 +27,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - 43d5e0c2d88e11f8a356cc38ae664a45536d5aef49c7a90ad9b3502759fd45c3--gzip
+                - e4e95538e867b730eb283091b625b0bc9cbbf3b3e52b9015f3a5c14e4c97b986--gzip
             opc-request-id:
                 - <redacted>
-        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:39:00.914Z"}},"description":"recorded create","displayName":"osok-replay-resource-manager-template-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-03T17:39:01.055Z"}'
+        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.291Z"}},"description":"recorded create","displayName":"osok-replay-resource-manager-template-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-05T06:59:31.444Z"}'
         encoding: json
     - request:
         method: GET
@@ -46,7 +46,7 @@ interactions:
                 - application/json
             opc-request-id:
                 - <redacted>
-        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:39:00.914Z"}},"description":"recorded create","displayName":"osok-replay-resource-manager-template-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-03T17:39:01.055Z"}'
+        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.291Z"}},"description":"recorded create","displayName":"osok-replay-resource-manager-template-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-05T06:59:31.444Z"}'
         encoding: json
     - request:
         method: GET
@@ -62,7 +62,7 @@ interactions:
                 - application/json
             opc-request-id:
                 - <redacted>
-        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:39:00.914Z"}},"description":"recorded create","displayName":"osok-replay-resource-manager-template-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-03T17:39:01.055Z"}'
+        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.291Z"}},"description":"recorded create","displayName":"osok-replay-resource-manager-template-v1","freeformTags":{"osok-replay":"create"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-05T06:59:31.444Z"}'
         encoding: json
     - request:
         method: PUT
@@ -71,7 +71,7 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"description":"recorded update","displayName":"osok-replay-resource-manager-template-v1-updated","freeformTags":{"osok-replay":"update"},"longDescription":"A private template used only for deterministic OSOK lifecycle recording.","templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD","zipFileBase64Encoded":"UEsDBBQACAAIAAAAAAAAAAAAAAAAAAAAAAAHAAAAbWFpbi50ZipJLSpKTMsvylWoVihKLSzNLEpNiS9LLSrOzM9TsFVQsrNVMNQzUFKo5QIEAAD//1BLBwjegOIZMAAAACoAAABQSwECFAAUAAgACAAAAAAA3oDiGTAAAAAqAAAABwAAAAAAAAAAAAAAAAAAAAAAbWFpbi50ZlBLBQYAAAAAAQABADUAAABlAAAAAAA="}}'
+        body: '{"description":"recorded update","displayName":"osok-replay-resource-manager-template-v1-updated","freeformTags":{"osok-replay":"update"},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD","zipFileBase64Encoded":"UEsDBBQACAAIAAAAAAAAAAAAAAAAAAAAAAAHAAAAbWFpbi50ZipJLSpKTMsvylWoVihKLSzNLEpNiS9LLSrOzM9TsFVQsrNVMNQzUFKo5QIEAAD//1BLBwjegOIZMAAAACoAAABQSwECFAAUAAgACAAAAAAA3oDiGTAAAAAqAAAABwAAAAAAAAAAAAAAAAAAAAAAbWFpbi50ZlBLBQYAAAAAAQABADUAAABlAAAAAAA="}}'
         encoding: json
       response:
         statusCode: 200
@@ -79,10 +79,10 @@ interactions:
             content-type:
                 - application/json
             etag:
-                - c420f049b9d949b2cf7192315a068e9354b4785d346df6e17f890ec77de3f86d
+                - fe08dbfdcb08fca941390454031e9eeabfd3208a5bac04c9c4bca16c386364e1
             opc-request-id:
                 - <redacted>
-        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:39:00.914Z"}},"description":"recorded update","displayName":"osok-replay-resource-manager-template-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-03T17:39:01.055Z"}'
+        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.291Z"}},"description":"recorded update","displayName":"osok-replay-resource-manager-template-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-05T06:59:31.444Z"}'
         encoding: json
     - request:
         method: GET
@@ -98,7 +98,23 @@ interactions:
                 - application/json
             opc-request-id:
                 - <redacted>
-        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-03T17:39:00.914Z"}},"description":"recorded update","displayName":"osok-replay-resource-manager-template-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-03T17:39:01.055Z"}'
+        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.291Z"}},"description":"recorded update","displayName":"osok-replay-resource-manager-template-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-05T06:59:31.444Z"}'
+        encoding: json
+    - request:
+        method: GET
+        host: resourcemanager.us-ashburn-1.oraclecloud.com
+        path: /20180917/templates/<ocid:2>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+            opc-request-id:
+                - <redacted>
+        body: '{"categoryId":"3","compartmentId":"<ocid:1>","definedTags":{"Oracle-Tags":{"CreatedBy":"<redacted>","CreatedOn":"2026-09-05T06:59:31.291Z"}},"description":"recorded update","displayName":"osok-replay-resource-manager-template-v1-updated","freeformTags":{"osok-replay":"update"},"id":"<ocid:2>","isFreeTier":false,"lifecycleState":"ACTIVE","longDescription":"A private template used only for deterministic OSOK lifecycle recording.","systemTags":{},"templateConfigSource":{"templateConfigSourceType":"ZIP_UPLOAD"},"timeCreated":"2026-09-05T06:59:31.444Z"}'
         encoding: json
     - request:
         method: DELETE

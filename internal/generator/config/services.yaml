@@ -3104,6 +3104,9 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: SensitiveType
+          formalSpec: sensitivetype
 
   - service: datascience
     sdkPackage: github.com/oracle/oci-go-sdk/v65/datascience
@@ -3772,6 +3775,13 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: FileSystem
+          formalSpec: filesystem
+        - kind: FilesystemSnapshotPolicy
+          formalSpec: filesystemsnapshotpolicy
+        - kind: Snapshot
+          formalSpec: snapshot
 
   - service: fleetappsmanagement
     sdkPackage: github.com/oracle/oci-go-sdk/v65/fleetappsmanagement

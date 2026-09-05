@@ -47,7 +47,7 @@ func TestRecordedTemplateCreateUpdateDelete(t *testing.T) {
 		FreeformTags: map[string]string{"osok-replay": "create"},
 	}}
 	manager := &TemplateServiceManager{Log: loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("recorded-integration")}}
-	hooks := newTemplateDefaultRuntimeHooks(sdkClient)
+	hooks := newTemplateRuntimeHooks(manager, sdkClient)
 	client := wrapTemplateGeneratedClient(hooks, defaultTemplateServiceClient{
 		ServiceClient: generatedruntime.NewServiceClient[*resourcemanagerv1beta1.Template](buildTemplateGeneratedRuntimeConfig(manager, hooks)),
 	})
