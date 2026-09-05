@@ -129,5 +129,15 @@ Cloud Guard `ManagedList`, DRG, Dashboard and DashboardGroup, Data Flow
 `LogSavedSearch`, and the four Usage API resources. The scenarios preserve
 resource-specific behavior such as OKE work-request breadcrumbs, polymorphic
 dashboard and speech payloads, state-free Usage API wrappers, and
-Compartment's intentional best-effort delete contract. The dynamic suite now
-covers 48 service-manager packages without OCI credentials.
+Compartment's intentional best-effort delete contract. That expansion brought
+the credential-free dynamic suite to 48 service-manager packages.
+
+The next recorded-evidence wave promotes and covers 11 formerly unseeded S2
+resources: Artifacts `ContainerRepository` and `Repository`, Notifications
+`Topic` and `Subscription`, DNS `SteeringPolicy`,
+`SteeringPolicyAttachment`, `TsigKey`, `View`, and `Zone`, plus File Storage
+`Export` and `MountTarget`. Their dynamic scenarios preserve service-specific
+details such as Container Registry's `REPO_ID_UNKNOWN`, parent-aware DNS
+attachment deletion, TSIG scoped absence confirmation, the live-observed DNS
+`UPDATING` value, and File Storage client-option normalization. The suite now
+covers 59 service-manager packages.
