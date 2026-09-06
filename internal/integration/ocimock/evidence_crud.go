@@ -19,6 +19,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/oracle/oci-go-sdk/v65/common"
 	"gopkg.in/yaml.v3"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -33,15 +34,18 @@ import (
 type EvidenceCRUDResponder struct {
 	mu sync.Mutex
 
-	create evidenceInteraction
-	update *evidenceInteraction
-	delete *evidenceInteraction
-	reads  map[evidencePhase][]evidenceInteraction
-	extra  []evidenceInteraction
+	create  evidenceInteraction
+	update  *evidenceInteraction
+	delete  *evidenceInteraction
+	deletes []evidenceInteraction
+	reads   map[evidencePhase][]evidenceInteraction
+	extra   []evidenceInteraction
 
-	phase      evidencePhase
-	operations map[Operation]int
-	phaseReads map[evidencePhase]int
+	phase        evidencePhase
+	operations   map[Operation]int
+	phaseReads   map[evidencePhase]int
+	readCursors  map[string]int
+	deleteCursor int
 }
 
 type evidencePhase string
@@ -129,11 +133,33 @@ func RunEvidenceLifecycle[T any](resource T, spec any, client LifecycleClient[T]
 			}
 			return evidence.ValidateProjection(current)
 		},
+		RetryError: func(err error) bool {
+			return evidenceHTTPStatus(err, http.StatusNotFound, http.StatusConflict, http.StatusTooManyRequests)
+		},
+		RetryDeleteError: func(err error) bool {
+			return evidenceHTTPStatus(err, http.StatusConflict, http.StatusTooManyRequests)
+		},
 	})
 	if mutationErr != nil {
 		return mutationErr
 	}
 	return err
+}
+
+func evidenceHTTPStatus(err error, statuses ...int) bool {
+	if err == nil {
+		return false
+	}
+	serviceErr, ok := common.IsServiceError(err)
+	for _, status := range statuses {
+		if ok && serviceErr.GetHTTPStatusCode() == status {
+			return true
+		}
+		if strings.Contains(strings.ToLower(err.Error()), fmt.Sprintf("http status code: %d", status)) {
+			return true
+		}
+	}
+	return false
 }
 
 // NewEvidenceCRUDResponder loads recorded request/response evidence and
@@ -156,21 +182,20 @@ func NewEvidenceCRUDResponder(path string) (*EvidenceCRUDResponder, error) {
 	createIndex := -1
 	updateIndex := -1
 	deleteIndex := -1
+	var deleteCandidates []int
 	for index, interaction := range cassette.Interactions {
-		switch strings.ToUpper(interaction.Request.Method) {
-		case http.MethodPut, http.MethodPatch:
-			updateIndex = index
-		case http.MethodDelete:
-			if deleteIndex < 0 {
-				deleteIndex = index
-			}
+		if strings.EqualFold(interaction.Request.Method, http.MethodDelete) {
+			deleteCandidates = append(deleteCandidates, index)
 		}
+	}
+	if len(deleteCandidates) > 0 {
+		deleteIndex = deleteCandidates[0]
 	}
 	for index, interaction := range cassette.Interactions {
 		if !strings.EqualFold(interaction.Request.Method, http.MethodPost) {
 			continue
 		}
-		if evidenceCreatePathMatchesItem(interaction.Request.Path, cassette.Interactions, updateIndex, deleteIndex) {
+		if evidenceCreatePathMatchesItem(interaction.Request.Path, cassette.Interactions, -1, deleteIndex) {
 			createIndex = index
 			break
 		}
@@ -186,13 +211,25 @@ func NewEvidenceCRUDResponder(path string) (*EvidenceCRUDResponder, error) {
 	if createIndex < 0 {
 		return nil, errors.New("OCI CRUD evidence has no create POST")
 	}
+	for index := createIndex + 1; index < len(cassette.Interactions); index++ {
+		if deleteIndex >= 0 && index >= deleteIndex {
+			break
+		}
+		interaction := cassette.Interactions[index]
+		method := strings.ToUpper(interaction.Request.Method)
+		if method == http.MethodPut || method == http.MethodPatch ||
+			(method == http.MethodPost && deleteIndex >= 0 && interaction.Request.Path == cassette.Interactions[deleteIndex].Request.Path) {
+			updateIndex = index
+		}
+	}
 
 	responder := &EvidenceCRUDResponder{
-		create:     cassette.Interactions[createIndex],
-		reads:      map[evidencePhase][]evidenceInteraction{},
-		phase:      evidenceBeforeCreate,
-		operations: map[Operation]int{},
-		phaseReads: map[evidencePhase]int{},
+		create:      cassette.Interactions[createIndex],
+		reads:       map[evidencePhase][]evidenceInteraction{},
+		phase:       evidenceBeforeCreate,
+		operations:  map[Operation]int{},
+		phaseReads:  map[evidencePhase]int{},
+		readCursors: map[string]int{},
 	}
 	if updateIndex >= 0 {
 		interaction := cassette.Interactions[updateIndex]
@@ -201,6 +238,11 @@ func NewEvidenceCRUDResponder(path string) (*EvidenceCRUDResponder, error) {
 	if deleteIndex >= 0 {
 		interaction := cassette.Interactions[deleteIndex]
 		responder.delete = &interaction
+		for _, index := range deleteCandidates {
+			if cassette.Interactions[index].Request.Path == interaction.Request.Path {
+				responder.deletes = append(responder.deletes, cassette.Interactions[index])
+			}
+		}
 	}
 
 	for index, interaction := range cassette.Interactions {
@@ -290,18 +332,41 @@ func (r *EvidenceCRUDResponder) Respond(request Request) (Response, error) {
 	case r.delete != nil && evidenceRequestMatches(request, r.delete.Request):
 		r.phase = evidenceDeleted
 		r.operations[OperationDelete]++
-		return evidenceHTTPResponse(r.delete.Response), nil
+		index := r.deleteCursor
+		if index >= len(r.deletes) {
+			index = len(r.deletes) - 1
+		}
+		if r.deleteCursor < len(r.deletes) {
+			r.deleteCursor++
+		}
+		return evidenceHTTPResponse(r.deletes[index].Response), nil
 	case strings.EqualFold(request.Method, http.MethodGet):
 		interactions := r.reads[r.phase]
 		var matched *evidenceInteraction
-		for index := len(interactions) - 1; index >= 0; index-- {
-			if evidenceReadMatches(request, interactions[index].Request) {
-				if r.phase != evidenceDeleted && !successfulStatus(interactions[index].Response.StatusCode) {
-					continue
+		if r.phase == evidenceDeleted {
+			var candidates []evidenceInteraction
+			for _, interaction := range interactions {
+				if evidenceReadMatches(request, interaction.Request) {
+					candidates = append(candidates, interaction)
 				}
-				interaction := interactions[index]
+			}
+			if len(candidates) > 0 {
+				key := evidenceReadCursorKey(r.phase, request)
+				index := r.readCursors[key]
+				if index >= len(candidates) {
+					index = len(candidates) - 1
+				}
+				interaction := candidates[index]
 				matched = &interaction
-				break
+				r.readCursors[key]++
+			}
+		} else {
+			for index := len(interactions) - 1; index >= 0; index-- {
+				if evidenceReadMatches(request, interactions[index].Request) && successfulStatus(interactions[index].Response.StatusCode) {
+					interaction := interactions[index]
+					matched = &interaction
+					break
+				}
 			}
 		}
 		if matched == nil {
@@ -349,6 +414,10 @@ func evidenceCreatePathMatchesItem(collectionPath string, interactions []evidenc
 		}
 	}
 	return false
+}
+
+func evidenceReadCursorKey(phase evidencePhase, request Request) string {
+	return string(phase) + "\x00" + request.URL.Path + "\x00" + normalizedEvidenceQuery(request.URL.Query())
 }
 
 // Verify requires every primary lifecycle operation represented by the
@@ -512,7 +581,37 @@ func validateEvidenceProjection(resource any, responseBody string) error {
 		}
 	}
 	if checks == 0 {
-		return errors.New("typed resource status exposes none of id, displayName, or lifecycleState from the recorded response")
+		keys := make([]string, 0, len(expected))
+		for key := range expected {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			want := expected[key]
+			if !evidenceScalar(want) {
+				continue
+			}
+			got, exposed := status[key]
+			if !exposed {
+				continue
+			}
+			checks++
+			if !reflect.DeepEqual(got, want) {
+				return fmt.Errorf("status.%s = %#v, want %#v", key, got, want)
+			}
+		}
+	}
+	if checks == 0 {
+		return errors.New("typed resource status exposes no scalar field from the recorded response")
 	}
 	return nil
+}
+
+func evidenceScalar(value any) bool {
+	switch value.(type) {
+	case string, bool, float64:
+		return true
+	default:
+		return false
+	}
 }

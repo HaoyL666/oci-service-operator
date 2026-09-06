@@ -47,7 +47,7 @@ candidates are divided into:
 
 Ownership and evidence are cross-cutting attributes: 123 of the synchronous
 resources use only their generated baseline, 202 have resource-local production
-override, 115 have recorded evidence, 210 are synthetic-only, and 139 currently
+override, 115 have recorded evidence, 210 are synthetic-only, and 154 currently
 have formal catalog rows.
 
 Start with S1, and classify evidence-backed resources from the unclassified
@@ -171,3 +171,13 @@ use nonstandard helpers that `formal-import` cannot resolve, while Lockbox
 the recorded SDK lifecycle rather than invented provider semantics. The suite
 now covers 96 service-manager packages, and no recorded S2 resource lacks a
 dynamic scenario or formal catalog row.
+
+The recorded S3 wave adds all 21 composite-path resources: four classic Load
+Balancer children, four Log Analytics resources, Logging `Log`, eleven Network
+Firewall policy children, and Object Storage `Bucket`. These scenarios retain
+the parent OCID or namespace and immutable child identity in every SDK path.
+The evidence responder supports POST-based updates and multi-attempt
+delete/read convergence while continuing to require the recorded create and
+update request bodies and a read in every lifecycle phase. Dynamic coverage is
+now 117 service-manager packages; no recorded S3 resource lacks a dynamic
+scenario or formal catalog row.
