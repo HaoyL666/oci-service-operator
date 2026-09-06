@@ -5,200 +5,108 @@ production service manager and the real OCI Go SDK while replacing only the
 SDK HTTP dispatcher. They are faster and broader than live OCI E2E, and deeper
 than package tests that replace the SDK client itself.
 
-## Evidence and ownership
+## Contract and ownership
 
-Build each resource scenario from these sources, in order:
+Each `*_mock_integration_test.go` owns its resource contract explicitly. It
+declares:
 
-1. A sanitized recorded cassette, when available, establishes observed OCI
-   methods, paths, status codes, headers, response shape, and lifecycle order.
-2. The vendored OCI Go SDK establishes current request and response types,
-   mandatory fields, enums, and HTTP serialization.
-3. Repo-authored formal metadata establishes OSOK lifecycle, mutation,
-   identity, follow-up, and deletion intent. Provider-fact imports are pinned
-   by `formal/sources.lock` to `terraform-provider-oci`.
-4. The pinned Terraform provider implementation is supporting evidence for
-   operation selection, request mapping, mutable versus force-new fields,
-   waiters, and response flattening.
-5. Synthetic cassettes supply contract examples only where recorded evidence
-   is unavailable; they are not proof of live OCI behavior.
+- the typed custom resource and initial spec;
+- the supported create, read, update, and delete operations;
+- typed OCI request details and response states;
+- the spec mutation used for an update;
+- assertions after create/read and update/read;
+- resource-specific behavior such as lifecycle requeues, work requests,
+  generated Secrets, or special deletion rules.
 
-The OCI SDK remains authoritative for SDK shapes. Terraform provider behavior
-must agree with formal imports and repo-authored OSOK semantics, but it does not
-replace the typed SDK response contract.
+The shared code under `internal/integration/ocimock` is deliberately
+mechanical. It sequences declared operations, retries reconciles when the
+service manager requests a requeue, routes SDK HTTP calls to the configured
+mock, verifies that every declared operation occurred, invokes package-owned
+assertions, and returns a stage-specific error. It does not infer fields,
+operations, mutations, or assertions from formal metadata, cassettes, CR
+reflection, or SDK reflection.
 
-Shared transport, CRUD routing, and lifecycle orchestration live under
-`internal/integration/ocimock`. Resource scenarios stay beside their service
-manager as `*_mock_integration_test.go`, where they can use package-private
-runtime hooks without exporting production APIs only for tests.
-
-## Synchronous CRUD groups
-
-The initial generated-runtime inventory contains 412 CRUD-capable resources.
-Eighty-seven use a work-request or other explicitly asynchronous resource-local
-path and are deferred to the asynchronous phase. The remaining 325 synchronous
-candidates are divided into:
-
-| Group | Count | Contract |
-| --- | ---: | --- |
-| S1: immediate top-level | 8 | One collection and item route with an explicit reviewed synchronous semantic contract; a steady response can complete create/update immediately. |
-| Needs contract classification | 73 | No work request or composite path is visible, but the resource has no explicit runtime semantics. Do not assume it is immediate; reconcile its recorded/SDK/provider behavior first. |
-| S2: lifecycle-polled | 164 | No work request, but create/update/delete convergence depends on lifecycle-state reads. |
-| S3: composite or nested path | 80 | Parent or composite path identity must be preserved across CRUD and deletion confirmation. |
-
-Ownership and evidence are cross-cutting attributes: 123 of the synchronous
-resources use only their generated baseline, 202 have resource-local production
-override, 115 have recorded evidence, 210 are synthetic-only, and 199 currently
-have formal catalog rows.
-
-Start with S1, and classify evidence-backed resources from the unclassified
-group before moving them into S1 or S2. Within each group, prefer recorded and formal-covered resources
-first, then recorded without formal coverage, then synthetic-only resources.
-Audit any resource-local override while migrating that resource.
-
-## Scenario contract
-
-Every CRUD scenario must prove both mapping directions:
+The complete path under test is:
 
 ```text
 typed CR spec
   -> production service manager
   -> real OCI SDK HTTP request
-  -> mock request assertions and typed dynamic state
-  -> OCI-compatible HTTP response
+  -> package-owned typed request assertion
+  -> package-owned OCI-compatible response state
   -> real OCI SDK typed response
   -> production status projection
-  -> typed CR status assertions
+  -> package-owned typed CR status assertion
 ```
 
-Where formal metadata requires them, the responder also verifies read after
-create, read after update, and post-delete read confirmation. New fields are
-added explicitly to the typed CR fixture, expected SDK request, typed mock
-response, and CR status assertion only when OSOK intentionally adopts them.
+## Authoring evidence
 
-Run the current mock integration surface with:
+Use these sources to author and review a scenario:
+
+1. A sanitized live cassette, when available, establishes observed OCI
+   methods, paths, status codes, headers, response shape, and lifecycle order.
+2. The vendored OCI Go SDK establishes request and response types, required
+   fields, enums, polymorphic discriminators, and HTTP serialization.
+3. Repo-authored formal metadata establishes OSOK lifecycle, mutation,
+   identity, follow-up, and deletion intent. Provider facts are pinned by
+   `formal/sources.lock` to `terraform-provider-oci`.
+4. The pinned Terraform provider is supporting evidence for request mapping,
+   mutable versus force-new fields, waiters, and response flattening.
+5. Synthetic evidence may fill a contract example when live evidence is not
+   available, but it is not proof of live OCI behavior.
+
+Cassettes and formal metadata are authoring provenance. Mock integration tests
+do not load either at runtime. A later SDK or lifecycle change therefore
+requires a deliberate edit to the typed test contract and a reviewable diff.
+
+The SDK remains authoritative for SDK wire shapes. Terraform behavior should
+agree with formal imports and OSOK-owned semantics, but it does not replace the
+typed SDK contract.
+
+## Writing a scenario
+
+Keep each scenario beside its service manager so it can use package-private
+runtime seams without exporting production APIs for tests.
+
+1. Construct the typed CR and give it stable Kubernetes identity with
+   `ocimock.InitializeResource`.
+2. Declare typed create/update request details and typed OCI states. For a
+   polymorphic request, assert the discriminator explicitly with
+   `ValidateDiscriminatedJSONRequest` and compare the remaining concrete SDK
+   type.
+3. Build a stateful transport with `NewExplicitCRUDResponder`. Declare only
+   operations the resource actually supports and add explicit auxiliary routes
+   for resource-specific calls.
+4. Open the SDK session and construct the production service-manager client.
+5. Run `RunLifecycle` with package-owned mutation and status callbacks.
+6. Close the session so responder verification proves every declared
+   operation and auxiliary route occurred.
+
+Do not make a fixture pass by dropping a meaningful field. Resolve a mismatch
+against the service manager, SDK, formal contract, provider behavior, and live
+evidence. Production fixes must follow normal ownership: edit generator or
+formal source of truth and regenerate generated outputs; edit handwritten
+runtime only when the behavior is resource-owned.
+
+## Running the suite
+
+Run all mock integration tests and their source-derived coverage audit with:
 
 ```bash
 make mockintegrationtest
 ```
 
-The target first audits the source-derived inventory. It fails if an explicitly
-classified S1 resource lacks a package-local dynamic scenario, or if an S2
-resource lacks either its dynamic scenario or formal catalog row. Resources
-with missing semantic metadata stay in `needs-contract-classification` and
-cannot silently satisfy the completed-group coverage checks.
+The current synchronous suite covers 193 service-manager packages. Its
+inventory separates immediate, lifecycle-polled, composite-path, asynchronous,
+and not-yet-classified resources so unsupported behavior is not silently
+treated as ordinary synchronous CRUD.
 
-All eight explicitly classified S1 resources have dynamic CRUD scenarios. The
-references deliberately cover different evidence boundaries:
+The broader credential-free integration surface remains:
 
-- `Budget` starts from recorded OCI evidence plus a seeded formal contract.
-- `HttpMonitor` starts from recorded evidence plus a seeded formal contract;
-  its resource-local runtime retains pagination and ambiguous-delete handling.
-- `WlpAgent` starts from a synthetic SDK contract plus a seeded formal contract;
-  its resource-local runtime retains only the state-free Active projection.
-- `AutoScalingConfiguration` starts from synthetic evidence and demonstrates
-  how migration must first correct missing formal semantics instead of treating
-  absent metadata as proof of immediate behavior.
-- Resource Manager `Template` starts from a real OCI recording and reviewed
-  SDK-backed local semantics because the pinned Terraform provider exposes no
-  corresponding resource implementation.
+```bash
+make integrationtest
+```
 
-The S2 references include `SavedQuery`, Data Safe `SensitiveType`, the File
-Storage `FileSystem`, `FilesystemSnapshotPolicy`, and `Snapshot` resources, and
-Resource Manager `Stack`. The core-networking batch adds `Vcn`, `Subnet`,
-`InternetGateway`, `NatGateway`, `ServiceGateway`, `RouteTable`, `SecurityList`,
-and `NetworkSecurityGroup`, retaining each package's handwritten parity layer
-while replacing only OCI HTTP transport. `SavedQuery`'s refreshed live cassette
-verifies
-the formal-backed full update request, the pre-delete state read, accepted
-delete, and final 404 confirmation; its dynamic scenario additionally exercises
-the provider-documented `CREATING` and `DELETING` transitions without cloud
-latency. The newer S2 scenarios apply the same contract while distinguishing
-formal provider-backed resources from SDK-and-recording-backed resources whose
-Terraform provider has no matching resource implementation.
-
-Compute `Instance` extends the S2 surface through the polymorphic image launch
-path. Its dynamic scenario validates shape and IMDSv2 options, lifecycle
-requeues from `PROVISIONING` to `RUNNING`, a name-and-tags update, and finalizer
-retention through `TERMINATING` to `TERMINATED`.
-
-The recorded-and-formal S2 migration is complete. The 25-resource expansion
-adds OKE `Cluster` and `NodePool`, Load Balancer, Streaming `Stream`, NoSQL
-`Table`, Monitoring `Alarm`, Email `Dkim`/`EmailDomain`/`Sender`, AI Document
-and AI Vision projects, Speech `TranscriptionJob`, Cloud Bridge `Environment`,
-Cloud Guard `ManagedList`, DRG, Dashboard and DashboardGroup, Data Flow
-`Application`, Data Science `Project`, Identity `Compartment`, Logging
-`LogSavedSearch`, and the four Usage API resources. The scenarios preserve
-resource-specific behavior such as OKE work-request breadcrumbs, polymorphic
-dashboard and speech payloads, state-free Usage API wrappers, and
-Compartment's intentional best-effort delete contract. That expansion brought
-the credential-free dynamic suite to 48 service-manager packages.
-
-The next recorded-evidence wave promotes and covers 11 formerly unseeded S2
-resources: Artifacts `ContainerRepository` and `Repository`, Notifications
-`Topic` and `Subscription`, DNS `SteeringPolicy`,
-`SteeringPolicyAttachment`, `TsigKey`, `View`, and `Zone`, plus File Storage
-`Export` and `MountTarget`. Their dynamic scenarios preserve service-specific
-details such as Container Registry's `REPO_ID_UNKNOWN`, parent-aware DNS
-attachment deletion, TSIG scoped absence confirmation, the live-observed DNS
-`UPDATING` value, and File Storage client-option normalization. The suite now
-covers 59 service-manager packages.
-
-The following recorded-evidence wave promotes eight additional S2 resources:
-OS Management Hub `LifecycleEnvironment`, `ManagedInstanceGroup`, `Profile`,
-`ScheduledJob`, and `SoftwareSource`, plus Stack Monitoring
-`MetricExtension`, `MonitoredResourceType`, and `ProcessSet`. These scenarios
-exercise polymorphic profile, software-source, and metric-query payloads,
-managed-instance-group membership state, scheduled operations, and the Stack
-Monitoring APIs that require a terminal `DELETED` read instead of treating an
-authorization-shaped 404 as absence. The credential-free dynamic suite now
-covers 67 service-manager packages.
-
-The final recorded S2 wave covers all 30 remaining resources. Resource Manager
-`Stack` already had a dynamic scenario; 29 new scenarios cover Announcements,
-Batch, Certificates Management, Compute Cloud at Customer, Data Safe, Events,
-Health Checks, IoT, Lockbox, Management Agent and Dashboard, Network Firewall,
-Resource Manager and Scheduler, Vulnerability Scanning, WAA, WAAS, and WAF.
-The shared evidence responder turns each sanitized live trace into a stateful
-mock: production code may reread a lifecycle phase without consuming a finite
-replay sequence, while create and update request bodies must still agree with
-the recorded OCI contract. The real SDK continues to serialize every request
-and decode every response.
-
-Twenty-one rows have mechanically imported facts from the pinned Terraform
-provider. The other nine stay explicitly scaffolded: five provider resources
-use nonstandard helpers that `formal-import` cannot resolve, while Lockbox
-`ApprovalTemplate`, both Management Dashboard resources, and Resource Manager
-`Stack` have no corresponding provider resource. Their executable evidence is
-the recorded SDK lifecycle rather than invented provider semantics. The suite
-now covers 96 service-manager packages, and no recorded S2 resource lacks a
-dynamic scenario or formal catalog row.
-
-The recorded S3 wave adds all 21 composite-path resources: four classic Load
-Balancer children, four Log Analytics resources, Logging `Log`, eleven Network
-Firewall policy children, and Object Storage `Bucket`. These scenarios retain
-the parent OCID or namespace and immutable child identity in every SDK path.
-The evidence responder supports POST-based updates and multi-attempt
-delete/read convergence while continuing to require the recorded create and
-update request bodies and a read in every lifecycle phase. Dynamic coverage is
-now 117 service-manager packages; no recorded S3 resource lacks a dynamic
-scenario or formal catalog row.
-
-The synthetic-only S2 wave completes the lifecycle-polled group. All 76
-remaining resources now exercise their production service manager through the
-real OCI SDK and credential-free stateful transport. The evidence responder
-matches sanitized OCID, binding, and secret placeholders, resets create specs
-before decoding request-shaped fixtures, supports non-JSON payloads, and omits
-an update phase when the existing synthetic evidence contains no update
-interaction.
-Three resources that previously had read-only evidence—Autonomous Database,
-EKMS Private Endpoint, and OPSI Chargeback Plan—use typed stateful responders
-covering create, lifecycle convergence, update, and confirmed deletion.
-
-Formal coverage adds 31 imports from the pinned Terraform provider. Fourteen
-rows remain explicitly scaffolded: four provider resources are registered but
-use CRUD shapes that `formal-import` cannot resolve, and ten have no resource
-in the pinned provider. Their repo-authored lifecycle metadata is derived from
-the existing service-manager semantics and their executable contract remains
-the vendored SDK plus the synthetic mock. S2 is now complete at 164 of 164
-dynamic scenarios and 164 of 164 formal catalog rows; the full credential-free
-dynamic suite covers 193 service-manager packages.
+Recorded and synthetic replay tests remain useful for provenance and wire
+fidelity. Live E2E remains the final proof that OCI accepts the request and
+provisions the intended resource.

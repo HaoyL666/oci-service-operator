@@ -2,21 +2,147 @@
 package esxihost
 
 import (
-	"path/filepath"
-	"testing"
-
+	"context"
+	"fmt"
 	ocvpsdk "github.com/oracle/oci-go-sdk/v65/ocvp"
 	ocvpv1beta1 "github.com/oracle/oci-service-operator/api/ocvp/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	"reflect"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"testing"
 )
 
-// Contract evidence: synthetic OCI-compatible responses, production service manager, and real OCI SDK serialization.
+// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
 func TestMockIntegrationEsxiHostLifecycleCRUD(t *testing.T) {
 	t.Parallel()
-	session, evidence, err := ocimock.OpenEvidenceCRUD(filepath.Join("testdata", "recordings", "esxihost_synthetic_crud.yaml"))
+
+	resource := newEsxiHostTestResource()
+	ocimock.InitializeResource(resource, "mock-esxihost")
+	resource.Spec = ocimock.MustJSONFixture[ocvpv1beta1.EsxiHostSpec](t, `{
+  "billingDonorHostId": "\u003cocid:1\u003e",
+  "capacityReservationId": "\u003cocid:2\u003e",
+  "clusterId": "\u003cocid:3\u003e",
+  "computeAvailabilityDomain": "Uocm:PHX-AD-1",
+  "currentCommitment": "MONTH",
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "42"
+    }
+  },
+  "displayName": "esxihost-sample",
+  "esxiSoftwareVersion": "7.0.0",
+  "freeformTags": {
+    "env": "dev"
+  },
+  "hostOcpuCount": 32,
+  "hostShapeName": "BM.DenseIO2.52",
+  "nextCommitment": "MONTH"
+}`)
+	createRequest := ocimock.MustJSONFixture[ocvpsdk.CreateEsxiHostDetails](t, `{
+  "billingDonorHostId": "\u003cocid:1\u003e",
+  "capacityReservationId": "\u003cocid:2\u003e",
+  "clusterId": "\u003cocid:3\u003e",
+  "computeAvailabilityDomain": "Uocm:PHX-AD-1",
+  "currentCommitment": "MONTH",
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "42"
+    }
+  },
+  "displayName": "esxihost-sample",
+  "esxiSoftwareVersion": "7.0.0",
+  "freeformTags": {
+    "env": "dev"
+  },
+  "hostOcpuCount": 32,
+  "hostShapeName": "BM.DenseIO2.52",
+  "nextCommitment": "MONTH"
+}`)
+	createdState := ocimock.MustOCIResponseFixture[ocvpsdk.EsxiHost](t, `{
+  "billingDonorHostId": "\u003cocid:1\u003e",
+  "capacityReservationId": "\u003cocid:2\u003e",
+  "clusterId": "\u003cocid:3\u003e",
+  "compartmentId": "\u003cocid:4\u003e",
+  "computeAvailabilityDomain": "Uocm:PHX-AD-1",
+  "currentCommitment": "MONTH",
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "42"
+    }
+  },
+  "displayName": "esxihost-sample",
+  "esxiSoftwareVersion": "7.0.0",
+  "freeformTags": {
+    "env": "dev"
+  },
+  "hostOcpuCount": 32,
+  "hostShapeName": "BM.DenseIO2.52",
+  "id": "\u003cocid:5\u003e",
+  "lifecycleState": "ACTIVE",
+  "nextCommitment": "MONTH"
+}`)
+	createdReadStates := []ocvpsdk.EsxiHost{
+		ocimock.MustOCIResponseFixture[ocvpsdk.EsxiHost](t, `{
+  "billingDonorHostId": "\u003cocid:1\u003e",
+  "capacityReservationId": "\u003cocid:2\u003e",
+  "clusterId": "\u003cocid:3\u003e",
+  "compartmentId": "\u003cocid:4\u003e",
+  "computeAvailabilityDomain": "Uocm:PHX-AD-1",
+  "currentCommitment": "MONTH",
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "42"
+    }
+  },
+  "displayName": "esxihost-sample",
+  "esxiSoftwareVersion": "7.0.0",
+  "freeformTags": {
+    "env": "dev"
+  },
+  "hostOcpuCount": 32,
+  "hostShapeName": "BM.DenseIO2.52",
+  "id": "\u003cocid:5\u003e",
+  "lifecycleState": "ACTIVE",
+  "nextCommitment": "MONTH"
+}`),
+	}
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
+		ocvpsdk.EsxiHost,
+		ocvpsdk.CreateEsxiHostDetails,
+		ocvpsdk.UpdateEsxiHostDetails,
+	]{
+		CollectionPath:     "/20230701/esxiHosts",
+		ItemPath:           "/20230701/esxiHosts/<ocid:5>",
+		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		CreateRequest:      &createRequest,
+		CreatedState:       &createdState,
+		ListShape:          ocimock.ListShapeItems,
+		CreatedReadStates:  createdReadStates,
+		DeleteEndsNotFound: true,
+		RequireCreateRead:  true,
+		RequireDeleteRead:  true,
+		CreateStatus:       201,
+		DeleteStatus:       204,
+		NotFoundCode:       "NotFound",
+		ValidateCreate: func(request ocimock.Request, _ ocvpsdk.CreateEsxiHostDetails) error {
+			if request.Header.Get("opc-retry-token") == "" {
+				return fmt.Errorf("create retry token is empty")
+			}
+			return nil
+		},
+		ValidateDelete: func(request ocimock.Request, _ ocvpsdk.EsxiHost) error {
+			if len(request.Body) != 0 {
+				return fmt.Errorf("delete body = %s", request.Body)
+			}
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, err := ocimock.Open(ocimock.Options{Host: "https://oci.mock.invalid", BasePath: "20230701", Responder: responder})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -25,16 +151,34 @@ func TestMockIntegrationEsxiHostLifecycleCRUD(t *testing.T) {
 			t.Errorf("close EsxiHost OCI mock: %v", err)
 		}
 	})
-	resource := newEsxiHostTestResource()
-	ocimock.InitializeResource(resource, "mock-esxihost")
-	if err := evidence.DecodeCreateSpec(&resource.Spec); err != nil {
-		t.Fatal(err)
-	}
 	sdkClient := ocvpsdk.EsxiHostClient{BaseClient: session.BaseClient()}
 	manager := &EsxiHostServiceManager{Log: loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("synthetic-integration")}}
 	hooks := newEsxiHostRuntimeHooks(manager, sdkClient)
 	client := wrapEsxiHostGeneratedClient(hooks, defaultEsxiHostServiceClient{ServiceClient: generatedruntime.NewServiceClient[*ocvpv1beta1.EsxiHost](buildEsxiHostGeneratedRuntimeConfig(manager, hooks))})
-	if err := ocimock.RunEvidenceLifecycle(resource, &resource.Spec, client, evidence); err != nil {
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*ocvpv1beta1.EsxiHost]{
+		Resource:      resource,
+		Client:        client,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *ocvpv1beta1.EsxiHost) error {
+			if current.Status.Id != "<ocid:5>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:5>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.BillingDonorHostId, current.Spec.BillingDonorHostId) ||
+				!reflect.DeepEqual(current.Status.ClusterId, current.Spec.ClusterId) ||
+				!reflect.DeepEqual(current.Status.ComputeAvailabilityDomain, current.Spec.ComputeAvailabilityDomain) ||
+				!reflect.DeepEqual(current.Status.CurrentCommitment, current.Spec.CurrentCommitment) ||
+				!reflect.DeepEqual(current.Status.DefinedTags, current.Spec.DefinedTags) ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
+				!reflect.DeepEqual(current.Status.HostOcpuCount, current.Spec.HostOcpuCount) ||
+				!reflect.DeepEqual(current.Status.HostShapeName, current.Spec.HostShapeName) ||
+				!reflect.DeepEqual(current.Status.NextCommitment, current.Spec.NextCommitment) {
+				return fmt.Errorf("created EsxiHost status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
 	if err := session.Close(); err != nil {

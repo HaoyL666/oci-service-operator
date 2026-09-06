@@ -2,19 +2,144 @@
 package backend
 
 import (
-	"path/filepath"
-	"testing"
-
+	"context"
+	"fmt"
 	loadbalancersdk "github.com/oracle/oci-go-sdk/v65/loadbalancer"
 	loadbalancerv1beta1 "github.com/oracle/oci-service-operator/api/loadbalancer/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	"reflect"
+	"testing"
 )
 
-// Contract evidence: recorded composite-path CRUD, production service manager, and real OCI SDK serialization.
+// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
 func TestMockIntegrationBackendCompositeCRUD(t *testing.T) {
 	t.Parallel()
-	session, evidence, err := ocimock.OpenEvidenceCRUD(filepath.Join("testdata", "recordings", "backend_crud.yaml"))
+
+	resource := &loadbalancerv1beta1.Backend{}
+	ocimock.InitializeResource(resource, "mock-backend")
+	resource.Spec = ocimock.MustJSONFixture[loadbalancerv1beta1.BackendSpec](t, `{
+  "ipAddress": "10.0.20.201",
+  "port": 8081,
+  "weight": 1
+}`)
+	resource.Spec.LoadBalancerId = "<ocid:1>"
+	resource.Spec.BackendSetName = "osok_replay_backend_set"
+	updatedSpec := resource.Spec
+	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
+  "backup": false,
+  "drain": false,
+  "offline": false,
+  "weight": 2
+}`)
+	createRequest := ocimock.MustJSONFixture[loadbalancersdk.CreateBackendDetails](t, `{
+  "ipAddress": "10.0.20.201",
+  "port": 8081,
+  "weight": 1
+}`)
+	createdState := ocimock.MustOCIResponseFixture[loadbalancersdk.Backend](t, `{
+  "backup": false,
+  "drain": false,
+  "ipAddress": "10.0.20.201",
+  "maxConnections": null,
+  "name": "10.0.20.201:8081",
+  "offline": false,
+  "port": 8081,
+  "weight": 1
+}`)
+	createdReadStates := []loadbalancersdk.Backend{
+		ocimock.MustOCIResponseFixture[loadbalancersdk.Backend](t, `{
+  "backup": false,
+  "drain": false,
+  "ipAddress": "10.0.20.201",
+  "maxConnections": null,
+  "name": "10.0.20.201:8081",
+  "offline": false,
+  "port": 8081,
+  "weight": 1
+}`),
+	}
+	updateRequest := ocimock.MustJSONFixture[loadbalancersdk.UpdateBackendDetails](t, `{
+  "backup": false,
+  "drain": false,
+  "offline": false,
+  "weight": 2
+}`)
+	updatedState := ocimock.MustOCIResponseFixture[loadbalancersdk.Backend](t, `{
+  "backup": false,
+  "drain": false,
+  "ipAddress": "10.0.20.201",
+  "maxConnections": null,
+  "name": "10.0.20.201:8081",
+  "offline": false,
+  "port": 8081,
+  "weight": 2
+}`)
+	updatedReadStates := []loadbalancersdk.Backend{
+		ocimock.MustOCIResponseFixture[loadbalancersdk.Backend](t, `{
+  "backup": false,
+  "drain": false,
+  "ipAddress": "10.0.20.201",
+  "maxConnections": null,
+  "name": "10.0.20.201:8081",
+  "offline": false,
+  "port": 8081,
+  "weight": 2
+}`),
+	}
+	deletedReadStates := []loadbalancersdk.Backend{
+		ocimock.MustOCIResponseFixture[loadbalancersdk.Backend](t, `{
+  "backup": false,
+  "drain": false,
+  "ipAddress": "10.0.20.201",
+  "maxConnections": null,
+  "name": "10.0.20.201:8081",
+  "offline": false,
+  "port": 8081,
+  "weight": 2
+}`),
+	}
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
+		loadbalancersdk.Backend,
+		loadbalancersdk.CreateBackendDetails,
+		loadbalancersdk.UpdateBackendDetails,
+	]{
+		CollectionPath:     "/20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set/backends",
+		ItemPath:           "/20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set/backends/10.0.20.201:8081",
+		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest:      &createRequest,
+		CreatedState:       &createdState,
+		ListShape:          ocimock.ListShapeArray,
+		UpdateRequest:      &updateRequest,
+		UpdatedState:       &updatedState,
+		CreatedReadStates:  createdReadStates,
+		UpdatedReadStates:  updatedReadStates,
+		DeletedReadStates:  deletedReadStates,
+		DeleteEndsNotFound: true,
+		RequireCreateRead:  true,
+		RequireUpdateRead:  true,
+		RequireDeleteRead:  true,
+		CreateStatus:       204,
+		UpdateStatus:       204,
+		DeleteStatus:       204,
+		NotFoundCode:       "NotFound",
+		ValidateCreate: func(request ocimock.Request, _ loadbalancersdk.CreateBackendDetails) error {
+			if request.Header.Get("opc-retry-token") == "" {
+				return fmt.Errorf("create retry token is empty")
+			}
+			return nil
+		},
+		ValidateDelete: func(request ocimock.Request, _ loadbalancersdk.Backend) error {
+			if len(request.Body) != 0 {
+				return fmt.Errorf("delete body = %s", request.Body)
+			}
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, err := ocimock.Open(ocimock.Options{Host: "https://oci.mock.invalid", BasePath: "20170115", Responder: responder})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,13 +148,6 @@ func TestMockIntegrationBackendCompositeCRUD(t *testing.T) {
 			t.Errorf("close Backend OCI mock: %v", err)
 		}
 	})
-	resource := &loadbalancerv1beta1.Backend{}
-	ocimock.InitializeResource(resource, "mock-backend")
-	if err := evidence.DecodeCreateSpec(&resource.Spec); err != nil {
-		t.Fatal(err)
-	}
-	resource.Spec.LoadBalancerId = "<ocid:1>"
-	resource.Spec.BackendSetName = "osok_replay_backend_set"
 	sdkClient := loadbalancersdk.LoadBalancerClient{BaseClient: session.BaseClient()}
 	hooks := newBackendRuntimeHooksWithOCIClient(sdkClient)
 	applyBackendRuntimeHooks(&hooks)
@@ -37,7 +155,30 @@ func TestMockIntegrationBackendCompositeCRUD(t *testing.T) {
 	client := wrapBackendGeneratedClient(hooks, defaultBackendServiceClient{
 		ServiceClient: generatedruntime.NewServiceClient[*loadbalancerv1beta1.Backend](buildBackendGeneratedRuntimeConfig(manager, hooks)),
 	})
-	if err := ocimock.RunEvidenceLifecycle(resource, &resource.Spec, client, evidence); err != nil {
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*loadbalancerv1beta1.Backend]{
+		Resource:      resource,
+		Client:        client,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *loadbalancerv1beta1.Backend) error {
+			if !reflect.DeepEqual(current.Status.IpAddress, current.Spec.IpAddress) ||
+				!reflect.DeepEqual(current.Status.Port, current.Spec.Port) ||
+				!reflect.DeepEqual(current.Status.Weight, current.Spec.Weight) {
+				return fmt.Errorf("created Backend status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *loadbalancerv1beta1.Backend) { current.Spec = updatedSpec },
+		ValidateUpdated: func(current *loadbalancerv1beta1.Backend) error {
+			if !reflect.DeepEqual(current.Status.Backup, current.Spec.Backup) ||
+				!reflect.DeepEqual(current.Status.Drain, current.Spec.Drain) ||
+				!reflect.DeepEqual(current.Status.Offline, current.Spec.Offline) ||
+				!reflect.DeepEqual(current.Status.Weight, current.Spec.Weight) {
+				return fmt.Errorf("updated Backend status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
 	if err := session.Close(); err != nil {

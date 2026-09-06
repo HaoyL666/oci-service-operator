@@ -2,17 +2,72 @@
 package odaprivateendpoint
 
 import (
-	"path/filepath"
-	"testing"
-
+	"context"
+	"fmt"
 	odasdk "github.com/oracle/oci-go-sdk/v65/oda"
+	odav1beta1 "github.com/oracle/oci-service-operator/api/oda/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	"reflect"
+	"testing"
 )
 
-// Contract evidence: synthetic OCI-compatible responses, production service manager, and real OCI SDK serialization.
+// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
 func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
 	t.Parallel()
-	session, evidence, err := ocimock.OpenEvidenceCRUD(filepath.Join("testdata", "recordings", "odaprivateendpoint_synthetic_crud.yaml"))
+
+	resource := newOdaPrivateEndpointResource("osok-replay-oda-endpoint")
+	ocimock.InitializeResource(resource, "mock-odaprivateendpoint")
+	resource.Spec = ocimock.MustJSONFixture[odav1beta1.OdaPrivateEndpointSpec](t, `{
+  "compartmentId": "\u003cocid:1\u003e",
+  "displayName": "osok-replay-oda-endpoint",
+  "subnetId": "\u003cocid:2\u003e"
+}`)
+	createRequest := ocimock.MustJSONFixture[odasdk.CreateOdaPrivateEndpointDetails](t, `{
+  "compartmentId": "\u003cocid:1\u003e",
+  "displayName": "osok-replay-oda-endpoint",
+  "subnetId": "\u003cocid:2\u003e"
+}`)
+	createdState := ocimock.MustOCIResponseFixture[odasdk.OdaPrivateEndpoint](t, `{
+  "compartmentId": "\u003cocid:1\u003e",
+  "displayName": "osok-replay-oda-endpoint",
+  "id": "\u003cocid:3\u003e",
+  "lifecycleState": "ACTIVE",
+  "subnetId": "\u003cocid:2\u003e"
+}`)
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
+		odasdk.OdaPrivateEndpoint,
+		odasdk.CreateOdaPrivateEndpointDetails,
+		odasdk.UpdateOdaPrivateEndpointDetails,
+	]{
+		CollectionPath:    "/20190506/odaPrivateEndpoints",
+		ItemPath:          "/20190506/odaPrivateEndpoints/<ocid:3>",
+		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		CreateRequest:     &createRequest,
+		CreatedState:      &createdState,
+		ListShape:         ocimock.ListShapeItems,
+		RequireCreateRead: true,
+		RequireDeleteRead: true,
+		CreateStatus:      201,
+		DeleteStatus:      204,
+		NotFoundCode:      "NotFound",
+		ValidateCreate: func(request ocimock.Request, _ odasdk.CreateOdaPrivateEndpointDetails) error {
+			if request.Header.Get("opc-retry-token") == "" {
+				return fmt.Errorf("create retry token is empty")
+			}
+			return nil
+		},
+		ValidateDelete: func(request ocimock.Request, _ odasdk.OdaPrivateEndpoint) error {
+			if len(request.Body) != 0 {
+				return fmt.Errorf("delete body = %s", request.Body)
+			}
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, err := ocimock.Open(ocimock.Options{Host: "https://oci.mock.invalid", BasePath: "20190506", Responder: responder})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -21,14 +76,25 @@ func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
 			t.Errorf("close OdaPrivateEndpoint OCI mock: %v", err)
 		}
 	})
-	resource := newOdaPrivateEndpointResource("osok-replay-oda-endpoint")
-	ocimock.InitializeResource(resource, "mock-odaprivateendpoint")
-	if err := evidence.DecodeCreateSpec(&resource.Spec); err != nil {
-		t.Fatal(err)
-	}
 	sdkClient := odasdk.ManagementClient{BaseClient: session.BaseClient()}
 	client := newOdaPrivateEndpointServiceClientWithOCIClient(sdkClient)
-	if err := ocimock.RunEvidenceLifecycle(resource, &resource.Spec, client, evidence); err != nil {
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*odav1beta1.OdaPrivateEndpoint]{
+		Resource:      resource,
+		Client:        client,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *odav1beta1.OdaPrivateEndpoint) error {
+			if current.Status.Id != "<ocid:3>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:3>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.CompartmentId, current.Spec.CompartmentId) ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.SubnetId, current.Spec.SubnetId) {
+				return fmt.Errorf("created OdaPrivateEndpoint status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
 	if err := session.Close(); err != nil {

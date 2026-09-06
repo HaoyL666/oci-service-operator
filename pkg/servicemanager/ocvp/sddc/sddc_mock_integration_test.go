@@ -2,26 +2,20 @@
 package sddc
 
 import (
-	"path/filepath"
-	"testing"
-
+	"context"
+	"fmt"
 	ocvpsdk "github.com/oracle/oci-go-sdk/v65/ocvp"
 	ocvpv1beta1 "github.com/oracle/oci-service-operator/api/ocvp/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	"reflect"
+	"testing"
 )
 
-// Contract evidence: synthetic OCI-compatible responses, production service manager, and real OCI SDK serialization.
+// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
 func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
 	t.Parallel()
-	session, evidence, err := ocimock.OpenEvidenceCRUD(filepath.Join("testdata", "recordings", "sddc_synthetic_crud.yaml"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if err := session.Close(); err != nil {
-			t.Errorf("close Sddc OCI mock: %v", err)
-		}
-	})
+
 	resource := &ocvpv1beta1.Sddc{Spec: ocvpv1beta1.SddcSpec{
 		VmwareSoftwareVersion: "8.0.2",
 		CompartmentId:         "ocid1.compartment.oc1..replay",
@@ -54,13 +48,420 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
 		FreeformTags:      map[string]string{"osok-replay": "create"},
 	}}
 	ocimock.InitializeResource(resource, "mock-sddc")
-	if err := evidence.DecodeCreateSpec(&resource.Spec); err != nil {
+	resource.Spec = ocimock.MustJSONFixture[ocvpv1beta1.SddcSpec](t, `{
+  "compartmentId": "\u003cocid:1\u003e",
+  "displayName": "osok-replay-sddc",
+  "freeformTags": {
+    "osok-replay": "create"
+  },
+  "hcxMode": "DISABLED",
+  "initialConfiguration": {
+    "initialClusterConfigurations": [
+      {
+        "computeAvailabilityDomain": "US-ASHBURN-AD-1",
+        "displayName": "management",
+        "esxiHostsCount": 3,
+        "initialCommitment": "HOUR",
+        "initialHostOcpuCount": 128,
+        "initialHostShapeName": "BM.DenseIO.E5.128",
+        "networkConfiguration": {
+          "nsxEdgeUplink1VlanId": "\u003cocid:2\u003e",
+          "nsxEdgeUplink2VlanId": "\u003cocid:3\u003e",
+          "nsxEdgeVTepVlanId": "\u003cocid:4\u003e",
+          "nsxVTepVlanId": "\u003cocid:5\u003e",
+          "provisioningSubnetId": "\u003cocid:6\u003e",
+          "vmotionVlanId": "\u003cocid:7\u003e",
+          "vsanVlanId": "\u003cocid:8\u003e",
+          "vsphereVlanId": "\u003cocid:9\u003e"
+        },
+        "vsphereType": "MANAGEMENT"
+      }
+    ]
+  },
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "vmwareSoftwareVersion": "8.0.2"
+}`)
+	updatedSpec := resource.Spec
+	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
+  "displayName": "osok-replay-sddc-updated",
+  "freeformTags": {
+    "osok-replay": "update"
+  }
+}`)
+	createRequest := ocimock.MustJSONFixture[ocvpsdk.CreateSddcDetails](t, `{
+  "compartmentId": "\u003cocid:1\u003e",
+  "displayName": "osok-replay-sddc",
+  "freeformTags": {
+    "osok-replay": "create"
+  },
+  "hcxMode": "DISABLED",
+  "initialConfiguration": {
+    "initialClusterConfigurations": [
+      {
+        "computeAvailabilityDomain": "US-ASHBURN-AD-1",
+        "displayName": "management",
+        "esxiHostsCount": 3,
+        "initialCommitment": "HOUR",
+        "initialHostOcpuCount": 128,
+        "initialHostShapeName": "BM.DenseIO.E5.128",
+        "networkConfiguration": {
+          "nsxEdgeUplink1VlanId": "\u003cocid:2\u003e",
+          "nsxEdgeUplink2VlanId": "\u003cocid:3\u003e",
+          "nsxEdgeVTepVlanId": "\u003cocid:4\u003e",
+          "nsxVTepVlanId": "\u003cocid:5\u003e",
+          "provisioningSubnetId": "\u003cocid:6\u003e",
+          "vmotionVlanId": "\u003cocid:7\u003e",
+          "vsanVlanId": "\u003cocid:8\u003e",
+          "vsphereVlanId": "\u003cocid:9\u003e"
+        },
+        "vsphereType": "MANAGEMENT"
+      }
+    ]
+  },
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "vmwareSoftwareVersion": "8.0.2"
+}`)
+	createdState := ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
+  "clustersCount": 1,
+  "compartmentId": "<ocid:1>",
+  "definedTags": {},
+  "displayName": "osok-replay-sddc",
+  "freeformTags": {
+    "osok-replay": "create"
+  },
+  "hcxMode": "DISABLED",
+  "id": "<ocid:10>",
+  "initialConfiguration": {
+    "initialClusterConfigurations": [
+      {
+        "computeAvailabilityDomain": "US-ASHBURN-AD-1",
+        "displayName": "management",
+        "esxiHostsCount": 3,
+        "initialCommitment": "HOUR",
+        "initialHostOcpuCount": 128,
+        "initialHostShapeName": "BM.DenseIO.E5.128",
+        "networkConfiguration": {
+          "nsxEdgeUplink1VlanId": "<ocid:2>",
+          "nsxEdgeUplink2VlanId": "<ocid:3>",
+          "nsxEdgeVTepVlanId": "<ocid:4>",
+          "nsxVTepVlanId": "<ocid:5>",
+          "provisioningSubnetId": "<ocid:6>",
+          "vmotionVlanId": "<ocid:7>",
+          "vsanVlanId": "<ocid:8>",
+          "vsphereVlanId": "<ocid:9>"
+        },
+        "vsphereType": "MANAGEMENT"
+      }
+    ]
+  },
+  "lifecycleState": "ACTIVE",
+  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:01:00Z",
+  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vmwareSoftwareVersion": "8.0.2"
+}`)
+	createdReadStates := []ocvpsdk.Sddc{
+		ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
+  "clustersCount": 1,
+  "compartmentId": "<ocid:1>",
+  "definedTags": {},
+  "displayName": "osok-replay-sddc",
+  "freeformTags": {
+    "osok-replay": "create"
+  },
+  "hcxMode": "DISABLED",
+  "id": "<ocid:10>",
+  "initialConfiguration": {
+    "initialClusterConfigurations": [
+      {
+        "computeAvailabilityDomain": "US-ASHBURN-AD-1",
+        "displayName": "management",
+        "esxiHostsCount": 3,
+        "initialCommitment": "HOUR",
+        "initialHostOcpuCount": 128,
+        "initialHostShapeName": "BM.DenseIO.E5.128",
+        "networkConfiguration": {
+          "nsxEdgeUplink1VlanId": "<ocid:2>",
+          "nsxEdgeUplink2VlanId": "<ocid:3>",
+          "nsxEdgeVTepVlanId": "<ocid:4>",
+          "nsxVTepVlanId": "<ocid:5>",
+          "provisioningSubnetId": "<ocid:6>",
+          "vmotionVlanId": "<ocid:7>",
+          "vsanVlanId": "<ocid:8>",
+          "vsphereVlanId": "<ocid:9>"
+        },
+        "vsphereType": "MANAGEMENT"
+      }
+    ]
+  },
+  "lifecycleState": "ACTIVE",
+  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:01:00Z",
+  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vmwareSoftwareVersion": "8.0.2"
+}`),
+	}
+	updateRequest := ocimock.MustJSONFixture[ocvpsdk.UpdateSddcDetails](t, `{
+  "displayName": "osok-replay-sddc-updated",
+  "freeformTags": {
+    "osok-replay": "update"
+  }
+}`)
+	updatedState := ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
+  "clustersCount": 1,
+  "compartmentId": "<ocid:1>",
+  "definedTags": {},
+  "displayName": "osok-replay-sddc-updated",
+  "freeformTags": {
+    "osok-replay": "update"
+  },
+  "hcxMode": "DISABLED",
+  "id": "<ocid:10>",
+  "initialConfiguration": {
+    "initialClusterConfigurations": [
+      {
+        "computeAvailabilityDomain": "US-ASHBURN-AD-1",
+        "displayName": "management",
+        "esxiHostsCount": 3,
+        "initialCommitment": "HOUR",
+        "initialHostOcpuCount": 128,
+        "initialHostShapeName": "BM.DenseIO.E5.128",
+        "networkConfiguration": {
+          "nsxEdgeUplink1VlanId": "<ocid:2>",
+          "nsxEdgeUplink2VlanId": "<ocid:3>",
+          "nsxEdgeVTepVlanId": "<ocid:4>",
+          "nsxVTepVlanId": "<ocid:5>",
+          "provisioningSubnetId": "<ocid:6>",
+          "vmotionVlanId": "<ocid:7>",
+          "vsanVlanId": "<ocid:8>",
+          "vsphereVlanId": "<ocid:9>"
+        },
+        "vsphereType": "MANAGEMENT"
+      }
+    ]
+  },
+  "lifecycleState": "ACTIVE",
+  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:02:00Z",
+  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vmwareSoftwareVersion": "8.0.2"
+}`)
+	updatedReadStates := []ocvpsdk.Sddc{
+		ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
+  "clustersCount": 1,
+  "compartmentId": "<ocid:1>",
+  "definedTags": {},
+  "displayName": "osok-replay-sddc-updated",
+  "freeformTags": {
+    "osok-replay": "update"
+  },
+  "hcxMode": "DISABLED",
+  "id": "<ocid:10>",
+  "initialConfiguration": {
+    "initialClusterConfigurations": [
+      {
+        "computeAvailabilityDomain": "US-ASHBURN-AD-1",
+        "displayName": "management",
+        "esxiHostsCount": 3,
+        "initialCommitment": "HOUR",
+        "initialHostOcpuCount": 128,
+        "initialHostShapeName": "BM.DenseIO.E5.128",
+        "networkConfiguration": {
+          "nsxEdgeUplink1VlanId": "<ocid:2>",
+          "nsxEdgeUplink2VlanId": "<ocid:3>",
+          "nsxEdgeVTepVlanId": "<ocid:4>",
+          "nsxVTepVlanId": "<ocid:5>",
+          "provisioningSubnetId": "<ocid:6>",
+          "vmotionVlanId": "<ocid:7>",
+          "vsanVlanId": "<ocid:8>",
+          "vsphereVlanId": "<ocid:9>"
+        },
+        "vsphereType": "MANAGEMENT"
+      }
+    ]
+  },
+  "lifecycleState": "ACTIVE",
+  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:02:00Z",
+  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vmwareSoftwareVersion": "8.0.2"
+}`),
+	}
+	deletedReadStates := []ocvpsdk.Sddc{
+		ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
+  "clustersCount": 1,
+  "compartmentId": "<ocid:1>",
+  "definedTags": {},
+  "displayName": "osok-replay-sddc-updated",
+  "freeformTags": {
+    "osok-replay": "update"
+  },
+  "hcxMode": "DISABLED",
+  "id": "<ocid:10>",
+  "initialConfiguration": {
+    "initialClusterConfigurations": [
+      {
+        "computeAvailabilityDomain": "US-ASHBURN-AD-1",
+        "displayName": "management",
+        "esxiHostsCount": 3,
+        "initialCommitment": "HOUR",
+        "initialHostOcpuCount": 128,
+        "initialHostShapeName": "BM.DenseIO.E5.128",
+        "networkConfiguration": {
+          "nsxEdgeUplink1VlanId": "<ocid:2>",
+          "nsxEdgeUplink2VlanId": "<ocid:3>",
+          "nsxEdgeVTepVlanId": "<ocid:4>",
+          "nsxVTepVlanId": "<ocid:5>",
+          "provisioningSubnetId": "<ocid:6>",
+          "vmotionVlanId": "<ocid:7>",
+          "vsanVlanId": "<ocid:8>",
+          "vsphereVlanId": "<ocid:9>"
+        },
+        "vsphereType": "MANAGEMENT"
+      }
+    ]
+  },
+  "lifecycleState": "DELETING",
+  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:03:00Z",
+  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vmwareSoftwareVersion": "8.0.2"
+}`),
+		ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
+  "clustersCount": 1,
+  "compartmentId": "<ocid:1>",
+  "definedTags": {},
+  "displayName": "osok-replay-sddc-updated",
+  "freeformTags": {
+    "osok-replay": "update"
+  },
+  "hcxMode": "DISABLED",
+  "id": "<ocid:10>",
+  "initialConfiguration": {
+    "initialClusterConfigurations": [
+      {
+        "computeAvailabilityDomain": "US-ASHBURN-AD-1",
+        "displayName": "management",
+        "esxiHostsCount": 3,
+        "initialCommitment": "HOUR",
+        "initialHostOcpuCount": 128,
+        "initialHostShapeName": "BM.DenseIO.E5.128",
+        "networkConfiguration": {
+          "nsxEdgeUplink1VlanId": "<ocid:2>",
+          "nsxEdgeUplink2VlanId": "<ocid:3>",
+          "nsxEdgeVTepVlanId": "<ocid:4>",
+          "nsxVTepVlanId": "<ocid:5>",
+          "provisioningSubnetId": "<ocid:6>",
+          "vmotionVlanId": "<ocid:7>",
+          "vsanVlanId": "<ocid:8>",
+          "vsphereVlanId": "<ocid:9>"
+        },
+        "vsphereType": "MANAGEMENT"
+      }
+    ]
+  },
+  "lifecycleState": "DELETED",
+  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:04:00Z",
+  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vmwareSoftwareVersion": "8.0.2"
+}`),
+	}
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
+		ocvpsdk.Sddc,
+		ocvpsdk.CreateSddcDetails,
+		ocvpsdk.UpdateSddcDetails,
+	]{
+		CollectionPath:    "/20230701/sddcs",
+		ItemPath:          "/20230701/sddcs/<ocid:10>",
+		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest:     &createRequest,
+		CreatedState:      &createdState,
+		ListShape:         ocimock.ListShapeItems,
+		UpdateRequest:     &updateRequest,
+		UpdatedState:      &updatedState,
+		CreatedReadStates: createdReadStates,
+		UpdatedReadStates: updatedReadStates,
+		DeletedReadStates: deletedReadStates,
+		RequireCreateRead: true,
+		RequireUpdateRead: true,
+		RequireDeleteRead: true,
+		CreateStatus:      202,
+		UpdateStatus:      200,
+		DeleteStatus:      204,
+		ValidateCreate: func(request ocimock.Request, _ ocvpsdk.CreateSddcDetails) error {
+			if request.Header.Get("opc-retry-token") == "" {
+				return fmt.Errorf("create retry token is empty")
+			}
+			return nil
+		},
+		ValidateDelete: func(request ocimock.Request, _ ocvpsdk.Sddc) error {
+			if len(request.Body) != 0 {
+				return fmt.Errorf("delete body = %s", request.Body)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
+	session, err := ocimock.Open(ocimock.Options{Host: "https://oci.mock.invalid", BasePath: "20230701", Responder: responder})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := session.Close(); err != nil {
+			t.Errorf("close Sddc OCI mock: %v", err)
+		}
+	})
 	sdkClient := ocvpsdk.SddcClient{BaseClient: session.BaseClient()}
 	manager := newSyntheticSddcManager(sdkClient)
 	client := manager.client
-	if err := ocimock.RunEvidenceLifecycle(resource, &resource.Spec, client, evidence); err != nil {
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*ocvpv1beta1.Sddc]{
+		Resource:      resource,
+		Client:        client,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *ocvpv1beta1.Sddc) error {
+			if current.Status.Id != "<ocid:10>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:10>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.CompartmentId, current.Spec.CompartmentId) ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
+				!reflect.DeepEqual(current.Status.HcxMode, current.Spec.HcxMode) ||
+				!reflect.DeepEqual(current.Status.VmwareSoftwareVersion, current.Spec.VmwareSoftwareVersion) ||
+				current.Status.ClustersCount != 1 ||
+				current.Status.VcenterFqdn == "" ||
+				current.Status.NsxManagerFqdn == "" {
+				return fmt.Errorf("created Sddc status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *ocvpv1beta1.Sddc) { current.Spec = updatedSpec },
+		ValidateUpdated: func(current *ocvpv1beta1.Sddc) error {
+			if current.Status.Id != "<ocid:10>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:10>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) {
+				return fmt.Errorf("updated Sddc status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
 	if err := session.Close(); err != nil {

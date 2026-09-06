@@ -2,19 +2,38 @@
 package publication
 
 import (
-	"path/filepath"
+	"context"
+	"fmt"
+	"net/http"
 	"testing"
 
 	marketplacesdk "github.com/oracle/oci-go-sdk/v65/marketplace"
+	marketplacev1beta1 "github.com/oracle/oci-service-operator/api/marketplace/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-// Contract evidence: synthetic OCI-compatible responses, production service manager, and real OCI SDK serialization.
-func TestMockIntegrationPublicationLifecycleCRUD(t *testing.T) {
+// Contract evidence:
+//   - synthetic OCI trace: testdata/recordings/publication_synthetic_crud.yaml
+//   - formal contract: formal/controllers/marketplace/publication and formal/imports/marketplace/publication.json
+//   - resource runtime: publication_runtime_client.go
+//   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/marketplace
+func TestMockIntegrationPublicationLifecycleCreateReadDelete(t *testing.T) {
 	t.Parallel()
-	session, evidence, err := ocimock.OpenEvidenceCRUD(filepath.Join("testdata", "recordings", "publication_synthetic_crud.yaml"))
+
+	resource := testPublicationResource()
+	ocimock.InitializeResource(resource, "mock-publication")
+	responder, err := newPublicationMockResponder(resource)
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, err := ocimock.Open(ocimock.Options{
+		Host:      "https://marketplace.mock.invalid",
+		BasePath:  "20181001",
+		Responder: responder,
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,14 +42,89 @@ func TestMockIntegrationPublicationLifecycleCRUD(t *testing.T) {
 			t.Errorf("close Publication OCI mock: %v", err)
 		}
 	})
-	resource := testPublicationResource()
-	ocimock.InitializeResource(resource, "mock-publication")
+
 	sdkClient := marketplacesdk.MarketplaceClient{BaseClient: session.BaseClient()}
-	client := newPublicationServiceClientWithOCIClient(loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("synthetic-integration")}, sdkClient)
-	if err := ocimock.RunEvidenceLifecycle(resource, &resource.Spec, client, evidence); err != nil {
+	client := newPublicationServiceClientWithOCIClient(
+		loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")},
+		sdkClient,
+	)
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*marketplacev1beta1.Publication]{
+		Resource:      resource,
+		Client:        client,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *marketplacev1beta1.Publication) error {
+			if current.Status.Id != testPublicationID ||
+				current.Status.Name != testPublicationName ||
+				current.Status.LifecycleState != string(marketplacesdk.PublicationLifecycleStateActive) ||
+				current.Status.PackageType != string(marketplacesdk.PackageTypeEnumImage) {
+				return fmt.Errorf("created Publication status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
+}
+
+func newPublicationMockResponder(resource *marketplacev1beta1.Publication) (*ocimock.CRUDResponder[marketplacesdk.Publication], error) {
+	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[marketplacesdk.Publication]{
+		CollectionPath:     "/20181001/publications",
+		ItemPath:           "/20181001/publications/" + testPublicationID,
+		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		RequireCreateRead:  true,
+		RequireDeleteRead:  true,
+		List: func(request ocimock.Request, present bool, state marketplacesdk.Publication) (ocimock.Response, error) {
+			if got := request.URL.Query().Get("compartmentId"); got != resource.Spec.CompartmentId {
+				return ocimock.Response{}, fmt.Errorf("ListPublications compartmentId = %q", got)
+			}
+			if got := request.URL.Query().Get("listingType"); got != resource.Spec.ListingType {
+				return ocimock.Response{}, fmt.Errorf("ListPublications listingType = %q", got)
+			}
+			if !present {
+				return ocimock.JSONResponse(http.StatusOK, []marketplacesdk.PublicationSummary{})
+			}
+			return ocimock.JSONResponse(http.StatusOK, []marketplacesdk.PublicationSummary{
+				sdkPublicationSummary(*state.Id, *state.Name, state.LifecycleState),
+			})
+		},
+		Create: func(request ocimock.Request) (marketplacesdk.Publication, ocimock.Response, error) {
+			var details marketplacesdk.CreatePublicationDetails
+			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
+				return marketplacesdk.Publication{}, ocimock.Response{}, err
+			}
+			if err := ocimock.ValidateMandatoryFields(details); err != nil {
+				return marketplacesdk.Publication{}, ocimock.Response{}, err
+			}
+			if details.CompartmentId == nil || *details.CompartmentId != resource.Spec.CompartmentId ||
+				details.Name == nil || *details.Name != resource.Spec.Name ||
+				details.ListingType != marketplacesdk.ListingTypePartner ||
+				!boolPointerValue(details.IsAgreementAcknowledged) {
+				return marketplacesdk.Publication{}, ocimock.Response{}, fmt.Errorf("CreatePublication details = %+v", details)
+			}
+			pkg, ok := details.PackageDetails.(marketplacesdk.CreateImagePublicationPackage)
+			if !ok || pkg.ImageId == nil || *pkg.ImageId != resource.Spec.PackageDetails.ImageId ||
+				pkg.PackageVersion == nil || *pkg.PackageVersion != resource.Spec.PackageDetails.PackageVersion {
+				return marketplacesdk.Publication{}, ocimock.Response{}, fmt.Errorf("CreatePublication package details = %#v", details.PackageDetails)
+			}
+			if request.Header.Get("opc-retry-token") == "" {
+				return marketplacesdk.Publication{}, ocimock.Response{}, fmt.Errorf("CreatePublication opc-retry-token is empty")
+			}
+			state := sdkPublication(testPublicationID, testPublicationName, marketplacesdk.PublicationLifecycleStateActive)
+			response, err := ocimock.JSONResponse(http.StatusCreated, state)
+			return state, response, err
+		},
+		Read: func(_ ocimock.Request, state marketplacesdk.Publication) (ocimock.Response, error) {
+			return ocimock.JSONResponse(http.StatusOK, state)
+		},
+		Delete: func(request ocimock.Request, _ marketplacesdk.Publication) (ocimock.Response, error) {
+			if len(request.Body) != 0 {
+				return ocimock.Response{}, fmt.Errorf("DeletePublication body = %s", request.Body)
+			}
+			return ocimock.EmptyResponse(http.StatusNoContent), nil
+		},
+	})
 }

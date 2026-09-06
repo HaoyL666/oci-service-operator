@@ -2,21 +2,86 @@
 package acceptedagreement
 
 import (
-	"path/filepath"
-	"testing"
-
+	"context"
+	"fmt"
 	marketplacesdk "github.com/oracle/oci-go-sdk/v65/marketplace"
 	marketplacev1beta1 "github.com/oracle/oci-service-operator/api/marketplace/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	"reflect"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"testing"
 )
 
-// Contract evidence: synthetic OCI-compatible responses, production service manager, and real OCI SDK serialization.
+// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
 func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
 	t.Parallel()
-	session, evidence, err := ocimock.OpenEvidenceCRUD(filepath.Join("testdata", "recordings", "acceptedagreement_synthetic_crud.yaml"))
+
+	resource := &marketplacev1beta1.AcceptedAgreement{Spec: marketplacev1beta1.AcceptedAgreementSpec{
+		CompartmentId: "ocid1.compartment.oc1..replay", ListingId: "ocid1.appcataloglisting.oc1..replay",
+		PackageVersion: "1.0", AgreementId: "ocid1.marketplaceagreement.oc1..replay", Signature: "synthetic-signature", DisplayName: "osok-replay-agreement",
+	}}
+	ocimock.InitializeResource(resource, "mock-acceptedagreement")
+	resource.Spec = ocimock.MustJSONFixture[marketplacev1beta1.AcceptedAgreementSpec](t, `{
+  "agreementId": "\u003cocid:1\u003e",
+  "compartmentId": "\u003cocid:2\u003e",
+  "displayName": "osok-replay-agreement",
+  "listingId": "\u003cocid:3\u003e",
+  "packageVersion": "1.0",
+  "signature": "synthetic-signature"
+}`)
+	createRequest := ocimock.MustJSONFixture[marketplacesdk.CreateAcceptedAgreementDetails](t, `{
+  "agreementId": "\u003cocid:1\u003e",
+  "compartmentId": "\u003cocid:2\u003e",
+  "displayName": "osok-replay-agreement",
+  "listingId": "\u003cocid:3\u003e",
+  "packageVersion": "1.0",
+  "signature": "synthetic-signature"
+}`)
+	createdState := ocimock.MustOCIResponseFixture[marketplacesdk.AcceptedAgreement](t, `{
+  "agreementId": "\u003cocid:1\u003e",
+  "compartmentId": "\u003cocid:2\u003e",
+  "displayName": "osok-replay-agreement",
+  "id": "\u003cocid:4\u003e",
+  "lifecycleState": "ACTIVE",
+  "listingId": "\u003cocid:3\u003e",
+  "packageVersion": "1.0",
+  "signature": "synthetic-signature"
+}`)
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
+		marketplacesdk.AcceptedAgreement,
+		marketplacesdk.CreateAcceptedAgreementDetails,
+		marketplacesdk.UpdateAcceptedAgreementDetails,
+	]{
+		CollectionPath:    "/20181001/acceptedAgreements",
+		ItemPath:          "/20181001/acceptedAgreements/<ocid:4>",
+		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		CreateRequest:     &createRequest,
+		CreatedState:      &createdState,
+		ListShape:         ocimock.ListShapeArray,
+		RequireCreateRead: true,
+		RequireDeleteRead: true,
+		CreateStatus:      201,
+		DeleteStatus:      204,
+		NotFoundCode:      "NotFound",
+		ValidateCreate: func(request ocimock.Request, _ marketplacesdk.CreateAcceptedAgreementDetails) error {
+			if request.Header.Get("opc-retry-token") == "" {
+				return fmt.Errorf("create retry token is empty")
+			}
+			return nil
+		},
+		ValidateDelete: func(request ocimock.Request, _ marketplacesdk.AcceptedAgreement) error {
+			if len(request.Body) != 0 {
+				return fmt.Errorf("delete body = %s", request.Body)
+			}
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, err := ocimock.Open(ocimock.Options{Host: "https://oci.mock.invalid", BasePath: "20181001", Responder: responder})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -25,19 +90,28 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
 			t.Errorf("close AcceptedAgreement OCI mock: %v", err)
 		}
 	})
-	resource := &marketplacev1beta1.AcceptedAgreement{Spec: marketplacev1beta1.AcceptedAgreementSpec{
-		CompartmentId: "ocid1.compartment.oc1..replay", ListingId: "ocid1.appcataloglisting.oc1..replay",
-		PackageVersion: "1.0", AgreementId: "ocid1.marketplaceagreement.oc1..replay", Signature: "synthetic-signature", DisplayName: "osok-replay-agreement",
-	}}
-	ocimock.InitializeResource(resource, "mock-acceptedagreement")
-	if err := evidence.DecodeCreateSpec(&resource.Spec); err != nil {
-		t.Fatal(err)
-	}
 	sdkClient := marketplacesdk.MarketplaceClient{BaseClient: session.BaseClient()}
 	manager := &AcceptedAgreementServiceManager{Log: loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("synthetic-integration")}}
 	hooks := newAcceptedAgreementRuntimeHooks(manager, sdkClient)
 	client := wrapAcceptedAgreementGeneratedClient(hooks, defaultAcceptedAgreementServiceClient{ServiceClient: generatedruntime.NewServiceClient[*marketplacev1beta1.AcceptedAgreement](buildAcceptedAgreementGeneratedRuntimeConfig(manager, hooks))})
-	if err := ocimock.RunEvidenceLifecycle(resource, &resource.Spec, client, evidence); err != nil {
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*marketplacev1beta1.AcceptedAgreement]{
+		Resource:      resource,
+		Client:        client,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *marketplacev1beta1.AcceptedAgreement) error {
+			if current.Status.Id != "<ocid:4>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:4>" ||
+				!reflect.DeepEqual(current.Status.AgreementId, current.Spec.AgreementId) ||
+				!reflect.DeepEqual(current.Status.CompartmentId, current.Spec.CompartmentId) ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.ListingId, current.Spec.ListingId) ||
+				!reflect.DeepEqual(current.Status.PackageVersion, current.Spec.PackageVersion) {
+				return fmt.Errorf("created AcceptedAgreement status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
 	if err := session.Close(); err != nil {

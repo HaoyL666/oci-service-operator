@@ -2,26 +2,20 @@
 package opensearchcluster
 
 import (
-	"path/filepath"
-	"testing"
-
+	"context"
+	"fmt"
 	opensearchsdk "github.com/oracle/oci-go-sdk/v65/opensearch"
 	opensearchv1beta1 "github.com/oracle/oci-service-operator/api/opensearch/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	"reflect"
+	"testing"
 )
 
-// Contract evidence: synthetic OCI-compatible responses, production service manager, and real OCI SDK serialization.
+// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
 func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
 	t.Parallel()
-	session, evidence, err := ocimock.OpenEvidenceCRUD(filepath.Join("testdata", "recordings", "opensearchcluster_synthetic_crud.yaml"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if err := session.Close(); err != nil {
-			t.Errorf("close OpensearchCluster OCI mock: %v", err)
-		}
-	})
+
 	resource := &opensearchv1beta1.OpensearchCluster{Spec: opensearchv1beta1.OpensearchClusterSpec{
 		DisplayName:                    syntheticOpensearchClusterName,
 		CompartmentId:                  "ocid1.compartment.oc1..replay",
@@ -46,12 +40,275 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
 		FreeformTags:                   map[string]string{"osok-replay": "synthetic"},
 	}}
 	ocimock.InitializeResource(resource, "mock-opensearchcluster")
-	if err := evidence.DecodeCreateSpec(&resource.Spec); err != nil {
+	resource.Spec = ocimock.MustJSONFixture[opensearchv1beta1.OpensearchClusterSpec](t, `{
+  "compartmentId": "\u003cocid:1\u003e",
+  "dataNodeCount": 3,
+  "dataNodeHostMemoryGB": 32,
+  "dataNodeHostOcpuCount": 2,
+  "dataNodeHostType": "FLEX",
+  "dataNodeStorageGB": 50,
+  "displayName": "osok-replay-opensearch-v1",
+  "freeformTags": {
+    "osok-replay": "synthetic"
+  },
+  "masterNodeCount": 3,
+  "masterNodeHostMemoryGB": 16,
+  "masterNodeHostOcpuCount": 1,
+  "masterNodeHostType": "FLEX",
+  "opendashboardNodeCount": 1,
+  "opendashboardNodeHostMemoryGB": 8,
+  "opendashboardNodeHostOcpuCount": 1,
+  "securityMode": "DISABLED",
+  "softwareVersion": "2.11.0",
+  "subnetCompartmentId": "\u003cocid:1\u003e",
+  "subnetId": "\u003cocid:2\u003e",
+  "vcnCompartmentId": "\u003cocid:1\u003e",
+  "vcnId": "\u003cocid:3\u003e"
+}`)
+	updatedSpec := resource.Spec
+	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
+  "displayName": "osok-replay-opensearch-v1-updated"
+}`)
+	createRequest := ocimock.MustJSONFixture[opensearchsdk.CreateOpensearchClusterDetails](t, `{
+  "compartmentId": "\u003cocid:1\u003e",
+  "dataNodeCount": 3,
+  "dataNodeHostMemoryGB": 32,
+  "dataNodeHostOcpuCount": 2,
+  "dataNodeHostType": "FLEX",
+  "dataNodeStorageGB": 50,
+  "displayName": "osok-replay-opensearch-v1",
+  "freeformTags": {
+    "osok-replay": "synthetic"
+  },
+  "masterNodeCount": 3,
+  "masterNodeHostMemoryGB": 16,
+  "masterNodeHostOcpuCount": 1,
+  "masterNodeHostType": "FLEX",
+  "opendashboardNodeCount": 1,
+  "opendashboardNodeHostMemoryGB": 8,
+  "opendashboardNodeHostOcpuCount": 1,
+  "securityMode": "DISABLED",
+  "softwareVersion": "2.11.0",
+  "subnetCompartmentId": "\u003cocid:1\u003e",
+  "subnetId": "\u003cocid:2\u003e",
+  "vcnCompartmentId": "\u003cocid:1\u003e",
+  "vcnId": "\u003cocid:3\u003e"
+}`)
+	createdState := ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
+  "compartmentId": "<ocid:1>",
+  "dataNodeCount": 3,
+  "dataNodeHostMemoryGB": 32,
+  "dataNodeHostOcpuCount": 2,
+  "dataNodeHostType": "FLEX",
+  "dataNodeStorageGB": 50,
+  "displayName": "osok-replay-opensearch-v1",
+  "freeformTags": {
+    "osok-replay": "synthetic"
+  },
+  "id": "<ocid:4>",
+  "lifecycleState": "ACTIVE",
+  "masterNodeCount": 3,
+  "masterNodeHostMemoryGB": 16,
+  "masterNodeHostOcpuCount": 1,
+  "masterNodeHostType": "FLEX",
+  "opendashboardNodeCount": 1,
+  "opendashboardNodeHostMemoryGB": 8,
+  "opendashboardNodeHostOcpuCount": 1,
+  "securityMode": "DISABLED",
+  "softwareVersion": "2.11.0",
+  "subnetCompartmentId": "<ocid:1>",
+  "subnetId": "<ocid:2>",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:01:00Z",
+  "vcnCompartmentId": "<ocid:1>",
+  "vcnId": "<ocid:3>"
+}`)
+	createdReadStates := []opensearchsdk.OpensearchCluster{
+		ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
+  "compartmentId": "<ocid:1>",
+  "dataNodeCount": 3,
+  "dataNodeHostMemoryGB": 32,
+  "dataNodeHostOcpuCount": 2,
+  "dataNodeHostType": "FLEX",
+  "dataNodeStorageGB": 50,
+  "displayName": "osok-replay-opensearch-v1",
+  "freeformTags": {
+    "osok-replay": "synthetic"
+  },
+  "id": "<ocid:4>",
+  "lifecycleState": "ACTIVE",
+  "masterNodeCount": 3,
+  "masterNodeHostMemoryGB": 16,
+  "masterNodeHostOcpuCount": 1,
+  "masterNodeHostType": "FLEX",
+  "opendashboardNodeCount": 1,
+  "opendashboardNodeHostMemoryGB": 8,
+  "opendashboardNodeHostOcpuCount": 1,
+  "securityMode": "DISABLED",
+  "softwareVersion": "2.11.0",
+  "subnetCompartmentId": "<ocid:1>",
+  "subnetId": "<ocid:2>",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:01:00Z",
+  "vcnCompartmentId": "<ocid:1>",
+  "vcnId": "<ocid:3>"
+}`),
+	}
+	updateRequest := ocimock.MustJSONFixture[opensearchsdk.UpdateOpensearchClusterDetails](t, `{
+  "displayName": "osok-replay-opensearch-v1-updated"
+}`)
+	updatedState := ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
+  "compartmentId": "<ocid:1>",
+  "dataNodeCount": 3,
+  "dataNodeHostMemoryGB": 32,
+  "dataNodeHostOcpuCount": 2,
+  "dataNodeHostType": "FLEX",
+  "dataNodeStorageGB": 50,
+  "displayName": "osok-replay-opensearch-v1-updated",
+  "freeformTags": {
+    "osok-replay": "synthetic"
+  },
+  "id": "<ocid:4>",
+  "lifecycleState": "ACTIVE",
+  "masterNodeCount": 3,
+  "masterNodeHostMemoryGB": 16,
+  "masterNodeHostOcpuCount": 1,
+  "masterNodeHostType": "FLEX",
+  "opendashboardNodeCount": 1,
+  "opendashboardNodeHostMemoryGB": 8,
+  "opendashboardNodeHostOcpuCount": 1,
+  "securityMode": "DISABLED",
+  "softwareVersion": "2.11.0",
+  "subnetCompartmentId": "<ocid:1>",
+  "subnetId": "<ocid:2>",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:02:00Z",
+  "vcnCompartmentId": "<ocid:1>",
+  "vcnId": "<ocid:3>"
+}`)
+	updatedReadStates := []opensearchsdk.OpensearchCluster{
+		ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
+  "compartmentId": "<ocid:1>",
+  "dataNodeCount": 3,
+  "dataNodeHostMemoryGB": 32,
+  "dataNodeHostOcpuCount": 2,
+  "dataNodeHostType": "FLEX",
+  "dataNodeStorageGB": 50,
+  "displayName": "osok-replay-opensearch-v1-updated",
+  "freeformTags": {
+    "osok-replay": "synthetic"
+  },
+  "id": "<ocid:4>",
+  "lifecycleState": "ACTIVE",
+  "masterNodeCount": 3,
+  "masterNodeHostMemoryGB": 16,
+  "masterNodeHostOcpuCount": 1,
+  "masterNodeHostType": "FLEX",
+  "opendashboardNodeCount": 1,
+  "opendashboardNodeHostMemoryGB": 8,
+  "opendashboardNodeHostOcpuCount": 1,
+  "securityMode": "DISABLED",
+  "softwareVersion": "2.11.0",
+  "subnetCompartmentId": "<ocid:1>",
+  "subnetId": "<ocid:2>",
+  "timeCreated": "2026-08-31T12:00:00Z",
+  "timeUpdated": "2026-08-31T12:02:00Z",
+  "vcnCompartmentId": "<ocid:1>",
+  "vcnId": "<ocid:3>"
+}`),
+	}
+	deletedReadStates := []opensearchsdk.OpensearchCluster{
+		ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
+  "compartmentId": "<ocid:1>",
+  "displayName": "osok-replay-opensearch-v1-updated",
+  "id": "<ocid:4>",
+  "lifecycleState": "DELETING"
+}`),
+		ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
+  "compartmentId": "<ocid:1>",
+  "displayName": "osok-replay-opensearch-v1-updated",
+  "id": "<ocid:4>",
+  "lifecycleState": "DELETED"
+}`),
+	}
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
+		opensearchsdk.OpensearchCluster,
+		opensearchsdk.CreateOpensearchClusterDetails,
+		opensearchsdk.UpdateOpensearchClusterDetails,
+	]{
+		CollectionPath:    "/20180828/opensearchClusters",
+		ItemPath:          "/20180828/opensearchClusters/<ocid:4>",
+		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest:     &createRequest,
+		CreatedState:      &createdState,
+		ListShape:         ocimock.ListShapeItems,
+		UpdateRequest:     &updateRequest,
+		UpdatedState:      &updatedState,
+		CreatedReadStates: createdReadStates,
+		UpdatedReadStates: updatedReadStates,
+		DeletedReadStates: deletedReadStates,
+		RequireCreateRead: true,
+		RequireUpdateRead: true,
+		RequireDeleteRead: true,
+		CreateStatus:      202,
+		UpdateStatus:      202,
+		DeleteStatus:      202,
+		ValidateCreate: func(request ocimock.Request, _ opensearchsdk.CreateOpensearchClusterDetails) error {
+			if request.Header.Get("opc-retry-token") == "" {
+				return fmt.Errorf("create retry token is empty")
+			}
+			return nil
+		},
+		ValidateDelete: func(request ocimock.Request, _ opensearchsdk.OpensearchCluster) error {
+			if len(request.Body) != 0 {
+				return fmt.Errorf("delete body = %s", request.Body)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
+	session, err := ocimock.Open(ocimock.Options{Host: "https://oci.mock.invalid", BasePath: "20180828", Responder: responder})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := session.Close(); err != nil {
+			t.Errorf("close OpensearchCluster OCI mock: %v", err)
+		}
+	})
 	sdkClient := opensearchsdk.OpensearchClusterClient{BaseClient: session.BaseClient()}
 	client := newSyntheticOpensearchClusterClient(sdkClient)
-	if err := ocimock.RunEvidenceLifecycle(resource, &resource.Spec, client, evidence); err != nil {
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*opensearchv1beta1.OpensearchCluster]{
+		Resource:      resource,
+		Client:        client,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *opensearchv1beta1.OpensearchCluster) error {
+			if current.Status.Id != "<ocid:4>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:4>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.CompartmentId, current.Spec.CompartmentId) ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
+				!reflect.DeepEqual(current.Status.SecurityMode, current.Spec.SecurityMode) ||
+				!reflect.DeepEqual(current.Status.SoftwareVersion, current.Spec.SoftwareVersion) {
+				return fmt.Errorf("created OpensearchCluster status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *opensearchv1beta1.OpensearchCluster) { current.Spec = updatedSpec },
+		ValidateUpdated: func(current *opensearchv1beta1.OpensearchCluster) error {
+			if current.Status.Id != "<ocid:4>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:4>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) {
+				return fmt.Errorf("updated OpensearchCluster status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
 	if err := session.Close(); err != nil {

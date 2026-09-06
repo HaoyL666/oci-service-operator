@@ -7,6 +7,7 @@ package ocimock
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 	"testing"
@@ -133,6 +134,68 @@ func TestCRUDResponderRejectsExpectedOperationWithoutHandler(t *testing.T) {
 	}
 }
 
+func TestCRUDResponderVerifiesExplicitAuxiliaryRoute(t *testing.T) {
+	t.Parallel()
+
+	responder, err := NewCRUDResponder(CRUDOptions[crudTestState]{
+		CollectionPath: "/v1/things",
+		ItemPath:       "/v1/things/thing-1",
+		AdditionalRoutes: []Route{{
+			Name:         "supporting lookup",
+			Method:       http.MethodGet,
+			Path:         "/v1/supporting",
+			MinimumCalls: 1,
+			Respond: func(Request) (Response, error) {
+				return JSONResponse(http.StatusOK, map[string]any{"items": []any{}})
+			},
+		}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := responder.Verify(); err == nil {
+		t.Fatal("Verify() error = nil before required auxiliary call")
+	}
+	if _, err := responder.Respond(Request{Method: http.MethodGet, URL: mustTestURL(t, "https://mock.invalid/v1/supporting")}); err != nil {
+		t.Fatal(err)
+	}
+	if err := responder.Verify(); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestCRUDResponderAcceptsPostUpdateOnItemPath(t *testing.T) {
+	t.Parallel()
+
+	initial := crudTestState{ID: "thing-1", Name: "created"}
+	responder, err := NewCRUDResponder(CRUDOptions[crudTestState]{
+		CollectionPath:     "/v1/things",
+		ItemPath:           "/v1/things/thing-1",
+		InitialState:       &initial,
+		ExpectedOperations: []Operation{OperationUpdate},
+		Update: func(request Request, state crudTestState) (crudTestState, Response, error) {
+			if request.Method != http.MethodPost {
+				return crudTestState{}, Response{}, fmt.Errorf("update method = %s", request.Method)
+			}
+			state.Name = "updated"
+			response, err := JSONResponse(http.StatusOK, state)
+			return state, response, err
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := responder.Respond(Request{
+		Method: http.MethodPost,
+		URL:    mustTestURL(t, "https://mock.invalid/v1/things/thing-1"),
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if err := responder.Verify(); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestCRUDResponderSupportsLifecycleReadTransitions(t *testing.T) {
 	t.Parallel()
 
@@ -197,7 +260,7 @@ func TestCRUDResponderRejectsReadAndReadTransitionTogether(t *testing.T) {
 			return state, EmptyResponse(http.StatusOK), nil
 		},
 	})
-	if err == nil || !strings.Contains(err.Error(), "read or readTransition") {
+	if err == nil || !strings.Contains(err.Error(), "read, readTransition, or readByPhase") {
 		t.Fatalf("NewCRUDResponder() error = %v", err)
 	}
 }

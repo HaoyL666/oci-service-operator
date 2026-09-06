@@ -2,28 +2,22 @@
 package scheduledquery
 
 import (
-	"path/filepath"
-	"testing"
-
+	"context"
+	"fmt"
 	apmtracessdk "github.com/oracle/oci-go-sdk/v65/apmtraces"
 	apmtracesv1beta1 "github.com/oracle/oci-service-operator/api/apmtraces/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	"reflect"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"testing"
 )
 
-// Contract evidence: synthetic OCI-compatible responses, production service manager, and real OCI SDK serialization.
+// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
 func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 	t.Parallel()
-	session, evidence, err := ocimock.OpenEvidenceCRUD(filepath.Join("testdata", "recordings", "scheduledquery_synthetic_crud.yaml"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() {
-		if err := session.Close(); err != nil {
-			t.Errorf("close ScheduledQuery OCI mock: %v", err)
-		}
-	})
+
 	domainID := "ocid1.apmdomain.oc1..replay"
 	resource := &apmtracesv1beta1.ScheduledQuery{
 		Spec: apmtracesv1beta1.ScheduledQuerySpec{
@@ -41,16 +35,225 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 		},
 	}
 	ocimock.InitializeResource(resource, "mock-scheduledquery")
-	if err := evidence.DecodeCreateSpec(&resource.Spec); err != nil {
+	resource.Spec = ocimock.MustJSONFixture[apmtracesv1beta1.ScheduledQuerySpec](t, `{
+  "freeformTags": {
+    "osok-replay": "create"
+  },
+  "scheduledQueryDescription": "OSOK synthetic scheduled query",
+  "scheduledQueryMaximumRuntimeInSeconds": 60,
+  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryProcessingSubType": "NONE",
+  "scheduledQueryProcessingType": "QUERY",
+  "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
+  "scheduledQueryRetentionPeriodInMs": 86400000,
+  "scheduledQuerySchedule": "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 720 MINUTES",
+  "scheduledQueryText": "SHOW SPANS * FIRST 100 ROWS BETWEEN now() - 2 HOURS AND now()"
+}`)
+	resource.Spec.ApmDomainId = domainID
+	updatedSpec := resource.Spec
+	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
+  "freeformTags": {
+    "osok-replay": "update"
+  },
+  "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
+  "scheduledQueryProcessingConfiguration": {
+    "customMetric": {
+      "isAnomalyDetectionEnabled": false,
+      "isMetricPublished": false,
+      "name": null
+    }
+  },
+  "scheduledQuerySchedule": "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 360 MINUTES"
+}`)
+	createRequest := ocimock.MustJSONFixture[apmtracessdk.CreateScheduledQueryDetails](t, `{
+  "freeformTags": {
+    "osok-replay": "create"
+  },
+  "scheduledQueryDescription": "OSOK synthetic scheduled query",
+  "scheduledQueryMaximumRuntimeInSeconds": 60,
+  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryProcessingSubType": "NONE",
+  "scheduledQueryProcessingType": "QUERY",
+  "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
+  "scheduledQueryRetentionPeriodInMs": 86400000,
+  "scheduledQuerySchedule": "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 720 MINUTES",
+  "scheduledQueryText": "SHOW SPANS * FIRST 100 ROWS BETWEEN now() - 2 HOURS AND now()"
+}`)
+	createdState := ocimock.MustOCIResponseFixture[apmtracessdk.ScheduledQuery](t, `{
+  "apmDomainId": "<ocid:1>",
+  "freeformTags": {
+    "osok-replay": "create"
+  },
+  "id": "<ocid:2>",
+  "lifecycleState": "ACTIVE",
+  "scheduledQueryDescription": "OSOK synthetic scheduled query",
+  "scheduledQueryMaximumRuntimeInSeconds": 60,
+  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryProcessingSubType": "NONE",
+  "scheduledQueryProcessingType": "QUERY",
+  "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
+  "scheduledQueryRetentionPeriodInMs": 86400000,
+  "scheduledQuerySchedule": "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 720 MINUTES",
+  "scheduledQueryText": "SHOW SPANS * FIRST 100 ROWS BETWEEN now() - 2 HOURS AND now()"
+}`)
+	createdReadStates := []apmtracessdk.ScheduledQuery{
+		ocimock.MustOCIResponseFixture[apmtracessdk.ScheduledQuery](t, `{
+  "apmDomainId": "<ocid:1>",
+  "freeformTags": {
+    "osok-replay": "create"
+  },
+  "id": "<ocid:2>",
+  "lifecycleState": "ACTIVE",
+  "scheduledQueryDescription": "OSOK synthetic scheduled query",
+  "scheduledQueryMaximumRuntimeInSeconds": 60,
+  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryProcessingSubType": "NONE",
+  "scheduledQueryProcessingType": "QUERY",
+  "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
+  "scheduledQueryRetentionPeriodInMs": 86400000,
+  "scheduledQuerySchedule": "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 720 MINUTES",
+  "scheduledQueryText": "SHOW SPANS * FIRST 100 ROWS BETWEEN now() - 2 HOURS AND now()"
+}`),
+	}
+	updateRequest := ocimock.MustJSONFixture[apmtracessdk.UpdateScheduledQueryDetails](t, `{
+  "freeformTags": {
+    "osok-replay": "update"
+  },
+  "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
+  "scheduledQueryProcessingConfiguration": {
+    "customMetric": {
+      "isAnomalyDetectionEnabled": false,
+      "isMetricPublished": false,
+      "name": null
+    }
+  },
+  "scheduledQuerySchedule": "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 360 MINUTES"
+}`)
+	updatedState := ocimock.MustOCIResponseFixture[apmtracessdk.ScheduledQuery](t, `{
+  "apmDomainId": "<ocid:1>",
+  "freeformTags": {
+    "osok-replay": "update"
+  },
+  "id": "<ocid:2>",
+  "lifecycleState": "ACTIVE",
+  "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
+  "scheduledQueryMaximumRuntimeInSeconds": 60,
+  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryProcessingSubType": "NONE",
+  "scheduledQueryProcessingType": "QUERY",
+  "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
+  "scheduledQueryRetentionPeriodInMs": 86400000,
+  "scheduledQuerySchedule": "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 360 MINUTES",
+  "scheduledQueryText": "SHOW SPANS * FIRST 100 ROWS BETWEEN now() - 2 HOURS AND now()"
+}`)
+	updatedReadStates := []apmtracessdk.ScheduledQuery{
+		ocimock.MustOCIResponseFixture[apmtracessdk.ScheduledQuery](t, `{
+  "apmDomainId": "<ocid:1>",
+  "freeformTags": {
+    "osok-replay": "update"
+  },
+  "id": "<ocid:2>",
+  "lifecycleState": "ACTIVE",
+  "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
+  "scheduledQueryMaximumRuntimeInSeconds": 60,
+  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryProcessingSubType": "NONE",
+  "scheduledQueryProcessingType": "QUERY",
+  "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
+  "scheduledQueryRetentionPeriodInMs": 86400000,
+  "scheduledQuerySchedule": "SCHEDULE STARTING AFTER 2099-01-01T00:00:00Z EVERY 360 MINUTES",
+  "scheduledQueryText": "SHOW SPANS * FIRST 100 ROWS BETWEEN now() - 2 HOURS AND now()"
+}`),
+	}
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
+		apmtracessdk.ScheduledQuery,
+		apmtracessdk.CreateScheduledQueryDetails,
+		apmtracessdk.UpdateScheduledQueryDetails,
+	]{
+		CollectionPath:     "/20200630/scheduledQueries",
+		ItemPath:           "/20200630/scheduledQueries/<ocid:2>",
+		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest:      &createRequest,
+		CreatedState:       &createdState,
+		ListShape:          ocimock.ListShapeItems,
+		UpdateRequest:      &updateRequest,
+		UpdatedState:       &updatedState,
+		CreatedReadStates:  createdReadStates,
+		UpdatedReadStates:  updatedReadStates,
+		DeleteEndsNotFound: true,
+		RequireCreateRead:  true,
+		RequireUpdateRead:  true,
+		RequireDeleteRead:  true,
+		CreateStatus:       201,
+		UpdateStatus:       200,
+		DeleteStatus:       204,
+		NotFoundCode:       "NotFound",
+		ValidateCreate: func(request ocimock.Request, _ apmtracessdk.CreateScheduledQueryDetails) error {
+			if request.Header.Get("opc-retry-token") == "" {
+				return fmt.Errorf("create retry token is empty")
+			}
+			return nil
+		},
+		ValidateDelete: func(request ocimock.Request, _ apmtracessdk.ScheduledQuery) error {
+			if len(request.Body) != 0 {
+				return fmt.Errorf("delete body = %s", request.Body)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
-	resource.Spec.ApmDomainId = domainID
+	session, err := ocimock.Open(ocimock.Options{Host: "https://oci.mock.invalid", BasePath: "20200630", Responder: responder})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := session.Close(); err != nil {
+			t.Errorf("close ScheduledQuery OCI mock: %v", err)
+		}
+	})
 	sdkClient := apmtracessdk.ScheduledQueryClient{BaseClient: session.BaseClient()}
 	client := newScheduledQueryServiceClientWithOCIClient(
 		loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("recorded-integration")},
 		sdkClient,
 	)
-	if err := ocimock.RunEvidenceLifecycle(resource, &resource.Spec, client, evidence); err != nil {
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*apmtracesv1beta1.ScheduledQuery]{
+		Resource:      resource,
+		Client:        client,
+		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *apmtracesv1beta1.ScheduledQuery) error {
+			if current.Status.Id != "<ocid:2>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:2>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryDescription, current.Spec.ScheduledQueryDescription) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryMaximumRuntimeInSeconds, current.Spec.ScheduledQueryMaximumRuntimeInSeconds) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryName, current.Spec.ScheduledQueryName) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryProcessingSubType, current.Spec.ScheduledQueryProcessingSubType) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryProcessingType, current.Spec.ScheduledQueryProcessingType) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryRetentionCriteria, current.Spec.ScheduledQueryRetentionCriteria) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryRetentionPeriodInMs, current.Spec.ScheduledQueryRetentionPeriodInMs) ||
+				!reflect.DeepEqual(current.Status.ScheduledQuerySchedule, current.Spec.ScheduledQuerySchedule) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryText, current.Spec.ScheduledQueryText) {
+				return fmt.Errorf("created ScheduledQuery status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *apmtracesv1beta1.ScheduledQuery) { current.Spec = updatedSpec },
+		ValidateUpdated: func(current *apmtracesv1beta1.ScheduledQuery) error {
+			if current.Status.Id != "<ocid:2>" ||
+				string(current.Status.OsokStatus.Ocid) != "<ocid:2>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
+				!reflect.DeepEqual(current.Status.ScheduledQueryDescription, current.Spec.ScheduledQueryDescription) ||
+				!reflect.DeepEqual(current.Status.ScheduledQuerySchedule, current.Spec.ScheduledQuerySchedule) {
+				return fmt.Errorf("updated ScheduledQuery status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
 	if err := session.Close(); err != nil {

@@ -40,11 +40,32 @@ type CRUDOptions[S any] struct {
 	Create                 func(Request) (S, Response, error)
 	Read                   func(Request, S) (Response, error)
 	ReadTransition         func(Request, S) (S, Response, error)
+	ReadByPhase            func(Request, ReadPhase, S) (S, Response, error)
 	Update                 func(Request, S) (S, Response, error)
 	Delete                 func(Request, S) (Response, error)
 	DeleteTransition       func(Request, S) (S, Response, error)
 	NotFound               func(Request) (Response, error)
+	AdditionalRoutes       []Route
 }
+
+// Route declares one package-owned auxiliary SDK interaction.
+type Route struct {
+	Name         string
+	Method       string
+	Path         string
+	MinimumCalls int
+	Respond      func(Request) (Response, error)
+}
+
+// ReadPhase identifies why the service manager is reading the item route.
+type ReadPhase string
+
+const (
+	ReadPhaseInitial ReadPhase = "initial"
+	ReadPhaseCreated ReadPhase = "created"
+	ReadPhaseUpdated ReadPhase = "updated"
+	ReadPhaseDeleted ReadPhase = "deleted"
+)
 
 // CRUDResponder is a stateful synchronous OCI CRUD mock.
 type CRUDResponder[S any] struct {
@@ -59,6 +80,7 @@ type CRUDResponder[S any] struct {
 	updateReads int
 	deleteReads int
 	operations  map[Operation]int
+	routeCalls  []int
 }
 
 // NewCRUDResponder validates and creates a stateful CRUD responder.
@@ -71,8 +93,14 @@ func NewCRUDResponder[S any](options CRUDOptions[S]) (*CRUDResponder[S], error) 
 	if options.CollectionPath == options.ItemPath {
 		return nil, errors.New("OCI mock CRUD collectionPath and itemPath must differ")
 	}
-	if options.Read != nil && options.ReadTransition != nil {
-		return nil, errors.New("OCI mock CRUD accepts read or readTransition, not both")
+	readHandlers := 0
+	for _, configured := range []bool{options.Read != nil, options.ReadTransition != nil, options.ReadByPhase != nil} {
+		if configured {
+			readHandlers++
+		}
+	}
+	if readHandlers > 1 {
+		return nil, errors.New("OCI mock CRUD accepts one of read, readTransition, or readByPhase")
 	}
 	if options.Delete != nil && options.DeleteTransition != nil {
 		return nil, errors.New("OCI mock CRUD accepts delete or deleteTransition, not both")
@@ -102,7 +130,17 @@ func NewCRUDResponder[S any](options CRUDOptions[S]) (*CRUDResponder[S], error) 
 	if options.RequireDeleteRead && !seen[OperationDelete] {
 		return nil, errors.New("OCI mock CRUD delete readback requires delete coverage")
 	}
-	responder := &CRUDResponder[S]{options: options, operations: map[Operation]int{}}
+	for index := range options.AdditionalRoutes {
+		route := &options.AdditionalRoutes[index]
+		route.Path = normalizePath(route.Path)
+		if route.Name == "" || route.Method == "" || route.Path == "" || route.Respond == nil {
+			return nil, fmt.Errorf("OCI mock CRUD auxiliary route %d is incomplete", index)
+		}
+		if route.MinimumCalls < 0 {
+			return nil, fmt.Errorf("OCI mock CRUD auxiliary route %q minimumCalls is negative", route.Name)
+		}
+	}
+	responder := &CRUDResponder[S]{options: options, operations: map[Operation]int{}, routeCalls: make([]int, len(options.AdditionalRoutes))}
 	if options.InitialState != nil {
 		responder.state = *options.InitialState
 		responder.present = true
@@ -115,6 +153,12 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	requestPath := normalizePath(request.URL.Path)
+	for index, route := range r.options.AdditionalRoutes {
+		if request.Method == route.Method && requestPath == route.Path {
+			r.routeCalls[index]++
+			return route.Respond(request)
+		}
+	}
 	switch {
 	case request.Method == http.MethodGet && requestPath == r.options.CollectionPath:
 		r.operations[OperationRead]++
@@ -154,6 +198,16 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 		} else if r.created {
 			r.createReads++
 		}
+		if r.options.ReadByPhase != nil {
+			phase := r.readPhase()
+			state, response, err := r.options.ReadByPhase(request, phase, r.state)
+			if err == nil && successfulStatus(response.StatusCode) {
+				r.state = state
+			} else if err == nil && phase == ReadPhaseDeleted && response.StatusCode == http.StatusNotFound {
+				r.present = false
+			}
+			return response, err
+		}
 		if r.options.ReadTransition != nil {
 			state, response, err := r.options.ReadTransition(request, r.state)
 			if err == nil && successfulStatus(response.StatusCode) {
@@ -165,7 +219,7 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 			return Response{}, fmt.Errorf("OCI mock CRUD read handler is not configured for %s", requestPath)
 		}
 		return r.options.Read(request, r.state)
-	case (request.Method == http.MethodPut || request.Method == http.MethodPatch) && requestPath == r.options.ItemPath:
+	case (request.Method == http.MethodPut || request.Method == http.MethodPatch || request.Method == http.MethodPost) && requestPath == r.options.ItemPath:
 		r.operations[OperationUpdate]++
 		if !r.present {
 			return r.notFound(request)
@@ -208,6 +262,19 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 	}
 }
 
+func (r *CRUDResponder[S]) readPhase() ReadPhase {
+	switch {
+	case r.deleted:
+		return ReadPhaseDeleted
+	case r.updated:
+		return ReadPhaseUpdated
+	case r.created:
+		return ReadPhaseCreated
+	default:
+		return ReadPhaseInitial
+	}
+}
+
 // Verify requires every declared lifecycle operation to be exercised.
 func (r *CRUDResponder[S]) Verify() error {
 	r.mu.Lock()
@@ -230,6 +297,11 @@ func (r *CRUDResponder[S]) Verify() error {
 	}
 	if r.options.RequireDeleteRead && r.deleteReads == 0 {
 		return errors.New("OCI mock CRUD did not confirm deletion with a read")
+	}
+	for index, route := range r.options.AdditionalRoutes {
+		if r.routeCalls[index] < route.MinimumCalls {
+			return fmt.Errorf("OCI mock CRUD auxiliary route %q calls = %d, want at least %d", route.Name, r.routeCalls[index], route.MinimumCalls)
+		}
 	}
 	return nil
 }
@@ -267,7 +339,7 @@ func expectedOperationsFromCallbacks[S any](options CRUDOptions[S]) []Operation 
 	if options.Create != nil {
 		operations = append(operations, OperationCreate)
 	}
-	if options.List != nil || options.Read != nil || options.ReadTransition != nil {
+	if options.List != nil || options.Read != nil || options.ReadTransition != nil || options.ReadByPhase != nil {
 		operations = append(operations, OperationRead)
 	}
 	if options.Update != nil {
@@ -293,7 +365,7 @@ func operationHandlerConfigured[S any](operation Operation, options CRUDOptions[
 	case OperationCreate:
 		return options.Create != nil
 	case OperationRead:
-		return options.List != nil || options.Read != nil || options.ReadTransition != nil
+		return options.List != nil || options.Read != nil || options.ReadTransition != nil || options.ReadByPhase != nil
 	case OperationUpdate:
 		return options.Update != nil
 	case OperationDelete:
