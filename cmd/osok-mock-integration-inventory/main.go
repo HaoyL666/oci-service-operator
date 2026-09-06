@@ -19,6 +19,7 @@ func main() {
 	jsonOutput := flag.Bool("json", false, "emit the complete inventory as JSON")
 	group := flag.String("group", "", "list resources in one group")
 	checkImmediate := flag.Bool("check-immediate", false, "fail when an explicitly immediate resource lacks a dynamic mock scenario")
+	checkLifecycle := flag.Bool("check-lifecycle", false, "fail when a lifecycle-polled resource lacks a dynamic mock scenario or formal row")
 	flag.Parse()
 
 	report, err := ocimockinventory.Audit(*root)
@@ -51,6 +52,20 @@ func main() {
 			for _, resource := range missing {
 				fmt.Fprintf(os.Stderr, "missing immediate mock integration: %s/%s (%s)\n", resource.Service, resource.Kind, resource.PackagePath)
 			}
+			os.Exit(1)
+		}
+	}
+	if *checkLifecycle {
+		failed := false
+		for _, resource := range ocimockinventory.MissingMockIntegration(report, ocimockinventory.GroupLifecycle) {
+			fmt.Fprintf(os.Stderr, "missing lifecycle mock integration: %s/%s (%s)\n", resource.Service, resource.Kind, resource.PackagePath)
+			failed = true
+		}
+		for _, resource := range ocimockinventory.MissingFormal(report, ocimockinventory.GroupLifecycle) {
+			fmt.Fprintf(os.Stderr, "missing lifecycle formal row: %s/%s (%s)\n", resource.Service, resource.Kind, resource.PackagePath)
+			failed = true
+		}
+		if failed {
 			os.Exit(1)
 		}
 	}

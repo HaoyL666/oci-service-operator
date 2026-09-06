@@ -117,20 +117,11 @@ func RunEvidenceLifecycle[T any](resource T, spec any, client LifecycleClient[T]
 		return errors.New("OCI CRUD evidence responder is required")
 	}
 	var mutationErr error
-	err := RunLifecycle(context.Background(), LifecycleScenario[T]{
+	scenario := LifecycleScenario[T]{
 		Resource:      resource,
 		Client:        client,
 		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current T) error {
-			return evidence.ValidateProjection(current)
-		},
-		Mutate: func(T) {
-			mutationErr = evidence.DecodeUpdateSpec(spec)
-		},
-		ValidateUpdated: func(current T) error {
-			if mutationErr != nil {
-				return mutationErr
-			}
 			return evidence.ValidateProjection(current)
 		},
 		RetryError: func(err error) bool {
@@ -139,11 +130,26 @@ func RunEvidenceLifecycle[T any](resource T, spec any, client LifecycleClient[T]
 		RetryDeleteError: func(err error) bool {
 			return evidenceHTTPStatus(err, http.StatusConflict, http.StatusTooManyRequests)
 		},
-	})
+	}
+	if evidence.update != nil {
+		scenario.Mutate = func(T) {
+			mutationErr = evidence.DecodeUpdateSpec(spec)
+		}
+		scenario.ValidateUpdated = func(current T) error {
+			if mutationErr != nil {
+				return mutationErr
+			}
+			return evidence.ValidateProjection(current)
+		}
+	}
+	err := RunLifecycle(context.Background(), scenario)
 	if mutationErr != nil {
 		return mutationErr
 	}
-	return err
+	if err != nil {
+		return err
+	}
+	return evidence.Verify()
 }
 
 func evidenceHTTPStatus(err error, statuses ...int) bool {
@@ -276,7 +282,7 @@ func (r *EvidenceCRUDResponder) DecodeCreateSpec(target any) error {
 	if r == nil {
 		return errors.New("nil OCI CRUD evidence responder")
 	}
-	return decodeEvidenceJSON(r.create.Request.Body, target, "create spec")
+	return decodeFreshEvidenceJSON(r.create.Request.Body, target, "create spec")
 }
 
 // DecodeUpdateSpec applies the recorded mutable update fields to a typed CR spec.
@@ -470,7 +476,7 @@ func evidenceRequestMatches(actual Request, expected evidenceRequest) bool {
 	if !strings.EqualFold(actual.Method, expected.Method) || actual.URL == nil || actual.URL.Path != expected.Path {
 		return false
 	}
-	return normalizedEvidenceQuery(actual.URL.Query()) == normalizedEvidenceRawQuery(expected.Query)
+	return evidenceQueryMatches(actual.URL.Query(), expected.Query)
 }
 
 func evidenceFullRequestMatches(actual Request, expected evidenceRequest) bool {
@@ -486,7 +492,30 @@ func evidenceReadMatches(actual Request, expected evidenceRequest) bool {
 	if expected.Query == "" {
 		return true
 	}
-	return normalizedEvidenceQuery(actual.URL.Query()) == normalizedEvidenceRawQuery(expected.Query)
+	return evidenceQueryMatches(actual.URL.Query(), expected.Query)
+}
+
+func evidenceQueryMatches(actual url.Values, expectedRaw string) bool {
+	expected, err := url.ParseQuery(expectedRaw)
+	if err != nil {
+		return normalizedEvidenceQuery(actual) == expectedRaw
+	}
+	if len(actual) != len(expected) {
+		return false
+	}
+	bindings := map[string]string{}
+	for key, wantValues := range expected {
+		gotValues, ok := actual[key]
+		if !ok || len(gotValues) != len(wantValues) {
+			return false
+		}
+		for index, want := range wantValues {
+			if want != gotValues[index] && !bindEvidencePlaceholder(bindings, want, gotValues[index]) {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func normalizedEvidenceQuery(values url.Values) string {
@@ -508,18 +537,74 @@ func compareEvidenceBody(actual []byte, expected string) error {
 		}
 		return fmt.Errorf("unexpected body %s", string(actual))
 	}
+	var expectedValue any
+	if err := json.Unmarshal([]byte(expected), &expectedValue); err != nil {
+		if string(actual) == expected {
+			return nil
+		}
+		return fmt.Errorf("body mismatch: actual=%q expected=%q", string(actual), expected)
+	}
 	var actualValue any
 	if err := json.Unmarshal(actual, &actualValue); err != nil {
 		return fmt.Errorf("decode actual JSON: %w", err)
 	}
-	var expectedValue any
-	if err := json.Unmarshal([]byte(expected), &expectedValue); err != nil {
-		return fmt.Errorf("decode expected JSON: %w", err)
-	}
-	if !reflect.DeepEqual(actualValue, expectedValue) {
+	if !evidenceValuesEqualWithBindings(actualValue, expectedValue, map[string]string{}) {
 		return fmt.Errorf("body mismatch: actual=%s expected=%s", string(actual), expected)
 	}
 	return nil
+}
+
+func evidenceValuesEqualWithBindings(actual, expected any, bindings map[string]string) bool {
+	if expectedString, ok := expected.(string); ok && evidencePlaceholder(expectedString) {
+		actualString, ok := actual.(string)
+		return ok && bindEvidencePlaceholder(bindings, expectedString, actualString)
+	}
+	switch expectedValue := expected.(type) {
+	case map[string]any:
+		actualValue, ok := actual.(map[string]any)
+		if !ok || len(actualValue) != len(expectedValue) {
+			return false
+		}
+		for key, want := range expectedValue {
+			got, exists := actualValue[key]
+			if !exists || !evidenceValuesEqualWithBindings(got, want, bindings) {
+				return false
+			}
+		}
+		return true
+	case []any:
+		actualValue, ok := actual.([]any)
+		if !ok || len(actualValue) != len(expectedValue) {
+			return false
+		}
+		for index, want := range expectedValue {
+			if !evidenceValuesEqualWithBindings(actualValue[index], want, bindings) {
+				return false
+			}
+		}
+		return true
+	default:
+		return reflect.DeepEqual(actual, expected)
+	}
+}
+
+func bindEvidencePlaceholder(bindings map[string]string, placeholder, actual string) bool {
+	if !evidencePlaceholder(placeholder) || actual == "" {
+		return false
+	}
+	if placeholder == "<redacted>" {
+		return true
+	}
+	if current, exists := bindings[placeholder]; exists {
+		return current == actual
+	}
+	bindings[placeholder] = actual
+	return true
+}
+
+func evidencePlaceholder(value string) bool {
+	return value == "<redacted>" || strings.HasPrefix(value, "<ocid:") && strings.HasSuffix(value, ">") ||
+		strings.HasPrefix(value, "<binding:") && strings.HasSuffix(value, ">")
 }
 
 func evidenceHTTPResponse(recorded evidenceResponse) Response {
@@ -540,6 +625,22 @@ func decodeEvidenceJSON(body string, target any, label string) error {
 	if err := json.Unmarshal([]byte(body), target); err != nil {
 		return fmt.Errorf("decode %s: %w", label, err)
 	}
+	return nil
+}
+
+func decodeFreshEvidenceJSON(body string, target any, label string) error {
+	if target == nil {
+		return fmt.Errorf("%s target is nil", label)
+	}
+	value := reflect.ValueOf(target)
+	if value.Kind() != reflect.Pointer || value.IsNil() {
+		return fmt.Errorf("%s target must be a non-nil pointer", label)
+	}
+	fresh := reflect.New(value.Elem().Type())
+	if err := decodeEvidenceJSON(body, fresh.Interface(), label); err != nil {
+		return err
+	}
+	value.Elem().Set(fresh.Elem())
 	return nil
 }
 

@@ -416,8 +416,8 @@ replay-coverage: ## Report OCI HTTP replay coverage and classification without e
 mock-integration-inventory: ## Classify generated CRUD resources for OCI mock integration migration.
 	go run ./cmd/osok-mock-integration-inventory
 
-mock-integration-coverage: ## Require every explicitly immediate CRUD resource to have a dynamic mock scenario.
-	go run ./cmd/osok-mock-integration-inventory --check-immediate
+mock-integration-coverage: ## Require completed S1 and S2 resources to retain their dynamic and formal coverage.
+	go run ./cmd/osok-mock-integration-inventory --check-immediate --check-lifecycle
 
 replaytest: replay-coverage ## Run credential-free OCI SDK HTTP replay tests.
 	go test ./internal/e2e/ocireplay

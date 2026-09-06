@@ -57,3 +57,16 @@ func TestMissingMockIntegrationFiltersOneGroup(t *testing.T) {
 		t.Fatalf("MissingMockIntegration() = %+v", missing)
 	}
 }
+
+func TestMissingFormalFiltersOneGroup(t *testing.T) {
+	t.Parallel()
+	report := Report{Resources: []Resource{
+		{Service: "first", Kind: "Covered", Group: GroupLifecycle, Formal: true},
+		{Service: "second", Kind: "Missing", Group: GroupLifecycle},
+		{Service: "third", Kind: "Later", Group: GroupComposite},
+	}}
+	missing := MissingFormal(report, GroupLifecycle)
+	if len(missing) != 1 || missing[0].Service != "second" || missing[0].Kind != "Missing" {
+		t.Fatalf("MissingFormal() = %+v", missing)
+	}
+}

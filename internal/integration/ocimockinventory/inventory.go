@@ -198,6 +198,18 @@ func MissingMockIntegration(report Report, group Group) []Resource {
 	return missing
 }
 
+// MissingFormal returns deterministically ordered resources in one group that
+// do not have a registered formal catalog row.
+func MissingFormal(report Report, group Group) []Resource {
+	var missing []Resource
+	for _, resource := range report.Resources {
+		if resource.Group == group && !resource.Formal {
+			missing = append(missing, resource)
+		}
+	}
+	return missing
+}
+
 type evidenceFlags struct {
 	recorded  bool
 	synthetic bool

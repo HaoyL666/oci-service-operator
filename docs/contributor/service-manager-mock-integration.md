@@ -47,7 +47,7 @@ candidates are divided into:
 
 Ownership and evidence are cross-cutting attributes: 123 of the synchronous
 resources use only their generated baseline, 202 have resource-local production
-override, 115 have recorded evidence, 210 are synthetic-only, and 154 currently
+override, 115 have recorded evidence, 210 are synthetic-only, and 199 currently
 have formal catalog rows.
 
 Start with S1, and classify evidence-backed resources from the unclassified
@@ -81,10 +81,11 @@ Run the current mock integration surface with:
 make mockintegrationtest
 ```
 
-The target first audits the source-derived inventory and fails if an explicitly
-classified S1 resource lacks a package-local dynamic scenario. Resources with
-missing semantic metadata stay in `needs-contract-classification` and cannot
-silently satisfy the S1 coverage check.
+The target first audits the source-derived inventory. It fails if an explicitly
+classified S1 resource lacks a package-local dynamic scenario, or if an S2
+resource lacks either its dynamic scenario or formal catalog row. Resources
+with missing semantic metadata stay in `needs-contract-classification` and
+cannot silently satisfy the completed-group coverage checks.
 
 All eight explicitly classified S1 resources have dynamic CRUD scenarios. The
 references deliberately cover different evidence boundaries:
@@ -181,3 +182,23 @@ delete/read convergence while continuing to require the recorded create and
 update request bodies and a read in every lifecycle phase. Dynamic coverage is
 now 117 service-manager packages; no recorded S3 resource lacks a dynamic
 scenario or formal catalog row.
+
+The synthetic-only S2 wave completes the lifecycle-polled group. All 76
+remaining resources now exercise their production service manager through the
+real OCI SDK and credential-free stateful transport. The evidence responder
+matches sanitized OCID, binding, and secret placeholders, resets create specs
+before decoding request-shaped fixtures, supports non-JSON payloads, and omits
+an update phase when the existing synthetic evidence contains no update
+interaction.
+Three resources that previously had read-only evidence—Autonomous Database,
+EKMS Private Endpoint, and OPSI Chargeback Plan—use typed stateful responders
+covering create, lifecycle convergence, update, and confirmed deletion.
+
+Formal coverage adds 31 imports from the pinned Terraform provider. Fourteen
+rows remain explicitly scaffolded: four provider resources are registered but
+use CRUD shapes that `formal-import` cannot resolve, and ten have no resource
+in the pinned provider. Their repo-authored lifecycle metadata is derived from
+the existing service-manager semantics and their executable contract remains
+the vendored SDK plus the synthetic mock. S2 is now complete at 164 of 164
+dynamic scenarios and 164 of 164 formal catalog rows; the full credential-free
+dynamic suite covers 193 service-manager packages.

@@ -162,3 +162,67 @@ func TestEvidenceHTTPStatus(t *testing.T) {
 		t.Fatal("unexpected status classified as retryable")
 	}
 }
+
+func TestEvidenceCRUDResponderSupportsCreateReadDeleteWithoutUpdate(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "immutable.yaml")
+	content := `version: 1
+interactions:
+  - request: {method: POST, path: /widgets, body: '{"displayName":"demo"}' }
+    response: {statusCode: 200, body: '{"id":"widget-1","displayName":"demo","lifecycleState":"ACTIVE"}' }
+  - request: {method: GET, path: /widgets/widget-1}
+    response: {statusCode: 200, body: '{"id":"widget-1","displayName":"demo","lifecycleState":"ACTIVE"}' }
+  - request: {method: DELETE, path: /widgets/widget-1}
+    response: {statusCode: 204}
+  - request: {method: GET, path: /widgets/widget-1}
+    response: {statusCode: 404, body: '{"code":"NotFound"}' }
+`
+	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	responder, err := NewEvidenceCRUDResponder(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if responder.update != nil {
+		t.Fatal("unexpected update interaction")
+	}
+}
+
+func TestEvidenceCRUDResponderMatchesNonJSONBody(t *testing.T) {
+	if err := compareEvidenceBody([]byte("terms and conditions"), "terms and conditions"); err != nil {
+		t.Fatal(err)
+	}
+	if err := compareEvidenceBody([]byte("different"), "terms and conditions"); err == nil {
+		t.Fatal("expected non-JSON request drift to fail")
+	}
+}
+
+func TestEvidenceRequestComparisonAcceptsSanitizedPlaceholders(t *testing.T) {
+	expected := `{"compartmentId":"<ocid:1>","parentCompartmentId":"<ocid:1>","secret":"<redacted>","nested":{"parent":"<binding:parent>"}}`
+	actual := []byte(`{"compartmentId":"ocid1.compartment.oc1..example","parentCompartmentId":"ocid1.compartment.oc1..example","secret":"test-only","nested":{"parent":"parent-id"}}`)
+	if err := compareEvidenceBody(actual, expected); err != nil {
+		t.Fatal(err)
+	}
+	drifted := []byte(`{"compartmentId":"ocid1.compartment.oc1..one","parentCompartmentId":"ocid1.compartment.oc1..two","secret":"test-only","nested":{"parent":"parent-id"}}`)
+	if err := compareEvidenceBody(drifted, expected); err == nil {
+		t.Fatal("expected inconsistent use of one sanitized OCID binding to fail")
+	}
+	if !evidenceQueryMatches(url.Values{"compartmentId": {"ocid1.compartment.oc1..example"}}, "compartmentId=%3Cocid%3A1%3E") {
+		t.Fatal("expected sanitized query placeholder to match")
+	}
+}
+
+func TestDecodeCreateSpecReplacesExistingValues(t *testing.T) {
+	type spec struct {
+		Name  string `json:"name"`
+		Extra string `json:"extra,omitempty"`
+	}
+	responder := &EvidenceCRUDResponder{create: evidenceInteraction{Request: evidenceRequest{Body: `{"name":"created"}`}}}
+	target := spec{Name: "old", Extra: "must-not-leak"}
+	if err := responder.DecodeCreateSpec(&target); err != nil {
+		t.Fatal(err)
+	}
+	if target.Name != "created" || target.Extra != "" {
+		t.Fatalf("decoded create spec = %+v", target)
+	}
+}
