@@ -76,6 +76,57 @@ func TestApplyDistributedDatabaseRuntimeHooksOverridesGeneratedDefaults(t *testi
 	}
 }
 
+func TestDistributedDatabaseUnsupportedDriftEquivalent(t *testing.T) {
+	t.Parallel()
+
+	desired := []any{map[string]any{
+		"source":           "EXADB_XS",
+		"adminPassword":    "secret",
+		"peerVmClusterIds": []any{"ocid1.vmcluster.oc1..peer"},
+		"vmClusterId":      "ocid1.vmcluster.oc1..primary",
+	}}
+	observed := []any{map[string]any{
+		"source":      "EXADB_XS",
+		"vmClusterId": "ocid1.vmcluster.oc1..primary",
+		"name":        "server-generated",
+	}}
+
+	handled, equivalent := distributedDatabaseUnsupportedDriftEquivalent("shardDetails", desired, observed)
+	if !handled || !equivalent {
+		t.Fatalf("unobservable create fields = handled %t, equivalent %t; want true, true", handled, equivalent)
+	}
+
+	observed[0].(map[string]any)["vmClusterId"] = "ocid1.vmcluster.oc1..different"
+	handled, equivalent = distributedDatabaseUnsupportedDriftEquivalent("shardDetails", desired, observed)
+	if !handled || equivalent {
+		t.Fatalf("observable drift = handled %t, equivalent %t; want true, false", handled, equivalent)
+	}
+
+	catalogDesired := []any{map[string]any{
+		"source":        "NEW_VAULT_AND_CLUSTER",
+		"adminPassword": "secret",
+		"shardSpace":    "CATALOG",
+		"vmClusterDetails": map[string]any{
+			"subnetId": "ocid1.subnet.oc1..catalog",
+		},
+	}}
+	catalogObserved := []any{map[string]any{
+		"source": "NEW_VAULT_AND_CLUSTER",
+		"vmClusterDetails": map[string]any{
+			"subnetId": "ocid1.subnet.oc1..catalog",
+		},
+	}}
+	handled, equivalent = distributedDatabaseUnsupportedDriftEquivalent("catalogDetails", catalogDesired, catalogObserved)
+	if !handled || !equivalent {
+		t.Fatalf("unobservable catalog fields = handled %t, equivalent %t; want true, true", handled, equivalent)
+	}
+
+	handled, equivalent = distributedDatabaseUnsupportedDriftEquivalent("displayName", "a", "a")
+	if handled || equivalent {
+		t.Fatalf("unowned path = handled %t, equivalent %t; want false, false", handled, equivalent)
+	}
+}
+
 func TestBuildDistributedDatabaseCreateBodyNormalizesExistingClusterAndPreservesFalseBooleans(t *testing.T) {
 	t.Parallel()
 

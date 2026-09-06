@@ -71,6 +71,11 @@ Supported update surface: definedTags,
 displayName, freeformTags
 Reject before mutate: force-new fields
 compartmentId
+Create-only fields:
+catalogDetails.adminPassword,
+catalogDetails.shardSpace,
+shardDetails.adminPassword,
+shardDetails.peerVmClusterIds
 Lookup filters: compartmentId,
 displayName, dbDeploymentType,
 lifecycleState
@@ -126,7 +131,11 @@ supported drift: definedTags, displayName,
 freeformTags
 reject before mutate: force-new fields
 compartmentId
-create-only fields: none
+create-only fields:
+catalogDetails.adminPassword,
+catalogDetails.shardSpace,
+shardDetails.adminPassword,
+shardDetails.peerVmClusterIds
 list lookup:
 oci_globally_distributed_database_sharded_databases
 filters compartmentId, displayName,
@@ -165,6 +174,12 @@ controls; the package-local runtime only
 performs in-place updates through
 UpdateDistributedDatabaseDetails for
 displayName, freeformTags, and definedTags.
+Write-only shard and catalog passwords plus peer
+VM cluster IDs are accepted during create but
+omitted or projected through different OCI read
+shapes; update parity ignores only those
+unobservable inputs and still rejects drift in
+observable shard or catalog fields.
 Delete keeps the finalizer until
 GetDistributedDatabase or list fallback confirms
 DELETED or NOT_FOUND.
