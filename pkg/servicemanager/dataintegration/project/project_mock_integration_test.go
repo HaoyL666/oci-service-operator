@@ -28,6 +28,17 @@ func TestMockIntegrationProjectCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateProjectDetails](t, `{
+  "name": "project create",
+  "identifier": "PROJECT_CREATE",
+  "description": "create"
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateProjectDetails](t, `{
+  "description": "updated",
+  "modelType": "PROJECT",
+  "objectVersion": 1,
+  "key": "resource-key"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.Project](t, `{
   "name": "project create",
   "identifier": "PROJECT_CREATE",
@@ -44,18 +55,12 @@ func TestMockIntegrationProjectCompositeCRUD(t *testing.T) {
   "description": "updated",
   "key": "resource-key"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.Project, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.Project, dataintegrationsdk.CreateProjectDetails, dataintegrationsdk.UpdateProjectDetails]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/projects", ItemPath: "/20200430/workspaces/<ocid:1>/projects/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateProjectBodyField(request, "name", "project create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateProjectBodyField(request, "description", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -91,22 +96,4 @@ func TestMockIntegrationProjectCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateProjectBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

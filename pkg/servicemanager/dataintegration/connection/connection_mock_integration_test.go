@@ -29,6 +29,16 @@ func TestMockIntegrationConnectionCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateConnectionFromRestNoAuth](t, `{
+  "name": "connection create",
+  "identifier": "CONNECTION_CREATE",
+  "description": "create"
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateConnectionFromRestNoAuth](t, `{
+  "description": "updated",
+  "key": "resource-key",
+  "objectVersion": 1
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.ConnectionFromRestNoAuth](t, `{
   "dataAssetKey": "data-asset-key",
   "name": "connection create",
@@ -47,17 +57,17 @@ func TestMockIntegrationConnectionCompositeCRUD(t *testing.T) {
   "description": "updated",
   "key": "resource-key"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.ConnectionFromRestNoAuth, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.ConnectionFromRestNoAuth, dataintegrationsdk.CreateConnectionFromRestNoAuth, dataintegrationsdk.UpdateConnectionFromRestNoAuth]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/connections", ItemPath: "/20200430/workspaces/<ocid:1>/connections/resource-key",
 		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
 		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateConnectionBodyField(request, "name", "connection create")
+			return ocimock.ValidateDiscriminatedJSONRequest(request, "modelType", "REST_NO_AUTH_CONNECTION", createRequest)
 		},
 		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateConnectionBodyField(request, "description", "updated")
+			return ocimock.ValidateDiscriminatedJSONRequest(request, "modelType", "REST_NO_AUTH_CONNECTION", updateRequest)
 		},
 	})
 	if err != nil {
@@ -94,22 +104,4 @@ func TestMockIntegrationConnectionCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateConnectionBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

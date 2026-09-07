@@ -28,6 +28,13 @@ func TestMockIntegrationRefreshActivityCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"timeScheduledStart":"2026-09-09T12:00:00Z"}`)
+	createRequest := ocimock.MustJSONFixture[fusionappssdk.CreateRefreshActivityDetails](t, `{
+  "sourceFusionEnvironmentId": "<ocid:2>",
+  "timeScheduledStart": "2026-09-08T12:00:00Z"
+}`)
+	updateRequest := ocimock.MustJSONFixture[fusionappssdk.UpdateRefreshActivityDetails](t, `{
+  "timeScheduledStart": "2026-09-09T12:00:00Z"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[fusionappssdk.RefreshActivity](t, `{
   "sourceFusionEnvironmentId": "<ocid:2>",
   "isDataMaskingOpted": false,
@@ -42,18 +49,12 @@ func TestMockIntegrationRefreshActivityCompositeCRUD(t *testing.T) {
   "id": "resource-key",
   "lifecycleState": "SUCCEEDED"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[fusionappssdk.RefreshActivity, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[fusionappssdk.RefreshActivity, fusionappssdk.CreateRefreshActivityDetails, fusionappssdk.UpdateRefreshActivityDetails]{
 		CollectionPath: "/20211201/fusionEnvironments/<ocid:1>/refreshActivities", ItemPath: "/20211201/fusionEnvironments/<ocid:1>/refreshActivities/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateRefreshActivityBodyField(request, "sourceFusionEnvironmentId", "<ocid:2>")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateRefreshActivityBodyField(request, "timeScheduledStart", "2026-09-09T12:00:00Z")
-		},
 		CreateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-create"}},
 		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
 		AdditionalRoutes: []ocimock.Route{
@@ -111,22 +112,4 @@ func refreshActivityWorkRequestResponse(id string, action fusionappssdk.WorkRequ
 			EntityType: common.String("RefreshActivity"), ActionType: action, Identifier: common.String("resource-key"),
 		}},
 	})
-}
-
-func validateRefreshActivityBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

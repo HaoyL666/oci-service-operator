@@ -29,6 +29,15 @@ func TestMockIntegrationAttributeCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[datacatalogsdk.CreateAttributeDetails](t, `{
+  "displayName": "attribute create",
+  "externalDataType": "VARCHAR",
+  "timeExternal": "2026-01-02T03:04:05Z",
+  "description": "create"
+}`)
+	updateRequest := ocimock.MustJSONFixture[datacatalogsdk.UpdateAttributeDetails](t, `{
+  "description": "updated"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[datacatalogsdk.Attribute](t, `{
   "entityKey": "entity-key",
   "displayName": "attribute create",
@@ -47,18 +56,12 @@ func TestMockIntegrationAttributeCompositeCRUD(t *testing.T) {
   "key": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[datacatalogsdk.Attribute, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[datacatalogsdk.Attribute, datacatalogsdk.CreateAttributeDetails, datacatalogsdk.UpdateAttributeDetails]{
 		CollectionPath: "/20190325/catalogs/<ocid:1>/dataAssets/asset-key/entities/entity-key/attributes", ItemPath: "/20190325/catalogs/<ocid:1>/dataAssets/asset-key/entities/entity-key/attributes/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateAttributeBodyField(request, "displayName", "attribute create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateAttributeBodyField(request, "description", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -94,22 +97,4 @@ func TestMockIntegrationAttributeCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateAttributeBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

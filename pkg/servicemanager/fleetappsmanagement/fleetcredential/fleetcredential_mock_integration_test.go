@@ -37,6 +37,34 @@ func TestMockIntegrationFleetCredentialCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"displayName":"credential updated"}`)
+	createRequest := ocimock.MustJSONFixture[fleetappsmanagementsdk.CreateFleetCredentialDetails](t, `{
+  "displayName": "credential create",
+  "entitySpecifics": {
+    "credentialLevel": "FLEET"
+  },
+  "user": {
+    "credentialType": "PLAIN_TEXT",
+    "value": "mock-user"
+  },
+  "password": {
+    "credentialType": "PLAIN_TEXT",
+    "value": "mock-password"
+  }
+}`)
+	updateRequest := ocimock.MustJSONFixture[fleetappsmanagementsdk.UpdateFleetCredentialDetails](t, `{
+  "displayName": "credential updated",
+  "entitySpecifics": {
+    "credentialLevel": "FLEET"
+  },
+  "user": {
+    "credentialType": "PLAIN_TEXT",
+    "value": "mock-user"
+  },
+  "password": {
+    "credentialType": "PLAIN_TEXT",
+    "value": "mock-password"
+  }
+}`)
 	createdState := ocimock.MustOCIResponseFixture[fleetappsmanagementsdk.FleetCredential](t, `{
   "displayName": "credential create",
   "entitySpecifics": {
@@ -69,18 +97,12 @@ func TestMockIntegrationFleetCredentialCompositeCRUD(t *testing.T) {
   "id": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[fleetappsmanagementsdk.FleetCredential, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[fleetappsmanagementsdk.FleetCredential, fleetappsmanagementsdk.CreateFleetCredentialDetails, fleetappsmanagementsdk.UpdateFleetCredentialDetails]{
 		CollectionPath: "/20250228/fleets/<ocid:1>/fleetCredentials", ItemPath: "/20250228/fleets/<ocid:1>/fleetCredentials/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateFleetCredentialBodyField(request, "displayName", "credential create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateFleetCredentialBodyField(request, "displayName", "credential updated")
-		},
 		CreateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-create"}},
 		UpdateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-update"}},
 		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
@@ -138,22 +160,4 @@ func fleetCredentialWorkRequestResponse(id string, operation fleetappsmanagement
 		CompartmentId: common.String("<ocid:2>"), PercentComplete: &complete,
 		Resources: []fleetappsmanagementsdk.WorkRequestResource{{EntityType: common.String("FleetCredential"), ActionType: action, Identifier: common.String("resource-key")}},
 	})
-}
-
-func validateFleetCredentialBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

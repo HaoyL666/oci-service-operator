@@ -36,6 +36,28 @@ func TestMockIntegrationAutoScalingPolicyCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"displayName":"policy updated"}`)
+	createRequest := ocimock.MustJSONFixture[autoscalingsdk.CreateScheduledPolicyDetails](t, `{
+  "capacity": {
+    "min": 1,
+    "max": 3,
+    "initial": 1
+  },
+  "displayName": "policy create",
+  "isEnabled": true,
+  "executionSchedule": {
+    "type": "cron",
+    "expression": "0 0 0 ? * * *",
+    "timezone": "UTC"
+  }
+}`)
+	updateRequest := ocimock.MustJSONFixture[autoscalingsdk.UpdateScheduledPolicyDetails](t, `{
+  "displayName": "policy updated",
+  "executionSchedule": {
+    "type": "cron",
+    "expression": "0 0 0 ? * * *",
+    "timezone": "UTC"
+  }
+}`)
 	createdState := ocimock.MustOCIResponseFixture[autoscalingsdk.ScheduledPolicy](t, `{
   "policyType": "scheduled",
   "capacity": {
@@ -70,17 +92,17 @@ func TestMockIntegrationAutoScalingPolicyCompositeCRUD(t *testing.T) {
   "id": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[autoscalingsdk.ScheduledPolicy, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[autoscalingsdk.ScheduledPolicy, autoscalingsdk.CreateScheduledPolicyDetails, autoscalingsdk.UpdateScheduledPolicyDetails]{
 		CollectionPath: "/20181001/autoScalingConfigurations/<ocid:1>/policies", ItemPath: "/20181001/autoScalingConfigurations/<ocid:1>/policies/resource-key",
 		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeArray,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
 		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateAutoScalingPolicyBodyField(request, "displayName", "policy create")
+			return ocimock.ValidateDiscriminatedJSONRequest(request, "policyType", "scheduled", createRequest)
 		},
 		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateAutoScalingPolicyBodyField(request, "displayName", "policy updated")
+			return ocimock.ValidateDiscriminatedJSONRequest(request, "policyType", "scheduled", updateRequest)
 		},
 	})
 	if err != nil {
@@ -117,22 +139,4 @@ func TestMockIntegrationAutoScalingPolicyCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateAutoScalingPolicyBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

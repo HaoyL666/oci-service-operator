@@ -30,6 +30,18 @@ func TestMockIntegrationCopyObjectRequestCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"status":"TERMINATING"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateCopyObjectRequestDetails](t, `{
+  "sourceWorkspaceId": "<ocid:2>",
+  "objectKeys": [
+    "object-key"
+  ],
+  "copyConflictResolution": {
+    "requestType": "RETAIN"
+  }
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateCopyObjectRequestDetails](t, `{
+  "status": "TERMINATING"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.CopyObjectRequest](t, `{
   "sourceWorkspaceId": "<ocid:2>",
   "objectKeys": [
@@ -53,18 +65,12 @@ func TestMockIntegrationCopyObjectRequestCompositeCRUD(t *testing.T) {
   "copyMetadataObjectRequestStatus": "TERMINATED",
   "status": "TERMINATING"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.CopyObjectRequest, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.CopyObjectRequest, dataintegrationsdk.CreateCopyObjectRequestDetails, dataintegrationsdk.UpdateCopyObjectRequestDetails]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/copyObjectRequests", ItemPath: "/20200430/workspaces/<ocid:1>/copyObjectRequests/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateCopyObjectRequestBodyField(request, "sourceWorkspaceId", "<ocid:2>")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateCopyObjectRequestBodyField(request, "status", "TERMINATING")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -81,14 +87,14 @@ func TestMockIntegrationCopyObjectRequestCompositeCRUD(t *testing.T) {
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*dataintegrationv1beta1.CopyObjectRequest]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *dataintegrationv1beta1.CopyObjectRequest) error {
-			if current.Status.OsokStatus.Ocid == "" {
+			if current.Status.OsokStatus.Ocid == "" || current.Status.CopyMetadataObjectRequestStatus != "SUCCESSFUL" {
 				return fmt.Errorf("created CopyObjectRequest status = %+v", current.Status)
 			}
 			return nil
 		},
 		Mutate: func(current *dataintegrationv1beta1.CopyObjectRequest) { current.Spec = updatedSpec },
 		ValidateUpdated: func(current *dataintegrationv1beta1.CopyObjectRequest) error {
-			if current.Status.OsokStatus.Ocid == "" {
+			if current.Status.OsokStatus.Ocid == "" || current.Status.CopyMetadataObjectRequestStatus != "TERMINATED" {
 				return fmt.Errorf("updated CopyObjectRequest status = %+v", current.Status)
 			}
 			return nil
@@ -100,22 +106,4 @@ func TestMockIntegrationCopyObjectRequestCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateCopyObjectRequestBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

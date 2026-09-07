@@ -26,6 +26,14 @@ func TestMockIntegrationPatternCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[datacatalogsdk.CreatePatternDetails](t, `{
+  "displayName": "pattern create",
+  "description": "create",
+  "expression": ".*"
+}`)
+	updateRequest := ocimock.MustJSONFixture[datacatalogsdk.UpdatePatternDetails](t, `{
+  "description": "updated"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[datacatalogsdk.Pattern](t, `{
   "catalogId": "<ocid:1>",
   "displayName": "pattern create",
@@ -42,18 +50,12 @@ func TestMockIntegrationPatternCompositeCRUD(t *testing.T) {
   "key": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[datacatalogsdk.Pattern, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[datacatalogsdk.Pattern, datacatalogsdk.CreatePatternDetails, datacatalogsdk.UpdatePatternDetails]{
 		CollectionPath: "/20190325/catalogs/<ocid:1>/patterns", ItemPath: "/20190325/catalogs/<ocid:1>/patterns/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validatePatternBodyField(request, "displayName", "pattern create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validatePatternBodyField(request, "description", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -89,22 +91,4 @@ func TestMockIntegrationPatternCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validatePatternBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

@@ -29,6 +29,17 @@ func TestMockIntegrationOsnCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"ocpuAllocationParam":{"ocpuAllocationNumber":2.0}}`)
+	createRequest := ocimock.MustJSONFixture[blockchainsdk.CreateOsnDetails](t, `{
+  "ad": "AD1",
+  "ocpuAllocationParam": {
+    "ocpuAllocationNumber": 1.0
+  }
+}`)
+	updateRequest := ocimock.MustJSONFixture[blockchainsdk.UpdateOsnDetails](t, `{
+  "ocpuAllocationParam": {
+    "ocpuAllocationNumber": 2.0
+  }
+}`)
 	createdState := ocimock.MustOCIResponseFixture[blockchainsdk.Osn](t, `{
   "ad": "AD1",
   "ocpuAllocationParam": {
@@ -45,17 +56,15 @@ func TestMockIntegrationOsnCompositeCRUD(t *testing.T) {
   "osnKey": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[blockchainsdk.Osn, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[blockchainsdk.Osn, blockchainsdk.CreateOsnDetails, blockchainsdk.UpdateOsnDetails]{
 		CollectionPath: "/20191010/blockchainPlatforms/<ocid:1>/osns", ItemPath: "/20191010/blockchainPlatforms/<ocid:1>/osns/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error { return validateOsnBodyField(request, "ad", "AD1") },
-		ValidateUpdateRaw: func(request ocimock.Request) error { return validateOsnBodyField(request, "ocpuAllocationParam", "") },
-		CreateHeaders:     http.Header{"Opc-Work-Request-Id": []string{"wr-create"}},
-		UpdateHeaders:     http.Header{"Opc-Work-Request-Id": []string{"wr-update"}},
-		DeleteHeaders:     http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
+		CreateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-create"}},
+		UpdateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-update"}},
+		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
 		AdditionalRoutes: []ocimock.Route{
 			{Name: "create-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/wr-create", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) { return osnWorkRequestResponse("wr-create", "CREATED") }},
 			{Name: "update-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/wr-update", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) { return osnWorkRequestResponse("wr-update", "UPDATED") }},
@@ -82,7 +91,7 @@ func TestMockIntegrationOsnCompositeCRUD(t *testing.T) {
 		},
 		Mutate: func(current *blockchainv1beta1.Osn) { current.Spec = updatedSpec },
 		ValidateUpdated: func(current *blockchainv1beta1.Osn) error {
-			if current.Status.Ad != current.Spec.Ad {
+			if current.Status.OcpuAllocationParam.OcpuAllocationNumber != current.Spec.OcpuAllocationParam.OcpuAllocationNumber {
 				return fmt.Errorf("updated Osn status = %+v", current.Status)
 			}
 			return nil
@@ -94,24 +103,6 @@ func TestMockIntegrationOsnCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateOsnBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }
 
 func osnWorkRequestResponse(id string, action string) (ocimock.Response, error) {

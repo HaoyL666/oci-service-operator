@@ -25,6 +25,13 @@ func TestMockIntegrationFleetPropertyCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"value":"property-updated"}`)
+	createRequest := ocimock.MustJSONFixture[fleetappsmanagementsdk.CreateFleetPropertyDetails](t, `{
+  "value": "property-create",
+  "propertyId": "<ocid:2>"
+}`)
+	updateRequest := ocimock.MustJSONFixture[fleetappsmanagementsdk.UpdateFleetPropertyDetails](t, `{
+  "value": "property-updated"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[fleetappsmanagementsdk.FleetProperty](t, `{
   "value": "property-create",
   "propertyId": "<ocid:2>",
@@ -37,18 +44,12 @@ func TestMockIntegrationFleetPropertyCompositeCRUD(t *testing.T) {
   "id": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[fleetappsmanagementsdk.FleetProperty, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[fleetappsmanagementsdk.FleetProperty, fleetappsmanagementsdk.CreateFleetPropertyDetails, fleetappsmanagementsdk.UpdateFleetPropertyDetails]{
 		CollectionPath: "/20250228/fleets/<ocid:1>/fleetProperties", ItemPath: "/20250228/fleets/<ocid:1>/fleetProperties/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateFleetPropertyBodyField(request, "value", "property-create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateFleetPropertyBodyField(request, "value", "property-updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -84,22 +85,4 @@ func TestMockIntegrationFleetPropertyCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateFleetPropertyBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

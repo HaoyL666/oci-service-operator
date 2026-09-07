@@ -28,6 +28,16 @@ func TestMockIntegrationDataAssetCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateDataAssetFromObjectStorage](t, `{
+  "name": "data asset create",
+  "identifier": "DATA_ASSET_CREATE",
+  "description": "create"
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateDataAssetFromObjectStorage](t, `{
+  "description": "updated",
+  "key": "resource-key",
+  "objectVersion": 1
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.DataAssetFromObjectStorageDetails](t, `{
   "name": "data asset create",
   "identifier": "DATA_ASSET_CREATE",
@@ -44,17 +54,17 @@ func TestMockIntegrationDataAssetCompositeCRUD(t *testing.T) {
   "description": "updated",
   "key": "resource-key"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.DataAssetFromObjectStorageDetails, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.DataAssetFromObjectStorageDetails, dataintegrationsdk.CreateDataAssetFromObjectStorage, dataintegrationsdk.UpdateDataAssetFromObjectStorage]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/dataAssets", ItemPath: "/20200430/workspaces/<ocid:1>/dataAssets/resource-key",
 		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
 		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateDataAssetBodyField(request, "name", "data asset create")
+			return ocimock.ValidateDiscriminatedJSONRequest(request, "modelType", "ORACLE_OBJECT_STORAGE_DATA_ASSET", createRequest)
 		},
 		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateDataAssetBodyField(request, "description", "updated")
+			return ocimock.ValidateDiscriminatedJSONRequest(request, "modelType", "ORACLE_OBJECT_STORAGE_DATA_ASSET", updateRequest)
 		},
 	})
 	if err != nil {
@@ -91,22 +101,4 @@ func TestMockIntegrationDataAssetCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateDataAssetBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

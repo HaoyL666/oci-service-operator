@@ -11,6 +11,7 @@ import (
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	shared "github.com/oracle/oci-service-operator/pkg/shared"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
@@ -26,6 +27,13 @@ func TestMockIntegrationDisApplicationDetailedDescriptionCompositeCRUD(t *testin
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"detailedDescription":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateDetailedDescriptionDetails](t, `{
+  "logo": "bG9nbw==",
+  "detailedDescription": "create"
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateDetailedDescriptionDetails](t, `{
+  "detailedDescription": "updated"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.DetailedDescription](t, `{
   "logo": "bG9nbw==",
   "detailedDescription": "create"
@@ -34,18 +42,12 @@ func TestMockIntegrationDisApplicationDetailedDescriptionCompositeCRUD(t *testin
   "logo": "bG9nbw==",
   "detailedDescription": "updated"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.DetailedDescription, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.DetailedDescription, dataintegrationsdk.CreateDetailedDescriptionDetails, dataintegrationsdk.UpdateDetailedDescriptionDetails]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/disApplications/application-key/detailedDescription", ItemPath: "/20200430/workspaces/<ocid:1>/disApplications/application-key/detailedDescription",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeNone,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeNone,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateDisApplicationDetailedDescriptionBodyField(request, "detailedDescription", "create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateDisApplicationDetailedDescriptionBodyField(request, "detailedDescription", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -62,14 +64,14 @@ func TestMockIntegrationDisApplicationDetailedDescriptionCompositeCRUD(t *testin
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*dataintegrationv1beta1.DisApplicationDetailedDescription]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *dataintegrationv1beta1.DisApplicationDetailedDescription) error {
-			if false {
+			if current.Status.OsokStatus.Ocid != "<ocid:1>/disApplications/application-key/detailedDescription" || current.Status.OsokStatus.Reason != string(shared.Active) {
 				return fmt.Errorf("created DisApplicationDetailedDescription status = %+v", current.Status)
 			}
 			return nil
 		},
 		Mutate: func(current *dataintegrationv1beta1.DisApplicationDetailedDescription) { current.Spec = updatedSpec },
 		ValidateUpdated: func(current *dataintegrationv1beta1.DisApplicationDetailedDescription) error {
-			if false {
+			if current.Status.OsokStatus.Ocid != "<ocid:1>/disApplications/application-key/detailedDescription" || current.Status.OsokStatus.Reason != string(shared.Active) {
 				return fmt.Errorf("updated DisApplicationDetailedDescription status = %+v", current.Status)
 			}
 			return nil
@@ -81,22 +83,4 @@ func TestMockIntegrationDisApplicationDetailedDescriptionCompositeCRUD(t *testin
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateDisApplicationDetailedDescriptionBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

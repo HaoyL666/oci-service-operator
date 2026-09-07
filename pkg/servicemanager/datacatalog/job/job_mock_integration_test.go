@@ -26,6 +26,14 @@ func TestMockIntegrationJobCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[datacatalogsdk.CreateJobDetails](t, `{
+  "displayName": "job create",
+  "jobDefinitionKey": "job-definition-key",
+  "description": "create"
+}`)
+	updateRequest := ocimock.MustJSONFixture[datacatalogsdk.UpdateJobDetails](t, `{
+  "description": "updated"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[datacatalogsdk.Job](t, `{
   "catalogId": "<ocid:1>",
   "displayName": "job create",
@@ -42,14 +50,12 @@ func TestMockIntegrationJobCompositeCRUD(t *testing.T) {
   "key": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[datacatalogsdk.Job, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[datacatalogsdk.Job, datacatalogsdk.CreateJobDetails, datacatalogsdk.UpdateJobDetails]{
 		CollectionPath: "/20190325/catalogs/<ocid:1>/jobs", ItemPath: "/20190325/catalogs/<ocid:1>/jobs/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error { return validateJobBodyField(request, "displayName", "job create") },
-		ValidateUpdateRaw: func(request ocimock.Request) error { return validateJobBodyField(request, "description", "updated") },
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -85,22 +91,4 @@ func TestMockIntegrationJobCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateJobBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

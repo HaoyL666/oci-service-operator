@@ -27,6 +27,16 @@ func TestMockIntegrationExternalPublicationCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateExternalPublicationDetails](t, `{
+  "applicationCompartmentId": "<ocid:2>",
+  "displayName": "publication create",
+  "description": "create"
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateExternalPublicationDetails](t, `{
+  "description": "updated",
+  "applicationCompartmentId": "<ocid:2>",
+  "displayName": "publication create"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.ExternalPublication](t, `{
   "applicationCompartmentId": "<ocid:2>",
   "displayName": "publication create",
@@ -41,18 +51,12 @@ func TestMockIntegrationExternalPublicationCompositeCRUD(t *testing.T) {
   "key": "resource-key",
   "status": "SUCCESSFUL"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.ExternalPublication, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.ExternalPublication, dataintegrationsdk.CreateExternalPublicationDetails, dataintegrationsdk.UpdateExternalPublicationDetails]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/tasks/task-key/externalPublications", ItemPath: "/20200430/workspaces/<ocid:1>/tasks/task-key/externalPublications/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateExternalPublicationBodyField(request, "displayName", "publication create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateExternalPublicationBodyField(request, "description", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -88,22 +92,4 @@ func TestMockIntegrationExternalPublicationCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateExternalPublicationBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

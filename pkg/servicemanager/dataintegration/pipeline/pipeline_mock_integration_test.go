@@ -24,41 +24,58 @@ func TestMockIntegrationPipelineCompositeCRUD(t *testing.T) {
   "name": "pipeline create",
   "identifier": "PIPELINE_CREATE",
   "registryMetadata": {
+    "aggregatorKey": "aggregator-key"
   },
-  "description": "create"
+  "description": "create",
+  "modelType": "PIPELINE",
+  "objectVersion": 1
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreatePipelineDetails](t, `{
+  "name": "pipeline create",
+  "identifier": "PIPELINE_CREATE",
+  "description": "create",
+  "registryMetadata": {
+    "aggregatorKey": "aggregator-key"
+  },
+  "modelType": "PIPELINE",
+  "objectVersion": 1
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdatePipelineDetails](t, `{
+  "description": "updated",
+  "key": "resource-key",
+  "modelType": "PIPELINE",
+  "objectVersion": 1,
+  "registryMetadata": {
+    "aggregatorKey": "aggregator-key",
+    "isFavorite": false
+  }
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.Pipeline](t, `{
   "aggregatorKey": "aggregator-key",
   "name": "pipeline create",
   "identifier": "PIPELINE_CREATE",
-  "registryMetadata": {
-  },
   "description": "create",
-  "key": "resource-key"
+  "key": "resource-key",
+  "modelType": "PIPELINE",
+  "objectVersion": 1
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[dataintegrationsdk.Pipeline](t, `{
   "aggregatorKey": "aggregator-key",
   "name": "pipeline create",
   "identifier": "PIPELINE_CREATE",
-  "registryMetadata": {
-  },
   "description": "updated",
-  "key": "resource-key"
+  "key": "resource-key",
+  "modelType": "PIPELINE",
+  "objectVersion": 1
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.Pipeline, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.Pipeline, dataintegrationsdk.CreatePipelineDetails, dataintegrationsdk.UpdatePipelineDetails]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/pipelines", ItemPath: "/20200430/workspaces/<ocid:1>/pipelines/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validatePipelineBodyField(request, "name", "pipeline create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validatePipelineBodyField(request, "description", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -94,22 +111,4 @@ func TestMockIntegrationPipelineCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validatePipelineBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

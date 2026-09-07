@@ -23,39 +23,45 @@ func TestMockIntegrationUserDefinedFunctionCompositeCRUD(t *testing.T) {
   "name": "function create",
   "identifier": "FUNCTION_CREATE",
   "registryMetadata": {
+    "aggregatorKey": "aggregator-key"
   },
   "description": "create"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateUserDefinedFunctionDetails](t, `{
+  "name": "function create",
+  "identifier": "FUNCTION_CREATE",
+  "description": "create",
+  "registryMetadata": {
+    "aggregatorKey": "aggregator-key"
+  }
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateUserDefinedFunctionDetails](t, `{
+  "description": "updated",
+  "registryMetadata": {
+    "aggregatorKey": "aggregator-key",
+    "isFavorite": false
+  }
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.UserDefinedFunction](t, `{
   "name": "function create",
   "identifier": "FUNCTION_CREATE",
-  "registryMetadata": {
-  },
   "description": "create",
   "key": "resource-key"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[dataintegrationsdk.UserDefinedFunction](t, `{
   "name": "function create",
   "identifier": "FUNCTION_CREATE",
-  "registryMetadata": {
-  },
   "description": "updated",
   "key": "resource-key"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.UserDefinedFunction, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.UserDefinedFunction, dataintegrationsdk.CreateUserDefinedFunctionDetails, dataintegrationsdk.UpdateUserDefinedFunctionDetails]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/userDefinedFunctions", ItemPath: "/20200430/workspaces/<ocid:1>/userDefinedFunctions/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateUserDefinedFunctionBodyField(request, "name", "function create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateUserDefinedFunctionBodyField(request, "description", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -91,22 +97,4 @@ func TestMockIntegrationUserDefinedFunctionCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateUserDefinedFunctionBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

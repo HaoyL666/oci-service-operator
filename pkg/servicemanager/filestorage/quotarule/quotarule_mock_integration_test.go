@@ -28,6 +28,16 @@ func TestMockIntegrationQuotaRuleCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"displayName":"quota updated"}`)
+	createRequest := ocimock.MustJSONFixture[filestoragesdk.CreateQuotaRuleDetails](t, `{
+  "principalType": "INDIVIDUAL_USER",
+  "isHardQuota": true,
+  "quotaLimitInGigabytes": 10,
+  "principalId": 1000,
+  "displayName": "quota create"
+}`)
+	updateRequest := ocimock.MustJSONFixture[filestoragesdk.UpdateQuotaRuleDetails](t, `{
+  "displayName": "quota updated"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[filestoragesdk.QuotaRule](t, `{
   "fileSystemId": "<ocid:1>",
   "principalType": "INDIVIDUAL_USER",
@@ -48,18 +58,12 @@ func TestMockIntegrationQuotaRuleCompositeCRUD(t *testing.T) {
   "id": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[filestoragesdk.QuotaRule, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[filestoragesdk.QuotaRule, filestoragesdk.CreateQuotaRuleDetails, filestoragesdk.UpdateQuotaRuleDetails]{
 		CollectionPath: "/20171215/fileSystems/<ocid:1>/quotaRules", ItemPath: "/20171215/fileSystems/<ocid:1>/quotaRules/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeArray,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeArray,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateQuotaRuleBodyField(request, "displayName", "quota create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateQuotaRuleBodyField(request, "displayName", "quota updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -95,22 +99,4 @@ func TestMockIntegrationQuotaRuleCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateQuotaRuleBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

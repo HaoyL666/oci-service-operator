@@ -23,17 +23,31 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
   "name": "application create",
   "identifier": "APPLICATION_CREATE",
   "objectVersion": 1,
-  "description": "create"
+  "description": "create",
+  "modelType": "INTEGRATION_APPLICATION"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateApplicationDetails](t, `{
+  "name": "application create",
+  "identifier": "APPLICATION_CREATE",
+  "description": "create",
+  "modelType": "INTEGRATION_APPLICATION"
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateApplicationDetails](t, `{
+  "description": "updated",
+  "objectVersion": 1,
+  "key": "resource-key",
+  "modelType": "INTEGRATION_APPLICATION"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.Application](t, `{
   "name": "application create",
   "identifier": "APPLICATION_CREATE",
   "objectVersion": 1,
   "description": "create",
   "key": "resource-key",
-  "lifecycleState": "ACTIVE"
+  "lifecycleState": "ACTIVE",
+  "modelType": "INTEGRATION_APPLICATION"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[dataintegrationsdk.Application](t, `{
   "name": "application create",
@@ -41,20 +55,15 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
   "objectVersion": 1,
   "description": "updated",
   "key": "resource-key",
-  "lifecycleState": "ACTIVE"
+  "lifecycleState": "ACTIVE",
+  "modelType": "INTEGRATION_APPLICATION"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.Application, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.Application, dataintegrationsdk.CreateApplicationDetails, dataintegrationsdk.UpdateApplicationDetails]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/applications", ItemPath: "/20200430/workspaces/<ocid:1>/applications/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateApplicationBodyField(request, "name", "application create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateApplicationBodyField(request, "description", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -90,22 +99,4 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateApplicationBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

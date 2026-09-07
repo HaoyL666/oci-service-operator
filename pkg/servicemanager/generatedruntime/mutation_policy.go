@@ -7,6 +7,7 @@ package generatedruntime
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"sort"
@@ -556,7 +557,11 @@ func (c ServiceClient[T]) filteredUpdateBody(resource T, options requestBuildOpt
 		if !ok {
 			continue
 		}
-		if currentValue, currentFound := lookupValueByPath(currentValues, path); currentFound && valuesEqual(specValue, currentValue) {
+		currentValue, currentFound := lookupValueByPath(currentValues, path)
+		if currentFound && valuesEqual(specValue, currentValue) {
+			continue
+		}
+		if zeroValueNullEquivalent(path, specValue, currentValue, c.config.Semantics.Mutation) {
 			continue
 		}
 		setValueByPath(body, canonicalValuePath(specValues, path), specValue)
@@ -564,22 +569,25 @@ func (c ServiceClient[T]) filteredUpdateBody(resource T, options requestBuildOpt
 	if len(body) == 0 {
 		return nil, false, nil
 	}
-	includeMandatoryUpdateBodyFields(body, specValues, c.config.Update)
+	if err := includeMandatoryUpdateBodyFields(body, specValues, currentValues, c.config.Update); err != nil {
+		return nil, false, err
+	}
 	preservePolymorphicUpdateDiscriminator(body, specValues, c.config.Update)
 	return body, true, nil
 }
 
 // includeMandatoryUpdateBodyFields carries required SDK update fields from the
-// desired spec when some mutable field actually drifted. OCI update models can
-// require an unchanged identity or configuration value alongside the changed
-// fields; adding it only after drift detection avoids no-op update loops.
-func includeMandatoryUpdateBodyFields(body, specValues map[string]any, operation *Operation) {
+// desired spec or observed OCI state when some mutable field actually drifted.
+// OCI update models can require an unchanged identity or configuration value
+// alongside changed fields; adding it only after drift detection avoids no-op
+// update loops.
+func includeMandatoryUpdateBodyFields(body, specValues, currentValues map[string]any, operation *Operation) error {
 	if len(body) == 0 || len(specValues) == 0 || operation == nil {
-		return
+		return nil
 	}
 	request, ok := operationRequestStruct(operation.NewRequest)
 	if !ok {
-		return
+		return nil
 	}
 	for _, requestField := range operation.Fields {
 		if requestField.Contribution != "body" {
@@ -589,29 +597,68 @@ func includeMandatoryUpdateBodyFields(body, specValues map[string]any, operation
 		if !found {
 			continue
 		}
-		bodyType := indirectType(bodyField.Type)
-		if bodyType == nil || bodyType.Kind() != reflect.Struct {
-			continue
+		paths, err := mandatoryUpdateBodyFieldPaths(bodyField.Type, specValues, currentValues)
+		if err != nil {
+			return err
 		}
-		for index := 0; index < bodyType.NumField(); index++ {
-			field := bodyType.Field(index)
-			if !field.IsExported() || field.Tag.Get("mandatory") != "true" {
-				continue
-			}
-			path := fieldJSONName(field)
-			if path == "" {
-				path = lowerCamel(field.Name)
-			}
+		for _, path := range paths {
 			if _, exists := lookupValueByPath(body, path); exists {
 				continue
 			}
-			value, exists := lookupValueByPath(specValues, path)
+			value, exists := lookupMeaningfulValue(specValues, path)
+			if !exists {
+				value, exists = lookupMeaningfulValue(currentValues, path)
+			}
 			if !exists {
 				continue
 			}
 			setValueByPath(body, canonicalValuePath(specValues, path), value)
 		}
 	}
+	return nil
+}
+
+func mandatoryUpdateBodyFieldPaths(targetType reflect.Type, specValues, currentValues map[string]any) ([]string, error) {
+	bodyType := indirectType(targetType)
+	if bodyType == nil && targetType.Kind() == reflect.Interface {
+		discriminator, ok := polymorphicUpdateDiscriminatorField(targetType)
+		if ok {
+			value, exists := lookupMeaningfulValue(specValues, discriminator)
+			if !exists {
+				value, exists = lookupMeaningfulValue(currentValues, discriminator)
+			}
+			if exists {
+				payload, err := json.Marshal(map[string]any{discriminator: value})
+				if err != nil {
+					return nil, fmt.Errorf("marshal %s discriminator for mandatory update fields: %w", discriminator, err)
+				}
+				converted, handled, err := convertPolymorphicInterfaceValue(payload, targetType)
+				if err != nil {
+					return nil, err
+				}
+				if handled {
+					bodyType = indirectType(reflect.TypeOf(converted.Interface()))
+				}
+			}
+		}
+	}
+	if bodyType == nil || bodyType.Kind() != reflect.Struct {
+		return nil, nil
+	}
+
+	paths := make([]string, 0, bodyType.NumField())
+	for index := 0; index < bodyType.NumField(); index++ {
+		field := bodyType.Field(index)
+		if !field.IsExported() || field.Tag.Get("mandatory") != "true" {
+			continue
+		}
+		path := fieldJSONName(field)
+		if path == "" {
+			path = lowerCamel(field.Name)
+		}
+		paths = append(paths, path)
+	}
+	return paths, nil
 }
 
 func preservePolymorphicUpdateDiscriminator(body, specValues map[string]any, operation *Operation) {

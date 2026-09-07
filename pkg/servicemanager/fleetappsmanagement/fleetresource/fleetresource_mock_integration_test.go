@@ -30,6 +30,16 @@ func TestMockIntegrationFleetResourceCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"compartmentId":"<ocid:5>"}`)
+	createRequest := ocimock.MustJSONFixture[fleetappsmanagementsdk.CreateFleetResourceDetails](t, `{
+  "resourceId": "<ocid:2>",
+  "tenancyId": "<ocid:3>",
+  "compartmentId": "<ocid:4>",
+  "resourceRegion": "us-ashburn-1",
+  "resourceType": "INSTANCE"
+}`)
+	updateRequest := ocimock.MustJSONFixture[fleetappsmanagementsdk.UpdateFleetResourceDetails](t, `{
+  "compartmentId": "<ocid:5>"
+}`)
 	createdState := ocimock.MustOCIResponseFixture[fleetappsmanagementsdk.FleetResource](t, `{
   "resourceId": "<ocid:2>",
   "tenancyId": "<ocid:3>",
@@ -48,18 +58,12 @@ func TestMockIntegrationFleetResourceCompositeCRUD(t *testing.T) {
   "id": "resource-key",
   "lifecycleState": "ACTIVE"
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[fleetappsmanagementsdk.FleetResource, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[fleetappsmanagementsdk.FleetResource, fleetappsmanagementsdk.CreateFleetResourceDetails, fleetappsmanagementsdk.UpdateFleetResourceDetails]{
 		CollectionPath: "/20250228/fleets/<ocid:1>/fleetResources", ItemPath: "/20250228/fleets/<ocid:1>/fleetResources/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateFleetResourceBodyField(request, "resourceId", "<ocid:2>")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateFleetResourceBodyField(request, "compartmentId", "<ocid:5>")
-		},
 		CreateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-create"}},
 		UpdateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-update"}},
 		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
@@ -117,22 +121,4 @@ func fleetResourceWorkRequestResponse(id string, operation fleetappsmanagementsd
 		CompartmentId: common.String("<ocid:2>"), PercentComplete: &complete,
 		Resources: []fleetappsmanagementsdk.WorkRequestResource{{EntityType: common.String("FleetResource"), ActionType: action, Identifier: common.String("resource-key")}},
 	})
-}
-
-func validateFleetResourceBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }

@@ -23,34 +23,42 @@ func TestMockIntegrationScheduleCompositeCRUD(t *testing.T) {
   "applicationKey": "application-key",
   "name": "schedule create",
   "identifier": "SCHEDULE_CREATE",
-  "description": "create"
+  "description": "create",
+  "objectVersion": 1
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createRequest := ocimock.MustJSONFixture[dataintegrationsdk.CreateScheduleDetails](t, `{
+  "name": "schedule create",
+  "identifier": "SCHEDULE_CREATE",
+  "description": "create",
+  "objectVersion": 1
+}`)
+	updateRequest := ocimock.MustJSONFixture[dataintegrationsdk.UpdateScheduleDetails](t, `{
+  "description": "updated",
+  "key": "resource-key",
+  "objectVersion": 1
+}`)
 	createdState := ocimock.MustOCIResponseFixture[dataintegrationsdk.Schedule](t, `{
   "name": "schedule create",
   "identifier": "SCHEDULE_CREATE",
   "description": "create",
-  "key": "resource-key"
+  "key": "resource-key",
+  "objectVersion": 1
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[dataintegrationsdk.Schedule](t, `{
   "name": "schedule create",
   "identifier": "SCHEDULE_CREATE",
   "description": "updated",
-  "key": "resource-key"
+  "key": "resource-key",
+  "objectVersion": 1
 }`)
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.Schedule, struct{}, struct{}]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[dataintegrationsdk.Schedule, dataintegrationsdk.CreateScheduleDetails, dataintegrationsdk.UpdateScheduleDetails]{
 		CollectionPath: "/20200430/workspaces/<ocid:1>/applications/application-key/schedules", ItemPath: "/20200430/workspaces/<ocid:1>/applications/application-key/schedules/resource-key",
-		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
-		ValidateCreateRaw: func(request ocimock.Request) error {
-			return validateScheduleBodyField(request, "name", "schedule create")
-		},
-		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return validateScheduleBodyField(request, "description", "updated")
-		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -86,22 +94,4 @@ func TestMockIntegrationScheduleCompositeCRUD(t *testing.T) {
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func validateScheduleBodyField(request ocimock.Request, field string, want string) error {
-	var body map[string]any
-	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
-		return err
-	}
-	value, ok := body[field]
-	if !ok {
-		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
-	}
-	if want != "" {
-		got, ok := value.(string)
-		if !ok || got != want {
-			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
-		}
-	}
-	return nil
 }
