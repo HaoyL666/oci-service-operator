@@ -7,7 +7,11 @@ package ocimock
 
 import (
 	"net/http"
+	"net/url"
 	"testing"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 )
 
 type explicitFixture struct {
@@ -36,6 +40,29 @@ func TestValidateJSONRequestComparesCompleteTypedValue(t *testing.T) {
 	}
 	if err := ValidateJSONRequest(request, explicitFixture{Name: "typed", Count: 3}); err == nil {
 		t.Fatal("ValidateJSONRequest() error = nil, want mismatch")
+	}
+}
+
+func TestValidateRetryTokenMatchesResourceUID(t *testing.T) {
+	resource := &metav1.PartialObjectMetadata{ObjectMeta: metav1.ObjectMeta{UID: types.UID("stable-resource-uid")}}
+	request := Request{Method: http.MethodPost, URL: &url.URL{Path: "/resources"}, Header: http.Header{"Opc-Retry-Token": []string{"stable-resource-uid"}}}
+	if err := ValidateRetryToken(request, resource); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestValidateRetryTokenRejectsMissingOrDifferentUID(t *testing.T) {
+	request := Request{Method: http.MethodPost, URL: &url.URL{Path: "/resources"}, Header: make(http.Header)}
+	if err := ValidateRetryToken(request, &metav1.PartialObjectMetadata{}); err == nil {
+		t.Fatal("expected empty resource UID to fail")
+	}
+	resource := &metav1.PartialObjectMetadata{ObjectMeta: metav1.ObjectMeta{UID: types.UID("stable-resource-uid")}}
+	if err := ValidateRetryToken(request, resource); err == nil {
+		t.Fatal("expected missing retry token to fail")
+	}
+	request.Header.Set("opc-retry-token", "different-uid")
+	if err := ValidateRetryToken(request, resource); err == nil {
+		t.Fatal("expected different retry token to fail")
 	}
 }
 

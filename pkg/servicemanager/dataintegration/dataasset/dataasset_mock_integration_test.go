@@ -61,6 +61,9 @@ func TestMockIntegrationDataAssetCompositeCRUD(t *testing.T) {
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
 		ValidateCreateRaw: func(request ocimock.Request) error {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				return err
+			}
 			return ocimock.ValidateDiscriminatedJSONRequest(request, "modelType", "ORACLE_OBJECT_STORAGE_DATA_ASSET", createRequest)
 		},
 		ValidateUpdateRaw: func(request ocimock.Request) error {

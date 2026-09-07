@@ -53,6 +53,9 @@ func TestMockIntegrationTermCompositeCRUD(t *testing.T) {
 		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
+		ValidateCreate: func(request ocimock.Request, _ datacatalogsdk.CreateTermDetails) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 	})
 	if err != nil {
 		t.Fatal(err)

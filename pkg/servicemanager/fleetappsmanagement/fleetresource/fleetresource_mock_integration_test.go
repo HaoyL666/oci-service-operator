@@ -64,6 +64,9 @@ func TestMockIntegrationFleetResourceCompositeCRUD(t *testing.T) {
 		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
+		ValidateCreate: func(request ocimock.Request, _ fleetappsmanagementsdk.CreateFleetResourceDetails) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		CreateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-create"}},
 		UpdateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-update"}},
 		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},

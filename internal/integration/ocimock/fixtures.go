@@ -33,6 +33,22 @@ func InitializeResource(resource metav1.Object, name string) {
 	resource.SetUID(types.UID(name + "-uid"))
 }
 
+// ValidateRetryToken verifies that generatedruntime used the resource's stable
+// Kubernetes identity for an OCI create request.
+func ValidateRetryToken(request Request, resource metav1.Object) error {
+	if resource == nil {
+		return fmt.Errorf("%s %s retry-token resource is nil", request.Method, request.URL.Path)
+	}
+	want := string(resource.GetUID())
+	if want == "" {
+		return fmt.Errorf("%s %s retry-token resource UID is empty", request.Method, request.URL.Path)
+	}
+	if got := request.Header.Get("opc-retry-token"); got != want {
+		return fmt.Errorf("%s %s opc-retry-token = %q, want resource UID %q", request.Method, request.URL.Path, got, want)
+	}
+	return nil
+}
+
 // MustJSONFixture constructs an explicitly selected typed CR, request details,
 // or OCI response model from package-owned JSON. The type argument keeps SDK
 // polymorphic decoding and field names checked at the test's call site.
