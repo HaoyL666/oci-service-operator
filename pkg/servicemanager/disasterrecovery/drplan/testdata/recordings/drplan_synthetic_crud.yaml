@@ -66,3 +66,32 @@ interactions:
                 - application/json
       response:
         statusCode: 204
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drPlans/<ocid:3>
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 404
+        headers:
+            content-type:
+                - application/json
+        body: '{"code":"NotFound","message":"DR plan deleted"}'
+        encoding: json
+    - request:
+        method: GET
+        host: disaster-recovery.us-ashburn-1.oci.oraclecloud.com
+        path: /20220125/drPlans
+        query: displayName=drplan-sample&drPlanId=%3Cocid%3A3%3E&drPlanType=SWITCHOVER&drProtectionGroupId=%3Cocid%3A1%3E
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"items":[]}'
+        encoding: json
