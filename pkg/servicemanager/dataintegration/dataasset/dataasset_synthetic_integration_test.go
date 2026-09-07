@@ -23,11 +23,11 @@ import (
 func TestSyntheticDataAssetReconcilesTracked(t *testing.T) {
 	resource := &dataintegrationv1beta1.DataAsset{}
 	resourceID := "ocid1.dataasset.oc1..synthetic"
-	pathValues := map[string]any{"workspaceId": "ocid1.workspace.oc1..synthetic"}
+	pathValues := map[string]any{"workspaceId": "ocid1.workspace.oc1..synthetic", "modelType": "ORACLE_OBJECT_STORAGE_DATA_ASSET"}
 	if err := ocireplay.SeedSyntheticTrackedResource(resource, resourceID, pathValues); err != nil {
 		t.Fatal(err)
 	}
-	observedBody, err := ocireplay.SyntheticObservedBody(map[string]any{}, resourceID, "ACTIVE", map[string]any{"key": resourceID, "resourceId": resourceID, "status": "ACTIVE", "timeCreated": "2026-01-02T03:04:05Z", "timeUpdated": "2026-01-03T03:04:05Z", "workspaceId": "ocid1.workspace.oc1..synthetic"})
+	observedBody, err := ocireplay.SyntheticObservedBody(map[string]any{}, resourceID, "ACTIVE", map[string]any{"key": resourceID, "resourceId": resourceID, "status": "ACTIVE", "timeCreated": "2026-01-02T03:04:05Z", "timeUpdated": "2026-01-03T03:04:05Z", "workspaceId": "ocid1.workspace.oc1..synthetic", "modelType": "ORACLE_OBJECT_STORAGE_DATA_ASSET"})
 	if err != nil {
 		t.Fatal(err)
 	}

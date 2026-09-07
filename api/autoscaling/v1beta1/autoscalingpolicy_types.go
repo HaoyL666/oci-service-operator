@@ -33,6 +33,9 @@ type AutoScalingPolicySpec struct {
 	ResourceAction AutoScalingPolicyResourceAction `json:"resourceAction,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	Rules []AutoScalingPolicyRule `json:"rules,omitempty"`
+	// The OCID of the autoscaling configuration containing this policy.
+	// +kubebuilder:validation:Required
+	AutoScalingConfigurationId string `json:"autoScalingConfigurationId"`
 }
 
 // AutoScalingPolicyCapacity defines nested fields for AutoScalingPolicy.Capacity.

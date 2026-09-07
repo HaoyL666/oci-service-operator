@@ -113,3 +113,38 @@ func TestExplicitCRUDResponderAdvancesDeclaredDeleteStatuses(t *testing.T) {
 		t.Fatalf("second delete = status %d, error %v", response.StatusCode, err)
 	}
 }
+
+func TestExplicitCRUDResponderAddsDeclaredOperationHeaders(t *testing.T) {
+	t.Parallel()
+	created := crudTestState{ID: "thing-1", Name: "created"}
+	updated := crudTestState{ID: "thing-1", Name: "updated"}
+	responder, err := NewExplicitCRUDResponder(ExplicitCRUDOptions[crudTestState, struct{}, struct{}]{
+		CollectionPath: "/v1/things", ItemPath: "/v1/things/thing-1",
+		Operations:   []Operation{OperationCreate, OperationUpdate, OperationDelete},
+		CreatedState: &created, UpdatedState: &updated,
+		ValidateCreateRaw: func(Request) error { return nil }, ValidateUpdateRaw: func(Request) error { return nil },
+		CreateHeaders: http.Header{"Opc-Work-Request-Id": []string{"create-wr"}},
+		UpdateHeaders: http.Header{"Opc-Work-Request-Id": []string{"update-wr"}},
+		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"delete-wr"}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	requests := []struct {
+		request Request
+		want    string
+	}{
+		{request: Request{Method: http.MethodPost, URL: mustTestURL(t, "https://mock.invalid/v1/things")}, want: "create-wr"},
+		{request: Request{Method: http.MethodPut, URL: mustTestURL(t, "https://mock.invalid/v1/things/thing-1")}, want: "update-wr"},
+		{request: Request{Method: http.MethodDelete, URL: mustTestURL(t, "https://mock.invalid/v1/things/thing-1")}, want: "delete-wr"},
+	}
+	for _, test := range requests {
+		response, err := responder.Respond(test.request)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got := response.Header.Get("Opc-Work-Request-Id"); got != test.want {
+			t.Fatalf("operation header = %q, want %q", got, test.want)
+		}
+	}
+}

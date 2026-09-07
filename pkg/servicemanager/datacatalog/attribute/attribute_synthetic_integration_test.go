@@ -23,7 +23,7 @@ import (
 func TestSyntheticAttributeReconcilesTracked(t *testing.T) {
 	resource := &datacatalogv1beta1.Attribute{}
 	resourceID := "ocid1.attribute.oc1..synthetic"
-	pathValues := map[string]any{"catalogId": "ocid1.catalog.oc1..synthetic", "dataAssetKey": "dataassetkey-synthetic", "entityKey": "entitykey-synthetic"}
+	pathValues := map[string]any{"catalogId": "ocid1.catalog.oc1..synthetic", "dataAssetKey": "dataassetkey-synthetic", "entityKey": "entitykey-synthetic", "timeExternal": "2026-01-02T03:04:05Z"}
 	if err := ocireplay.SeedSyntheticTrackedResource(resource, resourceID, pathValues); err != nil {
 		t.Fatal(err)
 	}

@@ -44,6 +44,9 @@ type UserDefinedFunctionSpec struct {
 	// The version of the object that is used to track changes in the object instance.
 	// +kubebuilder:validation:Optional
 	ObjectVersion int `json:"objectVersion,omitempty"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
 }
 
 // UserDefinedFunctionRegistryMetadata defines nested fields for UserDefinedFunction.RegistryMetadata.

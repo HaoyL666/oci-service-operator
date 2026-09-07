@@ -14,10 +14,12 @@ import (
 	"time"
 
 	apmconfigsdk "github.com/oracle/oci-go-sdk/v65/apmconfig"
+	autoscalingsdk "github.com/oracle/oci-go-sdk/v65/autoscaling"
 	dashboardservicesdk "github.com/oracle/oci-go-sdk/v65/dashboardservice"
 	databasesdk "github.com/oracle/oci-go-sdk/v65/database"
 	databasemigrationsdk "github.com/oracle/oci-go-sdk/v65/databasemigration"
 	databasetoolssdk "github.com/oracle/oci-go-sdk/v65/databasetools"
+	dataintegrationsdk "github.com/oracle/oci-go-sdk/v65/dataintegration"
 	datasafesdk "github.com/oracle/oci-go-sdk/v65/datasafe"
 	networkfirewallsdk "github.com/oracle/oci-go-sdk/v65/networkfirewall"
 	"github.com/oracle/oci-service-operator/pkg/credhelper"
@@ -50,6 +52,8 @@ var errResourceNotFound = errors.New("generated runtime resource not found")
 var (
 	passwordSourceType                       = reflect.TypeOf(shared.PasswordSource{})
 	usernameSourceType                       = reflect.TypeOf(shared.UsernameSource{})
+	autoScalingPolicyCreateDetailsType       = reflect.TypeOf((*autoscalingsdk.CreateAutoScalingPolicyDetails)(nil)).Elem()
+	autoScalingPolicyUpdateDetailsType       = reflect.TypeOf((*autoscalingsdk.UpdateAutoScalingPolicyDetails)(nil)).Elem()
 	autonomousDatabaseBaseType               = reflect.TypeOf((*databasesdk.CreateAutonomousDatabaseBase)(nil)).Elem()
 	configCreateDetailsType                  = reflect.TypeOf((*apmconfigsdk.CreateConfigDetails)(nil)).Elem()
 	configUpdateDetailsType                  = reflect.TypeOf((*apmconfigsdk.UpdateConfigDetails)(nil)).Elem()
@@ -57,6 +61,12 @@ var (
 	connectionUpdateDetailsType              = reflect.TypeOf((*databasemigrationsdk.UpdateConnectionDetails)(nil)).Elem()
 	databaseToolsConnectionCreateDetailsType = reflect.TypeOf((*databasetoolssdk.CreateDatabaseToolsConnectionDetails)(nil)).Elem()
 	databaseToolsConnectionUpdateDetailsType = reflect.TypeOf((*databasetoolssdk.UpdateDatabaseToolsConnectionDetails)(nil)).Elem()
+	dataIntegrationConnectionCreateType      = reflect.TypeOf((*dataintegrationsdk.CreateConnectionDetails)(nil)).Elem()
+	dataIntegrationConnectionUpdateType      = reflect.TypeOf((*dataintegrationsdk.UpdateConnectionDetails)(nil)).Elem()
+	dataIntegrationDataAssetCreateType       = reflect.TypeOf((*dataintegrationsdk.CreateDataAssetDetails)(nil)).Elem()
+	dataIntegrationDataAssetUpdateType       = reflect.TypeOf((*dataintegrationsdk.UpdateDataAssetDetails)(nil)).Elem()
+	dataIntegrationTaskCreateType            = reflect.TypeOf((*dataintegrationsdk.CreateTaskDetails)(nil)).Elem()
+	dataIntegrationTaskUpdateType            = reflect.TypeOf((*dataintegrationsdk.UpdateTaskDetails)(nil)).Elem()
 	dashboardCreateDetailsType               = reflect.TypeOf((*dashboardservicesdk.CreateDashboardDetails)(nil)).Elem()
 	dashboardUpdateDetailsType               = reflect.TypeOf((*dashboardservicesdk.UpdateDashboardDetails)(nil)).Elem()
 	sensitiveTypeCreateDetailsType           = reflect.TypeOf((*datasafesdk.CreateSensitiveTypeDetails)(nil)).Elem()

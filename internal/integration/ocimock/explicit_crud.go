@@ -49,6 +49,9 @@ type ExplicitCRUDOptions[S, C, U any] struct {
 	DeleteStatus   int
 	DeleteStatuses []int
 	NotFoundCode   string
+	CreateHeaders  http.Header
+	UpdateHeaders  http.Header
+	DeleteHeaders  http.Header
 
 	ValidateCreate    func(Request, C) error
 	CompareCreate     func(C, C) error
@@ -128,6 +131,7 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 			}
 			state := *options.CreatedState
 			response, err := JSONResponse(statusOrDefault(options.CreateStatus, http.StatusOK), state)
+			mergeResponseHeaders(&response, options.CreateHeaders)
 			return state, response, err
 		}
 	}
@@ -189,6 +193,7 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 			}
 			state := *options.UpdatedState
 			response, err := JSONResponse(statusOrDefault(options.UpdateStatus, http.StatusOK), state)
+			mergeResponseHeaders(&response, options.UpdateHeaders)
 			return state, response, err
 		}
 	}
@@ -212,7 +217,9 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 			if status == http.StatusNotFound {
 				return explicitNotFoundResponse(options.NotFoundCode)
 			}
-			return EmptyResponse(status), nil
+			response := EmptyResponse(status)
+			mergeResponseHeaders(&response, options.DeleteHeaders)
+			return response, nil
 		}
 		if options.DeletedState == nil && len(options.DeletedReadStates) == 0 {
 			crudOptions.Delete = deleteHandler
@@ -237,6 +244,18 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 		}
 	}
 	return NewCRUDResponder(crudOptions)
+}
+
+func mergeResponseHeaders(response *Response, headers http.Header) {
+	if response == nil || len(headers) == 0 {
+		return
+	}
+	if response.Header == nil {
+		response.Header = make(http.Header)
+	}
+	for name, values := range headers {
+		response.Header[name] = append([]string(nil), values...)
+	}
 }
 
 func explicitRequestDetails[T any](request Request, expected T, compare func(T, T) error) (T, error) {

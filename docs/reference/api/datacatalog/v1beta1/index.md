@@ -58,9 +58,12 @@ AttributeSpec defines the desired state of Attribute.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `businessName` | Optional user friendly business name of the attribute. If set, this supplements the harvested display name of the object. | `string` | No | - | - |
+| `catalogId` | The OCID of the catalog containing this resource. | `string` | Yes | - | - |
 | [`customPropertyMembers`](#kind-attribute-spec-custompropertymembers) | The list of customized properties along with the values for this object | `list[object]` | No | - | - |
+| `dataAssetKey` | The key of the data asset containing this resource. | `string` | Yes | - | - |
 | `description` | Detailed description of the attribute. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
+| `entityKey` | The key of the entity containing this resource. | `string` | Yes | - | - |
 | `externalDataType` | Data type of the attribute as defined in the external system. | `string` | Yes | - | - |
 | `externalDatatypeEntityKey` | External entity key that represents the datatype of this attribute , applicable if this attribute is a complex type. | `string` | No | - | - |
 | `externalParentAttributeKey` | External attribute key that represents the parent attribute of this attribute , applicable if the parent attribute is of complex type. | `string` | No | - | - |
@@ -592,7 +595,9 @@ ConnectionSpec defines the desired state of Connection.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing this resource. | `string` | Yes | - | - |
 | [`customPropertyMembers`](#kind-connection-spec-custompropertymembers) | The list of customized properties along with the values for this object | `list[object]` | No | - | - |
+| `dataAssetKey` | The key of the data asset containing this resource. | `string` | Yes | - | - |
 | `description` | A description of the connection. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
 | `encProperties` | A map of maps that contains the encrypted values for sensitive properties which are specific to the connection type. Each connection type definition defines it's set of required and optional properties. The map keys are category names and the values are maps of property name to property value. Every property is contained inside of a category. Most connections have required properties within the "default" category. To determine the set of optional and required properties for a connection type, a query can be done on '/types?type=connection' that returns a collection of all connection types. The appropriate connection type, which will include definitions of all of it's properties, can be identified from this collection. Example: `{"encProperties": { "default": { "password": "example-password"}}}` | `map[string, map[string, string]]` | No | - | - |
@@ -890,6 +895,7 @@ DataAssetSpec defines the desired state of DataAsset.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing this resource. | `string` | Yes | - | - |
 | [`customPropertyMembers`](#kind-dataasset-spec-custompropertymembers) | The list of customized properties along with the values for this object | `list[object]` | No | - | - |
 | `description` | Detailed description of the data asset. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
@@ -1148,7 +1154,9 @@ EntitySpec defines the desired state of Entity.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `businessName` | Optional user friendly business name of the data entity. If set, this supplements the harvested display name of the object. | `string` | No | - | - |
+| `catalogId` | The OCID of the catalog containing this resource. | `string` | Yes | - | - |
 | [`customPropertyMembers`](#kind-entity-spec-custompropertymembers) | The list of customized properties along with the values for this object | `list[object]` | No | - | - |
+| `dataAssetKey` | The key of the data asset containing this resource. | `string` | Yes | - | - |
 | `description` | Detailed description of a data entity. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
 | `folderKey` | Key of the associated folder. | `string` | No | - | - |
@@ -1430,7 +1438,9 @@ FolderSpec defines the desired state of Folder.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `businessName` | Optional user friendly business name of the folder. If set, this supplements the harvested display name of the object. | `string` | No | - | - |
+| `catalogId` | The OCID of the catalog containing this resource. | `string` | Yes | - | - |
 | [`customPropertyMembers`](#kind-folder-spec-custompropertymembers) | The list of customized properties along with the values for this object | `list[object]` | No | - | - |
+| `dataAssetKey` | The key of the data asset containing this resource. | `string` | Yes | - | - |
 | `description` | Detailed description of a folder. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
 | `harvestStatus` | Folder harvesting status. | `string` | No | - | - |
@@ -1839,6 +1849,7 @@ JobSpec defines the desired state of Job.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing this resource. | `string` | Yes | - | - |
 | `connectionKey` | The key of the connection used by the job. This connection will override the default connection specified in the associated job definition. All executions will use this connection. | `string` | No | - | - |
 | `description` | Detailed description of the job. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
@@ -1979,6 +1990,7 @@ JobDefinitionSpec defines the desired state of JobDefinition.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `catalogId` | The OCID of the catalog containing this resource. | `string` | Yes | - | - |
 | `connectionKey` | The key of the connection resource to be used for the job. | `string` | No | - | - |
 | `dataAssetKey` | The key of the data asset for which the job is defined. | `string` | No | - | - |
 | `description` | Detailed description of the job definition. | `string` | No | - | - |

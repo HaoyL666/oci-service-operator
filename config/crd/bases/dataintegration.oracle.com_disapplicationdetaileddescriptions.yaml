@@ -54,12 +54,22 @@ spec:
             description: DisApplicationDetailedDescriptionSpec defines the desired
               state of DisApplicationDetailedDescription.
             properties:
+              applicationKey:
+                description: The key of the application containing this resource.
+                type: string
               detailedDescription:
                 description: Base64 encoded rich text description of the object.
                 type: string
               logo:
                 description: Base64 encoded image to represent logo of the object.
                 type: string
+              workspaceId:
+                description: The OCID of the Data Integration workspace containing
+                  this resource.
+                type: string
+            required:
+            - applicationKey
+            - workspaceId
             type: object
           status:
             description: DisApplicationDetailedDescriptionStatus defines the observed

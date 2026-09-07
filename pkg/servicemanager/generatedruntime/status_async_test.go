@@ -95,6 +95,44 @@ func TestApplySuccessClearsLifecycleAsyncTrackerWhenActive(t *testing.T) {
 	}
 }
 
+func TestApplySuccessTreatsStateFreeResponseAsActiveWhenAsyncIsNone(t *testing.T) {
+	t.Parallel()
+	client := NewServiceClient[*fakeResource](Config[*fakeResource]{
+		Kind: "StateFreeThing", SDKName: "Thing",
+		Semantics: &Semantics{Async: &AsyncSemantics{Strategy: asyncStrategyNone, Runtime: asyncRuntimeGeneratedRuntime, FormalClassification: asyncStrategyNone}},
+	})
+	resource := &fakeResource{}
+	response, err := client.applySuccess(resource, fakeGetThingResponse{Thing: fakeThing{Id: "ocid1.thing.oc1..state-free", DisplayName: "state-free"}}, shared.Provisioning)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !response.IsSuccessful || response.ShouldRequeue {
+		t.Fatalf("response = %#v, want successful no-requeue", response)
+	}
+	if resource.Status.OsokStatus.Reason != string(shared.Active) {
+		t.Fatalf("status reason = %q, want Active", resource.Status.OsokStatus.Reason)
+	}
+}
+
+func TestApplySuccessRequeuesMissingDeclaredLifecycleState(t *testing.T) {
+	t.Parallel()
+	client := NewServiceClient[*fakeResource](Config[*fakeResource]{
+		Kind: "LifecycleThing", SDKName: "Thing",
+		Semantics: &Semantics{
+			Async:     &AsyncSemantics{Strategy: asyncStrategyNone, Runtime: asyncRuntimeGeneratedRuntime, FormalClassification: asyncStrategyNone},
+			Lifecycle: LifecycleSemantics{ActiveStates: []string{"ACTIVE"}},
+		},
+	})
+	resource := &fakeResource{}
+	response, err := client.applySuccess(resource, fakeGetThingResponse{Thing: fakeThing{Id: "ocid1.thing.oc1..lifecycle", DisplayName: "lifecycle"}}, shared.Provisioning)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !response.IsSuccessful || !response.ShouldRequeue {
+		t.Fatalf("response = %#v, want successful requeue while the declared lifecycle state is absent", response)
+	}
+}
+
 func TestApplySuccessPrefersObservedLifecyclePhaseTransition(t *testing.T) {
 	t.Parallel()
 	client := NewServiceClient[*fakeResource](Config[*fakeResource]{Kind: "Thing", SDKName: "Thing", Semantics: &Semantics{Lifecycle: LifecycleSemantics{UpdatingStates: []string{"UPDATING"}, ActiveStates: []string{"ACTIVE"}}, Delete: DeleteSemantics{PendingStates: []string{"DELETING"}}}})

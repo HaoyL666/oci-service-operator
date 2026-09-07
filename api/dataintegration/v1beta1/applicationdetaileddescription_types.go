@@ -20,6 +20,12 @@ type ApplicationDetailedDescriptionSpec struct {
 	// Base64 encoded rich text description of the object.
 	// +kubebuilder:validation:Optional
 	DetailedDescription string `json:"detailedDescription,omitempty"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
+	// The key of the application containing this resource.
+	// +kubebuilder:validation:Required
+	ApplicationKey string `json:"applicationKey"`
 }
 
 // ApplicationDetailedDescriptionStatus defines the observed state of ApplicationDetailedDescription.

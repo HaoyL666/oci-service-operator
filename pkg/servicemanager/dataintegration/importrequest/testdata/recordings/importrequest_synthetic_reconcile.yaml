@@ -11,7 +11,7 @@ interactions:
     - request:
         method: GET
         host: dataintegration.us-ashburn-1.oci.oraclecloud.com
-        path: /20200430/workspaces/<ocid:1>/importRequests/<ocid:1>
+        path: /20200430/workspaces/<ocid:1>/importRequests/<ocid:2>
         headers:
             content-type:
                 - application/json
@@ -20,12 +20,12 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z","workspaceId":"<ocid:2>"}'
+        body: '{"id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z","workspaceId":"<ocid:1>"}'
         encoding: json
     - request:
         method: PUT
         host: dataintegration.us-ashburn-1.oci.oraclecloud.com
-        path: /20200430/workspaces/<ocid:1>/importRequests/<ocid:1>
+        path: /20200430/workspaces/<ocid:1>/importRequests/<ocid:2>
         headers:
             content-type:
                 - application/json
@@ -36,12 +36,12 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z","workspaceId":"<ocid:2>"}'
+        body: '{"id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z","workspaceId":"<ocid:1>"}'
         encoding: json
     - request:
         method: GET
         host: dataintegration.us-ashburn-1.oci.oraclecloud.com
-        path: /20200430/workspaces/<ocid:1>/importRequests/<ocid:1>
+        path: /20200430/workspaces/<ocid:1>/importRequests/<ocid:2>
         headers:
             content-type:
                 - application/json
@@ -50,5 +50,5 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z","workspaceId":"<ocid:2>"}'
+        body: '{"id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z","workspaceId":"<ocid:1>"}'
         encoding: json

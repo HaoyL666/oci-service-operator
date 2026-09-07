@@ -112,6 +112,12 @@ type ConnectionSpec struct {
 	// The version of the object that is used to track changes in the object instance.
 	// +kubebuilder:validation:Required
 	ObjectVersion int `json:"objectVersion"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
+	// The data asset key required by the connection collection lookup.
+	// +kubebuilder:validation:Required
+	DataAssetKey string `json:"dataAssetKey"`
 }
 
 // ConnectionParentRef defines nested fields for Connection.ParentRef.

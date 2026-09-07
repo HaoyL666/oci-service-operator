@@ -309,3 +309,34 @@ func TestCRUDResponderVerificationRequiresConfiguredReadbacks(t *testing.T) {
 		})
 	}
 }
+
+func TestCRUDResponderSupportsSingletonCRUDPathWithoutList(t *testing.T) {
+	t.Parallel()
+	created := crudTestState{ID: "singleton", Name: "created"}
+	responder, err := NewCRUDResponder(CRUDOptions[crudTestState]{
+		CollectionPath: "/v1/singleton", ItemPath: "/v1/singleton",
+		ExpectedOperations: []Operation{OperationCreate, OperationRead, OperationDelete},
+		Create: func(Request) (crudTestState, Response, error) {
+			response, err := JSONResponse(http.StatusCreated, created)
+			return created, response, err
+		},
+		Read:   func(_ Request, state crudTestState) (Response, error) { return JSONResponse(http.StatusOK, state) },
+		Delete: func(Request, crudTestState) (Response, error) { return EmptyResponse(http.StatusNoContent), nil },
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	requests := []Request{
+		{Method: http.MethodPost, URL: mustTestURL(t, "https://mock.invalid/v1/singleton")},
+		{Method: http.MethodGet, URL: mustTestURL(t, "https://mock.invalid/v1/singleton")},
+		{Method: http.MethodDelete, URL: mustTestURL(t, "https://mock.invalid/v1/singleton")},
+	}
+	for _, request := range requests {
+		if _, err := responder.Respond(request); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := responder.Verify(); err != nil {
+		t.Fatal(err)
+	}
+}

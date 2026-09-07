@@ -11,7 +11,7 @@ interactions:
     - request:
         method: GET
         host: datacatalog.us-ashburn-1.oci.oraclecloud.com
-        path: /20190325/catalogs/<ocid:1>/dataAssets/dataassetkey-synthetic/folders/<ocid:1>
+        path: /20190325/catalogs/<ocid:1>/dataAssets/dataassetkey-synthetic/folders/<ocid:2>
         headers:
             content-type:
                 - application/json
@@ -20,28 +20,28 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"catalogId":"<ocid:2>","dataAssetKey":"dataassetkey-synthetic","id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
+        body: '{"catalogId":"<ocid:1>","dataAssetKey":"dataassetkey-synthetic","id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
         encoding: json
     - request:
         method: PUT
         host: datacatalog.us-ashburn-1.oci.oraclecloud.com
-        path: /20190325/catalogs/<ocid:1>/dataAssets/dataassetkey-synthetic/folders/<ocid:1>
+        path: /20190325/catalogs/<ocid:1>/dataAssets/dataassetkey-synthetic/folders/<ocid:2>
         headers:
             content-type:
                 - application/json
-        body: '{}'
+        body: '{"displayName":"","timeExternal":"2026-01-02T03:04:05Z"}'
         encoding: json
       response:
         statusCode: 200
         headers:
             content-type:
                 - application/json
-        body: '{"catalogId":"<ocid:2>","dataAssetKey":"dataassetkey-synthetic","id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
+        body: '{"catalogId":"<ocid:1>","dataAssetKey":"dataassetkey-synthetic","id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
         encoding: json
     - request:
         method: GET
         host: datacatalog.us-ashburn-1.oci.oraclecloud.com
-        path: /20190325/catalogs/<ocid:1>/dataAssets/dataassetkey-synthetic/folders/<ocid:1>
+        path: /20190325/catalogs/<ocid:1>/dataAssets/dataassetkey-synthetic/folders/<ocid:2>
         headers:
             content-type:
                 - application/json
@@ -50,5 +50,5 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"catalogId":"<ocid:2>","dataAssetKey":"dataassetkey-synthetic","id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
+        body: '{"catalogId":"<ocid:1>","dataAssetKey":"dataassetkey-synthetic","id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
         encoding: json

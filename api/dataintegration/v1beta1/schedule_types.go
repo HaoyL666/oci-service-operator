@@ -50,6 +50,12 @@ type ScheduleSpec struct {
 	ModelType string `json:"modelType,omitempty"`
 	// +kubebuilder:validation:Optional
 	ParentRef ScheduleParentRef `json:"parentRef,omitempty,omitzero"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
+	// The key of the application containing this resource.
+	// +kubebuilder:validation:Required
+	ApplicationKey string `json:"applicationKey"`
 }
 
 // ScheduleFrequencyDetailsTime defines nested fields for Schedule.FrequencyDetails.Time.

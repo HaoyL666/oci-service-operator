@@ -68,7 +68,7 @@ func TestPreserveNetworkFirewallUpdateDiscriminator(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			body := map[string]any{"description": "updated"}
-			preserveNetworkFirewallUpdateDiscriminator(body, map[string]any{test.discriminator: test.value}, &Operation{NewRequest: test.request, Fields: []RequestField{test.field}})
+			preservePolymorphicUpdateDiscriminator(body, map[string]any{test.discriminator: test.value}, &Operation{NewRequest: test.request, Fields: []RequestField{test.field}})
 			if body[test.discriminator] != test.value {
 				t.Fatalf("body = %#v", body)
 			}

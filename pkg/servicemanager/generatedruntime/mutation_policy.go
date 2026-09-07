@@ -493,8 +493,11 @@ func typeExposesFieldPath(t reflect.Type, segments []string) bool {
 }
 
 func indirectType(t reflect.Type) reflect.Type {
-	for t != nil && (t.Kind() == reflect.Pointer || t.Kind() == reflect.Interface) {
+	for t != nil && t.Kind() == reflect.Pointer {
 		t = t.Elem()
+	}
+	if t != nil && t.Kind() == reflect.Interface {
+		return nil
 	}
 	return t
 }
@@ -562,7 +565,7 @@ func (c ServiceClient[T]) filteredUpdateBody(resource T, options requestBuildOpt
 		return nil, false, nil
 	}
 	includeMandatoryUpdateBodyFields(body, specValues, c.config.Update)
-	preserveNetworkFirewallUpdateDiscriminator(body, specValues, c.config.Update)
+	preservePolymorphicUpdateDiscriminator(body, specValues, c.config.Update)
 	return body, true, nil
 }
 
@@ -611,7 +614,7 @@ func includeMandatoryUpdateBodyFields(body, specValues map[string]any, operation
 	}
 }
 
-func preserveNetworkFirewallUpdateDiscriminator(body, specValues map[string]any, operation *Operation) {
+func preservePolymorphicUpdateDiscriminator(body, specValues map[string]any, operation *Operation) {
 	if len(body) == 0 || len(specValues) == 0 || operation == nil || operation.NewRequest == nil {
 		return
 	}
@@ -627,7 +630,7 @@ func preserveNetworkFirewallUpdateDiscriminator(body, specValues map[string]any,
 		if !found {
 			continue
 		}
-		discriminator, ok := networkFirewallDiscriminatorField(requestField.Type)
+		discriminator, ok := polymorphicUpdateDiscriminatorField(requestField.Type)
 		if !ok {
 			continue
 		}
@@ -641,8 +644,14 @@ func preserveNetworkFirewallUpdateDiscriminator(body, specValues map[string]any,
 	}
 }
 
-func networkFirewallDiscriminatorField(targetType reflect.Type) (string, bool) {
+func polymorphicUpdateDiscriminatorField(targetType reflect.Type) (string, bool) {
 	switch targetType {
+	case autoScalingPolicyUpdateDetailsType:
+		return "policyType", true
+	case dataIntegrationConnectionUpdateType,
+		dataIntegrationDataAssetUpdateType,
+		dataIntegrationTaskUpdateType:
+		return "modelType", true
 	case networkFirewallUpdateAddressListType,
 		networkFirewallUpdateApplicationType,
 		networkFirewallUpdateDecryptionType,

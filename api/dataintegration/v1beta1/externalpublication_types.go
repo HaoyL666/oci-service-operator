@@ -30,6 +30,12 @@ type ExternalPublicationSpec struct {
 	ResourceConfiguration ExternalPublicationResourceConfiguration `json:"resourceConfiguration,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	ConfigurationDetails ExternalPublicationConfigurationDetails `json:"configurationDetails,omitempty,omitzero"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
+	// The key of the task containing this external publication.
+	// +kubebuilder:validation:Required
+	TaskKey string `json:"taskKey"`
 }
 
 // ExternalPublicationResourceConfiguration defines nested fields for ExternalPublication.ResourceConfiguration.

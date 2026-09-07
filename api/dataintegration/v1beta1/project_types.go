@@ -42,6 +42,9 @@ type ProjectSpec struct {
 	ObjectVersion int `json:"objectVersion"`
 	// +kubebuilder:validation:Optional
 	ParentRef ProjectParentRef `json:"parentRef,omitempty,omitzero"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
 }
 
 // ProjectRegistryMetadata defines nested fields for Project.RegistryMetadata.

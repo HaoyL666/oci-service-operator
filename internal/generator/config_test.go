@@ -2530,7 +2530,12 @@ func TestCheckedInConfigSelectedKindsHaveExplicitAsyncContracts(t *testing.T) {
 		runtime  string
 	}{
 		"autoscaling/AutoScalingConfiguration":       {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
+		"blockchain/Osn":                             {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
+		"blockchain/Peer":                            {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
 		"cloudguard/WlpAgent":                        {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
+		"fleetappsmanagement/FleetCredential":        {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
+		"fleetappsmanagement/FleetResource":          {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
+		"fusionapps/RefreshActivity":                 {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
 		"healthchecks/HttpMonitor":                   {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
 		"jms/JmsPlugin":                              {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
 		"loadbalancer/Listener":                      {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
@@ -2553,6 +2558,26 @@ func TestCheckedInConfigSelectedKindsHaveExplicitAsyncContracts(t *testing.T) {
 			t.Fatalf("missing async expectation for default-active service %q", target.Service)
 		}
 		assertAsyncContract(t, service, target.Kind, expected.strategy, expected.runtime)
+	}
+
+	for _, testCase := range []struct {
+		service string
+		kind    string
+		phases  []string
+	}{
+		{service: "blockchain", kind: "Osn", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},
+		{service: "blockchain", kind: "Peer", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},
+		{service: "fleetappsmanagement", kind: "FleetCredential", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},
+		{service: "fleetappsmanagement", kind: "FleetResource", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},
+		{service: "fusionapps", kind: "RefreshActivity", phases: []string{AsyncPhaseCreate, AsyncPhaseDelete}},
+	} {
+		async := assertAsyncContract(t, services[testCase.service], testCase.kind, AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)
+		if async.WorkRequest.Source != AsyncWorkRequestSourceServiceSDK {
+			t.Fatalf("%s %s workRequest.source = %q, want %q", testCase.service, testCase.kind, async.WorkRequest.Source, AsyncWorkRequestSourceServiceSDK)
+		}
+		if !slices.Equal(async.WorkRequest.Phases, testCase.phases) {
+			t.Fatalf("%s %s workRequest.phases = %v, want %v", testCase.service, testCase.kind, async.WorkRequest.Phases, testCase.phases)
+		}
 	}
 
 	ailanguage := assertAsyncContract(t, services["ailanguage"], "Project", AsyncStrategyWorkRequest, AsyncRuntimeGeneratedRuntime)

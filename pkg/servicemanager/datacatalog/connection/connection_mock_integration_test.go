@@ -1,0 +1,126 @@
+/* Copyright (c) 2026, Oracle and/or its affiliates. All rights reserved. */
+package connection
+
+import (
+	"context"
+	"fmt"
+	"testing"
+
+	datacatalogsdk "github.com/oracle/oci-go-sdk/v65/datacatalog"
+	datacatalogv1beta1 "github.com/oracle/oci-service-operator/api/datacatalog/v1beta1"
+	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
+	"github.com/oracle/oci-service-operator/pkg/loggerutil"
+	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	ctrl "sigs.k8s.io/controller-runtime"
+)
+
+func TestMockIntegrationConnectionCompositeCRUD(t *testing.T) {
+	t.Parallel()
+	resource := &datacatalogv1beta1.Connection{}
+	ocimock.InitializeResource(resource, "mock-connection")
+	resource.Spec = ocimock.MustJSONFixture[datacatalogv1beta1.ConnectionSpec](t, `{
+  "catalogId": "<ocid:1>",
+  "dataAssetKey": "asset-key",
+  "displayName": "connection create",
+  "typeKey": "connection-type",
+  "properties": {
+    "default": {
+      "endpoint": "mock"
+    }
+  },
+  "description": "create"
+}`)
+	updatedSpec := resource.Spec
+	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{"description":"updated"}`)
+	createdState := ocimock.MustOCIResponseFixture[datacatalogsdk.Connection](t, `{
+  "dataAssetKey": "asset-key",
+  "displayName": "connection create",
+  "typeKey": "connection-type",
+  "properties": {
+    "default": {
+      "endpoint": "mock"
+    }
+  },
+  "description": "create",
+  "key": "resource-key",
+  "lifecycleState": "ACTIVE"
+}`)
+	updatedState := ocimock.MustOCIResponseFixture[datacatalogsdk.Connection](t, `{
+  "dataAssetKey": "asset-key",
+  "displayName": "connection create",
+  "typeKey": "connection-type",
+  "properties": {
+    "default": {
+      "endpoint": "mock"
+    }
+  },
+  "description": "updated",
+  "key": "resource-key",
+  "lifecycleState": "ACTIVE"
+}`)
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[datacatalogsdk.Connection, struct{}, struct{}]{
+		CollectionPath: "/20190325/catalogs/<ocid:1>/dataAssets/asset-key/connections", ItemPath: "/20190325/catalogs/<ocid:1>/dataAssets/asset-key/connections/resource-key",
+		Operations:   []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreatedState: &createdState, UpdatedState: &updatedState, ListShape: ocimock.ListShapeItems,
+		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
+		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return validateConnectionBodyField(request, "displayName", "connection create")
+		},
+		ValidateUpdateRaw: func(request ocimock.Request) error {
+			return validateConnectionBodyField(request, "description", "updated")
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, err := ocimock.Open(ocimock.Options{Host: "https://datacatalog.mock.invalid", BasePath: "20190325", Responder: responder})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = session.Close() })
+	sdkClient := datacatalogsdk.DataCatalogClient{BaseClient: session.BaseClient()}
+	manager := &ConnectionServiceManager{Log: loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}}
+	hooks := newConnectionRuntimeHooks(manager, sdkClient)
+	client := wrapConnectionGeneratedClient(hooks, defaultConnectionServiceClient{ServiceClient: generatedruntime.NewServiceClient[*datacatalogv1beta1.Connection](buildConnectionGeneratedRuntimeConfig(manager, hooks))})
+	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*datacatalogv1beta1.Connection]{
+		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		ValidateCreated: func(current *datacatalogv1beta1.Connection) error {
+			if current.Status.Description != resource.Spec.Description || current.Status.OsokStatus.Ocid == "" {
+				return fmt.Errorf("created Connection status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *datacatalogv1beta1.Connection) { current.Spec = updatedSpec },
+		ValidateUpdated: func(current *datacatalogv1beta1.Connection) error {
+			if current.Status.Description != current.Spec.Description {
+				return fmt.Errorf("updated Connection status = %+v", current.Status)
+			}
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := session.Close(); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func validateConnectionBodyField(request ocimock.Request, field string, want string) error {
+	var body map[string]any
+	if err := ocimock.DecodeJSONRequest(request, &body); err != nil {
+		return err
+	}
+	value, ok := body[field]
+	if !ok {
+		return fmt.Errorf("%s %s body is missing %s", request.Method, request.URL.Path, field)
+	}
+	if want != "" {
+		got, ok := value.(string)
+		if !ok || got != want {
+			return fmt.Errorf("%s %s body[%s] = %#v, want %q", request.Method, request.URL.Path, field, value, want)
+		}
+	}
+	return nil
+}

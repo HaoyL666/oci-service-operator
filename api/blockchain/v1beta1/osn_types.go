@@ -19,6 +19,9 @@ type OsnSpec struct {
 	Ad string `json:"ad"`
 	// +kubebuilder:validation:Optional
 	OcpuAllocationParam OsnOcpuAllocationParam `json:"ocpuAllocationParam,omitempty,omitzero"`
+	// The OCID of the blockchain platform containing this node.
+	// +kubebuilder:validation:Required
+	BlockchainPlatformId string `json:"blockchainPlatformId"`
 }
 
 // OsnOcpuAllocationParam defines nested fields for Osn.OcpuAllocationParam.

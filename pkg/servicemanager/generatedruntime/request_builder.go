@@ -15,11 +15,13 @@ import (
 	"unicode"
 
 	apmconfigsdk "github.com/oracle/oci-go-sdk/v65/apmconfig"
+	autoscalingsdk "github.com/oracle/oci-go-sdk/v65/autoscaling"
 	"github.com/oracle/oci-go-sdk/v65/common"
 	dashboardservicesdk "github.com/oracle/oci-go-sdk/v65/dashboardservice"
 	databasesdk "github.com/oracle/oci-go-sdk/v65/database"
 	databasemigrationsdk "github.com/oracle/oci-go-sdk/v65/databasemigration"
 	databasetoolssdk "github.com/oracle/oci-go-sdk/v65/databasetools"
+	dataintegrationsdk "github.com/oracle/oci-go-sdk/v65/dataintegration"
 	datasafesdk "github.com/oracle/oci-go-sdk/v65/datasafe"
 	networkfirewallsdk "github.com/oracle/oci-go-sdk/v65/networkfirewall"
 	"github.com/oracle/oci-service-operator/pkg/credhelper"
@@ -543,6 +545,16 @@ func convertValue(raw any, targetType reflect.Type) (reflect.Value, error) {
 	if raw == nil {
 		return reflect.Zero(targetType), nil
 	}
+	rawValue := reflect.ValueOf(raw)
+	if targetType.Kind() == reflect.Slice && targetType.Elem().Kind() != reflect.Uint8 && rawValue.Kind() != reflect.Slice && rawValue.Kind() != reflect.Array {
+		item, err := convertValue(raw, targetType.Elem())
+		if err != nil {
+			return reflect.Value{}, err
+		}
+		converted := reflect.MakeSlice(targetType, 1, 1)
+		converted.Index(0).Set(item)
+		return converted, nil
+	}
 	payload, err := json.Marshal(raw)
 	if err != nil {
 		return reflect.Value{}, fmt.Errorf("marshal source value: %w", err)
@@ -561,6 +573,18 @@ func convertValue(raw any, targetType reflect.Type) (reflect.Value, error) {
 
 func convertPolymorphicInterfaceValue(payload []byte, targetType reflect.Type) (reflect.Value, bool, error) {
 	switch targetType {
+	case autoScalingPolicyCreateDetailsType:
+		body, err := convertDiscriminatedInterface[autoscalingsdk.CreateAutoScalingPolicyDetails](payload, "Autoscaling policy", "policyType", map[string]reflect.Type{
+			"SCHEDULED": reflect.TypeOf(autoscalingsdk.CreateScheduledPolicyDetails{}),
+			"THRESHOLD": reflect.TypeOf(autoscalingsdk.CreateThresholdPolicyDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case autoScalingPolicyUpdateDetailsType:
+		body, err := convertDiscriminatedInterface[autoscalingsdk.UpdateAutoScalingPolicyDetails](payload, "Autoscaling policy", "policyType", map[string]reflect.Type{
+			"SCHEDULED": reflect.TypeOf(autoscalingsdk.UpdateScheduledPolicyDetails{}),
+			"THRESHOLD": reflect.TypeOf(autoscalingsdk.UpdateThresholdPolicyDetails{}),
+		})
+		return interfaceValue(targetType, body, err)
 	case autonomousDatabaseBaseType:
 		body, err := convertAutonomousDatabaseBase(payload)
 		if err != nil {
@@ -617,6 +641,108 @@ func convertPolymorphicInterfaceValue(payload []byte, targetType reflect.Type) (
 		converted := reflect.New(targetType).Elem()
 		converted.Set(reflect.ValueOf(body))
 		return converted, true, nil
+	case dataIntegrationConnectionCreateType:
+		body, err := convertDiscriminatedInterface[dataintegrationsdk.CreateConnectionDetails](payload, "Data Integration connection", "modelType", map[string]reflect.Type{
+			"AMAZON_S3_CONNECTION":             reflect.TypeOf(dataintegrationsdk.CreateConnectionFromAmazonS3{}),
+			"BICC_CONNECTION":                  reflect.TypeOf(dataintegrationsdk.CreateConnectionFromBicc{}),
+			"BIP_CONNECTION":                   reflect.TypeOf(dataintegrationsdk.CreateConnectionFromBip{}),
+			"GENERIC_JDBC_CONNECTION":          reflect.TypeOf(dataintegrationsdk.CreateConnectionFromJdbc{}),
+			"HDFS_CONNECTION":                  reflect.TypeOf(dataintegrationsdk.CreateConnectionFromHdfs{}),
+			"LAKE_CONNECTION":                  reflect.TypeOf(dataintegrationsdk.CreateConnectionFromLake{}),
+			"MYSQL_CONNECTION":                 reflect.TypeOf(dataintegrationsdk.CreateConnectionFromMySql{}),
+			"MYSQL_HEATWAVE_CONNECTION":        reflect.TypeOf(dataintegrationsdk.CreateConnectionFromMySqlHeatWave{}),
+			"OAUTH2_CONNECTION":                reflect.TypeOf(dataintegrationsdk.CreateConnectionFromOAuth2{}),
+			"ORACLE_ADWC_CONNECTION":           reflect.TypeOf(dataintegrationsdk.CreateConnectionFromAdwc{}),
+			"ORACLE_ATP_CONNECTION":            reflect.TypeOf(dataintegrationsdk.CreateConnectionFromAtp{}),
+			"ORACLE_EBS_CONNECTION":            reflect.TypeOf(dataintegrationsdk.CreateConnectionFromOracleEbs{}),
+			"ORACLE_OBJECT_STORAGE_CONNECTION": reflect.TypeOf(dataintegrationsdk.CreateConnectionFromObjectStorage{}),
+			"ORACLE_PEOPLESOFT_CONNECTION":     reflect.TypeOf(dataintegrationsdk.CreateConnectionFromOraclePeopleSoft{}),
+			"ORACLE_SIEBEL_CONNECTION":         reflect.TypeOf(dataintegrationsdk.CreateConnectionFromOracleSiebel{}),
+			"ORACLEDB_CONNECTION":              reflect.TypeOf(dataintegrationsdk.CreateConnectionFromOracle{}),
+			"REST_BASIC_AUTH_CONNECTION":       reflect.TypeOf(dataintegrationsdk.CreateConnectionFromRestBasicAuth{}),
+			"REST_NO_AUTH_CONNECTION":          reflect.TypeOf(dataintegrationsdk.CreateConnectionFromRestNoAuth{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case dataIntegrationConnectionUpdateType:
+		body, err := convertDiscriminatedInterface[dataintegrationsdk.UpdateConnectionDetails](payload, "Data Integration connection", "modelType", map[string]reflect.Type{
+			"AMAZON_S3_CONNECTION":             reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromAmazonS3{}),
+			"BICC_CONNECTION":                  reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromBicc{}),
+			"BIP_CONNECTION":                   reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromBip{}),
+			"GENERIC_JDBC_CONNECTION":          reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromJdbc{}),
+			"HDFS_CONNECTION":                  reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromHdfs{}),
+			"LAKE_CONNECTION":                  reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromLake{}),
+			"MYSQL_CONNECTION":                 reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromMySql{}),
+			"MYSQL_HEATWAVE_CONNECTION":        reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromMySqlHeatWave{}),
+			"OAUTH2_CONNECTION":                reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromOAuth2{}),
+			"ORACLE_ADWC_CONNECTION":           reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromAdwc{}),
+			"ORACLE_ATP_CONNECTION":            reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromAtp{}),
+			"ORACLE_EBS_CONNECTION":            reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromOracleEbs{}),
+			"ORACLE_OBJECT_STORAGE_CONNECTION": reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromObjectStorage{}),
+			"ORACLE_PEOPLESOFT_CONNECTION":     reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromOraclePeopleSoft{}),
+			"ORACLE_SIEBEL_CONNECTION":         reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromOracleSiebel{}),
+			"ORACLEDB_CONNECTION":              reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromOracle{}),
+			"REST_BASIC_AUTH_CONNECTION":       reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromRestBasicAuth{}),
+			"REST_NO_AUTH_CONNECTION":          reflect.TypeOf(dataintegrationsdk.UpdateConnectionFromRestNoAuth{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case dataIntegrationDataAssetCreateType:
+		body, err := convertDiscriminatedInterface[dataintegrationsdk.CreateDataAssetDetails](payload, "Data Integration data asset", "modelType", map[string]reflect.Type{
+			"AMAZON_S3_DATA_ASSET":             reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromAmazonS3{}),
+			"FUSION_APP_DATA_ASSET":            reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromFusionApp{}),
+			"GENERIC_JDBC_DATA_ASSET":          reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromJdbc{}),
+			"HDFS_DATA_ASSET":                  reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromHdfs{}),
+			"LAKE_DATA_ASSET":                  reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromLake{}),
+			"MYSQL_DATA_ASSET":                 reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromMySql{}),
+			"MYSQL_HEATWAVE_DATA_ASSET":        reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromMySqlHeatWave{}),
+			"ORACLE_ADWC_DATA_ASSET":           reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromAdwc{}),
+			"ORACLE_ATP_DATA_ASSET":            reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromAtp{}),
+			"ORACLE_DATA_ASSET":                reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromOracle{}),
+			"ORACLE_EBS_DATA_ASSET":            reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromOracleEbs{}),
+			"ORACLE_OBJECT_STORAGE_DATA_ASSET": reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromObjectStorage{}),
+			"ORACLE_PEOPLESOFT_DATA_ASSET":     reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromOraclePeopleSoft{}),
+			"ORACLE_SIEBEL_DATA_ASSET":         reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromOracleSiebel{}),
+			"REST_DATA_ASSET":                  reflect.TypeOf(dataintegrationsdk.CreateDataAssetFromRest{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case dataIntegrationDataAssetUpdateType:
+		body, err := convertDiscriminatedInterface[dataintegrationsdk.UpdateDataAssetDetails](payload, "Data Integration data asset", "modelType", map[string]reflect.Type{
+			"AMAZON_S3_DATA_ASSET":             reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromAmazonS3{}),
+			"FUSION_APP_DATA_ASSET":            reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromFusionApp{}),
+			"GENERIC_JDBC_DATA_ASSET":          reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromJdbc{}),
+			"HDFS_DATA_ASSET":                  reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromHdfs{}),
+			"LAKE_DATA_ASSET":                  reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromLake{}),
+			"MYSQL_DATA_ASSET":                 reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromMySql{}),
+			"MYSQL_HEATWAVE_DATA_ASSET":        reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromMySqlHeatWave{}),
+			"ORACLE_ADWC_DATA_ASSET":           reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromAdwc{}),
+			"ORACLE_ATP_DATA_ASSET":            reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromAtp{}),
+			"ORACLE_DATA_ASSET":                reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromOracle{}),
+			"ORACLE_EBS_DATA_ASSET":            reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromOracleEbs{}),
+			"ORACLE_OBJECT_STORAGE_DATA_ASSET": reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromObjectStorage{}),
+			"ORACLE_PEOPLESOFT_DATA_ASSET":     reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromOraclePeopleSoft{}),
+			"ORACLE_SIEBEL_DATA_ASSET":         reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromOracleSiebel{}),
+			"REST_DATA_ASSET":                  reflect.TypeOf(dataintegrationsdk.UpdateDataAssetFromRest{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case dataIntegrationTaskCreateType:
+		body, err := convertDiscriminatedInterface[dataintegrationsdk.CreateTaskDetails](payload, "Data Integration task", "modelType", map[string]reflect.Type{
+			"DATA_LOADER_TASK":  reflect.TypeOf(dataintegrationsdk.CreateTaskFromDataLoaderTask{}),
+			"INTEGRATION_TASK":  reflect.TypeOf(dataintegrationsdk.CreateTaskFromIntegrationTask{}),
+			"OCI_DATAFLOW_TASK": reflect.TypeOf(dataintegrationsdk.CreateTaskFromOciDataflowTask{}),
+			"PIPELINE_TASK":     reflect.TypeOf(dataintegrationsdk.CreateTaskFromPipelineTask{}),
+			"REST_TASK":         reflect.TypeOf(dataintegrationsdk.CreateTaskFromRestTask{}),
+			"SQL_TASK":          reflect.TypeOf(dataintegrationsdk.CreateTaskFromSqlTask{}),
+		})
+		return interfaceValue(targetType, body, err)
+	case dataIntegrationTaskUpdateType:
+		body, err := convertDiscriminatedInterface[dataintegrationsdk.UpdateTaskDetails](payload, "Data Integration task", "modelType", map[string]reflect.Type{
+			"DATA_LOADER_TASK":  reflect.TypeOf(dataintegrationsdk.UpdateTaskFromDataLoaderTask{}),
+			"INTEGRATION_TASK":  reflect.TypeOf(dataintegrationsdk.UpdateTaskFromIntegrationTask{}),
+			"OCI_DATAFLOW_TASK": reflect.TypeOf(dataintegrationsdk.UpdateTaskFromOciDataflowTask{}),
+			"PIPELINE_TASK":     reflect.TypeOf(dataintegrationsdk.UpdateTaskFromPipelineTask{}),
+			"REST_TASK":         reflect.TypeOf(dataintegrationsdk.UpdateTaskFromRestTask{}),
+			"SQL_TASK":          reflect.TypeOf(dataintegrationsdk.UpdateTaskFromSqlTask{}),
+		})
+		return interfaceValue(targetType, body, err)
 	case dashboardCreateDetailsType:
 		body, err := convertDashboardCreateDetails(payload)
 		if err != nil {
@@ -744,14 +870,18 @@ func convertSensitiveTypePolymorphic[T any](payload []byte, concreteTypes map[st
 }
 
 func convertNetworkFirewallPolymorphic[T any](payload []byte, discriminator string, concreteTypes map[string]reflect.Type) (T, error) {
+	return convertDiscriminatedInterface[T](payload, "Network Firewall", discriminator, concreteTypes)
+}
+
+func convertDiscriminatedInterface[T any](payload []byte, subject string, discriminator string, concreteTypes map[string]reflect.Type) (T, error) {
 	var zero T
 	value, err := jsonFieldString(payload, discriminator)
 	if err != nil {
-		return zero, fmt.Errorf("decode Network Firewall %s discriminator: %w", discriminator, err)
+		return zero, fmt.Errorf("decode %s %s discriminator: %w", subject, discriminator, err)
 	}
 	concreteType, ok := concreteTypes[strings.ToUpper(strings.TrimSpace(value))]
 	if !ok {
-		return zero, fmt.Errorf("unsupported Network Firewall %s discriminator %q", discriminator, value)
+		return zero, fmt.Errorf("unsupported %s %s discriminator %q", subject, discriminator, value)
 	}
 	converted := reflect.New(concreteType)
 	if err := json.Unmarshal(payload, converted.Interface()); err != nil {

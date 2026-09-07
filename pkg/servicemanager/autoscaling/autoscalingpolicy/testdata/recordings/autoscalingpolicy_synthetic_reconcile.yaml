@@ -11,7 +11,7 @@ interactions:
     - request:
         method: GET
         host: autoscaling.us-ashburn-1.oci.oraclecloud.com
-        path: /20181001/autoScalingConfigurations/<ocid:1>/policies/<ocid:1>
+        path: /20181001/autoScalingConfigurations/<ocid:1>/policies/<ocid:2>
         headers:
             content-type:
                 - application/json
@@ -20,30 +20,30 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"autoScalingConfigurationId":"<ocid:2>","id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
+        body: '{"autoScalingConfigurationId":"<ocid:1>","id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","policyType":"scheduled","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
         encoding: json
     - request:
         method: PUT
         host: autoscaling.us-ashburn-1.oci.oraclecloud.com
-        path: /20181001/autoScalingConfigurations/<ocid:1>/policies/<ocid:1>
+        path: /20181001/autoScalingConfigurations/<ocid:1>/policies/<ocid:2>
         headers:
             content-type:
                 - application/json
             opc-retry-token:
                 - <redacted>
-        body: "null"
+        body: '{"policyType":"scheduled"}'
         encoding: json
       response:
         statusCode: 200
         headers:
             content-type:
                 - application/json
-        body: '{"autoScalingConfigurationId":"<ocid:2>","id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
+        body: '{"autoScalingConfigurationId":"<ocid:1>","id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","policyType":"scheduled","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
         encoding: json
     - request:
         method: GET
         host: autoscaling.us-ashburn-1.oci.oraclecloud.com
-        path: /20181001/autoScalingConfigurations/<ocid:1>/policies/<ocid:1>
+        path: /20181001/autoScalingConfigurations/<ocid:1>/policies/<ocid:2>
         headers:
             content-type:
                 - application/json
@@ -52,5 +52,5 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{"autoScalingConfigurationId":"<ocid:2>","id":"<ocid:1>","key":"<ocid:1>","lifecycleState":"ACTIVE","resourceId":"<ocid:1>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
+        body: '{"autoScalingConfigurationId":"<ocid:1>","id":"<ocid:2>","key":"<ocid:2>","lifecycleState":"ACTIVE","policyType":"scheduled","resourceId":"<ocid:2>","status":"ACTIVE","timeCreated":"2026-01-02T03:04:05Z","timeUpdated":"2026-01-03T03:04:05Z"}'
         encoding: json

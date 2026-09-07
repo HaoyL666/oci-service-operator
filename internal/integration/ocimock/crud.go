@@ -90,8 +90,8 @@ func NewCRUDResponder[S any](options CRUDOptions[S]) (*CRUDResponder[S], error) 
 	if options.CollectionPath == "" || options.ItemPath == "" {
 		return nil, errors.New("OCI mock CRUD collectionPath and itemPath are required")
 	}
-	if options.CollectionPath == options.ItemPath {
-		return nil, errors.New("OCI mock CRUD collectionPath and itemPath must differ")
+	if options.CollectionPath == options.ItemPath && options.List != nil {
+		return nil, errors.New("OCI mock CRUD singleton path cannot also define a list handler")
 	}
 	readHandlers := 0
 	for _, configured := range []bool{options.Read != nil, options.ReadTransition != nil, options.ReadByPhase != nil} {
@@ -160,7 +160,7 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 		}
 	}
 	switch {
-	case request.Method == http.MethodGet && requestPath == r.options.CollectionPath:
+	case request.Method == http.MethodGet && requestPath == r.options.CollectionPath && r.options.List != nil:
 		r.operations[OperationRead]++
 		if r.options.List == nil {
 			return Response{}, fmt.Errorf("OCI mock CRUD list handler is not configured for %s", requestPath)

@@ -53,6 +53,12 @@ type PipelineSpec struct {
 	// The list of variables required in pipeline.
 	// +kubebuilder:validation:Optional
 	Variables []shared.JSONValue `json:"variables,omitempty"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
+	// The aggregator key required by the collection lookup.
+	// +kubebuilder:validation:Required
+	AggregatorKey string `json:"aggregatorKey"`
 }
 
 // PipelineRegistryMetadata defines nested fields for Pipeline.RegistryMetadata.

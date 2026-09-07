@@ -117,6 +117,9 @@ type TaskSpec struct {
 	// Header value.
 	// +kubebuilder:validation:Optional
 	AdditionalProperties string `json:"additionalProperties,omitempty"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
 }
 
 // TaskParentRef defines nested fields for Task.ParentRef.

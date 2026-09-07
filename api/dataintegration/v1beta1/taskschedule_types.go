@@ -79,6 +79,12 @@ type TaskScheduleSpec struct {
 	// The type of the object.
 	// +kubebuilder:validation:Optional
 	ModelType string `json:"modelType,omitempty"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
+	// The key of the application containing this resource.
+	// +kubebuilder:validation:Required
+	ApplicationKey string `json:"applicationKey"`
 }
 
 // TaskScheduleParentRef defines nested fields for TaskSchedule.ParentRef.

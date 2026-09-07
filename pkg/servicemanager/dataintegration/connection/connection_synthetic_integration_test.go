@@ -23,11 +23,11 @@ import (
 func TestSyntheticConnectionReconcilesTracked(t *testing.T) {
 	resource := &dataintegrationv1beta1.Connection{}
 	resourceID := "ocid1.connection.oc1..synthetic"
-	pathValues := map[string]any{"workspaceId": "ocid1.workspace.oc1..synthetic"}
+	pathValues := map[string]any{"workspaceId": "ocid1.workspace.oc1..synthetic", "modelType": "REST_NO_AUTH_CONNECTION"}
 	if err := ocireplay.SeedSyntheticTrackedResource(resource, resourceID, pathValues); err != nil {
 		t.Fatal(err)
 	}
-	observedBody, err := ocireplay.SyntheticObservedBody(map[string]any{}, resourceID, "ACTIVE", map[string]any{"key": resourceID, "resourceId": resourceID, "status": "ACTIVE", "timeCreated": "2026-01-02T03:04:05Z", "timeUpdated": "2026-01-03T03:04:05Z", "workspaceId": "ocid1.workspace.oc1..synthetic"})
+	observedBody, err := ocireplay.SyntheticObservedBody(map[string]any{}, resourceID, "ACTIVE", map[string]any{"key": resourceID, "resourceId": resourceID, "status": "ACTIVE", "timeCreated": "2026-01-02T03:04:05Z", "timeUpdated": "2026-01-03T03:04:05Z", "workspaceId": "ocid1.workspace.oc1..synthetic", "modelType": "REST_NO_AUTH_CONNECTION"})
 	if err != nil {
 		t.Fatal(err)
 	}

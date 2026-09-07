@@ -20,9 +20,9 @@ type DisApplicationSpec struct {
 	// Value can only contain upper case letters, underscore, and numbers. It should begin with upper case letter or underscore. The value can be modified.
 	// +kubebuilder:validation:Required
 	Identifier string `json:"identifier"`
-	// OCID of the compartment that this resource belongs to. Defaults to compartment of the Workspace.
-	// +kubebuilder:validation:Optional
-	CompartmentId string `json:"compartmentId,omitempty"`
+	// The compartment OCID required by the DIS application collection lookup.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
 	// Currently not used on application creation. Reserved for future.
 	// +kubebuilder:validation:Optional
 	Key string `json:"key,omitempty"`
@@ -66,6 +66,9 @@ type DisApplicationSpec struct {
 	ParentRef DisApplicationParentRef `json:"parentRef,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	Metadata DisApplicationMetadata `json:"metadata,omitempty,omitzero"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
 }
 
 // DisApplicationSourceApplicationInfo defines nested fields for DisApplication.SourceApplicationInfo.

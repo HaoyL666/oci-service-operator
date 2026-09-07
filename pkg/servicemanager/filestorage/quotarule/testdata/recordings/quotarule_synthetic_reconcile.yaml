@@ -29,7 +29,7 @@ interactions:
         headers:
             content-type:
                 - application/json
-        body: '{}'
+        body: '{"quotaLimitInGigabytes":0}'
         encoding: json
       response:
         statusCode: 200

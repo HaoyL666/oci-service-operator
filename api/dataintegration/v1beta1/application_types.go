@@ -63,6 +63,9 @@ type ApplicationSpec struct {
 	ParentRef ApplicationParentRef `json:"parentRef,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	Metadata ApplicationMetadata `json:"metadata,omitempty,omitzero"`
+	// The OCID of the Data Integration workspace containing this resource.
+	// +kubebuilder:validation:Required
+	WorkspaceId string `json:"workspaceId"`
 }
 
 // ApplicationSourceApplicationInfo defines nested fields for Application.SourceApplicationInfo.

@@ -42,6 +42,20 @@ interactions:
         body: '{"catalogId":"<ocid:1>","displayName":"osok-replay-namespace","id":"<ocid:2>","key":"namespace-key","lifecycleState":"ACTIVE"}'
         encoding: json
     - request:
+        method: GET
+        host: datacatalog.us-ashburn-1.oci.oraclecloud.com
+        path: /20190325/catalogs/<ocid:1>/namespaces/namespace-key
+        headers:
+            content-type:
+                - application/json
+      response:
+        statusCode: 200
+        headers:
+            content-type:
+                - application/json
+        body: '{"catalogId":"<ocid:1>","displayName":"osok-replay-namespace","id":"<ocid:2>","key":"namespace-key","lifecycleState":"ACTIVE"}'
+        encoding: json
+    - request:
         method: DELETE
         host: datacatalog.us-ashburn-1.oci.oraclecloud.com
         path: /20190325/catalogs/<ocid:1>/namespaces/namespace-key

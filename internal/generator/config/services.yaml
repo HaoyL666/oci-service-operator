@@ -1005,6 +1005,15 @@ services:
             strategy: none
             runtime: generatedruntime
             formalClassification: none
+        - kind: AutoScalingPolicy
+          specFields:
+            - name: AutoScalingConfigurationId
+              type: string
+              tag: 'json:"autoScalingConfigurationId"'
+              comments:
+                - The OCID of the autoscaling configuration containing this policy.
+              markers:
+                - +kubebuilder:validation:Required
 
   - service: bastion
     sdkPackage: github.com/oracle/oci-go-sdk/v65/bastion
@@ -1163,6 +1172,34 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: Osn
+          specFields:
+            - &blockchainPlatformIdField
+              name: BlockchainPlatformId
+              type: string
+              tag: 'json:"blockchainPlatformId"'
+              comments:
+                - The OCID of the blockchain platform containing this node.
+              markers:
+                - +kubebuilder:validation:Required
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: Peer
+          specFields:
+            - *blockchainPlatformIdField
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
 
   - service: budget
     sdkPackage: github.com/oracle/oci-go-sdk/v65/budget
@@ -2422,6 +2459,32 @@ services:
       webhooks:
         strategy: none
       resources:
+        - kind: Attribute
+          specFields:
+            - &dataCatalogCatalogIdField
+              name: CatalogId
+              type: string
+              tag: 'json:"catalogId"'
+              comments:
+                - The OCID of the catalog containing this resource.
+              markers:
+                - +kubebuilder:validation:Required
+            - &dataCatalogDataAssetKeyField
+              name: DataAssetKey
+              type: string
+              tag: 'json:"dataAssetKey"'
+              comments:
+                - The key of the data asset containing this resource.
+              markers:
+                - +kubebuilder:validation:Required
+            - &dataCatalogEntityKeyField
+              name: EntityKey
+              type: string
+              tag: 'json:"entityKey"'
+              comments:
+                - The key of the entity containing this resource.
+              markers:
+                - +kubebuilder:validation:Required
         - kind: AttributeTag
           specFields:
             - name: CatalogId
@@ -2452,6 +2515,10 @@ services:
                 - The key of the attribute receiving the tag.
               markers:
                 - +kubebuilder:validation:Required
+        - kind: Connection
+          specFields:
+            - *dataCatalogCatalogIdField
+            - *dataCatalogDataAssetKeyField
         - kind: CustomProperty
           specFields:
             - name: CatalogId
@@ -2468,6 +2535,9 @@ services:
                 - The key of the namespace containing the custom property.
               markers:
                 - +kubebuilder:validation:Required
+        - kind: DataAsset
+          specFields:
+            - *dataCatalogCatalogIdField
         - kind: DataAssetTag
           specFields:
             - name: CatalogId
@@ -2484,6 +2554,10 @@ services:
                 - The key of the data asset receiving the tag.
               markers:
                 - +kubebuilder:validation:Required
+        - kind: Entity
+          specFields:
+            - *dataCatalogCatalogIdField
+            - *dataCatalogDataAssetKeyField
         - kind: EntityTag
           specFields:
             - name: CatalogId
@@ -2507,6 +2581,10 @@ services:
                 - The key of the entity receiving the tag.
               markers:
                 - +kubebuilder:validation:Required
+        - kind: Folder
+          specFields:
+            - *dataCatalogCatalogIdField
+            - *dataCatalogDataAssetKeyField
         - kind: FolderTag
           specFields:
             - name: CatalogId
@@ -2539,6 +2617,12 @@ services:
                 - The OCID of the catalog containing the glossary.
               markers:
                 - +kubebuilder:validation:Required
+        - kind: Job
+          specFields:
+            - *dataCatalogCatalogIdField
+        - kind: JobDefinition
+          specFields:
+            - *dataCatalogCatalogIdField
         - kind: Namespace
           specFields:
             - name: CatalogId
@@ -2702,8 +2786,46 @@ services:
       webhooks:
         strategy: none
       resources:
+        - kind: Application
+          specFields:
+            - &dataIntegrationWorkspaceIdField
+              name: WorkspaceId
+              type: string
+              tag: 'json:"workspaceId"'
+              comments:
+                - The OCID of the Data Integration workspace containing this resource.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: ApplicationDetailedDescription
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - &dataIntegrationApplicationKeyField
+              name: ApplicationKey
+              type: string
+              tag: 'json:"applicationKey"'
+              comments:
+                - The key of the application containing this resource.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: Connection
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - name: DataAssetKey
+              type: string
+              tag: 'json:"dataAssetKey"'
+              comments:
+                - The data asset key required by the connection collection lookup.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: CopyObjectRequest
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+        - kind: DataAsset
+          specFields:
+            - *dataIntegrationWorkspaceIdField
         - kind: DataFlow
           specFields:
+            - *dataIntegrationWorkspaceIdField
             - name: Nodes
               type: '[]shared.JSONValue'
               tag: 'json:"nodes,omitempty"'
@@ -2732,6 +2854,51 @@ services:
             - name: TargetFieldMapSummary
               type: 'map[string]shared.JSONValue'
               tag: 'json:"targetFieldMapSummary,omitempty"'
+        - kind: DisApplication
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - name: CompartmentId
+              type: string
+              tag: 'json:"compartmentId"'
+              comments:
+                - The compartment OCID required by the DIS application collection lookup.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: DisApplicationDetailedDescription
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - *dataIntegrationApplicationKeyField
+        - kind: ExportRequest
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+        - kind: ExternalPublication
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - name: TaskKey
+              type: string
+              tag: 'json:"taskKey"'
+              comments:
+                - The key of the task containing this external publication.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: Folder
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - &dataIntegrationAggregatorKeyField
+              name: AggregatorKey
+              type: string
+              tag: 'json:"aggregatorKey"'
+              comments:
+                - The aggregator key required by the collection lookup.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: FunctionLibrary
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - *dataIntegrationAggregatorKeyField
+        - kind: ImportRequest
+          specFields:
+            - *dataIntegrationWorkspaceIdField
         - kind: DataFlowValidation
           specFields:
             - name: Nodes
@@ -2754,6 +2921,8 @@ services:
               tag: 'json:"targetFieldMapSummary,omitempty"'
         - kind: Pipeline
           specFields:
+            - *dataIntegrationWorkspaceIdField
+            - *dataIntegrationAggregatorKeyField
             - name: Nodes
               type: '[]shared.JSONValue'
               tag: 'json:"nodes,omitempty"'
@@ -2799,8 +2968,16 @@ services:
             - name: Metadata
               type: shared.JSONValue
               tag: 'json:"metadata,omitempty"'
+        - kind: Project
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+        - kind: Schedule
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - *dataIntegrationApplicationKeyField
         - kind: Task
           specFields:
+            - *dataIntegrationWorkspaceIdField
             - name: InputPorts
               type: '[]shared.JSONValue'
               tag: 'json:"inputPorts,omitempty"'
@@ -2931,6 +3108,15 @@ services:
             - name: ConditionalCompositeFieldMap
               type: shared.JSONValue
               tag: 'json:"conditionalCompositeFieldMap,omitempty"'
+        - kind: TaskRun
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - *dataIntegrationApplicationKeyField
+            - *dataIntegrationAggregatorKeyField
+        - kind: TaskSchedule
+          specFields:
+            - *dataIntegrationWorkspaceIdField
+            - *dataIntegrationApplicationKeyField
         - kind: TaskValidation
           specFields:
             - name: DataFlow
@@ -2939,6 +3125,9 @@ services:
             - name: Pipeline
               type: shared.JSONValue
               tag: 'json:"pipeline,omitempty"'
+        - kind: UserDefinedFunction
+          specFields:
+            - *dataIntegrationWorkspaceIdField
 
   - service: datalabelingservice
     sdkPackage: github.com/oracle/oci-go-sdk/v65/datalabelingservice
@@ -3782,6 +3971,15 @@ services:
           formalSpec: filesystemsnapshotpolicy
         - kind: Snapshot
           formalSpec: snapshot
+        - kind: QuotaRule
+          specFields:
+            - name: FileSystemId
+              type: string
+              tag: 'json:"fileSystemId"'
+              comments:
+                - The OCID of the file system containing this quota rule.
+              markers:
+                - +kubebuilder:validation:Required
 
   - service: fleetappsmanagement
     sdkPackage: github.com/oracle/oci-go-sdk/v65/fleetappsmanagement
@@ -3822,6 +4020,37 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: FleetCredential
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+          specFields:
+            - &fleetAppsManagementFleetIdField
+              name: FleetId
+              type: string
+              tag: 'json:"fleetId"'
+              comments:
+                - The OCID of the Fleet Application Management fleet containing this resource.
+              markers:
+                - +kubebuilder:validation:Required
+        - kind: FleetProperty
+          specFields:
+            - *fleetAppsManagementFleetIdField
+        - kind: FleetResource
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+          specFields:
+            - *fleetAppsManagementFleetIdField
 
   - service: fleetsoftwareupdate
     sdkPackage: github.com/oracle/oci-go-sdk/v65/fleetsoftwareupdate
@@ -3919,6 +4148,23 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: RefreshActivity
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, delete]
+          specFields:
+            - name: FusionEnvironmentId
+              type: string
+              tag: 'json:"fusionEnvironmentId"'
+              comments:
+                - The OCID of the Fusion environment receiving this refresh activity.
+              markers:
+                - +kubebuilder:validation:Required
 
   - service: gdp
     sdkPackage: github.com/oracle/oci-go-sdk/v65/gdp

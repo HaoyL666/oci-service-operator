@@ -23,11 +23,11 @@ import (
 func TestSyntheticAutoScalingPolicyReconcilesTracked(t *testing.T) {
 	resource := &autoscalingv1beta1.AutoScalingPolicy{}
 	resourceID := "ocid1.autoscalingpolicy.oc1..synthetic"
-	pathValues := map[string]any{"autoScalingConfigurationId": "ocid1.autoscalingconfiguration.oc1..synthetic"}
+	pathValues := map[string]any{"autoScalingConfigurationId": "ocid1.autoscalingconfiguration.oc1..synthetic", "policyType": "scheduled"}
 	if err := ocireplay.SeedSyntheticTrackedResource(resource, resourceID, pathValues); err != nil {
 		t.Fatal(err)
 	}
-	observedBody, err := ocireplay.SyntheticObservedBody(map[string]any{}, resourceID, "ACTIVE", map[string]any{"key": resourceID, "resourceId": resourceID, "status": "ACTIVE", "timeCreated": "2026-01-02T03:04:05Z", "timeUpdated": "2026-01-03T03:04:05Z", "autoScalingConfigurationId": "ocid1.autoscalingconfiguration.oc1..synthetic"})
+	observedBody, err := ocireplay.SyntheticObservedBody(map[string]any{}, resourceID, "ACTIVE", map[string]any{"key": resourceID, "resourceId": resourceID, "status": "ACTIVE", "timeCreated": "2026-01-02T03:04:05Z", "timeUpdated": "2026-01-03T03:04:05Z", "autoScalingConfigurationId": "ocid1.autoscalingconfiguration.oc1..synthetic", "policyType": "scheduled"})
 	if err != nil {
 		t.Fatal(err)
 	}
