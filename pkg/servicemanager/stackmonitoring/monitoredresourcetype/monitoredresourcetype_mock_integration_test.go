@@ -23,6 +23,7 @@ const mockMonitoredResourceTypeID = "ocid1.monitoredresourcetype.oc1..mock"
 func TestMockIntegrationMonitoredResourceTypeLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &stackmonitoringv1beta1.MonitoredResourceType{Spec: stackmonitoringv1beta1.MonitoredResourceTypeSpec{Name: "osok_mock_custom_type", CompartmentId: "ocid1.compartment.oc1..mock", DisplayName: "OSOK mock custom type", Description: "mock create", MetricNamespace: "osok_mock", SourceType: string(stackmonitoringsdk.SourceTypeSmRepoOnly), ResourceCategory: string(stackmonitoringsdk.ResourceCategoryApplication), FreeformTags: map[string]string{"mock": "create"}}}
+	ocimock.InitializeResource(resource, "mock-monitored-resource-type")
 	responder, err := newMonitoredResourceTypeMockResponder(resource)
 	if err != nil {
 		t.Fatal(err)
@@ -73,6 +74,9 @@ func newMonitoredResourceTypeMockResponder(resource *stackmonitoringv1beta1.Moni
 		CollectionPath: "/20210330/monitoredResourceTypes", ItemPath: "/20210330/monitoredResourceTypes/" + mockMonitoredResourceTypeID,
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete}, RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (stackmonitoringsdk.MonitoredResourceType, ocimock.Response, error) {
+			if got := request.Header.Get("opc-retry-token"); got != string(resource.UID) {
+				return stackmonitoringsdk.MonitoredResourceType{}, ocimock.Response{}, fmt.Errorf("CreateMonitoredResourceType retry token = %q, want resource UID %q", got, resource.UID)
+			}
 			var details stackmonitoringsdk.CreateMonitoredResourceTypeDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return stackmonitoringsdk.MonitoredResourceType{}, ocimock.Response{}, err

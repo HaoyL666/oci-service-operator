@@ -3,7 +3,6 @@ package listingrevision
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	marketplacepublishersdk "github.com/oracle/oci-go-sdk/v65/marketplacepublisher"
 	marketplacepublisherv1beta1 "github.com/oracle/oci-service-operator/api/marketplacepublisher/v1beta1"
@@ -37,6 +36,8 @@ func TestMockIntegrationListingRevisionLifecycleCRUD(t *testing.T) {
   ],
   "tagline": "Initial tagline"
 }`)
+	updatedSpec := resource.Spec
+	updatedSpec.Tagline = "Updated tagline"
 	createRequest := ocimock.MustJSONFixture[marketplacepublishersdk.CreateServiceListingRevisionDetails](t, `{
   "displayName": "Partner service",
   "freeformTags": {
@@ -90,6 +91,22 @@ func TestMockIntegrationListingRevisionLifecycleCRUD(t *testing.T) {
   "tagline": "Initial tagline"
 }`),
 	}
+	updateRequest := ocimock.MustJSONFixture[marketplacepublishersdk.UpdateServiceListingRevisionDetails](t, `{
+  "displayName": "Partner service",
+  "freeformTags": {
+    "env": "dev"
+  },
+  "headline": "Partner service headline",
+  "industries": [
+    "Technology"
+  ],
+  "productCodes": [
+    "COMPUTE"
+  ],
+  "tagline": "Updated tagline"
+}`)
+	updatedState := createdState
+	updatedState.Tagline = updateRequest.Tagline
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		marketplacepublishersdk.ServiceListingRevision,
 		marketplacepublishersdk.CreateServiceListingRevisionDetails,
@@ -97,36 +114,29 @@ func TestMockIntegrationListingRevisionLifecycleCRUD(t *testing.T) {
 	]{
 		CollectionPath:     "/20241201/listingRevisions",
 		ItemPath:           "/20241201/listingRevisions/<ocid:2>",
-		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState:       &createdState,
 		CreatedReadStates:  createdReadStates,
+		UpdatedState:       &updatedState,
+		UpdatedReadStates:  []marketplacepublishersdk.ServiceListingRevision{updatedState},
 		DeleteEndsNotFound: true,
 		RequireCreateRead:  true,
+		RequireUpdateRead:  true,
 		RequireDeleteRead:  true,
 		CreateStatus:       201,
 		DeleteStatus:       204,
 		NotFoundCode:       "NotFound",
 		ValidateCreateRaw: func(request ocimock.Request) error {
-			var body map[string]any
-			if err := json.Unmarshal(request.Body, &body); err != nil {
-				return err
-			}
-			if body["listingType"] != "SERVICE" {
-				return fmt.Errorf("create listingType = %#v", body["listingType"])
-			}
-			delete(body, "listingType")
-			normalized, err := json.Marshal(body)
-			if err != nil {
-				return err
-			}
-			request.Body = normalized
-			if err := ocimock.ValidateJSONRequest(request, createRequest); err != nil {
+			if err := ocimock.ValidateDiscriminatedJSONRequest(request, "listingType", "SERVICE", createRequest); err != nil {
 				return err
 			}
 			if request.Header.Get("opc-retry-token") == "" {
 				return fmt.Errorf("create retry token is empty")
 			}
 			return nil
+		},
+		ValidateUpdateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateDiscriminatedJSONRequest(request, "listingType", "SERVICE", updateRequest)
 		},
 		ValidateDelete: func(request ocimock.Request, _ marketplacepublishersdk.ServiceListingRevision) error {
 			if len(request.Body) != 0 {
@@ -166,6 +176,18 @@ func TestMockIntegrationListingRevisionLifecycleCRUD(t *testing.T) {
 				!reflect.DeepEqual(current.Status.ProductCodes, current.Spec.ProductCodes) ||
 				!reflect.DeepEqual(current.Status.Tagline, current.Spec.Tagline) {
 				return fmt.Errorf("created ListingRevision status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *marketplacepublisherv1beta1.ListingRevision) {
+			current.Spec = updatedSpec
+		},
+		ValidateUpdated: func(current *marketplacepublisherv1beta1.ListingRevision) error {
+			if current.Status.Id != "<ocid:2>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.ListingType, current.Spec.ListingType) ||
+				!reflect.DeepEqual(current.Status.Tagline, current.Spec.Tagline) {
+				return fmt.Errorf("updated ListingRevision status = %+v", current.Status)
 			}
 			return nil
 		},

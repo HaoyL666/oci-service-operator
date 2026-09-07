@@ -16,12 +16,19 @@ import (
 	streamingsdk "github.com/oracle/oci-go-sdk/v65/streaming"
 	streamingv1beta1 "github.com/oracle/oci-service-operator/api/streaming/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
+	"github.com/oracle/oci-service-operator/pkg/credhelper"
+	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
+	shared "github.com/oracle/oci-service-operator/pkg/shared"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
+	ctrl "sigs.k8s.io/controller-runtime"
 )
 
 const mockStreamID = "ocid1.stream.oc1..mock"
+const mockStreamUpdatedEndpoint = "https://messages-updated.mock.invalid"
 
 // Contract evidence:
 //   - recorded OCI trace: testdata/recordings/stream_crud.yaml
@@ -41,6 +48,62 @@ func TestMockIntegrationStreamLifecycleCRUD(t *testing.T) {
 			FreeformTags:     map[string]string{"osok-mock": "create"},
 		},
 	}
+	secretRecord := credhelper.SecretRecord{}
+	secretExists := false
+	secretCreates := 0
+	secretUpdates := 0
+	secretDeletes := 0
+	credentials := &fakeCredentialClient{}
+	credentials.getSecretRecordFn = func(_ context.Context, name, namespace string) (credhelper.SecretRecord, error) {
+		if name != resource.Name || namespace != resource.Namespace {
+			return credhelper.SecretRecord{}, fmt.Errorf("read endpoint Secret %s/%s, want %s/%s", namespace, name, resource.Namespace, resource.Name)
+		}
+		if !secretExists {
+			return credhelper.SecretRecord{}, apierrors.NewNotFound(schema.GroupResource{Resource: "secrets"}, name)
+		}
+		return cloneMockStreamSecretRecord(secretRecord), nil
+	}
+	credentials.createSecretFn = func(_ context.Context, name, namespace string, labels map[string]string, data map[string][]byte) (bool, error) {
+		if secretExists {
+			return false, apierrors.NewAlreadyExists(schema.GroupResource{Resource: "secrets"}, name)
+		}
+		if name != resource.Name || namespace != resource.Namespace {
+			return false, fmt.Errorf("create endpoint Secret %s/%s, want %s/%s", namespace, name, resource.Namespace, resource.Name)
+		}
+		secretRecord = credhelper.SecretRecord{
+			UID:    types.UID("mock-stream-endpoint-secret-uid"),
+			Labels: cloneMockStreamStringMap(labels),
+			Data:   cloneMockStreamByteMap(data),
+		}
+		secretExists = true
+		secretCreates++
+		return true, nil
+	}
+	credentials.updateSecretIfCurrentFn = func(_ context.Context, name, namespace string, current credhelper.SecretRecord, labels map[string]string, data map[string][]byte) (bool, error) {
+		if !secretExists {
+			return false, apierrors.NewNotFound(schema.GroupResource{Resource: "secrets"}, name)
+		}
+		if name != resource.Name || namespace != resource.Namespace || current.UID != secretRecord.UID {
+			return false, fmt.Errorf("guarded endpoint Secret update did not target the current %s/%s record", resource.Namespace, resource.Name)
+		}
+		if labels != nil {
+			secretRecord.Labels = cloneMockStreamStringMap(labels)
+		}
+		secretRecord.Data = cloneMockStreamByteMap(data)
+		secretUpdates++
+		return true, nil
+	}
+	credentials.deleteSecretIfCurrentFn = func(_ context.Context, name, namespace string, current credhelper.SecretRecord) (bool, error) {
+		if !secretExists {
+			return false, apierrors.NewNotFound(schema.GroupResource{Resource: "secrets"}, name)
+		}
+		if name != resource.Name || namespace != resource.Namespace || current.UID != secretRecord.UID {
+			return false, fmt.Errorf("guarded endpoint Secret delete did not target the current %s/%s record", resource.Namespace, resource.Name)
+		}
+		secretExists = false
+		secretDeletes++
+		return true, nil
+	}
 	responder, err := newStreamMockResponder(resource)
 	if err != nil {
 		t.Fatal(err)
@@ -55,7 +118,11 @@ func TestMockIntegrationStreamLifecycleCRUD(t *testing.T) {
 		}
 	})
 
-	client := newRecordedStreamClient(streamingsdk.StreamAdminClient{BaseClient: session.BaseClient()})
+	sdkClient := streamingsdk.StreamAdminClient{BaseClient: session.BaseClient()}
+	client, err := newMockStreamClient(sdkClient, credentials)
+	if err != nil {
+		t.Fatal(err)
+	}
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*streamingv1beta1.Stream]{
 		Resource:      resource,
 		Client:        client,
@@ -67,21 +134,25 @@ func TestMockIntegrationStreamLifecycleCRUD(t *testing.T) {
 				current.Status.LifecycleState != string(streamingsdk.StreamLifecycleStateActive) {
 				return fmt.Errorf("created Stream status = %+v", current.Status)
 			}
-			return nil
+			return validateMockStreamEndpointSecret(secretExists, secretRecord, current, "https://messages.mock.invalid")
 		},
 		Mutate: func(current *streamingv1beta1.Stream) {
 			current.Spec.FreeformTags = map[string]string{"osok-mock": "update"}
 		},
 		ValidateUpdated: func(current *streamingv1beta1.Stream) error {
 			if current.Status.FreeformTags["osok-mock"] != "update" ||
+				current.Status.MessagesEndpoint != mockStreamUpdatedEndpoint ||
 				current.Status.LifecycleState != string(streamingsdk.StreamLifecycleStateActive) {
 				return fmt.Errorf("updated Stream status = %+v", current.Status)
 			}
-			return nil
+			return validateMockStreamEndpointSecret(secretExists, secretRecord, current, mockStreamUpdatedEndpoint)
 		},
 	})
 	if err != nil {
 		t.Fatal(err)
+	}
+	if secretExists || secretCreates != 1 || secretUpdates != 1 || secretDeletes != 1 {
+		t.Fatalf("endpoint Secret lifecycle = exists:%t creates:%d updates:%d deletes:%d, want false/1/1/1", secretExists, secretCreates, secretUpdates, secretDeletes)
 	}
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
@@ -154,6 +225,7 @@ func newStreamMockResponder(resource *streamingv1beta1.Stream) (*ocimock.CRUDRes
 				return streamingsdk.Stream{}, ocimock.Response{}, fmt.Errorf("unexpected UpdateStream details: %+v", details)
 			}
 			state.FreeformTags = details.FreeformTags
+			state.MessagesEndpoint = common.String(mockStreamUpdatedEndpoint)
 			state.LifecycleState = streamingsdk.StreamLifecycleStateUpdating
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
@@ -162,4 +234,81 @@ func newStreamMockResponder(resource *streamingv1beta1.Stream) (*ocimock.CRUDRes
 			return ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})
+}
+
+func newMockStreamClient(
+	sdkClient streamingsdk.StreamAdminClient,
+	credentials *fakeCredentialClient,
+) (StreamServiceClient, error) {
+	manager := &StreamServiceManager{
+		CredentialClient: credentials,
+		Log:              loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")},
+	}
+	hooks := newStreamRuntimeHooks(manager, sdkClient)
+	delegate := defaultStreamServiceClient{
+		ServiceClient: generatedruntime.NewServiceClient[*streamingv1beta1.Stream](
+			buildStreamGeneratedRuntimeConfig(manager, hooks),
+		),
+	}
+	client := wrapStreamGeneratedClient(hooks, delegate)
+	wrapped, ok := client.(streamEndpointSecretClient)
+	if !ok {
+		return nil, fmt.Errorf("production Stream client = %T, want streamEndpointSecretClient", client)
+	}
+	wrapped.loadStream = func(ctx context.Context, streamID shared.OCID) (*streamingsdk.Stream, error) {
+		response, err := sdkClient.GetStream(ctx, streamingsdk.GetStreamRequest{StreamId: common.String(string(streamID))})
+		if err != nil {
+			return nil, err
+		}
+		return &response.Stream, nil
+	}
+	return wrapped, nil
+}
+
+func validateMockStreamEndpointSecret(
+	exists bool,
+	record credhelper.SecretRecord,
+	resource *streamingv1beta1.Stream,
+	wantEndpoint string,
+) error {
+	if !exists {
+		return fmt.Errorf("active Stream did not create its endpoint Secret")
+	}
+	if got := record.Labels[streamEndpointSecretOwnerUIDLabel]; got != string(resource.UID) {
+		return fmt.Errorf("endpoint Secret owner UID = %q, want %q", got, resource.UID)
+	}
+	if got := string(record.Data["endpoint"]); got != wantEndpoint {
+		return fmt.Errorf("endpoint Secret endpoint = %q, want %q", got, wantEndpoint)
+	}
+	return nil
+}
+
+func cloneMockStreamSecretRecord(source credhelper.SecretRecord) credhelper.SecretRecord {
+	return credhelper.SecretRecord{
+		UID:    source.UID,
+		Labels: cloneMockStreamStringMap(source.Labels),
+		Data:   cloneMockStreamByteMap(source.Data),
+	}
+}
+
+func cloneMockStreamStringMap(source map[string]string) map[string]string {
+	if source == nil {
+		return nil
+	}
+	cloned := make(map[string]string, len(source))
+	for key, value := range source {
+		cloned[key] = value
+	}
+	return cloned
+}
+
+func cloneMockStreamByteMap(source map[string][]byte) map[string][]byte {
+	if source == nil {
+		return nil
+	}
+	cloned := make(map[string][]byte, len(source))
+	for key, value := range source {
+		cloned[key] = append([]byte(nil), value...)
+	}
+	return cloned
 }

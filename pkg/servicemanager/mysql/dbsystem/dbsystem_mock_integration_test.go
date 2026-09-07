@@ -426,7 +426,7 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
 				!reflect.DeepEqual(current.Status.SubnetId, current.Spec.SubnetId) {
 				return fmt.Errorf("created DbSystem status = %+v", current.Status)
 			}
-			return nil
+			return validateMockDbSystemEndpointSecret(credentials, current)
 		},
 		Mutate: func(current *mysqlv1beta1.DbSystem) { current.Spec = updatedSpec },
 		ValidateUpdated: func(current *mysqlv1beta1.DbSystem) error {
@@ -438,13 +438,37 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
 				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) {
 				return fmt.Errorf("updated DbSystem status = %+v", current.Status)
 			}
-			return nil
+			return validateMockDbSystemEndpointSecret(credentials, current)
 		},
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
+	if credentials.hasEndpointSecret(resource.Name) {
+		t.Fatal("deleted DbSystem retained its generated endpoint Secret")
+	}
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
 	}
+}
+
+func validateMockDbSystemEndpointSecret(
+	credentials *syntheticDbSystemCredentialClient,
+	resource *mysqlv1beta1.DbSystem,
+) error {
+	record, exists := credentials.records[resource.Name]
+	if !exists {
+		return fmt.Errorf("active DbSystem did not create its generated endpoint Secret")
+	}
+	if got := record.Labels[dbSystemEndpointSecretOwnerUIDLabel]; got != string(resource.UID) {
+		return fmt.Errorf("endpoint Secret owner UID = %q, want %q", got, resource.UID)
+	}
+	wantData, err := dbSystemEndpointSecretData(resource)
+	if err != nil {
+		return err
+	}
+	if !reflect.DeepEqual(record.Data, wantData) {
+		return fmt.Errorf("endpoint Secret data = %#v, want %#v", record.Data, wantData)
+	}
+	return nil
 }

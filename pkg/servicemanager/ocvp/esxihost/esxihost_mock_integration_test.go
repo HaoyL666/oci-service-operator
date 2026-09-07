@@ -40,6 +40,9 @@ func TestMockIntegrationEsxiHostLifecycleCRUD(t *testing.T) {
   "hostShapeName": "BM.DenseIO2.52",
   "nextCommitment": "MONTH"
 }`)
+	updatedSpec := resource.Spec
+	updatedSpec.DisplayName = "esxihost-sample-updated"
+	updatedSpec.NextCommitment = string(ocvpsdk.CommitmentOneYear)
 	createRequest := ocimock.MustJSONFixture[ocvpsdk.CreateEsxiHostDetails](t, `{
   "billingDonorHostId": "\u003cocid:1\u003e",
   "capacityReservationId": "\u003cocid:2\u003e",
@@ -108,6 +111,13 @@ func TestMockIntegrationEsxiHostLifecycleCRUD(t *testing.T) {
   "nextCommitment": "MONTH"
 }`),
 	}
+	updateRequest := ocimock.MustJSONFixture[ocvpsdk.UpdateEsxiHostDetails](t, `{
+  "displayName": "esxihost-sample-updated",
+  "nextCommitment": "ONE_YEAR"
+}`)
+	updatedState := createdState
+	updatedState.DisplayName = updateRequest.DisplayName
+	updatedState.NextCommitment = updateRequest.NextCommitment
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		ocvpsdk.EsxiHost,
 		ocvpsdk.CreateEsxiHostDetails,
@@ -115,13 +125,17 @@ func TestMockIntegrationEsxiHostLifecycleCRUD(t *testing.T) {
 	]{
 		CollectionPath:     "/20230701/esxiHosts",
 		ItemPath:           "/20230701/esxiHosts/<ocid:5>",
-		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:      &createRequest,
 		CreatedState:       &createdState,
 		ListShape:          ocimock.ListShapeItems,
 		CreatedReadStates:  createdReadStates,
+		UpdateRequest:      &updateRequest,
+		UpdatedState:       &updatedState,
+		UpdatedReadStates:  []ocvpsdk.EsxiHost{updatedState},
 		DeleteEndsNotFound: true,
 		RequireCreateRead:  true,
+		RequireUpdateRead:  true,
 		RequireDeleteRead:  true,
 		CreateStatus:       201,
 		DeleteStatus:       204,
@@ -174,6 +188,19 @@ func TestMockIntegrationEsxiHostLifecycleCRUD(t *testing.T) {
 				!reflect.DeepEqual(current.Status.HostShapeName, current.Spec.HostShapeName) ||
 				!reflect.DeepEqual(current.Status.NextCommitment, current.Spec.NextCommitment) {
 				return fmt.Errorf("created EsxiHost status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *ocvpv1beta1.EsxiHost) {
+			current.Spec = updatedSpec
+		},
+		ValidateUpdated: func(current *ocvpv1beta1.EsxiHost) error {
+			if current.Status.Id != "<ocid:5>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.NextCommitment, current.Spec.NextCommitment) ||
+				!reflect.DeepEqual(current.Status.ClusterId, current.Spec.ClusterId) {
+				return fmt.Errorf("updated EsxiHost status = %+v", current.Status)
 			}
 			return nil
 		},

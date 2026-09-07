@@ -28,6 +28,7 @@ func TestMockIntegrationMetricExtensionLifecycleCRUD(t *testing.T) {
 		QueryProperties: stackmonitoringv1beta1.MetricExtensionQueryProperties{CollectionMethod: "JMX", ManagedBeanQuery: "java.lang:Location=%name%,type=GarbageCollector,*", JmxAttributes: "CollectionTime", IdentityMetric: "name;Location"},
 		Description:     "mock create",
 	}}
+	ocimock.InitializeResource(resource, "mock-metric-extension")
 	responder, err := newMetricExtensionMockResponder(resource)
 	if err != nil {
 		t.Fatal(err)
@@ -81,6 +82,9 @@ func newMetricExtensionMockResponder(resource *stackmonitoringv1beta1.MetricExte
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []stackmonitoringsdk.MetricExtension{state}})
 		},
 		Create: func(request ocimock.Request) (stackmonitoringsdk.MetricExtension, ocimock.Response, error) {
+			if got := request.Header.Get("opc-retry-token"); got != string(resource.UID) {
+				return stackmonitoringsdk.MetricExtension{}, ocimock.Response{}, fmt.Errorf("CreateMetricExtension retry token = %q, want resource UID %q", got, resource.UID)
+			}
 			var details stackmonitoringsdk.CreateMetricExtensionDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return stackmonitoringsdk.MetricExtension{}, ocimock.Response{}, err

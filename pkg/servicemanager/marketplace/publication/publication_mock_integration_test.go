@@ -20,12 +20,13 @@ import (
 //   - formal contract: formal/controllers/marketplace/publication and formal/imports/marketplace/publication.json
 //   - resource runtime: publication_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/marketplace
-func TestMockIntegrationPublicationLifecycleCreateReadDelete(t *testing.T) {
+func TestMockIntegrationPublicationLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := testPublicationResource()
 	ocimock.InitializeResource(resource, "mock-publication")
-	responder, err := newPublicationMockResponder(resource)
+	const updatedName = "publication-renamed"
+	responder, err := newPublicationMockResponder(resource, updatedName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -61,6 +62,17 @@ func TestMockIntegrationPublicationLifecycleCreateReadDelete(t *testing.T) {
 			}
 			return nil
 		},
+		Mutate: func(current *marketplacev1beta1.Publication) {
+			current.Spec.Name = updatedName
+		},
+		ValidateUpdated: func(current *marketplacev1beta1.Publication) error {
+			if current.Status.Id != testPublicationID ||
+				current.Status.Name != current.Spec.Name ||
+				current.Status.LifecycleState != string(marketplacesdk.PublicationLifecycleStateActive) {
+				return fmt.Errorf("updated Publication status = %+v", current.Status)
+			}
+			return nil
+		},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -70,12 +82,13 @@ func TestMockIntegrationPublicationLifecycleCreateReadDelete(t *testing.T) {
 	}
 }
 
-func newPublicationMockResponder(resource *marketplacev1beta1.Publication) (*ocimock.CRUDResponder[marketplacesdk.Publication], error) {
+func newPublicationMockResponder(resource *marketplacev1beta1.Publication, updatedName string) (*ocimock.CRUDResponder[marketplacesdk.Publication], error) {
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[marketplacesdk.Publication]{
 		CollectionPath:     "/20181001/publications",
 		ItemPath:           "/20181001/publications/" + testPublicationID,
-		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true,
+		RequireUpdateRead:  true,
 		RequireDeleteRead:  true,
 		List: func(request ocimock.Request, present bool, state marketplacesdk.Publication) (ocimock.Response, error) {
 			if got := request.URL.Query().Get("compartmentId"); got != resource.Spec.CompartmentId {
@@ -119,6 +132,20 @@ func newPublicationMockResponder(resource *marketplacev1beta1.Publication) (*oci
 		},
 		Read: func(_ ocimock.Request, state marketplacesdk.Publication) (ocimock.Response, error) {
 			return ocimock.JSONResponse(http.StatusOK, state)
+		},
+		Update: func(request ocimock.Request, state marketplacesdk.Publication) (marketplacesdk.Publication, ocimock.Response, error) {
+			var details marketplacesdk.UpdatePublicationDetails
+			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
+				return state, ocimock.Response{}, err
+			}
+			if details.Name == nil || *details.Name != updatedName ||
+				details.ShortDescription != nil || details.LongDescription != nil ||
+				details.SupportContacts != nil || details.DefinedTags != nil || details.FreeformTags != nil {
+				return state, ocimock.Response{}, fmt.Errorf("UpdatePublication details = %+v", details)
+			}
+			state.Name = details.Name
+			response, err := ocimock.JSONResponse(http.StatusOK, state)
+			return state, response, err
 		},
 		Delete: func(request ocimock.Request, _ marketplacesdk.Publication) (ocimock.Response, error) {
 			if len(request.Body) != 0 {

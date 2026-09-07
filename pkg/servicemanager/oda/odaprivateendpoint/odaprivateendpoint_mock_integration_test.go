@@ -23,6 +23,22 @@ func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
   "displayName": "osok-replay-oda-endpoint",
   "subnetId": "\u003cocid:2\u003e"
 }`)
+	updatedSpec := resource.Spec
+	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "84"
+    }
+  },
+  "description": "updated private endpoint",
+  "displayName": "osok-replay-oda-endpoint-updated",
+  "freeformTags": {
+    "env": "prod"
+  },
+  "nsgIds": [
+    "\u003cocid:4\u003e"
+  ]
+}`)
 	createRequest := ocimock.MustJSONFixture[odasdk.CreateOdaPrivateEndpointDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "displayName": "osok-replay-oda-endpoint",
@@ -35,6 +51,27 @@ func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
   "lifecycleState": "ACTIVE",
   "subnetId": "\u003cocid:2\u003e"
 }`)
+	updateRequest := ocimock.MustJSONFixture[odasdk.UpdateOdaPrivateEndpointDetails](t, `{
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "84"
+    }
+  },
+  "description": "updated private endpoint",
+  "displayName": "osok-replay-oda-endpoint-updated",
+  "freeformTags": {
+    "env": "prod"
+  },
+  "nsgIds": [
+    "\u003cocid:4\u003e"
+  ]
+}`)
+	updatedState := createdState
+	updatedState.DefinedTags = updateRequest.DefinedTags
+	updatedState.Description = updateRequest.Description
+	updatedState.DisplayName = updateRequest.DisplayName
+	updatedState.FreeformTags = updateRequest.FreeformTags
+	updatedState.NsgIds = updateRequest.NsgIds
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		odasdk.OdaPrivateEndpoint,
 		odasdk.CreateOdaPrivateEndpointDetails,
@@ -42,13 +79,18 @@ func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
 	]{
 		CollectionPath:    "/20190506/odaPrivateEndpoints",
 		ItemPath:          "/20190506/odaPrivateEndpoints/<ocid:3>",
-		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,
 		ListShape:         ocimock.ListShapeItems,
+		UpdateRequest:     &updateRequest,
+		UpdatedState:      &updatedState,
+		UpdatedReadStates: []odasdk.OdaPrivateEndpoint{updatedState},
 		RequireCreateRead: true,
+		RequireUpdateRead: true,
 		RequireDeleteRead: true,
 		CreateStatus:      201,
+		UpdateStatus:      202,
 		DeleteStatus:      204,
 		NotFoundCode:      "NotFound",
 		ValidateCreate: func(request ocimock.Request, _ odasdk.CreateOdaPrivateEndpointDetails) error {
@@ -90,6 +132,22 @@ func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
 				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
 				!reflect.DeepEqual(current.Status.SubnetId, current.Spec.SubnetId) {
 				return fmt.Errorf("created OdaPrivateEndpoint status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *odav1beta1.OdaPrivateEndpoint) {
+			current.Spec = updatedSpec
+		},
+		ValidateUpdated: func(current *odav1beta1.OdaPrivateEndpoint) error {
+			if current.Status.Id != "<ocid:3>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.DefinedTags, current.Spec.DefinedTags) ||
+				!reflect.DeepEqual(current.Status.Description, current.Spec.Description) ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
+				!reflect.DeepEqual(current.Status.NsgIds, current.Spec.NsgIds) ||
+				!reflect.DeepEqual(current.Status.SubnetId, current.Spec.SubnetId) {
+				return fmt.Errorf("updated OdaPrivateEndpoint status = %+v", current.Status)
 			}
 			return nil
 		},

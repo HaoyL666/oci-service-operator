@@ -23,6 +23,7 @@ const mockProcessSetID = "ocid1.processset.oc1..mock"
 func TestMockIntegrationProcessSetLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &stackmonitoringv1beta1.ProcessSet{Spec: stackmonitoringv1beta1.ProcessSetSpec{CompartmentId: "ocid1.compartment.oc1..mock", DisplayName: "mock-process-set", Specification: stackmonitoringv1beta1.ProcessSetSpecification{Items: []stackmonitoringv1beta1.ProcessSetSpecificationItem{{Label: "java", ProcessCommand: "java", ProcessUser: "opc", ProcessLineRegexPattern: ".*java.*"}}}, FreeformTags: map[string]string{"mock": "create"}}}
+	ocimock.InitializeResource(resource, "mock-process-set")
 	responder, err := newProcessSetMockResponder(resource)
 	if err != nil {
 		t.Fatal(err)
@@ -76,6 +77,9 @@ func newProcessSetMockResponder(resource *stackmonitoringv1beta1.ProcessSet) (*o
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []stackmonitoringsdk.ProcessSet{state}})
 		},
 		Create: func(request ocimock.Request) (stackmonitoringsdk.ProcessSet, ocimock.Response, error) {
+			if got := request.Header.Get("opc-retry-token"); got != string(resource.UID) {
+				return stackmonitoringsdk.ProcessSet{}, ocimock.Response{}, fmt.Errorf("CreateProcessSet retry token = %q, want resource UID %q", got, resource.UID)
+			}
 			var details stackmonitoringsdk.CreateProcessSetDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return stackmonitoringsdk.ProcessSet{}, ocimock.Response{}, err

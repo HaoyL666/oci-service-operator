@@ -25,6 +25,7 @@ func TestMockIntegrationSoftwareSourceLifecycleCRUD(t *testing.T) {
 		Url: "https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/", OsFamily: string(osmanagementhubsdk.OsFamilyOracleLinux8), ArchType: string(osmanagementhubsdk.ArchTypeX8664),
 		IsGpgCheckEnabled: false, IsSslVerifyEnabled: true, FreeformTags: map[string]string{"mock": "create"},
 	}}
+	ocimock.InitializeResource(resource, "mock-software-source")
 	responder, err := newSoftwareSourceMockResponder(resource)
 	if err != nil {
 		t.Fatal(err)
@@ -75,6 +76,9 @@ func newSoftwareSourceMockResponder(resource *osmanagementhubv1beta1.SoftwareSou
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []osmanagementhubsdk.PrivateSoftwareSource{state}})
 		},
 		Create: func(request ocimock.Request) (osmanagementhubsdk.PrivateSoftwareSource, ocimock.Response, error) {
+			if got := request.Header.Get("opc-retry-token"); got != string(resource.UID) {
+				return osmanagementhubsdk.PrivateSoftwareSource{}, ocimock.Response{}, fmt.Errorf("CreateSoftwareSource retry token = %q, want resource UID %q", got, resource.UID)
+			}
 			type createDetails osmanagementhubsdk.CreatePrivateSoftwareSourceDetails
 			var payload struct {
 				createDetails

@@ -31,6 +31,18 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
   "packageVersion": "1.0",
   "signature": "synthetic-signature"
 }`)
+	updatedSpec := resource.Spec
+	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "84"
+    }
+  },
+  "displayName": "osok-replay-agreement-updated",
+  "freeformTags": {
+    "env": "prod"
+  }
+}`)
 	createRequest := ocimock.MustJSONFixture[marketplacesdk.CreateAcceptedAgreementDetails](t, `{
   "agreementId": "\u003cocid:1\u003e",
   "compartmentId": "\u003cocid:2\u003e",
@@ -49,6 +61,21 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
   "packageVersion": "1.0",
   "signature": "synthetic-signature"
 }`)
+	updateRequest := ocimock.MustJSONFixture[marketplacesdk.UpdateAcceptedAgreementDetails](t, `{
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "84"
+    }
+  },
+  "displayName": "osok-replay-agreement-updated",
+  "freeformTags": {
+    "env": "prod"
+  }
+}`)
+	updatedState := createdState
+	updatedState.DefinedTags = updateRequest.DefinedTags
+	updatedState.DisplayName = updateRequest.DisplayName
+	updatedState.FreeformTags = updateRequest.FreeformTags
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		marketplacesdk.AcceptedAgreement,
 		marketplacesdk.CreateAcceptedAgreementDetails,
@@ -56,11 +83,15 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
 	]{
 		CollectionPath:    "/20181001/acceptedAgreements",
 		ItemPath:          "/20181001/acceptedAgreements/<ocid:4>",
-		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,
 		ListShape:         ocimock.ListShapeArray,
+		UpdateRequest:     &updateRequest,
+		UpdatedState:      &updatedState,
+		UpdatedReadStates: []marketplacesdk.AcceptedAgreement{updatedState},
 		RequireCreateRead: true,
+		RequireUpdateRead: true,
 		RequireDeleteRead: true,
 		CreateStatus:      201,
 		DeleteStatus:      204,
@@ -107,6 +138,19 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
 				!reflect.DeepEqual(current.Status.ListingId, current.Spec.ListingId) ||
 				!reflect.DeepEqual(current.Status.PackageVersion, current.Spec.PackageVersion) {
 				return fmt.Errorf("created AcceptedAgreement status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *marketplacev1beta1.AcceptedAgreement) {
+			current.Spec = updatedSpec
+		},
+		ValidateUpdated: func(current *marketplacev1beta1.AcceptedAgreement) error {
+			if current.Status.Id != "<ocid:4>" ||
+				current.Status.AppliedSignature != current.Spec.Signature ||
+				!reflect.DeepEqual(current.Status.DefinedTags, current.Spec.DefinedTags) ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) {
+				return fmt.Errorf("updated AcceptedAgreement status = %+v", current.Status)
 			}
 			return nil
 		},

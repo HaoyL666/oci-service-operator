@@ -67,7 +67,9 @@ ServiceManager --> BaseReconciler: requeue while OCI remains in\nCREATING, UPDAT
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: jsonData,
+displayName, headline, tagline (+28
+more)
 Reject before mutate: force-new fields
 listingId, listingType
 Lookup filters: displayName, id,
@@ -79,7 +81,7 @@ opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateListingRevision only for\nmutable fields display_name
+ServiceManager -> OCI: Apply UpdateListingRevision only for\nmutable fields jsonData,\ndisplayName, headline, tagline (+28\nmore)
 loop update pending UPDATING
 ServiceManager -> OCI: GetListingRevision
 end
@@ -116,7 +118,8 @@ provider states: create CREATING; update
 UPDATING; delete DELETING
 follow-up: create=read-after-write;
 update=read-after-write; delete=confirm-delete
-supported drift: display_name
+supported drift: jsonData, displayName,
+headline, tagline (+28 more)
 reject before mutate: force-new fields
 listingId, listingType
 create-only fields: none
@@ -127,10 +130,11 @@ exact resource identity match; duplicate matches
 fail
 conflicts: none
 open gaps: none
-The runtime uses its declared lifecycle-state
-contract for ListingRevision reconciliation.
-The credential-free mock exercises SDK request
-serialization, response projection, mutation
-when supported, and confirmed deletion.
+The runtime selects the concrete SERVICE, OCI,
+or LEAD_GENERATION update payload and applies
+only fields supported by that listing subtype.
+listingId and listingType define immutable
+identity; subtype-inapplicable fields do not
+trigger an update.
 end note
 @enduml

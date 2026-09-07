@@ -37,6 +37,8 @@ func TestMockIntegrationClusterLifecycleCRUD(t *testing.T) {
   },
   "sddcId": "\u003cocid:6\u003e"
 }`)
+	updatedSpec := resource.Spec
+	updatedSpec.DisplayName = "cluster-sample-updated"
 	createRequest := ocimock.MustJSONFixture[ocvpsdk.CreateClusterDetails](t, `{
   "computeAvailabilityDomain": "Uocm:PHX-AD-1",
   "displayName": "cluster-sample",
@@ -96,6 +98,11 @@ func TestMockIntegrationClusterLifecycleCRUD(t *testing.T) {
   "sddcId": "\u003cocid:6\u003e"
 }`),
 	}
+	updateRequest := ocimock.MustJSONFixture[ocvpsdk.UpdateClusterDetails](t, `{
+  "displayName": "cluster-sample-updated"
+}`)
+	updatedState := createdState
+	updatedState.DisplayName = updateRequest.DisplayName
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		ocvpsdk.Cluster,
 		ocvpsdk.CreateClusterDetails,
@@ -103,13 +110,17 @@ func TestMockIntegrationClusterLifecycleCRUD(t *testing.T) {
 	]{
 		CollectionPath:     "/20230701/clusters",
 		ItemPath:           "/20230701/clusters/<ocid:8>",
-		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:      &createRequest,
 		CreatedState:       &createdState,
 		ListShape:          ocimock.ListShapeItems,
 		CreatedReadStates:  createdReadStates,
+		UpdateRequest:      &updateRequest,
+		UpdatedState:       &updatedState,
+		UpdatedReadStates:  []ocvpsdk.Cluster{updatedState},
 		DeleteEndsNotFound: true,
 		RequireCreateRead:  true,
+		RequireUpdateRead:  true,
 		RequireDeleteRead:  true,
 		CreateStatus:       201,
 		DeleteStatus:       204,
@@ -158,6 +169,18 @@ func TestMockIntegrationClusterLifecycleCRUD(t *testing.T) {
 				!reflect.DeepEqual(current.Status.IsShieldedInstanceEnabled, current.Spec.IsShieldedInstanceEnabled) ||
 				!reflect.DeepEqual(current.Status.SddcId, current.Spec.SddcId) {
 				return fmt.Errorf("created Cluster status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *ocvpv1beta1.Cluster) {
+			current.Spec = updatedSpec
+		},
+		ValidateUpdated: func(current *ocvpv1beta1.Cluster) error {
+			if current.Status.Id != "<ocid:8>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.SddcId, current.Spec.SddcId) {
+				return fmt.Errorf("updated Cluster status = %+v", current.Status)
 			}
 			return nil
 		},

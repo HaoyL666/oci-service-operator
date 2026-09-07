@@ -48,6 +48,19 @@ func TestMockIntegrationOccCapacityRequestLifecycleCRUD(t *testing.T) {
   "requestState": "SUBMITTED",
   "requestType": "NEW"
 }`)
+	updatedSpec := resource.Spec
+	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "84"
+    }
+  },
+  "displayName": "capacity-request-updated",
+  "freeformTags": {
+    "env": "prod"
+  },
+  "requestState": "CANCELLED"
+}`)
 	createRequest := ocimock.MustJSONFixture[capacitymanagementsdk.CreateOccCapacityRequestDetails](t, `{
   "availabilityDomain": "Uocm:PHX-AD-1",
   "compartmentId": "\u003cocid:1\u003e",
@@ -106,6 +119,23 @@ func TestMockIntegrationOccCapacityRequestLifecycleCRUD(t *testing.T) {
   "requestState": "SUBMITTED",
   "requestType": "NEW"
 }`)
+	updateRequest := ocimock.MustJSONFixture[capacitymanagementsdk.UpdateOccCapacityRequestDetails](t, `{
+  "definedTags": {
+    "Operations": {
+      "CostCenter": "84"
+    }
+  },
+  "displayName": "capacity-request-updated",
+  "freeformTags": {
+    "env": "prod"
+  },
+  "requestState": "CANCELLED"
+}`)
+	updatedState := createdState
+	updatedState.DefinedTags = updateRequest.DefinedTags
+	updatedState.DisplayName = updateRequest.DisplayName
+	updatedState.FreeformTags = updateRequest.FreeformTags
+	updatedState.RequestState = capacitymanagementsdk.OccCapacityRequestRequestStateCancelled
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		capacitymanagementsdk.OccCapacityRequest,
 		capacitymanagementsdk.CreateOccCapacityRequestDetails,
@@ -113,10 +143,14 @@ func TestMockIntegrationOccCapacityRequestLifecycleCRUD(t *testing.T) {
 	]{
 		CollectionPath:    "/20231107/occCapacityRequests",
 		ItemPath:          "/20231107/occCapacityRequests/<ocid:3>",
-		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationDelete},
+		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,
+		UpdateRequest:     &updateRequest,
+		UpdatedState:      &updatedState,
+		UpdatedReadStates: []capacitymanagementsdk.OccCapacityRequest{updatedState},
 		RequireCreateRead: true,
+		RequireUpdateRead: true,
 		RequireDeleteRead: true,
 		CreateStatus:      201,
 		DeleteStatus:      204,
@@ -170,6 +204,20 @@ func TestMockIntegrationOccCapacityRequestLifecycleCRUD(t *testing.T) {
 				!reflect.DeepEqual(current.Status.RequestState, current.Spec.RequestState) ||
 				!reflect.DeepEqual(current.Status.RequestType, current.Spec.RequestType) {
 				return fmt.Errorf("created OccCapacityRequest status = %+v", current.Status)
+			}
+			return nil
+		},
+		Mutate: func(current *capacitymanagementv1beta1.OccCapacityRequest) {
+			current.Spec = updatedSpec
+		},
+		ValidateUpdated: func(current *capacitymanagementv1beta1.OccCapacityRequest) error {
+			if current.Status.Id != "<ocid:3>" ||
+				current.Status.LifecycleState != "ACTIVE" ||
+				!reflect.DeepEqual(current.Status.DefinedTags, current.Spec.DefinedTags) ||
+				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
+				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
+				!reflect.DeepEqual(current.Status.RequestState, current.Spec.RequestState) {
+				return fmt.Errorf("updated OccCapacityRequest status = %+v", current.Status)
 			}
 			return nil
 		},

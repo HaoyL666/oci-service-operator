@@ -40,7 +40,7 @@ observe --> retryable : OCI state in CREATING,\nUPDATING, DELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndisplay_name
+evaluate_ready --> apply_update : supported mutable drift for\njsonData, displayName,\nheadline (+29 more)
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -73,7 +73,8 @@ provider states: create CREATING; update
 UPDATING; delete DELETING
 follow-up: create=read-after-write;
 update=read-after-write; delete=confirm-delete
-supported drift: display_name
+supported drift: jsonData, displayName,
+headline, tagline (+28 more)
 reject before mutate: force-new fields
 listingId, listingType
 create-only fields: none
@@ -84,11 +85,12 @@ exact resource identity match; duplicate matches
 fail
 conflicts: none
 open gaps: none
-The runtime uses its declared lifecycle-state
-contract for ListingRevision reconciliation.
-The credential-free mock exercises SDK request
-serialization, response projection, mutation
-when supported, and confirmed deletion.
+The runtime selects the concrete SERVICE, OCI,
+or LEAD_GENERATION update payload and applies
+only fields supported by that listing subtype.
+listingId and listingType define immutable
+identity; subtype-inapplicable fields do not
+trigger an update.
 end note
 note right of delete_pending
 delete policy: required
