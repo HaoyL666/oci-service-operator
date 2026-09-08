@@ -96,10 +96,10 @@ Run all mock integration tests and their source-derived coverage audit with:
 make mockintegrationtest
 ```
 
-The current synchronous suite covers 193 service-manager packages. Its
-inventory separates immediate, lifecycle-polled, composite-path, asynchronous,
-and not-yet-classified resources so unsupported behavior is not silently
-treated as ordinary synchronous CRUD.
+The suite discovers and runs every package-local mock integration test. Its
+inventory separately reports immediate, lifecycle-polled, composite-path,
+asynchronous, and not-yet-classified resources so unsupported behavior is not
+silently treated as ordinary synchronous CRUD.
 
 The broader credential-free integration surface remains:
 

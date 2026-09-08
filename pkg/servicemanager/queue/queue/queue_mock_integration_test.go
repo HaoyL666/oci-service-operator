@@ -126,7 +126,7 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
   "id": "<ocid:3>",
   "lifecycleDetails": null,
   "lifecycleState": "ACTIVE",
-  "messagesEndpoint": "https://cell-1.queue.messaging.us-ashburn-1.oci.oraclecloud.com",
+	  "messagesEndpoint": "https://cell-2.queue.messaging.us-ashburn-1.oci.oraclecloud.com",
   "retentionInSeconds": 86400,
   "systemTags": {
   },
@@ -152,7 +152,7 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
   "id": "<ocid:3>",
   "lifecycleDetails": null,
   "lifecycleState": "DELETED",
-  "messagesEndpoint": "https://cell-1.queue.messaging.us-ashburn-1.oci.oraclecloud.com",
+  "messagesEndpoint": "https://cell-2.queue.messaging.us-ashburn-1.oci.oraclecloud.com",
   "retentionInSeconds": 86400,
   "systemTags": {
   },
@@ -277,6 +277,17 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
 		secretExists = true
 		return true, nil
 	}
+	credentials.updateSecretIfCurrentFn = func(_ context.Context, name, namespace string, current credhelper.SecretRecord, labels map[string]string, data map[string][]byte) (bool, error) {
+		if name != resource.Name || namespace != resource.Namespace || current.UID != secretRecord.UID ||
+			string(data["endpoint"]) != resource.Status.MessagesEndpoint {
+			return false, fmt.Errorf("unexpected Queue endpoint Secret guarded update")
+		}
+		if labels != nil {
+			secretRecord.Labels = cloneQueueSecretLabels(labels)
+		}
+		secretRecord.Data = cloneQueueSecretData(data)
+		return true, nil
+	}
 	credentials.deleteSecretIfCurrentFn = func(_ context.Context, name, namespace string, current credhelper.SecretRecord) (bool, error) {
 		if name != resource.Name || namespace != resource.Namespace || current.UID != secretRecord.UID {
 			return false, fmt.Errorf("unexpected Queue endpoint Secret guarded delete")
@@ -302,7 +313,8 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
 		},
 		Mutate: func(current *queuev1beta1.Queue) { current.Spec = updatedSpec },
 		ValidateUpdated: func(current *queuev1beta1.Queue) error {
-			if current.Status.DisplayName != current.Spec.DisplayName || current.Status.VisibilityInSeconds != current.Spec.VisibilityInSeconds || current.Status.OsokStatus.Async.Current != nil {
+			if current.Status.DisplayName != current.Spec.DisplayName || current.Status.VisibilityInSeconds != current.Spec.VisibilityInSeconds || current.Status.OsokStatus.Async.Current != nil ||
+				!secretExists || string(secretRecord.Data["endpoint"]) != current.Status.MessagesEndpoint {
 				return fmt.Errorf("updated Queue status = %+v", current.Status)
 			}
 			return nil
@@ -311,8 +323,8 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !credentials.createCalled || !credentials.deleteCalled || secretExists {
-		t.Fatalf("Queue endpoint Secret lifecycle create=%t delete=%t exists=%t", credentials.createCalled, credentials.deleteCalled, secretExists)
+	if !credentials.createCalled || !credentials.updateCalled || !credentials.deleteCalled || secretExists {
+		t.Fatalf("Queue endpoint Secret lifecycle create=%t update=%t delete=%t exists=%t", credentials.createCalled, credentials.updateCalled, credentials.deleteCalled, secretExists)
 	}
 	if err := session.Close(); err != nil {
 		t.Fatal(err)

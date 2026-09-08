@@ -81,8 +81,8 @@ func newOceInstanceRuntimeSemantics() *generatedruntime.Semantics {
 			MatchFields:        []string{"compartmentId", "displayName", "state", "tenancyId"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{"addOnFeatures", "compartmentId", "definedTags", "description", "drRegion", "freeformTags", "instanceLicenseType", "instanceUsageType", "lifecycleDetails", "wafPrimaryDomain"},
-			ForceNew:      []string{"adminEmail", "idcsAccessToken", "identityStripe.serviceName", "identityStripe.tenancy", "instanceAccessType", "name", "objectStorageNamespace", "tenancyId", "tenancyName", "upgradeSchedule"},
+			Mutable:       []string{"addOnFeatures", "definedTags", "description", "drRegion", "freeformTags", "instanceLicenseType", "instanceUsageType", "wafPrimaryDomain"},
+			ForceNew:      []string{"adminEmail", "compartmentId", "identityStripe.serviceName", "identityStripe.tenancy", "instanceAccessType", "name", "objectStorageNamespace", "tenancyId", "tenancyName", "upgradeSchedule"},
 			ConflictsWith: map[string][]string{},
 		},
 		Hooks: generatedruntime.HookSet{
@@ -91,15 +91,15 @@ func newOceInstanceRuntimeSemantics() *generatedruntime.Semantics {
 			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "oceinstance", Action: "DELETED"}},
 		},
 		CreateFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "read-after-write",
+			Strategy: "GetWorkRequest -> GetOceInstance",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "oceinstance", Action: "CREATED"}},
 		},
 		UpdateFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "read-after-write",
+			Strategy: "GetWorkRequest -> GetOceInstance",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "oceinstance", Action: "UPDATED"}},
 		},
 		DeleteFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "confirm-delete",
+			Strategy: "GetWorkRequest -> GetOceInstance/ListOceInstances confirm-delete",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "oceinstance", Action: "DELETED"}},
 		},
 		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{{Phase: "update", MethodName: "ChangeOceInstanceCompartment", RequestTypeName: "oce.ChangeOceInstanceCompartmentRequest", ResponseTypeName: "oce.ChangeOceInstanceCompartmentResponse"}},

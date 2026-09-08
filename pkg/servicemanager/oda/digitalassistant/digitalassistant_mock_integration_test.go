@@ -79,18 +79,48 @@ func TestMockIntegrationDigitalAssistantCRUD(t *testing.T) {
 		"primaryLanguageTag":"en",
 		"version":"1.0"
 	}`)
+	createWorkRequest := ocimock.MustOCIResponseFixture[odasdk.WorkRequest](t, `{
+		"compartmentId":null,
+		"id":"<ocid:3>",
+		"odaInstanceId":"<ocid:1>",
+		"percentComplete":100,
+		"requestAction":"CREATE_DIGITAL_ASSISTANT",
+		"resourceId":"<ocid:2>",
+		"resources":[{
+			"resourceAction":"CREATE",
+			"resourceId":"<ocid:2>",
+			"resourceType":"digitalassistant",
+			"resourceUri":null,
+			"status":"SUCCEEDED",
+			"statusMessage":null
+		}],
+		"status":"SUCCEEDED",
+		"statusMessage":null,
+		"timeAccepted":null,
+		"timeFinished":null,
+		"timeStarted":null
+	}`)
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[odasdk.DigitalAssistant, odasdk.CreateNewDigitalAssistantDetails, odasdk.UpdateDigitalAssistantDetails]{
 		CollectionPath: "/20190506/odaInstances/<ocid:1>/digitalAssistants",
 		ItemPath:       "/20190506/odaInstances/<ocid:1>/digitalAssistants/<ocid:2>",
 		Operations:     []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState:   &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		ListShape: ocimock.ListShapeItems, RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
-		CreateStatus: http.StatusCreated, UpdateStatus: http.StatusOK, DeleteStatus: http.StatusNoContent, NotFoundCode: "NotFound",
+		CreateStatus: http.StatusAccepted, UpdateStatus: http.StatusOK, DeleteStatus: http.StatusNoContent, NotFoundCode: "NotFound",
+		CreateHeaders: http.Header{"Opc-Work-Request-Id": []string{"<ocid:3>"}},
 		ValidateCreateRaw: func(request ocimock.Request) error {
 			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
 				return err
 			}
 			return ocimock.ValidateDiscriminatedJSONRequest(request, "kind", "NEW", createRequest)
+		},
+		AdditionalRoutes: []ocimock.Route{
+			{
+				Name: "create-work-request", Method: http.MethodGet, Path: "/20190506/workRequests/<ocid:3>", MinimumCalls: 1,
+				Respond: func(ocimock.Request) (ocimock.Response, error) {
+					return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
+				},
+			},
 		},
 	})
 	if err != nil {

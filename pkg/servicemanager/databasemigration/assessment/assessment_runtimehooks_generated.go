@@ -91,15 +91,15 @@ func newAssessmentRuntimeSemantics() *generatedruntime.Semantics {
 			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "assessment", Action: "DELETED"}},
 		},
 		CreateFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "read-after-write",
+			Strategy: "GetWorkRequest -> GetAssessment",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "assessment", Action: "CREATED"}},
 		},
 		UpdateFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "read-after-write",
+			Strategy: "GetWorkRequest -> GetAssessment",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "assessment", Action: "UPDATED"}},
 		},
 		DeleteFollowUp: generatedruntime.FollowUpSemantics{
-			Strategy: "confirm-delete",
+			Strategy: "GetWorkRequest -> GetAssessment/ListAssessments confirm-delete",
 			Hooks:    []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}, {Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "assessment", Action: "DELETED"}},
 		},
 		AuxiliaryOperations: []generatedruntime.AuxiliaryOperation{},
