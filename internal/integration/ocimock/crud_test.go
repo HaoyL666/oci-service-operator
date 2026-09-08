@@ -196,6 +196,38 @@ func TestCRUDResponderAcceptsPostUpdateOnItemPath(t *testing.T) {
 	}
 }
 
+func TestCRUDResponderSupportsActionDeletePath(t *testing.T) {
+	t.Parallel()
+
+	initial := crudTestState{ID: "thing-1", Name: "created"}
+	responder, err := NewCRUDResponder(CRUDOptions[crudTestState]{
+		CollectionPath:     "/v1/things",
+		ItemPath:           "/v1/things/thing-1",
+		DeletePath:         "/v1/things/thing-1/actions/cancel",
+		DeleteMethod:       http.MethodPost,
+		InitialState:       &initial,
+		ExpectedOperations: []Operation{OperationDelete},
+		Delete: func(request Request, _ crudTestState) (Response, error) {
+			if request.Method != http.MethodPost {
+				t.Fatalf("delete method = %s, want POST", request.Method)
+			}
+			return EmptyResponse(http.StatusAccepted), nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := responder.Respond(Request{
+		Method: http.MethodPost,
+		URL:    mustTestURL(t, "https://mock.invalid/v1/things/thing-1/actions/cancel"),
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if err := responder.Verify(); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestCRUDResponderSupportsLifecycleReadTransitions(t *testing.T) {
 	t.Parallel()
 

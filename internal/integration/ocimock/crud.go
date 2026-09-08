@@ -30,6 +30,8 @@ const (
 type CRUDOptions[S any] struct {
 	CollectionPath         string
 	ItemPath               string
+	DeletePath             string
+	DeleteMethod           string
 	ExpectedOperations     []Operation
 	RequireCreateRead      bool
 	RequireUpdateRead      bool
@@ -87,6 +89,13 @@ type CRUDResponder[S any] struct {
 func NewCRUDResponder[S any](options CRUDOptions[S]) (*CRUDResponder[S], error) {
 	options.CollectionPath = normalizePath(options.CollectionPath)
 	options.ItemPath = normalizePath(options.ItemPath)
+	options.DeletePath = normalizePath(options.DeletePath)
+	if options.DeletePath == "" {
+		options.DeletePath = options.ItemPath
+	}
+	if options.DeleteMethod == "" {
+		options.DeleteMethod = http.MethodDelete
+	}
 	if options.CollectionPath == "" || options.ItemPath == "" {
 		return nil, errors.New("OCI mock CRUD collectionPath and itemPath are required")
 	}
@@ -233,7 +242,7 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 			r.updated = true
 		}
 		return response, err
-	case request.Method == http.MethodDelete && requestPath == r.options.ItemPath:
+	case request.Method == r.options.DeleteMethod && requestPath == r.options.DeletePath:
 		r.operations[OperationDelete]++
 		if !r.present {
 			return r.notFound(request)

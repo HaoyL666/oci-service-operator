@@ -90,6 +90,34 @@ func TestExplicitCRUDResponderAdvancesDeclaredDeleteReadStates(t *testing.T) {
 	}
 }
 
+func TestExplicitCRUDResponderAdvancesDeclaredReadStatuses(t *testing.T) {
+	t.Parallel()
+
+	created := crudTestState{ID: "thing-1", Name: "created"}
+	responder, err := NewExplicitCRUDResponder(ExplicitCRUDOptions[crudTestState, struct{}, struct{}]{
+		CollectionPath:      "/v1/things",
+		ItemPath:            "/v1/things/thing-1",
+		Operations:          []Operation{OperationCreate, OperationRead},
+		CreatedState:        &created,
+		ValidateCreateRaw:   func(Request) error { return nil },
+		CreatedReadStatuses: []int{http.StatusNotFound, http.StatusOK},
+		NotFoundCode:        "NotFound",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := responder.Respond(Request{Method: http.MethodPost, URL: mustTestURL(t, "https://mock.invalid/v1/things")}); err != nil {
+		t.Fatal(err)
+	}
+	read := Request{Method: http.MethodGet, URL: mustTestURL(t, "https://mock.invalid/v1/things/thing-1")}
+	if response, err := responder.Respond(read); err != nil || response.StatusCode != http.StatusNotFound {
+		t.Fatalf("first created read = status %d, error %v", response.StatusCode, err)
+	}
+	if response, err := responder.Respond(read); err != nil || response.StatusCode != http.StatusOK {
+		t.Fatalf("second created read = status %d, error %v", response.StatusCode, err)
+	}
+}
+
 func TestExplicitCRUDResponderAdvancesDeclaredDeleteStatuses(t *testing.T) {
 	t.Parallel()
 

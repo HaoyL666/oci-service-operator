@@ -24,18 +24,23 @@ const (
 type ExplicitCRUDOptions[S, C, U any] struct {
 	CollectionPath string
 	ItemPath       string
+	DeletePath     string
+	DeleteMethod   string
 	Operations     []Operation
 
-	CreateRequest      *C
-	CreatedState       *S
-	UpdateRequest      *U
-	UpdatedState       *S
-	DeletedState       *S
-	InitialState       *S
-	CreatedReadStates  []S
-	UpdatedReadStates  []S
-	DeletedReadStates  []S
-	DeleteEndsNotFound bool
+	CreateRequest       *C
+	CreatedState        *S
+	UpdateRequest       *U
+	UpdatedState        *S
+	DeletedState        *S
+	InitialState        *S
+	CreatedReadStates   []S
+	UpdatedReadStates   []S
+	DeletedReadStates   []S
+	CreatedReadStatuses []int
+	UpdatedReadStatuses []int
+	DeletedReadStatuses []int
+	DeleteEndsNotFound  bool
 
 	ListShape              ListShape
 	RequireCreateRead      bool
@@ -75,6 +80,8 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 	crudOptions := CRUDOptions[S]{
 		CollectionPath:         options.CollectionPath,
 		ItemPath:               options.ItemPath,
+		DeletePath:             options.DeletePath,
+		DeleteMethod:           options.DeleteMethod,
 		ExpectedOperations:     append([]Operation(nil), options.Operations...),
 		RequireCreateRead:      options.RequireCreateRead,
 		RequireUpdateRead:      options.RequireUpdateRead,
@@ -135,7 +142,8 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 			return state, response, err
 		}
 	}
-	if len(options.CreatedReadStates)+len(options.UpdatedReadStates)+len(options.DeletedReadStates) > 0 || options.DeleteEndsNotFound {
+	if len(options.CreatedReadStates)+len(options.UpdatedReadStates)+len(options.DeletedReadStates)+
+		len(options.CreatedReadStatuses)+len(options.UpdatedReadStatuses)+len(options.DeletedReadStatuses) > 0 || options.DeleteEndsNotFound {
 		readIndexes := map[ReadPhase]int{}
 		crudOptions.ReadByPhase = func(request Request, phase ReadPhase, state S) (S, Response, error) {
 			if options.ValidateRead != nil {
@@ -146,7 +154,13 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 			}
 			states := explicitReadStates(options, phase)
 			index := readIndexes[phase]
+			readIndexes[phase]++
 			if phase == ReadPhaseDeleted && index >= len(states) && options.DeleteEndsNotFound {
+				response, err := explicitNotFoundResponse(options.NotFoundCode)
+				return state, response, err
+			}
+			status := explicitReadStatus(options, phase, index)
+			if status == http.StatusNotFound {
 				response, err := explicitNotFoundResponse(options.NotFoundCode)
 				return state, response, err
 			}
@@ -155,9 +169,8 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 					index = len(states) - 1
 				}
 				state = states[index]
-				readIndexes[phase]++
 			}
-			response, err := JSONResponse(statusOrDefault(options.ReadStatus, http.StatusOK), state)
+			response, err := JSONResponse(status, state)
 			return state, response, err
 		}
 	} else {
@@ -244,6 +257,25 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 		}
 	}
 	return NewCRUDResponder(crudOptions)
+}
+
+func explicitReadStatus[S, C, U any](options ExplicitCRUDOptions[S, C, U], phase ReadPhase, index int) int {
+	var statuses []int
+	switch phase {
+	case ReadPhaseCreated:
+		statuses = options.CreatedReadStatuses
+	case ReadPhaseUpdated:
+		statuses = options.UpdatedReadStatuses
+	case ReadPhaseDeleted:
+		statuses = options.DeletedReadStatuses
+	}
+	if len(statuses) == 0 {
+		return statusOrDefault(options.ReadStatus, http.StatusOK)
+	}
+	if index >= len(statuses) {
+		index = len(statuses) - 1
+	}
+	return statusOrDefault(statuses[index], http.StatusOK)
 }
 
 func mergeResponseHeaders(response *Response, headers http.Header) {
