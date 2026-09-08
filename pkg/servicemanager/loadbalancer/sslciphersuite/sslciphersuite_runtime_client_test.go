@@ -210,6 +210,27 @@ func TestSSLCipherSuiteCreateRetryTokenIsStablePerPayload(t *testing.T) {
 	}
 }
 
+func TestSSLCipherSuiteCreatePreservesGeneratedRetryToken(t *testing.T) {
+	t.Parallel()
+
+	fake := &fakeGeneratedSSLCipherSuiteOCIClient{}
+	hooks := newSSLCipherSuiteRuntimeHooksWithOCIClient(fake)
+	applySSLCipherSuiteRuntimeHooks(&hooks, fake, nil, loggerutil.OSOKLogger{})
+	_, err := hooks.Create.Call(context.Background(), loadbalancersdk.CreateSSLCipherSuiteRequest{
+		LoadBalancerId: common.String("ocid1.loadbalancer.oc1..example"),
+		OpcRetryToken:  common.String("resource-uid"),
+		CreateSslCipherSuiteDetails: loadbalancersdk.CreateSslCipherSuiteDetails{
+			Name: common.String("suite-v1"), Ciphers: []string{"cipher-a"},
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(fake.createRequests) != 1 || stringValue(fake.createRequests[0].OpcRetryToken) != "resource-uid" {
+		t.Fatalf("create retry token = %q, want resource-uid", stringValue(fake.createRequests[0].OpcRetryToken))
+	}
+}
+
 func TestSSLCipherSuiteRequestFieldsKeepOperationsScopedToRecordedPath(t *testing.T) {
 	t.Parallel()
 

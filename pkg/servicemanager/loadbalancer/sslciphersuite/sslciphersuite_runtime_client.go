@@ -89,11 +89,13 @@ func applySSLCipherSuiteRuntimeHooks(
 	createCall := hooks.Create.Call
 	if createCall != nil {
 		hooks.Create.Call = func(ctx context.Context, request loadbalancersdk.CreateSSLCipherSuiteRequest) (loadbalancersdk.CreateSSLCipherSuiteResponse, error) {
-			token, err := sslCipherSuiteCreateRetryToken(request)
-			if err != nil {
-				return loadbalancersdk.CreateSSLCipherSuiteResponse{}, err
+			if strings.TrimSpace(stringValue(request.OpcRetryToken)) == "" {
+				token, err := sslCipherSuiteCreateRetryToken(request)
+				if err != nil {
+					return loadbalancersdk.CreateSSLCipherSuiteResponse{}, err
+				}
+				request.OpcRetryToken = common.String(token)
 			}
-			request.OpcRetryToken = common.String(token)
 			return createCall(ctx, request)
 		}
 	}
