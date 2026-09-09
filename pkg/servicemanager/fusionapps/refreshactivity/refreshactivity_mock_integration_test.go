@@ -61,12 +61,8 @@ func TestMockIntegrationRefreshActivityCompositeCRUD(t *testing.T) {
 		CreateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-create"}},
 		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20211201/workRequests/wr-create", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return refreshActivityWorkRequestResponse("wr-create", fusionappssdk.WorkRequestResourceActionTypeCreated)
-			}},
-			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20211201/workRequests/wr-delete", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return refreshActivityWorkRequestResponse("wr-delete", fusionappssdk.WorkRequestResourceActionTypeDeleted)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20211201/workRequests/wr-create", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", refreshActivityMockWorkRequest("wr-create", fusionappssdk.WorkRequestResourceActionTypeCreated))},
+			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20211201/workRequests/wr-delete", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", refreshActivityMockWorkRequest("wr-delete", fusionappssdk.WorkRequestResourceActionTypeDeleted))},
 		},
 	})
 	if err != nil {
@@ -80,7 +76,8 @@ func TestMockIntegrationRefreshActivityCompositeCRUD(t *testing.T) {
 	sdkClient := fusionappssdk.FusionApplicationsClient{BaseClient: session.BaseClient()}
 	client := newRefreshActivityServiceClientWithOCIClient(loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}, sdkClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*fusionappsv1beta1.RefreshActivity]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *fusionappsv1beta1.RefreshActivity) error {
 			if current.Status.TimeScheduledStart != resource.Spec.TimeScheduledStart || current.Status.OsokStatus.Ocid == "" {
 				return fmt.Errorf("created RefreshActivity status = %+v", current.Status)
@@ -103,9 +100,9 @@ func TestMockIntegrationRefreshActivityCompositeCRUD(t *testing.T) {
 	}
 }
 
-func refreshActivityWorkRequestResponse(id string, action fusionappssdk.WorkRequestResourceActionTypeEnum) (ocimock.Response, error) {
+func refreshActivityMockWorkRequest(id string, action fusionappssdk.WorkRequestResourceActionTypeEnum) fusionappssdk.WorkRequest {
 	complete := float32(100)
-	return ocimock.JSONResponse(http.StatusOK, fusionappssdk.WorkRequest{
+	return fusionappssdk.WorkRequest{
 		OperationType:   fusionappssdk.WorkRequestOperationTypeRefreshFusionEnvironment,
 		Status:          fusionappssdk.WorkRequestStatusSucceeded,
 		Id:              common.String(id),
@@ -114,5 +111,5 @@ func refreshActivityWorkRequestResponse(id string, action fusionappssdk.WorkRequ
 		Resources: []fusionappssdk.WorkRequestResource{{
 			EntityType: common.String("RefreshActivity"), ActionType: action, Identifier: common.String("resource-key"),
 		}},
-	})
+	}
 }

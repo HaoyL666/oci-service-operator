@@ -173,7 +173,7 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 		CreatedState:      &createdState,
 		UpdateRequest:     &updateRequest,
 		UpdatedState:      &updatedState,
-		CreatedReadStates: createdReadStates,
+		CreatedReadStates: append(ocimock.LifecycleStates(t, createdState, "CREATING"), append(ocimock.LifecycleStates(t, createdState, "CREATING"), createdReadStates...)...),
 		UpdatedReadStates: updatedReadStates,
 		DeletedReadStates: deletedReadStates,
 		RequireCreateRead: true,

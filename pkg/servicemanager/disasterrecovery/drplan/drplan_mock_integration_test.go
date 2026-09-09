@@ -105,15 +105,11 @@ func TestMockIntegrationDrPlanWorkRequestCRUD(t *testing.T) {
 		AdditionalRoutes: []ocimock.Route{
 			{
 				Name: "create-work-request", Method: http.MethodGet, Path: "/20220125/workRequests/<ocid:2>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest),
 			},
 			{
 				Name: "update-work-request", Method: http.MethodGet, Path: "/20220125/workRequests/wr-update", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest),
 			},
 		},
 	})
@@ -135,9 +131,10 @@ func TestMockIntegrationDrPlanWorkRequestCRUD(t *testing.T) {
 	})
 
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*disasterrecoveryv1beta1.DrPlan]{
-		Resource:      resource,
-		Client:        client,
-		CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate},
+		Resource:            resource,
+		Client:              client,
+		CreateContext:       generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *disasterrecoveryv1beta1.DrPlan) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.DisplayName != resource.Spec.DisplayName || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created DrPlan status = %+v", current.Status)

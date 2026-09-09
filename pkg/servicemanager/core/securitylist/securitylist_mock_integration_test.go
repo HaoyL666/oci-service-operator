@@ -99,6 +99,7 @@ func TestMockIntegrationSecurityListLifecycleCRUD(t *testing.T) {
 func newSecurityListMockResponder(resource *corev1beta1.SecurityList) (*ocimock.CRUDResponder[coresdk.SecurityList], error) {
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
 	deleteReadObserved := false
+	updateReadObserved := false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[coresdk.SecurityList]{
 		CollectionPath:         "/20160918/securityLists",
 		ItemPath:               "/20160918/securityLists/" + mockSecurityListID,
@@ -141,6 +142,12 @@ func newSecurityListMockResponder(resource *corev1beta1.SecurityList) (*ocimock.
 			switch state.LifecycleState {
 			case coresdk.SecurityListLifecycleStateProvisioning:
 				state.LifecycleState = coresdk.SecurityListLifecycleStateAvailable
+			case "UPDATING":
+				if updateReadObserved {
+					state.LifecycleState = coresdk.SecurityListLifecycleStateAvailable
+				} else {
+					updateReadObserved = true
+				}
 			case coresdk.SecurityListLifecycleStateTerminating:
 				if deleteReadObserved {
 					response, err := ocimock.JSONResponse(http.StatusNotFound, map[string]string{"code": "NotAuthorizedOrNotFound"})
@@ -167,6 +174,7 @@ func newSecurityListMockResponder(resource *corev1beta1.SecurityList) (*ocimock.
 			state.FreeformTags = details.FreeformTags
 			state.EgressSecurityRules = details.EgressSecurityRules
 			state.IngressSecurityRules = details.IngressSecurityRules
+			state.LifecycleState = "UPDATING"
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},

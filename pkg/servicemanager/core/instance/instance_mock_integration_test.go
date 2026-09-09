@@ -115,6 +115,7 @@ func TestMockIntegrationInstanceLifecycleCRUD(t *testing.T) {
 func newInstanceMockResponder(resource *corev1beta1.Instance) (*ocimock.CRUDResponder[coresdk.Instance], error) {
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
 	provisioningReadObserved := false
+	updateReadObserved := false
 	terminatingReadObserved := false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[coresdk.Instance]{
 		CollectionPath:         "/20160918/instances",
@@ -178,6 +179,14 @@ func newInstanceMockResponder(resource *corev1beta1.Instance) (*ocimock.CRUDResp
 				} else {
 					provisioningReadObserved = true
 				}
+			case coresdk.InstanceLifecycleStateMoving:
+				if updateReadObserved {
+					state.LifecycleState = coresdk.InstanceLifecycleStateStopping
+				} else {
+					updateReadObserved = true
+				}
+			case coresdk.InstanceLifecycleStateStopping:
+				state.LifecycleState = coresdk.InstanceLifecycleStateRunning
 			case coresdk.InstanceLifecycleStateTerminating:
 				if terminatingReadObserved {
 					state.LifecycleState = coresdk.InstanceLifecycleStateTerminated
@@ -204,6 +213,7 @@ func newInstanceMockResponder(resource *corev1beta1.Instance) (*ocimock.CRUDResp
 			}
 			state.DisplayName = details.DisplayName
 			state.FreeformTags = details.FreeformTags
+			state.LifecycleState = coresdk.InstanceLifecycleStateMoving
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},

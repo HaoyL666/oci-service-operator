@@ -10,8 +10,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 	"reflect"
 	"strings"
+	"sync"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -38,6 +40,94 @@ func InitializeResource(resource metav1.Object, name string) {
 // to infer the resource-specific OCI SDK response type at the call site.
 func StateSequence[T any](states ...T) []T {
 	return append([]T(nil), states...)
+}
+
+// LifecycleStates clones a typed OCI response once per explicitly declared
+// lifecycle token.
+func LifecycleStates[T any](t TestingT, baseline T, states ...string) []T {
+	t.Helper()
+	result := make([]T, 0, len(states))
+	for _, state := range states {
+		state = strings.TrimSpace(state)
+		if state == "" {
+			t.Fatalf("lifecycle state must not be empty")
+		}
+		payload, err := json.Marshal(map[string]string{"lifecycleState": state})
+		if err != nil {
+			t.Fatalf("marshal lifecycle state %q: %v", state, err)
+		}
+		value := baseline
+		MustMergeJSONFixture(t, &value, string(payload))
+		result = append(result, value)
+	}
+	return result
+}
+
+// LifecycleStateSequence returns explicitly declared pending states followed
+// by the caller's typed terminal state.
+func LifecycleStateSequence[T any](t TestingT, terminal T, pendingStates ...string) []T {
+	return append(LifecycleStates(t, terminal, pendingStates...), terminal)
+}
+
+// NewJSONResponseSequence returns each typed response body once, then repeats
+// the terminal body for any additional polls.
+func NewJSONResponseSequence[T any](status int, values ...T) func(Request) (Response, error) {
+	sequence := append([]T(nil), values...)
+	var mu sync.Mutex
+	next := 0
+	return func(Request) (Response, error) {
+		mu.Lock()
+		defer mu.Unlock()
+		if len(sequence) == 0 {
+			return Response{}, fmt.Errorf("JSON response sequence is empty")
+		}
+		value := sequence[next]
+		if next < len(sequence)-1 {
+			next++
+		}
+		return JSONResponse(status, value)
+	}
+}
+
+// NewWorkRequestResponseSequence returns a typed pending work request once,
+// followed by the caller's typed terminal response. The pending status is
+// explicit at each resource test call site.
+func NewWorkRequestResponseSequence[T any](t TestingT, pendingStatus string, succeeded T) func(Request) (Response, error) {
+	t.Helper()
+	pendingStatus = strings.TrimSpace(pendingStatus)
+	if pendingStatus == "" {
+		t.Fatalf("work-request pending status must not be empty")
+	}
+	payload, err := json.Marshal(succeeded)
+	if err != nil {
+		t.Fatalf("marshal terminal work request: %v", err)
+	}
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(payload, &fields); err != nil {
+		t.Fatalf("decode terminal work request: %v", err)
+	}
+	if _, ok := fields["status"]; !ok {
+		t.Fatalf("terminal work request %T has no JSON status field", succeeded)
+	}
+	fields["status"], err = json.Marshal(pendingStatus)
+	if err != nil {
+		t.Fatalf("marshal work-request pending status: %v", err)
+	}
+	if _, ok := fields["percentComplete"]; ok {
+		fields["percentComplete"] = json.RawMessage("0")
+	}
+	if _, ok := fields["timeFinished"]; ok {
+		fields["timeFinished"] = json.RawMessage("null")
+	}
+	payload, err = json.Marshal(fields)
+	if err != nil {
+		t.Fatalf("marshal pending work request: %v", err)
+	}
+	var pending T
+	if err := json.Unmarshal(payload, &pending); err != nil {
+		t.Fatalf("decode pending work request as %T: %v", succeeded, err)
+	}
+	return NewJSONResponseSequence(http.StatusOK, pending, succeeded)
 }
 
 // ValidateRetryToken verifies that generatedruntime used the resource's stable
@@ -109,13 +199,10 @@ func MustMergeJSONFixture[T any](test TestingT, target *T, content string) {
 	if err != nil {
 		test.Fatalf("clone explicit %T fixture: %v", *target, err)
 	}
-	var cloned T
-	if err := json.Unmarshal(baseline, &cloned); err != nil {
-		test.Fatalf("clone explicit %T fixture: %v", *target, err)
-	}
+	var validated T
 	decoder := json.NewDecoder(bytes.NewBufferString(content))
 	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(&cloned); err != nil {
+	if err := decoder.Decode(&validated); err != nil {
 		test.Fatalf("merge explicit %T fixture: %v", *target, err)
 	}
 	var trailing any
@@ -125,7 +212,57 @@ func MustMergeJSONFixture[T any](test TestingT, target *T, content string) {
 		}
 		test.Fatalf("merge explicit %T fixture trailer: %v", *target, err)
 	}
+	var baselineFields, patchFields map[string]json.RawMessage
+	if err := json.Unmarshal(baseline, &baselineFields); err != nil || baselineFields == nil {
+		test.Fatalf("decode explicit %T baseline object: %v", *target, err)
+	}
+	if err := json.Unmarshal([]byte(content), &patchFields); err != nil || patchFields == nil {
+		test.Fatalf("decode explicit %T patch object: %v", *target, err)
+	}
+	mergedFields, err := mergeJSONObjects(baselineFields, patchFields)
+	if err != nil {
+		test.Fatalf("merge explicit %T fixture objects: %v", *target, err)
+	}
+	merged, err := json.Marshal(mergedFields)
+	if err != nil {
+		test.Fatalf("marshal merged explicit %T fixture: %v", *target, err)
+	}
+	var cloned T
+	if err := json.Unmarshal(merged, &cloned); err != nil {
+		test.Fatalf("decode merged explicit %T fixture: %v", *target, err)
+	}
 	*target = cloned
+}
+
+func mergeJSONObjects(baseline, patch map[string]json.RawMessage) (map[string]json.RawMessage, error) {
+	merged := make(map[string]json.RawMessage, len(baseline)+len(patch))
+	for name, value := range baseline {
+		merged[name] = append(json.RawMessage(nil), value...)
+	}
+	for name, patchValue := range patch {
+		baselineValue, exists := merged[name]
+		if !exists {
+			merged[name] = append(json.RawMessage(nil), patchValue...)
+			continue
+		}
+		var baselineObject, patchObject map[string]json.RawMessage
+		baselineErr := json.Unmarshal(baselineValue, &baselineObject)
+		patchErr := json.Unmarshal(patchValue, &patchObject)
+		if baselineErr != nil || patchErr != nil || baselineObject == nil || patchObject == nil {
+			merged[name] = append(json.RawMessage(nil), patchValue...)
+			continue
+		}
+		value, err := mergeJSONObjects(baselineObject, patchObject)
+		if err != nil {
+			return nil, fmt.Errorf("field %q: %w", name, err)
+		}
+		encoded, err := json.Marshal(value)
+		if err != nil {
+			return nil, fmt.Errorf("field %q: %w", name, err)
+		}
+		merged[name] = encoded
+	}
+	return merged, nil
 }
 
 // ValidateJSONRequest decodes an SDK-serialized request body into the caller's

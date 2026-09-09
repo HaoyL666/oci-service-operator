@@ -156,21 +156,15 @@ func TestMockIntegrationRedisClusterWorkRequestCRUD(t *testing.T) {
 		AdditionalRoutes: []ocimock.Route{
 			{
 				Name: "create-work-request", Method: http.MethodGet, Path: "/20220315/workRequests/<ocid:4>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest),
 			},
 			{
 				Name: "update-work-request", Method: http.MethodGet, Path: "/20220315/workRequests/<ocid:5>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest),
 			},
 			{
 				Name: "delete-work-request", Method: http.MethodGet, Path: "/20220315/workRequests/<ocid:6>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, deleteWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", deleteWorkRequest),
 			},
 		},
 	})
@@ -186,7 +180,8 @@ func TestMockIntegrationRedisClusterWorkRequestCRUD(t *testing.T) {
 	sdkClient := redissdk.RedisClusterClient{BaseClient: session.BaseClient()}
 	client := newRedisTestManager(sdkClient).client
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*redisv1beta1.RedisCluster]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *redisv1beta1.RedisCluster) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.DisplayName != resource.Spec.DisplayName || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created RedisCluster status = %+v", current.Status)

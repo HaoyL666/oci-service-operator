@@ -66,6 +66,7 @@ func TestMockIntegrationAutonomousDatabaseLifecycleCRUD(t *testing.T) {
 }
 
 func newAutonomousDatabaseMockResponder(resource *databasev1beta1.AutonomousDatabase) (*ocimock.CRUDResponder[databasesdk.AutonomousDatabase], error) {
+	deleteReads := 0
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[databasesdk.AutonomousDatabase]{
 		CollectionPath: "/20160918/autonomousDatabases",
 		ItemPath:       "/20160918/autonomousDatabases/" + mockAutonomousDatabaseID,
@@ -73,6 +74,7 @@ func newAutonomousDatabaseMockResponder(resource *databasev1beta1.AutonomousData
 			ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete,
 		},
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true,
+		RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (databasesdk.AutonomousDatabase, ocimock.Response, error) {
 			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
 				var zero databasesdk.AutonomousDatabase
@@ -98,6 +100,13 @@ func newAutonomousDatabaseMockResponder(resource *databasev1beta1.AutonomousData
 		ReadTransition: func(_ ocimock.Request, state databasesdk.AutonomousDatabase) (databasesdk.AutonomousDatabase, ocimock.Response, error) {
 			if state.LifecycleState == databasesdk.AutonomousDatabaseLifecycleStateProvisioning || state.LifecycleState == databasesdk.AutonomousDatabaseLifecycleStateUpdating {
 				state.LifecycleState = databasesdk.AutonomousDatabaseLifecycleStateAvailable
+			} else if state.LifecycleState == databasesdk.AutonomousDatabaseLifecycleStateTerminating {
+				deleteReads++
+				if deleteReads > 1 {
+					state.LifecycleState = databasesdk.AutonomousDatabaseLifecycleStateUnavailable
+				}
+			} else if state.LifecycleState == databasesdk.AutonomousDatabaseLifecycleStateUnavailable {
+				state.LifecycleState = databasesdk.AutonomousDatabaseLifecycleStateTerminated
 			}
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
@@ -117,8 +126,9 @@ func newAutonomousDatabaseMockResponder(resource *databasev1beta1.AutonomousData
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},
-		Delete: func(_ ocimock.Request, _ databasesdk.AutonomousDatabase) (ocimock.Response, error) {
-			return ocimock.EmptyResponse(http.StatusNoContent), nil
+		DeleteTransition: func(_ ocimock.Request, state databasesdk.AutonomousDatabase) (databasesdk.AutonomousDatabase, ocimock.Response, error) {
+			state.LifecycleState = databasesdk.AutonomousDatabaseLifecycleStateTerminating
+			return state, ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})
 }

@@ -135,11 +135,12 @@ func newAlarmMockResponder(resource *monitoringv1beta1.Alarm) (*ocimock.CRUDResp
 			return state, response, err
 		},
 		ReadTransition: func(_ ocimock.Request, state monitoringsdk.Alarm) (monitoringsdk.Alarm, ocimock.Response, error) {
-			if state.LifecycleState == monitoringsdk.AlarmLifecycleStateDeleted && deleteReadObserved {
-				return state, ocimock.Response{StatusCode: http.StatusNotFound}, nil
-			}
-			if state.LifecycleState == monitoringsdk.AlarmLifecycleStateDeleted {
-				deleteReadObserved = true
+			if state.LifecycleState == monitoringsdk.AlarmLifecycleStateDeleting {
+				if deleteReadObserved {
+					state.LifecycleState = monitoringsdk.AlarmLifecycleStateDeleted
+				} else {
+					deleteReadObserved = true
+				}
 			}
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
@@ -162,7 +163,7 @@ func newAlarmMockResponder(resource *monitoringv1beta1.Alarm) (*ocimock.CRUDResp
 			return state, response, err
 		},
 		DeleteTransition: func(_ ocimock.Request, state monitoringsdk.Alarm) (monitoringsdk.Alarm, ocimock.Response, error) {
-			state.LifecycleState = monitoringsdk.AlarmLifecycleStateDeleted
+			state.LifecycleState = monitoringsdk.AlarmLifecycleStateDeleting
 			return state, ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})

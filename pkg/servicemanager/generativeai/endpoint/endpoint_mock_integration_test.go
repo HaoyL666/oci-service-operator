@@ -44,6 +44,9 @@ func TestMockIntegrationEndpointLifecycleCRUD(t *testing.T) {
 }`)
 	createdState := ocimock.MustOCIResponseFixture[generativeaisdk.Endpoint](t, `{
   "compartmentId": "\u003cocid:1\u003e",
+  "contentModerationConfig": {
+    "isEnabled": false
+  },
   "dedicatedAiClusterId": "\u003cocid:2\u003e",
   "displayName": "osok-mock-generative-ai-endpoint",
   "id": "\u003cocid:4\u003e",
@@ -73,21 +76,25 @@ func TestMockIntegrationEndpointLifecycleCRUD(t *testing.T) {
 		generativeaisdk.CreateEndpointDetails,
 		generativeaisdk.UpdateEndpointDetails,
 	]{
-		CollectionPath:    "/20231130/endpoints",
-		ItemPath:          "/20231130/endpoints/<ocid:4>",
-		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreateRequest:     &createRequest,
-		CreatedState:      &createdState,
-		ListShape:         ocimock.ListShapeItems,
-		UpdateRequest:     &updateRequest,
-		UpdatedState:      &updatedState,
-		RequireCreateRead: true,
-		RequireUpdateRead: true,
-		RequireDeleteRead: true,
-		CreateStatus:      201,
-		UpdateStatus:      200,
-		DeleteStatus:      204,
-		NotFoundCode:      "NotFound",
+		CollectionPath:     "/20231130/endpoints",
+		ItemPath:           "/20231130/endpoints/<ocid:4>",
+		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CreateRequest:      &createRequest,
+		CreatedState:       &createdState,
+		CreatedReadStates:  ocimock.LifecycleStateSequence(t, createdState, "CREATING"),
+		ListShape:          ocimock.ListShapeItems,
+		UpdateRequest:      &updateRequest,
+		UpdatedState:       &updatedState,
+		DeletedReadStates:  ocimock.LifecycleStates(t, updatedState, "DELETING"),
+		DeleteEndsNotFound: true,
+		UpdatedReadStates:  ocimock.LifecycleStateSequence(t, updatedState, "UPDATING"),
+		RequireCreateRead:  true,
+		RequireUpdateRead:  true,
+		RequireDeleteRead:  true,
+		CreateStatus:       201,
+		UpdateStatus:       200,
+		DeleteStatus:       204,
+		NotFoundCode:       "NotFound",
 		ValidateCreate: func(request ocimock.Request, _ generativeaisdk.CreateEndpointDetails) error {
 			if request.Header.Get("opc-retry-token") == "" {
 				return fmt.Errorf("create retry token is empty")

@@ -183,12 +183,8 @@ func TestMockIntegrationFsuDiscoveryCRUD(t *testing.T) {
 		},
 
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20220528/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-			}},
-			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20220528/workRequests/<ocid:delete-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, deleteWorkRequest)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20220528/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest)},
+			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20220528/workRequests/<ocid:delete-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", deleteWorkRequest)},
 		},
 	})
 	if err != nil {
@@ -204,7 +200,8 @@ func TestMockIntegrationFsuDiscoveryCRUD(t *testing.T) {
 	hooks := newFsuDiscoveryRuntimeHooks(manager, sdkClient)
 	client := wrapFsuDiscoveryGeneratedClient(hooks, defaultFsuDiscoveryServiceClient{ServiceClient: generatedruntime.NewServiceClient[*apiv1beta1.FsuDiscovery](buildFsuDiscoveryGeneratedRuntimeConfig(manager, hooks))})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*apiv1beta1.FsuDiscovery]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *apiv1beta1.FsuDiscovery) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.LifecycleState != "ACTIVE" || current.Status.DisplayName != "mock-displayname-initial" || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created FsuDiscovery status = %+v", current.Status)

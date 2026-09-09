@@ -99,6 +99,7 @@ func TestMockIntegrationRouteTableLifecycleCRUD(t *testing.T) {
 func newRouteTableMockResponder(resource *corev1beta1.RouteTable) (*ocimock.CRUDResponder[coresdk.RouteTable], error) {
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
 	deleteReadObserved := false
+	updateReadObserved := false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[coresdk.RouteTable]{
 		CollectionPath:         "/20160918/routeTables",
 		ItemPath:               "/20160918/routeTables/" + mockRouteTableID,
@@ -141,6 +142,12 @@ func newRouteTableMockResponder(resource *corev1beta1.RouteTable) (*ocimock.CRUD
 			switch state.LifecycleState {
 			case coresdk.RouteTableLifecycleStateProvisioning:
 				state.LifecycleState = coresdk.RouteTableLifecycleStateAvailable
+			case "UPDATING":
+				if updateReadObserved {
+					state.LifecycleState = coresdk.RouteTableLifecycleStateAvailable
+				} else {
+					updateReadObserved = true
+				}
 			case coresdk.RouteTableLifecycleStateTerminating:
 				if deleteReadObserved {
 					response, err := ocimock.JSONResponse(http.StatusNotFound, map[string]string{"code": "NotAuthorizedOrNotFound"})
@@ -166,6 +173,7 @@ func newRouteTableMockResponder(resource *corev1beta1.RouteTable) (*ocimock.CRUD
 			state.DisplayName = details.DisplayName
 			state.FreeformTags = details.FreeformTags
 			state.RouteRules = details.RouteRules
+			state.LifecycleState = "UPDATING"
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},

@@ -7,6 +7,7 @@ package ocimock
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
@@ -27,16 +28,19 @@ type LifecycleClient[T any] interface {
 // LifecycleScenario keeps synchronous CRUD orchestration shared while leaving
 // typed resource construction, mutation, and status assertions package-local.
 type LifecycleScenario[T any] struct {
-	Resource         T
-	Client           LifecycleClient[T]
-	CreateContext    func(context.Context) context.Context
-	Mutate           func(T)
-	ValidateCreated  func(T) error
-	ValidateUpdated  func(T) error
-	ValidateStable   func(T) error
-	RetryError       func(error) bool
-	RetryDeleteError func(error) bool
-	MaxReconciles    int
+	Resource        T
+	Client          LifecycleClient[T]
+	CreateContext   func(context.Context) context.Context
+	Mutate          func(T)
+	ValidateCreated func(T) error
+	ValidateUpdated func(T) error
+	ValidateStable  func(T) error
+	// RequireAsyncPending declares phases that must expose a non-nil shared
+	// status.async.current during at least one requeue and clear it on success.
+	RequireAsyncPending []Operation
+	RetryError          func(error) bool
+	RetryDeleteError    func(error) bool
+	MaxReconciles       int
 }
 
 // RunLifecycle drives create/read, update/read, and confirmed delete without
@@ -63,7 +67,7 @@ func RunLifecycle[T any](ctx context.Context, scenario LifecycleScenario[T]) err
 		createContext = scenario.CreateContext(ctx)
 	}
 	request := lifecycleRequest(scenario.Resource)
-	if err := converge(createContext, scenario.Resource, scenario.Client, request, maxReconciles, scenario.RetryError); err != nil {
+	if err := converge(createContext, scenario.Resource, scenario.Client, request, OperationCreate, requiresOperation(scenario.RequireAsyncPending, OperationCreate), maxReconciles, scenario.RetryError); err != nil {
 		return fmt.Errorf("create/read lifecycle: %w", err)
 	}
 	if scenario.ValidateCreated != nil {
@@ -73,7 +77,7 @@ func RunLifecycle[T any](ctx context.Context, scenario LifecycleScenario[T]) err
 	}
 	if scenario.Mutate != nil {
 		scenario.Mutate(scenario.Resource)
-		if err := converge(ctx, scenario.Resource, scenario.Client, request, maxReconciles, scenario.RetryError); err != nil {
+		if err := converge(ctx, scenario.Resource, scenario.Client, request, OperationUpdate, requiresOperation(scenario.RequireAsyncPending, OperationUpdate), maxReconciles, scenario.RetryError); err != nil {
 			return fmt.Errorf("update/read lifecycle: %w", err)
 		}
 		if scenario.ValidateUpdated != nil {
@@ -97,6 +101,8 @@ func RunLifecycle[T any](ctx context.Context, scenario LifecycleScenario[T]) err
 			return fmt.Errorf("validate stable resource: %w", err)
 		}
 	}
+	requireDeleteAsync := requiresOperation(scenario.RequireAsyncPending, OperationDelete)
+	sawDeleteAsync := false
 	for attempt := 1; attempt <= maxReconciles; attempt++ {
 		deleted, err := scenario.Client.Delete(ctx, scenario.Resource)
 		if err != nil {
@@ -105,7 +111,28 @@ func RunLifecycle[T any](ctx context.Context, scenario LifecycleScenario[T]) err
 			}
 			return fmt.Errorf("delete lifecycle attempt %d: %w", attempt, err)
 		}
+		if requireDeleteAsync {
+			pending, pendingErr := asyncCurrentPresent(scenario.Resource)
+			if pendingErr != nil {
+				return fmt.Errorf("delete lifecycle attempt %d async status: %w", attempt, pendingErr)
+			}
+			if pending {
+				sawDeleteAsync = true
+			}
+		}
 		if deleted {
+			if requireDeleteAsync && !sawDeleteAsync {
+				return fmt.Errorf("delete lifecycle did not expose status.async.current")
+			}
+			if requireDeleteAsync {
+				pending, pendingErr := asyncCurrentPresent(scenario.Resource)
+				if pendingErr != nil {
+					return fmt.Errorf("delete lifecycle terminal async status: %w", pendingErr)
+				}
+				if pending {
+					return fmt.Errorf("delete lifecycle left status.async.current set")
+				}
+			}
 			return nil
 		}
 	}
@@ -123,7 +150,8 @@ func lifecycleRequest(resource any) ctrl.Request {
 	}}
 }
 
-func converge[T any](ctx context.Context, resource T, client LifecycleClient[T], request ctrl.Request, maxReconciles int, retryError func(error) bool) error {
+func converge[T any](ctx context.Context, resource T, client LifecycleClient[T], request ctrl.Request, phase Operation, requireAsyncPending bool, maxReconciles int, retryError func(error) bool) error {
+	sawAsyncPending := false
 	for attempt := 1; attempt <= maxReconciles; attempt++ {
 		response, err := client.CreateOrUpdate(ctx, resource, request)
 		if err != nil {
@@ -135,9 +163,55 @@ func converge[T any](ctx context.Context, resource T, client LifecycleClient[T],
 		if !response.IsSuccessful {
 			return fmt.Errorf("reconcile attempt %d was unsuccessful: %+v", attempt, response)
 		}
+		if requireAsyncPending {
+			pending, pendingErr := asyncCurrentPresent(resource)
+			if pendingErr != nil {
+				return fmt.Errorf("reconcile attempt %d %s async status: %w", attempt, phase, pendingErr)
+			}
+			if pending {
+				sawAsyncPending = true
+			}
+		}
 		if !response.ShouldRequeue {
+			if requireAsyncPending && !sawAsyncPending {
+				return fmt.Errorf("%s lifecycle did not expose status.async.current", phase)
+			}
+			if requireAsyncPending {
+				pending, pendingErr := asyncCurrentPresent(resource)
+				if pendingErr != nil {
+					return fmt.Errorf("%s lifecycle terminal async status: %w", phase, pendingErr)
+				}
+				if pending {
+					return fmt.Errorf("%s lifecycle left status.async.current set", phase)
+				}
+			}
 			return nil
 		}
 	}
 	return fmt.Errorf("reconcile did not converge after %d attempts", maxReconciles)
+}
+
+func requiresOperation(operations []Operation, want Operation) bool {
+	for _, operation := range operations {
+		if operation == want {
+			return true
+		}
+	}
+	return false
+}
+
+func asyncCurrentPresent(resource any) (bool, error) {
+	payload, err := json.Marshal(resource)
+	if err != nil {
+		return false, err
+	}
+	var object map[string]any
+	if err := json.Unmarshal(payload, &object); err != nil {
+		return false, err
+	}
+	status, _ := object["status"].(map[string]any)
+	sharedStatus, _ := status["status"].(map[string]any)
+	async, _ := sharedStatus["async"].(map[string]any)
+	current, exists := async["current"]
+	return exists && current != nil, nil
 }

@@ -109,13 +109,15 @@ func TestMockIntegrationSensitiveTypeLifecycleCRUD(t *testing.T) {
 func newSensitiveTypeMockResponder(resource *datasafev1beta1.SensitiveType) (*ocimock.CRUDResponder[datasafesdk.SensitiveTypePattern], error) {
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
 	updatedAt := common.SDKTime{Time: createdAt.Time.Add(time.Minute)}
+	deleteRead := false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[datasafesdk.SensitiveTypePattern]{
-		CollectionPath:     "/20181201/sensitiveTypes",
-		ItemPath:           "/20181201/sensitiveTypes/" + mockSensitiveTypeID,
-		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		RequireCreateRead:  true,
-		RequireUpdateRead:  true,
-		RequireDeleteRead:  true,
+		CollectionPath:         "/20181201/sensitiveTypes",
+		ItemPath:               "/20181201/sensitiveTypes/" + mockSensitiveTypeID,
+		ExpectedOperations:     []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		RequireCreateRead:      true,
+		RequireUpdateRead:      true,
+		RequireDeleteRead:      true,
+		RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (datasafesdk.SensitiveTypePattern, ocimock.Response, error) {
 			var details datasafesdk.CreateSensitiveTypePatternDetails
 			if err := ocimock.DecodeDiscriminatedJSONRequest(request, &details, "entityType", "SENSITIVE_TYPE"); err != nil {
@@ -167,6 +169,12 @@ func newSensitiveTypeMockResponder(resource *datasafev1beta1.SensitiveType) (*oc
 		ReadTransition: func(_ ocimock.Request, state datasafesdk.SensitiveTypePattern) (datasafesdk.SensitiveTypePattern, ocimock.Response, error) {
 			if state.LifecycleState == datasafesdk.DiscoveryLifecycleStateCreating || state.LifecycleState == datasafesdk.DiscoveryLifecycleStateUpdating {
 				state.LifecycleState = datasafesdk.DiscoveryLifecycleStateActive
+			} else if state.LifecycleState == datasafesdk.DiscoveryLifecycleStateDeleting {
+				if deleteRead {
+					state.LifecycleState = datasafesdk.DiscoveryLifecycleStateDeleted
+				} else {
+					deleteRead = true
+				}
 			}
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
@@ -205,11 +213,12 @@ func newSensitiveTypeMockResponder(resource *datasafev1beta1.SensitiveType) (*oc
 			response.Header = http.Header{"Opc-Work-Request-Id": []string{"ocid1.datasafeworkrequest.oc1..mock-update"}}
 			return state, response, nil
 		},
-		Delete: func(request ocimock.Request, _ datasafesdk.SensitiveTypePattern) (ocimock.Response, error) {
+		DeleteTransition: func(request ocimock.Request, state datasafesdk.SensitiveTypePattern) (datasafesdk.SensitiveTypePattern, ocimock.Response, error) {
 			if len(request.Body) != 0 {
-				return ocimock.Response{}, fmt.Errorf("delete SensitiveType body = %s", request.Body)
+				return datasafesdk.SensitiveTypePattern{}, ocimock.Response{}, fmt.Errorf("delete SensitiveType body = %s", request.Body)
 			}
-			return ocimock.EmptyResponse(http.StatusNoContent), nil
+			state.LifecycleState = datasafesdk.DiscoveryLifecycleStateDeleting
+			return state, ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})
 }

@@ -71,15 +71,9 @@ func TestMockIntegrationFleetResourceCompositeCRUD(t *testing.T) {
 		UpdateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-update"}},
 		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-create", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return fleetResourceWorkRequestResponse("wr-create", fleetappsmanagementsdk.OperationTypeCreateFleetResource, fleetappsmanagementsdk.ActionTypeCreated)
-			}},
-			{Name: "update-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-update", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return fleetResourceWorkRequestResponse("wr-update", fleetappsmanagementsdk.OperationTypeUpdateFleetResource, fleetappsmanagementsdk.ActionTypeUpdated)
-			}},
-			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-delete", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return fleetResourceWorkRequestResponse("wr-delete", fleetappsmanagementsdk.OperationTypeDeleteFleetResource, fleetappsmanagementsdk.ActionTypeDeleted)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-create", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", fleetResourceWorkRequest("wr-create", fleetappsmanagementsdk.OperationTypeCreateFleetResource, fleetappsmanagementsdk.ActionTypeCreated))},
+			{Name: "update-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-update", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", fleetResourceWorkRequest("wr-update", fleetappsmanagementsdk.OperationTypeUpdateFleetResource, fleetappsmanagementsdk.ActionTypeUpdated))},
+			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-delete", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", fleetResourceWorkRequest("wr-delete", fleetappsmanagementsdk.OperationTypeDeleteFleetResource, fleetappsmanagementsdk.ActionTypeDeleted))},
 		},
 	})
 	if err != nil {
@@ -94,7 +88,8 @@ func TestMockIntegrationFleetResourceCompositeCRUD(t *testing.T) {
 	workRequestClient := fleetappsmanagementsdk.FleetAppsManagementWorkRequestClient{BaseClient: session.BaseClient()}
 	client := newFleetResourceServiceClientWithOCIClients(loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}, sdkClient, workRequestClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*fleetappsmanagementv1beta1.FleetResource]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *fleetappsmanagementv1beta1.FleetResource) error {
 			if current.Status.CompartmentId != resource.Spec.CompartmentId || current.Status.OsokStatus.Ocid == "" {
 				return fmt.Errorf("created FleetResource status = %+v", current.Status)
@@ -117,11 +112,11 @@ func TestMockIntegrationFleetResourceCompositeCRUD(t *testing.T) {
 	}
 }
 
-func fleetResourceWorkRequestResponse(id string, operation fleetappsmanagementsdk.OperationTypeEnum, action fleetappsmanagementsdk.ActionTypeEnum) (ocimock.Response, error) {
+func fleetResourceWorkRequest(id string, operation fleetappsmanagementsdk.OperationTypeEnum, action fleetappsmanagementsdk.ActionTypeEnum) fleetappsmanagementsdk.WorkRequest {
 	complete := float32(100)
-	return ocimock.JSONResponse(http.StatusOK, fleetappsmanagementsdk.WorkRequest{
+	return fleetappsmanagementsdk.WorkRequest{
 		OperationType: operation, Status: fleetappsmanagementsdk.OperationStatusSucceeded, Id: common.String(id),
 		CompartmentId: common.String("<ocid:2>"), PercentComplete: &complete,
 		Resources: []fleetappsmanagementsdk.WorkRequestResource{{EntityType: common.String("FleetResource"), ActionType: action, Identifier: common.String("resource-key")}},
-	})
+	}
 }

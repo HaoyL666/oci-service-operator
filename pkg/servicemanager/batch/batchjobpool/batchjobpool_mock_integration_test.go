@@ -87,9 +87,7 @@ func TestMockIntegrationBatchJobPoolCRUD(t *testing.T) {
 		},
 
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "update-work-request", Method: http.MethodGet, Path: "/20251031/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-			}},
+			{Name: "update-work-request", Method: http.MethodGet, Path: "/20251031/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest)},
 		},
 	})
 	if err != nil {
@@ -105,7 +103,8 @@ func TestMockIntegrationBatchJobPoolCRUD(t *testing.T) {
 	hooks := newBatchJobPoolRuntimeHooks(manager, sdkClient)
 	client := wrapBatchJobPoolGeneratedClient(hooks, defaultBatchJobPoolServiceClient{ServiceClient: generatedruntime.NewServiceClient[*apiv1beta1.BatchJobPool](buildBatchJobPoolGeneratedRuntimeConfig(manager, hooks))})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*apiv1beta1.BatchJobPool]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationUpdate},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *apiv1beta1.BatchJobPool) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.LifecycleState != "ACTIVE" || current.Status.DisplayName != "mock-displayname-initial" || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created BatchJobPool status = %+v", current.Status)

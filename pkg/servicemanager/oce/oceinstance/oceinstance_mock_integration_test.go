@@ -200,21 +200,15 @@ func TestMockIntegrationOceInstanceWorkRequestCRUD(t *testing.T) {
 		AdditionalRoutes: []ocimock.Route{
 			{
 				Name: "create-work-request", Method: http.MethodGet, Path: "/20190912/workRequests/<ocid:3>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest),
 			},
 			{
 				Name: "update-work-request", Method: http.MethodGet, Path: "/20190912/workRequests/<ocid:5>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest),
 			},
 			{
 				Name: "delete-work-request", Method: http.MethodGet, Path: "/20190912/workRequests/<ocid:6>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, deleteWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", deleteWorkRequest),
 			},
 		},
 	})
@@ -230,7 +224,8 @@ func TestMockIntegrationOceInstanceWorkRequestCRUD(t *testing.T) {
 	sdkClient := ocesdk.OceInstanceClient{BaseClient: session.BaseClient()}
 	client := newOceInstanceServiceClientWithOCIClient(log, sdkClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*ocev1beta1.OceInstance]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *ocev1beta1.OceInstance) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.Name != resource.Spec.Name || current.Status.Description != resource.Spec.Description || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created OceInstance status = %+v", current.Status)

@@ -163,12 +163,15 @@ func newStreamMockResponder(resource *streamingv1beta1.Stream) (*ocimock.CRUDRes
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
 	createReadObserved := false
 	updateReadObserved := false
+	deleteReadObserved := false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[streamingsdk.Stream]{
-		CollectionPath:     "/20180418/streams",
-		ItemPath:           "/20180418/streams/" + mockStreamID,
-		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		RequireCreateRead:  true,
-		RequireUpdateRead:  true,
+		CollectionPath:         "/20180418/streams",
+		ItemPath:               "/20180418/streams/" + mockStreamID,
+		ExpectedOperations:     []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		RequireCreateRead:      true,
+		RequireUpdateRead:      true,
+		RequireDeleteRead:      true,
+		RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (streamingsdk.Stream, ocimock.Response, error) {
 			var details streamingsdk.CreateStreamDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
@@ -212,6 +215,12 @@ func newStreamMockResponder(resource *streamingv1beta1.Stream) (*ocimock.CRUDRes
 				} else {
 					updateReadObserved = true
 				}
+			case streamingsdk.StreamLifecycleStateDeleting:
+				if deleteReadObserved {
+					state.LifecycleState = streamingsdk.StreamLifecycleStateDeleted
+				} else {
+					deleteReadObserved = true
+				}
 			}
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
@@ -230,8 +239,9 @@ func newStreamMockResponder(resource *streamingv1beta1.Stream) (*ocimock.CRUDRes
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},
-		Delete: func(_ ocimock.Request, _ streamingsdk.Stream) (ocimock.Response, error) {
-			return ocimock.EmptyResponse(http.StatusNoContent), nil
+		DeleteTransition: func(_ ocimock.Request, state streamingsdk.Stream) (streamingsdk.Stream, ocimock.Response, error) {
+			state.LifecycleState = streamingsdk.StreamLifecycleStateDeleting
+			return state, ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})
 }

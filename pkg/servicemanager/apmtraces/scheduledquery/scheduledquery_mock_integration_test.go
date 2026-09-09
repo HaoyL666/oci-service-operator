@@ -42,6 +42,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
   "scheduledQueryDescription": "OSOK synthetic scheduled query",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
   "scheduledQueryName": "osok-mock-scheduled-query",
+  "scheduledQueryProcessingConfiguration": {
+    "customMetric": {
+      "isAnomalyDetectionEnabled": false,
+      "isMetricPublished": false,
+      "name": null
+    }
+  },
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -89,6 +96,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
   "scheduledQueryDescription": "OSOK synthetic scheduled query",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
   "scheduledQueryName": "osok-mock-scheduled-query",
+  "scheduledQueryProcessingConfiguration": {
+    "customMetric": {
+      "isAnomalyDetectionEnabled": false,
+      "isMetricPublished": false,
+      "name": null
+    }
+  },
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -107,6 +121,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
   "scheduledQueryDescription": "OSOK synthetic scheduled query",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
   "scheduledQueryName": "osok-mock-scheduled-query",
+  "scheduledQueryProcessingConfiguration": {
+    "customMetric": {
+      "isAnomalyDetectionEnabled": false,
+      "isMetricPublished": false,
+      "name": null
+    }
+  },
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -139,6 +160,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
   "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
   "scheduledQueryName": "osok-mock-scheduled-query",
+  "scheduledQueryProcessingConfiguration": {
+    "customMetric": {
+      "isAnomalyDetectionEnabled": false,
+      "isMetricPublished": false,
+      "name": null
+    }
+  },
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -157,6 +185,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
   "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
   "scheduledQueryName": "osok-mock-scheduled-query",
+  "scheduledQueryProcessingConfiguration": {
+    "customMetric": {
+      "isAnomalyDetectionEnabled": false,
+      "isMetricPublished": false,
+      "name": null
+    }
+  },
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -178,8 +213,9 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 		ListShape:          ocimock.ListShapeItems,
 		UpdateRequest:      &updateRequest,
 		UpdatedState:       &updatedState,
-		CreatedReadStates:  createdReadStates,
-		UpdatedReadStates:  updatedReadStates,
+		DeletedReadStates:  ocimock.LifecycleStates(t, updatedState, "DELETING"),
+		CreatedReadStates:  append(ocimock.LifecycleStates(t, createdState, "CREATING"), createdReadStates...),
+		UpdatedReadStates:  append(ocimock.LifecycleStates(t, updatedState, "UPDATING"), updatedReadStates...),
 		DeleteEndsNotFound: true,
 		RequireCreateRead:  true,
 		RequireUpdateRead:  true,

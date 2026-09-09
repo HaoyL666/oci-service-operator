@@ -92,6 +92,7 @@ func TestMockIntegrationNetworkSecurityGroupLifecycleCRUD(t *testing.T) {
 func newNetworkSecurityGroupMockResponder(resource *corev1beta1.NetworkSecurityGroup) (*ocimock.CRUDResponder[coresdk.NetworkSecurityGroup], error) {
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
 	deleteReadObserved := false
+	updateReadObserved := false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[coresdk.NetworkSecurityGroup]{
 		CollectionPath:         "/20160918/networkSecurityGroups",
 		ItemPath:               "/20160918/networkSecurityGroups/" + mockNetworkSecurityGroupID,
@@ -133,6 +134,12 @@ func newNetworkSecurityGroupMockResponder(resource *corev1beta1.NetworkSecurityG
 			switch state.LifecycleState {
 			case coresdk.NetworkSecurityGroupLifecycleStateProvisioning:
 				state.LifecycleState = coresdk.NetworkSecurityGroupLifecycleStateAvailable
+			case "UPDATING":
+				if updateReadObserved {
+					state.LifecycleState = coresdk.NetworkSecurityGroupLifecycleStateAvailable
+				} else {
+					updateReadObserved = true
+				}
 			case coresdk.NetworkSecurityGroupLifecycleStateTerminating:
 				if deleteReadObserved {
 					response, err := ocimock.JSONResponse(http.StatusNotFound, map[string]string{"code": "NotAuthorizedOrNotFound"})
@@ -154,6 +161,7 @@ func newNetworkSecurityGroupMockResponder(resource *corev1beta1.NetworkSecurityG
 			}
 			state.DisplayName = details.DisplayName
 			state.FreeformTags = details.FreeformTags
+			state.LifecycleState = "UPDATING"
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},

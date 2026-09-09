@@ -74,10 +74,12 @@ func TestMockIntegrationApplicationLifecycleCRUD(t *testing.T) {
 
 func newApplicationMockResponder(resource *dataflowv1beta1.Application) (*ocimock.CRUDResponder[dataflowsdk.Application], error) {
 	now := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
+	deleteRead := false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[dataflowsdk.Application]{
 		CollectionPath: "/20200129/applications", ItemPath: "/20200129/applications/" + mockApplicationID,
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
+		RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (dataflowsdk.Application, ocimock.Response, error) {
 			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
 				var zero dataflowsdk.Application
@@ -101,8 +103,16 @@ func newApplicationMockResponder(resource *dataflowv1beta1.Application) (*ocimoc
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},
-		Read: func(_ ocimock.Request, state dataflowsdk.Application) (ocimock.Response, error) {
-			return ocimock.JSONResponse(http.StatusOK, state)
+		ReadTransition: func(_ ocimock.Request, state dataflowsdk.Application) (dataflowsdk.Application, ocimock.Response, error) {
+			if state.LifecycleState == dataflowsdk.ApplicationLifecycleStateDeleting {
+				if deleteRead {
+					state.LifecycleState = dataflowsdk.ApplicationLifecycleStateDeleted
+				} else {
+					deleteRead = true
+				}
+			}
+			response, err := ocimock.JSONResponse(http.StatusOK, state)
+			return state, response, err
 		},
 		Update: func(request ocimock.Request, state dataflowsdk.Application) (dataflowsdk.Application, ocimock.Response, error) {
 			var details dataflowsdk.UpdateApplicationDetails
@@ -116,8 +126,9 @@ func newApplicationMockResponder(resource *dataflowv1beta1.Application) (*ocimoc
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},
-		Delete: func(_ ocimock.Request, _ dataflowsdk.Application) (ocimock.Response, error) {
-			return ocimock.EmptyResponse(http.StatusNoContent), nil
+		DeleteTransition: func(_ ocimock.Request, state dataflowsdk.Application) (dataflowsdk.Application, ocimock.Response, error) {
+			state.LifecycleState = dataflowsdk.ApplicationLifecycleStateDeleting
+			return state, ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})
 }

@@ -70,11 +70,12 @@ func TestMockIntegrationDashboardGroupLifecycleCRUD(t *testing.T) {
 
 func newDashboardGroupMockResponder(resource *dashboardservicev1beta1.DashboardGroup) (*ocimock.CRUDResponder[dashboardservicesdk.DashboardGroup], error) {
 	now := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
-	createRead, updateRead := false, false
+	createRead, updateRead, deleteRead := false, false, false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[dashboardservicesdk.DashboardGroup]{
 		CollectionPath: "/20210731/dashboardGroups", ItemPath: "/20210731/dashboardGroups/" + mockDashboardGroupID,
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
+		RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (dashboardservicesdk.DashboardGroup, ocimock.Response, error) {
 			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
 				var zero dashboardservicesdk.DashboardGroup
@@ -110,6 +111,12 @@ func newDashboardGroupMockResponder(resource *dashboardservicev1beta1.DashboardG
 				} else {
 					updateRead = true
 				}
+			case dashboardservicesdk.DashboardGroupLifecycleStateDeleting:
+				if deleteRead {
+					state.LifecycleState = dashboardservicesdk.DashboardGroupLifecycleStateDeleted
+				} else {
+					deleteRead = true
+				}
 			}
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
@@ -126,8 +133,9 @@ func newDashboardGroupMockResponder(resource *dashboardservicev1beta1.DashboardG
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},
-		Delete: func(_ ocimock.Request, _ dashboardservicesdk.DashboardGroup) (ocimock.Response, error) {
-			return ocimock.EmptyResponse(http.StatusNoContent), nil
+		DeleteTransition: func(_ ocimock.Request, state dashboardservicesdk.DashboardGroup) (dashboardservicesdk.DashboardGroup, ocimock.Response, error) {
+			state.LifecycleState = dashboardservicesdk.DashboardGroupLifecycleStateDeleting
+			return state, ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})
 }

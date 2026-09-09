@@ -6,10 +6,13 @@
 package ocimock
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/url"
 	"testing"
 
+	"github.com/oracle/oci-go-sdk/v65/common"
+	"github.com/oracle/oci-go-sdk/v65/datalabelingservice"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
@@ -26,6 +29,63 @@ func TestStateSequencePreservesOrder(t *testing.T) {
 	states := StateSequence("CREATING", "ACTIVE")
 	if len(states) != 2 || states[0] != "CREATING" || states[1] != "ACTIVE" {
 		t.Fatalf("StateSequence() = %v", states)
+	}
+}
+
+func TestLifecycleStateSequenceClonesPendingStatesBeforeTerminal(t *testing.T) {
+	t.Parallel()
+
+	type resource struct {
+		ID             string `json:"id"`
+		LifecycleState string `json:"lifecycleState"`
+	}
+	terminal := resource{ID: "resource-1", LifecycleState: "ACTIVE"}
+	states := LifecycleStateSequence(t, terminal, "CREATING", "UPDATING")
+	if len(states) != 3 || states[0].LifecycleState != "CREATING" || states[1].LifecycleState != "UPDATING" || states[2] != terminal {
+		t.Fatalf("lifecycle states = %+v", states)
+	}
+}
+
+func TestLifecycleStatesPreservesOCIResponseFields(t *testing.T) {
+	t.Parallel()
+
+	baseline := datalabelingservice.Dataset{
+		Id:             common.String("dataset-id"),
+		CompartmentId:  common.String("compartment-id"),
+		LifecycleState: datalabelingservice.DatasetLifecycleStateActive,
+	}
+	pending := LifecycleStates(t, baseline, "CREATING")
+	if len(pending) != 1 || pending[0].Id == nil || *pending[0].Id != "dataset-id" || pending[0].CompartmentId == nil || *pending[0].CompartmentId != "compartment-id" || pending[0].LifecycleState != datalabelingservice.DatasetLifecycleStateCreating {
+		t.Fatalf("pending Dataset = %+v", pending)
+	}
+}
+
+func TestNewWorkRequestResponseSequenceReturnsPendingThenTerminal(t *testing.T) {
+	t.Parallel()
+
+	type workRequest struct {
+		ID              string  `json:"id"`
+		Status          string  `json:"status"`
+		PercentComplete float32 `json:"percentComplete"`
+		TimeFinished    *string `json:"timeFinished"`
+	}
+	finished := "2026-09-09T00:00:00Z"
+	respond := NewWorkRequestResponseSequence(t, "IN_PROGRESS", workRequest{ID: "work-request-1", Status: "SUCCEEDED", PercentComplete: 100, TimeFinished: &finished})
+	for index, want := range []string{"IN_PROGRESS", "SUCCEEDED", "SUCCEEDED"} {
+		response, err := respond(Request{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		var got workRequest
+		if err := json.Unmarshal(response.Body, &got); err != nil {
+			t.Fatal(err)
+		}
+		if got.ID != "work-request-1" || got.Status != want {
+			t.Fatalf("response %d = %+v, want status %q", index, got, want)
+		}
+		if index == 0 && (got.PercentComplete != 0 || got.TimeFinished != nil) {
+			t.Fatalf("pending response = %+v, want incomplete without finish time", got)
+		}
 	}
 }
 
@@ -110,10 +170,10 @@ func TestValidateRetryTokenValueSupportsPackageOwnedDeterministicTokens(t *testi
 
 func TestMustMergeJSONFixturePreservesOmittedTypedFields(t *testing.T) {
 	t.Parallel()
-	baseline := explicitFixture{Name: "created", Count: 1, Tags: map[string]string{"phase": "create"}}
+	baseline := explicitFixture{Name: "created", Count: 1, Tags: map[string]string{"phase": "create", "retained": "yes"}}
 	fixture := baseline
 	MustMergeJSONFixture(t, &fixture, "{\"name\":\"updated\",\"tags\":{\"phase\":\"update\"}}")
-	if fixture.Name != "updated" || fixture.Count != 1 || fixture.Tags["phase"] != "update" {
+	if fixture.Name != "updated" || fixture.Count != 1 || fixture.Tags["phase"] != "update" || fixture.Tags["retained"] != "yes" {
 		t.Fatalf("fixture = %+v", fixture)
 	}
 	if baseline.Tags["phase"] != "create" {

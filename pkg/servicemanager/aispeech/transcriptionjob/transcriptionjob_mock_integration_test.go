@@ -74,10 +74,12 @@ func TestMockIntegrationTranscriptionJobLifecycleCRUD(t *testing.T) {
 func newTranscriptionJobMockResponder(resource *aispeechv1beta1.TranscriptionJob) (*ocimock.CRUDResponder[aispeechsdk.TranscriptionJob], error) {
 	now := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
 	createReads := 0
+	deleteReads := 0
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[aispeechsdk.TranscriptionJob]{
 		CollectionPath: "/20220101/transcriptionJobs", ItemPath: "/20220101/transcriptionJobs/" + mockTranscriptionJobID,
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
+		RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (aispeechsdk.TranscriptionJob, ocimock.Response, error) {
 			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
 				var zero aispeechsdk.TranscriptionJob
@@ -109,6 +111,14 @@ func newTranscriptionJobMockResponder(resource *aispeechv1beta1.TranscriptionJob
 				}
 			} else if state.LifecycleState == aispeechsdk.TranscriptionJobLifecycleStateInProgress {
 				state.LifecycleState, state.TimeFinished, state.OutstandingTasks, state.SuccessfulTasks, state.PercentComplete = aispeechsdk.TranscriptionJobLifecycleStateSucceeded, &now, common.Int(0), common.Int(1), common.Int(100)
+			} else if state.LifecycleState == aispeechsdk.TranscriptionJobLifecycleStateCanceling {
+				deleteReads++
+				if deleteReads > 1 {
+					state.LifecycleState = aispeechsdk.TranscriptionJobLifecycleStateCanceled
+				}
+			} else if state.LifecycleState == aispeechsdk.TranscriptionJobLifecycleStateCanceled {
+				response, err := ocimock.JSONResponse(http.StatusNotFound, map[string]string{"code": "NotAuthorizedOrNotFound"})
+				return state, response, err
 			}
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
@@ -125,8 +135,9 @@ func newTranscriptionJobMockResponder(resource *aispeechv1beta1.TranscriptionJob
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},
-		Delete: func(_ ocimock.Request, _ aispeechsdk.TranscriptionJob) (ocimock.Response, error) {
-			return ocimock.EmptyResponse(http.StatusNoContent), nil
+		DeleteTransition: func(_ ocimock.Request, state aispeechsdk.TranscriptionJob) (aispeechsdk.TranscriptionJob, ocimock.Response, error) {
+			state.LifecycleState = aispeechsdk.TranscriptionJobLifecycleStateCanceling
+			return state, ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})
 }

@@ -183,12 +183,8 @@ func TestMockIntegrationFleetCRUD(t *testing.T) {
 		},
 
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-			}},
-			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/<ocid:delete-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, deleteWorkRequest)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest)},
+			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/<ocid:delete-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", deleteWorkRequest)},
 		},
 	})
 	if err != nil {
@@ -204,7 +200,8 @@ func TestMockIntegrationFleetCRUD(t *testing.T) {
 	hooks := newFleetRuntimeHooks(manager, sdkClient)
 	client := wrapFleetGeneratedClient(hooks, defaultFleetServiceClient{ServiceClient: generatedruntime.NewServiceClient[*apiv1beta1.Fleet](buildFleetGeneratedRuntimeConfig(manager, hooks))})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*apiv1beta1.Fleet]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *apiv1beta1.Fleet) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.LifecycleState != "ACTIVE" || current.Status.DisplayName != "mock-displayname-initial" || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created Fleet status = %+v", current.Status)

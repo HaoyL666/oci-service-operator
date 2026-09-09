@@ -275,12 +275,8 @@ func TestMockIntegrationDataSourceWorkRequestCRUD(t *testing.T) {
 		},
 
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20200131/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-			}},
-			{Name: "update-work-request", Method: http.MethodGet, Path: "/20200131/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20200131/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest)},
+			{Name: "update-work-request", Method: http.MethodGet, Path: "/20200131/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest)},
 		},
 	})
 	if err != nil {
@@ -298,7 +294,8 @@ func TestMockIntegrationDataSourceWorkRequestCRUD(t *testing.T) {
 	applyDataSourceRuntimeHooksWithWorkRequestClient(manager, &hooks, sdkClient, nil)
 	client := wrapDataSourceGeneratedClient(hooks, defaultDataSourceServiceClient{ServiceClient: generatedruntime.NewServiceClient[*cloudguardv1beta1.DataSource](buildDataSourceGeneratedRuntimeConfig(manager, hooks))})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*cloudguardv1beta1.DataSource]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *cloudguardv1beta1.DataSource) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.LifecycleState != "ACTIVE" ||
 				current.Status.DisplayName != resource.Spec.DisplayName || current.Status.OsokStatus.Async.Current != nil {

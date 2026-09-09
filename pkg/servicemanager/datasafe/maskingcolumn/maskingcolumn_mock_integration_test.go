@@ -224,12 +224,8 @@ func TestMockIntegrationMaskingColumnWorkRequestCRUD(t *testing.T) {
 		},
 
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20181201/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-			}},
-			{Name: "update-work-request", Method: http.MethodGet, Path: "/20181201/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20181201/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest)},
+			{Name: "update-work-request", Method: http.MethodGet, Path: "/20181201/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest)},
 		},
 	})
 	if err != nil {
@@ -246,7 +242,8 @@ func TestMockIntegrationMaskingColumnWorkRequestCRUD(t *testing.T) {
 	applyMaskingColumnRuntimeHooks(&hooks, sdkClient, nil)
 	client := wrapMaskingColumnGeneratedClient(hooks, defaultMaskingColumnServiceClient{ServiceClient: generatedruntime.NewServiceClient[*datasafev1beta1.MaskingColumn](buildMaskingColumnGeneratedRuntimeConfig(manager, hooks))})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*datasafev1beta1.MaskingColumn]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *datasafev1beta1.MaskingColumn) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.LifecycleState != "ACTIVE" ||
 				current.Status.MaskingColumnGroup != resource.Spec.MaskingColumnGroup || current.Status.OsokStatus.Async.Current != nil {

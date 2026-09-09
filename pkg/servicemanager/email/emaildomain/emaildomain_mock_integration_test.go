@@ -83,6 +83,7 @@ func TestMockIntegrationEmailDomainLifecycleCRUD(t *testing.T) {
 func newEmailDomainMockResponder(resource *emailv1beta1.EmailDomain) (*ocimock.CRUDResponder[emailsdk.EmailDomain], error) {
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
 	createReadObserved := false
+	updateReadObserved := false
 	deleteReadObserved := false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[emailsdk.EmailDomain]{
 		CollectionPath: "/20170907/emailDomains", ItemPath: "/20170907/emailDomains/" + mockEmailDomainID,
@@ -119,6 +120,12 @@ func newEmailDomainMockResponder(resource *emailv1beta1.EmailDomain) (*ocimock.C
 				} else {
 					createReadObserved = true
 				}
+			case emailsdk.EmailDomainLifecycleStateUpdating:
+				if updateReadObserved {
+					state.LifecycleState = emailsdk.EmailDomainLifecycleStateActive
+				} else {
+					updateReadObserved = true
+				}
 			case emailsdk.EmailDomainLifecycleStateDeleting:
 				if deleteReadObserved {
 					state.LifecycleState = emailsdk.EmailDomainLifecycleStateDeleted
@@ -139,6 +146,7 @@ func newEmailDomainMockResponder(resource *emailv1beta1.EmailDomain) (*ocimock.C
 			}
 			state.Description = details.Description
 			state.FreeformTags = details.FreeformTags
+			state.LifecycleState = emailsdk.EmailDomainLifecycleStateUpdating
 			response, err := ocimock.JSONResponse(http.StatusAccepted, state)
 			return state, response, err
 		},

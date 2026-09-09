@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
+	shared "github.com/oracle/oci-service-operator/pkg/shared"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
@@ -29,6 +30,31 @@ type lifecycleTestClient struct {
 	deleteCalls   int
 	retryDelete   bool
 	stableRequeue bool
+}
+
+type asyncLifecycleTestResource struct {
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Status            struct {
+		OSOKStatus shared.OSOKStatus `json:"status"`
+	} `json:"status,omitempty"`
+}
+
+type asyncLifecycleTestClient struct {
+	createCalls int
+}
+
+func (c *asyncLifecycleTestClient) CreateOrUpdate(_ context.Context, resource *asyncLifecycleTestResource, _ ctrl.Request) (servicemanager.OSOKResponse, error) {
+	c.createCalls++
+	if c.createCalls == 1 {
+		resource.Status.OSOKStatus.Async.Current = &shared.OSOKAsyncOperation{WorkRequestID: "work-request-1"}
+		return servicemanager.OSOKResponse{IsSuccessful: true, ShouldRequeue: true}, nil
+	}
+	resource.Status.OSOKStatus.Async.Current = nil
+	return servicemanager.OSOKResponse{IsSuccessful: true}, nil
+}
+
+func (*asyncLifecycleTestClient) Delete(context.Context, *asyncLifecycleTestResource) (bool, error) {
+	return true, nil
 }
 
 func (c *lifecycleTestClient) CreateOrUpdate(_ context.Context, resource *lifecycleTestResource, _ ctrl.Request) (servicemanager.OSOKResponse, error) {
@@ -102,6 +128,37 @@ func TestLifecycleRequestUsesKubernetesIdentity(t *testing.T) {
 	request := lifecycleRequest(resource)
 	if request.Namespace != resource.Namespace || request.Name != resource.Name {
 		t.Fatalf("lifecycle request = %s/%s, want %s/%s", request.Namespace, request.Name, resource.Namespace, resource.Name)
+	}
+}
+
+func TestRunLifecycleRequiresPendingAsyncStateForDeclaredPhase(t *testing.T) {
+	t.Parallel()
+
+	resource := &asyncLifecycleTestResource{ObjectMeta: metav1.ObjectMeta{Name: "async", Namespace: "default"}}
+	err := RunLifecycle(context.Background(), LifecycleScenario[*asyncLifecycleTestResource]{
+		Resource:            resource,
+		Client:              &asyncLifecycleTestClient{},
+		RequireAsyncPending: []Operation{OperationCreate},
+		ValidateCreated:     func(*asyncLifecycleTestResource) error { return nil },
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestRunLifecycleRejectsMissingDeclaredAsyncState(t *testing.T) {
+	t.Parallel()
+
+	resource := &asyncLifecycleTestResource{ObjectMeta: metav1.ObjectMeta{Name: "async", Namespace: "default"}}
+	client := &asyncLifecycleTestClient{createCalls: 1}
+	err := RunLifecycle(context.Background(), LifecycleScenario[*asyncLifecycleTestResource]{
+		Resource:            resource,
+		Client:              client,
+		RequireAsyncPending: []Operation{OperationCreate},
+		ValidateCreated:     func(*asyncLifecycleTestResource) error { return nil },
+	})
+	if err == nil || !strings.Contains(err.Error(), "create lifecycle did not expose status.async.current") {
+		t.Fatalf("RunLifecycle() error = %v, want missing async state", err)
 	}
 }
 

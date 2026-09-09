@@ -156,15 +156,9 @@ func TestMockIntegrationDataSourceWorkRequestCRUD(t *testing.T) {
 			return ocimock.ValidateDiscriminatedJSONRequest(request, "type", "PROMETHEUS_EMITTER", updateRequest)
 		},
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20200202/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-			}},
-			{Name: "update-work-request", Method: http.MethodGet, Path: "/20200202/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-			}},
-			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20200202/workRequests/<ocid:delete-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, deleteWorkRequest)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20200202/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest)},
+			{Name: "update-work-request", Method: http.MethodGet, Path: "/20200202/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest)},
+			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20200202/workRequests/<ocid:delete-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", deleteWorkRequest)},
 		},
 	})
 	if err != nil {
@@ -178,7 +172,8 @@ func TestMockIntegrationDataSourceWorkRequestCRUD(t *testing.T) {
 	sdkClient := managementagentsdk.ManagementAgentClient{BaseClient: session.BaseClient()}
 	client := newDataSourceRuntimeClient(sdkClient, loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*managementagentv1beta1.DataSource]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *managementagentv1beta1.DataSource) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.State != "ACTIVE" || current.Status.Url != resource.Spec.Url ||
 				current.Status.Type != resource.Spec.Type || current.Status.OsokStatus.Async.Current != nil {

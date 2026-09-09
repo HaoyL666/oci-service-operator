@@ -110,12 +110,12 @@ func TestMockIntegrationDatabaseToolsConnectionLifecycleCRUD(t *testing.T) {
   "keyStores": [
     {
       "keyStoreContent": {
-        "secretId": "\u003credacted\u003e",
+        "secretId": "ocid1.secret.oc1..truststore",
         "valueType": "SECRETID"
       },
       "keyStorePassword": {
-        "secretId": "\u003credacted\u003e",
-        "valueType": "\u003credacted\u003e"
+        "secretId": "ocid1.secret.oc1..truststore-password",
+        "valueType": "SECRETID"
       },
       "keyStoreType": "JAVA_TRUST_STORE"
     }
@@ -127,8 +127,8 @@ func TestMockIntegrationDatabaseToolsConnectionLifecycleCRUD(t *testing.T) {
   "url": "jdbc:oracle:thin:@tcp://db.example.com:1521/service",
   "userName": "app-user",
   "userPassword": {
-    "secretId": "\u003credacted\u003e",
-    "valueType": "\u003credacted\u003e"
+    "secretId": "ocid1.secret.oc1..db-password",
+    "valueType": "SECRETID"
   }
 }`)
 	createdReadStates := []databasetoolssdk.DatabaseToolsConnectionGenericJdbc{
@@ -150,12 +150,12 @@ func TestMockIntegrationDatabaseToolsConnectionLifecycleCRUD(t *testing.T) {
   "keyStores": [
     {
       "keyStoreContent": {
-        "secretId": "\u003credacted\u003e",
+        "secretId": "ocid1.secret.oc1..truststore",
         "valueType": "SECRETID"
       },
       "keyStorePassword": {
-        "secretId": "\u003credacted\u003e",
-        "valueType": "\u003credacted\u003e"
+        "secretId": "ocid1.secret.oc1..truststore-password",
+        "valueType": "SECRETID"
       },
       "keyStoreType": "JAVA_TRUST_STORE"
     }
@@ -167,8 +167,8 @@ func TestMockIntegrationDatabaseToolsConnectionLifecycleCRUD(t *testing.T) {
   "url": "jdbc:oracle:thin:@tcp://db.example.com:1521/service",
   "userName": "app-user",
   "userPassword": {
-    "secretId": "\u003credacted\u003e",
-    "valueType": "\u003credacted\u003e"
+    "secretId": "ocid1.secret.oc1..db-password",
+    "valueType": "SECRETID"
   }
 }`),
 	}
@@ -299,8 +299,9 @@ func TestMockIntegrationDatabaseToolsConnectionLifecycleCRUD(t *testing.T) {
 		ListShape:          ocimock.ListShapeItems,
 		UpdateRequest:      &updateRequest,
 		UpdatedState:       &updatedState,
-		CreatedReadStates:  createdReadStates,
-		UpdatedReadStates:  updatedReadStates,
+		DeletedReadStates:  ocimock.LifecycleStates(t, updatedState, "DELETING"),
+		CreatedReadStates:  append(ocimock.LifecycleStates(t, createdState, "CREATING"), createdReadStates...),
+		UpdatedReadStates:  append(ocimock.LifecycleStates(t, updatedState, "UPDATING"), updatedReadStates...),
 		DeleteEndsNotFound: true,
 		RequireCreateRead:  true,
 		RequireUpdateRead:  true,

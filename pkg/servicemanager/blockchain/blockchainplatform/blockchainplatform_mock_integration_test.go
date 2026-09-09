@@ -137,15 +137,9 @@ func TestMockIntegrationBlockchainPlatformCRUD(t *testing.T) {
 		},
 
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-			}},
-			{Name: "update-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-			}},
-			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/<ocid:delete-work-request>", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return ocimock.JSONResponse(http.StatusOK, deleteWorkRequest)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/<ocid:create-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest)},
+			{Name: "update-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/<ocid:update-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest)},
+			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/<ocid:delete-work-request>", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", deleteWorkRequest)},
 		},
 	})
 	if err != nil {
@@ -161,7 +155,8 @@ func TestMockIntegrationBlockchainPlatformCRUD(t *testing.T) {
 	hooks := newBlockchainPlatformRuntimeHooks(manager, sdkClient)
 	client := wrapBlockchainPlatformGeneratedClient(hooks, defaultBlockchainPlatformServiceClient{ServiceClient: generatedruntime.NewServiceClient[*apiv1beta1.BlockchainPlatform](buildBlockchainPlatformGeneratedRuntimeConfig(manager, hooks))})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*apiv1beta1.BlockchainPlatform]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *apiv1beta1.BlockchainPlatform) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.LifecycleState != "ACTIVE" || current.Status.Description != "mock-description-initial" || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created BlockchainPlatform status = %+v", current.Status)

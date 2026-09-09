@@ -110,15 +110,9 @@ func TestMockIntegrationFleetCredentialCompositeCRUD(t *testing.T) {
 		UpdateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-update"}},
 		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-create", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return fleetCredentialWorkRequestResponse("wr-create", fleetappsmanagementsdk.OperationTypeCreateCredential, fleetappsmanagementsdk.ActionTypeCreated)
-			}},
-			{Name: "update-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-update", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return fleetCredentialWorkRequestResponse("wr-update", fleetappsmanagementsdk.OperationTypeUpdateCredential, fleetappsmanagementsdk.ActionTypeUpdated)
-			}},
-			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-delete", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) {
-				return fleetCredentialWorkRequestResponse("wr-delete", fleetappsmanagementsdk.OperationTypeDeleteCredential, fleetappsmanagementsdk.ActionTypeDeleted)
-			}},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-create", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", fleetCredentialWorkRequest("wr-create", fleetappsmanagementsdk.OperationTypeCreateCredential, fleetappsmanagementsdk.ActionTypeCreated))},
+			{Name: "update-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-update", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", fleetCredentialWorkRequest("wr-update", fleetappsmanagementsdk.OperationTypeUpdateCredential, fleetappsmanagementsdk.ActionTypeUpdated))},
+			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20250228/workRequests/wr-delete", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", fleetCredentialWorkRequest("wr-delete", fleetappsmanagementsdk.OperationTypeDeleteCredential, fleetappsmanagementsdk.ActionTypeDeleted))},
 		},
 	})
 	if err != nil {
@@ -133,7 +127,8 @@ func TestMockIntegrationFleetCredentialCompositeCRUD(t *testing.T) {
 	workRequestClient := fleetappsmanagementsdk.FleetAppsManagementWorkRequestClient{BaseClient: session.BaseClient()}
 	client := newFleetCredentialServiceClientWithOCIClients(loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}, sdkClient, workRequestClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*fleetappsmanagementv1beta1.FleetCredential]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *fleetappsmanagementv1beta1.FleetCredential) error {
 			if current.Status.DisplayName != resource.Spec.DisplayName || current.Status.OsokStatus.Ocid == "" {
 				return fmt.Errorf("created FleetCredential status = %+v", current.Status)
@@ -156,11 +151,11 @@ func TestMockIntegrationFleetCredentialCompositeCRUD(t *testing.T) {
 	}
 }
 
-func fleetCredentialWorkRequestResponse(id string, operation fleetappsmanagementsdk.OperationTypeEnum, action fleetappsmanagementsdk.ActionTypeEnum) (ocimock.Response, error) {
+func fleetCredentialWorkRequest(id string, operation fleetappsmanagementsdk.OperationTypeEnum, action fleetappsmanagementsdk.ActionTypeEnum) fleetappsmanagementsdk.WorkRequest {
 	complete := float32(100)
-	return ocimock.JSONResponse(http.StatusOK, fleetappsmanagementsdk.WorkRequest{
+	return fleetappsmanagementsdk.WorkRequest{
 		OperationType: operation, Status: fleetappsmanagementsdk.OperationStatusSucceeded, Id: common.String(id),
 		CompartmentId: common.String("<ocid:2>"), PercentComplete: &complete,
 		Resources: []fleetappsmanagementsdk.WorkRequestResource{{EntityType: common.String("FleetCredential"), ActionType: action, Identifier: common.String("resource-key")}},
-	})
+	}
 }

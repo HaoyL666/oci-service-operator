@@ -131,21 +131,15 @@ func TestMockIntegrationVbInstanceWorkRequestCRUD(t *testing.T) {
 		AdditionalRoutes: []ocimock.Route{
 			{
 				Name: "create-work-request", Method: http.MethodGet, Path: "/20210601/workRequests/<ocid:2>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, createWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", createWorkRequest),
 			},
 			{
 				Name: "update-work-request", Method: http.MethodGet, Path: "/20210601/workRequests/<ocid:4>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, updateWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", updateWorkRequest),
 			},
 			{
 				Name: "delete-work-request", Method: http.MethodGet, Path: "/20210601/workRequests/<ocid:5>", MinimumCalls: 1,
-				Respond: func(ocimock.Request) (ocimock.Response, error) {
-					return ocimock.JSONResponse(http.StatusOK, deleteWorkRequest)
-				},
+				Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", deleteWorkRequest),
 			},
 		},
 	})
@@ -161,7 +155,8 @@ func TestMockIntegrationVbInstanceWorkRequestCRUD(t *testing.T) {
 	_ = log
 	client := newVbInstanceServiceClientWithOCIClient(visualbuildersdk.VbInstanceClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*visualbuilderv1beta1.VbInstance]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *visualbuilderv1beta1.VbInstance) error {
 			if current.Status.OsokStatus.Ocid == "" || current.Status.DisplayName != resource.Spec.DisplayName || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created VbInstance status = %+v", current.Status)

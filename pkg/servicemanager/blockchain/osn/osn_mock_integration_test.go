@@ -69,9 +69,9 @@ func TestMockIntegrationOsnCompositeCRUD(t *testing.T) {
 		UpdateHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-update"}},
 		DeleteHeaders: http.Header{"Opc-Work-Request-Id": []string{"wr-delete"}},
 		AdditionalRoutes: []ocimock.Route{
-			{Name: "create-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/wr-create", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) { return osnWorkRequestResponse("wr-create", "CREATED") }},
-			{Name: "update-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/wr-update", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) { return osnWorkRequestResponse("wr-update", "UPDATED") }},
-			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/wr-delete", MinimumCalls: 1, Respond: func(ocimock.Request) (ocimock.Response, error) { return osnWorkRequestResponse("wr-delete", "DELETED") }},
+			{Name: "create-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/wr-create", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", osnWorkRequest("wr-create", "CREATED"))},
+			{Name: "update-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/wr-update", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", osnWorkRequest("wr-update", "UPDATED"))},
+			{Name: "delete-work-request", Method: http.MethodGet, Path: "/20191010/workRequests/wr-delete", MinimumCalls: 1, Respond: ocimock.NewWorkRequestResponseSequence(t, "IN_PROGRESS", osnWorkRequest("wr-delete", "DELETED"))},
 		},
 	})
 	if err != nil {
@@ -85,7 +85,8 @@ func TestMockIntegrationOsnCompositeCRUD(t *testing.T) {
 	sdkClient := blockchainsdk.BlockchainPlatformClient{BaseClient: session.BaseClient()}
 	client := newOsnServiceClientWithOCIClient(loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}, sdkClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*blockchainv1beta1.Osn]{
-		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
+		RequireAsyncPending: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Resource:            resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *blockchainv1beta1.Osn) error {
 			if current.Status.Ad != resource.Spec.Ad || current.Status.OsokStatus.Ocid == "" {
 				return fmt.Errorf("created Osn status = %+v", current.Status)
@@ -108,10 +109,10 @@ func TestMockIntegrationOsnCompositeCRUD(t *testing.T) {
 	}
 }
 
-func osnWorkRequestResponse(id string, action string) (ocimock.Response, error) {
-	return ocimock.JSONResponse(http.StatusOK, blockchainsdk.WorkRequest{
+func osnWorkRequest(id string, action string) blockchainsdk.WorkRequest {
+	return blockchainsdk.WorkRequest{
 		Id: common.String(id), OperationType: blockchainsdk.WorkRequestOperationTypeUpdatePlatform,
 		Status: blockchainsdk.WorkRequestStatusSucceeded, CompartmentId: common.String("<ocid:2>"), PercentComplete: func() *float32 { value := float32(100); return &value }(),
 		Resources: []blockchainsdk.WorkRequestResource{{EntityType: common.String("osn"), ActionType: blockchainsdk.WorkRequestResourceActionTypeEnum(action), Identifier: common.String("resource-key")}},
-	})
+	}
 }

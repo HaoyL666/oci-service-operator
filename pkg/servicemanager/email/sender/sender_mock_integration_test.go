@@ -84,10 +84,12 @@ func TestMockIntegrationSenderLifecycleCRUD(t *testing.T) {
 
 func newSenderMockResponder(resource *emailv1beta1.Sender) (*ocimock.CRUDResponder[emailsdk.Sender], error) {
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 5, 12, 0, 0, 0, time.UTC)}
+	createRead, deleteRead := false, false
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[emailsdk.Sender]{
 		CollectionPath: "/20170907/senders", ItemPath: "/20170907/senders/" + mockSenderID,
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
+		RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (emailsdk.Sender, ocimock.Response, error) {
 			var details emailsdk.CreateSenderDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
@@ -102,13 +104,28 @@ func newSenderMockResponder(resource *emailv1beta1.Sender) (*ocimock.CRUDRespond
 				return emailsdk.Sender{}, ocimock.Response{}, fmt.Errorf("unexpected CreateSender details: %+v", details)
 			}
 			state := emailsdk.Sender{CompartmentId: details.CompartmentId, EmailAddress: details.EmailAddress,
-				Id: common.String(mockSenderID), IsSpf: common.Bool(true), LifecycleState: emailsdk.SenderLifecycleStateActive,
+				Id: common.String(mockSenderID), IsSpf: common.Bool(true), LifecycleState: emailsdk.SenderLifecycleStateCreating,
 				TimeCreated: &createdAt, FreeformTags: details.FreeformTags}
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},
-		Read: func(_ ocimock.Request, state emailsdk.Sender) (ocimock.Response, error) {
-			return ocimock.JSONResponse(http.StatusOK, state)
+		ReadTransition: func(_ ocimock.Request, state emailsdk.Sender) (emailsdk.Sender, ocimock.Response, error) {
+			switch state.LifecycleState {
+			case emailsdk.SenderLifecycleStateCreating:
+				if createRead {
+					state.LifecycleState = emailsdk.SenderLifecycleStateActive
+				} else {
+					createRead = true
+				}
+			case emailsdk.SenderLifecycleStateDeleting:
+				if deleteRead {
+					state.LifecycleState = emailsdk.SenderLifecycleStateDeleted
+				} else {
+					deleteRead = true
+				}
+			}
+			response, err := ocimock.JSONResponse(http.StatusOK, state)
+			return state, response, err
 		},
 		Update: func(request ocimock.Request, state emailsdk.Sender) (emailsdk.Sender, ocimock.Response, error) {
 			var details emailsdk.UpdateSenderDetails
@@ -122,8 +139,9 @@ func newSenderMockResponder(resource *emailv1beta1.Sender) (*ocimock.CRUDRespond
 			response, err := ocimock.JSONResponse(http.StatusOK, state)
 			return state, response, err
 		},
-		Delete: func(_ ocimock.Request, _ emailsdk.Sender) (ocimock.Response, error) {
-			return ocimock.EmptyResponse(http.StatusNoContent), nil
+		DeleteTransition: func(_ ocimock.Request, state emailsdk.Sender) (emailsdk.Sender, ocimock.Response, error) {
+			state.LifecycleState = emailsdk.SenderLifecycleStateDeleting
+			return state, ocimock.EmptyResponse(http.StatusNoContent), nil
 		},
 	})
 }
