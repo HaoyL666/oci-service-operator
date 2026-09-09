@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -36,7 +36,7 @@ func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
     "returnCode": 200,
     "timeoutInMillis": 3000
   },
-  "name": "osok_replay_backend_set_v1",
+  "name": "osok_mock_backend_set_v1",
   "policy": "ROUND_ROBIN"
 }`)
 	resource.Spec.LoadBalancerId = "<ocid:1>"
@@ -81,7 +81,7 @@ func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
     "returnCode": 200,
     "timeoutInMillis": 3000
   },
-  "name": "osok_replay_backend_set_v1",
+  "name": "osok_mock_backend_set_v1",
   "policy": "ROUND_ROBIN"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loadbalancersdk.BackendSet](t, `{
@@ -113,7 +113,7 @@ func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
   },
   "keepAliveTimeoutInSeconds": null,
   "lbCookieSessionPersistenceConfiguration": null,
-  "name": "osok_replay_backend_set_v1",
+  "name": "osok_mock_backend_set_v1",
   "policy": "ROUND_ROBIN",
   "sessionPersistenceConfiguration": null,
   "sslConfiguration": null
@@ -148,7 +148,7 @@ func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
   },
   "keepAliveTimeoutInSeconds": null,
   "lbCookieSessionPersistenceConfiguration": null,
-  "name": "osok_replay_backend_set_v1",
+  "name": "osok_mock_backend_set_v1",
   "policy": "ROUND_ROBIN",
   "sessionPersistenceConfiguration": null,
   "sslConfiguration": null
@@ -206,7 +206,7 @@ func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
   },
   "keepAliveTimeoutInSeconds": null,
   "lbCookieSessionPersistenceConfiguration": null,
-  "name": "osok_replay_backend_set_v1",
+  "name": "osok_mock_backend_set_v1",
   "policy": "ROUND_ROBIN",
   "sessionPersistenceConfiguration": null,
   "sslConfiguration": null
@@ -241,7 +241,7 @@ func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
   },
   "keepAliveTimeoutInSeconds": null,
   "lbCookieSessionPersistenceConfiguration": null,
-  "name": "osok_replay_backend_set_v1",
+  "name": "osok_mock_backend_set_v1",
   "policy": "ROUND_ROBIN",
   "sessionPersistenceConfiguration": null,
   "sslConfiguration": null
@@ -277,7 +277,7 @@ func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
   },
   "keepAliveTimeoutInSeconds": null,
   "lbCookieSessionPersistenceConfiguration": null,
-  "name": "osok_replay_backend_set_v1",
+  "name": "osok_mock_backend_set_v1",
   "policy": "ROUND_ROBIN",
   "sessionPersistenceConfiguration": null,
   "sslConfiguration": null
@@ -289,7 +289,7 @@ func TestMockIntegrationBackendSetCompositeCRUD(t *testing.T) {
 		loadbalancersdk.UpdateBackendSetDetails,
 	]{
 		CollectionPath:    "/20170115/loadBalancers/<ocid:1>/backendSets",
-		ItemPath:          "/20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set_v1",
+		ItemPath:          "/20170115/loadBalancers/<ocid:1>/backendSets/osok_mock_backend_set_v1",
 		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,

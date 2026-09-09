@@ -170,7 +170,7 @@ func (f *fakeGeneratedBackendSetOCIClient) ensureMaps() {
 func TestBackendSetRuntimeSemanticsUsesGeneratedWorkRequests(t *testing.T) {
 	t.Parallel()
 
-	got := newBackendSetRuntimeSemantics()
+	got := reviewedBackendSetRuntimeSemantics()
 	if got.FormalService != "networkloadbalancer" || got.FormalSlug != "backendset" {
 		t.Fatalf("formal identity = %s/%s, want networkloadbalancer/backendset", got.FormalService, got.FormalSlug)
 	}

@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,11 +22,11 @@ func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
   "items": [
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "created"
     }
   ],
-  "name": "osok_replay_rule_set"
+  "name": "osok_mock_rule_set"
 }`)
 	resource.Spec.LoadBalancerId = "<ocid:1>"
 	updatedSpec := resource.Spec
@@ -34,7 +34,7 @@ func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
   "items": [
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "updated"
     }
   ]
@@ -43,22 +43,22 @@ func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
   "items": [
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "created"
     }
   ],
-  "name": "osok_replay_rule_set"
+  "name": "osok_mock_rule_set"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loadbalancersdk.RuleSet](t, `{
   "items": [
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
       "conditions": null,
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "created"
     }
   ],
-  "name": "osok_replay_rule_set"
+  "name": "osok_mock_rule_set"
 }`)
 	createdReadStates := []loadbalancersdk.RuleSet{
 		ocimock.MustOCIResponseFixture[loadbalancersdk.RuleSet](t, `{
@@ -66,18 +66,18 @@ func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
       "conditions": null,
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "created"
     }
   ],
-  "name": "osok_replay_rule_set"
+  "name": "osok_mock_rule_set"
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[loadbalancersdk.UpdateRuleSetDetails](t, `{
   "items": [
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "updated"
     }
   ]
@@ -87,11 +87,11 @@ func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
       "conditions": null,
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "updated"
     }
   ],
-  "name": "osok_replay_rule_set"
+  "name": "osok_mock_rule_set"
 }`)
 	updatedReadStates := []loadbalancersdk.RuleSet{
 		ocimock.MustOCIResponseFixture[loadbalancersdk.RuleSet](t, `{
@@ -99,11 +99,11 @@ func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
       "conditions": null,
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "updated"
     }
   ],
-  "name": "osok_replay_rule_set"
+  "name": "osok_mock_rule_set"
 }`),
 	}
 	deletedReadStates := []loadbalancersdk.RuleSet{
@@ -112,11 +112,11 @@ func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
     {
       "action": "ADD_HTTP_REQUEST_HEADER",
       "conditions": null,
-      "header": "x-osok-replay",
+      "header": "x-osok-mock",
       "value": "updated"
     }
   ],
-  "name": "osok_replay_rule_set"
+  "name": "osok_mock_rule_set"
 }`),
 	}
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
@@ -125,7 +125,7 @@ func TestMockIntegrationRuleSetCompositeCRUD(t *testing.T) {
 		loadbalancersdk.UpdateRuleSetDetails,
 	]{
 		CollectionPath:     "/20170115/loadBalancers/<ocid:1>/ruleSets",
-		ItemPath:           "/20170115/loadBalancers/<ocid:1>/ruleSets/osok_replay_rule_set",
+		ItemPath:           "/20170115/loadBalancers/<ocid:1>/ruleSets/osok_mock_rule_set",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:      &createRequest,
 		CreatedState:       &createdState,

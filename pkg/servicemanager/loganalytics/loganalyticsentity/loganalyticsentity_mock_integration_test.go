@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,27 +23,27 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "compartmentId": "\u003cocid:1\u003e",
   "entityTypeName": "Palo Alto Networks",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
-  "hostname": "osok-replay-create.example.com",
-  "name": "osok-replay-log-analytics-entity",
+  "hostname": "osok-mock-create.example.com",
+  "name": "osok-mock-log-analytics-entity",
   "timezoneRegion": "UTC"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
-  "hostname": "osok-replay-update.example.com"
+  "hostname": "osok-mock-update.example.com"
 }`)
 	createRequest := ocimock.MustJSONFixture[loganalyticssdk.CreateLogAnalyticsEntityDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "entityTypeName": "Palo Alto Networks",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
-  "hostname": "osok-replay-create.example.com",
-  "name": "osok-replay-log-analytics-entity",
+  "hostname": "osok-mock-create.example.com",
+  "name": "osok-mock-log-analytics-entity",
   "timezoneRegion": "UTC"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loganalyticssdk.LogAnalyticsEntity](t, `{
@@ -61,9 +61,9 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "entityTypeInternalName": "oci_palo_alto",
   "entityTypeName": "Palo Alto Networks",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
-  "hostname": "osok-replay-create.example.com",
+  "hostname": "osok-mock-create.example.com",
   "id": "<ocid:2>",
   "lifecycleDetails": "READY",
   "lifecycleState": "ACTIVE",
@@ -73,7 +73,7 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "metadata": {
     "items": []
   },
-  "name": "osok-replay-log-analytics-entity",
+  "name": "osok-mock-log-analytics-entity",
   "properties": {},
   "sourceId": null,
   "timeCreated": "2026-09-02T04:02:44.150Z",
@@ -97,9 +97,9 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "entityTypeInternalName": "oci_palo_alto",
   "entityTypeName": "Palo Alto Networks",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
-  "hostname": "osok-replay-create.example.com",
+  "hostname": "osok-mock-create.example.com",
   "id": "<ocid:2>",
   "lifecycleDetails": "READY",
   "lifecycleState": "ACTIVE",
@@ -109,7 +109,7 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "metadata": {
     "items": []
   },
-  "name": "osok-replay-log-analytics-entity",
+  "name": "osok-mock-log-analytics-entity",
   "properties": {},
   "sourceId": null,
   "timeCreated": "2026-09-02T04:02:44.150Z",
@@ -120,9 +120,9 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
 	}
 	updateRequest := ocimock.MustJSONFixture[loganalyticssdk.UpdateLogAnalyticsEntityDetails](t, `{
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
-  "hostname": "osok-replay-update.example.com"
+  "hostname": "osok-mock-update.example.com"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[loganalyticssdk.LogAnalyticsEntity](t, `{
   "areLogsCollected": false,
@@ -139,9 +139,9 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "entityTypeInternalName": "oci_palo_alto",
   "entityTypeName": "Palo Alto Networks",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
-  "hostname": "osok-replay-update.example.com",
+  "hostname": "osok-mock-update.example.com",
   "id": "<ocid:2>",
   "lifecycleDetails": "READY",
   "lifecycleState": "ACTIVE",
@@ -151,7 +151,7 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "metadata": {
     "items": []
   },
-  "name": "osok-replay-log-analytics-entity",
+  "name": "osok-mock-log-analytics-entity",
   "properties": {},
   "sourceId": null,
   "timeCreated": "2026-09-02T04:02:44.150Z",
@@ -175,9 +175,9 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "entityTypeInternalName": "oci_palo_alto",
   "entityTypeName": "Palo Alto Networks",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
-  "hostname": "osok-replay-update.example.com",
+  "hostname": "osok-mock-update.example.com",
   "id": "<ocid:2>",
   "lifecycleDetails": "READY",
   "lifecycleState": "ACTIVE",
@@ -187,7 +187,7 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "metadata": {
     "items": []
   },
-  "name": "osok-replay-log-analytics-entity",
+  "name": "osok-mock-log-analytics-entity",
   "properties": {},
   "sourceId": null,
   "timeCreated": "2026-09-02T04:02:44.150Z",
@@ -212,9 +212,9 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "entityTypeInternalName": "oci_palo_alto",
   "entityTypeName": "Palo Alto Networks",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
-  "hostname": "osok-replay-update.example.com",
+  "hostname": "osok-mock-update.example.com",
   "id": "<ocid:2>",
   "lifecycleDetails": "READY",
   "lifecycleState": "DELETED",
@@ -224,7 +224,7 @@ func TestMockIntegrationLogAnalyticsEntityCompositeCRUD(t *testing.T) {
   "metadata": {
     "items": []
   },
-  "name": "osok-replay-log-analytics-entity",
+  "name": "osok-mock-log-analytics-entity",
   "properties": {},
   "sourceId": null,
   "timeCreated": "2026-09-02T04:02:44.150Z",

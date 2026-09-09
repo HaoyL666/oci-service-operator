@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,9 +23,9 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
   "action": "START_RESOURCE",
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-resource-schedule-v1",
+  "displayName": "osok-mock-resource-schedule-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "recurrenceDetails": "FREQ=DAILY;INTERVAL=1",
   "recurrenceType": "ICAL",
@@ -42,7 +42,7 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "resourceFilters": [],
   "resources": [
@@ -56,9 +56,9 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
   "action": "START_RESOURCE",
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-resource-schedule-v1",
+  "displayName": "osok-mock-resource-schedule-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "recurrenceDetails": "FREQ=DAILY;INTERVAL=1",
   "recurrenceType": "ICAL",
@@ -81,9 +81,9 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-resource-schedule-v1",
+  "displayName": "osok-mock-resource-schedule-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:4>",
   "lastRunStatus": null,
@@ -94,7 +94,7 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
     "compartmentId": "<ocid:1>",
     "definedTags": null,
     "description": "recorded create",
-    "displayName": "osok-replay-resource-schedule-v1",
+    "displayName": "osok-mock-resource-schedule-v1",
     "freeformTags": null,
     "id": "<ocid:4>",
     "lastRunStatus": null,
@@ -140,7 +140,7 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[resourceschedulersdk.UpdateScheduleDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "resourceFilters": [],
   "resources": [
@@ -160,9 +160,9 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-resource-schedule-v1",
+  "displayName": "osok-mock-resource-schedule-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:4>",
   "lastRunStatus": null,
@@ -173,7 +173,7 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
     "compartmentId": "<ocid:1>",
     "definedTags": null,
     "description": "recorded create",
-    "displayName": "osok-replay-resource-schedule-v1",
+    "displayName": "osok-mock-resource-schedule-v1",
     "freeformTags": null,
     "id": "<ocid:4>",
     "lastRunStatus": null,
@@ -226,9 +226,9 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-resource-schedule-v1",
+  "displayName": "osok-mock-resource-schedule-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:4>",
   "lastRunStatus": null,
@@ -239,7 +239,7 @@ func TestMockIntegrationScheduleEvidenceCRUD(t *testing.T) {
     "compartmentId": "<ocid:1>",
     "definedTags": null,
     "description": "recorded create",
-    "displayName": "osok-replay-resource-schedule-v1",
+    "displayName": "osok-mock-resource-schedule-v1",
     "freeformTags": null,
     "id": "<ocid:4>",
     "lastRunStatus": null,

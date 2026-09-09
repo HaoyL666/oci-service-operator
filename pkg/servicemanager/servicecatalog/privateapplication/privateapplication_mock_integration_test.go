@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationPrivateApplicationLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 

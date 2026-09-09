@@ -24,7 +24,7 @@ import (
 const mockVcnID = "ocid1.vcn.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/vcn_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/core/vcn and formal/imports/core/vcn.json
 //   - resource runtime: vcn_runtime.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/core

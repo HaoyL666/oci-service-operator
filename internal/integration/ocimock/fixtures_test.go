@@ -20,6 +20,15 @@ type explicitFixture struct {
 	Tags  map[string]string `json:"tags,omitempty"`
 }
 
+func TestStateSequencePreservesOrder(t *testing.T) {
+	t.Parallel()
+
+	states := StateSequence("CREATING", "ACTIVE")
+	if len(states) != 2 || states[0] != "CREATING" || states[1] != "ACTIVE" {
+		t.Fatalf("StateSequence() = %v", states)
+	}
+}
+
 func TestMustJSONFixtureReturnsExplicitType(t *testing.T) {
 	t.Parallel()
 	fixture := MustJSONFixture[explicitFixture](t, "{\"name\":\"typed\",\"count\":2}")
@@ -43,6 +52,24 @@ func TestValidateJSONRequestComparesCompleteTypedValue(t *testing.T) {
 	}
 }
 
+func TestCompareJSONSubsetChecksDeclaredFieldsAndAllowsAdditionalFields(t *testing.T) {
+	t.Parallel()
+	type requestFixture struct {
+		Name    *string `json:"name,omitempty"`
+		Enabled *bool   `json:"enabled,omitempty"`
+	}
+	name := "typed"
+	enabled := false
+	actual := requestFixture{Name: &name, Enabled: &enabled}
+	if err := CompareJSONSubset(actual, requestFixture{Name: &name}); err != nil {
+		t.Fatal(err)
+	}
+	other := "other"
+	if err := CompareJSONSubset(actual, requestFixture{Name: &other}); err == nil {
+		t.Fatal("CompareJSONSubset() error = nil, want declared-field mismatch")
+	}
+}
+
 func TestValidateRetryTokenMatchesResourceUID(t *testing.T) {
 	resource := &metav1.PartialObjectMetadata{ObjectMeta: metav1.ObjectMeta{UID: types.UID("stable-resource-uid")}}
 	request := Request{Method: http.MethodPost, URL: &url.URL{Path: "/resources"}, Header: http.Header{"Opc-Retry-Token": []string{"stable-resource-uid"}}}
@@ -63,6 +90,21 @@ func TestValidateRetryTokenRejectsMissingOrDifferentUID(t *testing.T) {
 	request.Header.Set("opc-retry-token", "different-uid")
 	if err := ValidateRetryToken(request, resource); err == nil {
 		t.Fatal("expected different retry token to fail")
+	}
+}
+
+func TestValidateRetryTokenValueSupportsPackageOwnedDeterministicTokens(t *testing.T) {
+	t.Parallel()
+
+	request := Request{Method: http.MethodPost, URL: &url.URL{Path: "/resources"}, Header: http.Header{"Opc-Retry-Token": []string{"scoped-token"}}}
+	if err := ValidateRetryTokenValue(request, "scoped-token"); err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateRetryTokenValue(request, ""); err == nil {
+		t.Fatal("expected empty deterministic token to fail")
+	}
+	if err := ValidateRetryTokenValue(request, "other-token"); err == nil {
+		t.Fatal("expected different deterministic token to fail")
 	}
 }
 
@@ -95,6 +137,20 @@ func TestValidateDiscriminatedJSONRequestUsesConcreteDetails(t *testing.T) {
 		Body:   []byte("{\"type\":\"NAMED\",\"name\":\"typed\",\"count\":2}"),
 	}
 	if err := ValidateDiscriminatedJSONRequest(request, "type", "NAMED", explicitFixture{Name: "typed", Count: 2}); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestValidateDiscriminatedJSONRequestSubsetAllowsAdditionalConcreteFields(t *testing.T) {
+	t.Parallel()
+	request := Request{
+		Method: http.MethodPost,
+		URL:    mustTestURL(t, "https://mock.invalid/things"),
+		Body:   []byte("{\"type\":\"NAMED\",\"name\":\"typed\",\"count\":2}"),
+	}
+	if err := ValidateDiscriminatedJSONRequestSubset(request, "type", "NAMED", struct {
+		Name string `json:"name"`
+	}{Name: "typed"}); err != nil {
 		t.Fatal(err)
 	}
 }

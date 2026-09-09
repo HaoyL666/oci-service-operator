@@ -376,6 +376,70 @@ notes:
 	}
 }
 
+func TestValidateRepoAuthoredOperationsRejectsUnknownOrMissingPrimaryByPhase(t *testing.T) {
+	t.Parallel()
+
+	imported := []operationBinding{
+		{Operation: "CreateTemplate"},
+		{Operation: "ImportTemplate"},
+	}
+	for _, tc := range []struct {
+		name   string
+		subset []string
+		want   string
+	}{
+		{
+			name:   "unknown",
+			subset: []string{"CreateTemplate", "LaunchTemplate"},
+			want:   `repoAuthored.operations.create[1]="LaunchTemplate" is not present in imported create operations`,
+		},
+		{
+			name:   "missing primary",
+			subset: []string{"ImportTemplate"},
+			want:   `repoAuthored.operations.create must include primary create operation "CreateTemplate"`,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			diagram := diagramSpec{
+				Kind: "Template",
+				RepoAuthored: &diagramRepoAuthoredSemantics{
+					Operations: &diagramOperationSemantics{Create: tc.subset},
+				},
+			}
+			problems := validateRepoAuthoredOperations("runtime-lifecycle.yaml", diagram, "create", imported)
+			if !containsProblem(problems, tc.want) {
+				t.Fatalf("problems = %#v, want %q", problems, tc.want)
+			}
+		})
+	}
+}
+
+func TestValidateRepoAuthoredOperationsAllowsEmptySubsetWithoutImportedPrimary(t *testing.T) {
+	t.Parallel()
+
+	diagram := diagramSpec{
+		Kind: "Template",
+		RepoAuthored: &diagramRepoAuthoredSemantics{
+			Operations: &diagramOperationSemantics{Delete: []string{}},
+		},
+	}
+	imported := []operationBinding{{Operation: "ScheduleTemplateDeletion"}}
+	if problems := validateRepoAuthoredOperations("runtime-lifecycle.yaml", diagram, "delete", imported); len(problems) != 0 {
+		t.Fatalf("problems = %#v, want explicit provider-only delete exclusion to be valid", problems)
+	}
+}
+
+func containsProblem(problems []string, want string) bool {
+	for _, problem := range problems {
+		if strings.Contains(problem, want) {
+			return true
+		}
+	}
+	return false
+}
+
 func TestVerifyRejectsMissingRenderedDiagramArtifacts(t *testing.T) {
 	root := writeScaffold(t)
 	if err := os.Remove(filepath.Join(root, "controllers", "template", "diagrams", "sequence.svg")); err != nil {

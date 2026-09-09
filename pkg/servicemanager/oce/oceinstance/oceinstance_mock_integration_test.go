@@ -16,7 +16,7 @@ import (
 )
 
 // Contract evidence: vendored OCI SDK, production service manager, reviewed
-// formal lifecycle, and the existing sanitized OCI replay fixture.
+// formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationOceInstanceWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &ocev1beta1.OceInstance{}

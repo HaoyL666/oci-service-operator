@@ -22,7 +22,7 @@ import (
 
 const mockCarbonQueryID = "ocid1.usagecarbonemissionsquery.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, reviewed formal state-free contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, reviewed formal state-free contract, and vendored OCI SDK.
 func TestMockIntegrationUsageCarbonEmissionsQueryLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	const tenancyID = "ocid1.tenancy.oc1..mock"
@@ -81,6 +81,10 @@ func newCarbonQueryMockResponder(resource *usageapiv1beta1.UsageCarbonEmissionsQ
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []usageapisdk.UsageCarbonEmissionsQuery{state}})
 		},
 		Create: func(request ocimock.Request) (usageapisdk.UsageCarbonEmissionsQuery, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero usageapisdk.UsageCarbonEmissionsQuery
+				return zero, ocimock.Response{}, err
+			}
 			var details usageapisdk.CreateUsageCarbonEmissionsQueryDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return usageapisdk.UsageCarbonEmissionsQuery{}, ocimock.Response{}, err

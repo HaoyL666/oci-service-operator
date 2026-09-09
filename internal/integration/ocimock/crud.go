@@ -30,6 +30,10 @@ const (
 type CRUDOptions[S any] struct {
 	CollectionPath         string
 	ItemPath               string
+	CreatePath             string
+	CreateMethod           string
+	UpdatePath             string
+	UpdateMethod           string
 	DeletePath             string
 	DeleteMethod           string
 	ExpectedOperations     []Operation
@@ -89,7 +93,18 @@ type CRUDResponder[S any] struct {
 func NewCRUDResponder[S any](options CRUDOptions[S]) (*CRUDResponder[S], error) {
 	options.CollectionPath = normalizePath(options.CollectionPath)
 	options.ItemPath = normalizePath(options.ItemPath)
+	options.CreatePath = normalizePath(options.CreatePath)
+	options.UpdatePath = normalizePath(options.UpdatePath)
 	options.DeletePath = normalizePath(options.DeletePath)
+	if options.CreatePath == "" {
+		options.CreatePath = options.CollectionPath
+	}
+	if options.CreateMethod == "" {
+		options.CreateMethod = http.MethodPost
+	}
+	if options.UpdatePath == "" {
+		options.UpdatePath = options.ItemPath
+	}
 	if options.DeletePath == "" {
 		options.DeletePath = options.ItemPath
 	}
@@ -175,7 +190,7 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 			return Response{}, fmt.Errorf("OCI mock CRUD list handler is not configured for %s", requestPath)
 		}
 		return r.options.List(request, r.present, r.state)
-	case request.Method == http.MethodPost && requestPath == r.options.CollectionPath:
+	case request.Method == r.options.CreateMethod && requestPath == r.options.CreatePath && !r.present:
 		r.operations[OperationCreate]++
 		if r.options.Create == nil {
 			return Response{}, fmt.Errorf("OCI mock CRUD create handler is not configured for %s", requestPath)
@@ -192,6 +207,9 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 			r.deleted = false
 		}
 		return response, err
+	case request.Method == r.options.CreateMethod && requestPath == r.options.CreatePath &&
+		!(requestPath == r.options.UpdatePath && updateMethodMatches(r.options.UpdateMethod, request.Method)):
+		return Response{}, fmt.Errorf("OCI mock CRUD resource already exists at %s", r.options.ItemPath)
 	case request.Method == http.MethodGet && requestPath == r.options.ItemPath:
 		r.operations[OperationRead]++
 		if !r.present {
@@ -228,7 +246,7 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 			return Response{}, fmt.Errorf("OCI mock CRUD read handler is not configured for %s", requestPath)
 		}
 		return r.options.Read(request, r.state)
-	case (request.Method == http.MethodPut || request.Method == http.MethodPatch || request.Method == http.MethodPost) && requestPath == r.options.ItemPath:
+	case updateMethodMatches(r.options.UpdateMethod, request.Method) && requestPath == r.options.UpdatePath:
 		r.operations[OperationUpdate]++
 		if !r.present {
 			return r.notFound(request)
@@ -269,6 +287,17 @@ func (r *CRUDResponder[S]) Respond(request Request) (Response, error) {
 	default:
 		return Response{}, fmt.Errorf("OCI mock CRUD has no route for %s %s", request.Method, request.URL.String())
 	}
+}
+
+func isUpdateMethod(method string) bool {
+	return method == http.MethodPut || method == http.MethodPatch || method == http.MethodPost
+}
+
+func updateMethodMatches(configured, actual string) bool {
+	if configured != "" {
+		return actual == configured
+	}
+	return isUpdateMethod(actual)
 }
 
 func (r *CRUDResponder[S]) readPhase() ReadPhase {

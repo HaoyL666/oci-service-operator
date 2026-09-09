@@ -22,7 +22,7 @@ import (
 
 const mockCompartmentID = "ocid1.compartment.oc1..mock-child"
 
-// Contract evidence: the recorded OCI trace, formal best-effort delete contract, orphan-delete wrapper, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal best-effort delete contract, orphan-delete wrapper, and vendored OCI SDK.
 func TestMockIntegrationCompartmentLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &identityv1beta1.Compartment{ObjectMeta: metav1.ObjectMeta{Name: "mock-compartment", Namespace: "default", UID: types.UID("mock-compartment-uid")}, Spec: identityv1beta1.CompartmentSpec{
@@ -37,7 +37,7 @@ func TestMockIntegrationCompartmentLifecycleCRUD(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { _ = session.Close() })
-	client := newRecordedCompartmentClient(identitysdk.IdentityClient{BaseClient: session.BaseClient()})
+	client := newMockCompartmentClient(identitysdk.IdentityClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*identityv1beta1.Compartment]{
 		Resource: resource, Client: client,
 		ValidateCreated: func(current *identityv1beta1.Compartment) error {
@@ -83,6 +83,10 @@ func newCompartmentMockResponder(resource *identityv1beta1.Compartment) (*ocimoc
 			return ocimock.JSONResponse(http.StatusOK, []identitysdk.Compartment{state})
 		},
 		Create: func(request ocimock.Request) (identitysdk.Compartment, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero identitysdk.Compartment
+				return zero, ocimock.Response{}, err
+			}
 			var details identitysdk.CreateCompartmentDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return identitysdk.Compartment{}, ocimock.Response{}, err

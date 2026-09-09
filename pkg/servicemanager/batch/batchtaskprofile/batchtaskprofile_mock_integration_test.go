@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationBatchTaskProfileEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,9 +23,9 @@ func TestMockIntegrationBatchTaskProfileEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[batchv1beta1.BatchTaskProfileSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-batch-task-profile-v3",
+  "displayName": "osok-mock-batch-task-profile-v3",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "minMemoryInGBs": 1,
   "minOcpus": 1
@@ -34,15 +34,15 @@ func TestMockIntegrationBatchTaskProfileEvidenceCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[batchsdk.CreateBatchTaskProfileDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-batch-task-profile-v3",
+  "displayName": "osok-mock-batch-task-profile-v3",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "minMemoryInGBs": 1,
   "minOcpus": 1
@@ -56,10 +56,10 @@ func TestMockIntegrationBatchTaskProfileEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-batch-task-profile-v3",
+  "displayName": "osok-mock-batch-task-profile-v3",
   "extendedInformation": null,
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -73,7 +73,7 @@ func TestMockIntegrationBatchTaskProfileEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[batchsdk.UpdateBatchTaskProfileDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[batchsdk.BatchTaskProfile](t, `{
@@ -85,10 +85,10 @@ func TestMockIntegrationBatchTaskProfileEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-batch-task-profile-v3",
+  "displayName": "osok-mock-batch-task-profile-v3",
   "extendedInformation": null,
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -108,10 +108,10 @@ func TestMockIntegrationBatchTaskProfileEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-batch-task-profile-v3",
+  "displayName": "osok-mock-batch-task-profile-v3",
   "extendedInformation": null,
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETED",

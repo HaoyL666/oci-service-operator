@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationPrivilegedApiControlWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -297,7 +297,7 @@ func TestMockIntegrationPrivilegedApiControlWorkRequestCRUD(t *testing.T) {
 	t.Cleanup(func() { _ = session.Close() })
 	log := loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}
 	base := session.BaseClient()
-	sdkClient := syntheticPrivilegedApiControlClient{
+	sdkClient := mockPrivilegedApiControlClient{
 		PrivilegedApiControlClient:     apiaccesscontrolsdk.PrivilegedApiControlClient{BaseClient: base},
 		PrivilegedApiWorkRequestClient: apiaccesscontrolsdk.PrivilegedApiWorkRequestClient{BaseClient: base},
 	}

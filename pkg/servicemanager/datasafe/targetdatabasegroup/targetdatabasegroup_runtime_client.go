@@ -35,11 +35,11 @@ func applyTargetDatabaseGroupRuntimeHooks(hooks *TargetDatabaseGroupRuntimeHooks
 	if hooks == nil {
 		return
 	}
-	hooks.Semantics = newTargetDatabaseGroupRuntimeSemantics()
+	hooks.Semantics = reviewedTargetDatabaseGroupRuntimeSemantics()
 	runtimecommon.ConfigureWorkRequest(&hooks.Async, client, initErr, "TargetDatabaseGroup")
 }
 
-func newTargetDatabaseGroupRuntimeSemantics() *generatedruntime.Semantics {
+func reviewedTargetDatabaseGroupRuntimeSemantics() *generatedruntime.Semantics {
 	return &generatedruntime.Semantics{
 		FormalService: "datasafe",
 		FormalSlug:    "targetdatabasegroup",

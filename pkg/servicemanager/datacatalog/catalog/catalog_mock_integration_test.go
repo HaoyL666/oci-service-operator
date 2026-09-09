@@ -22,7 +22,7 @@ import (
 const mockCatalogID = "ocid1.datacatalog.oc1..mock"
 
 // Contract evidence:
-//   - synthetic OCI trace: testdata/recordings/catalog_synthetic_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/datacatalog/catalog and formal/imports/datacatalog/catalog.json
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/datacatalog
 func TestMockIntegrationCatalogLifecycleCRUD(t *testing.T) {

@@ -94,7 +94,9 @@ type diagramMutationSemantics struct {
 }
 
 type diagramOperationSemantics struct {
+	Create []string `yaml:"create,omitempty"`
 	Update []string `yaml:"update,omitempty"`
+	Delete []string `yaml:"delete,omitempty"`
 }
 
 type diagramHookSemantics struct {

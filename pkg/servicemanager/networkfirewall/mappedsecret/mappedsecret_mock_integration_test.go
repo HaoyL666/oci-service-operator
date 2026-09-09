@@ -13,7 +13,7 @@ import (
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 )
 
-// Explicit typed service-manager lifecycle; replay evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; mock evidence is authoring reference only.
 func TestMockIntegrationMappedSecretCompositeCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &networkfirewallv1beta1.MappedSecret{}
@@ -58,6 +58,9 @@ func TestMockIntegrationMappedSecretCompositeCRUD(t *testing.T) {
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotAuthorizedOrNotFound",
 		ValidateCreateRaw: func(request ocimock.Request) error {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				return err
+			}
 			return ocimock.ValidateDiscriminatedJSONRequest(request, "source", "OCI_VAULT", createRequest)
 		},
 		ValidateUpdateRaw: func(request ocimock.Request) error {

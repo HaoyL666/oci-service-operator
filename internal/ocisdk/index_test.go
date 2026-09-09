@@ -304,6 +304,21 @@ func TestIndexLoadsPolymorphicInterfaceFamilies(t *testing.T) {
 				}
 			},
 		},
+		{
+			name:       "fleetsoftwareupdate.FsuGoalVersionDetails",
+			importPath: "github.com/oracle/oci-go-sdk/v65/fleetsoftwareupdate",
+			typeName:   "FsuGoalVersionDetails",
+			assert: func(t *testing.T, family InterfaceFamily) {
+				version := findStruct(t, family.Implementations, "VersionFsuTargetDetails")
+				if field := findField(t, version.Fields, "Version"); !field.Mandatory {
+					t.Fatal("VersionFsuTargetDetails.Version should be mandatory")
+				}
+				exadb := findStruct(t, family.Implementations, "ExadbStackFsuGoalVersionDetails")
+				if field := findField(t, exadb.Fields, "Components"); !field.Mandatory {
+					t.Fatal("ExadbStackFsuGoalVersionDetails.Components should be mandatory")
+				}
+			},
+		},
 	}
 
 	for _, tt := range tests {

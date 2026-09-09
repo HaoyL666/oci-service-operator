@@ -118,13 +118,20 @@ generator specializes those controller-local diagrams from the shared
 `spec.cfg`, repo-authored runtime metadata, and imported provider facts derived
 from the public `terraform-provider-oci` behavior.
 
-When the provider exposes update operations that the published runtime does not
-use, `runtime-lifecycle.yaml` may declare
-`repoAuthored.operations.update` as the effective operation subset. Every entry
-must name an imported provider update operation. Omitting the subset preserves
-all imported update operations. An explicit subset must retain the generator's
-primary update operation and may remove only unused auxiliary operations; the
-validated subset drives both formal diagrams and generated runtime semantics.
+When the provider exposes create, update, or delete operations that are not
+delegated to the generated runtime core, `runtime-lifecycle.yaml` may declare
+the matching `repoAuthored.operations.create`, `update`, or `delete` effective
+operation subset. This includes unused provider operations and operations that
+a package-local wrapper handles separately. Every entry must name an imported
+provider operation for that phase. Omitting a phase subset preserves all
+imported operations. An explicit subset must retain the generator's primary
+operation when that primary is present in the provider import; an explicit
+empty subset may exclude a provider-only phase whose primary runtime operation
+comes from the vendored SDK instead. Package-local handled operations belong in
+`repoAuthored.hooks`, notes, and package tests rather than the generated
+runtime's unsupported auxiliary-operation list. The validated subsets drive
+generated runtime semantics, and the update subset also drives formal mutation
+diagrams.
 
 `formal/` is controller-scoped, not service-scoped. The steady-state target is
 one manifest row plus sibling `controllers/<service>/<slug>/...` and

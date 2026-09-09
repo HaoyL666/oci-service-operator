@@ -12,17 +12,17 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationNetworkFirewallLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
-	resource := &networkfirewallv1beta1.NetworkFirewall{Spec: networkfirewallv1beta1.NetworkFirewallSpec{CompartmentId: "ocid1.compartment.oc1..replay", SubnetId: "ocid1.subnet.oc1..replay", NetworkFirewallPolicyId: "ocid1.networkfirewallpolicy.oc1..replay", DisplayName: "osok-replay-network-firewall", Shape: "NETWORK_FIREWALL_SMALL", FreeformTags: map[string]string{"osok-replay": "create"}}}
+	resource := &networkfirewallv1beta1.NetworkFirewall{Spec: networkfirewallv1beta1.NetworkFirewallSpec{CompartmentId: "ocid1.compartment.oc1..mock", SubnetId: "ocid1.subnet.oc1..mock", NetworkFirewallPolicyId: "ocid1.networkfirewallpolicy.oc1..mock", DisplayName: "osok-mock-network-firewall", Shape: "NETWORK_FIREWALL_SMALL", FreeformTags: map[string]string{"osok-mock": "create"}}}
 	ocimock.InitializeResource(resource, "mock-networkfirewall")
 	resource.Spec = ocimock.MustJSONFixture[networkfirewallv1beta1.NetworkFirewallSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-network-firewall",
+  "displayName": "osok-mock-network-firewall",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "networkFirewallPolicyId": "\u003cocid:2\u003e",
   "shape": "NETWORK_FIREWALL_SMALL",
@@ -30,16 +30,16 @@ func TestMockIntegrationNetworkFirewallLifecycleCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-network-firewall-updated",
+  "displayName": "osok-mock-network-firewall-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[networkfirewallsdk.CreateNetworkFirewallDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-network-firewall",
+  "displayName": "osok-mock-network-firewall",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "networkFirewallPolicyId": "\u003cocid:2\u003e",
   "shape": "NETWORK_FIREWALL_SMALL",
@@ -47,9 +47,9 @@ func TestMockIntegrationNetworkFirewallLifecycleCRUD(t *testing.T) {
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.NetworkFirewall](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-network-firewall",
+  "displayName": "osok-mock-network-firewall",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:5>",
   "lifecycleState": "ACTIVE",
@@ -58,16 +58,16 @@ func TestMockIntegrationNetworkFirewallLifecycleCRUD(t *testing.T) {
   "subnetId": "<ocid:3>"
 }`)
 	updateRequest := ocimock.MustJSONFixture[networkfirewallsdk.UpdateNetworkFirewallDetails](t, `{
-  "displayName": "osok-replay-network-firewall-updated",
+  "displayName": "osok-mock-network-firewall-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[networkfirewallsdk.NetworkFirewall](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-network-firewall-updated",
+  "displayName": "osok-mock-network-firewall-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:5>",
   "lifecycleState": "ACTIVE",
@@ -77,9 +77,9 @@ func TestMockIntegrationNetworkFirewallLifecycleCRUD(t *testing.T) {
 }`)
 	deletedState := ocimock.MustOCIResponseFixture[networkfirewallsdk.NetworkFirewall](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-network-firewall-updated",
+  "displayName": "osok-mock-network-firewall-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:5>",
   "lifecycleState": "DELETED",

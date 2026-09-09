@@ -116,6 +116,16 @@ func validateRuntimeUpdateOperationSubset(formalModel *FormalModel, runtime *Run
 	}
 
 	primary := strings.TrimSpace(runtime.Update.MethodName)
+	importedPrimary := false
+	for _, operation := range formalModel.Binding.Import.Operations.Update {
+		if strings.TrimSpace(operation.Operation) == primary {
+			importedPrimary = true
+			break
+		}
+	}
+	if !importedPrimary {
+		return nil
+	}
 	for _, operation := range subset {
 		if strings.TrimSpace(operation) == primary {
 			return nil
@@ -324,11 +334,11 @@ func buildAuxiliaryOperationModels(formalModel *FormalModel, runtime *RuntimeMod
 		}
 	}
 
-	appendPhase("create", binding.Import.Operations.Create)
+	appendPhase("create", formal.EffectiveRuntimeLifecycleCreateOperations(formalModel.RuntimeLifecycle, binding.Import.Operations.Create))
 	appendPhase("get", binding.Import.Operations.Get)
 	appendPhase("list", binding.Import.Operations.List)
 	appendPhase("update", formal.EffectiveRuntimeLifecycleUpdateOperations(formalModel.RuntimeLifecycle, binding.Import.Operations.Update))
-	appendPhase("delete", binding.Import.Operations.Delete)
+	appendPhase("delete", formal.EffectiveRuntimeLifecycleDeleteOperations(formalModel.RuntimeLifecycle, binding.Import.Operations.Delete))
 
 	sort.Slice(auxiliary, func(i, j int) bool {
 		if auxiliary[i].Phase != auxiliary[j].Phase {

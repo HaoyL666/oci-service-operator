@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationCustomProtectionRuleEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,9 +22,9 @@ func TestMockIntegrationCustomProtectionRuleEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[waasv1beta1.CustomProtectionRuleSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "blocks example input",
-  "displayName": "osok-replay-custom-protection-rule-v1",
+  "displayName": "osok-mock-custom-protection-rule-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "template": "SecRule REQUEST_HEADERS \"example\" \"id: {{id_1}}, ctl:ruleEngine={{mode}}\""
 }`)
@@ -32,15 +32,15 @@ func TestMockIntegrationCustomProtectionRuleEvidenceCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[waassdk.CreateCustomProtectionRuleDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "blocks example input",
-  "displayName": "osok-replay-custom-protection-rule-v1",
+  "displayName": "osok-mock-custom-protection-rule-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "template": "SecRule REQUEST_HEADERS \"example\" \"id: {{id_1}}, ctl:ruleEngine={{mode}}\""
 }`)
@@ -53,9 +53,9 @@ func TestMockIntegrationCustomProtectionRuleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "blocks example input",
-  "displayName": "osok-replay-custom-protection-rule-v1",
+  "displayName": "osok-mock-custom-protection-rule-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -68,7 +68,7 @@ func TestMockIntegrationCustomProtectionRuleEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[waassdk.UpdateCustomProtectionRuleDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[waassdk.CustomProtectionRule](t, `{
@@ -80,9 +80,9 @@ func TestMockIntegrationCustomProtectionRuleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-custom-protection-rule-v1",
+  "displayName": "osok-mock-custom-protection-rule-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -101,9 +101,9 @@ func TestMockIntegrationCustomProtectionRuleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-custom-protection-rule-v1",
+  "displayName": "osok-mock-custom-protection-rule-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETED",

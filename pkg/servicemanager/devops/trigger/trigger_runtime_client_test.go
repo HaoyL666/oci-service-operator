@@ -100,7 +100,7 @@ func (f *fakeTriggerOCIClient) GetWorkRequest(ctx context.Context, request devop
 func TestTriggerRuntimeSemanticsEncodesWorkRequestAndDeleteContracts(t *testing.T) {
 	t.Parallel()
 
-	got := newTriggerRuntimeSemantics()
+	got := reviewedTriggerRuntimeSemantics()
 	if got.FormalService != "devops" || got.FormalSlug != "trigger" {
 		t.Fatalf("formal identity = %s/%s, want devops/trigger", got.FormalService, got.FormalSlug)
 	}

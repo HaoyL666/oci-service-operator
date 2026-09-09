@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,14 +23,14 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-digitaltwinmodel")
 	resource.Spec = ocimock.MustJSONFixture[iotv1beta1.DigitalTwinModelSpec](t, `{
   "description": "OSOK recorded digital twin model",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "iotDomainId": "\u003cocid:1\u003e",
   "spec": {
     "@context": "dtmi:dtdl:context;3",
-    "@id": "dtmi:com:oracle:osok:ReplayLifecycleThermostat;1",
+    "@id": "dtmi:com:oracle:osok:MockLifecycleThermostat;1",
     "@type": "Interface",
     "contents": [
       {
@@ -39,27 +39,27 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
         "schema": "double"
       }
     ],
-    "displayName": "OSOK Replay Thermostat"
+    "displayName": "OSOK Mock Thermostat"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "OSOK recorded digital twin model updated",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[iotsdk.CreateDigitalTwinModelDetails](t, `{
   "description": "OSOK recorded digital twin model",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "iotDomainId": "\u003cocid:1\u003e",
   "spec": {
     "@context": "dtmi:dtdl:context;3",
-    "@id": "dtmi:com:oracle:osok:ReplayLifecycleThermostat;1",
+    "@id": "dtmi:com:oracle:osok:MockLifecycleThermostat;1",
     "@type": "Interface",
     "contents": [
       {
@@ -68,7 +68,7 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
         "schema": "double"
       }
     ],
-    "displayName": "OSOK Replay Thermostat"
+    "displayName": "OSOK Mock Thermostat"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[iotsdk.DigitalTwinModel](t, `{
@@ -79,14 +79,14 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded digital twin model",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "iotDomainId": "<ocid:1>",
   "lifecycleState": "ACTIVE",
-  "specUri": "dtmi:com:oracle:osok:ReplayLifecycleThermostat;1",
+  "specUri": "dtmi:com:oracle:osok:MockLifecycleThermostat;1",
   "systemTags": {},
   "timeCreated": "2026-09-02T20:52:21.154Z",
   "timeUpdated": "2026-09-02T20:52:21.154Z"
@@ -100,14 +100,14 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded digital twin model",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "iotDomainId": "<ocid:1>",
   "lifecycleState": "ACTIVE",
-  "specUri": "dtmi:com:oracle:osok:ReplayLifecycleThermostat;1",
+  "specUri": "dtmi:com:oracle:osok:MockLifecycleThermostat;1",
   "systemTags": {},
   "timeCreated": "2026-09-02T20:52:21.154Z",
   "timeUpdated": "2026-09-02T20:52:21.154Z"
@@ -115,9 +115,9 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
 	}
 	updateRequest := ocimock.MustJSONFixture[iotsdk.UpdateDigitalTwinModelDetails](t, `{
   "description": "OSOK recorded digital twin model updated",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[iotsdk.DigitalTwinModel](t, `{
@@ -128,14 +128,14 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded digital twin model updated",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "iotDomainId": "<ocid:1>",
   "lifecycleState": "ACTIVE",
-  "specUri": "dtmi:com:oracle:osok:ReplayLifecycleThermostat;1",
+  "specUri": "dtmi:com:oracle:osok:MockLifecycleThermostat;1",
   "systemTags": {},
   "timeCreated": "2026-09-02T20:52:21.154Z",
   "timeUpdated": "2026-09-02T20:52:25.360Z"
@@ -149,14 +149,14 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded digital twin model updated",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "iotDomainId": "<ocid:1>",
   "lifecycleState": "ACTIVE",
-  "specUri": "dtmi:com:oracle:osok:ReplayLifecycleThermostat;1",
+  "specUri": "dtmi:com:oracle:osok:MockLifecycleThermostat;1",
   "systemTags": {},
   "timeCreated": "2026-09-02T20:52:21.154Z",
   "timeUpdated": "2026-09-02T20:52:25.360Z"
@@ -171,14 +171,14 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded digital twin model updated",
-  "displayName": "osok-replay-digital-twin-model",
+  "displayName": "osok-mock-digital-twin-model",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "iotDomainId": "<ocid:1>",
   "lifecycleState": "DELETED",
-  "specUri": "dtmi:com:oracle:osok:ReplayLifecycleThermostat;1",
+  "specUri": "dtmi:com:oracle:osok:MockLifecycleThermostat;1",
   "systemTags": {},
   "timeCreated": "2026-09-02T20:52:21.154Z",
   "timeUpdated": "2026-09-02T20:52:28.938Z"
@@ -228,7 +228,7 @@ func TestMockIntegrationDigitalTwinModelEvidenceCRUD(t *testing.T) {
 				}
 				return ocimock.Response{
 					StatusCode: http.StatusOK,
-					Body:       []byte(`{"@context":"dtmi:dtdl:context;3","@id":"dtmi:com:oracle:osok:ReplayLifecycleThermostat;1","@type":"Interface","contents":[{"@id":"dtmi:com:oracle:osok:ReplayLifecycleThermostat:_contents:__temperature;1","@type":"Property","name":"temperature","schema":"double"}],"displayName":"OSOK Replay Thermostat"}`),
+					Body:       []byte(`{"@context":"dtmi:dtdl:context;3","@id":"dtmi:com:oracle:osok:MockLifecycleThermostat;1","@type":"Interface","contents":[{"@id":"dtmi:com:oracle:osok:MockLifecycleThermostat:_contents:__temperature;1","@type":"Property","name":"temperature","schema":"double"}],"displayName":"OSOK Mock Thermostat"}`),
 				}, nil
 			},
 		}},

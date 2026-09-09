@@ -3,8 +3,8 @@
   Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
 */
 
-// Package ocimockinventory derives mock-integration migration groups from the
-// checked-in generated runtime, cassette evidence, and formal catalog.
+// Package ocimockinventory derives mock-integration groups from the checked-in
+// generated runtime and formal catalog.
 package ocimockinventory
 
 import (
@@ -17,11 +17,9 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-
-	"github.com/oracle/oci-service-operator/internal/e2e/ocireplay"
 )
 
-// Group is a mutually exclusive migration group.
+// Group is a mutually exclusive generated-resource coverage group.
 type Group string
 
 const (
@@ -40,25 +38,19 @@ type Resource struct {
 	Group           Group  `json:"group"`
 	RuntimeOverride bool   `json:"runtimeOverride"`
 	Formal          bool   `json:"formal"`
-	Recorded        bool   `json:"recorded"`
-	Synthetic       bool   `json:"synthetic"`
 	MockIntegration bool   `json:"mockIntegration"`
 }
 
-// Report is the generated CRUD migration inventory.
+// Report is the generated CRUD mock-integration inventory.
 type Report struct {
 	GeneratedCRUD               int           `json:"generatedCrud"`
 	SynchronousCRUD             int           `json:"synchronousCrud"`
 	WorkRequestCRUD             int           `json:"workRequestCrud"`
 	RuntimeOverrides            int           `json:"runtimeOverrides"`
 	FormalResources             int           `json:"formalResources"`
-	Recorded                    int           `json:"recorded"`
-	SyntheticOnly               int           `json:"syntheticOnly"`
 	MockIntegration             int           `json:"mockIntegration"`
 	SynchronousRuntimeOverrides int           `json:"synchronousRuntimeOverrides"`
 	SynchronousFormalResources  int           `json:"synchronousFormalResources"`
-	SynchronousRecorded         int           `json:"synchronousRecorded"`
-	SynchronousSyntheticOnly    int           `json:"synchronousSyntheticOnly"`
 	SynchronousMockIntegration  int           `json:"synchronousMockIntegration"`
 	Groups                      map[Group]int `json:"groups"`
 	Resources                   []Resource    `json:"resources"`
@@ -80,11 +72,6 @@ func Audit(root string) (Report, error) {
 	if err != nil {
 		return Report{}, fmt.Errorf("resolve repository root: %w", err)
 	}
-	coverage, err := ocireplay.AuditCoverage(root)
-	if err != nil {
-		return Report{}, fmt.Errorf("load replay evidence: %w", err)
-	}
-	evidence := replayEvidence(coverage)
 	formal, err := formalResources(root)
 	if err != nil {
 		return Report{}, err
@@ -127,7 +114,6 @@ func Audit(root string) (Report, error) {
 		kind := string(kindMatch[1])
 		group := classify(hooks, production)
 		key := inventoryKey(service, kind)
-		itemEvidence := evidence[key]
 		item := Resource{
 			Service:         service,
 			Kind:            kind,
@@ -135,8 +121,6 @@ func Audit(root string) (Report, error) {
 			Group:           group,
 			RuntimeOverride: runtimeOverride,
 			Formal:          formal[key],
-			Recorded:        itemEvidence.recorded,
-			Synthetic:       itemEvidence.synthetic,
 			MockIntegration: hasMockIntegrationTest(packageDir),
 		}
 		report.Resources = append(report.Resources, item)
@@ -155,22 +139,12 @@ func Audit(root string) (Report, error) {
 			if item.Formal {
 				report.SynchronousFormalResources++
 			}
-			if item.Recorded {
-				report.SynchronousRecorded++
-			} else if item.Synthetic {
-				report.SynchronousSyntheticOnly++
-			}
 		}
 		if runtimeOverride {
 			report.RuntimeOverrides++
 		}
 		if item.Formal {
 			report.FormalResources++
-		}
-		if item.Recorded {
-			report.Recorded++
-		} else if item.Synthetic {
-			report.SyntheticOnly++
 		}
 		if item.MockIntegration {
 			report.MockIntegration++
@@ -187,7 +161,7 @@ func Audit(root string) (Report, error) {
 }
 
 // MissingMockIntegration returns deterministically ordered resources in one
-// group that do not yet have a package-local dynamic mock scenario.
+// group that do not yet have a package-local typed mock scenario.
 func MissingMockIntegration(report Report, group Group) []Resource {
 	var missing []Resource
 	for _, resource := range report.Resources {
@@ -208,25 +182,6 @@ func MissingFormal(report Report, group Group) []Resource {
 		}
 	}
 	return missing
-}
-
-type evidenceFlags struct {
-	recorded  bool
-	synthetic bool
-}
-
-func replayEvidence(report ocireplay.CoverageReport) map[string]evidenceFlags {
-	result := map[string]evidenceFlags{}
-	for _, resource := range report.Resources {
-		key := inventoryKey(resource.Service, resource.Resource)
-		flags := result[key]
-		for _, cassette := range resource.Cassettes {
-			flags.recorded = flags.recorded || cassette.Metadata.Provenance == ocireplay.ProvenanceRecorded
-			flags.synthetic = flags.synthetic || cassette.Metadata.Provenance == ocireplay.ProvenanceSynthetic
-		}
-		result[key] = flags
-	}
-	return result
 }
 
 func formalResources(root string) (map[string]bool, error) {

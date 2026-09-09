@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationSecurityRuleCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,13 +22,13 @@ func TestMockIntegrationSecurityRuleCompositeCRUD(t *testing.T) {
   "action": "ALLOW",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
-  "name": "osok_replay_security_rule"
+  "name": "osok_mock_security_rule"
 }`)
 	resource.Spec.NetworkFirewallPolicyId = "<ocid:1>"
 	updatedSpec := resource.Spec
@@ -36,10 +36,10 @@ func TestMockIntegrationSecurityRuleCompositeCRUD(t *testing.T) {
   "action": "DROP",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   }
 }`)
@@ -47,30 +47,30 @@ func TestMockIntegrationSecurityRuleCompositeCRUD(t *testing.T) {
   "action": "ALLOW",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
-  "name": "osok_replay_security_rule"
+  "name": "osok_mock_security_rule"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.SecurityRule](t, `{
   "action": "ALLOW",
   "condition": {
     "application": null,
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "service": null,
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "url": null
   },
   "description": null,
   "inspection": null,
-  "name": "osok_replay_security_rule",
+  "name": "osok_mock_security_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -81,10 +81,10 @@ func TestMockIntegrationSecurityRuleCompositeCRUD(t *testing.T) {
   "action": "DROP",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   }
 }`)
@@ -93,17 +93,17 @@ func TestMockIntegrationSecurityRuleCompositeCRUD(t *testing.T) {
   "condition": {
     "application": null,
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "service": null,
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "url": null
   },
   "description": null,
   "inspection": null,
-  "name": "osok_replay_security_rule",
+  "name": "osok_mock_security_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -116,7 +116,7 @@ func TestMockIntegrationSecurityRuleCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateSecurityRuleDetails,
 	]{
 		CollectionPath:    "/20230501/networkFirewallPolicies/<ocid:1>/securityRules",
-		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/securityRules/osok_replay_security_rule",
+		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/securityRules/osok_mock_security_rule",
 		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,

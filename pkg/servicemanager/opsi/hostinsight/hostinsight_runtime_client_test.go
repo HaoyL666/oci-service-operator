@@ -268,7 +268,7 @@ func hostInsightWorkRequest(
 func TestHostInsightRuntimeSemanticsEncodesWorkRequestAndDeleteContracts(t *testing.T) {
 	t.Parallel()
 
-	got := newHostInsightRuntimeSemantics()
+	got := reviewedHostInsightRuntimeSemantics()
 	if got.FormalService != "opsi" || got.FormalSlug != "hostinsight" {
 		t.Fatalf("formal identity = %s/%s, want opsi/hostinsight", got.FormalService, got.FormalSlug)
 	}

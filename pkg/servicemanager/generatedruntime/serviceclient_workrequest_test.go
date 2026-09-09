@@ -19,6 +19,60 @@ type fakeWorkRequest struct {
 	PercentComplete *float32
 }
 
+type fakeDefaultWorkRequestResource struct {
+	Identifier *string
+}
+
+type fakeDefaultWorkRequest struct {
+	Resources []fakeDefaultWorkRequestResource
+}
+
+func TestDefaultWorkRequestAsyncAdapterCoversCommonOCIStatuses(t *testing.T) {
+	t.Parallel()
+
+	adapter := DefaultWorkRequestAsyncAdapter()
+	for raw, want := range map[string]shared.OSOKAsyncNormalizedClass{
+		"ACCEPTED":        shared.OSOKAsyncClassPending,
+		"IN_PROGRESS":     shared.OSOKAsyncClassPending,
+		"SUCCEEDED":       shared.OSOKAsyncClassSucceeded,
+		"COMPLETED":       shared.OSOKAsyncClassSucceeded,
+		"FAILED":          shared.OSOKAsyncClassFailed,
+		"CANCELED":        shared.OSOKAsyncClassCanceled,
+		"NEEDS_ATTENTION": shared.OSOKAsyncClassAttention,
+	} {
+		got, err := adapter.Normalize(raw)
+		if err != nil {
+			t.Fatalf("Normalize(%q) error = %v", raw, err)
+		}
+		if got != want {
+			t.Fatalf("Normalize(%q) = %q, want %q", raw, got, want)
+		}
+	}
+}
+
+func TestRecoverSingleWorkRequestResourceID(t *testing.T) {
+	t.Parallel()
+
+	id := "ocid1.example.oc1..resource"
+	got, err := recoverSingleWorkRequestResourceID(fakeDefaultWorkRequest{
+		Resources: []fakeDefaultWorkRequestResource{{Identifier: &id}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != id {
+		t.Fatalf("recoverSingleWorkRequestResourceID() = %q, want %q", got, id)
+	}
+
+	other := "ocid1.example.oc1..other"
+	_, err = recoverSingleWorkRequestResourceID(fakeDefaultWorkRequest{
+		Resources: []fakeDefaultWorkRequestResource{{Identifier: &id}, {Identifier: &other}},
+	})
+	if err == nil {
+		t.Fatal("recoverSingleWorkRequestResourceID() error = nil for ambiguous resources")
+	}
+}
+
 func newFakeWorkRequestConfig(workRequests map[string]fakeWorkRequest) Config[*fakeResource] {
 	return Config[*fakeResource]{
 		Kind:    "Queue",

@@ -30,7 +30,7 @@ func (r hostnameDelayedVisibilityResponder) Verify() error {
 }
 
 // Contract evidence: vendored OCI SDK, production service manager, reviewed
-// formal lifecycle, and the existing sanitized OCI replay fixture.
+// formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationHostnameWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &loadbalancerv1beta1.Hostname{}
@@ -38,7 +38,7 @@ func TestMockIntegrationHostnameWorkRequestCRUD(t *testing.T) {
 	resource.SetAnnotations(map[string]string{hostnameLoadBalancerIDAnnotation: "<ocid:1>"})
 	resource.Spec = ocimock.MustJSONFixture[loadbalancerv1beta1.HostnameSpec](t, `{
   "hostname": "create.example.com",
-  "name": "osok_replay_hostname_v1"
+  "name": "osok_mock_hostname_v1"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
@@ -47,18 +47,18 @@ func TestMockIntegrationHostnameWorkRequestCRUD(t *testing.T) {
 
 	createRequest := ocimock.MustJSONFixture[loadbalancersdk.CreateHostnameDetails](t, `{
   "hostname": "create.example.com",
-  "name": "osok_replay_hostname_v1"
+  "name": "osok_mock_hostname_v1"
 }`)
 	updateRequest := ocimock.MustJSONFixture[loadbalancersdk.UpdateHostnameDetails](t, `{
   "hostname": "update.example.com"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loadbalancersdk.Hostname](t, `{
   "hostname": "create.example.com",
-  "name": "osok_replay_hostname_v1"
+  "name": "osok_mock_hostname_v1"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[loadbalancersdk.Hostname](t, `{
   "hostname": "update.example.com",
-  "name": "osok_replay_hostname_v1"
+  "name": "osok_mock_hostname_v1"
 }`)
 	createWorkRequest := ocimock.MustOCIResponseFixture[loadbalancersdk.WorkRequest](t, `{
   "compartmentId": "<ocid:3>",
@@ -101,7 +101,7 @@ func TestMockIntegrationHostnameWorkRequestCRUD(t *testing.T) {
 }`)
 
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[loadbalancersdk.Hostname, loadbalancersdk.CreateHostnameDetails, loadbalancersdk.UpdateHostnameDetails]{
-		CollectionPath: "/20170115/loadBalancers/<ocid:1>/hostnames", ItemPath: "/20170115/loadBalancers/<ocid:1>/hostnames/osok_replay_hostname_v1",
+		CollectionPath: "/20170115/loadBalancers/<ocid:1>/hostnames", ItemPath: "/20170115/loadBalancers/<ocid:1>/hostnames/osok_mock_hostname_v1",
 		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		CreatedReadStatuses: []int{http.StatusNotFound, http.StatusOK},

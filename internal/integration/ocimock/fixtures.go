@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strings"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -33,6 +34,12 @@ func InitializeResource(resource metav1.Object, name string) {
 	resource.SetUID(types.UID(name + "-uid"))
 }
 
+// StateSequence preserves an explicitly authored sequence while allowing Go
+// to infer the resource-specific OCI SDK response type at the call site.
+func StateSequence[T any](states ...T) []T {
+	return append([]T(nil), states...)
+}
+
 // ValidateRetryToken verifies that generatedruntime used the resource's stable
 // Kubernetes identity for an OCI create request.
 func ValidateRetryToken(request Request, resource metav1.Object) error {
@@ -43,8 +50,18 @@ func ValidateRetryToken(request Request, resource metav1.Object) error {
 	if want == "" {
 		return fmt.Errorf("%s %s retry-token resource UID is empty", request.Method, request.URL.Path)
 	}
+	return ValidateRetryTokenValue(request, want)
+}
+
+// ValidateRetryTokenValue verifies a package-owned deterministic retry token
+// when the resource intentionally scopes its token beyond the raw Kubernetes
+// UID.
+func ValidateRetryTokenValue(request Request, want string) error {
+	if strings.TrimSpace(want) == "" {
+		return fmt.Errorf("%s %s expected retry token is empty", request.Method, request.URL.Path)
+	}
 	if got := request.Header.Get("opc-retry-token"); got != want {
-		return fmt.Errorf("%s %s opc-retry-token = %q, want resource UID %q", request.Method, request.URL.Path, got, want)
+		return fmt.Errorf("%s %s opc-retry-token = %q, want %q", request.Method, request.URL.Path, got, want)
 	}
 	return nil
 }
@@ -148,6 +165,87 @@ func CompareJSONValues[T any](actual, expected T) error {
 	return nil
 }
 
+// CompareJSONSubset compares every field explicitly declared by expected while
+// allowing the SDK request model to carry additional zero-valued fields. This
+// keeps package tests strict about their authored contract without forcing
+// fixtures to restate unrelated value-shaped CR fields.
+func CompareJSONSubset[T any](actual, expected T) error {
+	actualValue, actualJSON, err := comparableJSONValue(actual)
+	if err != nil {
+		return fmt.Errorf("marshal actual %T JSON subset: %w", actual, err)
+	}
+	expectedValue, expectedJSON, err := comparableJSONValue(expected)
+	if err != nil {
+		return fmt.Errorf("marshal expected %T JSON subset: %w", expected, err)
+	}
+	if path, ok := jsonSubsetMismatch(actualValue, expectedValue, "$"); !ok {
+		return fmt.Errorf("typed JSON subset mismatch at %s: actual=%s expected=%s", path, actualJSON, expectedJSON)
+	}
+	return nil
+}
+
+func comparableJSONValue(value any) (any, []byte, error) {
+	encoded, err := json.Marshal(value)
+	if err != nil {
+		return nil, nil, err
+	}
+	var decoded any
+	if err := json.Unmarshal(encoded, &decoded); err != nil {
+		return nil, nil, err
+	}
+	return decoded, encoded, nil
+}
+
+func jsonSubsetMismatch(actual, expected any, path string) (string, bool) {
+	switch wanted := expected.(type) {
+	case map[string]any:
+		got, ok := actual.(map[string]any)
+		if !ok {
+			return path, false
+		}
+		for key, wantedValue := range wanted {
+			// Typed SDK fixtures cannot distinguish an omitted field from an
+			// explicitly authored null after unmarshalling. Nil therefore means
+			// the package test did not declare an assertion for that field.
+			if wantedValue == nil || key == "JsonData" || emptyJSONCollection(wantedValue) {
+				continue
+			}
+			gotValue, found := got[key]
+			if !found {
+				return path + "." + key, false
+			}
+			if mismatch, matches := jsonSubsetMismatch(gotValue, wantedValue, path+"."+key); !matches {
+				return mismatch, false
+			}
+		}
+		return "", true
+	case []any:
+		got, ok := actual.([]any)
+		if !ok || len(got) != len(wanted) {
+			return path, false
+		}
+		for index := range wanted {
+			if mismatch, matches := jsonSubsetMismatch(got[index], wanted[index], fmt.Sprintf("%s[%d]", path, index)); !matches {
+				return mismatch, false
+			}
+		}
+		return "", true
+	default:
+		return path, reflect.DeepEqual(actual, expected)
+	}
+}
+
+func emptyJSONCollection(value any) bool {
+	switch typed := value.(type) {
+	case []any:
+		return len(typed) == 0
+	case map[string]any:
+		return len(typed) == 0
+	default:
+		return false
+	}
+}
+
 // ValidateDiscriminatedJSONRequest verifies an explicit polymorphic
 // discriminator, removes it, and compares the remaining body with the selected
 // concrete SDK details type.
@@ -166,4 +264,26 @@ func ValidateDiscriminatedJSONRequest[T any](request Request, field string, want
 	}
 	request.Body = normalized
 	return ValidateJSONRequest(request, expected)
+}
+
+// ValidateDiscriminatedJSONRequestSubset verifies a polymorphic discriminator
+// and every concrete field explicitly declared by expected.
+func ValidateDiscriminatedJSONRequestSubset[T any](request Request, field string, want any, expected T) error {
+	var body map[string]any
+	if err := json.Unmarshal(request.Body, &body); err != nil {
+		return fmt.Errorf("decode discriminated %s %s request: %w", request.Method, request.URL.Path, err)
+	}
+	if !reflect.DeepEqual(body[field], want) {
+		return fmt.Errorf("%s %s discriminator %s = %#v, want %#v", request.Method, request.URL.Path, field, body[field], want)
+	}
+	delete(body, field)
+	normalized, err := json.Marshal(body)
+	if err != nil {
+		return fmt.Errorf("normalize discriminated %s %s request: %w", request.Method, request.URL.Path, err)
+	}
+	var actual T
+	if err := json.Unmarshal(normalized, &actual); err != nil {
+		return fmt.Errorf("decode discriminated concrete %s %s request: %w", request.Method, request.URL.Path, err)
+	}
+	return CompareJSONSubset(actual, expected)
 }

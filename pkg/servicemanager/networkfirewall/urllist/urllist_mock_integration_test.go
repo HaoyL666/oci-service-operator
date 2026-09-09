@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationUrlListCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -20,7 +20,7 @@ func TestMockIntegrationUrlListCompositeCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-urllist")
 	resource.Spec = ocimock.MustJSONFixture[networkfirewallv1beta1.UrlListSpec](t, `{
   "description": "OSOK recorded URL list",
-  "name": "osok_replay_url_list",
+  "name": "osok_mock_url_list",
   "urls": [
     {
       "pattern": "*.example.com/*",
@@ -41,7 +41,7 @@ func TestMockIntegrationUrlListCompositeCRUD(t *testing.T) {
 }`)
 	createRequest := ocimock.MustJSONFixture[networkfirewallsdk.CreateUrlListDetails](t, `{
   "description": "OSOK recorded URL list",
-  "name": "osok_replay_url_list",
+  "name": "osok_mock_url_list",
   "urls": [
     {
       "pattern": "*.example.com/*",
@@ -51,7 +51,7 @@ func TestMockIntegrationUrlListCompositeCRUD(t *testing.T) {
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.UrlList](t, `{
   "description": "OSOK recorded URL list",
-  "name": "osok_replay_url_list",
+  "name": "osok_mock_url_list",
   "parentResourceId": "<ocid:1>",
   "totalUrls": 1,
   "urls": [
@@ -72,7 +72,7 @@ func TestMockIntegrationUrlListCompositeCRUD(t *testing.T) {
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[networkfirewallsdk.UrlList](t, `{
   "description": "OSOK recorded UrlList updated",
-  "name": "osok_replay_url_list",
+  "name": "osok_mock_url_list",
   "parentResourceId": "<ocid:1>",
   "totalUrls": 1,
   "urls": [
@@ -88,7 +88,7 @@ func TestMockIntegrationUrlListCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateUrlListDetails,
 	]{
 		CollectionPath:    "/20230501/networkFirewallPolicies/<ocid:1>/urlLists",
-		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_replay_url_list",
+		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/urlLists/osok_mock_url_list",
 		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,

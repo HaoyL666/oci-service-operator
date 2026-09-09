@@ -12,54 +12,54 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationServiceListCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &networkfirewallv1beta1.ServiceList{}
 	ocimock.InitializeResource(resource, "mock-servicelist")
 	resource.Spec = ocimock.MustJSONFixture[networkfirewallv1beta1.ServiceListSpec](t, `{
-  "name": "osok_replay_service_list",
+  "name": "osok_mock_service_list",
   "services": [
-    "osok_replay_prereq_tcp"
+    "osok_mock_prereq_tcp"
   ]
 }`)
 	resource.Spec.NetworkFirewallPolicyId = "<ocid:1>"
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "services": [
-    "osok_replay_prereq_tcp",
-    "osok_replay_udp2"
+    "osok_mock_prereq_tcp",
+    "osok_mock_udp2"
   ]
 }`)
 	createRequest := ocimock.MustJSONFixture[networkfirewallsdk.CreateServiceListDetails](t, `{
-  "name": "osok_replay_service_list",
+  "name": "osok_mock_service_list",
   "services": [
-    "osok_replay_prereq_tcp"
+    "osok_mock_prereq_tcp"
   ]
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.ServiceList](t, `{
   "description": null,
-  "name": "osok_replay_service_list",
+  "name": "osok_mock_service_list",
   "parentResourceId": "<ocid:1>",
   "services": [
-    "osok_replay_prereq_tcp"
+    "osok_mock_prereq_tcp"
   ],
   "totalServices": 1
 }`)
 	updateRequest := ocimock.MustJSONFixture[networkfirewallsdk.UpdateServiceListDetails](t, `{
   "services": [
-    "osok_replay_prereq_tcp",
-    "osok_replay_udp2"
+    "osok_mock_prereq_tcp",
+    "osok_mock_udp2"
   ]
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[networkfirewallsdk.ServiceList](t, `{
   "description": null,
-  "name": "osok_replay_service_list",
+  "name": "osok_mock_service_list",
   "parentResourceId": "<ocid:1>",
   "services": [
-    "osok_replay_prereq_tcp",
-    "osok_replay_udp2"
+    "osok_mock_prereq_tcp",
+    "osok_mock_udp2"
   ],
   "totalServices": 2
 }`)
@@ -69,7 +69,7 @@ func TestMockIntegrationServiceListCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateServiceListDetails,
 	]{
 		CollectionPath:    "/20230501/networkFirewallPolicies/<ocid:1>/serviceLists",
-		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/serviceLists/osok_replay_service_list",
+		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/serviceLists/osok_mock_service_list",
 		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,

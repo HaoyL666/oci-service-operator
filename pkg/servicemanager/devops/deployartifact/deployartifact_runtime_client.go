@@ -99,7 +99,7 @@ func applyDeployArtifactRuntimeHooks(
 		return
 	}
 
-	hooks.Semantics = newDeployArtifactRuntimeSemantics()
+	hooks.Semantics = reviewedDeployArtifactRuntimeSemantics()
 	hooks.BuildCreateBody = func(_ context.Context, resource *devopsv1beta1.DeployArtifact, _ string) (any, error) {
 		return buildDeployArtifactCreateBody(resource)
 	}
@@ -210,7 +210,7 @@ func newDeployArtifactRuntimeHooksWithOCIClient(client deployArtifactOCIClient) 
 	}
 }
 
-func newDeployArtifactRuntimeSemantics() *generatedruntime.Semantics {
+func reviewedDeployArtifactRuntimeSemantics() *generatedruntime.Semantics {
 	return &generatedruntime.Semantics{
 		FormalService: "devops",
 		FormalSlug:    "deployartifact",

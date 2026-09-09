@@ -38,6 +38,10 @@ func TestMockIntegrationChannelCompositeCRUD(t *testing.T) {
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": items})
 		},
 		Create: func(request ocimock.Request) (odasdk.WebChannel, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero odasdk.WebChannel
+				return zero, ocimock.Response{}, err
+			}
 			if err := ocimock.ValidateDiscriminatedJSONRequest(request, "type", "WEB", createDetails); err != nil {
 				return odasdk.WebChannel{}, ocimock.Response{}, err
 			}

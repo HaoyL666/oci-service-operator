@@ -38,7 +38,10 @@ func TestMockIntegrationTargetDetectorRecipeCompositeCRUD(t *testing.T) {
 }`)
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[cloudguardsdk.TargetDetectorRecipe, cloudguardsdk.CreateTargetDetectorRecipeDetails, cloudguardsdk.UpdateTargetDetectorRecipeDetails]{
 		CollectionPath: "/20200131/targets/<ocid:1>/targetDetectorRecipes", ItemPath: "/20200131/targets/<ocid:1>/targetDetectorRecipes/<ocid:4>",
-		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Operations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		ListShape:         ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,

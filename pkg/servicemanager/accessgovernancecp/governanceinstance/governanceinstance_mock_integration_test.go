@@ -14,20 +14,20 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &accessgovernancecpv1beta1.GovernanceInstance{
 		Spec: accessgovernancecpv1beta1.GovernanceInstanceSpec{
-			DisplayName:      syntheticGovernanceInstanceName,
+			DisplayName:      mockGovernanceInstanceName,
 			LicenseType:      string(accessgovernancecpsdk.LicenseTypeNewLicense),
 			TenancyNamespace: "synthetic-namespace",
-			CompartmentId:    "ocid1.compartment.oc1..replay",
+			CompartmentId:    "ocid1.compartment.oc1..mock",
 			IdcsAccessToken:  "synthetic-administrator-token",
 			Description:      "synthetic create",
 			FreeformTags: map[string]string{
-				"osok-replay": "create",
+				"osok-mock": "create",
 			},
 		},
 	}
@@ -35,9 +35,9 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[accessgovernancecpv1beta1.GovernanceInstanceSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-governance-v1",
+  "displayName": "osok-mock-synthetic-governance-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "idcsAccessToken": "\u003credacted\u003e",
   "licenseType": "NEW_LICENSE",
@@ -47,15 +47,15 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "synthetic update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[accessgovernancecpsdk.CreateGovernanceInstanceDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-governance-v1",
+  "displayName": "osok-mock-synthetic-governance-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "idcsAccessToken": "\u003credacted\u003e",
   "licenseType": "NEW_LICENSE",
@@ -64,9 +64,9 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 	createdState := ocimock.MustOCIResponseFixture[accessgovernancecpsdk.GovernanceInstance](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-governance-v1",
+  "displayName": "osok-mock-synthetic-governance-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "instanceUrl": "https://access-governance.example.test",
@@ -79,9 +79,9 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[accessgovernancecpsdk.GovernanceInstance](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-governance-v1",
+  "displayName": "osok-mock-synthetic-governance-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "instanceUrl": "https://access-governance.example.test",
@@ -94,15 +94,15 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[accessgovernancecpsdk.UpdateGovernanceInstanceDetails](t, `{
   "description": "synthetic update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[accessgovernancecpsdk.GovernanceInstance](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-governance-v1",
+  "displayName": "osok-mock-synthetic-governance-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "instanceUrl": "https://access-governance.example.test",
@@ -116,9 +116,9 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[accessgovernancecpsdk.GovernanceInstance](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-governance-v1",
+  "displayName": "osok-mock-synthetic-governance-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "instanceUrl": "https://access-governance.example.test",
@@ -133,9 +133,9 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[accessgovernancecpsdk.GovernanceInstance](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-governance-v1",
+  "displayName": "osok-mock-synthetic-governance-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "instanceUrl": "https://access-governance.example.test",
@@ -148,9 +148,9 @@ func TestMockIntegrationGovernanceInstanceLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[accessgovernancecpsdk.GovernanceInstance](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-governance-v1",
+  "displayName": "osok-mock-synthetic-governance-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "instanceUrl": "https://access-governance.example.test",

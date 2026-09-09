@@ -25,7 +25,7 @@ import (
 const mockPathAnalyzerTestID = "ocid1.pathanalyzertest.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/pathanalyzertest_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/vnmonitoring/pathanalyzertest.json
 //   - repo-authored runtime: formal/controllers/vnmonitoring/pathanalyzertest/diagrams/runtime-lifecycle.yaml
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/vn_monitoring/vn_monitoring_path_analyzer_test_resource.go
@@ -116,6 +116,10 @@ func newPathAnalyzerTestMockResponder(resource *vnmonitoringv1beta1.PathAnalyzer
 		RequireUpdateRead:  true,
 		RequireDeleteRead:  true,
 		Create: func(request ocimock.Request) (vnmonitoringsdk.PathAnalyzerTest, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero vnmonitoringsdk.PathAnalyzerTest
+				return zero, ocimock.Response{}, err
+			}
 			var details vnmonitoringsdk.CreatePathAnalyzerTestDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return vnmonitoringsdk.PathAnalyzerTest{}, ocimock.Response{}, err

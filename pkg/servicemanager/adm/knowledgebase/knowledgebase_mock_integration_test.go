@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationKnowledgeBaseWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -28,30 +28,30 @@ func TestMockIntegrationKnowledgeBaseWorkRequestCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-knowledgebase")
 	resource.Spec = ocimock.MustJSONFixture[admv1beta1.KnowledgeBaseSpec](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-async-adm-v1",
+  "displayName": "osok-mock-async-adm-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-async-adm-v1-updated",
+  "displayName": "osok-mock-async-adm-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 
 	createRequest := ocimock.MustJSONFixture[admsdk.CreateKnowledgeBaseDetails](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-async-adm-v1",
+  "displayName": "osok-mock-async-adm-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updateRequest := ocimock.MustJSONFixture[admsdk.UpdateKnowledgeBaseDetails](t, `{
-  "displayName": "osok-replay-async-adm-v1-updated",
+  "displayName": "osok-mock-async-adm-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[admsdk.KnowledgeBase](t, `{
@@ -63,9 +63,9 @@ func TestMockIntegrationKnowledgeBaseWorkRequestCRUD(t *testing.T) {
       "CreatedOn": "2026-08-31T21:00:50.820Z"
     }
   },
-  "displayName": "osok-replay-async-adm-v1",
+  "displayName": "osok-mock-async-adm-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleState": "ACTIVE",
@@ -86,9 +86,9 @@ func TestMockIntegrationKnowledgeBaseWorkRequestCRUD(t *testing.T) {
       "CreatedOn": "2026-08-31T21:00:50.820Z"
     }
   },
-  "displayName": "osok-replay-async-adm-v1-updated",
+  "displayName": "osok-mock-async-adm-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleState": "ACTIVE",
@@ -109,9 +109,9 @@ func TestMockIntegrationKnowledgeBaseWorkRequestCRUD(t *testing.T) {
       "CreatedOn": "2026-08-31T21:00:50.820Z"
     }
   },
-  "displayName": "osok-replay-async-adm-v1-updated",
+  "displayName": "osok-mock-async-adm-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleState": "DELETED",

@@ -24,7 +24,7 @@ import (
 const mockStackID = "ocid1.ormstack.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/stack_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/resourcemanager
 //   - reviewed runtime semantics: stack_runtime_semantics.go
 //
@@ -39,7 +39,7 @@ func TestMockIntegrationStackLifecycleCRUD(t *testing.T) {
 			CompartmentId: "ocid1.compartment.oc1..mock",
 			ConfigSource: resourcemanagerv1beta1.StackConfigSource{
 				ConfigSourceType:     "ZIP_UPLOAD",
-				ZipFileBase64Encoded: recordedStackZip(t),
+				ZipFileBase64Encoded: mockStackZip(t),
 			},
 			DisplayName:  "mock-stack",
 			Description:  "mock create",
@@ -61,7 +61,7 @@ func TestMockIntegrationStackLifecycleCRUD(t *testing.T) {
 	})
 
 	sdkClient := resourcemanagersdk.ResourceManagerClient{BaseClient: session.BaseClient()}
-	client := newRecordedStackClient(sdkClient)
+	client := newMockStackClient(sdkClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*resourcemanagerv1beta1.Stack]{
 		Resource:      resource,
 		Client:        client,

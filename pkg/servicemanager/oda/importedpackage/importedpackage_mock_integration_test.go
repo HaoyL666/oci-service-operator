@@ -31,6 +31,9 @@ func TestMockIntegrationImportedPackageCompositeCRUD(t *testing.T) {
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[odasdk.ImportedPackage, odasdk.CreateImportedPackageDetails, odasdk.UpdateImportedPackageDetails]{
 		CollectionPath: "/20190506/odaInstances/<ocid:1>/importedPackages", ItemPath: "/20190506/odaInstances/<ocid:1>/importedPackages/<ocid:2>",
 		Operations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete}, CreateRequest: &createRequest, CreatedState: &created,
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		UpdateRequest: &updateRequest, UpdatedState: &updated, UpdatedReadStates: []odasdk.ImportedPackage{updated}, ListShape: ocimock.ListShapeArray,
 		DeleteEndsNotFound: true, RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, CreateStatus: http.StatusCreated, DeleteStatus: http.StatusNoContent, NotFoundCode: "NotFound",
 	})

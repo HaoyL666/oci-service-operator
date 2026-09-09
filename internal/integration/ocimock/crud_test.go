@@ -196,6 +196,43 @@ func TestCRUDResponderAcceptsPostUpdateOnItemPath(t *testing.T) {
 	}
 }
 
+func TestCRUDResponderSupportsPutCreateAndUpdateOnItemPath(t *testing.T) {
+	t.Parallel()
+
+	responder, err := NewCRUDResponder(CRUDOptions[crudTestState]{
+		CollectionPath:     "/widgets",
+		ItemPath:           "/widgets/widget-1",
+		CreatePath:         "/widgets/widget-1",
+		CreateMethod:       http.MethodPut,
+		ExpectedOperations: []Operation{OperationCreate, OperationUpdate},
+		Create: func(Request) (crudTestState, Response, error) {
+			state := crudTestState{Name: "created"}
+			response, err := JSONResponse(http.StatusCreated, state)
+			return state, response, err
+		},
+		Update: func(Request, crudTestState) (crudTestState, Response, error) {
+			state := crudTestState{Name: "updated"}
+			response, err := JSONResponse(http.StatusOK, state)
+			return state, response, err
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, request := range []Request{
+		{Method: http.MethodPut, URL: mustTestURL(t, "https://example.test/widgets/widget-1")},
+		{Method: http.MethodPut, URL: mustTestURL(t, "https://example.test/widgets/widget-1")},
+	} {
+		if _, err := responder.Respond(request); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := responder.Verify(); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestCRUDResponderSupportsActionDeletePath(t *testing.T) {
 	t.Parallel()
 

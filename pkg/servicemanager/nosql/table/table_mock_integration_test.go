@@ -26,7 +26,7 @@ import (
 const mockTableID = "ocid1.nosqltable.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/table_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/nosql/table and formal/imports/nosql/table.json
 //   - resource runtime: table_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/nosql

@@ -23,7 +23,7 @@ import (
 
 const mockScheduleID = "ocid1.usageschedule.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal schedule contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal schedule contract, and vendored OCI SDK.
 func TestMockIntegrationScheduleLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	const tenancyID = "ocid1.tenancy.oc1..mock"
@@ -86,6 +86,10 @@ func newScheduleMockResponder(resource *usageapiv1beta1.Schedule) (*ocimock.CRUD
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []usageapisdk.Schedule{state}})
 		},
 		Create: func(request ocimock.Request) (usageapisdk.Schedule, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero usageapisdk.Schedule
+				return zero, ocimock.Response{}, err
+			}
 			var details usageapisdk.CreateScheduleDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return usageapisdk.Schedule{}, ocimock.Response{}, err

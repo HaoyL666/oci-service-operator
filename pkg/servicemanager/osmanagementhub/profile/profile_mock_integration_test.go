@@ -84,6 +84,10 @@ func newProfileMockResponder(resource *osmanagementhubv1beta1.Profile) (*ocimock
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []osmanagementhubsdk.SoftwareSourceProfile{state}})
 		},
 		Create: func(request ocimock.Request) (osmanagementhubsdk.SoftwareSourceProfile, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryTokenValue(request, profileRetryToken(resource, resource.Namespace)); err != nil {
+				var zero osmanagementhubsdk.SoftwareSourceProfile
+				return zero, ocimock.Response{}, err
+			}
 			type createDetails osmanagementhubsdk.CreateSoftwareSourceProfileDetails
 			var payload struct {
 				createDetails

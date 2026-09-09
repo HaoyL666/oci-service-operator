@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -29,7 +29,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[loggingv1beta1.UnifiedAgentConfigurationSpec](t, `{
   "compartmentId": "<ocid:1>",
   "description": "OSOK recorded unified agent configuration",
-  "displayName": "osok-replay-unified-agent-config",
+  "displayName": "osok-mock-unified-agent-config",
   "groupAssociation": {
     "groupList": [
       "<ocid:2>"
@@ -46,12 +46,12 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     ],
     "sources": [
       {
-        "name": "osok-replay-application",
+        "name": "osok-mock-application",
         "parser": {
           "parserType": "NONE"
         },
         "paths": [
-          "/var/log/osok-replay.log"
+          "/var/log/osok-mock.log"
         ],
         "sourceType": "LOG_TAIL"
       }
@@ -67,7 +67,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded unified agent configuration",
-  "displayName": "osok-replay-unified-agent-config-updated",
+  "displayName": "osok-mock-unified-agent-config-updated",
   "freeformTags": {
   },
   "groupAssociation": {
@@ -86,12 +86,12 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     ],
     "sources": [
       {
-        "name": "osok-replay-application",
+        "name": "osok-mock-application",
         "parser": {
           "parserType": "NONE"
         },
         "paths": [
-          "/var/log/osok-replay.log"
+          "/var/log/osok-mock.log"
         ],
         "sourceType": "LOG_TAIL"
       }
@@ -102,7 +102,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
 	createRequest := ocimock.MustJSONFixture[loggingsdk.CreateUnifiedAgentConfigurationDetails](t, `{
   "compartmentId": "<ocid:1>",
   "description": "OSOK recorded unified agent configuration",
-  "displayName": "osok-replay-unified-agent-config",
+  "displayName": "osok-mock-unified-agent-config",
   "groupAssociation": {
     "groupList": [
       "<ocid:2>"
@@ -119,12 +119,12 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     ],
     "sources": [
       {
-        "name": "osok-replay-application",
+        "name": "osok-mock-application",
         "parser": {
           "parserType": "NONE"
         },
         "paths": [
-          "/var/log/osok-replay.log"
+          "/var/log/osok-mock.log"
         ],
         "sourceType": "LOG_TAIL"
       }
@@ -139,7 +139,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded unified agent configuration",
-  "displayName": "osok-replay-unified-agent-config-updated",
+  "displayName": "osok-mock-unified-agent-config-updated",
   "freeformTags": {
   },
   "groupAssociation": {
@@ -158,12 +158,12 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     ],
     "sources": [
       {
-        "name": "osok-replay-application",
+        "name": "osok-mock-application",
         "parser": {
           "parserType": "NONE"
         },
         "paths": [
-          "/var/log/osok-replay.log"
+          "/var/log/osok-mock.log"
         ],
         "sourceType": "LOG_TAIL"
       }
@@ -180,7 +180,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded unified agent configuration",
-  "displayName": "osok-replay-unified-agent-config",
+  "displayName": "osok-mock-unified-agent-config",
   "freeformTags": {
   },
   "groupAssociation": {
@@ -206,7 +206,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     "sources": [
       {
         "advancedOptions": null,
-        "name": "osok-replay-application",
+        "name": "osok-mock-application",
         "parser": {
           "fieldTimeKey": null,
           "isEstimateCurrentEvent": null,
@@ -219,7 +219,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
           "types": null
         },
         "paths": [
-          "/var/log/osok-replay.log"
+          "/var/log/osok-mock.log"
         ],
         "sourceType": "LOG_TAIL"
       }
@@ -240,7 +240,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded unified agent configuration",
-  "displayName": "osok-replay-unified-agent-config-updated",
+  "displayName": "osok-mock-unified-agent-config-updated",
   "freeformTags": {
   },
   "groupAssociation": {
@@ -266,7 +266,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
     "sources": [
       {
         "advancedOptions": null,
-        "name": "osok-replay-application",
+        "name": "osok-mock-application",
         "parser": {
           "fieldTimeKey": null,
           "isEstimateCurrentEvent": null,
@@ -279,7 +279,7 @@ func TestMockIntegrationUnifiedAgentConfigurationWorkRequestCRUD(t *testing.T) {
           "types": null
         },
         "paths": [
-          "/var/log/osok-replay.log"
+          "/var/log/osok-mock.log"
         ],
         "sourceType": "LOG_TAIL"
       }

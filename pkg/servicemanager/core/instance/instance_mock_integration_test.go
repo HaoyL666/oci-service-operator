@@ -24,7 +24,7 @@ import (
 const mockInstanceID = "ocid1.instance.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/instance_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/core/instance and formal/imports/core/instance.json
 //   - resource runtime: instance_runtime.go
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/core/core_instance_resource.go

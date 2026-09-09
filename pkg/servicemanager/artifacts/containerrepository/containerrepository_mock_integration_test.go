@@ -22,7 +22,7 @@ import (
 const mockContainerRepositoryID = "ocid1.containerrepo.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/containerrepository_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - repo-authored runtime: containerrepository_runtime_client.go
 //   - OCI SDK and pinned Terraform provider ArtifactsContainerRepository resource
 func TestMockIntegrationContainerRepositoryLifecycleCRUD(t *testing.T) {
@@ -101,6 +101,10 @@ func newContainerRepositoryMockResponder(resource *artifactsv1beta1.ContainerRep
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []artifactssdk.ContainerRepository{state}})
 		},
 		Create: func(request ocimock.Request) (artifactssdk.ContainerRepository, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero artifactssdk.ContainerRepository
+				return zero, ocimock.Response{}, err
+			}
 			var details artifactssdk.CreateContainerRepositoryDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return artifactssdk.ContainerRepository{}, ocimock.Response{}, err

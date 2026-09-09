@@ -14,12 +14,12 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationAnalyticsInstanceLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &analyticsv1beta1.AnalyticsInstance{Spec: analyticsv1beta1.AnalyticsInstanceSpec{
-		Name: "osok-replay-analytics", CompartmentId: "ocid1.compartment.oc1..replay",
+		Name: "osok-mock-analytics", CompartmentId: "ocid1.compartment.oc1..mock",
 		FeatureSet:  "ENTERPRISE_ANALYTICS",
 		Capacity:    analyticsv1beta1.AnalyticsInstanceCapacity{CapacityType: "OLPU_COUNT", CapacityValue: 2},
 		LicenseType: "LICENSE_INCLUDED", Description: "OSOK synthetic analytics instance",
@@ -34,7 +34,7 @@ func TestMockIntegrationAnalyticsInstanceLifecycleCRUD(t *testing.T) {
   "description": "OSOK synthetic analytics instance",
   "featureSet": "ENTERPRISE_ANALYTICS",
   "licenseType": "LICENSE_INCLUDED",
-  "name": "osok-replay-analytics"
+  "name": "osok-mock-analytics"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
@@ -49,11 +49,11 @@ func TestMockIntegrationAnalyticsInstanceLifecycleCRUD(t *testing.T) {
   "description": "OSOK synthetic analytics instance",
   "featureSet": "ENTERPRISE_ANALYTICS",
   "licenseType": "LICENSE_INCLUDED",
-  "name": "osok-replay-analytics"
+  "name": "osok-mock-analytics"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[analyticssdk.AnalyticsInstance](t, `{
   "id": "<ocid:2>",
-  "name": "osok-replay-analytics",
+  "name": "osok-mock-analytics",
   "compartmentId": "<ocid:1>",
   "lifecycleState": "ACTIVE",
   "featureSet": "ENTERPRISE_ANALYTICS",
@@ -69,7 +69,7 @@ func TestMockIntegrationAnalyticsInstanceLifecycleCRUD(t *testing.T) {
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[analyticssdk.AnalyticsInstance](t, `{
   "id": "<ocid:2>",
-  "name": "osok-replay-analytics",
+  "name": "osok-mock-analytics",
   "compartmentId": "<ocid:1>",
   "lifecycleState": "ACTIVE",
   "featureSet": "ENTERPRISE_ANALYTICS",

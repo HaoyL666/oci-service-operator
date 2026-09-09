@@ -74,6 +74,10 @@ func newAutonomousDatabaseMockResponder(resource *databasev1beta1.AutonomousData
 		},
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true,
 		Create: func(request ocimock.Request) (databasesdk.AutonomousDatabase, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero databasesdk.AutonomousDatabase
+				return zero, ocimock.Response{}, err
+			}
 			var details map[string]any
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return databasesdk.AutonomousDatabase{}, ocimock.Response{}, err

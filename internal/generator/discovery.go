@@ -338,6 +338,13 @@ func buildRuntimeModel(pkg *ocisdk.Package, rawName string, operations []string,
 		}
 		assignRuntimeOperation(model, operation, binding)
 	}
+	if method, ok := pkg.OperationForRequest("GetWorkRequestRequest"); ok {
+		binding, err := buildRuntimeOperationModel(pkg, "WorkRequest", "Get", method)
+		if err != nil {
+			return nil, fmt.Errorf("discover GetWorkRequest runtime metadata: %w", err)
+		}
+		model.WorkRequest = binding
+	}
 	clients, err := collectRuntimeClients(model)
 	if err != nil {
 		return nil, fmt.Errorf("collect SDK clients for %q: %w", rawName, err)

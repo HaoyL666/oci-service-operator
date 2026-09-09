@@ -26,7 +26,7 @@ import (
 const mockTemplateID = "ocid1.ormtemplate.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/template_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/resourcemanager
 //   - reviewed runtime semantics: template_runtime_semantics.go
 //
@@ -43,7 +43,7 @@ func TestMockIntegrationTemplateImmediateCRUD(t *testing.T) {
 			LongDescription: "mock long description",
 			TemplateConfigSource: resourcemanagerv1beta1.TemplateConfigSource{
 				TemplateConfigSourceType: "ZIP_UPLOAD",
-				ZipFileBase64Encoded:     recordedTemplateZip(t),
+				ZipFileBase64Encoded:     mockTemplateZip(t),
 			},
 			FreeformTags: map[string]string{"osok-mock": "create"},
 		},

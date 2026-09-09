@@ -14,19 +14,19 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationEndpointLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &generativeaiv1beta1.Endpoint{Spec: generativeaiv1beta1.EndpointSpec{
-		CompartmentId: "ocid1.compartment.oc1..replay", ModelId: "ocid1.generativeaimodel.oc1..replay",
-		DedicatedAiClusterId: "ocid1.generativeaidedicatedaicluster.oc1..replay", DisplayName: "osok-replay-generative-ai-endpoint",
+		CompartmentId: "ocid1.compartment.oc1..mock", ModelId: "ocid1.generativeaimodel.oc1..mock",
+		DedicatedAiClusterId: "ocid1.generativeaidedicatedaicluster.oc1..mock", DisplayName: "osok-mock-generative-ai-endpoint",
 	}}
 	ocimock.InitializeResource(resource, "mock-endpoint")
 	resource.Spec = ocimock.MustJSONFixture[generativeaiv1beta1.EndpointSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "dedicatedAiClusterId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-generative-ai-endpoint",
+  "displayName": "osok-mock-generative-ai-endpoint",
   "modelId": "\u003cocid:3\u003e"
 }`)
 	updatedSpec := resource.Spec
@@ -39,13 +39,13 @@ func TestMockIntegrationEndpointLifecycleCRUD(t *testing.T) {
 	createRequest := ocimock.MustJSONFixture[generativeaisdk.CreateEndpointDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "dedicatedAiClusterId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-generative-ai-endpoint",
+  "displayName": "osok-mock-generative-ai-endpoint",
   "modelId": "\u003cocid:3\u003e"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[generativeaisdk.Endpoint](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "dedicatedAiClusterId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-generative-ai-endpoint",
+  "displayName": "osok-mock-generative-ai-endpoint",
   "id": "\u003cocid:4\u003e",
   "lifecycleState": "ACTIVE",
   "modelId": "\u003cocid:3\u003e"
@@ -63,7 +63,7 @@ func TestMockIntegrationEndpointLifecycleCRUD(t *testing.T) {
   },
   "dedicatedAiClusterId": "\u003cocid:2\u003e",
   "description": "mock-updated",
-  "displayName": "osok-replay-generative-ai-endpoint",
+  "displayName": "osok-mock-generative-ai-endpoint",
   "id": "\u003cocid:4\u003e",
   "lifecycleState": "ACTIVE",
   "modelId": "\u003cocid:3\u003e"

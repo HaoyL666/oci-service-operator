@@ -25,7 +25,7 @@ import (
 
 const mockAIProjectID = "ocid1.aidocumentproject.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal project contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal project contract, and vendored OCI SDK.
 func TestMockIntegrationProjectLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &aidocumentv1beta1.Project{
@@ -76,6 +76,10 @@ func newAIProjectMockResponder(resource *aidocumentv1beta1.Project) (*ocimock.CR
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (aidocumentsdk.Project, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero aidocumentsdk.Project
+				return zero, ocimock.Response{}, err
+			}
 			var details aidocumentsdk.CreateProjectDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return aidocumentsdk.Project{}, ocimock.Response{}, err

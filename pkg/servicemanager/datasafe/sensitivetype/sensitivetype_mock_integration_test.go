@@ -27,7 +27,7 @@ import (
 const mockSensitiveTypeID = "ocid1.sensitivetype.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/sensitivetype_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/datasafe/sensitivetype.json
 //   - repo-authored runtime: formal/controllers/datasafe/sensitivetype/diagrams/runtime-lifecycle.yaml
 //   - polymorphic request runtime: sensitivetype_runtime_client.go

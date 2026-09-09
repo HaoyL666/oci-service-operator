@@ -12,13 +12,13 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &ocvpv1beta1.Sddc{Spec: ocvpv1beta1.SddcSpec{
 		VmwareSoftwareVersion: "8.0.2",
-		CompartmentId:         "ocid1.compartment.oc1..replay",
+		CompartmentId:         "ocid1.compartment.oc1..mock",
 		HcxMode:               string(ocvpsdk.HcxModesDisabled),
 		InitialConfiguration: ocvpv1beta1.SddcInitialConfiguration{
 			InitialClusterConfigurations: []ocvpv1beta1.SddcInitialConfigurationInitialClusterConfiguration{
@@ -31,7 +31,7 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
 					InitialHostShapeName:      "BM.DenseIO.E5.128",
 					InitialHostOcpuCount:      128,
 					NetworkConfiguration: ocvpv1beta1.SddcInitialConfigurationInitialClusterConfigurationNetworkConfiguration{
-						ProvisioningSubnetId: "ocid1.subnet.oc1..replay",
+						ProvisioningSubnetId: "ocid1.subnet.oc1..mock",
 						VmotionVlanId:        "ocid1.vlan.oc1..vmotion",
 						VsanVlanId:           "ocid1.vlan.oc1..vsan",
 						NsxVTepVlanId:        "ocid1.vlan.oc1..nsxvtep",
@@ -43,16 +43,16 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
 				},
 			},
 		},
-		SshAuthorizedKeys: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
-		DisplayName:       syntheticSddcName,
-		FreeformTags:      map[string]string{"osok-replay": "create"},
+		SshAuthorizedKeys: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
+		DisplayName:       mockSddcName,
+		FreeformTags:      map[string]string{"osok-mock": "create"},
 	}}
 	ocimock.InitializeResource(resource, "mock-sddc")
 	resource.Spec = ocimock.MustJSONFixture[ocvpv1beta1.SddcSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-sddc",
+  "displayName": "osok-mock-sddc",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "hcxMode": "DISABLED",
   "initialConfiguration": {
@@ -78,21 +78,21 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
       }
     ]
   },
-  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
   "vmwareSoftwareVersion": "8.0.2"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-sddc-updated",
+  "displayName": "osok-mock-sddc-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[ocvpsdk.CreateSddcDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-sddc",
+  "displayName": "osok-mock-sddc",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "hcxMode": "DISABLED",
   "initialConfiguration": {
@@ -118,16 +118,16 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
       }
     ]
   },
-  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
   "vmwareSoftwareVersion": "8.0.2"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
   "clustersCount": 1,
   "compartmentId": "<ocid:1>",
   "definedTags": {},
-  "displayName": "osok-replay-sddc",
+  "displayName": "osok-mock-sddc",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "hcxMode": "DISABLED",
   "id": "<ocid:10>",
@@ -155,11 +155,11 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
     ]
   },
   "lifecycleState": "ACTIVE",
-  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
-  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "nsxManagerFqdn": "nsx.osok-mock.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
   "timeCreated": "2026-08-31T12:00:00Z",
   "timeUpdated": "2026-08-31T12:01:00Z",
-  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vcenterFqdn": "vcenter.osok-mock.example.internal",
   "vmwareSoftwareVersion": "8.0.2"
 }`)
 	createdReadStates := []ocvpsdk.Sddc{
@@ -167,9 +167,9 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
   "clustersCount": 1,
   "compartmentId": "<ocid:1>",
   "definedTags": {},
-  "displayName": "osok-replay-sddc",
+  "displayName": "osok-mock-sddc",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "hcxMode": "DISABLED",
   "id": "<ocid:10>",
@@ -197,27 +197,27 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
     ]
   },
   "lifecycleState": "ACTIVE",
-  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
-  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "nsxManagerFqdn": "nsx.osok-mock.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
   "timeCreated": "2026-08-31T12:00:00Z",
   "timeUpdated": "2026-08-31T12:01:00Z",
-  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vcenterFqdn": "vcenter.osok-mock.example.internal",
   "vmwareSoftwareVersion": "8.0.2"
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[ocvpsdk.UpdateSddcDetails](t, `{
-  "displayName": "osok-replay-sddc-updated",
+  "displayName": "osok-mock-sddc-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
   "clustersCount": 1,
   "compartmentId": "<ocid:1>",
   "definedTags": {},
-  "displayName": "osok-replay-sddc-updated",
+  "displayName": "osok-mock-sddc-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "hcxMode": "DISABLED",
   "id": "<ocid:10>",
@@ -245,11 +245,11 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
     ]
   },
   "lifecycleState": "ACTIVE",
-  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
-  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "nsxManagerFqdn": "nsx.osok-mock.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
   "timeCreated": "2026-08-31T12:00:00Z",
   "timeUpdated": "2026-08-31T12:02:00Z",
-  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vcenterFqdn": "vcenter.osok-mock.example.internal",
   "vmwareSoftwareVersion": "8.0.2"
 }`)
 	updatedReadStates := []ocvpsdk.Sddc{
@@ -257,9 +257,9 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
   "clustersCount": 1,
   "compartmentId": "<ocid:1>",
   "definedTags": {},
-  "displayName": "osok-replay-sddc-updated",
+  "displayName": "osok-mock-sddc-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "hcxMode": "DISABLED",
   "id": "<ocid:10>",
@@ -287,11 +287,11 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
     ]
   },
   "lifecycleState": "ACTIVE",
-  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
-  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "nsxManagerFqdn": "nsx.osok-mock.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
   "timeCreated": "2026-08-31T12:00:00Z",
   "timeUpdated": "2026-08-31T12:02:00Z",
-  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vcenterFqdn": "vcenter.osok-mock.example.internal",
   "vmwareSoftwareVersion": "8.0.2"
 }`),
 	}
@@ -300,9 +300,9 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
   "clustersCount": 1,
   "compartmentId": "<ocid:1>",
   "definedTags": {},
-  "displayName": "osok-replay-sddc-updated",
+  "displayName": "osok-mock-sddc-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "hcxMode": "DISABLED",
   "id": "<ocid:10>",
@@ -330,20 +330,20 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
     ]
   },
   "lifecycleState": "DELETING",
-  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
-  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "nsxManagerFqdn": "nsx.osok-mock.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
   "timeCreated": "2026-08-31T12:00:00Z",
   "timeUpdated": "2026-08-31T12:03:00Z",
-  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vcenterFqdn": "vcenter.osok-mock.example.internal",
   "vmwareSoftwareVersion": "8.0.2"
 }`),
 		ocimock.MustOCIResponseFixture[ocvpsdk.Sddc](t, `{
   "clustersCount": 1,
   "compartmentId": "<ocid:1>",
   "definedTags": {},
-  "displayName": "osok-replay-sddc-updated",
+  "displayName": "osok-mock-sddc-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "hcxMode": "DISABLED",
   "id": "<ocid:10>",
@@ -371,11 +371,11 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
     ]
   },
   "lifecycleState": "DELETED",
-  "nsxManagerFqdn": "nsx.osok-replay.example.internal",
-  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplayOnlyKey osok-replay",
+  "nsxManagerFqdn": "nsx.osok-mock.example.internal",
+  "sshAuthorizedKeys": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMockOnlyKey osok-mock",
   "timeCreated": "2026-08-31T12:00:00Z",
   "timeUpdated": "2026-08-31T12:04:00Z",
-  "vcenterFqdn": "vcenter.osok-replay.example.internal",
+  "vcenterFqdn": "vcenter.osok-mock.example.internal",
   "vmwareSoftwareVersion": "8.0.2"
 }`),
 	}
@@ -427,7 +427,7 @@ func TestMockIntegrationSddcLifecycleCRUD(t *testing.T) {
 		}
 	})
 	sdkClient := ocvpsdk.SddcClient{BaseClient: session.BaseClient()}
-	manager := newSyntheticSddcManager(sdkClient)
+	manager := newMockSddcManager(sdkClient)
 	client := manager.client
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*ocvpv1beta1.Sddc]{
 		Resource:      resource,

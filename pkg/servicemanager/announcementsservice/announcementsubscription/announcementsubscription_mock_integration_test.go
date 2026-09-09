@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationAnnouncementSubscriptionEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,9 +23,9 @@ func TestMockIntegrationAnnouncementSubscriptionEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[announcementsservicev1beta1.AnnouncementSubscriptionSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK recorded announcement subscription",
-  "displayName": "osok-replay-announcement-subscription",
+  "displayName": "osok-mock-announcement-subscription",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "onsTopicId": "\u003cocid:2\u003e",
   "preferredTimeZone": "UTC"
@@ -34,16 +34,16 @@ func TestMockIntegrationAnnouncementSubscriptionEvidenceCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "OSOK recorded announcement subscription updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "preferredTimeZone": "America/Chicago"
 }`)
 	createRequest := ocimock.MustJSONFixture[announcementsservicesdk.CreateAnnouncementSubscriptionDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK recorded announcement subscription",
-  "displayName": "osok-replay-announcement-subscription",
+  "displayName": "osok-mock-announcement-subscription",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "onsTopicId": "\u003cocid:2\u003e",
   "preferredTimeZone": "UTC"
@@ -57,10 +57,10 @@ func TestMockIntegrationAnnouncementSubscriptionEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded announcement subscription",
-  "displayName": "osok-replay-announcement-subscription",
+  "displayName": "osok-mock-announcement-subscription",
   "filterGroups": {},
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -75,7 +75,7 @@ func TestMockIntegrationAnnouncementSubscriptionEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[announcementsservicesdk.UpdateAnnouncementSubscriptionDetails](t, `{
   "description": "OSOK recorded announcement subscription updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "preferredTimeZone": "America/Chicago"
 }`)
@@ -88,10 +88,10 @@ func TestMockIntegrationAnnouncementSubscriptionEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded announcement subscription updated",
-  "displayName": "osok-replay-announcement-subscription",
+  "displayName": "osok-mock-announcement-subscription",
   "filterGroups": {},
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -112,10 +112,10 @@ func TestMockIntegrationAnnouncementSubscriptionEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded announcement subscription updated",
-  "displayName": "osok-replay-announcement-subscription",
+  "displayName": "osok-mock-announcement-subscription",
   "filterGroups": {},
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,

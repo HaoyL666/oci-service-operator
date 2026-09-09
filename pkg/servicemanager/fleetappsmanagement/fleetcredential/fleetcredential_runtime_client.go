@@ -69,7 +69,10 @@ func reviewedFleetCredentialRuntimeSemantics() *generatedruntime.Semantics {
 
 func newFleetCredentialServiceClientWithOCIClients(log loggerutil.OSOKLogger, client fleetappssdk.FleetAppsManagementClient, workRequestClient fleetappssdk.FleetAppsManagementWorkRequestClient) FleetCredentialServiceClient {
 	manager := &FleetCredentialServiceManager{Log: log}
-	hooks := newFleetCredentialDefaultRuntimeHooks(client)
+	hooks := newFleetCredentialDefaultRuntimeHooks(FleetCredentialSDKClients{
+		fleetAppsManagementClient:            client,
+		fleetAppsManagementWorkRequestClient: workRequestClient,
+	})
 	applyFleetCredentialRuntimeHooks(&hooks, workRequestClient, nil)
 	delegate := defaultFleetCredentialServiceClient{ServiceClient: generatedruntime.NewServiceClient[*fleetappsv1beta1.FleetCredential](buildFleetCredentialGeneratedRuntimeConfig(manager, hooks))}
 	return wrapFleetCredentialGeneratedClient(hooks, delegate)

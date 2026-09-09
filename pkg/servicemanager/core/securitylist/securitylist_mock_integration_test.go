@@ -24,7 +24,7 @@ import (
 const mockSecurityListID = "ocid1.securitylist.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/securitylist_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/core/securitylist and formal/imports/core/securitylist.json
 //   - resource runtime: securitylist_runtime.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/core

@@ -16,19 +16,19 @@ import (
 )
 
 // Contract evidence: vendored OCI SDK, production service manager, reviewed
-// formal lifecycle, and the existing sanitized OCI replay fixture.
+// formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationRoutingPolicyWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &loadbalancerv1beta1.RoutingPolicy{}
 	ocimock.InitializeResource(resource, "mock-routingpolicy")
 	resource.Spec = ocimock.MustJSONFixture[loadbalancerv1beta1.RoutingPolicySpec](t, `{
   "conditionLanguageVersion": "V1",
-  "name": "osok_replay_routing_policy",
+  "name": "osok_mock_routing_policy",
   "rules": [
     {
       "actions": [
         {
-          "backendSetName": "osok_replay_backend_set",
+          "backendSetName": "osok_mock_backend_set",
           "name": "FORWARD_TO_BACKENDSET"
         }
       ],
@@ -45,7 +45,7 @@ func TestMockIntegrationRoutingPolicyWorkRequestCRUD(t *testing.T) {
     {
       "actions": [
         {
-          "backendSetName": "osok_replay_backend_set",
+          "backendSetName": "osok_mock_backend_set",
           "name": "FORWARD_TO_BACKENDSET"
         }
       ],
@@ -57,12 +57,12 @@ func TestMockIntegrationRoutingPolicyWorkRequestCRUD(t *testing.T) {
 
 	createRequest := ocimock.MustJSONFixture[loadbalancersdk.CreateRoutingPolicyDetails](t, `{
   "conditionLanguageVersion": "V1",
-  "name": "osok_replay_routing_policy",
+  "name": "osok_mock_routing_policy",
   "rules": [
     {
       "actions": [
         {
-          "backendSetName": "osok_replay_backend_set",
+          "backendSetName": "osok_mock_backend_set",
           "name": "FORWARD_TO_BACKENDSET"
         }
       ],
@@ -77,7 +77,7 @@ func TestMockIntegrationRoutingPolicyWorkRequestCRUD(t *testing.T) {
     {
       "actions": [
         {
-          "backendSetName": "osok_replay_backend_set",
+          "backendSetName": "osok_mock_backend_set",
           "name": "FORWARD_TO_BACKENDSET"
         }
       ],
@@ -88,12 +88,12 @@ func TestMockIntegrationRoutingPolicyWorkRequestCRUD(t *testing.T) {
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loadbalancersdk.RoutingPolicy](t, `{
   "conditionLanguageVersion": "V1",
-  "name": "osok_replay_routing_policy",
+  "name": "osok_mock_routing_policy",
   "rules": [
     {
       "actions": [
         {
-          "backendSetName": "osok_replay_backend_set",
+          "backendSetName": "osok_mock_backend_set",
           "name": "FORWARD_TO_BACKENDSET"
         }
       ],
@@ -104,12 +104,12 @@ func TestMockIntegrationRoutingPolicyWorkRequestCRUD(t *testing.T) {
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[loadbalancersdk.RoutingPolicy](t, `{
   "conditionLanguageVersion": "V1",
-  "name": "osok_replay_routing_policy",
+  "name": "osok_mock_routing_policy",
   "rules": [
     {
       "actions": [
         {
-          "backendSetName": "osok_replay_backend_set",
+          "backendSetName": "osok_mock_backend_set",
           "name": "FORWARD_TO_BACKENDSET"
         }
       ],
@@ -159,7 +159,7 @@ func TestMockIntegrationRoutingPolicyWorkRequestCRUD(t *testing.T) {
 }`)
 
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[loadbalancersdk.RoutingPolicy, loadbalancersdk.CreateRoutingPolicyDetails, loadbalancersdk.UpdateRoutingPolicyDetails]{
-		CollectionPath: "/20170115/loadBalancers/<ocid:1>/routingPolicies", ItemPath: "/20170115/loadBalancers/<ocid:1>/routingPolicies/osok_replay_routing_policy",
+		CollectionPath: "/20170115/loadBalancers/<ocid:1>/routingPolicies", ItemPath: "/20170115/loadBalancers/<ocid:1>/routingPolicies/osok_mock_routing_policy",
 		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		ListShape: ocimock.ListShapeArray, RequireCreateRead: true, RequireUpdateRead: true, DeleteEndsNotFound: true, RequireDeleteRead: true,

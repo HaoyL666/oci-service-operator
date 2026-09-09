@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationDrProtectionGroupWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -28,9 +28,9 @@ func TestMockIntegrationDrProtectionGroupWorkRequestCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-drprotectiongroup")
 	resource.Spec = ocimock.MustJSONFixture[disasterrecoveryv1beta1.DrProtectionGroupSpec](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-dr-protection-group-v1",
+  "displayName": "osok-mock-dr-protection-group-v1",
   "freeformTags": {
-    "managed-by": "osok-replay"
+    "managed-by": "osok-mock"
   },
   "logLocation": {
     "bucket": "<binding:dr-log-bucket>",
@@ -44,9 +44,9 @@ func TestMockIntegrationDrProtectionGroupWorkRequestCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "definedTags": {
   },
-  "displayName": "osok-replay-dr-protection-group-v1-updated",
+  "displayName": "osok-mock-dr-protection-group-v1-updated",
   "freeformTags": {
-    "managed-by": "osok-replay"
+    "managed-by": "osok-mock"
   },
   "logLocation": {
     "bucket": "<binding:dr-log-bucket>",
@@ -59,9 +59,9 @@ func TestMockIntegrationDrProtectionGroupWorkRequestCRUD(t *testing.T) {
 
 	createRequest := ocimock.MustJSONFixture[disasterrecoverysdk.CreateDrProtectionGroupDetails](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-dr-protection-group-v1",
+  "displayName": "osok-mock-dr-protection-group-v1",
   "freeformTags": {
-    "managed-by": "osok-replay"
+    "managed-by": "osok-mock"
   },
   "logLocation": {
     "bucket": "<binding:dr-log-bucket>",
@@ -74,9 +74,9 @@ func TestMockIntegrationDrProtectionGroupWorkRequestCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[disasterrecoverysdk.UpdateDrProtectionGroupDetails](t, `{
   "definedTags": {
   },
-  "displayName": "osok-replay-dr-protection-group-v1-updated",
+  "displayName": "osok-mock-dr-protection-group-v1-updated",
   "freeformTags": {
-    "managed-by": "osok-replay"
+    "managed-by": "osok-mock"
   },
   "logLocation": {
     "bucket": "<binding:dr-log-bucket>",
@@ -95,9 +95,9 @@ func TestMockIntegrationDrProtectionGroupWorkRequestCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T17:43:17.317Z"
     }
   },
-  "displayName": "osok-replay-dr-protection-group-v1",
+  "displayName": "osok-mock-dr-protection-group-v1",
   "freeformTags": {
-    "managed-by": "osok-replay"
+    "managed-by": "osok-mock"
   },
   "id": "<ocid:3>",
   "lifeCycleDetails": null,
@@ -122,9 +122,9 @@ func TestMockIntegrationDrProtectionGroupWorkRequestCRUD(t *testing.T) {
   "compartmentId": "<ocid:1>",
   "definedTags": {
   },
-  "displayName": "osok-replay-dr-protection-group-v1-updated",
+  "displayName": "osok-mock-dr-protection-group-v1-updated",
   "freeformTags": {
-    "managed-by": "osok-replay"
+    "managed-by": "osok-mock"
   },
   "id": "<ocid:3>",
   "lifeCycleDetails": null,
@@ -149,9 +149,9 @@ func TestMockIntegrationDrProtectionGroupWorkRequestCRUD(t *testing.T) {
   "compartmentId": "<ocid:1>",
   "definedTags": {
   },
-  "displayName": "osok-replay-dr-protection-group-v1-updated",
+  "displayName": "osok-mock-dr-protection-group-v1-updated",
   "freeformTags": {
-    "managed-by": "osok-replay"
+    "managed-by": "osok-mock"
   },
   "id": "<ocid:3>",
   "lifeCycleDetails": null,

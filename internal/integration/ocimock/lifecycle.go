@@ -10,6 +10,8 @@ import (
 	"fmt"
 
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
@@ -31,6 +33,7 @@ type LifecycleScenario[T any] struct {
 	Mutate           func(T)
 	ValidateCreated  func(T) error
 	ValidateUpdated  func(T) error
+	ValidateStable   func(T) error
 	RetryError       func(error) bool
 	RetryDeleteError func(error) bool
 	MaxReconciles    int
@@ -59,7 +62,8 @@ func RunLifecycle[T any](ctx context.Context, scenario LifecycleScenario[T]) err
 	if scenario.CreateContext != nil {
 		createContext = scenario.CreateContext(ctx)
 	}
-	if err := converge(createContext, scenario.Resource, scenario.Client, maxReconciles, scenario.RetryError); err != nil {
+	request := lifecycleRequest(scenario.Resource)
+	if err := converge(createContext, scenario.Resource, scenario.Client, request, maxReconciles, scenario.RetryError); err != nil {
 		return fmt.Errorf("create/read lifecycle: %w", err)
 	}
 	if scenario.ValidateCreated != nil {
@@ -69,13 +73,28 @@ func RunLifecycle[T any](ctx context.Context, scenario LifecycleScenario[T]) err
 	}
 	if scenario.Mutate != nil {
 		scenario.Mutate(scenario.Resource)
-		if err := converge(ctx, scenario.Resource, scenario.Client, maxReconciles, scenario.RetryError); err != nil {
+		if err := converge(ctx, scenario.Resource, scenario.Client, request, maxReconciles, scenario.RetryError); err != nil {
 			return fmt.Errorf("update/read lifecycle: %w", err)
 		}
 		if scenario.ValidateUpdated != nil {
 			if err := scenario.ValidateUpdated(scenario.Resource); err != nil {
 				return fmt.Errorf("validate updated resource: %w", err)
 			}
+		}
+	}
+	if scenario.ValidateStable != nil {
+		response, err := scenario.Client.CreateOrUpdate(ctx, scenario.Resource, request)
+		if err != nil {
+			return fmt.Errorf("stable lifecycle: %w", err)
+		}
+		if !response.IsSuccessful {
+			return fmt.Errorf("stable lifecycle was unsuccessful: %+v", response)
+		}
+		if response.ShouldRequeue {
+			return fmt.Errorf("stable lifecycle unexpectedly requested requeue: %+v", response)
+		}
+		if err := scenario.ValidateStable(scenario.Resource); err != nil {
+			return fmt.Errorf("validate stable resource: %w", err)
 		}
 	}
 	for attempt := 1; attempt <= maxReconciles; attempt++ {
@@ -93,9 +112,20 @@ func RunLifecycle[T any](ctx context.Context, scenario LifecycleScenario[T]) err
 	return fmt.Errorf("delete lifecycle did not converge after %d attempts", maxReconciles)
 }
 
-func converge[T any](ctx context.Context, resource T, client LifecycleClient[T], maxReconciles int, retryError func(error) bool) error {
+func lifecycleRequest(resource any) ctrl.Request {
+	object, ok := resource.(metav1.Object)
+	if !ok {
+		return ctrl.Request{}
+	}
+	return ctrl.Request{NamespacedName: types.NamespacedName{
+		Namespace: object.GetNamespace(),
+		Name:      object.GetName(),
+	}}
+}
+
+func converge[T any](ctx context.Context, resource T, client LifecycleClient[T], request ctrl.Request, maxReconciles int, retryError func(error) bool) error {
 	for attempt := 1; attempt <= maxReconciles; attempt++ {
-		response, err := client.CreateOrUpdate(ctx, resource, ctrl.Request{})
+		response, err := client.CreateOrUpdate(ctx, resource, request)
 		if err != nil {
 			if retryError != nil && retryError(err) {
 				continue

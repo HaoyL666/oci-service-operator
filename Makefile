@@ -407,29 +407,20 @@ test: manifests generate fmt vet ## Run tests.
 		$(ENVTEST_ENV) KUBEBUILDER_ASSETS="$$envtest_assets" go test ./... -coverprofile cover.out | tee unittests.cover'
 	go tool cover -func cover.out | grep total | awk '{print substr($$3, 1, length($$3)-1)}' > unittests.percent
 
-REPLAY_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f \( -name '*_recorded_integration_test.go' -o -name '*_synthetic_integration_test.go' \) -exec dirname {} \;))
 MOCK_INTEGRATION_PACKAGES := $(sort $(shell find pkg/servicemanager -type f -name '*_mock_integration_test.go' -exec dirname {} \;))
 
-replay-coverage: ## Report OCI HTTP replay coverage and classification without enforcing completeness.
-	go run ./cmd/osok-replay-coverage
-
-mock-integration-inventory: ## Classify generated CRUD resources for OCI mock integration migration.
+mock-integration-inventory: ## Classify generated CRUD resources for OCI mock integration coverage.
 	go run ./cmd/osok-mock-integration-inventory
 
 mock-integration-coverage: ## Require completed S1 and S2 resources to retain their dynamic and formal coverage.
 	go run ./cmd/osok-mock-integration-inventory --check-immediate --check-lifecycle
 
-replaytest: replay-coverage ## Run credential-free OCI SDK HTTP replay tests.
-	go test ./internal/e2e/ocireplay
-	@[ -n "$(REPLAY_INTEGRATION_PACKAGES)" ] || { echo "No replay integration tests found"; exit 1; }
-	go test $(addprefix ./,$(REPLAY_INTEGRATION_PACKAGES)) -run '^Test(Recorded|Synthetic)' -count=1
-
-mockintegrationtest: mock-integration-coverage ## Run dynamic service-manager integration tests against the in-memory OCI HTTP mock.
+mockintegrationtest: mock-integration-coverage ## Run typed service-manager integration tests against the in-memory OCI HTTP mock.
 	go test ./internal/integration/ocimock
 	@[ -n "$(MOCK_INTEGRATION_PACKAGES)" ] || { echo "No OCI mock integration tests found"; exit 1; }
 	go test $(addprefix ./,$(MOCK_INTEGRATION_PACKAGES)) -run '^TestMockIntegration' -count=1
 
-integrationtest: replaytest mockintegrationtest ## Run credential-free OCI service-manager and lifecycle integration tests.
+integrationtest: mockintegrationtest ## Run credential-free OCI service-manager and lifecycle integration tests.
 	go test ./internal/e2e/lifecycle
 
 functionaltest: integrationtest ## Run deterministic controller integration tests.

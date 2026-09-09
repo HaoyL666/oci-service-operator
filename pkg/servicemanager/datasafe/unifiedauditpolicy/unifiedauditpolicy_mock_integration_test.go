@@ -15,12 +15,12 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationUnifiedAuditPolicyLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &datasafev1beta1.UnifiedAuditPolicy{}
-	if err := json.Unmarshal([]byte(`{"metadata":{"name":"osok-replay-unifiedauditpolicy"},"spec":{"securityPolicyId":"ocid1.securitypolicy.oc1..synthetic","unifiedAuditPolicyDefinitionId":"ocid1.unifiedauditpolicydefinition.oc1..synthetic","compartmentId":"ocid1.compartment.oc1..synthetic","status":"DISABLED","conditions":[{"entitySelection":"ALL_USERS","operationStatus":"ALL"}],"displayName":"osok-replay-unified-audit-policy"}}`), resource); err != nil {
+	if err := json.Unmarshal([]byte(`{"metadata":{"name":"osok-mock-unifiedauditpolicy"},"spec":{"securityPolicyId":"ocid1.securitypolicy.oc1..synthetic","unifiedAuditPolicyDefinitionId":"ocid1.unifiedauditpolicydefinition.oc1..synthetic","compartmentId":"ocid1.compartment.oc1..synthetic","status":"DISABLED","conditions":[{"entitySelection":"ALL_USERS","operationStatus":"ALL"}],"displayName":"osok-mock-unified-audit-policy"}}`), resource); err != nil {
 		t.Fatal(err)
 	}
 	ocimock.InitializeResource(resource, "mock-unifiedauditpolicy")
@@ -46,7 +46,7 @@ func TestMockIntegrationUnifiedAuditPolicyLifecycleCRUD(t *testing.T) {
       "operationStatus": "ALL"
     }
   ],
-  "displayName": "osok-replay-unified-audit-policy",
+  "displayName": "osok-mock-unified-audit-policy",
   "securityPolicyId": "ocid1.securitypolicy.oc1..synthetic",
   "status": "DISABLED",
   "unifiedAuditPolicyDefinitionId": "ocid1.unifiedauditpolicydefinition.oc1..synthetic"
@@ -59,7 +59,7 @@ func TestMockIntegrationUnifiedAuditPolicyLifecycleCRUD(t *testing.T) {
       "operationStatus": "ALL"
     }
   ],
-  "displayName": "osok-replay-unified-audit-policy",
+  "displayName": "osok-mock-unified-audit-policy",
   "id": "\u003cocid:4\u003e",
   "lifecycleState": "ACTIVE",
   "securityPolicyId": "ocid1.securitypolicy.oc1..synthetic",
@@ -75,7 +75,7 @@ func TestMockIntegrationUnifiedAuditPolicyLifecycleCRUD(t *testing.T) {
       "operationStatus": "ALL"
     }
   ],
-  "displayName": "osok-replay-unified-audit-policy",
+  "displayName": "osok-mock-unified-audit-policy",
   "id": "\u003cocid:4\u003e",
   "lifecycleState": "ACTIVE",
   "securityPolicyId": "ocid1.securitypolicy.oc1..synthetic",
@@ -105,7 +105,7 @@ func TestMockIntegrationUnifiedAuditPolicyLifecycleCRUD(t *testing.T) {
     }
   ],
   "description": "mock-updated",
-  "displayName": "osok-replay-unified-audit-policy",
+  "displayName": "osok-mock-unified-audit-policy",
   "id": "\u003cocid:4\u003e",
   "lifecycleState": "ACTIVE",
   "securityPolicyId": "ocid1.securitypolicy.oc1..synthetic",
@@ -124,7 +124,7 @@ func TestMockIntegrationUnifiedAuditPolicyLifecycleCRUD(t *testing.T) {
     }
   ],
   "description": "mock-updated",
-  "displayName": "osok-replay-unified-audit-policy",
+  "displayName": "osok-mock-unified-audit-policy",
   "id": "\u003cocid:4\u003e",
   "lifecycleState": "ACTIVE",
   "securityPolicyId": "ocid1.securitypolicy.oc1..synthetic",

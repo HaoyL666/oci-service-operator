@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,25 +22,25 @@ func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[wafv1beta1.WebAppFirewallSpec](t, `{
   "backendType": "LOAD_BALANCER",
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waf-v1",
+  "displayName": "osok-mock-waf-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "loadBalancerId": "\u003cocid:2\u003e",
   "webAppFirewallPolicyId": "\u003cocid:3\u003e"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-waf-v1-updated",
+  "displayName": "osok-mock-waf-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[wafsdk.CreateWebAppFirewallLoadBalancerDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waf-v1",
+  "displayName": "osok-mock-waf-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "loadBalancerId": "\u003cocid:2\u003e",
   "webAppFirewallPolicyId": "\u003cocid:3\u003e"
@@ -54,9 +54,9 @@ func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T23:11:24.587Z"
     }
   },
-  "displayName": "osok-replay-waf-v1",
+  "displayName": "osok-mock-waf-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:5>",
   "lifecycleDetails": null,
@@ -81,9 +81,9 @@ func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T23:11:24.587Z"
     }
   },
-  "displayName": "osok-replay-waf-v1",
+  "displayName": "osok-mock-waf-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:5>",
   "lifecycleDetails": null,
@@ -100,9 +100,9 @@ func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[wafsdk.UpdateWebAppFirewallDetails](t, `{
-  "displayName": "osok-replay-waf-v1-updated",
+  "displayName": "osok-mock-waf-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[wafsdk.WebAppFirewallLoadBalancer](t, `{
@@ -114,9 +114,9 @@ func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T23:11:24.587Z"
     }
   },
-  "displayName": "osok-replay-waf-v1-updated",
+  "displayName": "osok-mock-waf-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:5>",
   "lifecycleDetails": null,
@@ -141,9 +141,9 @@ func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T23:11:24.587Z"
     }
   },
-  "displayName": "osok-replay-waf-v1-updated",
+  "displayName": "osok-mock-waf-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:5>",
   "lifecycleDetails": null,
@@ -169,9 +169,9 @@ func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T23:11:24.587Z"
     }
   },
-  "displayName": "osok-replay-waf-v1-updated",
+  "displayName": "osok-mock-waf-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:5>",
   "lifecycleDetails": null,
@@ -195,9 +195,9 @@ func TestMockIntegrationWebAppFirewallEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T23:11:24.587Z"
     }
   },
-  "displayName": "osok-replay-waf-v1-updated",
+  "displayName": "osok-mock-waf-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:5>",
   "lifecycleDetails": null,

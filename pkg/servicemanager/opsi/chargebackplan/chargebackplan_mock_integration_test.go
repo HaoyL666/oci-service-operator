@@ -22,7 +22,7 @@ func TestMockIntegrationChargebackPlanLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := baseChargebackPlan()
 	ocimock.InitializeResource(resource, "mock-chargebackplan")
-	responder, err := newChargebackPlanMockResponder()
+	responder, err := newChargebackPlanMockResponder(resource)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,7 +63,7 @@ func TestMockIntegrationChargebackPlanLifecycleCRUD(t *testing.T) {
 	}
 }
 
-func newChargebackPlanMockResponder() (*ocimock.CRUDResponder[opsisdk.ChargebackPlan], error) {
+func newChargebackPlanMockResponder(resource *opsiv1beta1.ChargebackPlan) (*ocimock.CRUDResponder[opsisdk.ChargebackPlan], error) {
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[opsisdk.ChargebackPlan]{
 		CollectionPath: "/20200630/chargebackPlans",
 		ItemPath:       "/20200630/chargebackPlans/" + mockChargebackPlanID,
@@ -79,6 +79,10 @@ func newChargebackPlanMockResponder() (*ocimock.CRUDResponder[opsisdk.Chargeback
 			return ocimock.JSONResponse(http.StatusOK, opsisdk.ChargebackPlanCollection{Items: items})
 		},
 		Create: func(request ocimock.Request) (opsisdk.ChargebackPlan, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryTokenValue(request, chargebackPlanRetryToken(resource, resource.Namespace)); err != nil {
+				var zero opsisdk.ChargebackPlan
+				return zero, ocimock.Response{}, err
+			}
 			var details map[string]any
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return opsisdk.ChargebackPlan{}, ocimock.Response{}, err

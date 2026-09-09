@@ -25,7 +25,7 @@ import (
 
 const mockApplicationID = "ocid1.dataflowapplication.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal immediate-response contract, resource-local runtime, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal immediate-response contract, resource-local runtime, and vendored OCI SDK.
 func TestMockIntegrationApplicationLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &dataflowv1beta1.Application{ObjectMeta: metav1.ObjectMeta{Name: "mock-data-flow-application", Namespace: "default", UID: types.UID("mock-data-flow-application-uid")}, Spec: dataflowv1beta1.ApplicationSpec{
@@ -79,6 +79,10 @@ func newApplicationMockResponder(resource *dataflowv1beta1.Application) (*ocimoc
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
 		Create: func(request ocimock.Request) (dataflowsdk.Application, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero dataflowsdk.Application
+				return zero, ocimock.Response{}, err
+			}
 			var details dataflowsdk.CreateApplicationDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return dataflowsdk.Application{}, ocimock.Response{}, err

@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationLogAnalyticsLogGroupCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -24,24 +24,24 @@ func TestMockIntegrationLogAnalyticsLogGroupCompositeCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[loganalyticsv1beta1.LogAnalyticsLogGroupSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-log-analytics-group-v1",
+  "displayName": "osok-mock-log-analytics-group-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[loganalyticssdk.CreateLogAnalyticsLogGroupDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-log-analytics-group-v1",
+  "displayName": "osok-mock-log-analytics-group-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loganalyticssdk.LogAnalyticsLogGroup](t, `{
@@ -53,9 +53,9 @@ func TestMockIntegrationLogAnalyticsLogGroupCompositeCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-log-analytics-group-v1",
+  "displayName": "osok-mock-log-analytics-group-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "timeCreated": "2026-09-01T21:50:19.024Z",
@@ -71,9 +71,9 @@ func TestMockIntegrationLogAnalyticsLogGroupCompositeCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-log-analytics-group-v1",
+  "displayName": "osok-mock-log-analytics-group-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "timeCreated": "2026-09-01T21:50:19.024Z",
@@ -83,7 +83,7 @@ func TestMockIntegrationLogAnalyticsLogGroupCompositeCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[loganalyticssdk.UpdateLogAnalyticsLogGroupDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[loganalyticssdk.LogAnalyticsLogGroup](t, `{
@@ -95,9 +95,9 @@ func TestMockIntegrationLogAnalyticsLogGroupCompositeCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-log-analytics-group-v1",
+  "displayName": "osok-mock-log-analytics-group-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "timeCreated": "2026-09-01T21:50:19.024Z",
@@ -113,9 +113,9 @@ func TestMockIntegrationLogAnalyticsLogGroupCompositeCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-log-analytics-group-v1",
+  "displayName": "osok-mock-log-analytics-group-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "timeCreated": "2026-09-01T21:50:19.024Z",

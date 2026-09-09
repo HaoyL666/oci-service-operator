@@ -44,6 +44,10 @@ func TestMockIntegrationAuthenticationProviderCompositeCRUD(t *testing.T) {
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": items})
 		},
 		Create: func(request ocimock.Request) (odasdk.AuthenticationProvider, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero odasdk.AuthenticationProvider
+				return zero, ocimock.Response{}, err
+			}
 			var details odasdk.CreateAuthenticationProviderDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return odasdk.AuthenticationProvider{}, ocimock.Response{}, err

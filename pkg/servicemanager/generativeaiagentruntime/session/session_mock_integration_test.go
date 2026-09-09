@@ -37,9 +37,12 @@ func TestMockIntegrationSessionCompositeCRUD(t *testing.T) {
 		generativeaiagentruntimesdk.CreateSessionDetails,
 		generativeaiagentruntimesdk.UpdateSessionDetails,
 	]{
-		CollectionPath:     "/20240531/agentEndpoints/<ocid:1>/sessions",
-		ItemPath:           "/20240531/agentEndpoints/<ocid:1>/sessions/<ocid:2>",
-		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CollectionPath: "/20240531/agentEndpoints/<ocid:1>/sessions",
+		ItemPath:       "/20240531/agentEndpoints/<ocid:1>/sessions/<ocid:2>",
+		Operations:     []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		CreateRequest:      &createRequest,
 		CreatedState:       &createdState,
 		UpdateRequest:      &updateRequest,

@@ -23,7 +23,7 @@ import (
 
 const mockLogSavedSearchID = "ocid1.logsavedsearch.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, reviewed formal contract, resource-local semantics, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, reviewed formal contract, resource-local semantics, and vendored OCI SDK.
 func TestMockIntegrationLogSavedSearchLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &loggingv1beta1.LogSavedSearch{ObjectMeta: metav1.ObjectMeta{Name: "mock-log-saved-search", Namespace: "default", UID: types.UID("mock-log-saved-search-uid")}, Spec: loggingv1beta1.LogSavedSearchSpec{
@@ -76,6 +76,10 @@ func newLogSavedSearchMockResponder(resource *loggingv1beta1.LogSavedSearch) (*o
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
 		Create: func(request ocimock.Request) (loggingsdk.LogSavedSearch, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero loggingsdk.LogSavedSearch
+				return zero, ocimock.Response{}, err
+			}
 			var details loggingsdk.CreateLogSavedSearchDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return loggingsdk.LogSavedSearch{}, ocimock.Response{}, err

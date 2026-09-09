@@ -20,10 +20,14 @@ const (
 )
 
 // ExplicitCRUDOptions contains only package-owned, typed test inputs. It does
-// not inspect formal metadata, cassettes, CR fields, or SDK types.
+// not inspect formal metadata, CR fields, or SDK types.
 type ExplicitCRUDOptions[S, C, U any] struct {
 	CollectionPath string
 	ItemPath       string
+	CreatePath     string
+	CreateMethod   string
+	UpdatePath     string
+	UpdateMethod   string
 	DeletePath     string
 	DeleteMethod   string
 	Operations     []Operation
@@ -80,6 +84,10 @@ func NewExplicitCRUDResponder[S, C, U any](options ExplicitCRUDOptions[S, C, U])
 	crudOptions := CRUDOptions[S]{
 		CollectionPath:         options.CollectionPath,
 		ItemPath:               options.ItemPath,
+		CreatePath:             options.CreatePath,
+		CreateMethod:           options.CreateMethod,
+		UpdatePath:             options.UpdatePath,
+		UpdateMethod:           options.UpdateMethod,
 		DeletePath:             options.DeletePath,
 		DeleteMethod:           options.DeleteMethod,
 		ExpectedOperations:     append([]Operation(nil), options.Operations...),

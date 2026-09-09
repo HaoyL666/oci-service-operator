@@ -14,21 +14,21 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationSecurityAttributeNamespaceLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &securityattributev1beta1.SecurityAttributeNamespace{Spec: securityattributev1beta1.SecurityAttributeNamespaceSpec{
-		CompartmentId: "ocid1.tenancy.oc1..replay", Name: syntheticSecurityAttributeNamespaceName, Description: "synthetic create", FreeformTags: map[string]string{"osok-replay": "synthetic"},
+		CompartmentId: "ocid1.tenancy.oc1..mock", Name: mockSecurityAttributeNamespaceName, Description: "synthetic create", FreeformTags: map[string]string{"osok-mock": "synthetic"},
 	}}
 	ocimock.InitializeResource(resource, "mock-securityattributenamespace")
 	resource.Spec = ocimock.MustJSONFixture[securityattributev1beta1.SecurityAttributeNamespaceSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic create",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
-  "name": "osok_replay_security_namespace_v1"
+  "name": "osok_mock_security_namespace_v1"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
@@ -38,22 +38,22 @@ func TestMockIntegrationSecurityAttributeNamespaceLifecycleCRUD(t *testing.T) {
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic create",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
-  "name": "osok_replay_security_namespace_v1"
+  "name": "osok_mock_security_namespace_v1"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[securityattributesdk.SecurityAttributeNamespace](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic create",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
   "mode": [
     "ENFORCE"
   ],
-  "name": "osok_replay_security_namespace_v1"
+  "name": "osok_mock_security_namespace_v1"
 }`)
 	updateRequest := ocimock.MustJSONFixture[securityattributesdk.UpdateSecurityAttributeNamespaceDetails](t, `{
   "description": "synthetic update"
@@ -62,14 +62,14 @@ func TestMockIntegrationSecurityAttributeNamespaceLifecycleCRUD(t *testing.T) {
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
   "mode": [
     "ENFORCE"
   ],
-  "name": "osok_replay_security_namespace_v1"
+  "name": "osok_mock_security_namespace_v1"
 }`)
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		securityattributesdk.SecurityAttributeNamespace,

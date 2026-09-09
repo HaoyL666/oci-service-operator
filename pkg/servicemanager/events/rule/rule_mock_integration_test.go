@@ -16,7 +16,7 @@ import (
 const mockRuleID = "ocid1.rule.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/rule_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/events/rule and formal/imports/events/rule.json
 //   - resource runtime: rule_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/events
@@ -56,9 +56,12 @@ func TestMockIntegrationRuleExplicitCRUD(t *testing.T) {
 		eventssdk.CreateRuleDetails,
 		eventssdk.UpdateRuleDetails,
 	]{
-		CollectionPath:    "/20181201/rules",
-		ItemPath:          "/20181201/rules/" + mockRuleID,
-		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		CollectionPath: "/20181201/rules",
+		ItemPath:       "/20181201/rules/" + mockRuleID,
+		Operations:     []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,
 		UpdateRequest:     &updateRequest,
@@ -82,7 +85,7 @@ func TestMockIntegrationRuleExplicitCRUD(t *testing.T) {
 		}
 	})
 
-	client := newRecordedRuleClient(eventssdk.EventsClient{BaseClient: session.BaseClient()})
+	client := newMockRuleClient(eventssdk.EventsClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*eventsv1beta1.Rule]{
 		Resource:      resource,
 		Client:        client,

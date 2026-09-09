@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,13 +22,13 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
   "action": "INSPECT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
-  "name": "osok_replay_tunnel_rule",
+  "name": "osok_mock_tunnel_rule",
   "profile": {
     "mustReturnTrafficToSource": true
   },
@@ -40,10 +40,10 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
   "action": "INSPECT_AND_CAPTURE_LOG",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "profile": {
@@ -55,13 +55,13 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
   "action": "INSPECT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
-  "name": "osok_replay_tunnel_rule",
+  "name": "osok_mock_tunnel_rule",
   "profile": {
     "mustReturnTrafficToSource": true
   }
@@ -70,14 +70,14 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
   "action": "INSPECT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "description": null,
-  "name": "osok_replay_tunnel_rule",
+  "name": "osok_mock_tunnel_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -94,14 +94,14 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
   "action": "INSPECT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "description": null,
-  "name": "osok_replay_tunnel_rule",
+  "name": "osok_mock_tunnel_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -118,10 +118,10 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
   "action": "INSPECT_AND_CAPTURE_LOG",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "profile": {
@@ -132,14 +132,14 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
   "action": "INSPECT_AND_CAPTURE_LOG",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "description": null,
-  "name": "osok_replay_tunnel_rule",
+  "name": "osok_mock_tunnel_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -156,14 +156,14 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
   "action": "INSPECT_AND_CAPTURE_LOG",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "description": null,
-  "name": "osok_replay_tunnel_rule",
+  "name": "osok_mock_tunnel_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -182,7 +182,7 @@ func TestMockIntegrationTunnelInspectionRuleCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateVxlanInspectionRuleDetails,
 	]{
 		CollectionPath:     "/20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules",
-		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_replay_tunnel_rule",
+		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/tunnelInspectionRules/osok_mock_tunnel_rule",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState:       &createdState,
 		UpdatedState:       &updatedState,

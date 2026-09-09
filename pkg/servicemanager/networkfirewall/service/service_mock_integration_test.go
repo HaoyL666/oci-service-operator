@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationServiceCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -20,7 +20,7 @@ func TestMockIntegrationServiceCompositeCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-service")
 	resource.Spec = ocimock.MustJSONFixture[networkfirewallv1beta1.ServiceSpec](t, `{
   "description": "OSOK recorded service",
-  "name": "osok_replay_service",
+  "name": "osok_mock_service",
   "portRanges": [
     {
       "maximumPort": 8080,
@@ -43,7 +43,7 @@ func TestMockIntegrationServiceCompositeCRUD(t *testing.T) {
 }`)
 	createRequest := ocimock.MustJSONFixture[networkfirewallsdk.CreateTcpServiceDetails](t, `{
   "description": "OSOK recorded service",
-  "name": "osok_replay_service",
+  "name": "osok_mock_service",
   "portRanges": [
     {
       "maximumPort": 8080,
@@ -53,7 +53,7 @@ func TestMockIntegrationServiceCompositeCRUD(t *testing.T) {
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.TcpService](t, `{
   "description": "OSOK recorded service",
-  "name": "osok_replay_service",
+  "name": "osok_mock_service",
   "parentResourceId": "<ocid:1>",
   "portRanges": [
     {
@@ -66,7 +66,7 @@ func TestMockIntegrationServiceCompositeCRUD(t *testing.T) {
 	createdReadStates := []networkfirewallsdk.TcpService{
 		ocimock.MustOCIResponseFixture[networkfirewallsdk.TcpService](t, `{
   "description": "OSOK recorded service",
-  "name": "osok_replay_service",
+  "name": "osok_mock_service",
   "parentResourceId": "<ocid:1>",
   "portRanges": [
     {
@@ -88,7 +88,7 @@ func TestMockIntegrationServiceCompositeCRUD(t *testing.T) {
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[networkfirewallsdk.TcpService](t, `{
   "description": "OSOK recorded Service updated",
-  "name": "osok_replay_service",
+  "name": "osok_mock_service",
   "parentResourceId": "<ocid:1>",
   "portRanges": [
     {
@@ -101,7 +101,7 @@ func TestMockIntegrationServiceCompositeCRUD(t *testing.T) {
 	updatedReadStates := []networkfirewallsdk.TcpService{
 		ocimock.MustOCIResponseFixture[networkfirewallsdk.TcpService](t, `{
   "description": "OSOK recorded Service updated",
-  "name": "osok_replay_service",
+  "name": "osok_mock_service",
   "parentResourceId": "<ocid:1>",
   "portRanges": [
     {
@@ -118,7 +118,7 @@ func TestMockIntegrationServiceCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateTcpServiceDetails,
 	]{
 		CollectionPath:     "/20230501/networkFirewallPolicies/<ocid:1>/services",
-		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/services/osok_replay_service",
+		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/services/osok_mock_service",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState:       &createdState,
 		UpdatedState:       &updatedState,

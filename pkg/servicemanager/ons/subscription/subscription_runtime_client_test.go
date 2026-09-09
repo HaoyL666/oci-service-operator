@@ -483,7 +483,7 @@ func TestSubscriptionUpdatePreservesOmittedDefinedTags(t *testing.T) {
 	current := makeSDKSubscription(testSubscriptionID, onssdk.SubscriptionLifecycleStateActive)
 	current.FreeformTags = map[string]string{"env": "dev"}
 	current.DefinedTags = map[string]map[string]interface{}{
-		"Oracle-Tags": {"CreatedBy": "osok-replay"},
+		"Oracle-Tags": {"CreatedBy": "osok-mock"},
 	}
 
 	body, updateNeeded, err := buildSubscriptionUpdateBody(

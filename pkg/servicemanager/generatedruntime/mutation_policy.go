@@ -285,6 +285,9 @@ func unsupportedUpdateDriftPathsWithEquivalence(
 	diffPaths := comparableDiffPaths(specValues, currentValues, "")
 	unsupported := make([]string, 0, len(diffPaths))
 	for _, path := range diffPaths {
+		if sdkSerializationFieldPath(path) {
+			continue
+		}
 		if equivalent != nil {
 			desired, desiredFound := lookupValueByPath(specValues, path)
 			observed, observedFound := lookupValueByPath(currentValues, path)
@@ -305,6 +308,15 @@ func unsupportedUpdateDriftPathsWithEquivalence(
 	}
 	sort.Strings(unsupported)
 	return unsupported
+}
+
+func sdkSerializationFieldPath(path string) bool {
+	for _, segment := range strings.Split(path, ".") {
+		if strings.EqualFold(strings.TrimSpace(segment), "jsonData") {
+			return true
+		}
+	}
+	return false
 }
 
 func comparableDiffPaths(specValues map[string]any, currentValues map[string]any, prefix string) []string {
@@ -614,8 +626,120 @@ func includeMandatoryUpdateBodyFields(body, specValues, currentValues map[string
 			}
 			setValueByPath(body, canonicalValuePath(specValues, path), value)
 		}
+		bodyJSONName := fieldJSONName(bodyField)
+		if bodyJSONName == "" {
+			bodyJSONName = lowerCamel(bodyField.Name)
+		}
+		bodyValue, exists := lookupValueByPath(body, bodyJSONName)
+		if !exists {
+			// A request's body field contains the whole projected update body,
+			// rather than adding another JSON nesting level.
+			bodyValue = body
+		}
+		if err := includeMandatoryNestedUpdateFields(bodyValue, specValues, currentValues, bodyField.Type); err != nil {
+			return err
+		}
 	}
 	return nil
+}
+
+func includeMandatoryNestedUpdateFields(bodyValue, specValue, currentValue any, targetType reflect.Type) error {
+	for targetType != nil && targetType.Kind() == reflect.Pointer {
+		targetType = targetType.Elem()
+	}
+	if targetType != nil && targetType.Kind() == reflect.Interface {
+		discriminator, ok := polymorphicUpdateDiscriminatorField(targetType)
+		if !ok {
+			return nil
+		}
+		value, exists := lookupValueByPath(jsonMap(bodyValue), discriminator)
+		if !exists {
+			value, exists = lookupValueByPath(jsonMap(specValue), discriminator)
+		}
+		if !exists {
+			value, exists = lookupValueByPath(jsonMap(currentValue), discriminator)
+		}
+		if !exists {
+			return nil
+		}
+		payload, err := json.Marshal(map[string]any{discriminator: value})
+		if err != nil {
+			return err
+		}
+		converted, handled, err := convertPolymorphicInterfaceValue(payload, targetType)
+		if err != nil || !handled {
+			return err
+		}
+		targetType = indirectType(reflect.TypeOf(converted.Interface()))
+	}
+	if targetType == nil {
+		return nil
+	}
+
+	switch targetType.Kind() {
+	case reflect.Struct:
+		bodyMap := mutableJSONMap(bodyValue)
+		if bodyMap == nil {
+			return nil
+		}
+		specMap := jsonMap(specValue)
+		currentMap := jsonMap(currentValue)
+		for index := 0; index < targetType.NumField(); index++ {
+			field := targetType.Field(index)
+			if !field.IsExported() {
+				continue
+			}
+			name := fieldJSONName(field)
+			if name == "" {
+				name = lowerCamel(field.Name)
+			}
+			child, exists := lookupMapKey(bodyMap, name)
+			if !exists && field.Tag.Get("mandatory") == "true" {
+				child, exists = lookupMapKey(specMap, name)
+				if !exists {
+					child, exists = lookupMapKey(currentMap, name)
+				}
+				if exists {
+					bodyMap[name] = child
+				}
+			}
+			if !exists {
+				continue
+			}
+			specChild, _ := lookupMapKey(specMap, name)
+			currentChild, _ := lookupMapKey(currentMap, name)
+			if err := includeMandatoryNestedUpdateFields(child, specChild, currentChild, field.Type); err != nil {
+				return err
+			}
+		}
+	case reflect.Slice, reflect.Array:
+		bodyItems, ok := bodyValue.([]any)
+		if !ok {
+			return nil
+		}
+		specItems, _ := specValue.([]any)
+		currentItems, _ := currentValue.([]any)
+		for index := range bodyItems {
+			var specItem, currentItem any
+			if index < len(specItems) {
+				specItem = specItems[index]
+			}
+			if index < len(currentItems) {
+				currentItem = currentItems[index]
+			}
+			if err := includeMandatoryNestedUpdateFields(bodyItems[index], specItem, currentItem, targetType.Elem()); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func mutableJSONMap(value any) map[string]any {
+	if values, ok := value.(map[string]any); ok {
+		return values
+	}
+	return jsonMap(value)
 }
 
 func mandatoryUpdateBodyFieldPaths(targetType reflect.Type, specValues, currentValues map[string]any) ([]string, error) {
@@ -710,6 +834,6 @@ func polymorphicUpdateDiscriminatorField(targetType reflect.Type) (string, bool)
 	case networkFirewallUpdateTunnelRuleType:
 		return "protocol", true
 	default:
-		return "", false
+		return additionalPolymorphicUpdateDiscriminatorField(targetType)
 	}
 }

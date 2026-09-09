@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationLogGroupWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -29,31 +29,31 @@ func TestMockIntegrationLogGroupWorkRequestCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[loggingv1beta1.LogGroupSpec](t, `{
   "compartmentId": "<ocid:1>",
   "description": "recorded create",
-  "displayName": "osok-replay-log-group-v1",
+  "displayName": "osok-mock-log-group-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 
 	createRequest := ocimock.MustJSONFixture[loggingsdk.CreateLogGroupDetails](t, `{
   "compartmentId": "<ocid:1>",
   "description": "recorded create",
-  "displayName": "osok-replay-log-group-v1",
+  "displayName": "osok-mock-log-group-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updateRequest := ocimock.MustJSONFixture[loggingsdk.UpdateLogGroupDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loggingsdk.LogGroup](t, `{
@@ -65,9 +65,9 @@ func TestMockIntegrationLogGroupWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-log-group-v1",
+  "displayName": "osok-mock-log-group-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleState": "ACTIVE",
@@ -85,9 +85,9 @@ func TestMockIntegrationLogGroupWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-log-group-v1",
+  "displayName": "osok-mock-log-group-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleState": "ACTIVE",

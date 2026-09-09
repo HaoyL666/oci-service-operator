@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -24,9 +24,9 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
     "192.0.2.0/24"
   ],
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waf-address-list-v1",
+  "displayName": "osok-mock-waf-address-list-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "type": "ADDRESSES"
 }`)
@@ -36,7 +36,7 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
     "198.51.100.0/24"
   ],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "type": "ADDRESSES"
 }`)
@@ -45,9 +45,9 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
     "192.0.2.0/24"
   ],
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waf-address-list-v1",
+  "displayName": "osok-mock-waf-address-list-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[wafsdk.NetworkAddressListAddresses](t, `{
@@ -61,9 +61,9 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T21:43:55.607Z"
     }
   },
-  "displayName": "osok-replay-waf-address-list-v1",
+  "displayName": "osok-mock-waf-address-list-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -89,9 +89,9 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T21:43:55.607Z"
     }
   },
-  "displayName": "osok-replay-waf-address-list-v1",
+  "displayName": "osok-mock-waf-address-list-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -111,7 +111,7 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
     "198.51.100.0/24"
   ],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[wafsdk.NetworkAddressListAddresses](t, `{
@@ -125,9 +125,9 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T21:43:55.607Z"
     }
   },
-  "displayName": "osok-replay-waf-address-list-v1",
+  "displayName": "osok-mock-waf-address-list-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -153,9 +153,9 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T21:43:55.607Z"
     }
   },
-  "displayName": "osok-replay-waf-address-list-v1",
+  "displayName": "osok-mock-waf-address-list-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -182,9 +182,9 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T21:43:55.607Z"
     }
   },
-  "displayName": "osok-replay-waf-address-list-v1",
+  "displayName": "osok-mock-waf-address-list-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -209,9 +209,9 @@ func TestMockIntegrationNetworkAddressListEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T21:43:55.607Z"
     }
   },
-  "displayName": "osok-replay-waf-address-list-v1",
+  "displayName": "osok-mock-waf-address-list-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,

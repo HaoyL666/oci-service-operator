@@ -44,6 +44,50 @@ func TestMergeFieldOverridesCanDropFieldWithJSONIgnoreTag(t *testing.T) {
 	}
 }
 
+func TestApplyResourceGenerationOverridesAddsNestedSpecHelperFields(t *testing.T) {
+	t.Parallel()
+	resources := []ResourceModel{{
+		Kind:       "FsuCycle",
+		SpecFields: []FieldModel{{Name: "GoalVersionDetails", Type: "FsuCycleGoalVersionDetails", Tag: `json:"goalVersionDetails"`}},
+		HelperTypes: []TypeModel{{
+			Name:   "FsuCycleGoalVersionDetails",
+			Fields: []FieldModel{{Name: "Type", Type: "string", Tag: `json:"type,omitempty"`}},
+		}},
+	}}
+	service := ServiceConfig{
+		Service: "fleetsoftwareupdate",
+		Generation: GenerationConfig{Resources: []ResourceGenerationOverride{{
+			Kind: "FsuCycle",
+			SpecFields: []FieldOverride{{
+				Name: "GoalVersionDetails.Version", Type: "string", Tag: `json:"version,omitempty"`,
+			}},
+		}}},
+	}
+	updated, err := applyResourceGenerationOverrides(service, "v1beta1", resources)
+	if err != nil {
+		t.Fatal(err)
+	}
+	helper := findHelperType(t, updated[0].HelperTypes, "FsuCycleGoalVersionDetails")
+	assertFieldNamesPresent(t, helper.Name+" fields", helper.Fields, "Type", "Version")
+}
+
+func TestApplyResourceGenerationOverridesRejectsUnknownNestedSpecPath(t *testing.T) {
+	t.Parallel()
+	service := ServiceConfig{
+		Service: "example",
+		Generation: GenerationConfig{Resources: []ResourceGenerationOverride{{
+			Kind: "Thing",
+			SpecFields: []FieldOverride{{
+				Name: "Missing.Value", Type: "string", Tag: `json:"value,omitempty"`,
+			}},
+		}}},
+	}
+	_, err := applyResourceGenerationOverrides(service, "v1beta1", []ResourceModel{{Kind: "Thing"}})
+	if err == nil || !strings.Contains(err.Error(), `root field "Missing" was not found`) {
+		t.Fatalf("applyResourceGenerationOverrides() error = %v, want missing-root detail", err)
+	}
+}
+
 func TestBuildPackageModelDiscoversResources(t *testing.T) {
 	t.Parallel()
 
@@ -1947,6 +1991,49 @@ func TestRenderServiceRuntimeHooksFileRendersFormalSemanticsAndRequestFields(t *
 	})
 }
 
+func TestRenderServiceRuntimeHooksFileConfiguresDefaultWorkRequestPolling(t *testing.T) {
+	t.Parallel()
+
+	content, err := renderServiceRuntimeHooksFile(ServiceManagerModel{
+		Kind:                  "Thing",
+		SDKName:               "Thing",
+		PackageName:           "thing",
+		APIImportPath:         "github.com/oracle/oci-service-operator/api/example/v1beta1",
+		APIImportAlias:        "examplev1beta1",
+		SDKImportPath:         "github.com/oracle/oci-go-sdk/v65/example",
+		SDKImportAlias:        "examplesdk",
+		ManagerTypeName:       "ThingServiceManager",
+		ClientInterfaceName:   "ThingServiceClient",
+		DefaultClientTypeName: "defaultThingServiceClient",
+		SDKClientTypeName:     "ExampleClient",
+		Async: &RuntimeAsyncModel{
+			Strategy:             "workrequest",
+			Runtime:              "generatedruntime",
+			FormalClassification: "workrequest",
+			WorkRequest: &RuntimeWorkRequestModel{
+				Source: "service-sdk",
+				Phases: []string{"create", "update", "delete"},
+			},
+		},
+		WorkRequestOperation: &RuntimeOperationModel{
+			MethodName:       "GetWorkRequest",
+			RequestTypeName:  "GetWorkRequestRequest",
+			ResponseTypeName: "GetWorkRequestResponse",
+		},
+		WorkRequestIDFieldName: "WorkRequestId",
+	})
+	if err != nil {
+		t.Fatalf("renderServiceRuntimeHooksFile() error = %v", err)
+	}
+	assertContains(t, content, []string{
+		"AsyncSemantics: &generatedruntime.AsyncSemantics{",
+		"Adapter: generatedruntime.DefaultWorkRequestAsyncAdapter()",
+		"WorkRequestId: &workRequestID",
+		"response, err := sdkClient.GetWorkRequest(ctx, request)",
+		"return response, nil",
+	})
+}
+
 func TestFilteredRuntimeHooksKeepsWorkRequestHelpersOnlyForExplicitWorkRequestAsync(t *testing.T) {
 	t.Parallel()
 
@@ -3150,6 +3237,7 @@ func TestCheckedInLifecycleAsyncContractsStripStaleWorkRequestHelpers(t *testing
 		serviceNames = append(serviceNames, serviceName)
 	}
 	slices.Sort(serviceNames)
+	pipeline := New()
 
 	for _, serviceName := range serviceNames {
 		targets := targetsByService[serviceName]
@@ -3166,7 +3254,7 @@ func TestCheckedInLifecycleAsyncContractsStripStaleWorkRequestHelpers(t *testing
 			outputRoot := t.TempDir()
 			seedSamplesKustomization(t, outputRoot)
 
-			result, err := New().Generate(context.Background(), cfg, []ServiceConfig{service}, Options{
+			result, err := pipeline.Generate(context.Background(), cfg, []ServiceConfig{service}, Options{
 				OutputRoot: outputRoot,
 			})
 			if err != nil {

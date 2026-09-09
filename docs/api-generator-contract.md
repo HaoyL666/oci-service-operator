@@ -50,7 +50,7 @@ Each service record defines:
 | `generation.resources[].serviceManager.packagePath` | Optional existing package path relative to `pkg/servicemanager/` when a manual layout must be preserved. |
 | `generation.resources[].serviceManager.needsCredentialClient` | Optional flag that threads credential-client plumbing into a generated service-manager seam when repo-authored secret-backed fields need it. |
 | `generation.resources[].webhooks.strategy` | Optional per-kind webhook ownership seam: `manual` or `none`. When omitted, the kind inherits the service-level webhook strategy. |
-| `generation.resources[].specFields` | Optional per-kind spec field overrides keyed by generated Go field name. Overrides may replace field type, tag, comments, or markers when the repo-authored v2 contract intentionally differs from the imported SDK surface. |
+| `generation.resources[].specFields` | Optional per-kind spec field overrides keyed by generated Go field name. Dot-separated names target fields in generated nested helper types. Overrides may replace or add a field's type, tag, comments, or markers when the repo-authored v2 contract intentionally differs from the imported SDK surface. |
 | `generation.resources[].statusFields` | Optional per-kind status field overrides keyed by generated Go field name. Overrides may replace or add repo-authored observed-state or status-mirror fields. |
 | `generation.resources[].sample` | Optional per-kind sample override. `body` replaces the rendered sample wholesale, while `metadataName` and `spec` refine the generated defaults. |
 
@@ -371,6 +371,9 @@ status fields keep their existing JSON tags.
 - `generation.resources[].specFields` and `generation.resources[].statusFields`
   match fields by generated Go name, with JSON tag fallback for anonymous or
   embedded cases.
+- Dot-separated `specFields[].name` paths resolve from a top-level spec field
+  through generated helper types. Every intermediate segment must already
+  exist; an invalid path fails package-model construction.
 - Field overrides may set `type`, `tag`, `comments`, and `markers`.
 - Omitted comments and markers inherit from the discovered field model; explicit
   values should be supplied when the repo-authored v2 contract intentionally

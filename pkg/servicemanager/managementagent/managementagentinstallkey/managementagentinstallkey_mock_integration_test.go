@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationManagementAgentInstallKeyEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,17 +22,17 @@ func TestMockIntegrationManagementAgentInstallKeyEvidenceCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-managementagentinstallkey")
 	resource.Spec = ocimock.MustJSONFixture[managementagentv1beta1.ManagementAgentInstallKeySpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-install-key-v1",
+  "displayName": "osok-mock-install-key-v1",
   "isUnlimited": true
 }`)
 	resource.Spec.IsKeyActive = true
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-install-key-v1-updated"
+  "displayName": "osok-mock-install-key-v1-updated"
 }`)
 	createRequest := ocimock.MustJSONFixture[managementagentsdk.CreateManagementAgentInstallKeyDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-install-key-v1",
+  "displayName": "osok-mock-install-key-v1",
   "isUnlimited": true
 }`)
 	createdState := ocimock.MustOCIResponseFixture[managementagentsdk.ManagementAgentInstallKey](t, `{
@@ -46,7 +46,7 @@ func TestMockIntegrationManagementAgentInstallKeyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T18:17:44.856Z"
     }
   },
-  "displayName": "osok-replay-install-key-v1",
+  "displayName": "osok-mock-install-key-v1",
   "freeformTags": {},
   "id": "<ocid:2>",
   "isUnlimited": true,
@@ -59,7 +59,7 @@ func TestMockIntegrationManagementAgentInstallKeyEvidenceCRUD(t *testing.T) {
   "timeUpdated": "2026-09-01T18:17:44.934Z"
 }`)
 	updateRequest := ocimock.MustJSONFixture[managementagentsdk.UpdateManagementAgentInstallKeyDetails](t, `{
-  "displayName": "osok-replay-install-key-v1-updated"
+  "displayName": "osok-mock-install-key-v1-updated"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[managementagentsdk.ManagementAgentInstallKey](t, `{
   "allowedKeyInstallCount": null,
@@ -72,7 +72,7 @@ func TestMockIntegrationManagementAgentInstallKeyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T18:17:44.856Z"
     }
   },
-  "displayName": "osok-replay-install-key-v1-updated",
+  "displayName": "osok-mock-install-key-v1-updated",
   "freeformTags": {},
   "id": "<ocid:2>",
   "isUnlimited": true,
@@ -95,7 +95,7 @@ func TestMockIntegrationManagementAgentInstallKeyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T18:17:44.856Z"
     }
   },
-  "displayName": "osok-replay-install-key-v1-updated",
+  "displayName": "osok-mock-install-key-v1-updated",
   "freeformTags": {},
   "id": "<ocid:2>",
   "isUnlimited": true,

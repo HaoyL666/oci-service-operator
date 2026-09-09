@@ -26,7 +26,7 @@ import (
 const mockSenderID = "ocid1.sender.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/sender_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/email/sender and formal/imports/email/sender.json
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/email
 func TestMockIntegrationSenderLifecycleCRUD(t *testing.T) {

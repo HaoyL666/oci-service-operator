@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationPingMonitorEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -20,9 +20,9 @@ func TestMockIntegrationPingMonitorEvidenceCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-pingmonitor")
 	resource.Spec = ocimock.MustJSONFixture[healthchecksv1beta1.PingMonitorSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-ping-monitor-v1",
+  "displayName": "osok-mock-ping-monitor-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "intervalInSeconds": 60,
   "port": 443,
@@ -34,17 +34,17 @@ func TestMockIntegrationPingMonitorEvidenceCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-ping-monitor-v1-updated",
+  "displayName": "osok-mock-ping-monitor-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "intervalInSeconds": 30
 }`)
 	createRequest := ocimock.MustJSONFixture[healthcheckssdk.CreatePingMonitorDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-ping-monitor-v1",
+  "displayName": "osok-mock-ping-monitor-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "intervalInSeconds": 60,
   "port": 443,
@@ -62,9 +62,9 @@ func TestMockIntegrationPingMonitorEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T17:48:20.639Z"
     }
   },
-  "displayName": "osok-replay-ping-monitor-v1",
+  "displayName": "osok-mock-ping-monitor-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "hash": null,
   "homeRegion": "us-ashburn-1",
@@ -90,9 +90,9 @@ func TestMockIntegrationPingMonitorEvidenceCRUD(t *testing.T) {
   ]
 }`)
 	updateRequest := ocimock.MustJSONFixture[healthcheckssdk.UpdatePingMonitorDetails](t, `{
-  "displayName": "osok-replay-ping-monitor-v1-updated",
+  "displayName": "osok-mock-ping-monitor-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "intervalInSeconds": 30
 }`)
@@ -104,9 +104,9 @@ func TestMockIntegrationPingMonitorEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T17:48:20.639Z"
     }
   },
-  "displayName": "osok-replay-ping-monitor-v1-updated",
+  "displayName": "osok-mock-ping-monitor-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "hash": null,
   "homeRegion": "us-ashburn-1",

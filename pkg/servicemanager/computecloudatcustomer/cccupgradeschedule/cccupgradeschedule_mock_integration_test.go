@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,17 +23,17 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[computecloudatcustomerv1beta1.CccUpgradeScheduleSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-ccc-schedule",
+  "displayName": "osok-mock-ccc-schedule",
   "events": [
     {
-      "description": "OSOK replay maintenance window",
+      "description": "OSOK mock maintenance window",
       "scheduleEventDuration": "PT49H",
       "scheduleEventRecurrences": "FREQ=MONTHLY",
       "timeStart": "2026-09-05T00:00:00Z"
     }
   ],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
@@ -41,30 +41,30 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
   "description": "recorded update",
   "events": [
     {
-      "description": "OSOK replay maintenance window",
+      "description": "OSOK mock maintenance window",
       "scheduleEventDuration": "PT49H",
       "scheduleEventRecurrences": "FREQ=MONTHLY",
       "timeStart": "2026-09-05T00:00:00Z"
     }
   ],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[computecloudatcustomersdk.CreateCccUpgradeScheduleDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-ccc-schedule",
+  "displayName": "osok-mock-ccc-schedule",
   "events": [
     {
-      "description": "OSOK replay maintenance window",
+      "description": "OSOK mock maintenance window",
       "scheduleEventDuration": "PT49H",
       "scheduleEventRecurrences": "FREQ=MONTHLY",
       "timeStart": "2026-09-05T00:00:00Z"
     }
   ],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[computecloudatcustomersdk.CccUpgradeSchedule](t, `{
@@ -76,10 +76,10 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-ccc-schedule",
+  "displayName": "osok-mock-ccc-schedule",
   "events": [
     {
-      "description": "OSOK replay maintenance window",
+      "description": "OSOK mock maintenance window",
       "name": "26a7217c-6b89-4077-9158-e06a7b8f31aa",
       "scheduleEventDuration": "PT49H",
       "scheduleEventRecurrences": "FREQ=MONTHLY",
@@ -87,7 +87,7 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
     }
   ],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "infrastructureIds": null,
@@ -101,14 +101,14 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
   "description": "recorded update",
   "events": [
     {
-      "description": "OSOK replay maintenance window",
+      "description": "OSOK mock maintenance window",
       "scheduleEventDuration": "PT49H",
       "scheduleEventRecurrences": "FREQ=MONTHLY",
       "timeStart": "2026-09-05T00:00:00Z"
     }
   ],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[computecloudatcustomersdk.CccUpgradeSchedule](t, `{
@@ -120,10 +120,10 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-ccc-schedule",
+  "displayName": "osok-mock-ccc-schedule",
   "events": [
     {
-      "description": "OSOK replay maintenance window",
+      "description": "OSOK mock maintenance window",
       "name": "abc678cb-a487-4714-b0ae-f7ca6aea0066",
       "scheduleEventDuration": "PT49H",
       "scheduleEventRecurrences": "FREQ=MONTHLY",
@@ -131,7 +131,7 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
     }
   ],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "infrastructureIds": null,
@@ -150,10 +150,10 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-ccc-schedule",
+  "displayName": "osok-mock-ccc-schedule",
   "events": [
     {
-      "description": "OSOK replay maintenance window",
+      "description": "OSOK mock maintenance window",
       "name": "abc678cb-a487-4714-b0ae-f7ca6aea0066",
       "scheduleEventDuration": "PT49H",
       "scheduleEventRecurrences": "FREQ=MONTHLY",
@@ -161,7 +161,7 @@ func TestMockIntegrationCccUpgradeScheduleEvidenceCRUD(t *testing.T) {
     }
   ],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "infrastructureIds": null,

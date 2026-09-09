@@ -78,6 +78,10 @@ func newManagedInstanceGroupMockResponder(resource *osmanagementhubv1beta1.Manag
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []osmanagementhubsdk.ManagedInstanceGroup{state}})
 		},
 		Create: func(request ocimock.Request) (osmanagementhubsdk.ManagedInstanceGroup, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero osmanagementhubsdk.ManagedInstanceGroup
+				return zero, ocimock.Response{}, err
+			}
 			var details osmanagementhubsdk.CreateManagedInstanceGroupDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return osmanagementhubsdk.ManagedInstanceGroup{}, ocimock.Response{}, err

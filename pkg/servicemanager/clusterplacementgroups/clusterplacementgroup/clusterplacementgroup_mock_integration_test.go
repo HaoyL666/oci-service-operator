@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationClusterPlacementGroupWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -32,15 +32,15 @@ func TestMockIntegrationClusterPlacementGroupWorkRequestCRUD(t *testing.T) {
   "compartmentId": "<ocid:1>",
   "description": "recorded create",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
-  "name": "osok-replay-async-cpg-v1"
+  "name": "osok-mock-async-cpg-v1"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 
@@ -50,14 +50,14 @@ func TestMockIntegrationClusterPlacementGroupWorkRequestCRUD(t *testing.T) {
   "compartmentId": "<ocid:1>",
   "description": "recorded create",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
-  "name": "osok-replay-async-cpg-v1"
+  "name": "osok-mock-async-cpg-v1"
 }`)
 	updateRequest := ocimock.MustJSONFixture[clusterplacementgroupssdk.UpdateClusterPlacementGroupDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[clusterplacementgroupssdk.ClusterPlacementGroup](t, `{
@@ -73,12 +73,12 @@ func TestMockIntegrationClusterPlacementGroupWorkRequestCRUD(t *testing.T) {
   },
   "description": "recorded create",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
   "lifecycleState": "ACTIVE",
-  "name": "osok-replay-async-cpg-v1",
+  "name": "osok-mock-async-cpg-v1",
   "placementInstruction": null,
   "systemTags": {
   },
@@ -98,12 +98,12 @@ func TestMockIntegrationClusterPlacementGroupWorkRequestCRUD(t *testing.T) {
   },
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
   "lifecycleState": "ACTIVE",
-  "name": "osok-replay-async-cpg-v1",
+  "name": "osok-mock-async-cpg-v1",
   "placementInstruction": null,
   "systemTags": {
   },
@@ -123,12 +123,12 @@ func TestMockIntegrationClusterPlacementGroupWorkRequestCRUD(t *testing.T) {
   },
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
   "lifecycleState": "DELETED",
-  "name": "osok-replay-async-cpg-v1",
+  "name": "osok-mock-async-cpg-v1",
   "placementInstruction": null,
   "systemTags": {
   },

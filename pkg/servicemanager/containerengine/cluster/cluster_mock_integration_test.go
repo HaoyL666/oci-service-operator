@@ -23,7 +23,7 @@ import (
 const mockClusterID = "ocid1.cluster.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/cluster_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/containerengine/cluster and formal/imports/containerengine/cluster.json
 //   - resource runtime: cluster_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/containerengine
@@ -62,7 +62,7 @@ func TestMockIntegrationClusterLifecycleCRUD(t *testing.T) {
 		}
 	})
 
-	client := newRecordedClusterClient(containerenginesdk.ContainerEngineClient{BaseClient: session.BaseClient()})
+	client := newMockClusterClient(containerenginesdk.ContainerEngineClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*containerenginev1beta1.Cluster]{
 		Resource:      resource,
 		Client:        client,

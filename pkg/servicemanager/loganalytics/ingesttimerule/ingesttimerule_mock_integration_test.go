@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -29,7 +29,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
         "SOURCE_NAME"
       ],
       "metricName": "matched_records",
-      "namespace": "osok_replay",
+      "namespace": "osok_mock",
       "resourceGroup": "integration",
       "type": "METRIC_EXTRACTION"
     }
@@ -38,13 +38,13 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
   "conditions": {
     "fieldName": "mtag",
     "fieldOperator": "EQUAL",
-    "fieldValue": "osok-replay",
+    "fieldValue": "osok-mock",
     "kind": "FIELD"
   },
   "description": "OSOK recorded ingest-time rule",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	resource.Spec.IsEnabled = true
@@ -58,9 +58,9 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded ingest-time rule updated",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "\u003cocid:3\u003e"
 }`)
@@ -72,7 +72,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
         "SOURCE_NAME"
       ],
       "metricName": "matched_records",
-      "namespace": "osok_replay",
+      "namespace": "osok_mock",
       "resourceGroup": "integration",
       "type": "METRIC_EXTRACTION"
     }
@@ -81,13 +81,13 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
   "conditions": {
     "fieldName": "mtag",
     "fieldOperator": "EQUAL",
-    "fieldValue": "osok-replay",
+    "fieldValue": "osok-mock",
     "kind": "FIELD"
   },
   "description": "OSOK recorded ingest-time rule",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loganalyticssdk.IngestTimeRule](t, `{
@@ -98,7 +98,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
         "SOURCE_NAME"
       ],
       "metricName": "matched_records",
-      "namespace": "osok_replay",
+      "namespace": "osok_mock",
       "resourceGroup": "integration",
       "type": "METRIC_EXTRACTION"
     }
@@ -108,7 +108,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     "additionalConditions": [],
     "fieldName": "mtag",
     "fieldOperator": "EQUAL",
-    "fieldValue": "osok-replay",
+    "fieldValue": "osok-mock",
     "kind": "FIELD"
   },
   "definedTags": {
@@ -118,9 +118,9 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded ingest-time rule",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "isEnabled": true,
@@ -137,7 +137,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
         "SOURCE_NAME"
       ],
       "metricName": "matched_records",
-      "namespace": "osok_replay",
+      "namespace": "osok_mock",
       "resourceGroup": "integration",
       "type": "METRIC_EXTRACTION"
     }
@@ -147,7 +147,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     "additionalConditions": [],
     "fieldName": "mtag",
     "fieldOperator": "EQUAL",
-    "fieldValue": "osok-replay",
+    "fieldValue": "osok-mock",
     "kind": "FIELD"
   },
   "definedTags": {
@@ -157,9 +157,9 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded ingest-time rule",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "isEnabled": true,
@@ -177,9 +177,9 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded ingest-time rule updated",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "\u003cocid:3\u003e"
 }`)
@@ -191,7 +191,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
         "SOURCE_NAME"
       ],
       "metricName": "matched_records",
-      "namespace": "osok_replay",
+      "namespace": "osok_mock",
       "resourceGroup": "integration",
       "type": "METRIC_EXTRACTION"
     }
@@ -201,7 +201,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     "additionalConditions": [],
     "fieldName": "mtag",
     "fieldOperator": "EQUAL",
-    "fieldValue": "osok-replay",
+    "fieldValue": "osok-mock",
     "kind": "FIELD"
   },
   "definedTags": {
@@ -211,9 +211,9 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded ingest-time rule updated",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isEnabled": true,
@@ -230,7 +230,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
         "SOURCE_NAME"
       ],
       "metricName": "matched_records",
-      "namespace": "osok_replay",
+      "namespace": "osok_mock",
       "resourceGroup": "integration",
       "type": "METRIC_EXTRACTION"
     }
@@ -240,7 +240,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     "additionalConditions": [],
     "fieldName": "mtag",
     "fieldOperator": "EQUAL",
-    "fieldValue": "osok-replay",
+    "fieldValue": "osok-mock",
     "kind": "FIELD"
   },
   "definedTags": {
@@ -250,9 +250,9 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded ingest-time rule updated",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isEnabled": true,
@@ -270,7 +270,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
         "SOURCE_NAME"
       ],
       "metricName": "matched_records",
-      "namespace": "osok_replay",
+      "namespace": "osok_mock",
       "resourceGroup": "integration",
       "type": "METRIC_EXTRACTION"
     }
@@ -280,7 +280,7 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     "additionalConditions": [],
     "fieldName": "mtag",
     "fieldOperator": "EQUAL",
-    "fieldValue": "osok-replay",
+    "fieldValue": "osok-mock",
     "kind": "FIELD"
   },
   "definedTags": {
@@ -290,9 +290,9 @@ func TestMockIntegrationIngestTimeRuleCompositeCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded ingest-time rule updated",
-  "displayName": "osok-replay-ingest-time-rule",
+  "displayName": "osok-mock-ingest-time-rule",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isEnabled": true,

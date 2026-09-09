@@ -281,6 +281,37 @@ func TestMandatoryUpdateBodyFieldPathsUsesConcretePolymorphicSDKType(t *testing.
 	}
 }
 
+func TestIncludeMandatoryUpdateBodyFieldsCarriesNestedRequiredSibling(t *testing.T) {
+	t.Parallel()
+	type workflow struct {
+		Scope    *string  `mandatory:"true" json:"scope"`
+		Workflow []string `mandatory:"true" json:"workflow"`
+	}
+	type details struct {
+		RollbackWorkflowDetails *workflow `mandatory:"false" json:"rollbackWorkflowDetails"`
+	}
+	type request struct {
+		Details details `contributesTo:"body"`
+	}
+
+	body := map[string]any{"rollbackWorkflowDetails": map[string]any{"scope": "TARGET"}}
+	spec := map[string]any{"rollbackWorkflowDetails": map[string]any{"scope": "TARGET", "workflow": []any{}}}
+	operation := &Operation{
+		NewRequest: func() any { return &request{} },
+		Fields:     []RequestField{{FieldName: "Details", Contribution: "body"}},
+	}
+	if err := includeMandatoryUpdateBodyFields(body, spec, nil, operation); err != nil {
+		t.Fatal(err)
+	}
+	workflowValue, ok := lookupValueByPath(body, "rollbackWorkflowDetails.workflow")
+	if !ok {
+		t.Fatalf("body = %#v, want nested required workflow", body)
+	}
+	if items, ok := workflowValue.([]any); !ok || len(items) != 0 {
+		t.Fatalf("rollbackWorkflowDetails.workflow = %#v, want explicit empty list", workflowValue)
+	}
+}
+
 func TestFilteredUpdateBodyDoesNotEmitMandatoryFieldsWithoutDrift(t *testing.T) {
 	t.Parallel()
 	client := ServiceClient[*cloudguardv1beta1.WlpAgent]{config: Config[*cloudguardv1beta1.WlpAgent]{

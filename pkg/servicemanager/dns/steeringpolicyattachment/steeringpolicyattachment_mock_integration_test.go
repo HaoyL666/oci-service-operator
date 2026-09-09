@@ -92,6 +92,10 @@ func newSteeringPolicyAttachmentMockResponder(resource *dnsv1beta1.SteeringPolic
 			return ocimock.JSONResponse(http.StatusOK, []dnssdk.SteeringPolicyAttachment{state})
 		},
 		Create: func(request ocimock.Request) (dnssdk.SteeringPolicyAttachment, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero dnssdk.SteeringPolicyAttachment
+				return zero, ocimock.Response{}, err
+			}
 			var details dnssdk.CreateSteeringPolicyAttachmentDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return dnssdk.SteeringPolicyAttachment{}, ocimock.Response{}, err

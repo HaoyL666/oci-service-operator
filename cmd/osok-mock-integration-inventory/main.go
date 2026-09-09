@@ -18,8 +18,8 @@ func main() {
 	root := flag.String("root", ".", "repository root")
 	jsonOutput := flag.Bool("json", false, "emit the complete inventory as JSON")
 	group := flag.String("group", "", "list resources in one group")
-	checkImmediate := flag.Bool("check-immediate", false, "fail when an explicitly immediate resource lacks a dynamic mock scenario")
-	checkLifecycle := flag.Bool("check-lifecycle", false, "fail when a lifecycle-polled resource lacks a dynamic mock scenario or formal row")
+	checkImmediate := flag.Bool("check-immediate", false, "fail when an explicitly immediate resource lacks a typed mock scenario")
+	checkLifecycle := flag.Bool("check-lifecycle", false, "fail when a lifecycle-polled resource lacks a typed mock scenario or formal row")
 	flag.Parse()
 
 	report, err := ocimockinventory.Audit(*root)
@@ -44,8 +44,8 @@ func main() {
 	fmt.Printf("    %s: %d\n", ocimockinventory.GroupLifecycle, report.Groups[ocimockinventory.GroupLifecycle])
 	fmt.Printf("    %s: %d\n", ocimockinventory.GroupComposite, report.Groups[ocimockinventory.GroupComposite])
 	fmt.Printf("  %s: %d\n", ocimockinventory.GroupWorkRequest, report.WorkRequestCRUD)
-	fmt.Printf("Synchronous evidence: recorded=%d synthetic-only=%d formal=%d runtime-overrides=%d dynamic-mock=%d\n", report.SynchronousRecorded, report.SynchronousSyntheticOnly, report.SynchronousFormalResources, report.SynchronousRuntimeOverrides, report.SynchronousMockIntegration)
-	fmt.Printf("All generated CRUD evidence: recorded=%d synthetic-only=%d formal=%d runtime-overrides=%d dynamic-mock=%d\n", report.Recorded, report.SyntheticOnly, report.FormalResources, report.RuntimeOverrides, report.MockIntegration)
+	fmt.Printf("Synchronous contracts: formal=%d runtime-overrides=%d typed-mock=%d\n", report.SynchronousFormalResources, report.SynchronousRuntimeOverrides, report.SynchronousMockIntegration)
+	fmt.Printf("All generated CRUD contracts: formal=%d runtime-overrides=%d typed-mock=%d\n", report.FormalResources, report.RuntimeOverrides, report.MockIntegration)
 	if *checkImmediate {
 		missing := ocimockinventory.MissingMockIntegration(report, ocimockinventory.GroupImmediate)
 		if len(missing) > 0 {
@@ -74,7 +74,7 @@ func main() {
 	}
 	for _, resource := range report.Resources {
 		if string(resource.Group) == *group {
-			fmt.Printf("%s/%s\trecorded=%t synthetic=%t formal=%t runtime-override=%t mock-integration=%t\n", resource.Service, resource.Kind, resource.Recorded, resource.Synthetic, resource.Formal, resource.RuntimeOverride, resource.MockIntegration)
+			fmt.Printf("%s/%s\tformal=%t runtime-override=%t mock-integration=%t\n", resource.Service, resource.Kind, resource.Formal, resource.RuntimeOverride, resource.MockIntegration)
 		}
 	}
 }

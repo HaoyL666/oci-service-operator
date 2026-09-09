@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,24 +23,24 @@ func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[datasafev1beta1.SecurityPolicySpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-security-policy-v1",
+  "displayName": "osok-mock-security-policy-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[datasafesdk.CreateSecurityPolicyDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-security-policy-v1",
+  "displayName": "osok-mock-security-policy-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[datasafesdk.SecurityPolicy](t, `{
@@ -52,9 +52,9 @@ func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-security-policy-v1",
+  "displayName": "osok-mock-security-policy-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": "Security policy is active",
@@ -73,9 +73,9 @@ func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-security-policy-v1",
+  "displayName": "osok-mock-security-policy-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": "Security policy is active",
@@ -88,7 +88,7 @@ func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[datasafesdk.UpdateSecurityPolicyDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[datasafesdk.SecurityPolicy](t, `{
@@ -100,9 +100,9 @@ func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-security-policy-v1",
+  "displayName": "osok-mock-security-policy-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": "Security policy is active",
@@ -121,9 +121,9 @@ func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-security-policy-v1",
+  "displayName": "osok-mock-security-policy-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": "Security policy is active",
@@ -143,9 +143,9 @@ func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-security-policy-v1",
+  "displayName": "osok-mock-security-policy-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": "Deleting the security policy resource",
@@ -163,9 +163,9 @@ func TestMockIntegrationSecurityPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-security-policy-v1",
+  "displayName": "osok-mock-security-policy-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": "Security policy is deleted",

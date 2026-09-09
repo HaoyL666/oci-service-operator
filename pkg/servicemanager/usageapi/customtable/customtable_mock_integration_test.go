@@ -22,7 +22,7 @@ import (
 
 const mockCustomTableID = "ocid1.usagecustomtable.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal state-free contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal state-free contract, and vendored OCI SDK.
 func TestMockIntegrationCustomTableLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &usageapiv1beta1.CustomTable{ObjectMeta: metav1.ObjectMeta{Name: "mock-custom-table", Namespace: "default", UID: types.UID("mock-custom-table-uid")}, Spec: usageapiv1beta1.CustomTableSpec{
@@ -79,6 +79,10 @@ func newCustomTableMockResponder(resource *usageapiv1beta1.CustomTable) (*ocimoc
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []usageapisdk.CustomTable{state}})
 		},
 		Create: func(request ocimock.Request) (usageapisdk.CustomTable, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero usageapisdk.CustomTable
+				return zero, ocimock.Response{}, err
+			}
 			var details usageapisdk.CreateCustomTableDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return usageapisdk.CustomTable{}, ocimock.Response{}, err

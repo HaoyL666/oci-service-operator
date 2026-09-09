@@ -24,7 +24,7 @@ import (
 const mockInternetGatewayID = "ocid1.internetgateway.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/internetgateway_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/core/internetgateway and formal/imports/core/internetgateway.json
 //   - resource runtime: internetgateway_runtime.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/core

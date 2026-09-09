@@ -14,19 +14,19 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &marketplacev1beta1.AcceptedAgreement{Spec: marketplacev1beta1.AcceptedAgreementSpec{
-		CompartmentId: "ocid1.compartment.oc1..replay", ListingId: "ocid1.appcataloglisting.oc1..replay",
-		PackageVersion: "1.0", AgreementId: "ocid1.marketplaceagreement.oc1..replay", Signature: "synthetic-signature", DisplayName: "osok-replay-agreement",
+		CompartmentId: "ocid1.compartment.oc1..mock", ListingId: "ocid1.appcataloglisting.oc1..mock",
+		PackageVersion: "1.0", AgreementId: "ocid1.marketplaceagreement.oc1..mock", Signature: "synthetic-signature", DisplayName: "osok-mock-agreement",
 	}}
 	ocimock.InitializeResource(resource, "mock-acceptedagreement")
 	resource.Spec = ocimock.MustJSONFixture[marketplacev1beta1.AcceptedAgreementSpec](t, `{
   "agreementId": "\u003cocid:1\u003e",
   "compartmentId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-agreement",
+  "displayName": "osok-mock-agreement",
   "listingId": "\u003cocid:3\u003e",
   "packageVersion": "1.0",
   "signature": "synthetic-signature"
@@ -38,7 +38,7 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
       "CostCenter": "84"
     }
   },
-  "displayName": "osok-replay-agreement-updated",
+  "displayName": "osok-mock-agreement-updated",
   "freeformTags": {
     "env": "prod"
   }
@@ -46,7 +46,7 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
 	createRequest := ocimock.MustJSONFixture[marketplacesdk.CreateAcceptedAgreementDetails](t, `{
   "agreementId": "\u003cocid:1\u003e",
   "compartmentId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-agreement",
+  "displayName": "osok-mock-agreement",
   "listingId": "\u003cocid:3\u003e",
   "packageVersion": "1.0",
   "signature": "synthetic-signature"
@@ -54,7 +54,7 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
 	createdState := ocimock.MustOCIResponseFixture[marketplacesdk.AcceptedAgreement](t, `{
   "agreementId": "\u003cocid:1\u003e",
   "compartmentId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-agreement",
+  "displayName": "osok-mock-agreement",
   "id": "\u003cocid:4\u003e",
   "lifecycleState": "ACTIVE",
   "listingId": "\u003cocid:3\u003e",
@@ -67,7 +67,7 @@ func TestMockIntegrationAcceptedAgreementLifecycleCRUD(t *testing.T) {
       "CostCenter": "84"
     }
   },
-  "displayName": "osok-replay-agreement-updated",
+  "displayName": "osok-mock-agreement-updated",
   "freeformTags": {
     "env": "prod"
   }

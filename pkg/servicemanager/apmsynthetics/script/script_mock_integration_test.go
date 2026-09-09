@@ -30,7 +30,7 @@ const (
 )
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/script_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/apmsynthetics/script.json
 //   - repo-authored runtime: formal/controllers/apmsynthetics/script/diagrams/runtime-lifecycle.yaml
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/apm_synthetics/apm_synthetics_script_resource.go
@@ -43,7 +43,7 @@ func TestMockIntegrationScriptSynchronousCRUD(t *testing.T) {
 		Spec: apmsyntheticsv1beta1.ScriptSpec{
 			DisplayName:     "mock-apm-script",
 			ContentType:     "SIDE",
-			Content:         recordedSeleniumScript("OSOK mock"),
+			Content:         mockSeleniumScript("OSOK mock"),
 			ContentFileName: "mock.side",
 			ApmDomainId:     mockScriptAPMDomainID,
 			FreeformTags:    map[string]string{"osok-mock": "create"},
@@ -84,7 +84,7 @@ func TestMockIntegrationScriptSynchronousCRUD(t *testing.T) {
 		},
 		Mutate: func(current *apmsyntheticsv1beta1.Script) {
 			current.Spec.DisplayName = "mock-apm-script-updated"
-			current.Spec.Content = recordedSeleniumScript("OSOK mock updated")
+			current.Spec.Content = mockSeleniumScript("OSOK mock updated")
 			current.Spec.FreeformTags = map[string]string{"osok-mock": "update"}
 		},
 		ValidateUpdated: func(current *apmsyntheticsv1beta1.Script) error {
@@ -115,6 +115,10 @@ func newScriptMockResponder(resource *apmsyntheticsv1beta1.Script) (*ocimock.CRU
 		RequireUpdateRead:  true,
 		RequireDeleteRead:  true,
 		Create: func(request ocimock.Request) (apmsyntheticssdk.Script, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero apmsyntheticssdk.Script
+				return zero, ocimock.Response{}, err
+			}
 			if err := validateScriptDomain(request); err != nil {
 				return apmsyntheticssdk.Script{}, ocimock.Response{}, err
 			}
@@ -155,7 +159,7 @@ func newScriptMockResponder(resource *apmsyntheticsv1beta1.Script) (*ocimock.CRU
 			}
 			expected := apmsyntheticssdk.UpdateScriptDetails{
 				DisplayName:  common.String("mock-apm-script-updated"),
-				Content:      common.String(recordedSeleniumScript("OSOK mock updated")),
+				Content:      common.String(mockSeleniumScript("OSOK mock updated")),
 				FreeformTags: map[string]string{"osok-mock": "update"},
 			}
 			if !reflect.DeepEqual(details, expected) {

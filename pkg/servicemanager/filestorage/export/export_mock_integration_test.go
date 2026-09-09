@@ -39,7 +39,7 @@ func TestMockIntegrationExportLifecycleCRUD(t *testing.T) {
 			t.Errorf("close Export OCI mock: %v", err)
 		}
 	})
-	client := newRecordedExportClient(filestoragesdk.FileStorageClient{BaseClient: session.BaseClient()})
+	client := newMockExportClient(filestoragesdk.FileStorageClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*filestoragev1beta1.Export]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *filestoragev1beta1.Export) error {
@@ -72,6 +72,10 @@ func newExportMockResponder(resource *filestoragev1beta1.Export) (*ocimock.CRUDR
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (filestoragesdk.Export, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero filestoragesdk.Export
+				return zero, ocimock.Response{}, err
+			}
 			var details filestoragesdk.CreateExportDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return filestoragesdk.Export{}, ocimock.Response{}, err

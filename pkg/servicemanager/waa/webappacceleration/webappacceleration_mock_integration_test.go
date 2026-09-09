@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,25 +23,25 @@ func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[waav1beta1.WebAppAccelerationSpec](t, `{
   "backendType": "LOAD_BALANCER",
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waa-acceleration-v1",
+  "displayName": "osok-mock-waa-acceleration-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "loadBalancerId": "\u003cocid:3\u003e",
   "webAppAccelerationPolicyId": "\u003cocid:2\u003e"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-waa-acceleration-v1-updated",
+  "displayName": "osok-mock-waa-acceleration-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[waasdk.CreateWebAppAccelerationLoadBalancerDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waa-acceleration-v1",
+  "displayName": "osok-mock-waa-acceleration-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "loadBalancerId": "\u003cocid:3\u003e",
   "webAppAccelerationPolicyId": "\u003cocid:2\u003e"
@@ -55,9 +55,9 @@ func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T03:06:40.769Z"
     }
   },
-  "displayName": "osok-replay-waa-acceleration-v1",
+  "displayName": "osok-mock-waa-acceleration-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:4>",
   "lifecycleDetails": null,
@@ -82,9 +82,9 @@ func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T03:06:40.769Z"
     }
   },
-  "displayName": "osok-replay-waa-acceleration-v1",
+  "displayName": "osok-mock-waa-acceleration-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:4>",
   "lifecycleDetails": null,
@@ -101,9 +101,9 @@ func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[waasdk.UpdateWebAppAccelerationDetails](t, `{
-  "displayName": "osok-replay-waa-acceleration-v1-updated",
+  "displayName": "osok-mock-waa-acceleration-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[waasdk.WebAppAccelerationLoadBalancer](t, `{
@@ -115,9 +115,9 @@ func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T03:06:40.769Z"
     }
   },
-  "displayName": "osok-replay-waa-acceleration-v1-updated",
+  "displayName": "osok-mock-waa-acceleration-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:4>",
   "lifecycleDetails": null,
@@ -142,9 +142,9 @@ func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T03:06:40.769Z"
     }
   },
-  "displayName": "osok-replay-waa-acceleration-v1-updated",
+  "displayName": "osok-mock-waa-acceleration-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:4>",
   "lifecycleDetails": null,
@@ -170,9 +170,9 @@ func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T03:06:40.769Z"
     }
   },
-  "displayName": "osok-replay-waa-acceleration-v1-updated",
+  "displayName": "osok-mock-waa-acceleration-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:4>",
   "lifecycleDetails": null,
@@ -235,7 +235,7 @@ func TestMockIntegrationWebAppAccelerationEvidenceCRUD(t *testing.T) {
 		}
 	})
 	baseClient := session.BaseClient()
-	sdkClient := recordedWebAppAccelerationOCIClient{
+	sdkClient := mockWebAppAccelerationOCIClient{
 		WaaClient:         waasdk.WaaClient{BaseClient: baseClient},
 		WorkRequestClient: waasdk.WorkRequestClient{BaseClient: baseClient},
 	}

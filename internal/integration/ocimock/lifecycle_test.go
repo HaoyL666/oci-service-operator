@@ -8,9 +8,11 @@ package ocimock
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/oracle/oci-service-operator/pkg/servicemanager"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
@@ -21,10 +23,12 @@ type lifecycleTestResource struct {
 }
 
 type lifecycleTestClient struct {
-	createCalls int
-	updateCalls int
-	deleteCalls int
-	retryDelete bool
+	createCalls   int
+	updateCalls   int
+	stableCalls   int
+	deleteCalls   int
+	retryDelete   bool
+	stableRequeue bool
 }
 
 func (c *lifecycleTestClient) CreateOrUpdate(_ context.Context, resource *lifecycleTestResource, _ ctrl.Request) (servicemanager.OSOKResponse, error) {
@@ -33,8 +37,12 @@ func (c *lifecycleTestClient) CreateOrUpdate(_ context.Context, resource *lifecy
 		resource.Created = true
 		return servicemanager.OSOKResponse{IsSuccessful: true}, nil
 	}
-	c.updateCalls++
-	return servicemanager.OSOKResponse{IsSuccessful: true}, nil
+	if c.updateCalls == 0 {
+		c.updateCalls++
+		return servicemanager.OSOKResponse{IsSuccessful: true}, nil
+	}
+	c.stableCalls++
+	return servicemanager.OSOKResponse{IsSuccessful: true, ShouldRequeue: c.stableRequeue}, nil
 }
 
 func (c *lifecycleTestClient) Delete(_ context.Context, resource *lifecycleTestResource) (bool, error) {
@@ -69,12 +77,56 @@ func TestRunLifecycleExecutesTypedCRUDContract(t *testing.T) {
 			}
 			return nil
 		},
+		ValidateStable: func(current *lifecycleTestResource) error {
+			if current.Name != "updated" {
+				return fmt.Errorf("stable resource = %+v", current)
+			}
+			return nil
+		},
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if client.createCalls != 1 || client.updateCalls != 1 || client.deleteCalls != 1 || !resource.Deleted {
-		t.Fatalf("calls create/update/delete=%d/%d/%d resource=%+v", client.createCalls, client.updateCalls, client.deleteCalls, resource)
+	if client.createCalls != 1 || client.updateCalls != 1 || client.stableCalls != 1 || client.deleteCalls != 1 || !resource.Deleted {
+		t.Fatalf("calls create/update/stable/delete=%d/%d/%d/%d resource=%+v", client.createCalls, client.updateCalls, client.stableCalls, client.deleteCalls, resource)
+	}
+}
+
+func TestLifecycleRequestUsesKubernetesIdentity(t *testing.T) {
+	t.Parallel()
+
+	resource := &metav1.PartialObjectMetadata{ObjectMeta: metav1.ObjectMeta{
+		Namespace: "test-namespace",
+		Name:      "test-name",
+	}}
+	request := lifecycleRequest(resource)
+	if request.Namespace != resource.Namespace || request.Name != resource.Name {
+		t.Fatalf("lifecycle request = %s/%s, want %s/%s", request.Namespace, request.Name, resource.Namespace, resource.Name)
+	}
+}
+
+func TestRunLifecycleRejectsStableRequeue(t *testing.T) {
+	t.Parallel()
+
+	resource := &lifecycleTestResource{Name: "created"}
+	err := RunLifecycle(context.Background(), LifecycleScenario[*lifecycleTestResource]{
+		Resource: resource,
+		Client:   &lifecycleTestClient{stableRequeue: true},
+		ValidateCreated: func(*lifecycleTestResource) error {
+			return nil
+		},
+		Mutate: func(current *lifecycleTestResource) {
+			current.Name = "updated"
+		},
+		ValidateUpdated: func(*lifecycleTestResource) error {
+			return nil
+		},
+		ValidateStable: func(*lifecycleTestResource) error {
+			return nil
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "stable lifecycle unexpectedly requested requeue") {
+		t.Fatalf("RunLifecycle() error = %v, want stable requeue rejection", err)
 	}
 }
 

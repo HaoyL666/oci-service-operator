@@ -24,7 +24,7 @@ import (
 const mockSnapshotID = "ocid1.snapshot.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/snapshot_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/filestorage/snapshot.json
 //   - repo-authored runtime: formal/controllers/filestorage/snapshot/diagrams/runtime-lifecycle.yaml
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/file_storage/file_storage_snapshot_resource.go

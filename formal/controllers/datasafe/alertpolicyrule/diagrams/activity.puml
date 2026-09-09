@@ -70,6 +70,7 @@ endif
 :Return success for the ACTIVE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
+:Keep promotion blocked on seed-corpus;
 }
 endif
 stop
@@ -107,7 +108,7 @@ filters alertPolicyId, expression, displayName;
 exact parent policy plus expression and display
 name match; duplicate matches fail
 conflicts: none
-open gaps: none
+open gaps: seed-corpus
 Write responses may include a Data Safe work
 request. The runtime resumes that request when
 present and otherwise converges from the

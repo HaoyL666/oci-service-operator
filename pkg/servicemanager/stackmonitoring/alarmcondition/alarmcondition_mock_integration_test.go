@@ -33,7 +33,10 @@ func TestMockIntegrationAlarmConditionCompositeCRUD(t *testing.T) {
 		CollectionPath: "/20210330/monitoringTemplates/" + testAlarmConditionMonitoringTemplate + "/alarmConditions",
 		ItemPath:       "/20210330/monitoringTemplates/" + testAlarmConditionMonitoringTemplate + "/alarmConditions/" + testAlarmConditionID,
 		Operations:     []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreateRequest:  &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
+		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		ListShape: ocimock.ListShapeItems, RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",
 	})

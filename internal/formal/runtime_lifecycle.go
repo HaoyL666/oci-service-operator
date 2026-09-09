@@ -40,15 +40,52 @@ func LoadRuntimeLifecycle(path string) (RuntimeLifecycleSpec, error) {
 	return loadDiagram(path)
 }
 
+// EffectiveRuntimeLifecycleCreateOperations returns the imported create
+// operations selected by repo-authored runtime semantics.
+func EffectiveRuntimeLifecycleCreateOperations(
+	spec *RuntimeLifecycleSpec,
+	imported []OperationBinding,
+) []OperationBinding {
+	return effectiveRuntimeLifecycleOperations(spec, imported, func(operations *diagramOperationSemantics) []string {
+		return operations.Create
+	})
+}
+
 // EffectiveRuntimeLifecycleUpdateOperations returns the imported update
-// operations selected by repo-authored runtime semantics. An omitted update
-// subset preserves every imported provider operation; an explicit subset keeps
-// only the named operations in declaration order.
+// operations selected by repo-authored runtime semantics.
 func EffectiveRuntimeLifecycleUpdateOperations(
 	spec *RuntimeLifecycleSpec,
 	imported []OperationBinding,
 ) []OperationBinding {
-	if spec == nil || spec.RepoAuthored == nil || spec.RepoAuthored.Operations == nil || spec.RepoAuthored.Operations.Update == nil {
+	return effectiveRuntimeLifecycleOperations(spec, imported, func(operations *diagramOperationSemantics) []string {
+		return operations.Update
+	})
+}
+
+// EffectiveRuntimeLifecycleDeleteOperations returns the imported delete
+// operations selected by repo-authored runtime semantics.
+func EffectiveRuntimeLifecycleDeleteOperations(
+	spec *RuntimeLifecycleSpec,
+	imported []OperationBinding,
+) []OperationBinding {
+	return effectiveRuntimeLifecycleOperations(spec, imported, func(operations *diagramOperationSemantics) []string {
+		return operations.Delete
+	})
+}
+
+// An omitted phase subset preserves every imported provider operation. An
+// explicit subset, including an explicit empty list, keeps only the named
+// operations in declaration order.
+func effectiveRuntimeLifecycleOperations(
+	spec *RuntimeLifecycleSpec,
+	imported []OperationBinding,
+	selection func(*diagramOperationSemantics) []string,
+) []OperationBinding {
+	if spec == nil || spec.RepoAuthored == nil || spec.RepoAuthored.Operations == nil {
+		return append([]OperationBinding(nil), imported...)
+	}
+	subset := selection(spec.RepoAuthored.Operations)
+	if subset == nil {
 		return append([]OperationBinding(nil), imported...)
 	}
 
@@ -57,8 +94,8 @@ func EffectiveRuntimeLifecycleUpdateOperations(
 		byName[strings.TrimSpace(operation.Operation)] = operation
 	}
 
-	effective := make([]OperationBinding, 0, len(spec.RepoAuthored.Operations.Update))
-	for _, name := range spec.RepoAuthored.Operations.Update {
+	effective := make([]OperationBinding, 0, len(subset))
+	for _, name := range subset {
 		if operation, ok := byName[strings.TrimSpace(name)]; ok {
 			effective = append(effective, operation)
 		}

@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -21,25 +21,25 @@ func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[networkfirewallv1beta1.NetworkFirewallPolicySpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK recorded Network Firewall policy",
-  "displayName": "osok-replay-network-firewall-policy",
+  "displayName": "osok-mock-network-firewall-policy",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "OSOK recorded Network Firewall policy updated",
-  "displayName": "osok-replay-network-firewall-policy-updated",
+  "displayName": "osok-mock-network-firewall-policy-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[networkfirewallsdk.CreateNetworkFirewallPolicyDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK recorded Network Firewall policy",
-  "displayName": "osok-replay-network-firewall-policy",
+  "displayName": "osok-mock-network-firewall-policy",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.NetworkFirewallPolicy](t, `{
@@ -52,9 +52,9 @@ func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded Network Firewall policy",
-  "displayName": "osok-replay-network-firewall-policy",
+  "displayName": "osok-mock-network-firewall-policy",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -74,9 +74,9 @@ func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded Network Firewall policy",
-  "displayName": "osok-replay-network-firewall-policy",
+  "displayName": "osok-mock-network-firewall-policy",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -88,9 +88,9 @@ func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
 	}
 	updateRequest := ocimock.MustJSONFixture[networkfirewallsdk.UpdateNetworkFirewallPolicyDetails](t, `{
   "description": "OSOK recorded Network Firewall policy updated",
-  "displayName": "osok-replay-network-firewall-policy-updated",
+  "displayName": "osok-mock-network-firewall-policy-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[networkfirewallsdk.NetworkFirewallPolicy](t, `{
@@ -103,9 +103,9 @@ func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded Network Firewall policy updated",
-  "displayName": "osok-replay-network-firewall-policy-updated",
+  "displayName": "osok-mock-network-firewall-policy-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -125,9 +125,9 @@ func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded Network Firewall policy updated",
-  "displayName": "osok-replay-network-firewall-policy-updated",
+  "displayName": "osok-mock-network-firewall-policy-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -148,9 +148,9 @@ func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded Network Firewall policy updated",
-  "displayName": "osok-replay-network-firewall-policy-updated",
+  "displayName": "osok-mock-network-firewall-policy-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -169,9 +169,9 @@ func TestMockIntegrationNetworkFirewallPolicyEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded Network Firewall policy updated",
-  "displayName": "osok-replay-network-firewall-policy-updated",
+  "displayName": "osok-mock-network-firewall-policy-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,

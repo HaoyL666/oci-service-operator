@@ -31,7 +31,7 @@ const mockStreamID = "ocid1.stream.oc1..mock"
 const mockStreamUpdatedEndpoint = "https://messages-updated.mock.invalid"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/stream_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/streaming/stream and formal/imports/streaming/stream.json
 //   - endpoint Secret runtime: stream_endpoint_secret_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/streaming

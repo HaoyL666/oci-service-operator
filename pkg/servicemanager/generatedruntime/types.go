@@ -290,8 +290,11 @@ type Config[T any] struct {
 	CredentialClient credhelper.CredentialClient
 	InitError        error
 	Semantics        *Semantics
-	BuildCreateBody  func(context.Context, T, string) (any, error)
-	BuildUpdateBody  func(context.Context, T, string, any) (any, bool, error)
+	// AsyncSemantics carries the generated async contract independently from
+	// optional formal mutability and lifecycle metadata.
+	AsyncSemantics  *AsyncSemantics
+	BuildCreateBody func(context.Context, T, string) (any, error)
+	BuildUpdateBody func(context.Context, T, string, any) (any, bool, error)
 
 	Identity        IdentityHooks[T]
 	Read            ReadHooks
@@ -339,10 +342,24 @@ func NewServiceClient[T any](cfg Config[T]) ServiceClient[T] {
 	if err := validateFormalSemantics(cfg.Kind, cfg.Semantics); err != nil {
 		cfg.InitError = errors.Join(cfg.InitError, err)
 	}
+	if err := validateRuntimeAsyncSemantics(cfg.Kind, cfg.AsyncSemantics); err != nil {
+		cfg.InitError = errors.Join(cfg.InitError, err)
+	}
 	if err := validateGeneratedWorkRequestAsyncHooks(cfg); err != nil {
 		cfg.InitError = errors.Join(cfg.InitError, err)
 	}
 	return ServiceClient[T]{config: cfg}
+}
+
+func validateRuntimeAsyncSemantics(kind string, async *AsyncSemantics) error {
+	if async == nil {
+		return nil
+	}
+	problems := invalidAsyncSemanticsProblems(&Semantics{Async: async})
+	if len(problems) == 0 {
+		return nil
+	}
+	return fmt.Errorf("%s async semantics blocked: %s", kind, strings.Join(problems, "; "))
 }
 
 func WithSkipExistingBeforeCreate(ctx context.Context) context.Context {

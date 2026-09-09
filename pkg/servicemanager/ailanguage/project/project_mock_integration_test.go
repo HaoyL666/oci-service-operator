@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationProjectWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -28,25 +28,25 @@ func TestMockIntegrationProjectWorkRequestCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-project")
 	resource.Spec = ocimock.MustJSONFixture[ailanguagev1beta1.ProjectSpec](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-ai-language-project-v1",
+  "displayName": "osok-mock-ai-language-project-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-ai-language-project-v1-updated"
+  "displayName": "osok-mock-ai-language-project-v1-updated"
 }`)
 
 	createRequest := ocimock.MustJSONFixture[ailanguagesdk.CreateProjectDetails](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-ai-language-project-v1",
+  "displayName": "osok-mock-ai-language-project-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updateRequest := ocimock.MustJSONFixture[ailanguagesdk.UpdateProjectDetails](t, `{
-  "displayName": "osok-replay-ai-language-project-v1-updated"
+  "displayName": "osok-mock-ai-language-project-v1-updated"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[ailanguagesdk.Project](t, `{
   "compartmentId": "<ocid:1>",
@@ -57,9 +57,9 @@ func TestMockIntegrationProjectWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": null,
-  "displayName": "osok-replay-ai-language-project-v1",
+  "displayName": "osok-mock-ai-language-project-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,
@@ -78,9 +78,9 @@ func TestMockIntegrationProjectWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": null,
-  "displayName": "osok-replay-ai-language-project-v1-updated",
+  "displayName": "osok-mock-ai-language-project-v1-updated",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,
@@ -99,9 +99,9 @@ func TestMockIntegrationProjectWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": null,
-  "displayName": "osok-replay-ai-language-project-v1-updated",
+  "displayName": "osok-mock-ai-language-project-v1-updated",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,

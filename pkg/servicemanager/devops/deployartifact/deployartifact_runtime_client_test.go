@@ -232,7 +232,7 @@ func deployArtifactWorkRequest(
 func TestDeployArtifactRuntimeSemanticsEncodesWorkRequestAndDeleteContracts(t *testing.T) {
 	t.Parallel()
 
-	got := newDeployArtifactRuntimeSemantics()
+	got := reviewedDeployArtifactRuntimeSemantics()
 	if got.FormalService != "devops" || got.FormalSlug != "deployartifact" {
 		t.Fatalf("formal identity = %s/%s, want devops/deployartifact", got.FormalService, got.FormalSlug)
 	}

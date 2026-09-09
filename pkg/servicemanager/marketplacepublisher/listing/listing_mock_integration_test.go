@@ -14,19 +14,19 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationListingLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &marketplacepublisherv1beta1.Listing{Spec: marketplacepublisherv1beta1.ListingSpec{
-		CompartmentId: "ocid1.compartment.oc1..replay", Name: "osok-replay-marketplace-listing",
+		CompartmentId: "ocid1.compartment.oc1..mock", Name: "osok-mock-marketplace-listing",
 		ListingType: string(marketplacepublishersdk.ListingTypeOciApplication), PackageType: string(marketplacepublishersdk.PackageTypeStack),
 	}}
 	ocimock.InitializeResource(resource, "mock-listing")
 	resource.Spec = ocimock.MustJSONFixture[marketplacepublisherv1beta1.ListingSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "listingType": "OCI_APPLICATION",
-  "name": "osok-replay-marketplace-listing",
+  "name": "osok-mock-marketplace-listing",
   "packageType": "STACK"
 }`)
 	updatedSpec := resource.Spec
@@ -38,7 +38,7 @@ func TestMockIntegrationListingLifecycleCRUD(t *testing.T) {
 	createRequest := ocimock.MustJSONFixture[marketplacepublishersdk.CreateListingDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "listingType": "OCI_APPLICATION",
-  "name": "osok-replay-marketplace-listing",
+  "name": "osok-mock-marketplace-listing",
   "packageType": "STACK"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[marketplacepublishersdk.Listing](t, `{
@@ -46,7 +46,7 @@ func TestMockIntegrationListingLifecycleCRUD(t *testing.T) {
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE",
   "listingType": "OCI_APPLICATION",
-  "name": "osok-replay-marketplace-listing",
+  "name": "osok-mock-marketplace-listing",
   "packageType": "STACK"
 }`)
 	updateRequest := ocimock.MustJSONFixture[marketplacepublishersdk.UpdateListingDetails](t, `{
@@ -62,7 +62,7 @@ func TestMockIntegrationListingLifecycleCRUD(t *testing.T) {
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE",
   "listingType": "OCI_APPLICATION",
-  "name": "osok-replay-marketplace-listing",
+  "name": "osok-mock-marketplace-listing",
   "packageType": "STACK"
 }`)
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[

@@ -23,7 +23,7 @@ import (
 
 const mockDataScienceProjectID = "ocid1.datascienceproject.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal project contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal project contract, and vendored OCI SDK.
 func TestMockIntegrationProjectLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &datasciencev1beta1.Project{ObjectMeta: metav1.ObjectMeta{Name: "mock-data-science-project", Namespace: "default", UID: types.UID("mock-data-science-project-uid")}, Spec: datasciencev1beta1.ProjectSpec{
@@ -38,7 +38,7 @@ func TestMockIntegrationProjectLifecycleCRUD(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { _ = session.Close() })
-	client := newRecordedDataScienceProjectClient(datasciencesdk.DataScienceClient{BaseClient: session.BaseClient()})
+	client := newMockDataScienceProjectClient(datasciencesdk.DataScienceClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*datasciencev1beta1.Project]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *datasciencev1beta1.Project) error {
@@ -75,6 +75,10 @@ func newDataScienceProjectMockResponder(resource *datasciencev1beta1.Project) (*
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (datasciencesdk.Project, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero datasciencesdk.Project
+				return zero, ocimock.Response{}, err
+			}
 			var details datasciencesdk.CreateProjectDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return datasciencesdk.Project{}, ocimock.Response{}, err

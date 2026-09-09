@@ -169,6 +169,19 @@ services:
       webhooks:
         strategy: none
 
+      resources:
+        - kind: AiDataPlatform
+          formalSpec: aidataplatform
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
   - service: aidocument
     sdkPackage: github.com/oracle/oci-go-sdk/v65/aidocument
     group: aidocument
@@ -1040,6 +1053,30 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: Bastion
+          formalSpec: bastion
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: Session
+          formalSpec: session
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - delete
 
   - service: batch
     sdkPackage: github.com/oracle/oci-go-sdk/v65/batch
@@ -1068,6 +1105,23 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: BatchContext
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: BatchJobPool
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [update]
 
   - service: bds
     sdkPackage: github.com/oracle/oci-go-sdk/v65/bds
@@ -1201,6 +1255,15 @@ services:
               source: service-sdk
               phases: [create, update, delete]
 
+        - kind: BlockchainPlatform
+          formalSpec: blockchainplatform
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
   - service: budget
     sdkPackage: github.com/oracle/oci-go-sdk/v65/budget
     group: budget
@@ -1381,7 +1444,41 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: AgentDependency
+          formalSpec: agentdependency
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update]
+        - kind: AssetSource
+          formalSpec: assetsource
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: Inventory
+          formalSpec: inventory
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, delete]
 
+        - kind: Agent
+          formalSpec: agent
+        - kind: Asset
+          formalSpec: asset
+        - kind: DiscoverySchedule
+          formalSpec: discoveryschedule
   - service: cloudguard
     sdkPackage: github.com/oracle/oci-go-sdk/v65/cloudguard
     group: cloudguard
@@ -1477,6 +1574,27 @@ services:
               markers:
                 - +kubebuilder:validation:Required
 
+        - kind: DataSource
+          formalSpec: datasource
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+        - kind: DataMaskRule
+          formalSpec: datamaskrule
+        - kind: ResponderRecipe
+          formalSpec: responderrecipe
+        - kind: SecurityRecipe
+          formalSpec: securityrecipe
+        - kind: SecurityZone
+          formalSpec: securityzone
+        - kind: Target
+          formalSpec: target
   - service: cloudmigrations
     sdkPackage: github.com/oracle/oci-go-sdk/v65/cloudmigrations
     group: cloudmigrations
@@ -1505,6 +1623,52 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: Migration
+          formalSpec: migration
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [delete]
+        - kind: MigrationAsset
+          formalSpec: migrationasset
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, delete]
+        - kind: MigrationPlan
+          formalSpec: migrationplan
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: ReplicationSchedule
+          formalSpec: replicationschedule
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: TargetAsset
+          formalSpec: targetasset
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
 
   - service: clusterplacementgroups
     sdkPackage: github.com/oracle/oci-go-sdk/v65/clusterplacementgroups
@@ -1594,6 +1758,9 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: CccInfrastructure
+          formalSpec: cccinfrastructure
 
   - service: computeinstanceagent
     sdkPackage: github.com/oracle/oci-go-sdk/v65/computeinstanceagent
@@ -2681,6 +2848,24 @@ services:
               markers:
                 - +kubebuilder:validation:Required
 
+        - kind: CatalogPrivateEndpoint
+          formalSpec: catalogprivateendpoint
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: Metastore
+          formalSpec: metastore
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, delete]
   - service: dataflow
     sdkPackage: github.com/oracle/oci-go-sdk/v65/dataflow
     group: dataflow
@@ -3129,6 +3314,15 @@ services:
           specFields:
             - *dataIntegrationWorkspaceIdField
 
+        - kind: Workspace
+          formalSpec: workspace
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
   - service: datalabelingservice
     sdkPackage: github.com/oracle/oci-go-sdk/v65/datalabelingservice
     group: datalabelingservice
@@ -3239,7 +3433,11 @@ services:
         strategy: generated
       webhooks:
         strategy: none
-
+      resources:
+        - kind: Annotation
+          formalSpec: annotation
+        - kind: Record
+          formalSpec: record
   - service: datasafe
     sdkPackage: github.com/oracle/oci-go-sdk/v65/datasafe
     group: datasafe
@@ -3294,9 +3492,162 @@ services:
       webhooks:
         strategy: none
       resources:
+        - kind: AlertPolicy
+          formalSpec: alertpolicy
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: AttributeSet
+          formalSpec: attributeset
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: SecurityPolicyConfig
+          formalSpec: securitypolicyconfig
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: SensitiveTypesExport
+          formalSpec: sensitivetypesexport
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+        - kind: TargetDatabaseGroup
+          formalSpec: targetdatabasegroup
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
         - kind: SensitiveType
           formalSpec: sensitivetype
 
+        - kind: DataSafePrivateEndpoint
+          formalSpec: datasafeprivateendpoint
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: MaskingColumn
+          formalSpec: maskingcolumn
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+        - kind: SensitiveColumn
+          formalSpec: sensitivecolumn
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+        - kind: SensitiveTypeGroup
+          formalSpec: sensitivetypegroup
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: TargetAlertPolicyAssociation
+          formalSpec: targetalertpolicyassociation
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: SecurityAssessment
+          formalSpec: securityassessment
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: SecurityPolicyDeployment
+          formalSpec: securitypolicydeployment
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: TargetDatabase
+          formalSpec: targetdatabase
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: UserAssessment
+          formalSpec: userassessment
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
   - service: datascience
     sdkPackage: github.com/oracle/oci-go-sdk/v65/datascience
     group: datascience
@@ -3472,6 +3823,95 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: MultiCloudResourceDiscovery
+          formalSpec: multicloudresourcediscovery
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbAwsIdentityConnector
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbAwsKey
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbAzureBlobContainer
+          formalSpec: oracledbazureblobcontainer
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbAzureBlobMount
+          formalSpec: oracledbazureblobmount
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbAzureConnector
+          formalSpec: oracledbazureconnector
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbAzureVault
+          formalSpec: oracledbazurevault
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbAzureVaultAssociation
+          formalSpec: oracledbazurevaultassociation
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbGcpIdentityConnector
+          formalSpec: oracledbgcpidentityconnector
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: OracleDbGcpKeyRing
+          formalSpec: oracledbgcpkeyring
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
 
   - service: delegateaccesscontrol
     sdkPackage: github.com/oracle/oci-go-sdk/v65/delegateaccesscontrol
@@ -3558,6 +3998,9 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: OccDemandSignal
+          formalSpec: occdemandsignal
 
   - service: desktops
     sdkPackage: github.com/oracle/oci-go-sdk/v65/desktops
@@ -3583,6 +4026,16 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: DesktopPool
+          formalSpec: desktoppool
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
 
   - service: devops
     sdkPackage: github.com/oracle/oci-go-sdk/v65/devops
@@ -3613,6 +4066,79 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: Project
+          formalSpec: project
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: Repository
+          formalSpec: repository
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: BuildPipeline
+          formalSpec: buildpipeline
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: DeployPipeline
+          formalSpec: deploypipeline
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: DeployArtifact
+          formalSpec: deployartifact
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: Trigger
+          formalSpec: trigger
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
 
   - service: dif
     sdkPackage: github.com/oracle/oci-go-sdk/v65/dif
@@ -3638,6 +4164,15 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: Stack
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
 
   - service: disasterrecovery
     sdkPackage: github.com/oracle/oci-go-sdk/v65/disasterrecovery
@@ -3907,6 +4442,16 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: EmWarehouse
+          formalSpec: emwarehouse
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
 
   - service: events
     sdkPackage: github.com/oracle/oci-go-sdk/v65/events
@@ -3981,6 +4526,10 @@ services:
               markers:
                 - +kubebuilder:validation:Required
 
+        - kind: OutboundConnector
+          formalSpec: outboundconnector
+        - kind: Replication
+          formalSpec: replication
   - service: fleetappsmanagement
     sdkPackage: github.com/oracle/oci-go-sdk/v65/fleetappsmanagement
     group: fleetappsmanagement
@@ -4052,6 +4601,116 @@ services:
           specFields:
             - *fleetAppsManagementFleetIdField
 
+        - kind: CatalogItem
+          formalSpec: catalogitem
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: CompliancePolicyRule
+          formalSpec: compliancepolicyrule
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: Fleet
+          formalSpec: fleet
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, delete]
+        - kind: MaintenanceWindow
+          formalSpec: maintenancewindow
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [update, delete]
+        - kind: Onboarding
+          formalSpec: onboarding
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: Patch
+          formalSpec: patch
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [update, delete]
+        - kind: PlatformConfiguration
+          formalSpec: platformconfiguration
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: Provision
+          formalSpec: provision
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: Runbook
+          formalSpec: runbook
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: RunbookVersion
+          formalSpec: runbookversion
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: SchedulerDefinition
+          formalSpec: schedulerdefinition
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update]
+        - kind: TaskRecord
+          formalSpec: taskrecord
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [update, delete]
+        - kind: Property
+          formalSpec: property
   - service: fleetsoftwareupdate
     sdkPackage: github.com/oracle/oci-go-sdk/v65/fleetsoftwareupdate
     group: fleetsoftwareupdate
@@ -4080,6 +4739,61 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: FsuAction
+          formalSpec: fsuaction
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: FsuCollection
+          formalSpec: fsucollection
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: FsuCycle
+          formalSpec: fsucycle
+          specFields:
+            - name: GoalVersionDetails.Components
+              type: '[]FsuCycleGoalVersionDetailsComponent'
+              tag: 'json:"components,omitempty"'
+            - name: GoalVersionDetails.Version
+              type: string
+              tag: 'json:"version,omitempty"'
+            - name: GoalVersionDetails.SoftwareImageId
+              type: string
+              tag: 'json:"softwareImageId,omitempty"'
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: FsuDiscovery
+          formalSpec: fsudiscovery
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, delete]
+        - kind: FsuReadinessCheck
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, delete]
 
   - service: functions
     sdkPackage: github.com/oracle/oci-go-sdk/v65/functions
@@ -4166,6 +4880,24 @@ services:
               markers:
                 - +kubebuilder:validation:Required
 
+        - kind: FusionEnvironment
+          formalSpec: fusionenvironment
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: FusionEnvironmentFamily
+          formalSpec: fusionenvironmentfamily
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
   - service: gdp
     sdkPackage: github.com/oracle/oci-go-sdk/v65/gdp
     group: gdp
@@ -4766,6 +5498,52 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: Connection
+          formalSpec: connection
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: DatabaseRegistration
+          formalSpec: databaseregistration
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: Deployment
+          formalSpec: deployment
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: DeploymentBackup
+          formalSpec: deploymentbackup
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, delete]
+        - kind: Pipeline
+          formalSpec: pipeline
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
 
   - service: governancerulescontrolplane
     sdkPackage: github.com/oracle/oci-go-sdk/v65/governancerulescontrolplane
@@ -4793,6 +5571,18 @@ services:
       webhooks:
         strategy: none
 
+      resources:
+        - kind: GovernanceRule
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
   - service: healthchecks
     sdkPackage: github.com/oracle/oci-go-sdk/v65/healthchecks
     group: healthchecks
@@ -4944,6 +5734,19 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: IotDomain
+          formalSpec: iotdomain
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
 
   - service: jms
     sdkPackage: github.com/oracle/oci-go-sdk/v65/jms
@@ -5763,6 +6566,19 @@ services:
       webhooks:
         strategy: none
 
+      resources:
+        - kind: KafkaCluster
+          formalSpec: kafkacluster
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
   - service: managementagent
     sdkPackage: github.com/oracle/oci-go-sdk/v65/managementagent
     group: managementagent
@@ -5790,6 +6606,31 @@ services:
       webhooks:
         strategy: none
 
+      resources:
+        - kind: DataSource
+          formalSpec: datasource
+          async:
+            strategy: workrequest
+            runtime: handwritten
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: NamedCredential
+          formalSpec: namedcredential
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
   - service: managementdashboard
     sdkPackage: github.com/oracle/oci-go-sdk/v65/managementdashboard
     group: managementdashboard
@@ -5941,6 +6782,18 @@ services:
       webhooks:
         strategy: none
 
+      resources:
+        - kind: Artifact
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
   - service: mediaservices
     sdkPackage: github.com/oracle/oci-go-sdk/v65/mediaservices
     group: mediaservices
@@ -6397,6 +7250,17 @@ services:
         strategy: none
       resources:
         - kind: Backend
+          formalSpec: backend
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
           specFields:
             - name: NetworkLoadBalancerId
               type: string
@@ -6440,6 +7304,17 @@ services:
                 isDrain: false
                 isOffline: false
         - kind: BackendSet
+          formalSpec: backendset
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
           specFields:
             - name: NetworkLoadBalancerId
               type: string
@@ -6455,6 +7330,17 @@ services:
               comments:
                 - The bound network load balancer OCID used to address this backend set.
         - kind: Listener
+          formalSpec: listener
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
           specFields:
             - name: NetworkLoadBalancerId
               type: string
@@ -6469,6 +7355,18 @@ services:
               tag: 'json:"networkLoadBalancerId,omitempty"'
               comments:
                 - The bound network load balancer OCID used to address this listener.
+        - kind: NetworkLoadBalancer
+          formalSpec: networkloadbalancer
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
     observedState:
       sdkAliases:
         WorkRequestLog:
@@ -7106,6 +8004,138 @@ services:
       webhooks:
         strategy: none
 
+      resources:
+        - kind: AwrHub
+          formalSpec: awrhub
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: AwrHubSource
+          formalSpec: awrhubsource
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: ChargebackPlanReport
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: EnterpriseManagerBridge
+          formalSpec: enterprisemanagerbridge
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: ExadataInsight
+          formalSpec: exadatainsight
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: HostInsight
+          formalSpec: hostinsight
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: NewsReport
+          formalSpec: newsreport
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: OperationsInsightsPrivateEndpoint
+          formalSpec: operationsinsightsprivateendpoint
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: OperationsInsightsWarehouse
+          formalSpec: operationsinsightswarehouse
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: OperationsInsightsWarehouseUser
+          formalSpec: operationsinsightswarehouseuser
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: OpsiConfiguration
+          formalSpec: opsiconfiguration
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
   - service: optimizer
     sdkPackage: github.com/oracle/oci-go-sdk/v65/optimizer
     group: optimizer
@@ -7580,7 +8610,44 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: ProtectionPolicy
+          formalSpec: protectionpolicy
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: RecoveryServiceSubnet
+          formalSpec: recoveryservicesubnet
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
 
+        - kind: ProtectedDatabase
+          formalSpec: protecteddatabase
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
   - service: redis
     sdkPackage: github.com/oracle/oci-go-sdk/v65/redis
     group: redis
@@ -7644,6 +8711,19 @@ services:
       webhooks:
         strategy: none
 
+      resources:
+        - kind: ResourceAnalyticsInstance
+          formalSpec: resourceanalyticsinstance
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
   - service: resourcemanager
     sdkPackage: github.com/oracle/oci-go-sdk/v65/resourcemanager
     group: resourcemanager
@@ -7671,7 +8751,9 @@ services:
         strategy: generated
       webhooks:
         strategy: none
-
+      resources:
+        - kind: ConfigurationSourceProvider
+          formalSpec: configurationsourceprovider
   - service: resourcescheduler
     sdkPackage: github.com/oracle/oci-go-sdk/v65/resourcescheduler
     group: resourcescheduler
@@ -7776,6 +8858,19 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: ServiceConnector
+          formalSpec: serviceconnector
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
 
   - service: secrets
     sdkPackage: github.com/oracle/oci-go-sdk/v65/secrets
@@ -8045,6 +9140,25 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: MaintenanceWindow
+          formalSpec: maintenancewindow
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
+        - kind: MonitoredResource
+          formalSpec: monitoredresource
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases: [create, update, delete]
 
   - service: streaming
     sdkPackage: github.com/oracle/oci-go-sdk/v65/streaming
@@ -8653,6 +9767,31 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: HttpRedirect
+          formalSpec: httpredirect
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
+        - kind: WaasPolicy
+          formalSpec: waaspolicy
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
 
   - service: waf
     sdkPackage: github.com/oracle/oci-go-sdk/v65/waf
@@ -8680,6 +9819,19 @@ services:
         strategy: generated
       webhooks:
         strategy: none
+      resources:
+        - kind: WebAppFirewallPolicy
+          formalSpec: webappfirewallpolicy
+          async:
+            strategy: workrequest
+            runtime: generatedruntime
+            formalClassification: workrequest
+            workRequest:
+              source: service-sdk
+              phases:
+                - create
+                - update
+                - delete
 
   - service: wlms
     sdkPackage: github.com/oracle/oci-go-sdk/v65/wlms

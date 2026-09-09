@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,14 +22,14 @@ func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
   "action": "DIPP_SRC_NAT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
-    "service": "osok_replay_prereq_tcp",
+    "service": "osok_mock_prereq_tcp",
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
-  "name": "osok_replay_nat_rule",
+  "name": "osok_mock_nat_rule",
   "type": "NATV4"
 }`)
 	resource.Spec.NetworkFirewallPolicyId = "<ocid:1>"
@@ -38,12 +38,12 @@ func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
   "action": "DIPP_SRC_NAT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses",
-      "osok_replay_addresses2"
+      "osok_mock_prereq_addresses",
+      "osok_mock_addresses2"
     ],
-    "service": "osok_replay_prereq_tcp",
+    "service": "osok_mock_prereq_tcp",
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "type": "NATV4"
@@ -52,28 +52,28 @@ func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
   "action": "DIPP_SRC_NAT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
-    "service": "osok_replay_prereq_tcp",
+    "service": "osok_mock_prereq_tcp",
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
-  "name": "osok_replay_nat_rule"
+  "name": "osok_mock_nat_rule"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.NatV4NatRule](t, `{
   "action": "DIPP_SRC_NAT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
-    "service": "osok_replay_prereq_tcp",
+    "service": "osok_mock_prereq_tcp",
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "description": null,
-  "name": "osok_replay_nat_rule",
+  "name": "osok_mock_nat_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -87,15 +87,15 @@ func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
   "action": "DIPP_SRC_NAT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
-    "service": "osok_replay_prereq_tcp",
+    "service": "osok_mock_prereq_tcp",
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "description": null,
-  "name": "osok_replay_nat_rule",
+  "name": "osok_mock_nat_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -109,12 +109,12 @@ func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
   "action": "DIPP_SRC_NAT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses",
-      "osok_replay_addresses2"
+      "osok_mock_prereq_addresses",
+      "osok_mock_addresses2"
     ],
-    "service": "osok_replay_prereq_tcp",
+    "service": "osok_mock_prereq_tcp",
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   }
 }`)
@@ -122,16 +122,16 @@ func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
   "action": "DIPP_SRC_NAT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses",
-      "osok_replay_addresses2"
+      "osok_mock_prereq_addresses",
+      "osok_mock_addresses2"
     ],
-    "service": "osok_replay_prereq_tcp",
+    "service": "osok_mock_prereq_tcp",
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "description": null,
-  "name": "osok_replay_nat_rule",
+  "name": "osok_mock_nat_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -145,16 +145,16 @@ func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
   "action": "DIPP_SRC_NAT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses",
-      "osok_replay_addresses2"
+      "osok_mock_prereq_addresses",
+      "osok_mock_addresses2"
     ],
-    "service": "osok_replay_prereq_tcp",
+    "service": "osok_mock_prereq_tcp",
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "description": null,
-  "name": "osok_replay_nat_rule",
+  "name": "osok_mock_nat_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -170,7 +170,7 @@ func TestMockIntegrationNatRuleCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateNatV4RuleDetails,
 	]{
 		CollectionPath:     "/20230501/networkFirewallPolicies/<ocid:1>/natRules",
-		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/natRules/osok_replay_nat_rule",
+		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/natRules/osok_mock_nat_rule",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState:       &createdState,
 		UpdatedState:       &updatedState,

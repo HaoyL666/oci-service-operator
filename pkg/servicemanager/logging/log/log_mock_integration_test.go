@@ -12,16 +12,16 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationLogCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &loggingv1beta1.Log{}
 	ocimock.InitializeResource(resource, "mock-log")
 	resource.Spec = ocimock.MustJSONFixture[loggingv1beta1.LogSpec](t, `{
-  "displayName": "osok-replay-custom-log-v1",
+  "displayName": "osok-mock-custom-log-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isEnabled": true,
   "logType": "CUSTOM",
@@ -31,15 +31,15 @@ func TestMockIntegrationLogCompositeCRUD(t *testing.T) {
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "isEnabled": false,
   "retentionDuration": 60
 }`)
 	createRequest := ocimock.MustJSONFixture[loggingsdk.CreateLogDetails](t, `{
-  "displayName": "osok-replay-custom-log-v1",
+  "displayName": "osok-mock-custom-log-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isEnabled": true,
   "logType": "CUSTOM",
@@ -54,9 +54,9 @@ func TestMockIntegrationLogCompositeCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T02:56:33.218Z"
     }
   },
-  "displayName": "osok-replay-custom-log-v1",
+  "displayName": "osok-mock-custom-log-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:4>",
   "isEnabled": true,
@@ -71,7 +71,7 @@ func TestMockIntegrationLogCompositeCRUD(t *testing.T) {
 }`)
 	updateRequest := ocimock.MustJSONFixture[loggingsdk.UpdateLogDetails](t, `{
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "isEnabled": false,
   "retentionDuration": 60
@@ -85,9 +85,9 @@ func TestMockIntegrationLogCompositeCRUD(t *testing.T) {
       "CreatedOn": "2026-09-01T02:56:33.218Z"
     }
   },
-  "displayName": "osok-replay-custom-log-v1",
+  "displayName": "osok-mock-custom-log-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:4>",
   "isEnabled": false,
@@ -146,7 +146,7 @@ func TestMockIntegrationLogCompositeCRUD(t *testing.T) {
 		}
 	})
 	sdkClient := loggingsdk.LoggingManagementClient{BaseClient: session.BaseClient()}
-	client := newRecordedLogClient(sdkClient)
+	client := newMockLogClient(sdkClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*loggingv1beta1.Log]{
 		Resource:      resource,
 		Client:        client,

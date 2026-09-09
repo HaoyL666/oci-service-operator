@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationSqlCollectionLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,7 +23,7 @@ func TestMockIntegrationSqlCollectionLifecycleCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[datasafev1beta1.SqlCollectionSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "dbUserName": "APPUSER",
-  "displayName": "osok-replay-sql-collection",
+  "displayName": "osok-mock-sql-collection",
   "sqlLevel": "USER_ISSUED_SQL",
   "status": "DISABLED",
   "targetId": "\u003cocid:2\u003e"
@@ -35,7 +35,7 @@ func TestMockIntegrationSqlCollectionLifecycleCRUD(t *testing.T) {
 	createRequest := ocimock.MustJSONFixture[datasafesdk.CreateSqlCollectionDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "dbUserName": "APPUSER",
-  "displayName": "osok-replay-sql-collection",
+  "displayName": "osok-mock-sql-collection",
   "sqlLevel": "USER_ISSUED_SQL",
   "status": "DISABLED",
   "targetId": "\u003cocid:2\u003e"
@@ -43,7 +43,7 @@ func TestMockIntegrationSqlCollectionLifecycleCRUD(t *testing.T) {
 	createdState := ocimock.MustOCIResponseFixture[datasafesdk.SqlCollection](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "dbUserName": "APPUSER",
-  "displayName": "osok-replay-sql-collection",
+  "displayName": "osok-mock-sql-collection",
   "id": "\u003cocid:3\u003e",
   "lifecycleState": "INACTIVE",
   "sqlLevel": "USER_ISSUED_SQL",
@@ -54,7 +54,7 @@ func TestMockIntegrationSqlCollectionLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[datasafesdk.SqlCollection](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "dbUserName": "APPUSER",
-  "displayName": "osok-replay-sql-collection",
+  "displayName": "osok-mock-sql-collection",
   "id": "\u003cocid:3\u003e",
   "lifecycleState": "INACTIVE",
   "sqlLevel": "USER_ISSUED_SQL",
@@ -69,7 +69,7 @@ func TestMockIntegrationSqlCollectionLifecycleCRUD(t *testing.T) {
   "compartmentId": "\u003cocid:1\u003e",
   "dbUserName": "APPUSER",
   "description": "mock-updated",
-  "displayName": "osok-replay-sql-collection",
+  "displayName": "osok-mock-sql-collection",
   "id": "\u003cocid:3\u003e",
   "lifecycleState": "INACTIVE",
   "sqlLevel": "USER_ISSUED_SQL",
@@ -81,7 +81,7 @@ func TestMockIntegrationSqlCollectionLifecycleCRUD(t *testing.T) {
   "compartmentId": "\u003cocid:1\u003e",
   "dbUserName": "APPUSER",
   "description": "mock-updated",
-  "displayName": "osok-replay-sql-collection",
+  "displayName": "osok-mock-sql-collection",
   "id": "\u003cocid:3\u003e",
   "lifecycleState": "INACTIVE",
   "sqlLevel": "USER_ISSUED_SQL",

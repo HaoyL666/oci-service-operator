@@ -25,7 +25,7 @@ import (
 
 const mockVisionProjectID = "ocid1.aivisionproject.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal project contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal project contract, and vendored OCI SDK.
 func TestMockIntegrationProjectLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &aivisionv1beta1.Project{ObjectMeta: metav1.ObjectMeta{Name: "mock-ai-vision-project", Namespace: "default", UID: types.UID("mock-ai-vision-project-uid")}, Spec: aivisionv1beta1.ProjectSpec{
@@ -76,6 +76,10 @@ func newVisionProjectMockResponder(resource *aivisionv1beta1.Project) (*ocimock.
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (aivisionsdk.Project, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero aivisionsdk.Project
+				return zero, ocimock.Response{}, err
+			}
 			var details aivisionsdk.CreateProjectDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return aivisionsdk.Project{}, ocimock.Response{}, err

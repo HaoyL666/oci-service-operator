@@ -26,7 +26,7 @@ import (
 const mockEmailDomainID = "ocid1.emaildomain.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/emaildomain_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/email/emaildomain and formal/imports/email/emaildomain.json
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/email
 func TestMockIntegrationEmailDomainLifecycleCRUD(t *testing.T) {
@@ -89,6 +89,10 @@ func newEmailDomainMockResponder(resource *emailv1beta1.EmailDomain) (*ocimock.C
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (emailsdk.EmailDomain, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero emailsdk.EmailDomain
+				return zero, ocimock.Response{}, err
+			}
 			var details emailsdk.CreateEmailDomainDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return emailsdk.EmailDomain{}, ocimock.Response{}, err

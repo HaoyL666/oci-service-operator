@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationBatchTaskEnvironmentEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,9 +23,9 @@ func TestMockIntegrationBatchTaskEnvironmentEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[batchv1beta1.BatchTaskEnvironmentSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-batch-task-environment-v1",
+  "displayName": "osok-mock-batch-task-environment-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "imageUrl": "\u003cbinding:batch-image-url\u003e",
   "volumes": []
@@ -34,15 +34,15 @@ func TestMockIntegrationBatchTaskEnvironmentEvidenceCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[batchsdk.CreateBatchTaskEnvironmentDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-batch-task-environment-v1",
+  "displayName": "osok-mock-batch-task-environment-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "imageUrl": "\u003cbinding:batch-image-url\u003e",
   "volumes": []
@@ -56,9 +56,9 @@ func TestMockIntegrationBatchTaskEnvironmentEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-batch-task-environment-v1",
+  "displayName": "osok-mock-batch-task-environment-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "imageUrl": "<binding:batch-image-url>",
@@ -73,7 +73,7 @@ func TestMockIntegrationBatchTaskEnvironmentEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[batchsdk.UpdateBatchTaskEnvironmentDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[batchsdk.BatchTaskEnvironment](t, `{
@@ -85,9 +85,9 @@ func TestMockIntegrationBatchTaskEnvironmentEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-batch-task-environment-v1",
+  "displayName": "osok-mock-batch-task-environment-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "imageUrl": "<binding:batch-image-url>",
@@ -108,9 +108,9 @@ func TestMockIntegrationBatchTaskEnvironmentEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-batch-task-environment-v1",
+  "displayName": "osok-mock-batch-task-environment-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "imageUrl": "<binding:batch-image-url>",

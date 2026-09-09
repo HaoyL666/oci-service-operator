@@ -24,7 +24,7 @@ import (
 const mockAlarmID = "ocid1.alarm.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/alarm_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/monitoring/alarm and formal/imports/monitoring/alarm.json
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/monitoring
 func TestMockIntegrationAlarmLifecycleCRUD(t *testing.T) {
@@ -59,7 +59,7 @@ func TestMockIntegrationAlarmLifecycleCRUD(t *testing.T) {
 		}
 	})
 
-	client := newRecordedAlarmClient(monitoringsdk.MonitoringClient{BaseClient: session.BaseClient()})
+	client := newMockAlarmClient(monitoringsdk.MonitoringClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*monitoringv1beta1.Alarm]{
 		Resource:      resource,
 		Client:        client,

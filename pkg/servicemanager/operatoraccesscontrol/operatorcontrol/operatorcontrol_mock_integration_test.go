@@ -14,13 +14,13 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationOperatorControlLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &operatoraccesscontrolv1beta1.OperatorControl{Spec: operatoraccesscontrolv1beta1.OperatorControlSpec{
-		OperatorControlName: "osok-replay-operator-control", ApproverGroupsList: []string{"ocid1.group.oc1..replay"},
-		ResourceType: string(operatoraccesscontrolsdk.ResourceTypesExacc), CompartmentId: "ocid1.compartment.oc1..replay",
+		OperatorControlName: "osok-mock-operator-control", ApproverGroupsList: []string{"ocid1.group.oc1..mock"},
+		ResourceType: string(operatoraccesscontrolsdk.ResourceTypesExacc), CompartmentId: "ocid1.compartment.oc1..mock",
 		Description: "synthetic operator control", NumberOfApprovers: 1,
 	}}
 	ocimock.InitializeResource(resource, "mock-operatorcontrol")
@@ -32,7 +32,7 @@ func TestMockIntegrationOperatorControlLifecycleCRUD(t *testing.T) {
   "description": "synthetic operator control",
   "isFullyPreApproved": false,
   "numberOfApprovers": 1,
-  "operatorControlName": "osok-replay-operator-control",
+  "operatorControlName": "osok-mock-operator-control",
   "resourceType": "EXACC"
 }`)
 	updatedSpec := resource.Spec
@@ -42,7 +42,7 @@ func TestMockIntegrationOperatorControlLifecycleCRUD(t *testing.T) {
   ],
   "description": "synthetic operator control-updated",
   "isFullyPreApproved": false,
-  "operatorControlName": "osok-replay-operator-control"
+  "operatorControlName": "osok-mock-operator-control"
 }`)
 	createRequest := ocimock.MustJSONFixture[operatoraccesscontrolsdk.CreateOperatorControlDetails](t, `{
   "approverGroupsList": [
@@ -52,7 +52,7 @@ func TestMockIntegrationOperatorControlLifecycleCRUD(t *testing.T) {
   "description": "synthetic operator control",
   "isFullyPreApproved": false,
   "numberOfApprovers": 1,
-  "operatorControlName": "osok-replay-operator-control",
+  "operatorControlName": "osok-mock-operator-control",
   "resourceType": "EXACC"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[operatoraccesscontrolsdk.OperatorControl](t, `{
@@ -65,7 +65,7 @@ func TestMockIntegrationOperatorControlLifecycleCRUD(t *testing.T) {
   "isFullyPreApproved": false,
   "lifecycleState": "CREATED",
   "numberOfApprovers": 1,
-  "operatorControlName": "osok-replay-operator-control",
+  "operatorControlName": "osok-mock-operator-control",
   "resourceType": "EXACC"
 }`)
 	updateRequest := ocimock.MustJSONFixture[operatoraccesscontrolsdk.UpdateOperatorControlDetails](t, `{
@@ -74,7 +74,7 @@ func TestMockIntegrationOperatorControlLifecycleCRUD(t *testing.T) {
   ],
   "description": "synthetic operator control-updated",
   "isFullyPreApproved": false,
-  "operatorControlName": "osok-replay-operator-control"
+  "operatorControlName": "osok-mock-operator-control"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[operatoraccesscontrolsdk.OperatorControl](t, `{
   "approverGroupsList": [
@@ -86,7 +86,7 @@ func TestMockIntegrationOperatorControlLifecycleCRUD(t *testing.T) {
   "isFullyPreApproved": false,
   "lifecycleState": "CREATED",
   "numberOfApprovers": 1,
-  "operatorControlName": "osok-replay-operator-control",
+  "operatorControlName": "osok-mock-operator-control",
   "resourceType": "EXACC"
 }`)
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[

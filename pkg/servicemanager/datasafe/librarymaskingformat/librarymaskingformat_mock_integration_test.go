@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationLibraryMaskingFormatEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,16 +23,16 @@ func TestMockIntegrationLibraryMaskingFormatEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[datasafev1beta1.LibraryMaskingFormatSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-library-masking-format-v2",
+  "displayName": "osok-mock-library-masking-format-v2",
   "formatEntries": [
     {
-      "description": "fixed replay value",
+      "description": "fixed mock value",
       "fixedString": "MASKED",
       "type": "FIXED_STRING"
     }
   ],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "sensitiveTypeIds": []
 }`)
@@ -40,22 +40,22 @@ func TestMockIntegrationLibraryMaskingFormatEvidenceCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[datasafesdk.CreateLibraryMaskingFormatDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-library-masking-format-v2",
+  "displayName": "osok-mock-library-masking-format-v2",
   "formatEntries": [
     {
-      "description": "fixed replay value",
+      "description": "fixed mock value",
       "fixedString": "MASKED",
       "type": "FIXED_STRING"
     }
   ],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "sensitiveTypeIds": []
 }`)
@@ -68,16 +68,16 @@ func TestMockIntegrationLibraryMaskingFormatEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-library-masking-format-v2",
+  "displayName": "osok-mock-library-masking-format-v2",
   "formatEntries": [
     {
-      "description": "fixed replay value",
+      "description": "fixed mock value",
       "fixedString": "MASKED",
       "type": "FIXED_STRING"
     }
   ],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleState": "ACTIVE",
@@ -96,16 +96,16 @@ func TestMockIntegrationLibraryMaskingFormatEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-library-masking-format-v2",
+  "displayName": "osok-mock-library-masking-format-v2",
   "formatEntries": [
     {
-      "description": "fixed replay value",
+      "description": "fixed mock value",
       "fixedString": "MASKED",
       "type": "FIXED_STRING"
     }
   ],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleState": "ACTIVE",
@@ -118,7 +118,7 @@ func TestMockIntegrationLibraryMaskingFormatEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[datasafesdk.UpdateLibraryMaskingFormatDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[datasafesdk.LibraryMaskingFormat](t, `{
@@ -130,16 +130,16 @@ func TestMockIntegrationLibraryMaskingFormatEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-library-masking-format-v2",
+  "displayName": "osok-mock-library-masking-format-v2",
   "formatEntries": [
     {
-      "description": "fixed replay value",
+      "description": "fixed mock value",
       "fixedString": "MASKED",
       "type": "FIXED_STRING"
     }
   ],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleState": "ACTIVE",
@@ -158,16 +158,16 @@ func TestMockIntegrationLibraryMaskingFormatEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-library-masking-format-v2",
+  "displayName": "osok-mock-library-masking-format-v2",
   "formatEntries": [
     {
-      "description": "fixed replay value",
+      "description": "fixed mock value",
       "fixedString": "MASKED",
       "type": "FIXED_STRING"
     }
   ],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleState": "ACTIVE",

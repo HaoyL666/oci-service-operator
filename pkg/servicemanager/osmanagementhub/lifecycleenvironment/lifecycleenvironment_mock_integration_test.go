@@ -83,6 +83,10 @@ func newLifecycleEnvironmentMockResponder(resource *osmanagementhubv1beta1.Lifec
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []osmanagementhubsdk.LifecycleEnvironment{state}})
 		},
 		Create: func(request ocimock.Request) (osmanagementhubsdk.LifecycleEnvironment, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero osmanagementhubsdk.LifecycleEnvironment
+				return zero, ocimock.Response{}, err
+			}
 			var details osmanagementhubsdk.CreateLifecycleEnvironmentDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return osmanagementhubsdk.LifecycleEnvironment{}, ocimock.Response{}, err

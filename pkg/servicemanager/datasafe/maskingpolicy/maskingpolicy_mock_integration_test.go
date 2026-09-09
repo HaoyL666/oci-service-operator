@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationMaskingPolicyLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -26,7 +26,7 @@ func TestMockIntegrationMaskingPolicyLifecycleCRUD(t *testing.T) {
     "sensitiveDataModelId": "\u003cocid:1\u003e"
   },
   "compartmentId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-masking-policy",
+  "displayName": "osok-mock-masking-policy",
   "isDropTempTablesEnabled": false,
   "isRedoLoggingEnabled": false,
   "isRefreshStatsEnabled": false
@@ -38,7 +38,7 @@ func TestMockIntegrationMaskingPolicyLifecycleCRUD(t *testing.T) {
     "sensitiveDataModelId": "\u003cocid:1\u003e"
   },
   "description": "mock-updated",
-  "displayName": "osok-replay-masking-policy",
+  "displayName": "osok-mock-masking-policy",
   "isDropTempTablesEnabled": false,
   "isRedoLoggingEnabled": false,
   "isRefreshStatsEnabled": false
@@ -49,7 +49,7 @@ func TestMockIntegrationMaskingPolicyLifecycleCRUD(t *testing.T) {
     "sensitiveDataModelId": "\u003cocid:1\u003e"
   },
   "compartmentId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-masking-policy",
+  "displayName": "osok-mock-masking-policy",
   "isDropTempTablesEnabled": false,
   "isRedoLoggingEnabled": false,
   "isRefreshStatsEnabled": false
@@ -60,7 +60,7 @@ func TestMockIntegrationMaskingPolicyLifecycleCRUD(t *testing.T) {
     "sensitiveDataModelId": "\u003cocid:1\u003e"
   },
   "compartmentId": "\u003cocid:2\u003e",
-  "displayName": "osok-replay-masking-policy",
+  "displayName": "osok-mock-masking-policy",
   "id": "\u003cocid:3\u003e",
   "isDropTempTablesEnabled": false,
   "isRedoLoggingEnabled": false,
@@ -73,7 +73,7 @@ func TestMockIntegrationMaskingPolicyLifecycleCRUD(t *testing.T) {
     "sensitiveDataModelId": "\u003cocid:1\u003e"
   },
   "description": "mock-updated",
-  "displayName": "osok-replay-masking-policy",
+  "displayName": "osok-mock-masking-policy",
   "isDropTempTablesEnabled": false,
   "isRedoLoggingEnabled": false,
   "isRefreshStatsEnabled": false
@@ -85,7 +85,7 @@ func TestMockIntegrationMaskingPolicyLifecycleCRUD(t *testing.T) {
   },
   "compartmentId": "\u003cocid:2\u003e",
   "description": "mock-updated",
-  "displayName": "osok-replay-masking-policy",
+  "displayName": "osok-mock-masking-policy",
   "id": "\u003cocid:3\u003e",
   "isDropTempTablesEnabled": false,
   "isRedoLoggingEnabled": false,

@@ -22,7 +22,7 @@ import (
 
 const mockQueryID = "ocid1.usagequery.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal state-free contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal state-free contract, and vendored OCI SDK.
 func TestMockIntegrationQueryLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	const tenancyID = "ocid1.tenancy.oc1..mock"
@@ -77,6 +77,10 @@ func newQueryMockResponder(resource *usageapiv1beta1.Query) (*ocimock.CRUDRespon
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []usageapisdk.Query{state}})
 		},
 		Create: func(request ocimock.Request) (usageapisdk.Query, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero usageapisdk.Query
+				return zero, ocimock.Response{}, err
+			}
 			var details usageapisdk.CreateQueryDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return usageapisdk.Query{}, ocimock.Response{}, err

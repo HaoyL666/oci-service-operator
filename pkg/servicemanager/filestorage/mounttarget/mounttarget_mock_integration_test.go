@@ -39,7 +39,7 @@ func TestMockIntegrationMountTargetLifecycleCRUD(t *testing.T) {
 			t.Errorf("close MountTarget OCI mock: %v", err)
 		}
 	})
-	client := newRecordedMountTargetClient(filestoragesdk.FileStorageClient{BaseClient: session.BaseClient()})
+	client := newMockMountTargetClient(filestoragesdk.FileStorageClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*filestoragev1beta1.MountTarget]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *filestoragev1beta1.MountTarget) error {
@@ -75,6 +75,10 @@ func newMountTargetMockResponder(resource *filestoragev1beta1.MountTarget) (*oci
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (filestoragesdk.MountTarget, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero filestoragesdk.MountTarget
+				return zero, ocimock.Response{}, err
+			}
 			var details filestoragesdk.CreateMountTargetDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return filestoragesdk.MountTarget{}, ocimock.Response{}, err

@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -20,7 +20,7 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-application")
 	resource.Spec = ocimock.MustJSONFixture[networkfirewallv1beta1.ApplicationSpec](t, `{
   "icmpType": 8,
-  "name": "osok_replay_application",
+  "name": "osok_mock_application",
   "type": "ICMP"
 }`)
 	resource.Spec.NetworkFirewallPolicyId = "<ocid:1>"
@@ -32,13 +32,13 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
 }`)
 	createRequest := ocimock.MustJSONFixture[networkfirewallsdk.CreateIcmpApplicationDetails](t, `{
   "icmpType": 8,
-  "name": "osok_replay_application"
+  "name": "osok_mock_application"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.IcmpApplication](t, `{
   "description": null,
   "icmpCode": null,
   "icmpType": 8,
-  "name": "osok_replay_application",
+  "name": "osok_mock_application",
   "parentResourceId": "<ocid:1>",
   "type": "ICMP"
 }`)
@@ -47,7 +47,7 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
   "description": null,
   "icmpCode": null,
   "icmpType": 8,
-  "name": "osok_replay_application",
+  "name": "osok_mock_application",
   "parentResourceId": "<ocid:1>",
   "type": "ICMP"
 }`),
@@ -60,7 +60,7 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
   "description": null,
   "icmpCode": 1,
   "icmpType": 3,
-  "name": "osok_replay_application",
+  "name": "osok_mock_application",
   "parentResourceId": "<ocid:1>",
   "type": "ICMP"
 }`)
@@ -69,7 +69,7 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
   "description": null,
   "icmpCode": 1,
   "icmpType": 3,
-  "name": "osok_replay_application",
+  "name": "osok_mock_application",
   "parentResourceId": "<ocid:1>",
   "type": "ICMP"
 }`),
@@ -80,7 +80,7 @@ func TestMockIntegrationApplicationCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateIcmpApplicationDetails,
 	]{
 		CollectionPath:     "/20230501/networkFirewallPolicies/<ocid:1>/applications",
-		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/applications/osok_replay_application",
+		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/applications/osok_mock_application",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState:       &createdState,
 		UpdatedState:       &updatedState,

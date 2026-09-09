@@ -31,6 +31,9 @@ func TestMockIntegrationSkillParameterCompositeCRUD(t *testing.T) {
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[odasdk.SkillParameter, odasdk.CreateSkillParameterDetails, odasdk.UpdateSkillParameterDetails]{
 		CollectionPath: "/20190506/odaInstances/oda-1/skills/skill-1/parameters", ItemPath: "/20190506/odaInstances/oda-1/skills/skill-1/parameters/param",
 		Operations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete}, CreateRequest: &createRequest, CreatedState: &created, ListShape: ocimock.ListShapeItems,
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		UpdateRequest: &updateRequest, UpdatedState: &updated, UpdatedReadStates: []odasdk.SkillParameter{updated}, DeleteEndsNotFound: true,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteStatus: http.StatusNoContent, NotFoundCode: "NotFound",
 	})

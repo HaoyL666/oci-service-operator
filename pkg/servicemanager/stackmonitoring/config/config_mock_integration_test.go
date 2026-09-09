@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationConfigLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,19 +23,19 @@ func TestMockIntegrationConfigLifecycleCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[stackmonitoringv1beta1.ConfigSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "configType": "AUTO_PROMOTE",
-  "displayName": "osok-replay-stack-config",
+  "displayName": "osok-mock-stack-config",
   "isEnabled": true,
   "resourceType": "HOST"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "configType": "AUTO_PROMOTE",
-  "displayName": "osok-replay-stack-config-updated",
+  "displayName": "osok-mock-stack-config-updated",
   "isEnabled": true
 }`)
 	createRequest := ocimock.MustJSONFixture[stackmonitoringsdk.CreateAutoPromoteConfigDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-stack-config",
+  "displayName": "osok-mock-stack-config",
   "isEnabled": true,
   "resourceType": "HOST"
 }`)
@@ -43,7 +43,7 @@ func TestMockIntegrationConfigLifecycleCRUD(t *testing.T) {
   "additionalConfigurations": {},
   "compartmentId": "\u003cocid:1\u003e",
   "configType": "AUTO_PROMOTE",
-  "displayName": "osok-replay-stack-config",
+  "displayName": "osok-mock-stack-config",
   "id": "\u003cocid:2\u003e",
   "isEnabled": true,
   "lifecycleState": "ACTIVE",
@@ -54,7 +54,7 @@ func TestMockIntegrationConfigLifecycleCRUD(t *testing.T) {
   "additionalConfigurations": {},
   "compartmentId": "\u003cocid:1\u003e",
   "configType": "AUTO_PROMOTE",
-  "displayName": "osok-replay-stack-config",
+  "displayName": "osok-mock-stack-config",
   "id": "\u003cocid:2\u003e",
   "isEnabled": true,
   "lifecycleState": "ACTIVE",
@@ -62,14 +62,14 @@ func TestMockIntegrationConfigLifecycleCRUD(t *testing.T) {
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[stackmonitoringsdk.UpdateAutoPromoteConfigDetails](t, `{
-  "displayName": "osok-replay-stack-config-updated",
+  "displayName": "osok-mock-stack-config-updated",
   "isEnabled": true
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[stackmonitoringsdk.AutoPromoteConfigDetails](t, `{
   "additionalConfigurations": {},
   "compartmentId": "\u003cocid:1\u003e",
   "configType": "AUTO_PROMOTE",
-  "displayName": "osok-replay-stack-config-updated",
+  "displayName": "osok-mock-stack-config-updated",
   "id": "\u003cocid:2\u003e",
   "isEnabled": true,
   "lifecycleState": "ACTIVE",
@@ -80,7 +80,7 @@ func TestMockIntegrationConfigLifecycleCRUD(t *testing.T) {
   "additionalConfigurations": {},
   "compartmentId": "\u003cocid:1\u003e",
   "configType": "AUTO_PROMOTE",
-  "displayName": "osok-replay-stack-config-updated",
+  "displayName": "osok-mock-stack-config-updated",
   "id": "\u003cocid:2\u003e",
   "isEnabled": true,
   "lifecycleState": "ACTIVE",

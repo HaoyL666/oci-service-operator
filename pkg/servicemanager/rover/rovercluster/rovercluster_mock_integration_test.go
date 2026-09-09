@@ -12,18 +12,18 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationRoverClusterLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &roverv1beta1.RoverCluster{
 		Spec: roverv1beta1.RoverClusterSpec{
-			DisplayName:   syntheticRoverClusterName,
-			CompartmentId: "ocid1.compartment.oc1..replay",
+			DisplayName:   mockRoverClusterName,
+			CompartmentId: "ocid1.compartment.oc1..mock",
 			ClusterSize:   5,
 			ClusterType:   "STANDALONE",
 			FreeformTags: map[string]string{
-				"osok-replay": "create",
+				"osok-mock": "create",
 			},
 		},
 	}
@@ -32,34 +32,34 @@ func TestMockIntegrationRoverClusterLifecycleCRUD(t *testing.T) {
   "clusterSize": 5,
   "clusterType": "STANDALONE",
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-synthetic-rover-v1",
+  "displayName": "osok-mock-synthetic-rover-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-synthetic-rover-v1-updated",
+  "displayName": "osok-mock-synthetic-rover-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[roversdk.CreateRoverClusterDetails](t, `{
   "clusterSize": 5,
   "clusterType": "STANDALONE",
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-synthetic-rover-v1",
+  "displayName": "osok-mock-synthetic-rover-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[roversdk.RoverCluster](t, `{
   "clusterSize": 5,
   "clusterType": "STANDALONE",
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-synthetic-rover-v1",
+  "displayName": "osok-mock-synthetic-rover-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -70,9 +70,9 @@ func TestMockIntegrationRoverClusterLifecycleCRUD(t *testing.T) {
   "clusterSize": 5,
   "clusterType": "STANDALONE",
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-synthetic-rover-v1",
+  "displayName": "osok-mock-synthetic-rover-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -80,18 +80,18 @@ func TestMockIntegrationRoverClusterLifecycleCRUD(t *testing.T) {
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[roversdk.UpdateRoverClusterDetails](t, `{
-  "displayName": "osok-replay-synthetic-rover-v1-updated",
+  "displayName": "osok-mock-synthetic-rover-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[roversdk.RoverCluster](t, `{
   "clusterSize": 5,
   "clusterType": "STANDALONE",
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-synthetic-rover-v1-updated",
+  "displayName": "osok-mock-synthetic-rover-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -102,9 +102,9 @@ func TestMockIntegrationRoverClusterLifecycleCRUD(t *testing.T) {
   "clusterSize": 5,
   "clusterType": "STANDALONE",
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-synthetic-rover-v1-updated",
+  "displayName": "osok-mock-synthetic-rover-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -116,9 +116,9 @@ func TestMockIntegrationRoverClusterLifecycleCRUD(t *testing.T) {
   "clusterSize": 5,
   "clusterType": "STANDALONE",
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-synthetic-rover-v1-updated",
+  "displayName": "osok-mock-synthetic-rover-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETING",
@@ -128,9 +128,9 @@ func TestMockIntegrationRoverClusterLifecycleCRUD(t *testing.T) {
   "clusterSize": 5,
   "clusterType": "STANDALONE",
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-synthetic-rover-v1-updated",
+  "displayName": "osok-mock-synthetic-rover-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETED",
@@ -184,7 +184,7 @@ func TestMockIntegrationRoverClusterLifecycleCRUD(t *testing.T) {
 		}
 	})
 	sdkClient := roversdk.RoverClusterClient{BaseClient: session.BaseClient()}
-	manager := newSyntheticRoverClusterManager(sdkClient)
+	manager := newMockRoverClusterManager(sdkClient)
 	client := manager.client
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*roverv1beta1.RoverCluster]{
 		Resource:      resource,

@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,9 +23,9 @@ func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[resourcemanagerv1beta1.PrivateEndpointSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "subnetId": "\u003cbinding:subnet-id\u003e",
   "vcnId": "\u003cbinding:vcn-id\u003e"
@@ -33,17 +33,17 @@ func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5-updated",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[resourcemanagersdk.CreatePrivateEndpointDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "subnetId": "\u003cbinding:subnet-id\u003e",
   "vcnId": "\u003cbinding:vcn-id\u003e"
@@ -57,10 +57,10 @@ func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5",
   "dnsZones": [],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "isUsedWithConfigurationSourceProvider": false,
@@ -85,10 +85,10 @@ func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5",
   "dnsZones": [],
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "isUsedWithConfigurationSourceProvider": false,
@@ -106,9 +106,9 @@ func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
 	}
 	updateRequest := ocimock.MustJSONFixture[resourcemanagersdk.UpdatePrivateEndpointDetails](t, `{
   "description": "recorded update",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5-updated",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[resourcemanagersdk.PrivateEndpoint](t, `{
@@ -120,10 +120,10 @@ func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5-updated",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5-updated",
   "dnsZones": [],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isUsedWithConfigurationSourceProvider": false,
@@ -148,10 +148,10 @@ func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5-updated",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5-updated",
   "dnsZones": [],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isUsedWithConfigurationSourceProvider": false,
@@ -177,10 +177,10 @@ func TestMockIntegrationPrivateEndpointEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-resource-manager-private-endpoint-v5-updated",
+  "displayName": "osok-mock-resource-manager-private-endpoint-v5-updated",
   "dnsZones": [],
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isUsedWithConfigurationSourceProvider": false,

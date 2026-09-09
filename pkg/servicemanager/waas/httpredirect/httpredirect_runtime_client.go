@@ -138,7 +138,10 @@ func httpRedirectWorkRequestClientFromOCI(client httpRedirectOCIClient) httpRedi
 }
 
 func newHttpRedirectRuntimeHooksWithOCIClient(client httpRedirectOCIClient) HttpRedirectRuntimeHooks {
-	hooks := newHttpRedirectDefaultRuntimeHooks(waassdk.RedirectClient{})
+	hooks := newHttpRedirectDefaultRuntimeHooks(HttpRedirectSDKClients{
+		redirectClient: waassdk.RedirectClient{},
+		waasClient:     waassdk.WaasClient{},
+	})
 	hooks.Create.Call = func(ctx context.Context, request waassdk.CreateHttpRedirectRequest) (waassdk.CreateHttpRedirectResponse, error) {
 		if client == nil {
 			return waassdk.CreateHttpRedirectResponse{}, fmt.Errorf("HttpRedirect OCI client is not configured")

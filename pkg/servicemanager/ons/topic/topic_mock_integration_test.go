@@ -77,6 +77,10 @@ func newTopicMockResponder(resource *onsv1beta1.Topic) (*ocimock.CRUDResponder[o
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (onssdk.NotificationTopic, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero onssdk.NotificationTopic
+				return zero, ocimock.Response{}, err
+			}
 			var details onssdk.CreateTopicDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return onssdk.NotificationTopic{}, ocimock.Response{}, err

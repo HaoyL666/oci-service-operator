@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,26 +23,26 @@ func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[iotv1beta1.IotDomainGroupSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK recorded IoT domain group",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "type": "LIGHTWEIGHT"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "OSOK recorded IoT domain group updated",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[iotsdk.CreateIotDomainGroupDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK recorded IoT domain group",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "type": "LIGHTWEIGHT"
 }`)
@@ -56,9 +56,9 @@ func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded IoT domain group",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -78,9 +78,9 @@ func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded IoT domain group",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -92,9 +92,9 @@ func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
 	}
 	updateRequest := ocimock.MustJSONFixture[iotsdk.UpdateIotDomainGroupDetails](t, `{
   "description": "OSOK recorded IoT domain group updated",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[iotsdk.IotDomainGroup](t, `{
@@ -107,9 +107,9 @@ func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded IoT domain group updated",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -129,9 +129,9 @@ func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded IoT domain group updated",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -152,9 +152,9 @@ func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded IoT domain group updated",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETING",
@@ -173,9 +173,9 @@ func TestMockIntegrationIotDomainGroupEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded IoT domain group updated",
-  "displayName": "osok-replay-iot-domain-group",
+  "displayName": "osok-mock-iot-domain-group",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETED",

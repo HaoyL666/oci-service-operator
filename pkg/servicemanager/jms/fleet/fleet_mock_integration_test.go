@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationFleetWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -29,9 +29,9 @@ func TestMockIntegrationFleetWorkRequestCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[jmsv1beta1.FleetSpec](t, `{
   "compartmentId": "<ocid:1>",
   "description": "OSOK recorded JMS fleet",
-  "displayName": "osok-replay-jms-fleet",
+  "displayName": "osok-mock-jms-fleet",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "inventoryLog": {
     "logGroupId": "<ocid:2>",
@@ -42,16 +42,16 @@ func TestMockIntegrationFleetWorkRequestCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "OSOK recorded JMS fleet updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 
 	createRequest := ocimock.MustJSONFixture[jmssdk.CreateFleetDetails](t, `{
   "compartmentId": "<ocid:1>",
   "description": "OSOK recorded JMS fleet",
-  "displayName": "osok-replay-jms-fleet",
+  "displayName": "osok-mock-jms-fleet",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "inventoryLog": {
     "logGroupId": "<ocid:2>",
@@ -61,7 +61,7 @@ func TestMockIntegrationFleetWorkRequestCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[jmssdk.UpdateFleetDetails](t, `{
   "description": "OSOK recorded JMS fleet updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[jmssdk.Fleet](t, `{
@@ -80,9 +80,9 @@ func TestMockIntegrationFleetWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded JMS fleet",
-  "displayName": "osok-replay-jms-fleet",
+  "displayName": "osok-mock-jms-fleet",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:7>",
   "inventoryLog": {
@@ -116,9 +116,9 @@ func TestMockIntegrationFleetWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded JMS fleet updated",
-  "displayName": "osok-replay-jms-fleet",
+  "displayName": "osok-mock-jms-fleet",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:7>",
   "inventoryLog": {
@@ -152,9 +152,9 @@ func TestMockIntegrationFleetWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded JMS fleet updated",
-  "displayName": "osok-replay-jms-fleet",
+  "displayName": "osok-mock-jms-fleet",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:7>",
   "inventoryLog": {

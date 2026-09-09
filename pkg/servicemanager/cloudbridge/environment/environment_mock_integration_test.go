@@ -25,7 +25,7 @@ import (
 
 const mockEnvironmentID = "ocid1.cloudbridgeenvironment.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal environment contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal environment contract, and vendored OCI SDK.
 func TestMockIntegrationEnvironmentLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &cloudbridgev1beta1.Environment{ObjectMeta: metav1.ObjectMeta{Name: "mock-environment", Namespace: "default", UID: types.UID("mock-environment-uid")}, Spec: cloudbridgev1beta1.EnvironmentSpec{
@@ -78,6 +78,10 @@ func newEnvironmentMockResponder(resource *cloudbridgev1beta1.Environment) (*oci
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (cloudbridgesdk.Environment, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero cloudbridgesdk.Environment
+				return zero, ocimock.Response{}, err
+			}
 			var details cloudbridgesdk.CreateEnvironmentDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return cloudbridgesdk.Environment{}, ocimock.Response{}, err

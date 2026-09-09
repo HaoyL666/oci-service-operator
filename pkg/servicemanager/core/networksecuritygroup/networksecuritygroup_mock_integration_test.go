@@ -24,7 +24,7 @@ import (
 const mockNetworkSecurityGroupID = "ocid1.networksecuritygroup.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/networksecuritygroup_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/core/networksecuritygroup and formal/imports/core/networksecuritygroup.json
 //   - resource runtime: networksecuritygroup_runtime.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/core

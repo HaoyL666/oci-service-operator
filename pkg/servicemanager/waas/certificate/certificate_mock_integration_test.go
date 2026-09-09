@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -21,26 +21,26 @@ func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[waasv1beta1.CertificateSpec](t, `{
   "certificateData": "\u003cbinding:certificate\u003e",
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waas-certificate",
+  "displayName": "osok-mock-waas-certificate",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isTrustVerificationDisabled": true,
   "privateKeyData": "\u003credacted\u003e"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-waas-certificate-updated",
+  "displayName": "osok-mock-waas-certificate-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[waassdk.CreateCertificateDetails](t, `{
   "certificateData": "\u003cbinding:certificate\u003e",
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waas-certificate",
+  "displayName": "osok-mock-waas-certificate",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isTrustVerificationDisabled": true,
   "privateKeyData": "\u003credacted\u003e"
@@ -53,15 +53,15 @@ func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-02T03:36:03.579Z"
     }
   },
-  "displayName": "osok-replay-waas-certificate",
+  "displayName": "osok-mock-waas-certificate",
   "extensions": null,
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
-  "issuedBy": "osok-replay-waas.example.com",
+  "issuedBy": "osok-mock-waas.example.com",
   "issuerName": {
-    "commonName": "osok-replay-waas.example.com"
+    "commonName": "osok-mock-waas.example.com"
   },
   "lifecycleState": "ACTIVE",
   "publicKeyInfo": {
@@ -72,7 +72,7 @@ func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
   "serialNumber": "13993365216209283207",
   "signatureAlgorithm": "",
   "subjectName": {
-    "commonName": "osok-replay-waas.example.com"
+    "commonName": "osok-mock-waas.example.com"
   },
   "timeCreated": "2026-09-02T03:36:04.193Z",
   "timeNotValidAfter": "2026-09-04T03:31:27.000Z",
@@ -80,9 +80,9 @@ func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
   "version": 0
 }`)
 	updateRequest := ocimock.MustJSONFixture[waassdk.UpdateCertificateDetails](t, `{
-  "displayName": "osok-replay-waas-certificate-updated",
+  "displayName": "osok-mock-waas-certificate-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[waassdk.Certificate](t, `{
@@ -93,15 +93,15 @@ func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-02T03:36:03.579Z"
     }
   },
-  "displayName": "osok-replay-waas-certificate-updated",
+  "displayName": "osok-mock-waas-certificate-updated",
   "extensions": null,
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
-  "issuedBy": "osok-replay-waas.example.com",
+  "issuedBy": "osok-mock-waas.example.com",
   "issuerName": {
-    "commonName": "osok-replay-waas.example.com"
+    "commonName": "osok-mock-waas.example.com"
   },
   "lifecycleState": "ACTIVE",
   "publicKeyInfo": {
@@ -112,7 +112,7 @@ func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
   "serialNumber": "13993365216209283207",
   "signatureAlgorithm": "",
   "subjectName": {
-    "commonName": "osok-replay-waas.example.com"
+    "commonName": "osok-mock-waas.example.com"
   },
   "timeCreated": "2026-09-02T03:36:04.193Z",
   "timeNotValidAfter": "2026-09-04T03:31:27.000Z",
@@ -127,15 +127,15 @@ func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-02T03:36:03.579Z"
     }
   },
-  "displayName": "osok-replay-waas-certificate-updated",
+  "displayName": "osok-mock-waas-certificate-updated",
   "extensions": null,
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
-  "issuedBy": "osok-replay-waas.example.com",
+  "issuedBy": "osok-mock-waas.example.com",
   "issuerName": {
-    "commonName": "osok-replay-waas.example.com"
+    "commonName": "osok-mock-waas.example.com"
   },
   "lifecycleState": "DELETED",
   "publicKeyInfo": {
@@ -146,7 +146,7 @@ func TestMockIntegrationCertificateEvidenceCRUD(t *testing.T) {
   "serialNumber": "13993365216209283207",
   "signatureAlgorithm": "",
   "subjectName": {
-    "commonName": "osok-replay-waas.example.com"
+    "commonName": "osok-mock-waas.example.com"
   },
   "timeCreated": "2026-09-02T03:36:04.193Z",
   "timeNotValidAfter": "2026-09-04T03:31:27.000Z",

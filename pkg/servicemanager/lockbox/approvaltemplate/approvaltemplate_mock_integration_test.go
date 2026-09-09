@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationApprovalTemplateEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,24 +23,24 @@ func TestMockIntegrationApprovalTemplateEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[lockboxv1beta1.ApprovalTemplateSpec](t, `{
   "autoApprovalState": "ENABLED",
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-approval-template-v1",
+  "displayName": "osok-mock-approval-template-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-approval-template-v1-updated",
+  "displayName": "osok-mock-approval-template-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[lockboxsdk.CreateApprovalTemplateDetails](t, `{
   "autoApprovalState": "ENABLED",
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-approval-template-v1",
+  "displayName": "osok-mock-approval-template-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[lockboxsdk.ApprovalTemplate](t, `{
@@ -53,9 +53,9 @@ func TestMockIntegrationApprovalTemplateEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-03T17:51:03.105Z"
     }
   },
-  "displayName": "osok-replay-approval-template-v1",
+  "displayName": "osok-mock-approval-template-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -64,9 +64,9 @@ func TestMockIntegrationApprovalTemplateEvidenceCRUD(t *testing.T) {
   "timeUpdated": "2026-09-03T17:51:03.250Z"
 }`)
 	updateRequest := ocimock.MustJSONFixture[lockboxsdk.UpdateApprovalTemplateDetails](t, `{
-  "displayName": "osok-replay-approval-template-v1-updated",
+  "displayName": "osok-mock-approval-template-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[lockboxsdk.ApprovalTemplate](t, `{
@@ -79,9 +79,9 @@ func TestMockIntegrationApprovalTemplateEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-03T17:51:03.105Z"
     }
   },
-  "displayName": "osok-replay-approval-template-v1-updated",
+  "displayName": "osok-mock-approval-template-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -99,9 +99,9 @@ func TestMockIntegrationApprovalTemplateEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-03T17:51:03.105Z"
     }
   },
-  "displayName": "osok-replay-approval-template-v1-updated",
+  "displayName": "osok-mock-approval-template-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETED",

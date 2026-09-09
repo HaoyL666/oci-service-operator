@@ -104,7 +104,7 @@ func applyTriggerRuntimeHooks(
 		return
 	}
 
-	hooks.Semantics = newTriggerRuntimeSemantics()
+	hooks.Semantics = reviewedTriggerRuntimeSemantics()
 	hooks.BuildCreateBody = func(_ context.Context, resource *devopsv1beta1.Trigger, _ string) (any, error) {
 		return buildTriggerCreateBody(resource)
 	}
@@ -756,7 +756,7 @@ func (c *triggerRuntimeClient) fail(resource *devopsv1beta1.Trigger, err error) 
 	return servicemanager.OSOKResponse{IsSuccessful: false}, err
 }
 
-func newTriggerRuntimeSemantics() *generatedruntime.Semantics {
+func reviewedTriggerRuntimeSemantics() *generatedruntime.Semantics {
 	return &generatedruntime.Semantics{
 		FormalService: "devops",
 		FormalSlug:    "trigger",

@@ -14,27 +14,27 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &mysqlv1beta1.DbSystem{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      syntheticDbSystemName,
+			Name:      mockDbSystemName,
 			Namespace: "default",
 			UID:       types.UID("synthetic-dbsystem-uid"),
 		},
 		Spec: mysqlv1beta1.DbSystemSpec{
-			CompartmentId:        "ocid1.compartment.oc1..replay",
+			CompartmentId:        "ocid1.compartment.oc1..mock",
 			ShapeName:            "MySQL.VM.Standard.E4.1.8GB",
-			SubnetId:             "ocid1.subnet.oc1..replay",
-			DisplayName:          syntheticDbSystemName,
+			SubnetId:             "ocid1.subnet.oc1..mock",
+			DisplayName:          mockDbSystemName,
 			Description:          "synthetic create",
-			AdminUsername:        syntheticDbSystemUsernameSource("mysql-admin"),
-			AdminPassword:        syntheticDbSystemPasswordSource("mysql-admin"),
+			AdminUsername:        mockDbSystemUsernameSource("mysql-admin"),
+			AdminPassword:        mockDbSystemPasswordSource("mysql-admin"),
 			DataStorageSizeInGBs: 50,
 			FreeformTags: map[string]string{
-				"osok-replay": "create",
+				"osok-mock": "create",
 			},
 		},
 	}
@@ -44,21 +44,21 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-mysql-v1-updated",
+  "displayName": "osok-mock-mysql-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[mysqlsdk.CreateDbSystemDetails](t, `{
-  "adminPassword": "ReplayPass123!",
-  "adminUsername": "replayadmin",
+  "adminPassword": "MockPass123!",
+  "adminUsername": "mockadmin",
   "compartmentId": "\u003cocid:1\u003e",
   "customerContacts": [],
   "dataStorageSizeInGBs": 50,
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-mysql-v1",
+  "displayName": "osok-mock-mysql-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isHighlyAvailable": false,
   "nsgIds": [],
@@ -83,10 +83,10 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
     "isDeleteProtected": false
   },
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-mysql-v1",
+  "displayName": "osok-mock-mysql-v1",
   "endpoints": [
     {
-      "hostname": "mysql-replay.example.internal",
+      "hostname": "mysql-mock.example.internal",
       "ipAddress": "10.0.0.10",
       "modes": [
         "READ",
@@ -99,9 +99,9 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
   ],
   "faultDomain": "FAULT-DOMAIN-1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
-  "hostnameLabel": "mysql-replay",
+  "hostnameLabel": "mysql-mock",
   "id": "<ocid:3>",
   "ipAddress": "10.0.0.10",
   "isHighlyAvailable": false,
@@ -136,10 +136,10 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
     "isDeleteProtected": false
   },
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-mysql-v1",
+  "displayName": "osok-mock-mysql-v1",
   "endpoints": [
     {
-      "hostname": "mysql-replay.example.internal",
+      "hostname": "mysql-mock.example.internal",
       "ipAddress": "10.0.0.10",
       "modes": [
         "READ",
@@ -152,9 +152,9 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
   ],
   "faultDomain": "FAULT-DOMAIN-1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
-  "hostnameLabel": "mysql-replay",
+  "hostnameLabel": "mysql-mock",
   "id": "<ocid:3>",
   "ipAddress": "10.0.0.10",
   "isHighlyAvailable": false,
@@ -173,9 +173,9 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
 	}
 	updateRequest := ocimock.MustJSONFixture[mysqlsdk.UpdateDbSystemDetails](t, `{
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-mysql-v1-updated",
+  "displayName": "osok-mock-mysql-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[mysqlsdk.DbSystem](t, `{
@@ -196,10 +196,10 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
     "isDeleteProtected": false
   },
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-mysql-v1-updated",
+  "displayName": "osok-mock-mysql-v1-updated",
   "endpoints": [
     {
-      "hostname": "mysql-replay.example.internal",
+      "hostname": "mysql-mock.example.internal",
       "ipAddress": "10.0.0.10",
       "modes": [
         "READ",
@@ -212,9 +212,9 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
   ],
   "faultDomain": "FAULT-DOMAIN-1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
-  "hostnameLabel": "mysql-replay",
+  "hostnameLabel": "mysql-mock",
   "id": "<ocid:3>",
   "ipAddress": "10.0.0.10",
   "isHighlyAvailable": false,
@@ -249,10 +249,10 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
     "isDeleteProtected": false
   },
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-mysql-v1-updated",
+  "displayName": "osok-mock-mysql-v1-updated",
   "endpoints": [
     {
-      "hostname": "mysql-replay.example.internal",
+      "hostname": "mysql-mock.example.internal",
       "ipAddress": "10.0.0.10",
       "modes": [
         "READ",
@@ -265,9 +265,9 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
   ],
   "faultDomain": "FAULT-DOMAIN-1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
-  "hostnameLabel": "mysql-replay",
+  "hostnameLabel": "mysql-mock",
   "id": "<ocid:3>",
   "ipAddress": "10.0.0.10",
   "isHighlyAvailable": false,
@@ -302,9 +302,9 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
     "isDeleteProtected": false
   },
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-mysql-v1-updated",
+  "displayName": "osok-mock-mysql-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isHighlyAvailable": false,
@@ -335,9 +335,9 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
     "isDeleteProtected": false
   },
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-mysql-v1-updated",
+  "displayName": "osok-mock-mysql-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isHighlyAvailable": false,
@@ -399,15 +399,15 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
 		}
 	})
 	sdkClient := mysqlsdk.DbSystemClient{BaseClient: session.BaseClient()}
-	credentials := &syntheticDbSystemCredentialClient{
+	credentials := &mockDbSystemCredentialClient{
 		secrets: map[string]map[string][]byte{
 			"mysql-admin": {
-				"username": []byte("replayadmin"),
-				"password": []byte("ReplayPass123!"),
+				"username": []byte("mockadmin"),
+				"password": []byte("MockPass123!"),
 			},
 		},
 	}
-	client := newSyntheticDbSystemClient(sdkClient, credentials)
+	client := newMockDbSystemClient(sdkClient, credentials)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*mysqlv1beta1.DbSystem]{
 		Resource:      resource,
 		Client:        client,
@@ -453,7 +453,7 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
 }
 
 func validateMockDbSystemEndpointSecret(
-	credentials *syntheticDbSystemCredentialClient,
+	credentials *mockDbSystemCredentialClient,
 	resource *mysqlv1beta1.DbSystem,
 ) error {
 	record, exists := credentials.records[resource.Name]

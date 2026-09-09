@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationBackendCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -24,7 +24,7 @@ func TestMockIntegrationBackendCompositeCRUD(t *testing.T) {
   "weight": 1
 }`)
 	resource.Spec.LoadBalancerId = "<ocid:1>"
-	resource.Spec.BackendSetName = "osok_replay_backend_set"
+	resource.Spec.BackendSetName = "osok_mock_backend_set"
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "backup": false,
@@ -104,8 +104,8 @@ func TestMockIntegrationBackendCompositeCRUD(t *testing.T) {
 		loadbalancersdk.CreateBackendDetails,
 		loadbalancersdk.UpdateBackendDetails,
 	]{
-		CollectionPath:     "/20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set/backends",
-		ItemPath:           "/20170115/loadBalancers/<ocid:1>/backendSets/osok_replay_backend_set/backends/10.0.20.201:8081",
+		CollectionPath:     "/20170115/loadBalancers/<ocid:1>/backendSets/osok_mock_backend_set/backends",
+		ItemPath:           "/20170115/loadBalancers/<ocid:1>/backendSets/osok_mock_backend_set/backends/10.0.20.201:8081",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:      &createRequest,
 		CreatedState:       &createdState,

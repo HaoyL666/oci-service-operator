@@ -24,7 +24,7 @@ import (
 const mockSubnetID = "ocid1.subnet.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/subnet_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/core/subnet and formal/imports/core/subnet.json
 //   - resource runtime: subnet_runtime.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/core

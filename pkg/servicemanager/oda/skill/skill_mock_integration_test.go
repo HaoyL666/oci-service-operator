@@ -44,6 +44,10 @@ func TestMockIntegrationSkillCompositeCRUD(t *testing.T) {
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": items})
 		},
 		Create: func(request ocimock.Request) (odasdk.Skill, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero odasdk.Skill
+				return zero, ocimock.Response{}, err
+			}
 			if err := ocimock.ValidateDiscriminatedJSONRequest(request, "kind", "NEW", createDetails); err != nil {
 				return odasdk.Skill{}, ocimock.Response{}, err
 			}

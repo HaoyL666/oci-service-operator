@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationDetectorRecipeLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,7 +23,7 @@ func TestMockIntegrationDetectorRecipeLifecycleCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[cloudguardv1beta1.DetectorRecipeSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK synthetic detector recipe",
-  "displayName": "osok-replay-detector-recipe"
+  "displayName": "osok-mock-detector-recipe"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
@@ -32,12 +32,12 @@ func TestMockIntegrationDetectorRecipeLifecycleCRUD(t *testing.T) {
 	createRequest := ocimock.MustJSONFixture[cloudguardsdk.CreateDetectorRecipeDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK synthetic detector recipe",
-  "displayName": "osok-replay-detector-recipe"
+  "displayName": "osok-mock-detector-recipe"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[cloudguardsdk.DetectorRecipe](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK synthetic detector recipe",
-  "displayName": "osok-replay-detector-recipe",
+  "displayName": "osok-mock-detector-recipe",
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE"
 }`)
@@ -47,7 +47,7 @@ func TestMockIntegrationDetectorRecipeLifecycleCRUD(t *testing.T) {
 	updatedState := ocimock.MustOCIResponseFixture[cloudguardsdk.DetectorRecipe](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "OSOK synthetic detector recipe-updated",
-  "displayName": "osok-replay-detector-recipe",
+  "displayName": "osok-mock-detector-recipe",
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE"
 }`)

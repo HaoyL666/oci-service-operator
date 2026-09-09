@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,10 +23,10 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[iotv1beta1.DigitalTwinAdapterSpec](t, `{
   "description": "OSOK recorded digital twin adapter",
   "digitalTwinModelId": "\u003cocid:1\u003e",
-  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:ReplayThermostat;1",
-  "displayName": "osok-replay-digital-twin-adapter",
+  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:MockThermostat;1",
+  "displayName": "osok-mock-digital-twin-adapter",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "inboundEnvelope": {
     "envelopeMapping": {
@@ -44,7 +44,7 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   "inboundRoutes": [
     {
       "condition": "*",
-      "description": "default replay route",
+      "description": "default mock route",
       "payloadMapping": {
         "$.temperature": "$.temperature"
       },
@@ -61,9 +61,9 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "OSOK recorded digital twin adapter updated",
-  "displayName": "osok-replay-digital-twin-adapter",
+  "displayName": "osok-mock-digital-twin-adapter",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "inboundEnvelope": {
     "envelopeMapping": {
@@ -81,7 +81,7 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   "inboundRoutes": [
     {
       "condition": "*",
-      "description": "default replay route",
+      "description": "default mock route",
       "payloadMapping": {
         "$.temperature": "$.temperature"
       },
@@ -97,10 +97,10 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
 	createRequest := ocimock.MustJSONFixture[iotsdk.CreateDigitalTwinAdapterDetails](t, `{
   "description": "OSOK recorded digital twin adapter",
   "digitalTwinModelId": "\u003cocid:1\u003e",
-  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:ReplayThermostat;1",
-  "displayName": "osok-replay-digital-twin-adapter",
+  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:MockThermostat;1",
+  "displayName": "osok-mock-digital-twin-adapter",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "inboundEnvelope": {
     "envelopeMapping": {
@@ -118,7 +118,7 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   "inboundRoutes": [
     {
       "condition": "*",
-      "description": "default replay route",
+      "description": "default mock route",
       "payloadMapping": {
         "$.temperature": "$.temperature"
       },
@@ -141,10 +141,10 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   },
   "description": "OSOK recorded digital twin adapter",
   "digitalTwinModelId": "<ocid:1>",
-  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:ReplayThermostat;1",
-  "displayName": "osok-replay-digital-twin-adapter",
+  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:MockThermostat;1",
+  "displayName": "osok-mock-digital-twin-adapter",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "inboundEnvelope": {
@@ -163,7 +163,7 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   "inboundRoutes": [
     {
       "condition": "*",
-      "description": "default replay route",
+      "description": "default mock route",
       "payloadMapping": {
         "$.temperature": "$.temperature"
       },
@@ -183,9 +183,9 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
 }`)
 	updateRequest := ocimock.MustJSONFixture[iotsdk.UpdateDigitalTwinAdapterDetails](t, `{
   "description": "OSOK recorded digital twin adapter updated",
-  "displayName": "osok-replay-digital-twin-adapter",
+  "displayName": "osok-mock-digital-twin-adapter",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "inboundEnvelope": {
     "envelopeMapping": {
@@ -203,7 +203,7 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   "inboundRoutes": [
     {
       "condition": "*",
-      "description": "default replay route",
+      "description": "default mock route",
       "payloadMapping": {
         "$.temperature": "$.temperature"
       },
@@ -225,10 +225,10 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   },
   "description": "OSOK recorded digital twin adapter updated",
   "digitalTwinModelId": "<ocid:1>",
-  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:ReplayThermostat;1",
-  "displayName": "osok-replay-digital-twin-adapter",
+  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:MockThermostat;1",
+  "displayName": "osok-mock-digital-twin-adapter",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "inboundEnvelope": {
@@ -247,7 +247,7 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   "inboundRoutes": [
     {
       "condition": "*",
-      "description": "default replay route",
+      "description": "default mock route",
       "payloadMapping": {
         "$.temperature": "$.temperature"
       },
@@ -274,10 +274,10 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   },
   "description": "OSOK recorded digital twin adapter updated",
   "digitalTwinModelId": "<ocid:1>",
-  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:ReplayThermostat;1",
-  "displayName": "osok-replay-digital-twin-adapter",
+  "digitalTwinModelSpecUri": "dtmi:com:oracle:osok:MockThermostat;1",
+  "displayName": "osok-mock-digital-twin-adapter",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "inboundEnvelope": {
@@ -296,7 +296,7 @@ func TestMockIntegrationDigitalTwinAdapterEvidenceCRUD(t *testing.T) {
   "inboundRoutes": [
     {
       "condition": "*",
-      "description": "default replay route",
+      "description": "default mock route",
       "payloadMapping": {
         "$.temperature": "$.temperature"
       },

@@ -36,6 +36,10 @@ func TestMockIntegrationPeerTargetDatabaseCompositeCRUD(t *testing.T) {
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": items})
 		},
 		Create: func(request ocimock.Request) (datasafesdk.PeerTargetDatabase, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero datasafesdk.PeerTargetDatabase
+				return zero, ocimock.Response{}, err
+			}
 			var details datasafesdk.CreatePeerTargetDatabaseDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return datasafesdk.PeerTargetDatabase{}, ocimock.Response{}, err

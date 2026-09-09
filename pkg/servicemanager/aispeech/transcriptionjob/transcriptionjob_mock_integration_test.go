@@ -25,7 +25,7 @@ import (
 
 const mockTranscriptionJobID = "ocid1.aispeechtranscriptionjob.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal job contract, resource-local delete semantics, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal job contract, resource-local delete semantics, and vendored OCI SDK.
 func TestMockIntegrationTranscriptionJobLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &aispeechv1beta1.TranscriptionJob{ObjectMeta: metav1.ObjectMeta{Name: "mock-transcription-job", Namespace: "default", UID: types.UID("mock-transcription-job-uid")}, Spec: aispeechv1beta1.TranscriptionJobSpec{
@@ -79,6 +79,10 @@ func newTranscriptionJobMockResponder(resource *aispeechv1beta1.TranscriptionJob
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
 		Create: func(request ocimock.Request) (aispeechsdk.TranscriptionJob, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero aispeechsdk.TranscriptionJob
+				return zero, ocimock.Response{}, err
+			}
 			var details aispeechsdk.CreateTranscriptionJobDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return aispeechsdk.TranscriptionJob{}, ocimock.Response{}, err

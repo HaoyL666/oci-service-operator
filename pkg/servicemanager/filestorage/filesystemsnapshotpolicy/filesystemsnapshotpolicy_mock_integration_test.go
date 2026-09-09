@@ -26,7 +26,7 @@ import (
 const mockFilesystemSnapshotPolicyID = "ocid1.filesystemsnapshotpolicy.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/filesystemsnapshotpolicy_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/filestorage/filesystemsnapshotpolicy.json
 //   - repo-authored runtime: formal/controllers/filestorage/filesystemsnapshotpolicy/diagrams/runtime-lifecycle.yaml
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/file_storage/file_storage_filesystem_snapshot_policy_resource.go

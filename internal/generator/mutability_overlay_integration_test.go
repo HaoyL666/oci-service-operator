@@ -135,6 +135,108 @@ services:
 	}
 }
 
+func TestGenerateBindsFormalSemanticsWithoutTerraformMutabilityOverlay(t *testing.T) {
+	t.Parallel()
+
+	repo := t.TempDir()
+	configPath := filepath.Join(repo, "internal", "generator", "config", "services.yaml")
+	writeGeneratorTestFile(t, configPath, `schemaVersion: v1alpha1
+domain: oracle.com
+defaultVersion: v1beta1
+generatorEntrypoint: ./cmd/generator
+packageProfiles:
+  crd-only:
+    description: CRD-only groups
+services:
+  - service: mysql
+    sdkPackage: example.com/test/sdk
+    group: mysql
+    packageProfile: crd-only
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - Widget
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+    generation:
+      serviceManager:
+        strategy: generated
+      resources:
+        - kind: Widget
+          formalSpec: widget
+`)
+	writeMutabilityOverlayWidgetFormalScaffold(t, repo)
+	importPath := filepath.Join(repo, "formal", "imports", "mysql", "widget.json")
+	formalImport := strings.Replace(
+		readFile(t, importPath),
+		`"providerResource": "oci_mysql_widget"`,
+		`"providerResource": "unavailable"`,
+		1,
+	)
+	writeGeneratorTestFile(t, importPath, formalImport)
+
+	cfg, err := LoadConfig(configPath)
+	if err != nil {
+		t.Fatalf("LoadConfig(%q) error = %v", configPath, err)
+	}
+	services, err := cfg.SelectServices("mysql", false)
+	if err != nil {
+		t.Fatalf("SelectServices(mysql) error = %v", err)
+	}
+	pipeline := New()
+	pipeline.discoverer = &Discoverer{
+		resolveDir: func(context.Context, string) (string, error) {
+			return sampleSDKDir(t), nil
+		},
+	}
+
+	outputRoot := t.TempDir()
+	overlayPath := filepath.Join(
+		outputRoot,
+		filepath.FromSlash(mutabilityOverlayGeneratedRootRelativePath),
+		"mysql",
+		"widget.json",
+	)
+	policyPath := filepath.Join(
+		outputRoot,
+		filepath.FromSlash(vapUpdatePolicyGeneratedRootRelativePath),
+		"mysql",
+		"widget.json",
+	)
+	writeGeneratorTestFile(t, overlayPath, "{}\n")
+	writeGeneratorTestFile(t, policyPath, "{}\n")
+	if _, err := pipeline.Generate(context.Background(), cfg, services, Options{
+		OutputRoot:              outputRoot,
+		Overwrite:               true,
+		EnableMutabilityOverlay: true,
+	}); err != nil {
+		t.Fatalf("Generate() error = %v", err)
+	}
+
+	runtimeHooks := readFile(t, filepath.Join(
+		outputRoot,
+		"pkg",
+		"servicemanager",
+		"mysql",
+		"widget",
+		"widget_runtimehooks_generated.go",
+	))
+	for _, want := range []string{
+		`FormalService: "mysql"`,
+		`FormalSlug:    "widget"`,
+		`ProvisioningStates: []string{"PROVISIONING"}`,
+		`Mutable:       []string{"displayName"}`,
+	} {
+		if !strings.Contains(runtimeHooks, want) {
+			t.Fatalf("runtime hooks do not contain %q:\n%s", want, runtimeHooks)
+		}
+	}
+	assertPathNotExists(t, overlayPath)
+	assertPathNotExists(t, policyPath)
+}
+
 func TestGenerateFallsBackToPinnedProviderMarkdown(t *testing.T) {
 	t.Parallel()
 

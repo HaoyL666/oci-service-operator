@@ -12,15 +12,15 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
-	resource := newOdaPrivateEndpointResource("osok-replay-oda-endpoint")
+	resource := newOdaPrivateEndpointResource("osok-mock-oda-endpoint")
 	ocimock.InitializeResource(resource, "mock-odaprivateendpoint")
 	resource.Spec = ocimock.MustJSONFixture[odav1beta1.OdaPrivateEndpointSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-oda-endpoint",
+  "displayName": "osok-mock-oda-endpoint",
   "subnetId": "\u003cocid:2\u003e"
 }`)
 	updatedSpec := resource.Spec
@@ -31,7 +31,7 @@ func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
     }
   },
   "description": "updated private endpoint",
-  "displayName": "osok-replay-oda-endpoint-updated",
+  "displayName": "osok-mock-oda-endpoint-updated",
   "freeformTags": {
     "env": "prod"
   },
@@ -41,12 +41,12 @@ func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
 }`)
 	createRequest := ocimock.MustJSONFixture[odasdk.CreateOdaPrivateEndpointDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-oda-endpoint",
+  "displayName": "osok-mock-oda-endpoint",
   "subnetId": "\u003cocid:2\u003e"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[odasdk.OdaPrivateEndpoint](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-oda-endpoint",
+  "displayName": "osok-mock-oda-endpoint",
   "id": "\u003cocid:3\u003e",
   "lifecycleState": "ACTIVE",
   "subnetId": "\u003cocid:2\u003e"
@@ -58,7 +58,7 @@ func TestMockIntegrationOdaPrivateEndpointLifecycleCRUD(t *testing.T) {
     }
   },
   "description": "updated private endpoint",
-  "displayName": "osok-replay-oda-endpoint-updated",
+  "displayName": "osok-mock-oda-endpoint-updated",
   "freeformTags": {
     "env": "prod"
   },

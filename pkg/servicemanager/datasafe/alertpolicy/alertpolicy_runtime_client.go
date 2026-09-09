@@ -35,11 +35,11 @@ func applyAlertPolicyRuntimeHooks(hooks *AlertPolicyRuntimeHooks, client runtime
 	if hooks == nil {
 		return
 	}
-	hooks.Semantics = newAlertPolicyRuntimeSemantics()
+	hooks.Semantics = reviewedAlertPolicyRuntimeSemantics()
 	runtimecommon.ConfigureWorkRequest(&hooks.Async, client, initErr, "AlertPolicy")
 }
 
-func newAlertPolicyRuntimeSemantics() *generatedruntime.Semantics {
+func reviewedAlertPolicyRuntimeSemantics() *generatedruntime.Semantics {
 	return &generatedruntime.Semantics{
 		FormalService: "datasafe",
 		FormalSlug:    "alertpolicy",

@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,9 +22,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-webappaccelerationpolicy")
 	resource.Spec = ocimock.MustJSONFixture[waav1beta1.WebAppAccelerationPolicySpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waa-policy-v1",
+  "displayName": "osok-mock-waa-policy-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "responseCachingPolicy": {
     "isResponseHeaderBasedCachingEnabled": true
@@ -42,9 +42,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-waa-policy-v1-updated",
+  "displayName": "osok-mock-waa-policy-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "systemTags": {
     "orcl-cloud": {
@@ -54,9 +54,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
 }`)
 	createRequest := ocimock.MustJSONFixture[waasdk.CreateWebAppAccelerationPolicyDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-waa-policy-v1",
+  "displayName": "osok-mock-waa-policy-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "responseCachingPolicy": {
     "isResponseHeaderBasedCachingEnabled": true
@@ -80,9 +80,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T02:55:43.178Z"
     }
   },
-  "displayName": "osok-replay-waa-policy-v1",
+  "displayName": "osok-mock-waa-policy-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -112,9 +112,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T02:55:43.178Z"
     }
   },
-  "displayName": "osok-replay-waa-policy-v1",
+  "displayName": "osok-mock-waa-policy-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -137,9 +137,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[waasdk.UpdateWebAppAccelerationPolicyDetails](t, `{
-  "displayName": "osok-replay-waa-policy-v1-updated",
+  "displayName": "osok-mock-waa-policy-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "systemTags": {
     "orcl-cloud": {
@@ -155,9 +155,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T02:55:43.178Z"
     }
   },
-  "displayName": "osok-replay-waa-policy-v1-updated",
+  "displayName": "osok-mock-waa-policy-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -187,9 +187,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T02:55:43.178Z"
     }
   },
-  "displayName": "osok-replay-waa-policy-v1-updated",
+  "displayName": "osok-mock-waa-policy-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -220,9 +220,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T02:55:43.178Z"
     }
   },
-  "displayName": "osok-replay-waa-policy-v1-updated",
+  "displayName": "osok-mock-waa-policy-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -251,9 +251,9 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
       "CreatedOn": "2026-09-04T02:55:43.178Z"
     }
   },
-  "displayName": "osok-replay-waa-policy-v1-updated",
+  "displayName": "osok-mock-waa-policy-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -322,7 +322,7 @@ func TestMockIntegrationWebAppAccelerationPolicyEvidenceCRUD(t *testing.T) {
 		}
 	})
 	baseClient := session.BaseClient()
-	sdkClient := recordedWebAppAccelerationPolicyOCIClient{
+	sdkClient := mockWebAppAccelerationPolicyOCIClient{
 		WaaClient:         waasdk.WaaClient{BaseClient: baseClient},
 		WorkRequestClient: waasdk.WorkRequestClient{BaseClient: baseClient},
 	}

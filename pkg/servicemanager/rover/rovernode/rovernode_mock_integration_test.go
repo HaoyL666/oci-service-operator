@@ -14,41 +14,41 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationRoverNodeLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &roverv1beta1.RoverNode{Spec: roverv1beta1.RoverNodeSpec{
-		DisplayName: "osok-replay-rover-node", CompartmentId: "ocid1.compartment.oc1..replay", Shape: "Rover.Node.1.168",
+		DisplayName: "osok-mock-rover-node", CompartmentId: "ocid1.compartment.oc1..mock", Shape: "Rover.Node.1.168",
 	}}
 	ocimock.InitializeResource(resource, "mock-rovernode")
 	resource.Spec = ocimock.MustJSONFixture[roverv1beta1.RoverNodeSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-rover-node",
+  "displayName": "osok-mock-rover-node",
   "shape": "Rover.Node.1.168"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-rover-node-updated"
+  "displayName": "osok-mock-rover-node-updated"
 }`)
 	createRequest := ocimock.MustJSONFixture[roversdk.CreateRoverNodeDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-rover-node",
+  "displayName": "osok-mock-rover-node",
   "shape": "Rover.Node.1.168"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[roversdk.RoverNode](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-rover-node",
+  "displayName": "osok-mock-rover-node",
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE",
   "shape": "Rover.Node.1.168"
 }`)
 	updateRequest := ocimock.MustJSONFixture[roversdk.UpdateRoverNodeDetails](t, `{
-  "displayName": "osok-replay-rover-node-updated"
+  "displayName": "osok-mock-rover-node-updated"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[roversdk.RoverNode](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-rover-node-updated",
+  "displayName": "osok-mock-rover-node-updated",
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE",
   "shape": "Rover.Node.1.168"

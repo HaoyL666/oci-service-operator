@@ -22,7 +22,7 @@ func TestMockIntegrationEkmsPrivateEndpointLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := makeSpecEkmsPrivateEndpoint()
 	ocimock.InitializeResource(resource, "mock-ekmsprivateendpoint")
-	responder, err := newEkmsPrivateEndpointMockResponder()
+	responder, err := newEkmsPrivateEndpointMockResponder(resource)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -67,7 +67,7 @@ func TestMockIntegrationEkmsPrivateEndpointLifecycleCRUD(t *testing.T) {
 	}
 }
 
-func newEkmsPrivateEndpointMockResponder() (*ocimock.CRUDResponder[keymanagementsdk.EkmsPrivateEndpoint], error) {
+func newEkmsPrivateEndpointMockResponder(resource *keymanagementv1beta1.EkmsPrivateEndpoint) (*ocimock.CRUDResponder[keymanagementsdk.EkmsPrivateEndpoint], error) {
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[keymanagementsdk.EkmsPrivateEndpoint]{
 		CollectionPath: "/20180608/ekmsPrivateEndpoints",
 		ItemPath:       "/20180608/ekmsPrivateEndpoints/" + mockEkmsPrivateEndpointID,
@@ -76,6 +76,10 @@ func newEkmsPrivateEndpointMockResponder() (*ocimock.CRUDResponder[keymanagement
 		},
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true,
 		Create: func(request ocimock.Request) (keymanagementsdk.EkmsPrivateEndpoint, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero keymanagementsdk.EkmsPrivateEndpoint
+				return zero, ocimock.Response{}, err
+			}
 			var details keymanagementsdk.CreateEkmsPrivateEndpointDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return keymanagementsdk.EkmsPrivateEndpoint{}, ocimock.Response{}, err

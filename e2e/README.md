@@ -1,10 +1,10 @@
-# OSOK Controller Integration And Live E2E
+# OSOK Integration And Live E2E
 
 `e2e/e2e-lite-local` creates a lightweight local Kind cluster for OSOK development.
 
-OSOK has two complementary controller-level test paths:
+OSOK has two complementary integration paths:
 
-- checked-in sanitized OCI HTTP cassettes exercise OCI SDK serialization and
+- package-local typed mock tests exercise OCI SDK serialization and
   service-manager reconciliation without cloud credentials;
 - live lifecycle scenarios install the real controller and perform create,
   update, and delete operations against OCI.
@@ -15,12 +15,12 @@ Run the deterministic integration suite with:
 make integrationtest
 ```
 
-Run only credential-free OCI SDK HTTP replays, or print the current
-controller-to-cassette coverage audit, with:
+Run only the service-manager mock tests, or print their generated-resource
+coverage inventory, with:
 
 ```bash
-make replaytest
-make replay-coverage
+make mockintegrationtest
+make mock-integration-inventory
 ```
 
 It is intended to:
@@ -325,8 +325,8 @@ The Instance scenario sets `instanceOptions.areLegacyImdsEndpointsDisabled:
 true`, which is required in tenancies that enforce IMDSv2. Do not commit live
 OCIDs into these manifests; the per-operator inputs remain environment values.
 
-See [Controller integration testing](../docs/contributor/controller-integration-testing.md)
-for cassette authoring and test-selection guidance.
+See [Service-manager mock integration](../docs/contributor/service-manager-mock-integration.md)
+for typed fixture authoring and test-selection guidance.
 
 ## Notes
 

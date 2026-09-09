@@ -34,7 +34,10 @@ func TestMockIntegrationLogAnalyticsEmBridgeCompositeCRUD(t *testing.T) {
 	updatedState.Description = common.String(updatedSpec.Description)
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[loganalyticssdk.LogAnalyticsEmBridge, loganalyticssdk.CreateLogAnalyticsEmBridgeDetails, loganalyticssdk.UpdateLogAnalyticsEmBridgeDetails]{
 		CollectionPath: "/20200601/namespaces/mocknamespace/logAnalyticsEmBridges", ItemPath: "/20200601/namespaces/mocknamespace/logAnalyticsEmBridges/" + testLogAnalyticsEmBridgeID,
-		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Operations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		ListShape: ocimock.ListShapeItems, RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 201, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",

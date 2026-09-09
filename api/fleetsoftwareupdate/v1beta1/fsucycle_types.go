@@ -104,7 +104,10 @@ type FsuCycleGoalVersionDetails struct {
 	// +kubebuilder:validation:Optional
 	NewHomePrefix string `json:"newHomePrefix,omitempty"`
 	// +kubebuilder:validation:Optional
-	Type string `json:"type,omitempty"`
+	Type            string                                `json:"type,omitempty"`
+	Components      []FsuCycleGoalVersionDetailsComponent `json:"components,omitempty"`
+	Version         string                                `json:"version,omitempty"`
+	SoftwareImageId string                                `json:"softwareImageId,omitempty"`
 }
 
 // FsuCycleUpgradeDetails defines nested fields for FsuCycle.UpgradeDetails.

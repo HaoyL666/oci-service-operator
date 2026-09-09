@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -28,14 +28,14 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   ],
   "description": "OSOK recorded saved search",
-  "displayName": "osok-replay-management-saved-search",
+  "displayName": "osok-mock-management-saved-search",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isOobSavedSearch": false,
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay"
+    "title": "OSOK mock"
   },
   "providerId": "log-analytics",
   "providerName": "Logging Analytics",
@@ -52,7 +52,7 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "OSOK recorded saved search updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createRequest := ocimock.MustJSONFixture[managementdashboardsdk.CreateManagementSavedSearchDetails](t, `{
@@ -63,14 +63,14 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   ],
   "description": "OSOK recorded saved search",
-  "displayName": "osok-replay-management-saved-search",
+  "displayName": "osok-mock-management-saved-search",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isOobSavedSearch": false,
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay"
+    "title": "OSOK mock"
   },
   "providerId": "log-analytics",
   "providerName": "Logging Analytics",
@@ -98,7 +98,7 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded saved search",
-  "displayName": "osok-replay-management-saved-search",
+  "displayName": "osok-mock-management-saved-search",
   "drilldownConfig": [],
   "featuresConfig": {
     "crossService": {
@@ -106,14 +106,14 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   },
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "isOobSavedSearch": false,
   "lifecycleState": "ACTIVE",
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay"
+    "title": "OSOK mock"
   },
   "parametersConfig": [],
   "providerId": "log-analytics",
@@ -147,7 +147,7 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded saved search",
-  "displayName": "osok-replay-management-saved-search",
+  "displayName": "osok-mock-management-saved-search",
   "drilldownConfig": [],
   "featuresConfig": {
     "crossService": {
@@ -155,14 +155,14 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   },
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "isOobSavedSearch": false,
   "lifecycleState": "ACTIVE",
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay"
+    "title": "OSOK mock"
   },
   "parametersConfig": [],
   "providerId": "log-analytics",
@@ -184,7 +184,7 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[managementdashboardsdk.UpdateManagementSavedSearchDetails](t, `{
   "description": "OSOK recorded saved search updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[managementdashboardsdk.ManagementSavedSearch](t, `{
@@ -202,7 +202,7 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded saved search updated",
-  "displayName": "osok-replay-management-saved-search",
+  "displayName": "osok-mock-management-saved-search",
   "drilldownConfig": [],
   "featuresConfig": {
     "crossService": {
@@ -210,14 +210,14 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   },
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "isOobSavedSearch": false,
   "lifecycleState": "ACTIVE",
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay"
+    "title": "OSOK mock"
   },
   "parametersConfig": [],
   "providerId": "log-analytics",
@@ -251,7 +251,7 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded saved search updated",
-  "displayName": "osok-replay-management-saved-search",
+  "displayName": "osok-mock-management-saved-search",
   "drilldownConfig": [],
   "featuresConfig": {
     "crossService": {
@@ -259,14 +259,14 @@ func TestMockIntegrationManagementSavedSearchEvidenceCRUD(t *testing.T) {
     }
   },
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "isOobSavedSearch": false,
   "lifecycleState": "ACTIVE",
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay"
+    "title": "OSOK mock"
   },
   "parametersConfig": [],
   "providerId": "log-analytics",

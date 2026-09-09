@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationOnPremConnectorLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,7 +22,7 @@ func TestMockIntegrationOnPremConnectorLifecycleCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-onpremconnector")
 	resource.Spec = ocimock.MustJSONFixture[datasafev1beta1.OnPremConnectorSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-onprem-connector"
+  "displayName": "osok-mock-onprem-connector"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
@@ -30,11 +30,11 @@ func TestMockIntegrationOnPremConnectorLifecycleCRUD(t *testing.T) {
 }`)
 	createRequest := ocimock.MustJSONFixture[datasafesdk.CreateOnPremConnectorDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-onprem-connector"
+  "displayName": "osok-mock-onprem-connector"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[datasafesdk.OnPremConnector](t, `{
   "compartmentId": "\u003cocid:1\u003e",
-  "displayName": "osok-replay-onprem-connector",
+  "displayName": "osok-mock-onprem-connector",
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE"
 }`)
@@ -44,7 +44,7 @@ func TestMockIntegrationOnPremConnectorLifecycleCRUD(t *testing.T) {
 	updatedState := ocimock.MustOCIResponseFixture[datasafesdk.OnPremConnector](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "mock-updated",
-  "displayName": "osok-replay-onprem-connector",
+  "displayName": "osok-mock-onprem-connector",
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE"
 }`)

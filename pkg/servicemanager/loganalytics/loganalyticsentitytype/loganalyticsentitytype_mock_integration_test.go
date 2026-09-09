@@ -14,14 +14,14 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationLogAnalyticsEntityTypeCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &loganalyticsv1beta1.LogAnalyticsEntityType{}
 	ocimock.InitializeResource(resource, "mock-loganalyticsentitytype")
 	resource.Spec = ocimock.MustJSONFixture[loganalyticsv1beta1.LogAnalyticsEntityTypeSpec](t, `{
-  "category": "osok-replay",
+  "category": "osok-mock",
   "name": "\u003cbinding:entity-type-name\u003e",
   "properties": [
     {
@@ -32,10 +32,10 @@ func TestMockIntegrationLogAnalyticsEntityTypeCompositeCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "category": "osok-replay-updated"
+  "category": "osok-mock-updated"
 }`)
 	createRequest := ocimock.MustJSONFixture[loganalyticssdk.CreateLogAnalyticsEntityTypeDetails](t, `{
-  "category": "osok-replay",
+  "category": "osok-mock",
   "name": "\u003cbinding:entity-type-name\u003e",
   "properties": [
     {
@@ -45,9 +45,9 @@ func TestMockIntegrationLogAnalyticsEntityTypeCompositeCRUD(t *testing.T) {
   ]
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loganalyticssdk.LogAnalyticsEntityType](t, `{
-  "category": "osok-replay",
+  "category": "osok-mock",
   "cloudType": "NON_CLOUD",
-  "internalName": "custom_osokreplayentitytype1788326489",
+  "internalName": "custom_osokmockentitytype1788326489",
   "lifecycleState": "ACTIVE",
   "managementAgentEligibilityStatus": "ELIGIBLE",
   "name": "<binding:entity-type-name>",
@@ -61,12 +61,12 @@ func TestMockIntegrationLogAnalyticsEntityTypeCompositeCRUD(t *testing.T) {
   "timeUpdated": "2026-09-02T05:21:24.538Z"
 }`)
 	updateRequest := ocimock.MustJSONFixture[loganalyticssdk.UpdateLogAnalyticsEntityTypeDetails](t, `{
-  "category": "osok-replay-updated"
+  "category": "osok-mock-updated"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[loganalyticssdk.LogAnalyticsEntityType](t, `{
-  "category": "osok-replay-updated",
+  "category": "osok-mock-updated",
   "cloudType": "NON_CLOUD",
-  "internalName": "custom_osokreplayentitytype1788326489",
+  "internalName": "custom_osokmockentitytype1788326489",
   "lifecycleState": "ACTIVE",
   "managementAgentEligibilityStatus": "ELIGIBLE",
   "name": "<binding:entity-type-name>",
@@ -80,9 +80,9 @@ func TestMockIntegrationLogAnalyticsEntityTypeCompositeCRUD(t *testing.T) {
   "timeUpdated": "2026-09-02T05:21:24.993Z"
 }`)
 	deletedState := ocimock.MustOCIResponseFixture[loganalyticssdk.LogAnalyticsEntityType](t, `{
-  "category": "osok-replay-updated",
+  "category": "osok-mock-updated",
   "cloudType": "NON_CLOUD",
-  "internalName": "custom_osokreplayentitytype1788326489",
+  "internalName": "custom_osokmockentitytype1788326489",
   "lifecycleState": "DELETED",
   "managementAgentEligibilityStatus": "ELIGIBLE",
   "name": "<binding:entity-type-name>",
@@ -140,7 +140,7 @@ func TestMockIntegrationLogAnalyticsEntityTypeCompositeCRUD(t *testing.T) {
 		}
 	})
 	sdkClient := loganalyticssdk.LogAnalyticsClient{BaseClient: session.BaseClient()}
-	client := newLogAnalyticsEntityTypeServiceClientWithOCIClientAndNamespaceGetter(loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}, sdkClient, recordedEntityTypeNamespaceGetter{namespace: "<binding:loganalytics-namespace>"})
+	client := newLogAnalyticsEntityTypeServiceClientWithOCIClientAndNamespaceGetter(loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}, sdkClient, mockEntityTypeNamespaceGetter{namespace: "<binding:loganalytics-namespace>"})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*loganalyticsv1beta1.LogAnalyticsEntityType]{
 		Resource:      resource,
 		Client:        client,

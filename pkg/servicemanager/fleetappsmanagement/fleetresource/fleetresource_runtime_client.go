@@ -69,7 +69,10 @@ func reviewedFleetResourceRuntimeSemantics() *generatedruntime.Semantics {
 
 func newFleetResourceServiceClientWithOCIClients(log loggerutil.OSOKLogger, client fleetappssdk.FleetAppsManagementClient, workRequestClient fleetappssdk.FleetAppsManagementWorkRequestClient) FleetResourceServiceClient {
 	manager := &FleetResourceServiceManager{Log: log}
-	hooks := newFleetResourceDefaultRuntimeHooks(client)
+	hooks := newFleetResourceDefaultRuntimeHooks(FleetResourceSDKClients{
+		fleetAppsManagementClient:            client,
+		fleetAppsManagementWorkRequestClient: workRequestClient,
+	})
 	applyFleetResourceRuntimeHooks(&hooks, workRequestClient, nil)
 	delegate := defaultFleetResourceServiceClient{ServiceClient: generatedruntime.NewServiceClient[*fleetappsv1beta1.FleetResource](buildFleetResourceGeneratedRuntimeConfig(manager, hooks))}
 	return wrapFleetResourceGeneratedClient(hooks, delegate)

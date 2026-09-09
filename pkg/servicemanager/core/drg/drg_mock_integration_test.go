@@ -23,7 +23,7 @@ import (
 
 const mockDrgID = "ocid1.drg.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal DRG contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal DRG contract, and vendored OCI SDK.
 func TestMockIntegrationDrgLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &corev1beta1.Drg{ObjectMeta: metav1.ObjectMeta{Name: "mock-drg", Namespace: "default", UID: types.UID("mock-drg-uid")}, Spec: corev1beta1.DrgSpec{
@@ -38,7 +38,7 @@ func TestMockIntegrationDrgLifecycleCRUD(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { _ = session.Close() })
-	client := newRecordedDrgClient(coresdk.VirtualNetworkClient{BaseClient: session.BaseClient()})
+	client := newMockDrgClient(coresdk.VirtualNetworkClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*corev1beta1.Drg]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *corev1beta1.Drg) error {
@@ -74,6 +74,10 @@ func newDrgMockResponder(resource *corev1beta1.Drg) (*ocimock.CRUDResponder[core
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (coresdk.Drg, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero coresdk.Drg
+				return zero, ocimock.Response{}, err
+			}
 			var details coresdk.CreateDrgDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return coresdk.Drg{}, ocimock.Response{}, err

@@ -26,7 +26,7 @@ import (
 const mockDkimID = "ocid1.dkim.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/dkim_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/email/dkim and formal/imports/email/dkim.json
 //   - resource runtime: dkim_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/email
@@ -90,6 +90,10 @@ func newDkimMockResponder(resource *emailv1beta1.Dkim) (*ocimock.CRUDResponder[e
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (emailsdk.Dkim, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero emailsdk.Dkim
+				return zero, ocimock.Response{}, err
+			}
 			var details emailsdk.CreateDkimDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return emailsdk.Dkim{}, ocimock.Response{}, err

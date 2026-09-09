@@ -109,7 +109,7 @@ func applyBackendSetRuntimeHooks(
 	paginatedListCall := func(ctx context.Context, request networkloadbalancersdk.ListBackendSetsRequest) (networkloadbalancersdk.ListBackendSetsResponse, error) {
 		return listBackendSetPages(ctx, request, listCall)
 	}
-	hooks.Semantics = newBackendSetRuntimeSemantics()
+	hooks.Semantics = reviewedBackendSetRuntimeSemantics()
 	hooks.Async.Adapter = backendSetWorkRequestAsyncAdapter
 	hooks.Async.GetWorkRequest = func(ctx context.Context, workRequestID string) (any, error) {
 		return getBackendSetWorkRequest(ctx, workRequestClient, initErr, workRequestID)
@@ -166,7 +166,7 @@ func applyBackendSetRuntimeHooks(
 
 func newBackendSetRuntimeHooksWithOCIClient(client backendSetRuntimeOCIClient) BackendSetRuntimeHooks {
 	return BackendSetRuntimeHooks{
-		Semantics: newBackendSetRuntimeSemantics(),
+		Semantics: reviewedBackendSetRuntimeSemantics(),
 		Identity:  generatedruntime.IdentityHooks[*networkloadbalancerv1beta1.BackendSet]{},
 		Read:      generatedruntime.ReadHooks{},
 		Create: runtimeOperationHooks[networkloadbalancersdk.CreateBackendSetRequest, networkloadbalancersdk.CreateBackendSetResponse]{
@@ -203,7 +203,7 @@ func newBackendSetRuntimeHooksWithOCIClient(client backendSetRuntimeOCIClient) B
 	}
 }
 
-func newBackendSetRuntimeSemantics() *generatedruntime.Semantics {
+func reviewedBackendSetRuntimeSemantics() *generatedruntime.Semantics {
 	return &generatedruntime.Semantics{
 		FormalService: "networkloadbalancer",
 		FormalSlug:    "backendset",

@@ -83,6 +83,10 @@ func newSubscriptionMockResponder(resource *onsv1beta1.Subscription) (*ocimock.C
 			return ocimock.JSONResponse(http.StatusOK, []onssdk.Subscription{state})
 		},
 		Create: func(request ocimock.Request) (onssdk.Subscription, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero onssdk.Subscription
+				return zero, ocimock.Response{}, err
+			}
 			var details onssdk.CreateSubscriptionDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return onssdk.Subscription{}, ocimock.Response{}, err

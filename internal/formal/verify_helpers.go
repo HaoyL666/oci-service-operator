@@ -937,13 +937,19 @@ func validateDiagramBinding(path string, diagram diagramSpec, binding *Controlle
 	if binding.Spec.DeleteConfirmation == "not-supported" && containsIgnoreCase(diagram.States, "terminating") {
 		problems = append(problems, fmt.Sprintf("%s: states must not include terminating when delete_confirmation is not-supported", filepath.ToSlash(path)))
 	}
-	problems = append(problems, validateRepoAuthoredUpdateOperations(path, diagram, binding.Import.Operations.Update)...)
+	problems = append(problems, validateRepoAuthoredOperations(path, diagram, "create", binding.Import.Operations.Create)...)
+	problems = append(problems, validateRepoAuthoredOperations(path, diagram, "update", binding.Import.Operations.Update)...)
+	problems = append(problems, validateRepoAuthoredOperations(path, diagram, "delete", binding.Import.Operations.Delete)...)
 
 	return problems
 }
 
-func validateRepoAuthoredUpdateOperations(path string, diagram diagramSpec, imported []operationBinding) []string {
-	if diagram.RepoAuthored == nil || diagram.RepoAuthored.Operations == nil || diagram.RepoAuthored.Operations.Update == nil {
+func validateRepoAuthoredOperations(path string, diagram diagramSpec, phase string, imported []operationBinding) []string {
+	if diagram.RepoAuthored == nil || diagram.RepoAuthored.Operations == nil {
+		return nil
+	}
+	subset := repoAuthoredOperationSubset(diagram.RepoAuthored.Operations, phase)
+	if subset == nil {
 		return nil
 	}
 
@@ -952,30 +958,43 @@ func validateRepoAuthoredUpdateOperations(path string, diagram diagramSpec, impo
 		available[strings.TrimSpace(operation.Operation)] = struct{}{}
 	}
 
-	seen := make(map[string]struct{}, len(diagram.RepoAuthored.Operations.Update))
+	seen := make(map[string]struct{}, len(subset))
 	var problems []string
-	for index, rawName := range diagram.RepoAuthored.Operations.Update {
+	for index, rawName := range subset {
 		name := strings.TrimSpace(rawName)
 		switch {
 		case name == "":
-			problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.update[%d] must not be empty", filepath.ToSlash(path), index))
+			problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.%s[%d] must not be empty", filepath.ToSlash(path), phase, index))
 		case hasStringKey(seen, name):
-			problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.update contains duplicate operation %q", filepath.ToSlash(path), name))
+			problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.%s contains duplicate operation %q", filepath.ToSlash(path), phase, name))
 		case !hasStringKey(available, name):
-			problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.update[%d]=%q is not present in imported update operations", filepath.ToSlash(path), index, name))
+			problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.%s[%d]=%q is not present in imported %s operations", filepath.ToSlash(path), phase, index, name, phase))
 		}
 		if name != "" {
 			seen[name] = struct{}{}
 		}
 	}
-	if primary := importedPrimaryUpdateOperation(diagram.Kind, imported); primary != "" && !containsTrimmedString(diagram.RepoAuthored.Operations.Update, primary) {
-		problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.update must include primary update operation %q", filepath.ToSlash(path), primary))
+	if primary := importedPrimaryOperation(diagram.Kind, phase, imported); primary != "" && !containsTrimmedString(subset, primary) {
+		problems = append(problems, fmt.Sprintf("%s: repoAuthored.operations.%s must include primary %s operation %q", filepath.ToSlash(path), phase, phase, primary))
 	}
 	return problems
 }
 
-func importedPrimaryUpdateOperation(kind string, imported []operationBinding) string {
-	want := "Update" + strings.TrimSpace(kind)
+func repoAuthoredOperationSubset(operations *diagramOperationSemantics, phase string) []string {
+	switch phase {
+	case "create":
+		return operations.Create
+	case "update":
+		return operations.Update
+	case "delete":
+		return operations.Delete
+	default:
+		return nil
+	}
+}
+
+func importedPrimaryOperation(kind, phase string, imported []operationBinding) string {
+	want := strings.ToUpper(phase[:1]) + phase[1:] + strings.TrimSpace(kind)
 	for _, operation := range imported {
 		if strings.TrimSpace(operation.Operation) == want {
 			return want

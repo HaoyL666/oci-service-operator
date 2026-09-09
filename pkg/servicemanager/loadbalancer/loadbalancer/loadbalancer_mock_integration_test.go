@@ -26,7 +26,7 @@ import (
 const mockLoadBalancerID = "ocid1.loadbalancer.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/loadbalancer_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/loadbalancer/loadbalancer and formal/imports/loadbalancer/loadbalancer.json
 //   - resource runtime: loadbalancer_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/loadbalancer

@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationDecryptionProfileCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -20,7 +20,7 @@ func TestMockIntegrationDecryptionProfileCompositeCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-decryptionprofile")
 	resource.Spec = ocimock.MustJSONFixture[networkfirewallv1beta1.DecryptionProfileSpec](t, `{
   "description": "OSOK recorded decryption profile",
-  "name": "osok_replay_decrypt_profile",
+  "name": "osok_mock_decrypt_profile",
   "type": "SSL_FORWARD_PROXY"
 }`)
 	resource.Spec.NetworkFirewallPolicyId = "<ocid:1>"
@@ -31,7 +31,7 @@ func TestMockIntegrationDecryptionProfileCompositeCRUD(t *testing.T) {
 }`)
 	createRequest := ocimock.MustJSONFixture[networkfirewallsdk.CreateSslForwardProxyProfileDetails](t, `{
   "description": "OSOK recorded decryption profile",
-  "name": "osok_replay_decrypt_profile"
+  "name": "osok_mock_decrypt_profile"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.SslForwardProxyProfile](t, `{
   "areCertificateExtensionsRestricted": false,
@@ -44,7 +44,7 @@ func TestMockIntegrationDecryptionProfileCompositeCRUD(t *testing.T) {
   "isUnsupportedCipherBlocked": false,
   "isUnsupportedVersionBlocked": false,
   "isUntrustedIssuerBlocked": false,
-  "name": "osok_replay_decrypt_profile",
+  "name": "osok_mock_decrypt_profile",
   "parentResourceId": "<ocid:1>",
   "type": "SSL_FORWARD_PROXY"
 }`)
@@ -60,7 +60,7 @@ func TestMockIntegrationDecryptionProfileCompositeCRUD(t *testing.T) {
   "isUnsupportedCipherBlocked": false,
   "isUnsupportedVersionBlocked": false,
   "isUntrustedIssuerBlocked": false,
-  "name": "osok_replay_decrypt_profile",
+  "name": "osok_mock_decrypt_profile",
   "parentResourceId": "<ocid:1>",
   "type": "SSL_FORWARD_PROXY"
 }`),
@@ -79,7 +79,7 @@ func TestMockIntegrationDecryptionProfileCompositeCRUD(t *testing.T) {
   "isUnsupportedCipherBlocked": false,
   "isUnsupportedVersionBlocked": false,
   "isUntrustedIssuerBlocked": false,
-  "name": "osok_replay_decrypt_profile",
+  "name": "osok_mock_decrypt_profile",
   "parentResourceId": "<ocid:1>",
   "type": "SSL_FORWARD_PROXY"
 }`)
@@ -95,7 +95,7 @@ func TestMockIntegrationDecryptionProfileCompositeCRUD(t *testing.T) {
   "isUnsupportedCipherBlocked": false,
   "isUnsupportedVersionBlocked": false,
   "isUntrustedIssuerBlocked": false,
-  "name": "osok_replay_decrypt_profile",
+  "name": "osok_mock_decrypt_profile",
   "parentResourceId": "<ocid:1>",
   "type": "SSL_FORWARD_PROXY"
 }`),
@@ -106,7 +106,7 @@ func TestMockIntegrationDecryptionProfileCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateSslForwardProxyProfileDetails,
 	]{
 		CollectionPath:     "/20230501/networkFirewallPolicies/<ocid:1>/decryptionProfiles",
-		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/decryptionProfiles/osok_replay_decrypt_profile",
+		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/decryptionProfiles/osok_mock_decrypt_profile",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreatedState:       &createdState,
 		UpdatedState:       &updatedState,

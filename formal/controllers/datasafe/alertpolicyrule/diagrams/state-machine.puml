@@ -84,7 +84,7 @@ filters alertPolicyId, expression, displayName;
 exact parent policy plus expression and display
 name match; duplicate matches fail
 conflicts: none
-open gaps: none
+open gaps: seed-corpus
 Write responses may include a Data Safe work
 request. The runtime resumes that request when
 present and otherwise converges from the

@@ -43,7 +43,10 @@ func TestMockIntegrationDetectorRecipeDetectorRuleCompositeCRUD(t *testing.T) {
 }`)
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[cloudguardsdk.DetectorRecipeDetectorRule, cloudguardsdk.CreateDetectorRecipeDetectorRuleDetails, cloudguardsdk.UpdateDetectorRecipeDetectorRuleDetails]{
 		CollectionPath: "/20200131/detectorRecipes/<ocid:1>/detectorRules", ItemPath: "/20200131/detectorRecipes/<ocid:1>/detectorRules/rule-1",
-		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		Operations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		ListShape:         ocimock.ListShapeItems,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,

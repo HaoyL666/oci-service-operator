@@ -506,6 +506,25 @@ func TestUnsupportedUpdateDriftPathsIgnoresMeaninglessNestedMaps(t *testing.T) {
 	}
 }
 
+func TestUnsupportedUpdateDriftPathsIgnoresSDKJSONDataCache(t *testing.T) {
+	t.Parallel()
+	spec := map[string]any{
+		"databaseDetails": map[string]any{
+			"jsonData":           "desired-serialization-cache",
+			"infrastructureType": "AUTONOMOUS_DATABASE",
+		},
+	}
+	current := map[string]any{
+		"databaseDetails": map[string]any{
+			"jsonData":           "observed-serialization-cache",
+			"infrastructureType": "AUTONOMOUS_DATABASE",
+		},
+	}
+	if paths := unsupportedUpdateDriftPaths(spec, current, MutationSemantics{}); len(paths) != 0 {
+		t.Fatalf("unsupportedUpdateDriftPaths() = %v, want SDK jsonData cache ignored", paths)
+	}
+}
+
 func TestUnsupportedUpdateDriftPathsTreatsZeroOnlyOptionalObjectAsNull(t *testing.T) {
 	t.Parallel()
 	spec := map[string]any{

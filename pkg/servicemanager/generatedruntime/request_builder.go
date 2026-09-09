@@ -844,7 +844,7 @@ func convertPolymorphicInterfaceValue(payload []byte, targetType reflect.Type) (
 		})
 		return interfaceValue(targetType, body, err)
 	default:
-		return reflect.Value{}, false, nil
+		return convertAdditionalPolymorphicInterfaceValue(payload, targetType)
 	}
 }
 

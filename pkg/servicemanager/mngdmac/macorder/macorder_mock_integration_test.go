@@ -16,7 +16,7 @@ import (
 )
 
 // Contract evidence: vendored OCI SDK, production service manager, reviewed
-// formal lifecycle, and the existing sanitized OCI replay fixture.
+// formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationMacOrderWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &mngdmacv1beta1.MacOrder{}

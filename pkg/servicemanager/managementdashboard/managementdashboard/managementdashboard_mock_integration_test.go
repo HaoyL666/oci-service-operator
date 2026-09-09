@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -28,14 +28,14 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   ],
   "description": "OSOK recorded management dashboard",
-  "displayName": "osok-replay-management-dashboard",
+  "displayName": "osok-mock-management-dashboard",
   "featuresConfig": {
     "crossService": {
       "shared": false
     }
   },
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isFavorite": false,
   "isOobDashboard": false,
@@ -43,7 +43,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
   "isShowInHome": false,
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay dashboard"
+    "title": "OSOK mock dashboard"
   },
   "providerId": "log-analytics",
   "providerName": "Logging Analytics",
@@ -57,11 +57,11 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
           "query": "*"
         }
       ],
-      "displayName": "OSOK replay tile",
+      "displayName": "OSOK mock tile",
       "drilldownConfig": [],
       "height": 4,
       "nls": {
-        "title": "OSOK replay tile"
+        "title": "OSOK mock tile"
       },
       "parametersMap": {},
       "row": 1,
@@ -82,7 +82,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "OSOK recorded management dashboard updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "isFavorite": true
 }`)
@@ -94,14 +94,14 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   ],
   "description": "OSOK recorded management dashboard",
-  "displayName": "osok-replay-management-dashboard",
+  "displayName": "osok-mock-management-dashboard",
   "featuresConfig": {
     "crossService": {
       "shared": false
     }
   },
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "isFavorite": false,
   "isOobDashboard": false,
@@ -109,7 +109,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
   "isShowInHome": false,
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay dashboard"
+    "title": "OSOK mock dashboard"
   },
   "providerId": "log-analytics",
   "providerName": "Logging Analytics",
@@ -123,11 +123,11 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
           "query": "*"
         }
       ],
-      "displayName": "OSOK replay tile",
+      "displayName": "OSOK mock tile",
       "drilldownConfig": [],
       "height": 4,
       "nls": {
-        "title": "OSOK replay tile"
+        "title": "OSOK mock tile"
       },
       "parametersMap": {},
       "row": 1,
@@ -160,7 +160,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded management dashboard",
-  "displayName": "osok-replay-management-dashboard",
+  "displayName": "osok-mock-management-dashboard",
   "drilldownConfig": [],
   "featuresConfig": {
     "crossService": {
@@ -168,7 +168,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   },
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "isFavorite": false,
@@ -178,7 +178,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
   "lifecycleState": "ACTIVE",
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay dashboard"
+    "title": "OSOK mock dashboard"
   },
   "parametersConfig": [],
   "providerId": "log-analytics",
@@ -199,8 +199,8 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
           "CreatedOn": "2026-09-02T20:28:07.817Z"
         }
       },
-      "description": "Temporary OSOK replay prerequisite",
-      "displayName": "osok-replay-batch5-dashboard-prerequisite",
+      "description": "Temporary OSOK mock prerequisite",
+      "displayName": "osok-mock-batch5-dashboard-prerequisite",
       "drilldownConfig": [],
       "featuresConfig": {
         "crossService": {
@@ -213,7 +213,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
       "lifecycleState": "ACTIVE",
       "metadataVersion": "2.0",
       "nls": {
-        "title": "OSOK replay"
+        "title": "OSOK mock"
       },
       "parametersConfig": [],
       "providerId": "log-analytics",
@@ -243,11 +243,11 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
         }
       ],
       "description": null,
-      "displayName": "OSOK replay tile",
+      "displayName": "OSOK mock tile",
       "drilldownConfig": [],
       "height": 4,
       "nls": {
-        "title": "OSOK replay tile"
+        "title": "OSOK mock tile"
       },
       "parametersMap": {},
       "row": 1,
@@ -284,7 +284,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded management dashboard",
-  "displayName": "osok-replay-management-dashboard",
+  "displayName": "osok-mock-management-dashboard",
   "drilldownConfig": [],
   "featuresConfig": {
     "crossService": {
@@ -292,7 +292,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   },
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "isFavorite": false,
@@ -302,7 +302,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
   "lifecycleState": "ACTIVE",
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay dashboard"
+    "title": "OSOK mock dashboard"
   },
   "parametersConfig": [],
   "providerId": "log-analytics",
@@ -323,8 +323,8 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
           "CreatedOn": "2026-09-02T20:28:07.817Z"
         }
       },
-      "description": "Temporary OSOK replay prerequisite",
-      "displayName": "osok-replay-batch5-dashboard-prerequisite",
+      "description": "Temporary OSOK mock prerequisite",
+      "displayName": "osok-mock-batch5-dashboard-prerequisite",
       "drilldownConfig": [],
       "featuresConfig": {
         "crossService": {
@@ -337,7 +337,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
       "lifecycleState": "ACTIVE",
       "metadataVersion": "2.0",
       "nls": {
-        "title": "OSOK replay"
+        "title": "OSOK mock"
       },
       "parametersConfig": [],
       "providerId": "log-analytics",
@@ -367,11 +367,11 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
         }
       ],
       "description": null,
-      "displayName": "OSOK replay tile",
+      "displayName": "OSOK mock tile",
       "drilldownConfig": [],
       "height": 4,
       "nls": {
-        "title": "OSOK replay tile"
+        "title": "OSOK mock tile"
       },
       "parametersMap": {},
       "row": 1,
@@ -395,7 +395,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[managementdashboardsdk.UpdateManagementDashboardDetails](t, `{
   "description": "OSOK recorded management dashboard updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "isFavorite": true
 }`)
@@ -415,7 +415,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded management dashboard updated",
-  "displayName": "osok-replay-management-dashboard",
+  "displayName": "osok-mock-management-dashboard",
   "drilldownConfig": [],
   "featuresConfig": {
     "crossService": {
@@ -423,7 +423,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   },
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isFavorite": true,
@@ -433,7 +433,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
   "lifecycleState": "ACTIVE",
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay dashboard"
+    "title": "OSOK mock dashboard"
   },
   "parametersConfig": [],
   "providerId": "log-analytics",
@@ -454,8 +454,8 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
           "CreatedOn": "2026-09-02T20:28:07.817Z"
         }
       },
-      "description": "Temporary OSOK replay prerequisite",
-      "displayName": "osok-replay-batch5-dashboard-prerequisite",
+      "description": "Temporary OSOK mock prerequisite",
+      "displayName": "osok-mock-batch5-dashboard-prerequisite",
       "drilldownConfig": [],
       "featuresConfig": {
         "crossService": {
@@ -468,7 +468,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
       "lifecycleState": "ACTIVE",
       "metadataVersion": "2.0",
       "nls": {
-        "title": "OSOK replay"
+        "title": "OSOK mock"
       },
       "parametersConfig": [],
       "providerId": "log-analytics",
@@ -498,11 +498,11 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
         }
       ],
       "description": null,
-      "displayName": "OSOK replay tile",
+      "displayName": "OSOK mock tile",
       "drilldownConfig": [],
       "height": 4,
       "nls": {
-        "title": "OSOK replay tile"
+        "title": "OSOK mock tile"
       },
       "parametersMap": {},
       "row": 1,
@@ -539,7 +539,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   },
   "description": "OSOK recorded management dashboard updated",
-  "displayName": "osok-replay-management-dashboard",
+  "displayName": "osok-mock-management-dashboard",
   "drilldownConfig": [],
   "featuresConfig": {
     "crossService": {
@@ -547,7 +547,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
     }
   },
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isFavorite": true,
@@ -557,7 +557,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
   "lifecycleState": "ACTIVE",
   "metadataVersion": "2.0",
   "nls": {
-    "title": "OSOK replay dashboard"
+    "title": "OSOK mock dashboard"
   },
   "parametersConfig": [],
   "providerId": "log-analytics",
@@ -578,8 +578,8 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
           "CreatedOn": "2026-09-02T20:28:07.817Z"
         }
       },
-      "description": "Temporary OSOK replay prerequisite",
-      "displayName": "osok-replay-batch5-dashboard-prerequisite",
+      "description": "Temporary OSOK mock prerequisite",
+      "displayName": "osok-mock-batch5-dashboard-prerequisite",
       "drilldownConfig": [],
       "featuresConfig": {
         "crossService": {
@@ -592,7 +592,7 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
       "lifecycleState": "ACTIVE",
       "metadataVersion": "2.0",
       "nls": {
-        "title": "OSOK replay"
+        "title": "OSOK mock"
       },
       "parametersConfig": [],
       "providerId": "log-analytics",
@@ -622,11 +622,11 @@ func TestMockIntegrationManagementDashboardEvidenceCRUD(t *testing.T) {
         }
       ],
       "description": null,
-      "displayName": "OSOK replay tile",
+      "displayName": "OSOK mock tile",
       "drilldownConfig": [],
       "height": 4,
       "nls": {
-        "title": "OSOK replay tile"
+        "title": "OSOK mock tile"
       },
       "parametersMap": {},
       "row": 1,

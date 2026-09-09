@@ -12,22 +12,22 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &generativeaiv1beta1.DedicatedAiCluster{
 		Spec: generativeaiv1beta1.DedicatedAiClusterSpec{
 			Type:          string(generativeaisdk.DedicatedAiClusterTypeHosting),
-			CompartmentId: "ocid1.compartment.oc1..replay",
+			CompartmentId: "ocid1.compartment.oc1..mock",
 			UnitCount:     1,
 			UnitShape: string(
 				generativeaisdk.DedicatedAiClusterUnitShapeSmallCohere,
 			),
-			DisplayName: syntheticDedicatedAiClusterName,
+			DisplayName: mockDedicatedAiClusterName,
 			Description: "synthetic create",
 			FreeformTags: map[string]string{
-				"osok-replay": "create",
+				"osok-mock": "create",
 			},
 		},
 	}
@@ -35,9 +35,9 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[generativeaiv1beta1.DedicatedAiClusterSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-ai-cluster-v1",
+  "displayName": "osok-mock-synthetic-ai-cluster-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "type": "HOSTING",
   "unitCount": 1,
@@ -47,16 +47,16 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "synthetic update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "unitCount": 2
 }`)
 	createRequest := ocimock.MustJSONFixture[generativeaisdk.CreateDedicatedAiClusterDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-ai-cluster-v1",
+  "displayName": "osok-mock-synthetic-ai-cluster-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "type": "HOSTING",
   "unitCount": 1,
@@ -65,9 +65,9 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 	createdState := ocimock.MustOCIResponseFixture[generativeaisdk.DedicatedAiCluster](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-ai-cluster-v1",
+  "displayName": "osok-mock-synthetic-ai-cluster-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -80,9 +80,9 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[generativeaisdk.DedicatedAiCluster](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic create",
-  "displayName": "osok-replay-synthetic-ai-cluster-v1",
+  "displayName": "osok-mock-synthetic-ai-cluster-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -95,16 +95,16 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[generativeaisdk.UpdateDedicatedAiClusterDetails](t, `{
   "description": "synthetic update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "unitCount": 2
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[generativeaisdk.DedicatedAiCluster](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-ai-cluster-v1",
+  "displayName": "osok-mock-synthetic-ai-cluster-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -118,9 +118,9 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[generativeaisdk.DedicatedAiCluster](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-ai-cluster-v1",
+  "displayName": "osok-mock-synthetic-ai-cluster-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
@@ -135,9 +135,9 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[generativeaisdk.DedicatedAiCluster](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-ai-cluster-v1",
+  "displayName": "osok-mock-synthetic-ai-cluster-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETING",
@@ -150,9 +150,9 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[generativeaisdk.DedicatedAiCluster](t, `{
   "compartmentId": "<ocid:1>",
   "description": "synthetic update",
-  "displayName": "osok-replay-synthetic-ai-cluster-v1",
+  "displayName": "osok-mock-synthetic-ai-cluster-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "DELETED",
@@ -210,7 +210,7 @@ func TestMockIntegrationDedicatedAiClusterLifecycleCRUD(t *testing.T) {
 		}
 	})
 	sdkClient := generativeaisdk.GenerativeAiClient{BaseClient: session.BaseClient()}
-	client := newSyntheticDedicatedAiClusterClient(sdkClient)
+	client := newMockDedicatedAiClusterClient(sdkClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*generativeaiv1beta1.DedicatedAiCluster]{
 		Resource:      resource,
 		Client:        client,

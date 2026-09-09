@@ -28,7 +28,7 @@ import (
 const mockHTTPMonitorID = "ocid1.httpmonitor.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/httpmonitor_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/healthchecks/httpmonitor.json
 //   - repo-authored runtime: formal/controllers/healthchecks/httpmonitor/diagrams/runtime-lifecycle.yaml
 //   - custom delete/pagination runtime: httpmonitor_runtime_client.go
@@ -143,6 +143,10 @@ func newHTTPMonitorMockResponder(resource *healthchecksv1beta1.HttpMonitor) (*oc
 			return ocimock.JSONResponse(http.StatusOK, []healthcheckssdk.HttpMonitor{})
 		},
 		Create: func(request ocimock.Request) (healthcheckssdk.HttpMonitor, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero healthcheckssdk.HttpMonitor
+				return zero, ocimock.Response{}, err
+			}
 			var details healthcheckssdk.CreateHttpMonitorDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return healthcheckssdk.HttpMonitor{}, ocimock.Response{}, err

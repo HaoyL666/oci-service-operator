@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationApmDomainWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -29,31 +29,31 @@ func TestMockIntegrationApmDomainWorkRequestCRUD(t *testing.T) {
 	resource.Spec = ocimock.MustJSONFixture[apmcontrolplanev1beta1.ApmDomainSpec](t, `{
   "compartmentId": "<ocid:1>",
   "description": "recorded create",
-  "displayName": "osok-replay-apm-domain-v1",
+  "displayName": "osok-mock-apm-domain-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 
 	createRequest := ocimock.MustJSONFixture[apmcontrolplanesdk.CreateApmDomainDetails](t, `{
   "compartmentId": "<ocid:1>",
   "description": "recorded create",
-  "displayName": "osok-replay-apm-domain-v1",
+  "displayName": "osok-mock-apm-domain-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   }
 }`)
 	updateRequest := ocimock.MustJSONFixture[apmcontrolplanesdk.UpdateApmDomainDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   }
 }`)
 	createdState := ocimock.MustOCIResponseFixture[apmcontrolplanesdk.ApmDomain](t, `{
@@ -66,9 +66,9 @@ func TestMockIntegrationApmDomainWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "recorded create",
-  "displayName": "osok-replay-apm-domain-v1",
+  "displayName": "osok-mock-apm-domain-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "isFreeTier": false,
@@ -89,9 +89,9 @@ func TestMockIntegrationApmDomainWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-apm-domain-v1",
+  "displayName": "osok-mock-apm-domain-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isFreeTier": false,
@@ -112,9 +112,9 @@ func TestMockIntegrationApmDomainWorkRequestCRUD(t *testing.T) {
     }
   },
   "description": "recorded update",
-  "displayName": "osok-replay-apm-domain-v1",
+  "displayName": "osok-mock-apm-domain-v1",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "isFreeTier": false,

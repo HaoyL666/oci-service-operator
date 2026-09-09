@@ -82,6 +82,10 @@ func newScheduledJobMockResponder(resource *osmanagementhubv1beta1.ScheduledJob)
 			return ocimock.JSONResponse(http.StatusOK, map[string]any{"items": []osmanagementhubsdk.ScheduledJob{state}})
 		},
 		Create: func(request ocimock.Request) (osmanagementhubsdk.ScheduledJob, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero osmanagementhubsdk.ScheduledJob
+				return zero, ocimock.Response{}, err
+			}
 			var details osmanagementhubsdk.CreateScheduledJobDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return osmanagementhubsdk.ScheduledJob{}, ocimock.Response{}, err

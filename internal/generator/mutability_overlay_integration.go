@@ -17,6 +17,7 @@ const (
 
 	mutabilityOverlayGeneratedRootRelativePath = "internal/generator/generated/mutability_overlay"
 	mutabilityOverlayDocsFixtureRootRelative   = "internal/generator/testdata/mutability_overlay/docs"
+	mutabilityOverlayUnavailableProvider       = "unavailable"
 
 	mutabilityOverlayGenerationErrorMissingSourceRevision = "missingSourceRevision"
 	mutabilityOverlayGenerationErrorASTJoinFailed         = "astJoinFailed"
@@ -99,6 +100,15 @@ func (g *Generator) buildMutabilityOverlayArtifacts(
 		for _, resource := range pkg.Resources {
 			astFields := mutabilityOverlayASTFields(resource)
 			if len(astFields) == 0 || resource.Formal == nil {
+				continue
+			}
+			// SDK-owned formal contracts can drive generated runtime semantics even
+			// when Terraform has no corresponding resource. In that case there is
+			// no Registry documentation from which to derive overlay or VAP facts.
+			if strings.EqualFold(
+				strings.TrimSpace(resource.Formal.Binding.Import.ProviderResource),
+				mutabilityOverlayUnavailableProvider,
+			) {
 				continue
 			}
 

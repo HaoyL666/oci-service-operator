@@ -27,7 +27,7 @@ import (
 const mockSavedQueryID = "ocid1.savedquery.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/savedquery_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/cloudguard/savedquery.json
 //   - repo-authored runtime: formal/controllers/cloudguard/savedquery/diagrams/runtime-lifecycle.yaml
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/cloud_guard/cloud_guard_saved_query_resource.go
@@ -109,6 +109,10 @@ func newSavedQueryMockResponder(resource *cloudguardv1beta1.SavedQuery) (*ocimoc
 		RequireDeleteRead:      true,
 		RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (cloudguardsdk.SavedQuery, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero cloudguardsdk.SavedQuery
+				return zero, ocimock.Response{}, err
+			}
 			var details cloudguardsdk.CreateSavedQueryDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return cloudguardsdk.SavedQuery{}, ocimock.Response{}, err

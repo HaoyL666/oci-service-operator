@@ -14,18 +14,18 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationApiPlatformInstanceLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &apiplatformv1beta1.ApiPlatformInstance{Spec: apiplatformv1beta1.ApiPlatformInstanceSpec{
-		Name: "osok-replay-api-platform", CompartmentId: "ocid1.compartment.oc1..replay", Description: "synthetic API Platform instance",
+		Name: "osok-mock-api-platform", CompartmentId: "ocid1.compartment.oc1..mock", Description: "synthetic API Platform instance",
 	}}
 	ocimock.InitializeResource(resource, "mock-apiplatforminstance")
 	resource.Spec = ocimock.MustJSONFixture[apiplatformv1beta1.ApiPlatformInstanceSpec](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic API Platform instance",
-  "name": "osok-replay-api-platform"
+  "name": "osok-mock-api-platform"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
@@ -34,14 +34,14 @@ func TestMockIntegrationApiPlatformInstanceLifecycleCRUD(t *testing.T) {
 	createRequest := ocimock.MustJSONFixture[apiplatformsdk.CreateApiPlatformInstanceDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic API Platform instance",
-  "name": "osok-replay-api-platform"
+  "name": "osok-mock-api-platform"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[apiplatformsdk.ApiPlatformInstance](t, `{
   "compartmentId": "\u003cocid:1\u003e",
   "description": "synthetic API Platform instance",
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE",
-  "name": "osok-replay-api-platform"
+  "name": "osok-mock-api-platform"
 }`)
 	updateRequest := ocimock.MustJSONFixture[apiplatformsdk.UpdateApiPlatformInstanceDetails](t, `{
   "description": "synthetic API Platform instance-updated"
@@ -51,7 +51,7 @@ func TestMockIntegrationApiPlatformInstanceLifecycleCRUD(t *testing.T) {
   "description": "synthetic API Platform instance-updated",
   "id": "\u003cocid:2\u003e",
   "lifecycleState": "ACTIVE",
-  "name": "osok-replay-api-platform"
+  "name": "osok-mock-api-platform"
 }`)
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		apiplatformsdk.ApiPlatformInstance,

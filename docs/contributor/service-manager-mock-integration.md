@@ -23,8 +23,8 @@ mechanical. It sequences declared operations, retries reconciles when the
 service manager requests a requeue, routes SDK HTTP calls to the configured
 mock, verifies that every declared operation occurred, invokes package-owned
 assertions, and returns a stage-specific error. It does not infer fields,
-operations, mutations, or assertions from formal metadata, cassettes, CR
-reflection, or SDK reflection.
+operations, mutations, or assertions from formal metadata, CR reflection, or
+SDK reflection.
 
 The complete path under test is:
 
@@ -43,21 +43,21 @@ typed CR spec
 
 Use these sources to author and review a scenario:
 
-1. A sanitized live cassette, when available, establishes observed OCI
-   methods, paths, status codes, headers, response shape, and lifecycle order.
-2. The vendored OCI Go SDK establishes request and response types, required
+1. The vendored OCI Go SDK establishes request and response types, required
    fields, enums, polymorphic discriminators, and HTTP serialization.
-3. Repo-authored formal metadata establishes OSOK lifecycle, mutation,
+2. Repo-authored formal metadata establishes OSOK lifecycle, mutation,
    identity, follow-up, and deletion intent. Provider facts are pinned by
    `formal/sources.lock` to `terraform-provider-oci`.
-4. The pinned Terraform provider is supporting evidence for request mapping,
+3. The pinned Terraform provider is supporting evidence for request mapping,
    mutable versus force-new fields, waiters, and response flattening.
-5. Synthetic evidence may fill a contract example when live evidence is not
-   available, but it is not proof of live OCI behavior.
+4. OCI API documentation and focused live E2E, when available, confirm service
+   behavior that cannot be established from local contracts alone.
 
-Cassettes and formal metadata are authoring provenance. Mock integration tests
-do not load either at runtime. A later SDK or lifecycle change therefore
-requires a deliberate edit to the typed test contract and a reviewable diff.
+Formal metadata is authoring provenance, but mock integration tests do not load
+it at runtime. Every request, response, mutation, and assertion required by the
+scenario is checked into the package-local Go test. A later SDK or lifecycle
+change therefore requires a deliberate edit to the typed test contract and a
+reviewable diff.
 
 The SDK remains authoritative for SDK wire shapes. Terraform behavior should
 agree with formal imports and OSOK-owned semantics, but it does not replace the
@@ -107,6 +107,5 @@ The broader credential-free integration surface remains:
 make integrationtest
 ```
 
-Recorded and synthetic replay tests remain useful for provenance and wire
-fidelity. Live E2E remains the final proof that OCI accepts the request and
-provisions the intended resource.
+Live E2E remains the final proof that OCI accepts the request and provisions
+the intended resource.

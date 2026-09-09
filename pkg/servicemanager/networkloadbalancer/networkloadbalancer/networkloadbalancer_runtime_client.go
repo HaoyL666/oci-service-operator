@@ -176,7 +176,10 @@ func newReviewedNetworkLoadBalancerRuntimeSemantics() *generatedruntime.Semantic
 		},
 		Hooks: generatedruntime.HookSet{
 			Create: []generatedruntime.Hook{{Helper: "tfresource.CreateResource", EntityType: "", Action: ""}},
-			Update: []generatedruntime.Hook{{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""}},
+			Update: []generatedruntime.Hook{
+				{Helper: "tfresource.UpdateResource", EntityType: "", Action: ""},
+				{Helper: "UpdateNetworkSecurityGroups"},
+			},
 			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "", Action: ""}},
 		},
 		CreateFollowUp: generatedruntime.FollowUpSemantics{

@@ -12,13 +12,13 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &opensearchv1beta1.OpensearchCluster{Spec: opensearchv1beta1.OpensearchClusterSpec{
-		DisplayName:                    syntheticOpensearchClusterName,
-		CompartmentId:                  "ocid1.compartment.oc1..replay",
+		DisplayName:                    mockOpensearchClusterName,
+		CompartmentId:                  "ocid1.compartment.oc1..mock",
 		SoftwareVersion:                "2.11.0",
 		MasterNodeCount:                3,
 		MasterNodeHostType:             string(opensearchsdk.MasterNodeHostTypeFlex),
@@ -32,12 +32,12 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
 		OpendashboardNodeCount:         1,
 		OpendashboardNodeHostOcpuCount: 1,
 		OpendashboardNodeHostMemoryGB:  8,
-		VcnId:                          "ocid1.vcn.oc1..replay",
-		SubnetId:                       "ocid1.subnet.oc1..replay",
-		VcnCompartmentId:               "ocid1.compartment.oc1..replay",
-		SubnetCompartmentId:            "ocid1.compartment.oc1..replay",
+		VcnId:                          "ocid1.vcn.oc1..mock",
+		SubnetId:                       "ocid1.subnet.oc1..mock",
+		VcnCompartmentId:               "ocid1.compartment.oc1..mock",
+		SubnetCompartmentId:            "ocid1.compartment.oc1..mock",
 		SecurityMode:                   string(opensearchsdk.SecurityModeDisabled),
-		FreeformTags:                   map[string]string{"osok-replay": "synthetic"},
+		FreeformTags:                   map[string]string{"osok-mock": "synthetic"},
 	}}
 	ocimock.InitializeResource(resource, "mock-opensearchcluster")
 	resource.Spec = ocimock.MustJSONFixture[opensearchv1beta1.OpensearchClusterSpec](t, `{
@@ -47,9 +47,9 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
   "dataNodeHostOcpuCount": 2,
   "dataNodeHostType": "FLEX",
   "dataNodeStorageGB": 50,
-  "displayName": "osok-replay-opensearch-v1",
+  "displayName": "osok-mock-opensearch-v1",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
   "masterNodeCount": 3,
   "masterNodeHostMemoryGB": 16,
@@ -67,7 +67,7 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "osok-replay-opensearch-v1-updated"
+  "displayName": "osok-mock-opensearch-v1-updated"
 }`)
 	createRequest := ocimock.MustJSONFixture[opensearchsdk.CreateOpensearchClusterDetails](t, `{
   "compartmentId": "\u003cocid:1\u003e",
@@ -76,9 +76,9 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
   "dataNodeHostOcpuCount": 2,
   "dataNodeHostType": "FLEX",
   "dataNodeStorageGB": 50,
-  "displayName": "osok-replay-opensearch-v1",
+  "displayName": "osok-mock-opensearch-v1",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
   "masterNodeCount": 3,
   "masterNodeHostMemoryGB": 16,
@@ -101,9 +101,9 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
   "dataNodeHostOcpuCount": 2,
   "dataNodeHostType": "FLEX",
   "dataNodeStorageGB": 50,
-  "displayName": "osok-replay-opensearch-v1",
+  "displayName": "osok-mock-opensearch-v1",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
   "id": "<ocid:4>",
   "lifecycleState": "ACTIVE",
@@ -131,9 +131,9 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
   "dataNodeHostOcpuCount": 2,
   "dataNodeHostType": "FLEX",
   "dataNodeStorageGB": 50,
-  "displayName": "osok-replay-opensearch-v1",
+  "displayName": "osok-mock-opensearch-v1",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
   "id": "<ocid:4>",
   "lifecycleState": "ACTIVE",
@@ -155,7 +155,7 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[opensearchsdk.UpdateOpensearchClusterDetails](t, `{
-  "displayName": "osok-replay-opensearch-v1-updated"
+  "displayName": "osok-mock-opensearch-v1-updated"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
   "compartmentId": "<ocid:1>",
@@ -164,9 +164,9 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
   "dataNodeHostOcpuCount": 2,
   "dataNodeHostType": "FLEX",
   "dataNodeStorageGB": 50,
-  "displayName": "osok-replay-opensearch-v1-updated",
+  "displayName": "osok-mock-opensearch-v1-updated",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
   "id": "<ocid:4>",
   "lifecycleState": "ACTIVE",
@@ -194,9 +194,9 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
   "dataNodeHostOcpuCount": 2,
   "dataNodeHostType": "FLEX",
   "dataNodeStorageGB": 50,
-  "displayName": "osok-replay-opensearch-v1-updated",
+  "displayName": "osok-mock-opensearch-v1-updated",
   "freeformTags": {
-    "osok-replay": "synthetic"
+    "osok-mock": "synthetic"
   },
   "id": "<ocid:4>",
   "lifecycleState": "ACTIVE",
@@ -220,13 +220,13 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
 	deletedReadStates := []opensearchsdk.OpensearchCluster{
 		ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-opensearch-v1-updated",
+  "displayName": "osok-mock-opensearch-v1-updated",
   "id": "<ocid:4>",
   "lifecycleState": "DELETING"
 }`),
 		ocimock.MustOCIResponseFixture[opensearchsdk.OpensearchCluster](t, `{
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-opensearch-v1-updated",
+  "displayName": "osok-mock-opensearch-v1-updated",
   "id": "<ocid:4>",
   "lifecycleState": "DELETED"
 }`),
@@ -279,7 +279,7 @@ func TestMockIntegrationOpensearchClusterLifecycleCRUD(t *testing.T) {
 		}
 	})
 	sdkClient := opensearchsdk.OpensearchClusterClient{BaseClient: session.BaseClient()}
-	client := newSyntheticOpensearchClusterClient(sdkClient)
+	client := newMockOpensearchClusterClient(sdkClient)
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*opensearchv1beta1.OpensearchCluster]{
 		Resource:      resource,
 		Client:        client,

@@ -16,7 +16,7 @@ import (
 )
 
 // Contract evidence: vendored OCI SDK, production service manager, reviewed
-// formal lifecycle, and the existing sanitized OCI replay fixture.
+// formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationSSLCipherSuiteWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &loadbalancerv1beta1.SSLCipherSuite{}
@@ -26,7 +26,7 @@ func TestMockIntegrationSSLCipherSuiteWorkRequestCRUD(t *testing.T) {
   "ciphers": [
     "ECDHE-RSA-AES256-GCM-SHA384"
   ],
-  "name": "osok_replay_ssl_cipher_v2"
+  "name": "osok_mock_ssl_cipher_v2"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
@@ -40,7 +40,7 @@ func TestMockIntegrationSSLCipherSuiteWorkRequestCRUD(t *testing.T) {
   "ciphers": [
     "ECDHE-RSA-AES256-GCM-SHA384"
   ],
-  "name": "osok_replay_ssl_cipher_v2"
+  "name": "osok_mock_ssl_cipher_v2"
 }`)
 	updateRequest := ocimock.MustJSONFixture[loadbalancersdk.UpdateSslCipherSuiteDetails](t, `{
   "ciphers": [
@@ -52,14 +52,14 @@ func TestMockIntegrationSSLCipherSuiteWorkRequestCRUD(t *testing.T) {
   "ciphers": [
     "ECDHE-RSA-AES256-GCM-SHA384"
   ],
-  "name": "osok_replay_ssl_cipher_v2"
+  "name": "osok_mock_ssl_cipher_v2"
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[loadbalancersdk.SslCipherSuite](t, `{
   "ciphers": [
     "ECDHE-RSA-AES256-GCM-SHA384",
     "ECDHE-RSA-AES128-GCM-SHA256"
   ],
-  "name": "osok_replay_ssl_cipher_v2"
+  "name": "osok_mock_ssl_cipher_v2"
 }`)
 	createWorkRequest := ocimock.MustOCIResponseFixture[loadbalancersdk.WorkRequest](t, `{
   "compartmentId": "<ocid:3>",
@@ -102,7 +102,7 @@ func TestMockIntegrationSSLCipherSuiteWorkRequestCRUD(t *testing.T) {
 }`)
 
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[loadbalancersdk.SslCipherSuite, loadbalancersdk.CreateSslCipherSuiteDetails, loadbalancersdk.UpdateSslCipherSuiteDetails]{
-		CollectionPath: "/20170115/loadBalancers/<ocid:1>/sslCipherSuites", ItemPath: "/20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_replay_ssl_cipher_v2",
+		CollectionPath: "/20170115/loadBalancers/<ocid:1>/sslCipherSuites", ItemPath: "/20170115/loadBalancers/<ocid:1>/sslCipherSuites/osok_mock_ssl_cipher_v2",
 		Operations:    []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest: &createRequest, CreatedState: &createdState, UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		ListShape: ocimock.ListShapeArray, RequireCreateRead: true, RequireUpdateRead: true, DeleteEndsNotFound: false, RequireDeleteRead: true,

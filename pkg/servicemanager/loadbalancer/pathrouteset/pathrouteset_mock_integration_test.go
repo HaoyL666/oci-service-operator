@@ -12,17 +12,17 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := &loadbalancerv1beta1.PathRouteSet{}
 	ocimock.InitializeResource(resource, "mock-pathrouteset")
 	resource.Spec = ocimock.MustJSONFixture[loadbalancerv1beta1.PathRouteSetSpec](t, `{
-  "name": "osok_replay_path_routes",
+  "name": "osok_mock_path_routes",
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/images",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -35,7 +35,7 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/assets",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -44,10 +44,10 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
   ]
 }`)
 	createRequest := ocimock.MustJSONFixture[loadbalancersdk.CreatePathRouteSetDetails](t, `{
-  "name": "osok_replay_path_routes",
+  "name": "osok_mock_path_routes",
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/images",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -56,10 +56,10 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
   ]
 }`)
 	createdState := ocimock.MustOCIResponseFixture[loadbalancersdk.PathRouteSet](t, `{
-  "name": "osok_replay_path_routes",
+  "name": "osok_mock_path_routes",
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/images",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -69,10 +69,10 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
 }`)
 	createdReadStates := []loadbalancersdk.PathRouteSet{
 		ocimock.MustOCIResponseFixture[loadbalancersdk.PathRouteSet](t, `{
-  "name": "osok_replay_path_routes",
+  "name": "osok_mock_path_routes",
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/images",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -84,7 +84,7 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
 	updateRequest := ocimock.MustJSONFixture[loadbalancersdk.UpdatePathRouteSetDetails](t, `{
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/assets",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -93,10 +93,10 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
   ]
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[loadbalancersdk.PathRouteSet](t, `{
-  "name": "osok_replay_path_routes",
+  "name": "osok_mock_path_routes",
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/assets",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -106,10 +106,10 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
 }`)
 	updatedReadStates := []loadbalancersdk.PathRouteSet{
 		ocimock.MustOCIResponseFixture[loadbalancersdk.PathRouteSet](t, `{
-  "name": "osok_replay_path_routes",
+  "name": "osok_mock_path_routes",
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/assets",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -120,10 +120,10 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
 	}
 	deletedReadStates := []loadbalancersdk.PathRouteSet{
 		ocimock.MustOCIResponseFixture[loadbalancersdk.PathRouteSet](t, `{
-  "name": "osok_replay_path_routes",
+  "name": "osok_mock_path_routes",
   "pathRoutes": [
     {
-      "backendSetName": "osok_replay_backend_set",
+      "backendSetName": "osok_mock_backend_set",
       "path": "/assets",
       "pathMatchType": {
         "matchType": "PREFIX_MATCH"
@@ -138,7 +138,7 @@ func TestMockIntegrationPathRouteSetCompositeCRUD(t *testing.T) {
 		loadbalancersdk.UpdatePathRouteSetDetails,
 	]{
 		CollectionPath:     "/20170115/loadBalancers/<ocid:1>/pathRouteSets",
-		ItemPath:           "/20170115/loadBalancers/<ocid:1>/pathRouteSets/osok_replay_path_routes",
+		ItemPath:           "/20170115/loadBalancers/<ocid:1>/pathRouteSets/osok_mock_path_routes",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:      &createRequest,
 		CreatedState:       &createdState,

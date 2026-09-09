@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationDecryptionRuleCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -22,13 +22,13 @@ func TestMockIntegrationDecryptionRuleCompositeCRUD(t *testing.T) {
   "action": "NO_DECRYPT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
-  "name": "osok_replay_decryption_rule"
+  "name": "osok_mock_decryption_rule"
 }`)
 	resource.Spec.NetworkFirewallPolicyId = "<ocid:1>"
 	updatedSpec := resource.Spec
@@ -36,11 +36,11 @@ func TestMockIntegrationDecryptionRuleCompositeCRUD(t *testing.T) {
   "action": "NO_DECRYPT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses",
-      "osok_replay_addresses2"
+      "osok_mock_prereq_addresses",
+      "osok_mock_addresses2"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   }
 }`)
@@ -48,27 +48,27 @@ func TestMockIntegrationDecryptionRuleCompositeCRUD(t *testing.T) {
   "action": "NO_DECRYPT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
-  "name": "osok_replay_decryption_rule"
+  "name": "osok_mock_decryption_rule"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.DecryptionRule](t, `{
   "action": "NO_DECRYPT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "decryptionProfile": null,
   "description": null,
-  "name": "osok_replay_decryption_rule",
+  "name": "osok_mock_decryption_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -81,11 +81,11 @@ func TestMockIntegrationDecryptionRuleCompositeCRUD(t *testing.T) {
   "action": "NO_DECRYPT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses",
-      "osok_replay_addresses2"
+      "osok_mock_prereq_addresses",
+      "osok_mock_addresses2"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   }
 }`)
@@ -93,16 +93,16 @@ func TestMockIntegrationDecryptionRuleCompositeCRUD(t *testing.T) {
   "action": "NO_DECRYPT",
   "condition": {
     "destinationAddress": [
-      "osok_replay_prereq_addresses",
-      "osok_replay_addresses2"
+      "osok_mock_prereq_addresses",
+      "osok_mock_addresses2"
     ],
     "sourceAddress": [
-      "osok_replay_prereq_addresses"
+      "osok_mock_prereq_addresses"
     ]
   },
   "decryptionProfile": null,
   "description": null,
-  "name": "osok_replay_decryption_rule",
+  "name": "osok_mock_decryption_rule",
   "parentResourceId": "<ocid:1>",
   "position": {
     "afterRule": null,
@@ -117,7 +117,7 @@ func TestMockIntegrationDecryptionRuleCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateDecryptionRuleDetails,
 	]{
 		CollectionPath:    "/20230501/networkFirewallPolicies/<ocid:1>/decryptionRules",
-		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/decryptionRules/osok_replay_decryption_rule",
+		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/decryptionRules/osok_mock_decryption_rule",
 		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,

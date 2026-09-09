@@ -22,7 +22,7 @@ import (
 const mockRepositoryID = "ocid1.artifactrepository.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/repository_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - repo-authored runtime: repository_runtime_client.go
 //   - OCI SDK and pinned Terraform provider ArtifactsRepository resource
 func TestMockIntegrationRepositoryLifecycleCRUD(t *testing.T) {
@@ -86,6 +86,10 @@ func newRepositoryMockResponder(resource *artifactsv1beta1.Repository) (*ocimock
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (artifactssdk.GenericRepository, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero artifactssdk.GenericRepository
+				return zero, ocimock.Response{}, err
+			}
 			var envelope struct {
 				artifactssdk.CreateGenericRepositoryDetails
 				RepositoryType string `json:"repositoryType"`

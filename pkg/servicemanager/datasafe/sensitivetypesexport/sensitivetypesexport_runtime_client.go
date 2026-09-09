@@ -35,11 +35,11 @@ func applySensitiveTypesExportRuntimeHooks(hooks *SensitiveTypesExportRuntimeHoo
 	if hooks == nil {
 		return
 	}
-	hooks.Semantics = newSensitiveTypesExportRuntimeSemantics()
+	hooks.Semantics = reviewedSensitiveTypesExportRuntimeSemantics()
 	runtimecommon.ConfigureWorkRequest(&hooks.Async, client, initErr, "SensitiveTypesExport")
 }
 
-func newSensitiveTypesExportRuntimeSemantics() *generatedruntime.Semantics {
+func reviewedSensitiveTypesExportRuntimeSemantics() *generatedruntime.Semantics {
 	return &generatedruntime.Semantics{
 		FormalService: "datasafe",
 		FormalSlug:    "sensitivetypesexport",

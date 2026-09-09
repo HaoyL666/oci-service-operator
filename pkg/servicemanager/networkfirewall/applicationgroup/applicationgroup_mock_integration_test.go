@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationApplicationGroupCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -20,46 +20,46 @@ func TestMockIntegrationApplicationGroupCompositeCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-applicationgroup")
 	resource.Spec = ocimock.MustJSONFixture[networkfirewallv1beta1.ApplicationGroupSpec](t, `{
   "apps": [
-    "osok_replay_prereq_icmp"
+    "osok_mock_prereq_icmp"
   ],
-  "name": "osok_replay_app_group"
+  "name": "osok_mock_app_group"
 }`)
 	resource.Spec.NetworkFirewallPolicyId = "<ocid:1>"
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "apps": [
-    "osok_replay_prereq_icmp",
-    "osok_replay_icmp2"
+    "osok_mock_prereq_icmp",
+    "osok_mock_icmp2"
   ]
 }`)
 	createRequest := ocimock.MustJSONFixture[networkfirewallsdk.CreateApplicationGroupDetails](t, `{
   "apps": [
-    "osok_replay_prereq_icmp"
+    "osok_mock_prereq_icmp"
   ],
-  "name": "osok_replay_app_group"
+  "name": "osok_mock_app_group"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.ApplicationGroup](t, `{
   "apps": [
-    "osok_replay_prereq_icmp"
+    "osok_mock_prereq_icmp"
   ],
   "description": null,
-  "name": "osok_replay_app_group",
+  "name": "osok_mock_app_group",
   "parentResourceId": "<ocid:1>",
   "totalApps": 1
 }`)
 	updateRequest := ocimock.MustJSONFixture[networkfirewallsdk.UpdateApplicationGroupDetails](t, `{
   "apps": [
-    "osok_replay_prereq_icmp",
-    "osok_replay_icmp2"
+    "osok_mock_prereq_icmp",
+    "osok_mock_icmp2"
   ]
 }`)
 	updatedState := ocimock.MustOCIResponseFixture[networkfirewallsdk.ApplicationGroup](t, `{
   "apps": [
-    "osok_replay_prereq_icmp",
-    "osok_replay_icmp2"
+    "osok_mock_prereq_icmp",
+    "osok_mock_icmp2"
   ],
   "description": null,
-  "name": "osok_replay_app_group",
+  "name": "osok_mock_app_group",
   "parentResourceId": "<ocid:1>",
   "totalApps": 2
 }`)
@@ -69,7 +69,7 @@ func TestMockIntegrationApplicationGroupCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateApplicationGroupDetails,
 	]{
 		CollectionPath:    "/20230501/networkFirewallPolicies/<ocid:1>/applicationGroups",
-		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/applicationGroups/osok_replay_app_group",
+		ItemPath:          "/20230501/networkFirewallPolicies/<ocid:1>/applicationGroups/osok_mock_app_group",
 		Operations:        []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:     &createRequest,
 		CreatedState:      &createdState,

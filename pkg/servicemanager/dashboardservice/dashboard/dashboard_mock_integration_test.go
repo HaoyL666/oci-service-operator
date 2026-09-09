@@ -26,7 +26,7 @@ import (
 
 const mockDashboardID = "ocid1.consoledashboard.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal polymorphic dashboard contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal polymorphic dashboard contract, and vendored OCI SDK.
 func TestMockIntegrationDashboardLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &dashboardservicev1beta1.Dashboard{ObjectMeta: metav1.ObjectMeta{Name: "mock-dashboard", Namespace: "default", UID: types.UID("mock-dashboard-uid")}, Spec: dashboardservicev1beta1.DashboardSpec{
@@ -78,6 +78,10 @@ func newDashboardMockResponder(resource *dashboardservicev1beta1.Dashboard) (*oc
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
 		Create: func(request ocimock.Request) (dashboardservicesdk.V1Dashboard, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero dashboardservicesdk.V1Dashboard
+				return zero, ocimock.Response{}, err
+			}
 			var envelope struct {
 				dashboardservicesdk.CreateV1DashboardDetails
 				SchemaVersion string `json:"schemaVersion"`

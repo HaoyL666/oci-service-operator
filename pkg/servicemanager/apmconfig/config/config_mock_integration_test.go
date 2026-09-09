@@ -30,7 +30,7 @@ const (
 )
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/config_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/apmconfig/config.json
 //   - repo-authored runtime: formal/controllers/apmconfig/config/diagrams/runtime-lifecycle.yaml
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/apm_config/apm_config_config_resource.go
@@ -49,7 +49,7 @@ func TestMockIntegrationConfigSpanFilterSynchronousCRUD(t *testing.T) {
 			FreeformTags: map[string]string{"osok-mock": "create"},
 		},
 	}
-	responder, err := newConfigMockResponder()
+	responder, err := newConfigMockResponder(resource)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -103,7 +103,7 @@ func TestMockIntegrationConfigSpanFilterSynchronousCRUD(t *testing.T) {
 	}
 }
 
-func newConfigMockResponder() (*ocimock.CRUDResponder[apmconfigsdk.SpanFilter], error) {
+func newConfigMockResponder(resource *apmconfigv1beta1.Config) (*ocimock.CRUDResponder[apmconfigsdk.SpanFilter], error) {
 	createdAt := common.SDKTime{Time: time.Date(2026, time.September, 4, 15, 0, 0, 0, time.UTC)}
 	updatedAt := common.SDKTime{Time: createdAt.Time.Add(time.Minute)}
 	return ocimock.NewCRUDResponder(ocimock.CRUDOptions[apmconfigsdk.SpanFilter]{
@@ -114,6 +114,10 @@ func newConfigMockResponder() (*ocimock.CRUDResponder[apmconfigsdk.SpanFilter], 
 		RequireUpdateRead:  true,
 		RequireDeleteRead:  true,
 		Create: func(request ocimock.Request) (apmconfigsdk.SpanFilter, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero apmconfigsdk.SpanFilter
+				return zero, ocimock.Response{}, err
+			}
 			if err := validateConfigDomain(request); err != nil {
 				return apmconfigsdk.SpanFilter{}, ocimock.Response{}, err
 			}

@@ -27,7 +27,7 @@ import (
 const mockWlpAgentID = "ocid1.wlpagent.oc1..mock"
 
 // Contract evidence:
-//   - synthetic contract: testdata/recordings/wlpagent_synthetic_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/cloudguard/wlpagent.json
 //   - repo-authored runtime: formal/controllers/cloudguard/wlpagent/diagrams/runtime-lifecycle.yaml
 //   - custom state-free runtime: wlpagent_runtime_client.go
@@ -122,6 +122,10 @@ func newWlpAgentMockResponder(resource *cloudguardv1beta1.WlpAgent) (*ocimock.CR
 			return ocimock.JSONResponse(http.StatusOK, cloudguardsdk.WlpAgentCollection{Items: items})
 		},
 		Create: func(request ocimock.Request) (cloudguardsdk.WlpAgent, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero cloudguardsdk.WlpAgent
+				return zero, ocimock.Response{}, err
+			}
 			var details cloudguardsdk.CreateWlpAgentDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return cloudguardsdk.WlpAgent{}, ocimock.Response{}, err

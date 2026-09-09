@@ -33,6 +33,9 @@ func TestMockIntegrationTranslatorCompositeCRUD(t *testing.T) {
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[odasdk.Translator, odasdk.CreateTranslatorDetails, odasdk.UpdateTranslatorDetails]{
 		CollectionPath: "/20190506/odaInstances/<ocid:1>/translators", ItemPath: "/20190506/odaInstances/<ocid:1>/translators/<ocid:2>",
 		Operations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete}, CreateRequest: &createRequest, CreatedState: &created, ListShape: ocimock.ListShapeItems,
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
 		UpdateRequest: &updateRequest, UpdatedState: &updated, UpdatedReadStates: []odasdk.Translator{updated}, DeleteEndsNotFound: true,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, CreateStatus: http.StatusCreated, DeleteStatus: http.StatusNoContent, NotFoundCode: "NotFound",
 	})

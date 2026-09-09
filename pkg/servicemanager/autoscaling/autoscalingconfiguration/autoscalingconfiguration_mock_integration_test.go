@@ -30,14 +30,14 @@ const (
 )
 
 // Contract evidence:
-//   - corrected historical trace: testdata/recordings/autoscalingconfiguration_synthetic_reconcile.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/autoscaling/autoscalingconfiguration.json
 //   - repo-authored runtime: formal/controllers/autoscaling/autoscalingconfiguration/diagrams/runtime-lifecycle.yaml
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/autoscaling/autoscaling_auto_scaling_configuration_resource.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/autoscaling
 //
-// The historical synthetic trace exposed a stale empty PUT caused by missing
-// formal semantics. This dynamic lifecycle proves that a converged read does
+// Earlier contract review exposed a stale empty PUT caused by missing formal
+// semantics. This dynamic lifecycle proves that a converged read does
 // not update while a requested mutable change still exercises the real SDK PUT.
 func TestMockIntegrationAutoScalingConfigurationSynchronousCRUD(t *testing.T) {
 	t.Parallel()

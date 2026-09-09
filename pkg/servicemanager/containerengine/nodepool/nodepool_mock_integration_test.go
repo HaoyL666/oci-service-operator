@@ -23,7 +23,7 @@ import (
 const mockNodePoolID = "ocid1.nodepool.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/nodepool_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/containerengine/nodepool and formal/imports/containerengine/nodepool.json
 //   - resource runtime: nodepool_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/containerengine
@@ -78,7 +78,7 @@ func TestMockIntegrationNodePoolLifecycleCRUD(t *testing.T) {
 		}
 	})
 
-	client := newRecordedNodePoolClient(containerenginesdk.ContainerEngineClient{BaseClient: session.BaseClient()})
+	client := newMockNodePoolClient(containerenginesdk.ContainerEngineClient{BaseClient: session.BaseClient()})
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*containerenginev1beta1.NodePool]{
 		Resource:      resource,
 		Client:        client,

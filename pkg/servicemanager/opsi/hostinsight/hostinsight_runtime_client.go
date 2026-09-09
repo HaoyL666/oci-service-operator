@@ -141,7 +141,7 @@ func applyHostInsightRuntimeHooks(
 		return
 	}
 
-	hooks.Semantics = newHostInsightRuntimeSemantics()
+	hooks.Semantics = reviewedHostInsightRuntimeSemantics()
 	applyHostInsightBodyHooks(hooks)
 	applyHostInsightOperationHooks(hooks, client, initErr)
 	applyHostInsightIdentityHooks(hooks)
@@ -724,7 +724,7 @@ func markHostInsightDeleteWorkRequestPending(resource *opsiv1beta1.HostInsight, 
 	}, loggerutil.OSOKLogger{})
 }
 
-func newHostInsightRuntimeSemantics() *generatedruntime.Semantics {
+func reviewedHostInsightRuntimeSemantics() *generatedruntime.Semantics {
 	return &generatedruntime.Semantics{
 		FormalService: "opsi",
 		FormalSlug:    "hostinsight",

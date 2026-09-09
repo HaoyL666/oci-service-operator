@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: the vendored OCI SDK, the package service manager, the
-// reviewed formal lifecycle, and the existing sanitized OCI replay fixture.
+// reviewed formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationDelegationControlWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -286,7 +286,7 @@ func TestMockIntegrationDelegationControlWorkRequestCRUD(t *testing.T) {
 	t.Cleanup(func() { _ = session.Close() })
 	log := loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("mock-integration")}
 	base := session.BaseClient()
-	sdkClient := syntheticDelegationControlClient{
+	sdkClient := mockDelegationControlClient{
 		DelegateAccessControlClient: delegateaccesscontrolsdk.DelegateAccessControlClient{BaseClient: base},
 		WorkRequestClient:           delegateaccesscontrolsdk.WorkRequestClient{BaseClient: base},
 	}

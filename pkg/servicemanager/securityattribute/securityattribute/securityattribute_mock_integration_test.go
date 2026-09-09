@@ -12,7 +12,7 @@ import (
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
 )
 
-// Explicit typed service-manager lifecycle; replay evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; mock evidence is authoring reference only.
 func TestMockIntegrationSecurityAttributeCompositeCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &securityattributev1beta1.SecurityAttribute{}
@@ -47,7 +47,10 @@ func TestMockIntegrationSecurityAttributeCompositeCRUD(t *testing.T) {
 		CollectionPath: "/20240815/securityAttributeNamespaces/<ocid:1>/securityAttributes",
 		ItemPath:       "/20240815/securityAttributeNamespaces/<ocid:1>/securityAttributes/osok_mock_attribute",
 		Operations:     []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
-		CreateRequest:  &createRequest, CreatedState: &createdState, ListShape: ocimock.ListShapeArray,
+		ValidateCreateRaw: func(request ocimock.Request) error {
+			return ocimock.ValidateRetryToken(request, resource)
+		},
+		CreateRequest: &createRequest, CreatedState: &createdState, ListShape: ocimock.ListShapeArray,
 		UpdateRequest: &updateRequest, UpdatedState: &updatedState,
 		RequireCreateRead: true, RequireUpdateRead: true, RequireDeleteRead: true, DeleteEndsNotFound: true,
 		CreateStatus: 200, UpdateStatus: 200, DeleteStatus: 204, NotFoundCode: "NotFound",

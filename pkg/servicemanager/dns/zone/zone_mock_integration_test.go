@@ -82,6 +82,10 @@ func newZoneMockResponder(resource *dnsv1beta1.Zone) (*ocimock.CRUDResponder[dns
 			return ocimock.JSONResponse(http.StatusOK, []dnssdk.Zone{state})
 		},
 		Create: func(request ocimock.Request) (dnssdk.Zone, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero dnssdk.Zone
+				return zero, ocimock.Response{}, err
+			}
 			var envelope struct {
 				dnssdk.CreateZoneDetails
 				MigrationSource string `json:"migrationSource"`

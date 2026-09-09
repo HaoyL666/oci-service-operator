@@ -359,6 +359,7 @@ func waasPolicyRuntimeSemantics() *generatedruntime.Semantics {
 			},
 			Update: []generatedruntime.Hook{
 				{Helper: "tfresource.UpdateResource", EntityType: "WaasPolicy", Action: "UpdateWaasPolicy"},
+				{Helper: "ChangeWaasPolicyCompartment"},
 				{Helper: "tfresource.WaitForWorkRequestWithErrorHandling", EntityType: "WorkRequest", Action: "GetWorkRequest"},
 			},
 			Delete: []generatedruntime.Hook{{Helper: "tfresource.DeleteResource", EntityType: "WaasPolicy", Action: "DeleteWaasPolicy"}},

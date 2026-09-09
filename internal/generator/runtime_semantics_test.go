@@ -31,6 +31,104 @@ func TestBuildRuntimeSemanticsHonorsRepoAuthoredUpdateOperationSubset(t *testing
 	}
 }
 
+func TestBuildRuntimeSemanticsIncludesSelectedAuxiliaryUpdateOperation(t *testing.T) {
+	t.Parallel()
+
+	formalModel := newThingFormalModelWithUpdateSubset([]string{"UpdateThing", "ChangeThingCompartment"})
+	runtime := &RuntimeModel{Update: &RuntimeOperationModel{MethodName: "UpdateThing"}}
+
+	semantics := buildRuntimeSemanticsModel(formalModel, runtime)
+	if semantics == nil {
+		t.Fatal("buildRuntimeSemanticsModel() = nil")
+	}
+	if len(semantics.AuxiliaryOperations) != 1 {
+		t.Fatalf("AuxiliaryOperations = %#v, want one selected update operation", semantics.AuxiliaryOperations)
+	}
+	got := semantics.AuxiliaryOperations[0]
+	if got.Phase != "update" || got.MethodName != "ChangeThingCompartment" {
+		t.Fatalf("AuxiliaryOperations[0] = %#v, want selected compartment update", got)
+	}
+}
+
+func TestBuildRuntimeSemanticsHonorsRepoAuthoredCreateAndDeleteOperationSubsets(t *testing.T) {
+	t.Parallel()
+
+	formalModel := newThingFormalModelWithPhaseSubsets(
+		[]string{"CreateThing"},
+		[]string{"DeleteThing"},
+	)
+	runtime := &RuntimeModel{
+		Create: &RuntimeOperationModel{MethodName: "CreateThing"},
+		Delete: &RuntimeOperationModel{MethodName: "DeleteThing"},
+	}
+
+	semantics := buildRuntimeSemanticsModel(formalModel, runtime)
+	if semantics == nil {
+		t.Fatal("buildRuntimeSemanticsModel() = nil")
+	}
+	if len(semantics.AuxiliaryOperations) != 0 {
+		t.Fatalf("AuxiliaryOperations = %#v, want provider-only create/delete actions excluded", semantics.AuxiliaryOperations)
+	}
+}
+
+func TestBuildRuntimeSemanticsAllowsExplicitEmptyDeleteSubsetWithoutImportedPrimary(t *testing.T) {
+	t.Parallel()
+
+	formalModel := &FormalModel{
+		Binding: formal.ControllerBinding{
+			Import: formal.ImportModel{
+				Operations: formal.Operations{
+					Delete: []formal.OperationBinding{{
+						Operation:    "ScheduleThingDeletion",
+						RequestType:  "ScheduleThingDeletionRequest",
+						ResponseType: "ScheduleThingDeletionResponse",
+					}},
+				},
+			},
+		},
+		RuntimeLifecycle: &formal.RuntimeLifecycleSpec{
+			RepoAuthored: &formal.RuntimeLifecycleRepoAuthoredSemantics{
+				Operations: &formal.RuntimeLifecycleOperationSemantics{Delete: []string{}},
+			},
+		},
+	}
+	runtime := &RuntimeModel{Delete: &RuntimeOperationModel{MethodName: "DeleteThing"}}
+
+	semantics := buildRuntimeSemanticsModel(formalModel, runtime)
+	if semantics == nil {
+		t.Fatal("buildRuntimeSemanticsModel() = nil")
+	}
+	if len(semantics.AuxiliaryOperations) != 0 {
+		t.Fatalf("AuxiliaryOperations = %#v, want provider-only delete action excluded", semantics.AuxiliaryOperations)
+	}
+}
+
+func TestValidateRuntimeUpdateOperationSubsetAllowsEmptySubsetWithoutImportedPrimary(t *testing.T) {
+	t.Parallel()
+
+	formalModel := &FormalModel{
+		Binding: formal.ControllerBinding{
+			Import: formal.ImportModel{
+				Operations: formal.Operations{
+					Update: []formal.OperationBinding{{Operation: "ManageThing"}},
+				},
+			},
+		},
+		RuntimeLifecycle: &formal.RuntimeLifecycleSpec{
+			RepoAuthored: &formal.RuntimeLifecycleRepoAuthoredSemantics{
+				Operations: &formal.RuntimeLifecycleOperationSemantics{Update: []string{}},
+			},
+		},
+	}
+	err := validateRuntimeUpdateOperationSubset(
+		formalModel,
+		&RuntimeModel{Update: &RuntimeOperationModel{MethodName: "UpdateThing"}},
+	)
+	if err != nil {
+		t.Fatalf("validateRuntimeUpdateOperationSubset() error = %v, want provider-only subset exclusion to be valid", err)
+	}
+}
+
 func TestValidateRuntimeUpdateOperationSubsetRejectsExcludedPrimary(t *testing.T) {
 	t.Parallel()
 
@@ -79,6 +177,33 @@ func newThingFormalModelWithUpdateSubset(subset []string) *FormalModel {
 			RepoAuthored: &formal.RuntimeLifecycleRepoAuthoredSemantics{
 				Operations: &formal.RuntimeLifecycleOperationSemantics{
 					Update: subset,
+				},
+			},
+		},
+	}
+}
+
+func newThingFormalModelWithPhaseSubsets(create, delete []string) *FormalModel {
+	return &FormalModel{
+		Binding: formal.ControllerBinding{
+			Import: formal.ImportModel{
+				Operations: formal.Operations{
+					Create: []formal.OperationBinding{
+						{Operation: "ImportThing", RequestType: "ImportThingRequest", ResponseType: "ImportThingResponse"},
+						{Operation: "CreateThing", RequestType: "CreateThingRequest", ResponseType: "CreateThingResponse"},
+					},
+					Delete: []formal.OperationBinding{
+						{Operation: "DeleteThing", RequestType: "DeleteThingRequest", ResponseType: "DeleteThingResponse"},
+						{Operation: "ScheduleThingDeletion", RequestType: "ScheduleThingDeletionRequest", ResponseType: "ScheduleThingDeletionResponse"},
+					},
+				},
+			},
+		},
+		RuntimeLifecycle: &formal.RuntimeLifecycleSpec{
+			RepoAuthored: &formal.RuntimeLifecycleRepoAuthoredSemantics{
+				Operations: &formal.RuntimeLifecycleOperationSemantics{
+					Create: create,
+					Delete: delete,
 				},
 			},
 		},

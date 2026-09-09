@@ -20,7 +20,7 @@ import (
 )
 
 // Contract evidence: vendored OCI SDK, production service manager, reviewed
-// formal lifecycle, and the existing sanitized OCI replay fixture.
+// formal lifecycle, and the existing sanitized OCI mock fixture.
 func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &queuev1beta1.Queue{}
@@ -31,9 +31,9 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
   ],
   "channelConsumptionLimit": 100,
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-async-queue-v1",
+  "displayName": "osok-mock-async-queue-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "retentionInSeconds": 86400,
   "timeoutInSeconds": 20,
@@ -46,9 +46,9 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
   ],
   "definedTags": {
   },
-  "displayName": "osok-replay-async-queue-v1-updated",
+  "displayName": "osok-mock-async-queue-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "visibilityInSeconds": 45
 }`)
@@ -59,9 +59,9 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
   ],
   "channelConsumptionLimit": 100,
   "compartmentId": "<ocid:1>",
-  "displayName": "osok-replay-async-queue-v1",
+  "displayName": "osok-mock-async-queue-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "retentionInSeconds": 86400,
   "timeoutInSeconds": 20,
@@ -73,9 +73,9 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
   ],
   "definedTags": {
   },
-  "displayName": "osok-replay-async-queue-v1-updated",
+  "displayName": "osok-mock-async-queue-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "visibilityInSeconds": 45
 }`)
@@ -93,9 +93,9 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
       "CreatedOn": "2026-08-31T21:10:02.867Z"
     }
   },
-  "displayName": "osok-replay-async-queue-v1",
+  "displayName": "osok-mock-async-queue-v1",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -119,9 +119,9 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
   "deadLetterQueueDeliveryCount": 0,
   "definedTags": {
   },
-  "displayName": "osok-replay-async-queue-v1-updated",
+  "displayName": "osok-mock-async-queue-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,
@@ -145,9 +145,9 @@ func TestMockIntegrationQueueWorkRequestCRUD(t *testing.T) {
   "deadLetterQueueDeliveryCount": 0,
   "definedTags": {
   },
-  "displayName": "osok-replay-async-queue-v1-updated",
+  "displayName": "osok-mock-async-queue-v1-updated",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:3>",
   "lifecycleDetails": null,

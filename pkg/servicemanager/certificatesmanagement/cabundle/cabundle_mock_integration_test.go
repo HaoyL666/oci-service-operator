@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationCaBundleEvidenceCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -25,16 +25,16 @@ func TestMockIntegrationCaBundleEvidenceCRUD(t *testing.T) {
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
   "freeformTags": {
-    "osok-replay": "create",
+    "osok-mock": "create",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   },
-  "name": "osok-replay-common-ca-bundle-v1"
+  "name": "osok-mock-common-ca-bundle-v1"
 }`)
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update",
+    "osok-mock": "update",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   }
 }`)
@@ -43,23 +43,23 @@ func TestMockIntegrationCaBundleEvidenceCRUD(t *testing.T) {
   "compartmentId": "\u003cocid:1\u003e",
   "description": "recorded create",
   "freeformTags": {
-    "osok-replay": "create",
+    "osok-mock": "create",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   },
-  "name": "osok-replay-common-ca-bundle-v1"
+  "name": "osok-mock-common-ca-bundle-v1"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[certificatesmanagementsdk.CaBundle](t, `{
   "compartmentId": "<ocid:1>",
   "definedTags": {},
   "description": "recorded create",
   "freeformTags": {
-    "osok-replay": "create",
+    "osok-mock": "create",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,
   "lifecycleState": "ACTIVE",
-  "name": "osok-replay-common-ca-bundle-v1",
+  "name": "osok-mock-common-ca-bundle-v1",
   "timeCreated": "2026-09-01T05:56:00.996Z"
 }`)
 	createdReadStates := []certificatesmanagementsdk.CaBundle{
@@ -68,20 +68,20 @@ func TestMockIntegrationCaBundleEvidenceCRUD(t *testing.T) {
   "definedTags": {},
   "description": "recorded create",
   "freeformTags": {
-    "osok-replay": "create",
+    "osok-mock": "create",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,
   "lifecycleState": "ACTIVE",
-  "name": "osok-replay-common-ca-bundle-v1",
+  "name": "osok-mock-common-ca-bundle-v1",
   "timeCreated": "2026-09-01T05:56:00.996Z"
 }`),
 	}
 	updateRequest := ocimock.MustJSONFixture[certificatesmanagementsdk.UpdateCaBundleDetails](t, `{
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update",
+    "osok-mock": "update",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   }
 }`)
@@ -90,13 +90,13 @@ func TestMockIntegrationCaBundleEvidenceCRUD(t *testing.T) {
   "definedTags": {},
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update",
+    "osok-mock": "update",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,
   "lifecycleState": "ACTIVE",
-  "name": "osok-replay-common-ca-bundle-v1",
+  "name": "osok-mock-common-ca-bundle-v1",
   "timeCreated": "2026-09-01T05:56:00.996Z"
 }`)
 	updatedReadStates := []certificatesmanagementsdk.CaBundle{
@@ -105,13 +105,13 @@ func TestMockIntegrationCaBundleEvidenceCRUD(t *testing.T) {
   "definedTags": {},
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update",
+    "osok-mock": "update",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,
   "lifecycleState": "ACTIVE",
-  "name": "osok-replay-common-ca-bundle-v1",
+  "name": "osok-mock-common-ca-bundle-v1",
   "timeCreated": "2026-09-01T05:56:00.996Z"
 }`),
 	}
@@ -121,13 +121,13 @@ func TestMockIntegrationCaBundleEvidenceCRUD(t *testing.T) {
   "definedTags": {},
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update",
+    "osok-mock": "update",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,
   "lifecycleState": "DELETING",
-  "name": "osok-replay-common-ca-bundle-v1",
+  "name": "osok-mock-common-ca-bundle-v1",
   "timeCreated": "2026-09-01T05:56:00.996Z"
 }`),
 		ocimock.MustOCIResponseFixture[certificatesmanagementsdk.CaBundle](t, `{
@@ -135,13 +135,13 @@ func TestMockIntegrationCaBundleEvidenceCRUD(t *testing.T) {
   "definedTags": {},
   "description": "recorded update",
   "freeformTags": {
-    "osok-replay": "update",
+    "osok-mock": "update",
     "osokCaBundlePemSha256": "eb67e294add6b04ce0798f3c28492f41be14a5abcbe27a1417743a411e984628"
   },
   "id": "<ocid:2>",
   "lifecycleDetails": null,
   "lifecycleState": "DELETED",
-  "name": "osok-replay-common-ca-bundle-v1",
+  "name": "osok-mock-common-ca-bundle-v1",
   "timeCreated": "2026-09-01T05:56:00.996Z"
 }`),
 	}

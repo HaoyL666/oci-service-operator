@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationAddressListCompositeCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -23,7 +23,7 @@ func TestMockIntegrationAddressListCompositeCRUD(t *testing.T) {
     "10.20.0.0/24"
   ],
   "description": "OSOK recorded address list",
-  "name": "osok_replay_address_list",
+  "name": "osok_mock_address_list",
   "type": "IP"
 }`)
 	resource.Spec.NetworkFirewallPolicyId = "<ocid:1>"
@@ -41,7 +41,7 @@ func TestMockIntegrationAddressListCompositeCRUD(t *testing.T) {
     "10.20.0.0/24"
   ],
   "description": "OSOK recorded address list",
-  "name": "osok_replay_address_list",
+  "name": "osok_mock_address_list",
   "type": "IP"
 }`)
 	createdState := ocimock.MustOCIResponseFixture[networkfirewallsdk.AddressList](t, `{
@@ -49,7 +49,7 @@ func TestMockIntegrationAddressListCompositeCRUD(t *testing.T) {
     "10.20.0.0/24"
   ],
   "description": "OSOK recorded address list",
-  "name": "osok_replay_address_list",
+  "name": "osok_mock_address_list",
   "parentResourceId": "<ocid:1>",
   "totalAddresses": 1,
   "type": "IP"
@@ -60,7 +60,7 @@ func TestMockIntegrationAddressListCompositeCRUD(t *testing.T) {
     "10.20.0.0/24"
   ],
   "description": "OSOK recorded address list",
-  "name": "osok_replay_address_list",
+  "name": "osok_mock_address_list",
   "parentResourceId": "<ocid:1>",
   "totalAddresses": 1,
   "type": "IP"
@@ -79,7 +79,7 @@ func TestMockIntegrationAddressListCompositeCRUD(t *testing.T) {
     "10.21.0.0/24"
   ],
   "description": "OSOK recorded address list updated",
-  "name": "osok_replay_address_list",
+  "name": "osok_mock_address_list",
   "parentResourceId": "<ocid:1>",
   "totalAddresses": 2,
   "type": "IP"
@@ -91,7 +91,7 @@ func TestMockIntegrationAddressListCompositeCRUD(t *testing.T) {
     "10.21.0.0/24"
   ],
   "description": "OSOK recorded address list updated",
-  "name": "osok_replay_address_list",
+  "name": "osok_mock_address_list",
   "parentResourceId": "<ocid:1>",
   "totalAddresses": 2,
   "type": "IP"
@@ -103,7 +103,7 @@ func TestMockIntegrationAddressListCompositeCRUD(t *testing.T) {
 		networkfirewallsdk.UpdateIpAddressListDetails,
 	]{
 		CollectionPath:     "/20230501/networkFirewallPolicies/<ocid:1>/addressLists",
-		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/addressLists/osok_replay_address_list",
+		ItemPath:           "/20230501/networkFirewallPolicies/<ocid:1>/addressLists/osok_mock_address_list",
 		Operations:         []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		CreateRequest:      &createRequest,
 		CreatedState:       &createdState,

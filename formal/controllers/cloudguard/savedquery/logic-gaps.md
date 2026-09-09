@@ -14,7 +14,7 @@ No open logic gaps remain for the seeded `cloudguard/SavedQuery` row.
 
 - The pinned provider importer cannot resolve this provider resource's older
   CRUD implementation automatically. The reviewed provider source, vendored
-  SDK, and recorded OCI trace therefore form the explicit evidence boundary.
+  SDK, and reviewed OCI API behavior therefore form the explicit evidence boundary.
 - Create may report `CREATING` before `ACTIVE`. Ordinary updates are direct
   body responses, while delete returns 202 and is confirmed through
   `DELETING`, `DELETED`, or a NotFound reread.

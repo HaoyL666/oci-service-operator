@@ -74,6 +74,10 @@ func newViewMockResponder(resource *dnsv1beta1.View) (*ocimock.CRUDResponder[dns
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (dnssdk.View, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero dnssdk.View
+				return zero, ocimock.Response{}, err
+			}
 			var details dnssdk.CreateViewDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return dnssdk.View{}, ocimock.Response{}, err

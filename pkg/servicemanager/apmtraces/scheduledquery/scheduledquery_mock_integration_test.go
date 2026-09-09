@@ -14,15 +14,15 @@ import (
 	"testing"
 )
 
-// Explicit typed service-manager lifecycle; recorded and synthetic evidence is authoring reference only.
+// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
 func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
-	domainID := "ocid1.apmdomain.oc1..replay"
+	domainID := "ocid1.apmdomain.oc1..mock"
 	resource := &apmtracesv1beta1.ScheduledQuery{
 		Spec: apmtracesv1beta1.ScheduledQuerySpec{
 			ApmDomainId:                           domainID,
-			ScheduledQueryName:                    "osok-replay-scheduled-query",
+			ScheduledQueryName:                    "osok-mock-scheduled-query",
 			ScheduledQueryProcessingType:          "QUERY",
 			ScheduledQueryProcessingSubType:       "NONE",
 			ScheduledQueryText:                    "SHOW SPANS * FIRST 100 ROWS BETWEEN now() - 2 HOURS AND now()",
@@ -31,17 +31,17 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 			ScheduledQueryMaximumRuntimeInSeconds: 60,
 			ScheduledQueryRetentionCriteria:       "KEEP_DATA_UNTIL_RETENTION_PERIOD",
 			ScheduledQueryRetentionPeriodInMs:     86400000,
-			FreeformTags:                          map[string]string{"osok-replay": "create"},
+			FreeformTags:                          map[string]string{"osok-mock": "create"},
 		},
 	}
 	ocimock.InitializeResource(resource, "mock-scheduledquery")
 	resource.Spec = ocimock.MustJSONFixture[apmtracesv1beta1.ScheduledQuerySpec](t, `{
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "scheduledQueryDescription": "OSOK synthetic scheduled query",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
-  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryName": "osok-mock-scheduled-query",
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -53,7 +53,7 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 	updatedSpec := resource.Spec
 	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
   "scheduledQueryProcessingConfiguration": {
@@ -67,11 +67,11 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 }`)
 	createRequest := ocimock.MustJSONFixture[apmtracessdk.CreateScheduledQueryDetails](t, `{
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "scheduledQueryDescription": "OSOK synthetic scheduled query",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
-  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryName": "osok-mock-scheduled-query",
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -82,13 +82,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 	createdState := ocimock.MustOCIResponseFixture[apmtracessdk.ScheduledQuery](t, `{
   "apmDomainId": "<ocid:1>",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
   "scheduledQueryDescription": "OSOK synthetic scheduled query",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
-  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryName": "osok-mock-scheduled-query",
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -100,13 +100,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[apmtracessdk.ScheduledQuery](t, `{
   "apmDomainId": "<ocid:1>",
   "freeformTags": {
-    "osok-replay": "create"
+    "osok-mock": "create"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
   "scheduledQueryDescription": "OSOK synthetic scheduled query",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
-  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryName": "osok-mock-scheduled-query",
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -117,7 +117,7 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 	}
 	updateRequest := ocimock.MustJSONFixture[apmtracessdk.UpdateScheduledQueryDetails](t, `{
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
   "scheduledQueryProcessingConfiguration": {
@@ -132,13 +132,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 	updatedState := ocimock.MustOCIResponseFixture[apmtracessdk.ScheduledQuery](t, `{
   "apmDomainId": "<ocid:1>",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
   "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
-  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryName": "osok-mock-scheduled-query",
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",
@@ -150,13 +150,13 @@ func TestMockIntegrationScheduledQueryLifecycleCRUD(t *testing.T) {
 		ocimock.MustOCIResponseFixture[apmtracessdk.ScheduledQuery](t, `{
   "apmDomainId": "<ocid:1>",
   "freeformTags": {
-    "osok-replay": "update"
+    "osok-mock": "update"
   },
   "id": "<ocid:2>",
   "lifecycleState": "ACTIVE",
   "scheduledQueryDescription": "OSOK synthetic scheduled query updated",
   "scheduledQueryMaximumRuntimeInSeconds": 60,
-  "scheduledQueryName": "osok-replay-scheduled-query",
+  "scheduledQueryName": "osok-mock-scheduled-query",
   "scheduledQueryProcessingSubType": "NONE",
   "scheduledQueryProcessingType": "QUERY",
   "scheduledQueryRetentionCriteria": "KEEP_DATA_UNTIL_RETENTION_PERIOD",

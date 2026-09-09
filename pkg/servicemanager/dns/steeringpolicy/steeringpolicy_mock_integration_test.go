@@ -84,6 +84,10 @@ func newSteeringPolicyMockResponder(resource *dnsv1beta1.SteeringPolicy) (*ocimo
 			return ocimock.JSONResponse(http.StatusOK, []dnssdk.SteeringPolicy{state})
 		},
 		Create: func(request ocimock.Request) (dnssdk.SteeringPolicy, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero dnssdk.SteeringPolicy
+				return zero, ocimock.Response{}, err
+			}
 			var details dnssdk.CreateSteeringPolicyDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return dnssdk.SteeringPolicy{}, ocimock.Response{}, err

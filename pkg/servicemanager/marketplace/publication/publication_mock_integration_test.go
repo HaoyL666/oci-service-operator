@@ -16,7 +16,7 @@ import (
 )
 
 // Contract evidence:
-//   - synthetic OCI trace: testdata/recordings/publication_synthetic_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/marketplace/publication and formal/imports/marketplace/publication.json
 //   - resource runtime: publication_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/marketplace

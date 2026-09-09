@@ -78,7 +78,7 @@ func applyBackendRuntimeHooks(hooks *BackendRuntimeHooks, client backendRuntimeO
 	}
 
 	getCall := hooks.Get.Call
-	hooks.Semantics = newBackendRuntimeSemantics()
+	hooks.Semantics = reviewedBackendRuntimeSemantics()
 	hooks.Identity = generatedruntime.IdentityHooks[*networkloadbalancerv1beta1.Backend]{
 		Resolve: func(resource *networkloadbalancerv1beta1.Backend) (any, error) {
 			return resolveBackendIdentity(resource)
@@ -352,7 +352,7 @@ func hasPendingBackendWriteWorkRequest(resource *networkloadbalancerv1beta1.Back
 
 func newBackendRuntimeHooksWithOCIClient(client backendRuntimeOCIClient) BackendRuntimeHooks {
 	return BackendRuntimeHooks{
-		Semantics:       newBackendRuntimeSemantics(),
+		Semantics:       reviewedBackendRuntimeSemantics(),
 		Identity:        generatedruntime.IdentityHooks[*networkloadbalancerv1beta1.Backend]{},
 		Read:            generatedruntime.ReadHooks{},
 		TrackedRecreate: generatedruntime.TrackedRecreateHooks[*networkloadbalancerv1beta1.Backend]{},
@@ -394,7 +394,7 @@ func newBackendRuntimeHooksWithOCIClient(client backendRuntimeOCIClient) Backend
 	}
 }
 
-func newBackendRuntimeSemantics() *generatedruntime.Semantics {
+func reviewedBackendRuntimeSemantics() *generatedruntime.Semantics {
 	return &generatedruntime.Semantics{
 		FormalService: "networkloadbalancer",
 		FormalSlug:    "backend",

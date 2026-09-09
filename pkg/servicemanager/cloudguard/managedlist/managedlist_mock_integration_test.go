@@ -25,7 +25,7 @@ import (
 
 const mockManagedListID = "ocid1.cloudguardmanagedlist.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal managed-list contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal managed-list contract, and vendored OCI SDK.
 func TestMockIntegrationManagedListLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &cloudguardv1beta1.ManagedList{ObjectMeta: metav1.ObjectMeta{Name: "mock-managed-list", Namespace: "default", UID: types.UID("mock-managed-list-uid")}, Spec: cloudguardv1beta1.ManagedListSpec{
@@ -79,6 +79,10 @@ func newManagedListMockResponder(resource *cloudguardv1beta1.ManagedList) (*ocim
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true, RetainStateAfterDelete: true,
 		Create: func(request ocimock.Request) (cloudguardsdk.ManagedList, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero cloudguardsdk.ManagedList
+				return zero, ocimock.Response{}, err
+			}
 			var details cloudguardsdk.CreateManagedListDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return cloudguardsdk.ManagedList{}, ocimock.Response{}, err

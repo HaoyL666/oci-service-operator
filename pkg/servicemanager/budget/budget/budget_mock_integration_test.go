@@ -28,7 +28,7 @@ import (
 const mockBudgetID = "ocid1.budget.oc1..mock"
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/budget_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal provider facts: formal/imports/budget/budget.json
 //   - repo-authored runtime: formal/controllers/budget/budget/diagrams/runtime-lifecycle.yaml
 //   - Terraform provider: terraform-provider-oci@eb653febb1ba internal/service/budget/budget_budget_resource.go

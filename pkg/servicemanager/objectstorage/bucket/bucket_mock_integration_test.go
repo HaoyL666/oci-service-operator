@@ -27,7 +27,7 @@ const (
 )
 
 // Contract evidence:
-//   - recorded OCI trace: testdata/recordings/bucket_crud.yaml
+//   - package-owned typed OCI fixtures declared below
 //   - formal contract: formal/controllers/objectstorage/objectstoragebucket and formal/imports/objectstorage/objectstoragebucket.json
 //   - resource runtime: bucket_runtime_client.go
 //   - OCI SDK: vendor/github.com/oracle/oci-go-sdk/v65/objectstorage

@@ -25,7 +25,7 @@ import (
 
 const mockDashboardGroupID = "ocid1.consoledashboardgroup.oc1..mock"
 
-// Contract evidence: the recorded OCI trace, formal dashboard-group contract, and vendored OCI SDK.
+// Contract evidence: the package-owned typed OCI fixtures, formal dashboard-group contract, and vendored OCI SDK.
 func TestMockIntegrationDashboardGroupLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 	resource := &dashboardservicev1beta1.DashboardGroup{ObjectMeta: metav1.ObjectMeta{Name: "mock-dashboard-group", Namespace: "default", UID: types.UID("mock-dashboard-group-uid")}, Spec: dashboardservicev1beta1.DashboardGroupSpec{
@@ -76,6 +76,10 @@ func newDashboardGroupMockResponder(resource *dashboardservicev1beta1.DashboardG
 		ExpectedOperations: []ocimock.Operation{ocimock.OperationCreate, ocimock.OperationRead, ocimock.OperationUpdate, ocimock.OperationDelete},
 		RequireCreateRead:  true, RequireUpdateRead: true, RequireDeleteRead: true,
 		Create: func(request ocimock.Request) (dashboardservicesdk.DashboardGroup, ocimock.Response, error) {
+			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
+				var zero dashboardservicesdk.DashboardGroup
+				return zero, ocimock.Response{}, err
+			}
 			var details dashboardservicesdk.CreateDashboardGroupDetails
 			if err := ocimock.DecodeJSONRequest(request, &details); err != nil {
 				return dashboardservicesdk.DashboardGroup{}, ocimock.Response{}, err
