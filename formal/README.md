@@ -16,11 +16,10 @@ This tree is the repo-local source of truth for formal runtime inputs.
 - `controller_manifest.tsv` binds one controller row to exactly one import, spec, logic-gap file, and diagrams directory. That manifest is authoritative for generator-owned formal catalog artifacts; orphan controller directories or import JSON files are drift and fail `make formal-verify`.
 
 The checked-in `template` row remains scaffold-only as a schema example. The
-current seeded default-active corpus lives in `core/Drg`, `mysql/DbSystem`,
-`nosql/Table`, `psql/DbSystem`, and `streaming/Stream`.
-`database/AutonomousDatabase` remains the default-active promotable reference
-row, and `identity/User` remains a preserved explicit-backlog promotable
-reference row.
+authoritative corpus is the complete set of rows in
+`controller_manifest.tsv`; its `stage` column distinguishes `seeded`,
+`promotable`, and `scaffold` entries. Use that manifest rather than a
+hand-maintained resource list or count when inspecting current coverage.
 
 Use `make formal-scaffold` to refresh the tracked scaffold rows and any
 explicit `formalSpec` rows from the published default-active API surface in

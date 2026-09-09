@@ -81,23 +81,27 @@ Rules:
 - Legacy overlay files and kind-remap layers are not part of the current
   generator contract.
 
-## Async Strategy Closeout
+## Async Strategy Contract
 
-The checked-in async contract is now explicit on the selected surface:
+The authoritative resource-by-resource async selection lives in
+`internal/generator/config/services.yaml`; formal lifecycle metadata records
+the reviewed runtime intent. Do not maintain a second resource inventory in
+this document.
 
-- Selected kinds with lifecycle async metadata are
-  `containerengine/Cluster`, `containerinstances/ContainerInstance`,
-  `core/Instance`, `database/AutonomousDatabase`,
-  `functions/Application`, `functions/Function`, `identity/Compartment`,
-  `keymanagement/Vault`, `mysql/DbSystem`, `nosql/Table`,
-  `objectstorage/Bucket`, `opensearch/OpensearchCluster`,
-  `psql/DbSystem`, and `streaming/Stream`.
-- Selected kinds with workrequest async metadata are `queue/Queue` and
-  `redis/RedisCluster`.
+- `async.strategy=lifecycle` models resources whose OCI object lifecycle is
+  polled until it reaches a terminal state.
+- `async.strategy=workrequest` models resources whose mutating operations are
+  tracked through OCI Work Requests.
+- `async.runtime=generatedruntime` activates the corresponding shared runtime
+  contract. Work-request resources use the bounded `Async` hook seam for
+  fetching and classifying requests, recovering resource IDs, and projecting
+  shared status.
+- `async.runtime=handwritten` leaves those responsibilities with the
+  resource-owned service manager while requiring the same shared status
+  contract.
 - `status.async.current` is the canonical in-flight tracker for the shared
-  async contract and for the reference migrations that already project it in
-  runtime today. Within the embedded shared OSOK status object, the canonical
-  field is `status.async.current.workRequestId`; on the CR it is exposed at
+  async contract. Within the embedded shared OSOK status object, the canonical
+  field is `status.async.current.workRequestId`; on a CR it is exposed at
   `.status.status.async.current.workRequestId`.
 - `status.opcRequestId` is the canonical shared OCI request-correlation field
   for controller-backed resources. On the CR it is exposed at
@@ -110,35 +114,20 @@ The checked-in async contract is now explicit on the selected surface:
   Handwritten runtimes must publish the same field explicitly from mutating
   OCI response headers and surfaced OCI service errors; they must not invent
   resource-local replacements.
-- The generator contract now also allows `async.strategy=workrequest` with
-  `async.runtime=generatedruntime`. That posture requires the generated-runtime
-  `Async` seam to supply work-request fetch, status/action classification,
-  resource-ID recovery, and any temporary legacy bridge mirrors without
-  widening generatedruntime into a generic provider contract.
-- `nosql/Table` is the lifecycle-only reference migration. `queue/Queue` and
-  `redis/RedisCluster` are the workrequest-backed reference migrations.
-- `queue/Queue` keeps its legacy work-request ID mirrors only for the current
-  compatibility window; new selected resources should not add Queue-style
-  compatibility fields by default.
-- The checked-in selected workrequest resources remain handwritten until the
-  later scaffold-refresh and package-migration stories consume the new bounded
-  `Async` seam. Recording `generatedruntime` in async metadata now means the
-  contract is available, not that every existing checked-in package has
-  already switched to it.
-- Remaining lifecycle/manual selected kinds that still expose OCI
-  work-request APIs, including `psql/DbSystem`, are re-audited separately
-  under `oci-service-operator-0kb`; the metadata classification does not, by
-  itself, claim that those handwritten runtimes already project the Table
-  reference semantics or the shared tracker identically.
+- Compatibility mirrors retained by an existing handwritten resource are
+  resource-local migration details; new resources should use the shared
+  tracker directly.
 - The disabled top-level `service: workrequests` row in
   `internal/generator/config/services.yaml` is a separate rollout decision.
   Setting `async.strategy=workrequest` on a published kind does not implicitly
   enable or publish a standalone `workrequests` API group.
 - Scaffolded per-service `WorkRequest`, `WorkRequestError`, and
   `WorkRequestLog` rows in `formal/controller_manifest.tsv` remain catalog-only
-  `stage=scaffold` entries until `oci-service-operator-9s2` resolves their
-  prune-or-promote path. They do not authorize `formalSpec`,
+  `stage=scaffold` entries. They do not authorize `formalSpec`,
   controller-backed runtime ownership, or package publication by themselves.
+
+Use `make mock-integration-inventory` to inspect the current generated CRUD
+runtime classifications and coverage instead of relying on a copied list.
 
 ## Output Ownership
 
