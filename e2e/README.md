@@ -310,9 +310,14 @@ behaviors:
 | ADM KnowledgeBase | none | service work requests |
 | Cluster Placement Group | none; availability domain is discovered | independent work requests |
 | Core VCN | none | foundational network lifecycle |
+| Core DRG | none | dynamic-routing gateway lifecycle and metadata update |
 | Core Subnet | `OCI_VCN_ID` | resource with an existing-network prerequisite |
 | Core Network Security Group | `OCI_VCN_ID` | network security lifecycle and metadata update |
 | Core Internet Gateway | `OCI_VCN_ID` for a VCN that can accept an Internet Gateway | gateway enablement and network lifecycle |
+| Core NAT Gateway | `OCI_VCN_ID` | NAT gateway lifecycle, traffic blocking, and metadata update |
+| Core Route Table | `OCI_VCN_ID` | empty route-table lifecycle and metadata update |
+| Core Security List | `OCI_VCN_ID` | network-rule lifecycle and metadata update |
+| Core Service Gateway | `OCI_VCN_ID` | empty-service gateway lifecycle, traffic blocking, and metadata update |
 | Queue | none | work requests plus endpoint Secret |
 | NoSQL Table | none | eventual-consistency lifecycle and sequenced updates |
 | Core Instance | `OCI_SUBNET_ID`, `OCI_IMAGE_ID`, and `OCI_COMPUTE_SHAPE` | compute lifecycle and in-place update |
