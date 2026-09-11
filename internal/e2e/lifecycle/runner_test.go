@@ -341,9 +341,11 @@ func TestCheckedInLifecycleScenariosRenderAndKeepResourceIdentity(t *testing.T) 
 			}
 			rendered, err := renderScenario(scenario, t.TempDir(), map[string]string{
 				"OCI_AVAILABILITY_DOMAIN":   "example:US-ASHBURN-AD-1",
+				"OCI_CLUSTER_ID":            "ocid1.cluster.oc1..scenario",
 				"OCI_COMPUTE_SHAPE":         "VM.Standard.E4.Flex",
 				"OCI_COMPARTMENT_ID":        "ocid1.compartment.oc1..scenario",
 				"OCI_IMAGE_ID":              "ocid1.image.oc1..scenario",
+				"OCI_KUBERNETES_VERSION":    "v1.36.1",
 				"OCI_NOTIFICATION_TOPIC_ID": "ocid1.onstopic.oc1..scenario",
 				"OCI_TENANCY_ID":            "ocid1.tenancy.oc1..scenario",
 				"OCI_REGION":                "us-ashburn-1",

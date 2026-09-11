@@ -318,6 +318,8 @@ behaviors:
 | Core Route Table | `OCI_VCN_ID` | empty route-table lifecycle and metadata update |
 | Core Security List | `OCI_VCN_ID` | network-rule lifecycle and metadata update |
 | Core Service Gateway | `OCI_VCN_ID` | empty-service gateway lifecycle, traffic blocking, and metadata update |
+| OKE Cluster | `OCI_VCN_ID`, `OCI_SUBNET_ID`, and a region-supported `OCI_KUBERNETES_VERSION` | private Basic control-plane lifecycle, work requests, and metadata update |
+| OKE NodePool | `OCI_CLUSTER_ID`, `OCI_SUBNET_ID`, `OCI_IMAGE_ID`, `OCI_COMPUTE_SHAPE`, and a cluster-compatible `OCI_KUBERNETES_VERSION`; availability domain is discovered | one-node IMDSv2 pool lifecycle, work requests, and metadata update |
 | Queue | none | work requests plus endpoint Secret |
 | NoSQL Table | none | eventual-consistency lifecycle and sequenced updates |
 | Core Instance | `OCI_SUBNET_ID`, `OCI_IMAGE_ID`, and `OCI_COMPUTE_SHAPE` | compute lifecycle and in-place update |
@@ -326,9 +328,11 @@ behaviors:
 | Notifications Topic | none | notification lifecycle and metadata update |
 | Monitoring Alarm | `OCI_NOTIFICATION_TOPIC_ID` | disabled alarm lifecycle and query update |
 
-The Instance scenario sets `instanceOptions.areLegacyImdsEndpointsDisabled:
-true`, which is required in tenancies that enforce IMDSv2. Do not commit live
-OCIDs into these manifests; the per-operator inputs remain environment values.
+The Instance and OKE NodePool scenarios disable legacy IMDS endpoints, which
+is required in tenancies that enforce IMDSv2. The OKE scenarios use long
+timeouts because create and delete are asynchronous, potentially expensive
+operations. Do not commit live OCIDs into these manifests; the per-operator
+inputs remain environment values.
 
 See [Service-manager mock integration](../docs/contributor/service-manager-mock-integration.md)
 for typed fixture authoring and test-selection guidance.
