@@ -677,6 +677,50 @@ func TestBuildPackageModelSynthesizesONSObservedStateFields(t *testing.T) {
 	}
 }
 
+func TestBuildPackageModelPreservesAliasedAPIKinds(t *testing.T) {
+	t.Parallel()
+
+	cfg := &Config{
+		Domain:         "oracle.com",
+		DefaultVersion: "v1beta1",
+	}
+	service := ServiceConfig{
+		Service:        "apigateway",
+		SDKPackage:     "github.com/oracle/oci-go-sdk/v65/apigateway",
+		Group:          "apigateway",
+		PackageProfile: PackageProfileCRDOnly,
+		Selection:      selectionExplicit(true, "Deployment", "Gateway"),
+		KindAliases: map[string]string{
+			"Deployment": "ApiGatewayDeployment",
+			"Gateway":    "ApiGateway",
+		},
+	}.withSelectedKinds([]string{"Deployment", "Gateway"})
+
+	pkg, err := NewDiscoverer().BuildPackageModel(context.Background(), cfg, service)
+	if err != nil {
+		t.Fatalf("BuildPackageModel() error = %v", err)
+	}
+
+	gateway := findResource(t, pkg.Resources, "ApiGateway")
+	if gateway.SDKName != "Gateway" || gateway.FileStem != "apigateway" {
+		t.Fatalf("ApiGateway identity = SDKName %q, FileStem %q", gateway.SDKName, gateway.FileStem)
+	}
+	deployment := findResource(t, pkg.Resources, "ApiGatewayDeployment")
+	if deployment.SDKName != "Deployment" || deployment.FileStem != "apigatewaydeployment" {
+		t.Fatalf("ApiGatewayDeployment identity = SDKName %q, FileStem %q", deployment.SDKName, deployment.FileStem)
+	}
+	for _, field := range []string{"DisplayName", "Hostname", "LifecycleState", "FreeformTags"} {
+		if !hasField(gateway.StatusFields, field) {
+			t.Fatalf("ApiGateway status fields = %#v, want %s", gateway.StatusFields, field)
+		}
+	}
+	for _, field := range []string{"DisplayName", "Specification", "LifecycleState", "FreeformTags"} {
+		if !hasField(deployment.StatusFields, field) {
+			t.Fatalf("ApiGatewayDeployment status fields = %#v, want %s", deployment.StatusFields, field)
+		}
+	}
+}
+
 func TestBuildPackageModelSynthesizesWorkRequestsObservedStateAlias(t *testing.T) {
 	t.Parallel()
 

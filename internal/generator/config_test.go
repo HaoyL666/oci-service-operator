@@ -48,6 +48,99 @@ services:
 	}
 }
 
+func TestLoadConfigPreservesStableAPIKindAliases(t *testing.T) {
+	t.Parallel()
+
+	configPath := filepath.Join(t.TempDir(), "services.yaml")
+	content := `
+schemaVersion: v1alpha1
+domain: oracle.com
+defaultVersion: v1beta1
+generatorEntrypoint: ./cmd/generator
+packageProfiles:
+  controller-backed:
+    description: generated controllers
+services:
+  - service: apigateway
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/apigateway
+    group: apigateway
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds: [Deployment, Gateway]
+    kindAliases:
+      Deployment: ApiGatewayDeployment
+      Gateway: ApiGateway
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+`
+	if err := os.WriteFile(configPath, []byte(content), 0o644); err != nil {
+		t.Fatalf("write temp config: %v", err)
+	}
+
+	cfg, err := LoadConfig(configPath)
+	if err != nil {
+		t.Fatalf("LoadConfig() error = %v", err)
+	}
+	service := cfg.Services[0]
+	if got := service.APIKindFor("Gateway"); got != "ApiGateway" {
+		t.Fatalf("APIKindFor(Gateway) = %q, want ApiGateway", got)
+	}
+	if got := service.SDKKindFor("ApiGatewayDeployment"); got != "Deployment" {
+		t.Fatalf("SDKKindFor(ApiGatewayDeployment) = %q, want Deployment", got)
+	}
+	selectedServices, err := cfg.SelectDefaultActiveOrExplicitServices("", false)
+	if err != nil {
+		t.Fatalf("SelectDefaultActiveOrExplicitServices() error = %v", err)
+	}
+	selected := selectedServices[0]
+	if got := selected.SelectedAPIKinds(); !slices.Equal(got, []string{"ApiGatewayDeployment", "ApiGateway"}) {
+		t.Fatalf("SelectedAPIKinds() = %v, want stable API aliases", got)
+	}
+}
+
+func TestLoadConfigRejectsDuplicateAPIKindAliases(t *testing.T) {
+	t.Parallel()
+
+	configPath := filepath.Join(t.TempDir(), "services.yaml")
+	content := `
+schemaVersion: v1alpha1
+domain: oracle.com
+defaultVersion: v1beta1
+generatorEntrypoint: ./cmd/generator
+packageProfiles:
+  controller-backed:
+    description: generated controllers
+services:
+  - service: apigateway
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/apigateway
+    group: apigateway
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds: [Deployment, Gateway]
+    kindAliases:
+      Deployment: ApiGateway
+      Gateway: ApiGateway
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+`
+	if err := os.WriteFile(configPath, []byte(content), 0o644); err != nil {
+		t.Fatalf("write temp config: %v", err)
+	}
+
+	_, err := LoadConfig(configPath)
+	if err == nil || !strings.Contains(err.Error(), `both "Deployment" and "Gateway" to API kind "ApiGateway"`) {
+		t.Fatalf("LoadConfig() error = %v, want duplicate API kind alias failure", err)
+	}
+}
+
 func TestLoadConfigRejectsBlankObservedStateExcludedFieldPath(t *testing.T) {
 	t.Parallel()
 
@@ -1140,6 +1233,7 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 		"analytics",
 		"announcementsservice",
 		"apiaccesscontrol",
+		"apigateway",
 		"apiplatform",
 		"apmconfig",
 		"apmcontrolplane",
@@ -1291,6 +1385,7 @@ func TestCheckedInConfigIncludesDefaultActiveSelectionMetadata(t *testing.T) {
 		"analytics",
 		"announcementsservice",
 		"apiaccesscontrol",
+		"apigateway",
 		"apiplatform",
 		"apmconfig",
 		"apmcontrolplane",
@@ -1802,13 +1897,15 @@ func TestCheckedInConfigPromotesFormalSpecReferences(t *testing.T) {
 	t.Parallel()
 
 	cfg := loadCheckedInConfig(t)
-	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "analytics", "apiaccesscontrol", "autoscaling", "bds", "cloudguard", "containerengine", "containerinstances", "core", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "dataflow", "disasterrecovery", "distributeddatabase", "generativeaiagent", "healthchecks", "identity", "jms", "mediaservices", "mysql", "objectstorage", "oce", "ocvp", "opa", "opensearch", "psql", "redis", "streaming", "tenantmanagercontrolplane")
+	services := serviceConfigsByName(t, cfg, "aidocument", "ailanguage", "aispeech", "aivision", "analytics", "apiaccesscontrol", "apigateway", "autoscaling", "bds", "cloudguard", "containerengine", "containerinstances", "core", "database", "databasemigration", "databasetools", "datalabelingservice", "datascience", "dataflow", "disasterrecovery", "distributeddatabase", "generativeaiagent", "healthchecks", "identity", "jms", "mediaservices", "mysql", "objectstorage", "oce", "ocvp", "opa", "opensearch", "psql", "redis", "streaming", "tenantmanagercontrolplane")
 	assertFormalSpecFor(t, services["aidocument"], "Project", "project")
 	assertFormalSpecFor(t, services["ailanguage"], "Project", "project")
 	assertFormalSpecFor(t, services["aispeech"], "TranscriptionJob", "transcriptionjob")
 	assertFormalSpecFor(t, services["aivision"], "Project", "project")
 	assertFormalSpecFor(t, services["analytics"], "AnalyticsInstance", "analyticsinstance")
 	assertFormalSpecFor(t, services["apiaccesscontrol"], "PrivilegedApiControl", "privilegedapicontrol")
+	assertFormalSpecFor(t, services["apigateway"], "ApiGateway", "gateway")
+	assertFormalSpecFor(t, services["apigateway"], "ApiGatewayDeployment", "deployment")
 	assertFormalSpecFor(t, services["autoscaling"], "AutoScalingConfiguration", "autoscalingconfiguration")
 	assertFormalSpecFor(t, services["bds"], "BdsInstance", "bdsinstance")
 	assertFormalSpecFor(t, services["cloudguard"], "SavedQuery", "savedquery")
@@ -2414,6 +2511,7 @@ func TestCheckedInConfigSelectedKindsHaveExplicitAsyncContracts(t *testing.T) {
 		"analytics":                    {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
 		"announcementsservice":         {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
 		"apiaccesscontrol":             {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
+		"apigateway":                   {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
 		"apiplatform":                  {strategy: AsyncStrategyLifecycle, runtime: AsyncRuntimeGeneratedRuntime},
 		"apmconfig":                    {strategy: AsyncStrategyNone, runtime: AsyncRuntimeGeneratedRuntime},
 		"apmcontrolplane":              {strategy: AsyncStrategyWorkRequest, runtime: AsyncRuntimeGeneratedRuntime},
@@ -2696,6 +2794,8 @@ func TestCheckedInConfigSelectedKindsHaveExplicitAsyncContracts(t *testing.T) {
 		phases  []string
 	}{
 		{service: "bastion", kind: "Bastion", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},
+		{service: "apigateway", kind: "Deployment", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},
+		{service: "apigateway", kind: "Gateway", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},
 		{service: "aidataplatform", kind: "AiDataPlatform", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},
 		{service: "cloudguard", kind: "DataSource", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate}},
 		{service: "datasafe", kind: "DataSafePrivateEndpoint", phases: []string{AsyncPhaseCreate, AsyncPhaseUpdate, AsyncPhaseDelete}},

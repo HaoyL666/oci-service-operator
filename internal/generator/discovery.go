@@ -134,7 +134,11 @@ func resourceModels(index *ocisdk.Package, service ServiceConfig) ([]ResourceMod
 
 	kindNames := make(map[string]struct{}, len(candidates))
 	for _, candidate := range candidates {
-		kindNames[candidate.rawName] = struct{}{}
+		kind := service.APIKindFor(candidate.rawName)
+		if _, exists := kindNames[kind]; exists {
+			return nil, fmt.Errorf("service %q kindAliases produces duplicate API kind %q", service.Service, kind)
+		}
+		kindNames[kind] = struct{}{}
 	}
 
 	resources := make([]ResourceModel, 0, len(candidates))
@@ -249,7 +253,7 @@ func buildResourceModelForKinds(index *ocisdk.Package, service ServiceConfig, en
 		return ResourceModel{}, fmt.Errorf("discover runtime metadata for %q: %w", entry.rawName, err)
 	}
 
-	kind := entry.rawName
+	kind := service.APIKindFor(entry.rawName)
 	fieldSet := synthesizeResourceFieldSet(index, service, kind, entry.rawName, desiredStateStructCandidates(entry.rawName, entry.requestBodyPayloads))
 	displayField := primaryDisplayField(fieldSet.SpecFields)
 	kindPlural := strings.ToLower(pluralize(kind))

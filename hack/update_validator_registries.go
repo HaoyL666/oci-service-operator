@@ -51,6 +51,7 @@ type configuredService struct {
 	Group         string
 	Version       string
 	SelectedKinds []string
+	SDKKinds      map[string]string
 }
 
 var (
@@ -474,11 +475,16 @@ func loadConfiguredServices(root string, serviceName string, all bool) ([]config
 		if sdkPackageBase != service.Service {
 			return nil, fmt.Errorf("service %q sdkPackage %q does not match SDK package basename %q", service.Service, service.SDKPackage, sdkPackageBase)
 		}
+		sdkKinds := make(map[string]string, len(service.SelectedKinds()))
+		for _, sdkKind := range service.SelectedKinds() {
+			sdkKinds[service.APIKindFor(sdkKind)] = sdkKind
+		}
 		services = append(services, configuredService{
 			Service:       service.Service,
 			Group:         service.Group,
 			Version:       service.VersionOrDefault(cfg.DefaultVersion),
-			SelectedKinds: service.SelectedKinds(),
+			SelectedKinds: service.SelectedAPIKinds(),
+			SDKKinds:      sdkKinds,
 		})
 	}
 
@@ -737,7 +743,12 @@ func buildServiceTarget(service configuredService, specInfo apiTypeInfo, sdkStru
 }
 
 func sdkCandidatesForTarget(service configuredService, spec string, targetName string, sdkStructs map[string]bool, existing specTarget) []string {
-	candidates := deriveSDKTypes(service.Service, spec, targetName, sdkStructs)
+	sdkSpec := spec
+	if alias := strings.TrimSpace(service.SDKKinds[spec]); alias != "" {
+		sdkSpec = alias
+		targetName = alias
+	}
+	candidates := deriveSDKTypes(service.Service, sdkSpec, targetName, sdkStructs)
 	candidates = appendExistingSDKCandidates(service.Service, candidates, existing.SDKMappings)
 	candidates = uniqueByOrder(candidates)
 	sortSDKTypeNames(candidates)
@@ -990,6 +1001,18 @@ const (
 
 // Explicit overrides cover specs whose API surface or SDK names do not follow the common generator conventions.
 var explicitAPITargetOverrides = map[string]apiTargetOverride{
+	"apigateway.ApiGateway": {
+		MappingOverrides: excludedMappingOverrides(
+			collectionResponseExcludedReason,
+			"GatewayCollection",
+		),
+	},
+	"apigateway.ApiGatewayDeployment": {
+		MappingOverrides: excludedMappingOverrides(
+			collectionResponseExcludedReason,
+			"DeploymentCollection",
+		),
+	},
 	"artifacts.ContainerImage": {
 		MappingOverrides: excludedMappingOverrides(
 			"Intentionally untracked: collection responses do not map to a singular resource status surface.",
@@ -2481,6 +2504,7 @@ func reportDiff(path string, next []byte) {
 
 func makeTargetName(group, spec string) string {
 	prefix := map[string]string{
+		"apigateway":             "",
 		"database":               "",
 		"email":                  "Email",
 		"generativeai":           "GenerativeAI",

@@ -14,6 +14,7 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/analytics"
 	"github.com/oracle/oci-go-sdk/v65/announcementsservice"
 	"github.com/oracle/oci-go-sdk/v65/apiaccesscontrol"
+	"github.com/oracle/oci-go-sdk/v65/apigateway"
 	"github.com/oracle/oci-go-sdk/v65/apiplatform"
 	"github.com/oracle/oci-go-sdk/v65/apmconfig"
 	"github.com/oracle/oci-go-sdk/v65/apmcontrolplane"
@@ -630,6 +631,18 @@ var seedTargets = []Target{
 	newTarget("apiaccesscontrol", "PrivilegedApiControl", reflect.TypeOf(apiaccesscontrol.PrivilegedApiControl{})),
 	newTarget("apiaccesscontrol", "PrivilegedApiControlCollection", reflect.TypeOf(apiaccesscontrol.PrivilegedApiControlCollection{})),
 	newTarget("apiaccesscontrol", "PrivilegedApiControlSummary", reflect.TypeOf(apiaccesscontrol.PrivilegedApiControlSummary{})),
+
+	// Apigateway CRD support
+	newTarget("apigateway", "CreateDeploymentDetails", reflect.TypeOf(apigateway.CreateDeploymentDetails{})),
+	newTarget("apigateway", "CreateGatewayDetails", reflect.TypeOf(apigateway.CreateGatewayDetails{})),
+	newTarget("apigateway", "UpdateDeploymentDetails", reflect.TypeOf(apigateway.UpdateDeploymentDetails{})),
+	newTarget("apigateway", "UpdateGatewayDetails", reflect.TypeOf(apigateway.UpdateGatewayDetails{})),
+	newTarget("apigateway", "Deployment", reflect.TypeOf(apigateway.Deployment{})),
+	newTarget("apigateway", "DeploymentCollection", reflect.TypeOf(apigateway.DeploymentCollection{})),
+	newTarget("apigateway", "Gateway", reflect.TypeOf(apigateway.Gateway{})),
+	newTarget("apigateway", "GatewayCollection", reflect.TypeOf(apigateway.GatewayCollection{})),
+	newTarget("apigateway", "DeploymentSummary", reflect.TypeOf(apigateway.DeploymentSummary{})),
+	newTarget("apigateway", "GatewaySummary", reflect.TypeOf(apigateway.GatewaySummary{})),
 
 	// Apiplatform CRD support
 	newTarget("apiplatform", "CreateApiPlatformInstanceDetails", reflect.TypeOf(apiplatform.CreateApiPlatformInstanceDetails{})),

@@ -907,6 +907,59 @@ services:
 	}
 }
 
+func TestDiscoverPublishedKindsUsesStableAPIKindAliases(t *testing.T) {
+	t.Parallel()
+
+	repoRoot := t.TempDir()
+	configPath := filepath.Join(repoRoot, "internal", "generator", "config", "services.yaml")
+	writeTestFile(t, configPath, `schemaVersion: v1
+domain: oracle.com
+defaultVersion: v1beta1
+generatorEntrypoint: ./cmd/generator
+packageProfiles:
+  controller-backed:
+    description: Shared manager install
+services:
+  - service: apigateway
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/apigateway
+    group: apigateway
+    version: v1beta1
+    phase: networking-and-infrastructure
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - Deployment
+        - Gateway
+    kindAliases:
+      Deployment: ApiGatewayDeployment
+      Gateway: ApiGateway
+    async:
+      strategy: lifecycle
+      runtime: generatedruntime
+      formalClassification: lifecycle
+`)
+	writeTestFile(t, filepath.Join(repoRoot, "api", "apigateway", "v1beta1", "apigateway_types.go"), strings.ReplaceAll(testUserAPI, "User", "ApiGateway"))
+	writeTestFile(t, filepath.Join(repoRoot, "api", "apigateway", "v1beta1", "apigatewaydeployment_types.go"), strings.ReplaceAll(testUserAPI, "User", "ApiGatewayDeployment"))
+
+	cfg, err := generator.LoadConfig(configPath)
+	if err != nil {
+		t.Fatalf("generator.LoadConfig() error = %v", err)
+	}
+	entries, _, err := discoverPublishedKinds(repoRoot, cfg)
+	if err != nil {
+		t.Fatalf("discoverPublishedKinds() error = %v", err)
+	}
+	want := []inventoryEntry{
+		{Service: "apigateway", Group: "apigateway", Version: "v1beta1", Slug: "apigateway", Kind: "ApiGateway"},
+		{Service: "apigateway", Group: "apigateway", Version: "v1beta1", Slug: "apigatewaydeployment", Kind: "ApiGatewayDeployment"},
+	}
+	if !reflect.DeepEqual(entries, want) {
+		t.Fatalf("discoverPublishedKinds() = %#v, want %#v", entries, want)
+	}
+}
+
 func TestGeneratePrunesRowsOutsideDefaultActiveSurface(t *testing.T) {
 	requirePlantUML(t)
 	repoRoot := writeTestRepo(t)

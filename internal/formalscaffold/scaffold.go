@@ -396,7 +396,7 @@ func discoverServicePublishedKinds(repoRoot string, cfg *generator.Config, servi
 		return nil, fmt.Errorf("read published API directory %q for service %q: %w", apiDir, service.Service, err)
 	}
 
-	selectedKinds := selectedKindSet(service.SelectedKinds())
+	selectedKinds := selectedAPIKindSet(service)
 	remainingSelectedKinds := copyKindSet(selectedKinds)
 	entries := make([]inventoryEntry, 0, len(dirEntries))
 	for _, dirEntry := range dirEntries {
@@ -416,6 +416,18 @@ func discoverServicePublishedKinds(repoRoot string, cfg *generator.Config, servi
 		return nil, fmt.Errorf("service %q has no published API kinds under %q", service.Service, apiDir)
 	}
 	return entries, nil
+}
+
+func selectedAPIKindSet(service generator.ServiceConfig) map[string]struct{} {
+	selected := service.SelectedKinds()
+	if len(selected) == 0 {
+		return nil
+	}
+	apiKinds := make([]string, 0, len(selected))
+	for _, sdkKind := range selected {
+		apiKinds = append(apiKinds, service.APIKindFor(sdkKind))
+	}
+	return selectedKindSet(apiKinds)
 }
 
 func publishedInventoryEntry(apiDir string, service generator.ServiceConfig, version string, dirEntry os.DirEntry, selectedKinds map[string]struct{}, remainingSelectedKinds map[string]struct{}, seen map[string]string) (inventoryEntry, bool, error) {

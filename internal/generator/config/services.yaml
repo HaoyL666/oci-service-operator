@@ -565,6 +565,131 @@ services:
           serviceManager:
             strategy: none
 
+  - service: apigateway
+    sdkPackage: github.com/oracle/oci-go-sdk/v65/apigateway
+    group: apigateway
+    version: v1beta1
+    phase: networking-and-infrastructure
+    packageProfile: controller-backed
+    selection:
+      enabled: true
+      mode: explicit
+      includeKinds:
+        - Deployment
+        - Gateway
+    kindAliases:
+      Deployment: ApiGatewayDeployment
+      Gateway: ApiGateway
+    async:
+      strategy: workrequest
+      runtime: generatedruntime
+      formalClassification: workrequest
+      workRequest:
+        source: service-sdk
+        phases:
+          - create
+          - update
+          - delete
+    generation:
+      controller:
+        strategy: generated
+      serviceManager:
+        strategy: generated
+      registration:
+        strategy: generated
+      webhooks:
+        strategy: none
+      resources:
+        - kind: ApiGateway
+          formalSpec: gateway
+          controller:
+            extraRBACMarkers:
+              - '+kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch;create;update;delete'
+          serviceManager:
+            packagePath: apigateway/gateway
+            needsCredentialClient: true
+          specFields:
+            - name: Id
+              type: string
+              tag: 'json:"id,omitempty"'
+              comments:
+                - The OCID of an existing API Gateway to bind to.
+              markers:
+                - +kubebuilder:validation:Optional
+            - name: EndpointType
+              type: string
+              tag: 'json:"endpointType"'
+              markers:
+                - +kubebuilder:validation:Required
+                - +kubebuilder:validation:Enum=PUBLIC;PRIVATE
+                - +kubebuilder:validation:XValidation:rule="self == oldSelf",message="endpointType is immutable"
+            - name: SubnetId
+              type: string
+              tag: 'json:"subnetId"'
+              markers:
+                - +kubebuilder:validation:Required
+                - +kubebuilder:validation:XValidation:rule="self == oldSelf",message="subnetId is immutable"
+          sample:
+            body: |-
+              #
+              # Replace the compartment and subnet OCIDs below before running e2e.
+              #
+              apiVersion: apigateway.oracle.com/v1beta1
+              kind: ApiGateway
+              metadata:
+                name: apigateway-sample
+              spec:
+                compartmentId: ocid1.compartment.oc1..exampleuniqueID
+                displayName: apigateway-sample
+                endpointType: PRIVATE
+                subnetId: ocid1.subnet.oc1..exampleuniqueID
+        - kind: ApiGatewayDeployment
+          formalSpec: deployment
+          serviceManager:
+            packagePath: apigateway/deployment
+          specFields:
+            - name: Id
+              type: string
+              tag: 'json:"id,omitempty"'
+              comments:
+                - The OCID of an existing API Gateway Deployment to bind to.
+              markers:
+                - +kubebuilder:validation:Optional
+            - name: Specification
+              type: ApiGatewayDeploymentSpecification
+              tag: 'json:"specification,omitempty,omitzero"'
+              markers:
+                - +kubebuilder:validation:Optional
+            - name: Routes
+              type: '[]ApiGatewayDeploymentSpecificationRoute'
+              tag: 'json:"routes,omitempty"'
+              comments:
+                - Routes is the compatibility shorthand for specification.routes.
+                - Set either routes or specification.routes; the runtime rejects conflicting values.
+              markers:
+                - +kubebuilder:validation:Optional
+          sample:
+            body: |-
+              #
+              # Replace the gateway and compartment OCIDs below before running e2e.
+              #
+              apiVersion: apigateway.oracle.com/v1beta1
+              kind: ApiGatewayDeployment
+              metadata:
+                name: apigatewaydeployment-sample
+              spec:
+                gatewayId: ocid1.apigateway.oc1..exampleuniqueID
+                compartmentId: ocid1.compartment.oc1..exampleuniqueID
+                displayName: apigatewaydeployment-sample
+                pathPrefix: /sample
+                routes:
+                  - path: /hello
+                    methods: [GET]
+                    backend:
+                      type: STOCK_RESPONSE_BACKEND
+                      status: 200
+                      body: hello
+
   - service: apiplatform
     sdkPackage: github.com/oracle/oci-go-sdk/v65/apiplatform
     group: apiplatform

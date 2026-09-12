@@ -26,6 +26,7 @@ Each service record defines:
 | `selection.enabled` | Whether the service participates in the default active generator surface. |
 | `selection.mode` | Default selection contract for the service: `all` or `explicit`. |
 | `selection.includeKinds` | Optional non-empty kind list used only when `selection.mode=explicit`. |
+| `kindAliases` | Optional mapping from discovered SDK resource-family names to stable OSOK API kind names. SDK names still drive operation and model discovery. |
 | `async.strategy` | Optional service-level default for published async behavior: `none`, `lifecycle`, or `workrequest`. |
 | `async.runtime` | Optional service-level default naming whether the active runtime owner is `generatedruntime` or a handwritten service package. For `async.strategy=workrequest`, `generatedruntime` means the runtime uses the bounded `Async` hook seam described below rather than a package-local state machine. |
 | `async.formalClassification` | Optional service-level default that keeps `formal/` classification aligned with the checked-in async posture. |
@@ -64,7 +65,11 @@ Rules:
   selectors such as `--service`.
 - `selection.mode=all` requires an empty `selection.includeKinds`.
 - `selection.mode=explicit` requires a non-empty `selection.includeKinds` list
-  of current OSOK kinds.
+  of discovered SDK resource-family names (the names are also OSOK kinds when
+  no `kindAliases` entry applies).
+- `kindAliases` keys use discovered SDK resource-family names and values use
+  stable OSOK API kind names. Alias values must be unique within a service;
+  selection continues to use the SDK names.
 - Enabled selected kinds must resolve to explicit async metadata either from
   service-level `async.*` defaults or resource-level
   `generation.resources[].async.*` overrides.

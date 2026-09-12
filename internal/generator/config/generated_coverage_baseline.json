@@ -1,16 +1,16 @@
 {
   "aggregate": {
-    "specs": 473,
-    "mappings": 1935,
-    "trackedMappings": 1920,
+    "specs": 475,
+    "mappings": 1943,
+    "trackedMappings": 1928,
     "untrackedMappings": 15,
-    "presentFields": 18599,
+    "presentFields": 18700,
     "missingFields": 381,
-    "mandatoryPresentFields": 6229,
+    "mandatoryPresentFields": 6253,
     "mandatoryMissingFields": 302,
-    "extraSpecFields": 1502,
-    "overallCoveragePercent": 97.99262381454163,
-    "mandatoryCoveragePercent": 95.37589955596385
+    "extraSpecFields": 1519,
+    "overallCoveragePercent": 98.00324930559195,
+    "mandatoryCoveragePercent": 95.39282990083905
   },
   "services": [
     {
@@ -152,6 +152,20 @@
       "extraSpecFields": 1,
       "overallCoveragePercent": 98.18181818181819,
       "mandatoryCoveragePercent": 95.45454545454545
+    },
+    {
+      "service": "apigateway",
+      "specs": 2,
+      "mappings": 8,
+      "trackedMappings": 8,
+      "untrackedMappings": 0,
+      "presentFields": 101,
+      "missingFields": 0,
+      "mandatoryPresentFields": 24,
+      "mandatoryMissingFields": 0,
+      "extraSpecFields": 17,
+      "overallCoveragePercent": 100,
+      "mandatoryCoveragePercent": 100
     },
     {
       "service": "apiplatform",
