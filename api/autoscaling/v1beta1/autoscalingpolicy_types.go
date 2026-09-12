@@ -24,7 +24,7 @@ type AutoScalingPolicySpec struct {
 	DisplayName string `json:"displayName,omitempty"`
 	// Whether the autoscaling policy is enabled.
 	// +kubebuilder:validation:Optional
-	IsEnabled bool `json:"isEnabled,omitempty"`
+	IsEnabled *bool `json:"isEnabled,omitempty"`
 	// +kubebuilder:validation:Optional
 	PolicyType string `json:"policyType,omitempty"`
 	// +kubebuilder:validation:Optional

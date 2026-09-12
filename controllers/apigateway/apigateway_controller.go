@@ -21,6 +21,8 @@ type ApiGatewayReconciler struct {
 // +kubebuilder:rbac:groups=apigateway.oracle.com,resources=apigateways,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=apigateway.oracle.com,resources=apigateways/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=apigateway.oracle.com,resources=apigateways/finalizers,verbs=update
+// +kubebuilder:rbac:groups="",resources=events,verbs=create;patch
+// +kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch;create;update;delete
 
 // Reconcile is part of the main Kubernetes reconciliation loop.
 func (r *ApiGatewayReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

@@ -27,7 +27,7 @@ func TestMockIntegrationAutoScalingPolicyCompositeCRUD(t *testing.T) {
     "initial": 1
   },
   "displayName": "policy create",
-  "isEnabled": true,
+  "isEnabled": false,
   "executionSchedule": {
     "type": "cron",
     "expression": "0 0 0 ? * * *",
@@ -43,7 +43,7 @@ func TestMockIntegrationAutoScalingPolicyCompositeCRUD(t *testing.T) {
     "initial": 1
   },
   "displayName": "policy create",
-  "isEnabled": true,
+  "isEnabled": false,
   "executionSchedule": {
     "type": "cron",
     "expression": "0 0 0 ? * * *",
@@ -66,7 +66,7 @@ func TestMockIntegrationAutoScalingPolicyCompositeCRUD(t *testing.T) {
     "initial": 1
   },
   "displayName": "policy create",
-  "isEnabled": true,
+  "isEnabled": false,
   "executionSchedule": {
     "type": "cron",
     "expression": "0 0 0 ? * * *",
@@ -83,7 +83,7 @@ func TestMockIntegrationAutoScalingPolicyCompositeCRUD(t *testing.T) {
     "initial": 1
   },
   "displayName": "policy updated",
-  "isEnabled": true,
+  "isEnabled": false,
   "executionSchedule": {
     "type": "cron",
     "expression": "0 0 0 ? * * *",

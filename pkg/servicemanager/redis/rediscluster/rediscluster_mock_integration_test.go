@@ -23,11 +23,6 @@ func TestMockIntegrationRedisClusterWorkRequestCRUD(t *testing.T) {
 	ocimock.InitializeResource(resource, "mock-rediscluster")
 	resource.Spec = ocimock.MustJSONFixture[redisv1beta1.RedisClusterSpec](t, `{
   "compartmentId": "<ocid:1>",
-  "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
-    }
-  },
   "displayName": "redis-sample",
   "freeformTags": {
     "env": "dev"
@@ -44,11 +39,6 @@ func TestMockIntegrationRedisClusterWorkRequestCRUD(t *testing.T) {
 
 	createRequest := ocimock.MustJSONFixture[redissdk.CreateRedisClusterDetails](t, `{
   "compartmentId": "<ocid:1>",
-  "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
-    }
-  },
   "displayName": "redis-sample",
   "freeformTags": {
     "env": "dev"
@@ -74,8 +64,8 @@ func TestMockIntegrationRedisClusterWorkRequestCRUD(t *testing.T) {
     "env": "dev"
   },
   "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
+    "Oracle-Tags": {
+      "CreatedBy": "<redacted>"
     }
   }
 }`)
@@ -92,8 +82,8 @@ func TestMockIntegrationRedisClusterWorkRequestCRUD(t *testing.T) {
     "env": "dev"
   },
   "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
+    "Oracle-Tags": {
+      "CreatedBy": "<redacted>"
     }
   }
 }`)

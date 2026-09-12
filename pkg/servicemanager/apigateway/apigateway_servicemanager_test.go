@@ -356,6 +356,7 @@ func TestGatewayDeleteUsesSpecID(t *testing.T) {
 	const gatewayID = "ocid1.apigateway.oc1..delete"
 	deletedID := ""
 	getCalls := 0
+	secretDeleted := false
 
 	manager := makeGatewayManager(&mockGatewayClient{
 		deleteGatewayFn: func(_ context.Context, req apigatewaysdk.DeleteGatewayRequest) (apigatewaysdk.DeleteGatewayResponse, error) {
@@ -375,9 +376,22 @@ func TestGatewayDeleteUsesSpecID(t *testing.T) {
 				},
 			}, nil
 		},
-	}, &fakeCredentialClient{})
+	}, &fakeCredentialClient{
+		getSecretFn: func(_ context.Context, name, namespace string) (map[string][]byte, error) {
+			assert.Equal(t, "test-gw", name)
+			assert.Equal(t, "default", namespace)
+			return smanager.AddManagedSecretData(map[string][]byte{"hostname": []byte("example.test")}, "ApiGateway", "test-gw"), nil
+		},
+		deleteSecretFn: func(_ context.Context, name, namespace string) (bool, error) {
+			assert.Equal(t, "test-gw", name)
+			assert.Equal(t, "default", namespace)
+			secretDeleted = true
+			return true, nil
+		},
+	})
 
 	resource := &apigatewayv1beta1.ApiGateway{
+		ObjectMeta: metav1.ObjectMeta{Name: "test-gw", Namespace: "default"},
 		Spec: apigatewayv1beta1.ApiGatewaySpec{
 			ApiGatewayId: gatewayID,
 		},
@@ -388,11 +402,13 @@ func TestGatewayDeleteUsesSpecID(t *testing.T) {
 	assert.True(t, done)
 	assert.Equal(t, gatewayID, deletedID)
 	assert.Equal(t, "opc-gateway-delete-1", resource.Status.OsokStatus.OpcRequestID)
+	assert.True(t, secretDeleted)
 }
 
 func TestGatewayDeleteSkipsRepeatedDeleteWhileDeleting(t *testing.T) {
 	const gatewayID = "ocid1.apigateway.oc1..deleting"
 	deleteCalled := false
+	secretDeleted := false
 	manager := makeGatewayManager(&mockGatewayClient{
 		getGatewayFn: func(_ context.Context, req apigatewaysdk.GetGatewayRequest) (apigatewaysdk.GetGatewayResponse, error) {
 			return apigatewaysdk.GetGatewayResponse{Gateway: apigatewaysdk.Gateway{
@@ -403,7 +419,10 @@ func TestGatewayDeleteSkipsRepeatedDeleteWhileDeleting(t *testing.T) {
 			deleteCalled = true
 			return apigatewaysdk.DeleteGatewayResponse{}, nil
 		},
-	}, &fakeCredentialClient{})
+	}, &fakeCredentialClient{deleteSecretFn: func(context.Context, string, string) (bool, error) {
+		secretDeleted = true
+		return true, nil
+	}})
 	resource := &apigatewayv1beta1.ApiGateway{}
 	resource.Status.OsokStatus.Ocid = gatewayID
 
@@ -411,6 +430,7 @@ func TestGatewayDeleteSkipsRepeatedDeleteWhileDeleting(t *testing.T) {
 	assert.NoError(t, err)
 	assert.False(t, done)
 	assert.False(t, deleteCalled)
+	assert.False(t, secretDeleted)
 }
 
 func TestDeploymentCreateOrUpdateCreateSuccess(t *testing.T) {

@@ -68,10 +68,12 @@ func TestMockIntegrationAutoScalingConfigurationSynchronousCRUD(t *testing.T) {
 		ValidateCreated: func(current *autoscalingv1beta1.AutoScalingConfiguration) error {
 			if current.Status.Id != mockAutoScalingConfigurationID ||
 				current.Status.DisplayName != "mock-autoscaling" ||
-				!current.Status.IsEnabled ||
+				current.Status.IsEnabled ||
 				current.Status.Resource.Id != mockInstancePoolID ||
 				len(current.Status.Policies) != 1 ||
-				current.Status.Policies[0].PolicyType != "scheduled" {
+				current.Status.Policies[0].PolicyType != "scheduled" ||
+				current.Status.Policies[0].IsEnabled == nil ||
+				*current.Status.Policies[0].IsEnabled {
 				return fmt.Errorf("created AutoScalingConfiguration status = %+v", current.Status)
 			}
 			return nil
@@ -79,7 +81,7 @@ func TestMockIntegrationAutoScalingConfigurationSynchronousCRUD(t *testing.T) {
 		Mutate: func(current *autoscalingv1beta1.AutoScalingConfiguration) {
 			current.Spec.DisplayName = "mock-autoscaling-updated"
 			current.Spec.CoolDownInSeconds = 300
-			current.Spec.IsEnabled = false
+			current.Spec.IsEnabled = common.Bool(false)
 			current.Spec.FreeformTags = map[string]string{"osok-mock": "update"}
 		},
 		ValidateUpdated: func(current *autoscalingv1beta1.AutoScalingConfiguration) error {
@@ -113,7 +115,7 @@ func newMockAutoScalingConfigurationResource() *autoscalingv1beta1.AutoScalingCo
 		Spec: autoscalingv1beta1.AutoScalingConfigurationSpec{
 			CompartmentId: "ocid1.compartment.oc1..mock",
 			DisplayName:   "mock-autoscaling",
-			IsEnabled:     true,
+			IsEnabled:     common.Bool(false),
 			FreeformTags:  map[string]string{"osok-mock": "create"},
 			Resource: autoscalingv1beta1.AutoScalingConfigurationResource{
 				Id:   mockInstancePoolID,
@@ -122,7 +124,10 @@ func newMockAutoScalingConfigurationResource() *autoscalingv1beta1.AutoScalingCo
 			Policies: []autoscalingv1beta1.AutoScalingConfigurationPolicy{{
 				PolicyType:  "scheduled",
 				DisplayName: "nightly-stop",
-				IsEnabled:   true,
+				IsEnabled:   common.Bool(false),
+				Capacity: autoscalingv1beta1.AutoScalingConfigurationPolicyCapacity{
+					Min: 1, Max: 1, Initial: 1,
+				},
 				ExecutionSchedule: autoscalingv1beta1.AutoScalingConfigurationPolicyExecutionSchedule{
 					Type:       "cron",
 					Expression: "0 0 0 ? * * *",
@@ -243,19 +248,22 @@ func mockCreateAutoScalingConfigurationDetails(
 	return autoscalingsdk.CreateAutoScalingConfigurationDetails{
 		CompartmentId: common.String(resource.Spec.CompartmentId),
 		DisplayName:   common.String(resource.Spec.DisplayName),
-		IsEnabled:     common.Bool(true),
+		IsEnabled:     common.Bool(false),
 		FreeformTags:  map[string]string{"osok-mock": "create"},
 		Resource: autoscalingsdk.InstancePoolResource{
 			Id: common.String(mockInstancePoolID),
 		},
 		Policies: []autoscalingsdk.CreateAutoScalingPolicyDetails{
 			autoscalingsdk.CreateScheduledPolicyDetails{
+				Capacity: &autoscalingsdk.Capacity{
+					Min: common.Int(1), Max: common.Int(1), Initial: common.Int(1),
+				},
 				ExecutionSchedule: autoscalingsdk.CronExecutionSchedule{
 					Expression: common.String("0 0 0 ? * * *"),
 					Timezone:   autoscalingsdk.ExecutionScheduleTimezoneUtc,
 				},
 				DisplayName: common.String("nightly-stop"),
-				IsEnabled:   common.Bool(true),
+				IsEnabled:   common.Bool(false),
 			},
 		},
 	}

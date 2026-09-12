@@ -1774,6 +1774,30 @@ func TestCheckedInConfigSelectServicesPreservesCorePackageSplitKinds(t *testing.
 	})
 }
 
+func TestCheckedInAutoscalingPolicyEnabledPreservesPresence(t *testing.T) {
+	t.Parallel()
+
+	cfg := loadCheckedInConfig(t)
+	service := serviceConfigsByName(t, cfg, "autoscaling")["autoscaling"]
+	assertPointerBool := func(kind, name string) {
+		t.Helper()
+		override := overridesByKind(service)[kind]
+		for _, field := range override.SpecFields {
+			if field.Name != name {
+				continue
+			}
+			if field.Type != "*bool" || field.Tag != `json:"isEnabled,omitempty"` {
+				t.Fatalf("%s %s override = %#v, want pointer bool with optional JSON tag", kind, name, field)
+			}
+			return
+		}
+		t.Fatalf("autoscaling %s is missing %s presence override", kind, name)
+	}
+	assertPointerBool("AutoScalingConfiguration", "IsEnabled")
+	assertPointerBool("AutoScalingConfiguration", "Policies.IsEnabled")
+	assertPointerBool("AutoScalingPolicy", "IsEnabled")
+}
+
 func TestCheckedInConfigPromotesFormalSpecReferences(t *testing.T) {
 	t.Parallel()
 

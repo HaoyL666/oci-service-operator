@@ -1018,8 +1018,18 @@ services:
             strategy: none
             runtime: generatedruntime
             formalClassification: none
+          specFields:
+            - name: IsEnabled
+              type: "*bool"
+              tag: 'json:"isEnabled,omitempty"'
+            - name: Policies.IsEnabled
+              type: "*bool"
+              tag: 'json:"isEnabled,omitempty"'
         - kind: AutoScalingPolicy
           specFields:
+            - name: IsEnabled
+              type: "*bool"
+              tag: 'json:"isEnabled,omitempty"'
             - name: AutoScalingConfigurationId
               type: string
               tag: 'json:"autoScalingConfigurationId"'

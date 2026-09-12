@@ -99,20 +99,20 @@ func (c *GatewayServiceManager) Delete(ctx context.Context, obj runtime.Object) 
 	targetID, err := servicemanager.ResolveResourceID(gw.Status.OsokStatus.Ocid, gw.Spec.ApiGatewayId)
 	if err != nil {
 		c.Log.InfoLog("ApiGateway has no OCID, nothing to delete")
-		return true, nil
+		return c.deleteEndpointSecret(ctx, gw)
 	}
 
 	gwInstance, err := c.GetGateway(ctx, targetID, nil)
 	if err != nil {
 		if isGatewayNotFound(err) {
 			servicemanager.RecordErrorOpcRequestID(&gw.Status.OsokStatus, err)
-			return true, nil
+			return c.deleteEndpointSecret(ctx, gw)
 		}
 		servicemanager.RecordErrorOpcRequestID(&gw.Status.OsokStatus, err)
 		return false, err
 	}
 	if gwInstance.LifecycleState == apigatewaysdk.GatewayLifecycleStateDeleted {
-		return true, nil
+		return c.deleteEndpointSecret(ctx, gw)
 	}
 	if gwInstance.LifecycleState == apigatewaysdk.GatewayLifecycleStateDeleting {
 		return false, nil
@@ -131,7 +131,7 @@ func (c *GatewayServiceManager) Delete(ctx context.Context, obj runtime.Object) 
 	if err != nil {
 		if isGatewayNotFound(err) {
 			servicemanager.RecordErrorOpcRequestID(&gw.Status.OsokStatus, err)
-			return true, nil
+			return c.deleteEndpointSecret(ctx, gw)
 		}
 		servicemanager.RecordErrorOpcRequestID(&gw.Status.OsokStatus, err)
 		c.Log.ErrorLog(err, "Error while checking ApiGateway deletion")
@@ -139,9 +139,23 @@ func (c *GatewayServiceManager) Delete(ctx context.Context, obj runtime.Object) 
 	}
 
 	if gwInstance.LifecycleState == apigatewaysdk.GatewayLifecycleStateDeleted {
-		return true, nil
+		return c.deleteEndpointSecret(ctx, gw)
 	}
 	return false, nil
+}
+
+func (c *GatewayServiceManager) deleteEndpointSecret(ctx context.Context, gw *apigatewayv1beta1.ApiGateway) (bool, error) {
+	if c.CredentialClient == nil {
+		return false, fmt.Errorf("ApiGateway endpoint secret credential client is not configured")
+	}
+	return servicemanager.DeleteOwnedSecretIfPresent(
+		ctx,
+		c.CredentialClient,
+		gw.Name,
+		gw.Namespace,
+		"ApiGateway",
+		gw.Name,
+	)
 }
 
 // GetCrdStatus returns the OSOK status from the resource.

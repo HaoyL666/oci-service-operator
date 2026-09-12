@@ -42,7 +42,7 @@ type AutoScalingConfigurationSpec struct {
 	CoolDownInSeconds int `json:"coolDownInSeconds,omitempty"`
 	// Whether the autoscaling configuration is enabled.
 	// +kubebuilder:validation:Optional
-	IsEnabled bool `json:"isEnabled,omitempty"`
+	IsEnabled *bool `json:"isEnabled,omitempty"`
 }
 
 // AutoScalingConfigurationPolicyCapacity defines nested fields for AutoScalingConfiguration.Policy.Capacity.
@@ -181,7 +181,7 @@ type AutoScalingConfigurationPolicy struct {
 	DisplayName string `json:"displayName,omitempty"`
 	// Whether the autoscaling policy is enabled.
 	// +kubebuilder:validation:Optional
-	IsEnabled bool `json:"isEnabled,omitempty"`
+	IsEnabled *bool `json:"isEnabled,omitempty"`
 	// +kubebuilder:validation:Optional
 	PolicyType string `json:"policyType,omitempty"`
 	// +kubebuilder:validation:Optional
