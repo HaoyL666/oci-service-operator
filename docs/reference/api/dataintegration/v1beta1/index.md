@@ -429,7 +429,92 @@ ApplicationDetailedDescriptionStatus defines the observed state of ApplicationDe
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `detailedDescription` | Base64 encoded rich text description of the object. | `string` | No | - | - |
+| `identifier` | Value can only contain upper case letters, underscore, and numbers. It should begin with upper case letter or underscore. The value can be modified. | `string` | No | - | - |
+| `key` | Generated key that can be used in API calls to identify task. On scenarios where reference to the task is needed, a value can be passed in create. | `string` | No | - | - |
+| `logo` | Base64 encoded image to represent logo of the object. | `string` | No | - | - |
+| [`metadata`](#kind-applicationdetaileddescription-status-metadata) | ApplicationDetailedDescriptionMetadata defines nested fields for ApplicationDetailedDescription.Metadata. | `object` | No | - | - |
+| `modelType` | The type of the published object. | `string` | No | - | - |
+| `modelVersion` | The object's model version. | `string` | No | - | - |
+| `name` | Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters. | `string` | No | - | - |
+| `objectStatus` | The status of an object that can be set to value 1 for shallow references across objects, other values reserved. | `integer` | No | - | - |
+| `objectVersion` | The version of the object that is used to track changes in the object instance. | `integer` | No | - | - |
+| [`parentRef`](#kind-applicationdetaileddescription-status-parentref) | ApplicationDetailedDescriptionParentRef defines nested fields for ApplicationDetailedDescription.ParentRef. | `object` | No | - | - |
 | [`status`](#kind-applicationdetaileddescription-status-status) | - | `object` | Yes | - | - |
+
+<a id="kind-applicationdetaileddescription-status-metadata"></a>
+#### Status.metadata
+
+[Back to ApplicationDetailedDescription status](#kind-applicationdetaileddescription-status)
+
+ApplicationDetailedDescriptionMetadata defines nested fields for ApplicationDetailedDescription.Metadata.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`aggregator`](#kind-applicationdetaileddescription-status-metadata-aggregator) | ApplicationDetailedDescriptionMetadataAggregator defines nested fields for ApplicationDetailedDescription.Metadata.Aggregator. | `object` | No | - | - |
+| `aggregatorKey` | The owning object key for this object. | `string` | No | - | - |
+| [`countStatistics`](#kind-applicationdetaileddescription-status-metadata-countstatistics) | ApplicationDetailedDescriptionMetadataCountStatistics defines nested fields for ApplicationDetailedDescription.Metadata.CountStatistics. | `object` | No | - | - |
+| `createdBy` | The user that created the object. | `string` | No | - | - |
+| `createdByName` | The user that created the object. | `string` | No | - | - |
+| `identifierPath` | The full path to identify this object. | `string` | No | - | - |
+| `infoFields` | Information property fields. | `map[string, string]` | No | - | - |
+| `isFavorite` | Specifies whether this object is a favorite or not. | `boolean` | No | - | - |
+| `labels` | Labels are keywords or tags that you can add to data assets, dataflows and so on. You can define your own labels and use them to categorize content. | `list[string]` | No | - | - |
+| `registryVersion` | The registry version of the object. | `integer` | No | - | - |
+| `timeCreated` | The date and time that the object was created. | `string` | No | - | - |
+| `timeUpdated` | The date and time that the object was updated. | `string` | No | - | - |
+| `updatedBy` | The user that updated the object. | `string` | No | - | - |
+| `updatedByName` | The user that updated the object. | `string` | No | - | - |
+
+<a id="kind-applicationdetaileddescription-status-metadata-aggregator"></a>
+##### Status.metadata.aggregator
+
+[Back to ApplicationDetailedDescription status](#kind-applicationdetaileddescription-status)
+
+ApplicationDetailedDescriptionMetadataAggregator defines nested fields for ApplicationDetailedDescription.Metadata.Aggregator.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `description` | The description of the aggregator. | `string` | No | - | - |
+| `identifier` | The identifier of the aggregator. | `string` | No | - | - |
+| `key` | The key of the aggregator object. | `string` | No | - | - |
+| `name` | The name of the aggregator. | `string` | No | - | - |
+| `type` | The type of the aggregator. | `string` | No | - | - |
+
+<a id="kind-applicationdetaileddescription-status-metadata-countstatistics"></a>
+##### Status.metadata.countStatistics
+
+[Back to ApplicationDetailedDescription status](#kind-applicationdetaileddescription-status)
+
+ApplicationDetailedDescriptionMetadataCountStatistics defines nested fields for ApplicationDetailedDescription.Metadata.CountStatistics.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`objectTypeCountList`](#kind-applicationdetaileddescription-status-metadata-countstatistics-objecttypecountlist) | The array of statistics. | `list[object]` | No | - | - |
+
+<a id="kind-applicationdetaileddescription-status-metadata-countstatistics-objecttypecountlist"></a>
+###### Status.metadata.countStatistics.objectTypeCountList[]
+
+[Back to ApplicationDetailedDescription status](#kind-applicationdetaileddescription-status)
+
+ApplicationDetailedDescriptionMetadataCountStatisticsObjectTypeCountList defines nested fields for ApplicationDetailedDescription.Metadata.CountStatistics.ObjectTypeCountList.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `objectCount` | The value for the count statistic object. | `integer (int64)` | No | - | - |
+| `objectType` | The type of object for the count statistic object. | `string` | No | - | - |
+
+<a id="kind-applicationdetaileddescription-status-parentref"></a>
+#### Status.parentRef
+
+[Back to ApplicationDetailedDescription status](#kind-applicationdetaileddescription-status)
+
+ApplicationDetailedDescriptionParentRef defines nested fields for ApplicationDetailedDescription.ParentRef.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `parent` | Key of the parent object. | `string` | No | - | - |
+| `rootDocId` | Key of the root document object. | `string` | No | - | - |
 
 <a id="kind-applicationdetaileddescription-status-status"></a>
 #### Status.status
@@ -7470,7 +7555,92 @@ DisApplicationDetailedDescriptionStatus defines the observed state of DisApplica
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `detailedDescription` | Base64 encoded rich text description of the object. | `string` | No | - | - |
+| `identifier` | Value can only contain upper case letters, underscore, and numbers. It should begin with upper case letter or underscore. The value can be modified. | `string` | No | - | - |
+| `key` | Generated key that can be used in API calls to identify task. On scenarios where reference to the task is needed, a value can be passed in create. | `string` | No | - | - |
+| `logo` | Base64 encoded image to represent logo of the object. | `string` | No | - | - |
+| [`metadata`](#kind-disapplicationdetaileddescription-status-metadata) | DisApplicationDetailedDescriptionMetadata defines nested fields for DisApplicationDetailedDescription.Metadata. | `object` | No | - | - |
+| `modelType` | The type of the published object. | `string` | No | - | - |
+| `modelVersion` | The object's model version. | `string` | No | - | - |
+| `name` | Free form text without any restriction on permitted characters. Name can have letters, numbers, and special characters. The value is editable and is restricted to 1000 characters. | `string` | No | - | - |
+| `objectStatus` | The status of an object that can be set to value 1 for shallow references across objects, other values reserved. | `integer` | No | - | - |
+| `objectVersion` | The version of the object that is used to track changes in the object instance. | `integer` | No | - | - |
+| [`parentRef`](#kind-disapplicationdetaileddescription-status-parentref) | DisApplicationDetailedDescriptionParentRef defines nested fields for DisApplicationDetailedDescription.ParentRef. | `object` | No | - | - |
 | [`status`](#kind-disapplicationdetaileddescription-status-status) | - | `object` | Yes | - | - |
+
+<a id="kind-disapplicationdetaileddescription-status-metadata"></a>
+#### Status.metadata
+
+[Back to DisApplicationDetailedDescription status](#kind-disapplicationdetaileddescription-status)
+
+DisApplicationDetailedDescriptionMetadata defines nested fields for DisApplicationDetailedDescription.Metadata.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`aggregator`](#kind-disapplicationdetaileddescription-status-metadata-aggregator) | DisApplicationDetailedDescriptionMetadataAggregator defines nested fields for DisApplicationDetailedDescription.Metadata.Aggregator. | `object` | No | - | - |
+| `aggregatorKey` | The owning object key for this object. | `string` | No | - | - |
+| [`countStatistics`](#kind-disapplicationdetaileddescription-status-metadata-countstatistics) | DisApplicationDetailedDescriptionMetadataCountStatistics defines nested fields for DisApplicationDetailedDescription.Metadata.CountStatistics. | `object` | No | - | - |
+| `createdBy` | The user that created the object. | `string` | No | - | - |
+| `createdByName` | The user that created the object. | `string` | No | - | - |
+| `identifierPath` | The full path to identify this object. | `string` | No | - | - |
+| `infoFields` | Information property fields. | `map[string, string]` | No | - | - |
+| `isFavorite` | Specifies whether this object is a favorite or not. | `boolean` | No | - | - |
+| `labels` | Labels are keywords or tags that you can add to data assets, dataflows and so on. You can define your own labels and use them to categorize content. | `list[string]` | No | - | - |
+| `registryVersion` | The registry version of the object. | `integer` | No | - | - |
+| `timeCreated` | The date and time that the object was created. | `string` | No | - | - |
+| `timeUpdated` | The date and time that the object was updated. | `string` | No | - | - |
+| `updatedBy` | The user that updated the object. | `string` | No | - | - |
+| `updatedByName` | The user that updated the object. | `string` | No | - | - |
+
+<a id="kind-disapplicationdetaileddescription-status-metadata-aggregator"></a>
+##### Status.metadata.aggregator
+
+[Back to DisApplicationDetailedDescription status](#kind-disapplicationdetaileddescription-status)
+
+DisApplicationDetailedDescriptionMetadataAggregator defines nested fields for DisApplicationDetailedDescription.Metadata.Aggregator.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `description` | The description of the aggregator. | `string` | No | - | - |
+| `identifier` | The identifier of the aggregator. | `string` | No | - | - |
+| `key` | The key of the aggregator object. | `string` | No | - | - |
+| `name` | The name of the aggregator. | `string` | No | - | - |
+| `type` | The type of the aggregator. | `string` | No | - | - |
+
+<a id="kind-disapplicationdetaileddescription-status-metadata-countstatistics"></a>
+##### Status.metadata.countStatistics
+
+[Back to DisApplicationDetailedDescription status](#kind-disapplicationdetaileddescription-status)
+
+DisApplicationDetailedDescriptionMetadataCountStatistics defines nested fields for DisApplicationDetailedDescription.Metadata.CountStatistics.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`objectTypeCountList`](#kind-disapplicationdetaileddescription-status-metadata-countstatistics-objecttypecountlist) | The array of statistics. | `list[object]` | No | - | - |
+
+<a id="kind-disapplicationdetaileddescription-status-metadata-countstatistics-objecttypecountlist"></a>
+###### Status.metadata.countStatistics.objectTypeCountList[]
+
+[Back to DisApplicationDetailedDescription status](#kind-disapplicationdetaileddescription-status)
+
+DisApplicationDetailedDescriptionMetadataCountStatisticsObjectTypeCountList defines nested fields for DisApplicationDetailedDescription.Metadata.CountStatistics.ObjectTypeCountList.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `objectCount` | The value for the count statistic object. | `integer (int64)` | No | - | - |
+| `objectType` | The type of object for the count statistic object. | `string` | No | - | - |
+
+<a id="kind-disapplicationdetaileddescription-status-parentref"></a>
+#### Status.parentRef
+
+[Back to DisApplicationDetailedDescription status](#kind-disapplicationdetaileddescription-status)
+
+DisApplicationDetailedDescriptionParentRef defines nested fields for DisApplicationDetailedDescription.ParentRef.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `parent` | Key of the parent object. | `string` | No | - | - |
+| `rootDocId` | Key of the root document object. | `string` | No | - | - |
 
 <a id="kind-disapplicationdetaileddescription-status-status"></a>
 #### Status.status

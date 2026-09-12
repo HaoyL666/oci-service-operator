@@ -898,6 +898,10 @@ func applySDKMappingOverride(mapping sdkMapping, override apiTargetOverride, typ
 	if strings.TrimSpace(overrideMapping.APISurface) != "" {
 		mapping.APISurface = overrideMapping.APISurface
 	}
+	if overrideMapping.Include {
+		mapping.Exclude = false
+		mapping.Reason = ""
+	}
 	if overrideMapping.Exclude {
 		mapping.Exclude = true
 	}
@@ -950,6 +954,7 @@ type apiTargetOverride struct {
 type mappingOverride struct {
 	APISurface string
 	Exclude    bool
+	Include    bool
 	Reason     string
 }
 
@@ -967,6 +972,15 @@ func specMappingOverrides(sdkTypes ...string) map[string]mappingOverride {
 
 func statusMappingOverrides(sdkTypes ...string) map[string]mappingOverride {
 	return mappingOverridesForSurface("status", sdkTypes...)
+}
+
+func includedStatusMappingOverrides(sdkTypes ...string) map[string]mappingOverride {
+	overrides := mappingOverridesForSurface("status", sdkTypes...)
+	for sdkType, override := range overrides {
+		override.Include = true
+		overrides[sdkType] = override
+	}
+	return overrides
 }
 
 func excludedMappingOverrides(reason string, sdkTypes ...string) map[string]mappingOverride {
@@ -1001,6 +1015,42 @@ const (
 
 // Explicit overrides cover specs whose API surface or SDK names do not follow the common generator conventions.
 var explicitAPITargetOverrides = map[string]apiTargetOverride{
+	"dataintegration.ApplicationDetailedDescription": {
+		SDKTypes: []string{"CreateDetailedDescriptionDetails", "UpdateDetailedDescriptionDetails", "DetailedDescription"},
+		MappingOverrides: statusMappingOverrides(
+			"DetailedDescription",
+		),
+	},
+	"dataintegration.DisApplicationDetailedDescription": {
+		SDKTypes: []string{"CreateDetailedDescriptionDetails", "UpdateDetailedDescriptionDetails", "DetailedDescription"},
+		MappingOverrides: statusMappingOverrides(
+			"DetailedDescription",
+		),
+	},
+	"multicloud.ExternalLocationDetailsMetadata": {
+		SDKTypes: []string{"ExternalLocationsMetadatumSummary"},
+		MappingOverrides: statusMappingOverrides(
+			"ExternalLocationsMetadatumSummary",
+		),
+	},
+	"multicloud.ExternalLocationMappingMetadata": {
+		SDKTypes: []string{"ExternalLocationMappingMetadatumSummary"},
+		MappingOverrides: statusMappingOverrides(
+			"ExternalLocationMappingMetadatumSummary",
+		),
+	},
+	"multicloud.ExternalLocationSummariesMetadata": {
+		SDKTypes: []string{"ExternalLocationSummariesMetadatumSummaryCollection"},
+		MappingOverrides: statusMappingOverrides(
+			"ExternalLocationSummariesMetadatumSummaryCollection",
+		),
+	},
+	"osuborganizationsubscription.OrganizationSubscription": {
+		SDKTypes: []string{"SubscriptionSummary"},
+		MappingOverrides: statusMappingOverrides(
+			"SubscriptionSummary",
+		),
+	},
 	"apigateway.ApiGateway": {
 		MappingOverrides: excludedMappingOverrides(
 			collectionResponseExcludedReason,
@@ -1723,8 +1773,7 @@ var explicitAPITargetOverrides = map[string]apiTargetOverride{
 		"SubscriptionSummary",
 	)},
 	"ons.Topic": {
-		MappingOverrides: excludedMappingOverrides(
-			"Intentionally untracked: OCI read-model mappings broaden desired-state coverage, and this CRD does not expose a meaningful status surface for parity tracking.",
+		MappingOverrides: includedStatusMappingOverrides(
 			"NotificationTopic",
 			"NotificationTopicSummary",
 		),

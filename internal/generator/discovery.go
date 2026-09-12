@@ -254,7 +254,14 @@ func buildResourceModelForKinds(index *ocisdk.Package, service ServiceConfig, en
 	}
 
 	kind := service.APIKindFor(entry.rawName)
-	fieldSet := synthesizeResourceFieldSet(index, service, kind, entry.rawName, desiredStateStructCandidates(entry.rawName, entry.requestBodyPayloads))
+	fieldSet := synthesizeResourceFieldSet(
+		index,
+		service,
+		kind,
+		entry.rawName,
+		desiredStateStructCandidates(entry.rawName, entry.requestBodyPayloads),
+		responseObservedStateStructCandidates(index, runtimeModel),
+	)
 	displayField := primaryDisplayField(fieldSet.SpecFields)
 	kindPlural := strings.ToLower(pluralize(kind))
 	statusTypeName := defaultStatusTypeName(kind)
@@ -279,6 +286,58 @@ func buildResourceModelForKinds(index *ocisdk.Package, service ServiceConfig, en
 		ListComments:        []string{fmt.Sprintf("%s contains a list of %s.", listTypeName, kind)},
 		PrimaryDisplayField: displayField,
 	}, nil
+}
+
+func responseObservedStateStructCandidates(index *ocisdk.Package, runtimeModel *RuntimeModel) []string {
+	if index == nil || runtimeModel == nil {
+		return nil
+	}
+
+	candidates := make([]string, 0, 3)
+	operations := []*RuntimeOperationModel{
+		runtimeModel.Get,
+		runtimeModel.Create,
+		runtimeModel.Update,
+	}
+	for _, operation := range operations {
+		if operation == nil {
+			continue
+		}
+		for _, payload := range index.ResponseBodyPayloads(operation.ResponseTypeName) {
+			candidates = appendUniqueStrings(candidates, payload)
+		}
+	}
+	if len(candidates) > 0 || runtimeModel.List == nil {
+		return candidates
+	}
+
+	responseType := runtimeModel.List.ResponseTypeName
+	if structExposesItems(index, responseType) {
+		return []string{responseType}
+	}
+	payloads := index.ResponseBodyPayloads(responseType)
+	for _, payload := range payloads {
+		if structExposesItems(index, payload) {
+			return []string{payload}
+		}
+	}
+	return payloads
+}
+
+func structExposesItems(index *ocisdk.Package, candidate string) bool {
+	if index == nil || strings.TrimSpace(candidate) == "" {
+		return false
+	}
+	model, ok := index.Struct(candidate)
+	if !ok {
+		return false
+	}
+	for _, field := range model.Fields {
+		if field.Name == "Items" || field.JSONName == "items" {
+			return true
+		}
+	}
+	return false
 }
 
 func apiObjectListTypeName(kind string, kindNames map[string]struct{}) string {

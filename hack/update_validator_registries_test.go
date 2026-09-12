@@ -315,6 +315,19 @@ func TestFilterConfiguredAPISpecsAppliesStableAPIKindAlias(t *testing.T) {
 	}
 }
 
+func TestApplySDKMappingOverrideCanPromotePreviouslyExcludedStatus(t *testing.T) {
+	t.Parallel()
+
+	mapping := applySDKMappingOverride(
+		sdkMapping{SDKStruct: "ons.NotificationTopic", Exclude: true, Reason: noMeaningfulStatusExcludedReason},
+		apiTargetOverride{MappingOverrides: includedStatusMappingOverrides("NotificationTopic")},
+		"NotificationTopic",
+	)
+	if mapping.Exclude || mapping.Reason != "" || mapping.APISurface != "status" {
+		t.Fatalf("promoted mapping = %+v", mapping)
+	}
+}
+
 func TestFilterConfiguredAPISpecsRejectsMissingSelectedKinds(t *testing.T) {
 	t.Parallel()
 

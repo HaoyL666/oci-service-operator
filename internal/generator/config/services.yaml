@@ -7160,6 +7160,12 @@ services:
       strategy: lifecycle
       runtime: generatedruntime
       formalClassification: lifecycle
+    observedState:
+      sdkAliases:
+        ExternalLocationDetailsMetadata:
+          - ExternalLocationsMetadatumSummary
+        ExternalLocationMappingMetadata:
+          - ExternalLocationMappingMetadatumSummary
     generation:
       controller:
         strategy: generated
@@ -8366,6 +8372,10 @@ services:
       strategy: lifecycle
       runtime: generatedruntime
       formalClassification: lifecycle
+    observedState:
+      sdkAliases:
+        OrganizationSubscription:
+          - SubscriptionSummary
     generation:
       controller:
         strategy: generated

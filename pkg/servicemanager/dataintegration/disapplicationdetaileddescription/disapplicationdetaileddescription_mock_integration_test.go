@@ -67,14 +67,17 @@ func TestMockIntegrationDisApplicationDetailedDescriptionCompositeCRUD(t *testin
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*dataintegrationv1beta1.DisApplicationDetailedDescription]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *dataintegrationv1beta1.DisApplicationDetailedDescription) error {
-			if current.Status.OsokStatus.Ocid != "<ocid:1>/disApplications/application-key/detailedDescription" || current.Status.OsokStatus.Reason != string(shared.Active) {
+			if current.Status.OsokStatus.Ocid != "<ocid:1>/disApplications/application-key/detailedDescription" ||
+				current.Status.OsokStatus.Reason != string(shared.Active) || current.Status.Logo != "bG9nbw==" ||
+				current.Status.DetailedDescription != "create" {
 				return fmt.Errorf("created DisApplicationDetailedDescription status = %+v", current.Status)
 			}
 			return nil
 		},
 		Mutate: func(current *dataintegrationv1beta1.DisApplicationDetailedDescription) { current.Spec = updatedSpec },
 		ValidateUpdated: func(current *dataintegrationv1beta1.DisApplicationDetailedDescription) error {
-			if current.Status.OsokStatus.Ocid != "<ocid:1>/disApplications/application-key/detailedDescription" || current.Status.OsokStatus.Reason != string(shared.Active) {
+			if current.Status.OsokStatus.Ocid != "<ocid:1>/disApplications/application-key/detailedDescription" ||
+				current.Status.OsokStatus.Reason != string(shared.Active) || current.Status.DetailedDescription != "updated" {
 				return fmt.Errorf("updated DisApplicationDetailedDescription status = %+v", current.Status)
 			}
 			return nil

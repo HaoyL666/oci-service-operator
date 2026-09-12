@@ -45,7 +45,9 @@ func TestMockIntegrationTopicLifecycleCRUD(t *testing.T) {
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*onsv1beta1.Topic]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *onsv1beta1.Topic) error {
-			if current.Status.OsokStatus.Ocid != shared.OCID(mockTopicID) || current.Status.OsokStatus.Reason != string(shared.Active) {
+			if current.Status.OsokStatus.Ocid != shared.OCID(mockTopicID) || current.Status.OsokStatus.Reason != string(shared.Active) ||
+				current.Status.TopicId != mockTopicID || current.Status.Name != "mock-topic" ||
+				current.Status.Description != "mock create" || current.Status.LifecycleState != string(onssdk.NotificationTopicLifecycleStateActive) {
 				return fmt.Errorf("created Topic status = %+v", current.Status)
 			}
 			return nil
@@ -55,7 +57,8 @@ func TestMockIntegrationTopicLifecycleCRUD(t *testing.T) {
 			current.Spec.FreeformTags = map[string]string{"osok-mock": "update"}
 		},
 		ValidateUpdated: func(current *onsv1beta1.Topic) error {
-			if current.Status.OsokStatus.Reason != string(shared.Active) {
+			if current.Status.OsokStatus.Reason != string(shared.Active) || current.Status.Description != "mock update" ||
+				current.Status.FreeformTags["osok-mock"] != "update" {
 				return fmt.Errorf("updated Topic status = %+v", current.Status)
 			}
 			return nil

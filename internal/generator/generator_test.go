@@ -124,6 +124,40 @@ func TestBuildPackageModelDiscoversResources(t *testing.T) {
 	assertDiscoveredOAuthClientCredential(t, findResource(t, pkg.Resources, "OAuthClientCredential"))
 }
 
+func TestResponseObservedStateFallbackUsesTypedOperationBodiesOnlyWhenNeeded(t *testing.T) {
+	t.Parallel()
+
+	index, err := ocisdk.NewIndex(func(context.Context, string) (string, error) {
+		return sampleSDKDir(t), nil
+	}).Package(context.Background(), "example.com/test/sdk")
+	if err != nil {
+		t.Fatal(err)
+	}
+	candidates := responseObservedStateStructCandidates(index, &RuntimeModel{
+		Get:  &RuntimeOperationModel{ResponseTypeName: "GetWidgetResponse"},
+		List: &RuntimeOperationModel{ResponseTypeName: "ListWidgetsResponse"},
+	})
+	if !slices.Equal(candidates, []string{"Widget"}) {
+		t.Fatalf("response candidates = %v, want singular Widget read model", candidates)
+	}
+
+	fallback := synthesizeResourceFieldSet(index, ServiceConfig{}, "MissingWidget", "MissingWidget", nil, candidates)
+	assertFieldNamesPresent(t, "fallback status", fallback.StatusFields, "LifecycleState")
+
+	listCandidates := responseObservedStateStructCandidates(index, &RuntimeModel{
+		List: &RuntimeOperationModel{ResponseTypeName: "ListWidgetsResponse"},
+	})
+	if !slices.Equal(listCandidates, []string{"ListWidgetsResponse"}) {
+		t.Fatalf("list response candidates = %v, want collection response model", listCandidates)
+	}
+	listFallback := synthesizeResourceFieldSet(index, ServiceConfig{}, "MissingWidgetList", "MissingWidgetList", nil, listCandidates)
+	assertFieldNamesPresent(t, "list fallback status", listFallback.StatusFields, "Items")
+
+	named := synthesizeResourceFieldSet(index, ServiceConfig{}, "Widget", "Widget", nil, []string{"DbSystem"})
+	assertFieldNamesPresent(t, "named status", named.StatusFields, "LifecycleState", "TimeUpdated")
+	assertFieldNamesAbsent(t, "named status", named.StatusFields, "Id", "DisplayName", "Port")
+}
+
 func TestAPIObjectListTypeNameAvoidsSelectedKindCollision(t *testing.T) {
 	t.Parallel()
 

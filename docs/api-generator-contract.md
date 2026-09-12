@@ -70,6 +70,12 @@ Rules:
 - `kindAliases` keys use discovered SDK resource-family names and values use
   stable OSOK API kind names. Alias values must be unique within a service;
   selection continues to use the SDK names.
+- Status synthesis first uses `<SDKKind>` and `<SDKKind>Summary`. If neither
+  model contributes a field, the generator falls back to the typed body of the
+  selected get/create/update response, or to the collection body of a
+  list-only response. Binary response bodies are never exposed in status.
+- `observedState.sdkAliases` remains the explicit source of truth when a
+  list-backed runtime selects one item rather than publishing the collection.
 - Enabled selected kinds must resolve to explicit async metadata either from
   service-level `async.*` defaults or resource-level
   `generation.resources[].async.*` overrides.

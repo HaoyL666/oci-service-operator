@@ -118,6 +118,7 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/optimizer"
 	"github.com/oracle/oci-go-sdk/v65/osmanagementhub"
 	"github.com/oracle/oci-go-sdk/v65/osubbillingschedule"
+	"github.com/oracle/oci-go-sdk/v65/osuborganizationsubscription"
 	"github.com/oracle/oci-go-sdk/v65/osubsubscription"
 	"github.com/oracle/oci-go-sdk/v65/psa"
 	"github.com/oracle/oci-go-sdk/v65/psql"
@@ -1045,6 +1046,7 @@ var seedTargets = []Target{
 	newTarget("dataintegration", "CreateCopyObjectRequestDetails", reflect.TypeOf(dataintegration.CreateCopyObjectRequestDetails{})),
 	newTarget("dataintegration", "CreateDataFlowDetails", reflect.TypeOf(dataintegration.CreateDataFlowDetails{})),
 	newTarget("dataintegration", "CreateDataFlowValidationDetails", reflect.TypeOf(dataintegration.CreateDataFlowValidationDetails{})),
+	newTarget("dataintegration", "CreateDetailedDescriptionDetails", reflect.TypeOf(dataintegration.CreateDetailedDescriptionDetails{})),
 	newTarget("dataintegration", "CreateDisApplicationDetails", reflect.TypeOf(dataintegration.CreateDisApplicationDetails{})),
 	newTarget("dataintegration", "CreateExportRequestDetails", reflect.TypeOf(dataintegration.CreateExportRequestDetails{})),
 	newTarget("dataintegration", "CreateExternalPublicationDetails", reflect.TypeOf(dataintegration.CreateExternalPublicationDetails{})),
@@ -1065,6 +1067,7 @@ var seedTargets = []Target{
 	newTarget("dataintegration", "UpdateApplicationDetails", reflect.TypeOf(dataintegration.UpdateApplicationDetails{})),
 	newTarget("dataintegration", "UpdateCopyObjectRequestDetails", reflect.TypeOf(dataintegration.UpdateCopyObjectRequestDetails{})),
 	newTarget("dataintegration", "UpdateDataFlowDetails", reflect.TypeOf(dataintegration.UpdateDataFlowDetails{})),
+	newTarget("dataintegration", "UpdateDetailedDescriptionDetails", reflect.TypeOf(dataintegration.UpdateDetailedDescriptionDetails{})),
 	newTarget("dataintegration", "UpdateDisApplicationDetails", reflect.TypeOf(dataintegration.UpdateDisApplicationDetails{})),
 	newTarget("dataintegration", "UpdateExportRequestDetails", reflect.TypeOf(dataintegration.UpdateExportRequestDetails{})),
 	newTarget("dataintegration", "UpdateExternalPublicationDetails", reflect.TypeOf(dataintegration.UpdateExternalPublicationDetails{})),
@@ -1090,6 +1093,7 @@ var seedTargets = []Target{
 	newTarget("dataintegration", "CopyObjectRequest", reflect.TypeOf(dataintegration.CopyObjectRequest{})),
 	newTarget("dataintegration", "DataFlow", reflect.TypeOf(dataintegration.DataFlow{})),
 	newTarget("dataintegration", "DataFlowValidation", reflect.TypeOf(dataintegration.DataFlowValidation{})),
+	newTarget("dataintegration", "DetailedDescription", reflect.TypeOf(dataintegration.DetailedDescription{})),
 	newTarget("dataintegration", "DisApplication", reflect.TypeOf(dataintegration.DisApplication{})),
 	newTarget("dataintegration", "ExportRequest", reflect.TypeOf(dataintegration.ExportRequest{})),
 	newTarget("dataintegration", "ExternalPublication", reflect.TypeOf(dataintegration.ExternalPublication{})),
@@ -1913,6 +1917,7 @@ var seedTargets = []Target{
 	newTarget("mngdmac", "MacOrderSummary", reflect.TypeOf(mngdmac.MacOrderSummary{})),
 
 	// Multicloud CRD support
+	newTarget("multicloud", "ExternalLocationSummariesMetadatumSummaryCollection", reflect.TypeOf(multicloud.ExternalLocationSummariesMetadatumSummaryCollection{})),
 	newTarget("multicloud", "MultiCloudMetadata", reflect.TypeOf(multicloud.MultiCloudMetadata{})),
 	newTarget("multicloud", "MultiCloudMetadataCollection", reflect.TypeOf(multicloud.MultiCloudMetadataCollection{})),
 	newTarget("multicloud", "MulticloudResourceCollection", reflect.TypeOf(multicloud.MulticloudResourceCollection{})),
@@ -1921,6 +1926,8 @@ var seedTargets = []Target{
 	newTarget("multicloud", "NetworkAnchorCollection", reflect.TypeOf(multicloud.NetworkAnchorCollection{})),
 	newTarget("multicloud", "ResourceAnchor", reflect.TypeOf(multicloud.ResourceAnchor{})),
 	newTarget("multicloud", "ResourceAnchorCollection", reflect.TypeOf(multicloud.ResourceAnchorCollection{})),
+	newTarget("multicloud", "ExternalLocationMappingMetadatumSummary", reflect.TypeOf(multicloud.ExternalLocationMappingMetadatumSummary{})),
+	newTarget("multicloud", "ExternalLocationsMetadatumSummary", reflect.TypeOf(multicloud.ExternalLocationsMetadatumSummary{})),
 	newTarget("multicloud", "MultiCloudMetadataSummary", reflect.TypeOf(multicloud.MultiCloudMetadataSummary{})),
 	newTarget("multicloud", "MulticloudResourceSummary", reflect.TypeOf(multicloud.MulticloudResourceSummary{})),
 	newTarget("multicloud", "MulticloudSubscriptionSummary", reflect.TypeOf(multicloud.MulticloudSubscriptionSummary{})),
@@ -2098,6 +2105,9 @@ var seedTargets = []Target{
 
 	// Osubbillingschedule CRD support
 	newTarget("osubbillingschedule", "BillingScheduleSummary", reflect.TypeOf(osubbillingschedule.BillingScheduleSummary{})),
+
+	// Osuborganizationsubscription CRD support
+	newTarget("osuborganizationsubscription", "SubscriptionSummary", reflect.TypeOf(osuborganizationsubscription.SubscriptionSummary{})),
 
 	// Osubsubscription CRD support
 	newTarget("osubsubscription", "SubscriptionSummary", reflect.TypeOf(osubsubscription.SubscriptionSummary{})),

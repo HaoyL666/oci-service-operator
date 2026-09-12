@@ -18,7 +18,14 @@ type resourceFieldSet struct {
 	HelperTypes  []TypeModel
 }
 
-func synthesizeResourceFieldSet(index *ocisdk.Package, service ServiceConfig, resourceKind string, rawName string, specCandidates []string) resourceFieldSet {
+func synthesizeResourceFieldSet(
+	index *ocisdk.Package,
+	service ServiceConfig,
+	resourceKind string,
+	rawName string,
+	specCandidates []string,
+	responseStatusCandidates []string,
+) resourceFieldSet {
 	synthesizer := newFieldSynthesizer(index, resourceKind)
 
 	specFields, _ := synthesizer.mergeStructFields(specCandidates, nil, fieldRenderingOptions{scope: fieldScopeSpec})
@@ -35,6 +42,18 @@ func synthesizeResourceFieldSet(index *ocisdk.Package, service ServiceConfig, re
 			requiredPointerFieldPaths: service.ObservedStateRequiredPointerFieldPaths(rawName),
 		},
 	)
+	if len(observedFields) == 0 {
+		observedFields, _ = synthesizer.mergeStructFields(
+			responseStatusCandidates,
+			nil,
+			fieldRenderingOptions{
+				scope:                     fieldScopeStatus,
+				escapeStatusJSONCollision: true,
+				excludedFieldPaths:        service.ObservedStateExcludedFieldPaths(rawName),
+				requiredPointerFieldPaths: service.ObservedStateRequiredPointerFieldPaths(rawName),
+			},
+		)
+	}
 	for _, field := range observedFields {
 		jsonName := tagJSONName(field.Tag)
 		if _, exists := statusJSONNames[jsonName]; exists {

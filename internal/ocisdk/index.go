@@ -95,14 +95,15 @@ type Index struct {
 }
 
 type Package struct {
-	typeNames           []string
-	structs             map[string]structDefinition
-	aliases             map[string]ast.Expr
-	interfaces          map[string]struct{}
-	polymorphic         map[string][]string
-	requestBodyPayloads map[string][]string
-	requestMethods      map[string]OperationMethod
-	clientConstructors  map[string]ClientConstructor
+	typeNames            []string
+	structs              map[string]structDefinition
+	aliases              map[string]ast.Expr
+	interfaces           map[string]struct{}
+	polymorphic          map[string][]string
+	requestBodyPayloads  map[string][]string
+	responseBodyPayloads map[string][]string
+	requestMethods       map[string]OperationMethod
+	clientConstructors   map[string]ClientConstructor
 
 	mu       sync.Mutex
 	resolved map[string]Struct
@@ -198,6 +199,13 @@ func (pkg *Package) TypeNames() []string {
 
 func (pkg *Package) RequestBodyPayloads(typeName string) []string {
 	return append([]string(nil), pkg.requestBodyPayloads[typeName]...)
+}
+
+// ResponseBodyPayloads returns local SDK model types carried in an operation
+// response body. Binary bodies are intentionally excluded because they are not
+// safe Kubernetes status schemas.
+func (pkg *Package) ResponseBodyPayloads(typeName string) []string {
+	return append([]string(nil), pkg.responseBodyPayloads[typeName]...)
 }
 
 func (pkg *Package) OperationForRequest(typeName string) (OperationMethod, bool) {
@@ -562,17 +570,19 @@ func parsePackage(dir string) (*Package, error) {
 	}
 
 	pkg := &Package{
-		structs:             make(map[string]structDefinition),
-		aliases:             make(map[string]ast.Expr),
-		interfaces:          make(map[string]struct{}),
-		polymorphic:         make(map[string][]string),
-		requestBodyPayloads: make(map[string][]string),
-		requestMethods:      make(map[string]OperationMethod),
-		clientConstructors:  make(map[string]ClientConstructor),
-		resolved:            make(map[string]Struct),
+		structs:              make(map[string]structDefinition),
+		aliases:              make(map[string]ast.Expr),
+		interfaces:           make(map[string]struct{}),
+		polymorphic:          make(map[string][]string),
+		requestBodyPayloads:  make(map[string][]string),
+		responseBodyPayloads: make(map[string][]string),
+		requestMethods:       make(map[string]OperationMethod),
+		clientConstructors:   make(map[string]ClientConstructor),
+		resolved:             make(map[string]Struct),
 	}
 	exportedTypes := make(map[string]struct{})
 	requestBodyPayloadExprs := make(map[string][]ast.Expr)
+	responseBodyPayloadExprs := make(map[string][]ast.Expr)
 	operationPaths := make(map[string]string)
 	for _, parsedPackage := range pkgs {
 		for _, fileNode := range parsedPackage.Files {
@@ -595,6 +605,7 @@ func parsePackage(dir string) (*Package, error) {
 						case *ast.StructType:
 							pkg.structs[typeSpec.Name.Name] = parseStruct(concrete)
 							requestBodyPayloadExprs[typeSpec.Name.Name] = append(requestBodyPayloadExprs[typeSpec.Name.Name], bodyContributorExprs(concrete)...)
+							responseBodyPayloadExprs[typeSpec.Name.Name] = append(responseBodyPayloadExprs[typeSpec.Name.Name], bodyPresenterExprs(concrete)...)
 						case *ast.InterfaceType:
 							pkg.interfaces[typeSpec.Name.Name] = struct{}{}
 						default:
@@ -631,6 +642,15 @@ func parsePackage(dir string) (*Package, error) {
 				continue
 			}
 			pkg.requestBodyPayloads[typeName] = appendUniqueNames(pkg.requestBodyPayloads[typeName], payloadType)
+		}
+	}
+	for typeName, exprs := range responseBodyPayloadExprs {
+		for _, expr := range exprs {
+			payloadType, ok := pkg.referencedTypeName(expr, map[string]struct{}{})
+			if !ok {
+				continue
+			}
+			pkg.responseBodyPayloads[typeName] = appendUniqueNames(pkg.responseBodyPayloads[typeName], payloadType)
 		}
 	}
 
@@ -736,12 +756,35 @@ func bodyContributorExprs(structType *ast.StructType) []ast.Expr {
 	return contributors
 }
 
+func bodyPresenterExprs(structType *ast.StructType) []ast.Expr {
+	if structType.Fields == nil {
+		return nil
+	}
+
+	presenters := make([]ast.Expr, 0, len(structType.Fields.List))
+	for _, field := range structType.Fields.List {
+		if !presentsResponseBody(field.Tag) {
+			continue
+		}
+		presenters = append(presenters, field.Type)
+	}
+	return presenters
+}
+
 func contributesToBody(tag *ast.BasicLit) bool {
 	structTag, ok := parseStructTag(tag)
 	if !ok {
 		return false
 	}
 	return structTag.Get("contributesTo") == "body"
+}
+
+func presentsResponseBody(tag *ast.BasicLit) bool {
+	structTag, ok := parseStructTag(tag)
+	if !ok {
+		return false
+	}
+	return structTag.Get("presentIn") == "body" && structTag.Get("encoding") != "binary"
 }
 
 func jsonFieldName(tag *ast.BasicLit) (string, bool) {
