@@ -19,6 +19,8 @@ SAMPLE_DIR="${SAMPLE_DIR:-${REPO_ROOT}/config/samples}"
 SAMPLE_GLOB="${SAMPLE_GLOB:-}"
 SCENARIO_PATH="${SCENARIO_PATH:-}"
 SCENARIO_ARTIFACT_DIR="${SCENARIO_ARTIFACT_DIR:-}"
+COMPOSITE_DIR="${COMPOSITE_DIR:-}"
+COMPOSITE_ARTIFACT_DIR="${COMPOSITE_ARTIFACT_DIR:-}"
 TEST_NAMESPACE="${TEST_NAMESPACE:-default}"
 CONTROLLER_ROLLOUT_TIMEOUT="${CONTROLLER_ROLLOUT_TIMEOUT:-5m}"
 RESOURCE_TIMEOUT="${RESOURCE_TIMEOUT:-10m}"
@@ -50,6 +52,8 @@ KIND_CONFIG_PATH="${ARTIFACT_DIR}/kind-config.yaml"
 KUBECTL_BIN="${KUBECTL_BIN:-kubectl}"
 KIND_BIN="${BIN_DIR}/kind"
 OPERATOR_SDK_BIN="${BIN_DIR}/operator-sdk"
+CHAINSAW_RUNNER="${CHAINSAW_RUNNER:-${REPO_ROOT}/e2e/chainsaw}"
+CHAINSAW_VERSION="${CHAINSAW_VERSION:-v0.2.15}"
 MAKE_GOCACHE="${MAKE_GOCACHE:-${ARTIFACT_DIR}/.gocache}"
 MAKE_GOMODCACHE="${MAKE_GOMODCACHE:-${ARTIFACT_DIR}/.gomodcache}"
 MAKE_GOTMPDIR="${MAKE_GOTMPDIR:-${ARTIFACT_DIR}/.gotmp}"
@@ -97,7 +101,8 @@ Default action:
 
 Other actions:
   test    Require --service. Bootstrap the cluster if needed, then deploy and
-          validate the selected package group against samples or one lifecycle scenario.
+          validate the selected package group against samples, one lifecycle
+          scenario, or one composite suite.
   down    Delete the Kind cluster and local artifacts for CLUSTER_NAME.
   status  Show cluster, OLM, and optional service deployment status.
   render  Render the Kind config only.
@@ -110,6 +115,8 @@ Service test options:
   --sample-glob GLOB       Manifest glob inside --sample-dir. Default: <group>_*.yaml
   --scenario PATH          Run an AWS ACK-style create/update/delete scenario
                            instead of applying the package sample directory.
+  --composite DIR          Run a Chainsaw dependency suite instead of package
+                           samples or one standalone lifecycle scenario.
   --test-namespace NS      Namespace for sample applies when manifests omit it.
                            Default: ${TEST_NAMESPACE}
   --oci-profile PROFILE    OCI profile for auto-created ocicredentials. Default: ${OCI_PROFILE}
@@ -134,6 +141,7 @@ Common environment overrides:
   OPERATOR_SDK_VERSION=${OPERATOR_SDK_VERSION}
   OLM_VERSION=${OLM_VERSION}
   CERT_MANAGER_VERSION=${CERT_MANAGER_VERSION}
+  CHAINSAW_VERSION=${CHAINSAW_VERSION}
   RECREATE_CLUSTER=${RECREATE_CLUSTER}
   SKIP_OLM=${SKIP_OLM}
 EOF
@@ -151,6 +159,9 @@ need_cmd() {
 }
 
 parse_args() {
+  local composite_relative
+  local composite_service
+
   if [ $# -gt 0 ]; then
     case "$1" in
       up|test|down|status|render|help|-h|--help)
@@ -185,6 +196,11 @@ parse_args() {
       --scenario)
         [ $# -ge 2 ] || die "--scenario requires a value"
         SCENARIO_PATH="$2"
+        shift 2
+        ;;
+      --composite)
+        [ $# -ge 2 ] || die "--composite requires a value"
+        COMPOSITE_DIR="$2"
         shift 2
         ;;
       --test-namespace)
@@ -270,6 +286,26 @@ parse_args() {
       *) SCENARIO_PATH="${REPO_ROOT}/${SCENARIO_PATH}" ;;
     esac
     [ -f "${SCENARIO_PATH}" ] || die "lifecycle scenario not found: ${SCENARIO_PATH}"
+  fi
+
+  if [ -n "${COMPOSITE_DIR}" ]; then
+    case "${COMPOSITE_DIR}" in
+      /*) ;;
+      *) COMPOSITE_DIR="${REPO_ROOT}/${COMPOSITE_DIR}" ;;
+    esac
+    [ -d "${COMPOSITE_DIR}" ] || die "composite suite directory not found: ${COMPOSITE_DIR}"
+    COMPOSITE_DIR="$(cd -- "${COMPOSITE_DIR}" && pwd -P)"
+    [ -f "${COMPOSITE_DIR}/chainsaw-test.yaml" ] || die "composite suite is missing chainsaw-test.yaml: ${COMPOSITE_DIR}"
+    case "${COMPOSITE_DIR}" in
+      "${REPO_ROOT}/e2e/composite/"*)
+        composite_relative="${COMPOSITE_DIR#"${REPO_ROOT}/e2e/composite/"}"
+        composite_service="${composite_relative%%/*}"
+        [ "${SERVICE}" = "${composite_service}" ] || die "composite suite targets service ${composite_service}, not ${SERVICE}"
+        ;;
+    esac
+  fi
+  if [ -n "${SCENARIO_PATH}" ] && [ -n "${COMPOSITE_DIR}" ]; then
+    die "--scenario and --composite cannot be used together"
   fi
 
   if [ -n "${SERVICE}" ] && [ -z "${CONTROLLER_IMG}" ]; then
@@ -610,13 +646,17 @@ load_local_controller_image() {
 
 refresh_service_artifacts() {
   local args
+  local generator_service
 
-  args=( generator-refresh "GENERATOR_SERVICE=${SERVICE}" )
+  generator_service="${CRD_PATHS#./api/}"
+  generator_service="${generator_service%%/*}"
+  [ -n "${generator_service}" ] || die "unable to derive generator service from CRD_PATHS=${CRD_PATHS}"
+  args=( generator-refresh "GENERATOR_SERVICE=${generator_service}" )
   if [ -n "${GENERATOR_OVERWRITE:-}" ]; then
     args+=( "GENERATOR_OVERWRITE=${GENERATOR_OVERWRITE}" )
   fi
 
-  log "Refreshing generated artifacts for service ${SERVICE}"
+  log "Refreshing generated artifacts for package ${SERVICE} from generator service ${generator_service}"
   run_make "${args[@]}"
 }
 
@@ -1380,6 +1420,25 @@ run_lifecycle_scenario() {
   log "Lifecycle evidence written to ${scenario_artifacts}/result.json"
 }
 
+run_composite_suite() {
+  local composite_name
+  local composite_artifacts
+
+  composite_name="${SERVICE}-$(basename -- "${COMPOSITE_DIR}")"
+  composite_artifacts="${COMPOSITE_ARTIFACT_DIR:-${ARTIFACT_DIR}/composite/${composite_name}}"
+  mkdir -p "${composite_artifacts}"
+  export OSOK_E2E_SUFFIX="${OSOK_E2E_SUFFIX:-$(date -u +%Y%m%d-%H%M%S)}"
+
+  log "Running composite suite ${COMPOSITE_DIR}"
+  "${CHAINSAW_RUNNER}" test "${COMPOSITE_DIR}" \
+    --fail-fast \
+    --parallel 1 \
+    --report-format JSON \
+    --report-name result \
+    --report-path "${composite_artifacts}"
+  log "Composite evidence written to ${composite_artifacts}/result.json"
+}
+
 run_service_suite() {
   load_service_metadata
   ensure_service_prereqs
@@ -1420,14 +1479,16 @@ run_service_suite() {
   apply_service_install_manifest
   patch_kind_local_mismatches
   wait_for_controller_rollout
-  if [ -n "${SCENARIO_PATH}" ]; then
+  if [ -n "${COMPOSITE_DIR}" ]; then
+    run_composite_suite
+  elif [ -n "${SCENARIO_PATH}" ]; then
     run_lifecycle_scenario
   else
     run_service_samples
   fi
   capture_controller_logs
 
-  if [ -z "${SCENARIO_PATH}" ] && [ "${RESULT_FAIL_COUNT}" -ne 0 ]; then
+  if [ -z "${SCENARIO_PATH}" ] && [ -z "${COMPOSITE_DIR}" ] && [ "${RESULT_FAIL_COUNT}" -ne 0 ]; then
     die "service suite failed for ${SERVICE}; see ${RESULTS_FILE} and ${CONTROLLER_LOG_FILE}"
   fi
 }

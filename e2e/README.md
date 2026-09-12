@@ -6,8 +6,8 @@ OSOK has two complementary integration paths:
 
 - package-local typed mock tests exercise OCI SDK serialization and
   service-manager reconciliation without cloud credentials;
-- live lifecycle scenarios install the real controller and perform create,
-  update, and delete operations against OCI.
+- live standalone and composite scenarios install the real controller and
+  perform create, update, and delete operations against OCI.
 
 Run the deterministic integration suite with:
 
@@ -120,6 +120,28 @@ SKIP_OLM=true ./e2e/e2e-lite-local test \
 The equivalent Make target is `make e2e-live`. Override `E2E_SERVICE` and
 `E2E_SCENARIO` for another checked-in scenario.
 
+Run a dependency graph with Chainsaw:
+
+```bash
+export OCI_COMPARTMENT_ID=ocid1.compartment.oc1..example
+SKIP_OLM=true ./e2e/e2e-lite-local test \
+  --service core-network \
+  --composite e2e/composite/core-network/basic
+```
+
+The equivalent target is:
+
+```bash
+make e2e-composite \
+  E2E_SERVICE=core-network \
+  E2E_COMPOSITE=e2e/composite/core-network/basic
+```
+
+`e2e/chainsaw` installs the pinned Chainsaw release into the ignored `bin/`
+directory and verifies the release checksum. It is also used by
+`make e2e-composite-lint`, which validates every checked-in composite test
+without contacting Kubernetes or OCI.
+
 The direct package-install path does not require OLM, so `SKIP_OLM=true` is the
 recommended local setting for `--service` runs.
 
@@ -219,6 +241,7 @@ equivalent to exporting the variable first:
 - kind config: `e2e/.e2e-lite-local-<cluster-name>/kind-config.yaml`
 - service results: `e2e/.e2e-lite-local-<cluster-name>/results/<group>.tsv`
 - lifecycle evidence: `e2e/.e2e-lite-local-<cluster-name>/scenarios/<name>/result.json`
+- composite evidence: `e2e/.e2e-lite-local-<cluster-name>/composite/<name>/result.json`
 - controller logs: `e2e/.e2e-lite-local-<cluster-name>/logs/<group>-controller.log`
 
 ## What The Script Does
@@ -246,13 +269,16 @@ The script:
   per-resource `PASS`/`FAIL`
 - when `--scenario` is set, renders its variables, performs create/update/delete,
   waits for status convergence, confirms deletion, and writes JSON evidence
+- when `--composite` is set, runs an explicit Chainsaw resource graph, passes
+  observed OCI identifiers to downstream CRs, and writes a JSON report
 
 ## What The Script Does Not Do
 
 The script does not:
 
 - rewrite placeholder OCI values inside sample manifests
-- infer resource dependency order beyond the discovered manifest list
+- infer dependencies from arbitrary manifests; composite dependencies are
+  declared explicitly in their Chainsaw test
 - turn CRD-only resources into controller-backed resources
 - make admission-only resources appear reconciled
 
@@ -269,6 +295,31 @@ The script does not:
   `admitted-only` to make that distinction explicit.
 - The `Stream` resource gets one extra check: the result includes whether the
   generated endpoint secret named after the resource is present.
+
+## Composite Scenario Contract
+
+Composite suites live under `e2e/composite/<service>/<suite>/` and use the
+explicit Chainsaw `chainsaw-test.yaml` format. Each suite keeps all graph
+operations in one step so an upstream `kubectl get` output binding can be used
+by later resource templates. Chainsaw owns reverse-order cleanup; OSOK
+finalizers continue to own OCI deletion confirmation.
+
+The first suites are built from standalone resources already proven against
+live OCI:
+
+| Suite | Graph | Additional operator inputs |
+| --- | --- | --- |
+| `core-network/basic` | VCN -> Subnet, Internet Gateway, Network Security Group | `OCI_COMPARTMENT_ID` |
+| `containerengine/cluster-node-pool` | OKE Cluster -> IMDSv2 NodePool | `OCI_COMPARTMENT_ID`, `OCI_VCN_ID`, `OCI_CLUSTER_SUBNET_ID`, `OCI_SERVICE_LB_SUBNET_ID`, `OCI_NODE_SUBNET_ID`, `OCI_POD_SUBNET_ID`, `OCI_KUBERNETES_VERSION`, `OCI_COMPUTE_SHAPE`, `OCI_IMAGE_ID`, and `OCI_AVAILABILITY_DOMAIN` |
+| `apigateway/gateway-deployment` | API Gateway -> Deployment, including endpoint Secret verification | `OCI_COMPARTMENT_ID`, private `OCI_SUBNET_ID` |
+| `filestorage/filesystem-export` | File System + Mount Target -> Export | `OCI_COMPARTMENT_ID`, `OCI_AVAILABILITY_DOMAIN`, private `OCI_SUBNET_ID` |
+| `logging/log-group-log` | Log Group -> Custom Log | `OCI_COMPARTMENT_ID` |
+| `ons/topic-subscription` | Topic -> Subscription | `OCI_COMPARTMENT_ID`, `OCI_NOTIFICATION_PROTOCOL`, and a confirmation-free `OCI_NOTIFICATION_ENDPOINT` |
+
+The local helper generates `OSOK_E2E_SUFFIX` when it is absent. Composite
+files read operator inputs from environment variables and contain no live
+OCIDs or credentials. A suite currently targets one package group so its
+controller image, CRDs, credentials, logs, and cleanup remain isolated.
 
 ## Lifecycle Scenario Contract
 

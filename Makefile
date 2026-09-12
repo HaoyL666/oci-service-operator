@@ -422,18 +422,33 @@ mockintegrationtest: mock-integration-coverage ## Run typed service-manager inte
 	@[ -n "$(MOCK_INTEGRATION_PACKAGES)" ] || { echo "No OCI mock integration tests found"; exit 1; }
 	go test $(addprefix ./,$(MOCK_INTEGRATION_PACKAGES)) -run '^TestMockIntegration' -count=1
 
-integrationtest: mockintegrationtest ## Run credential-free OCI service-manager and lifecycle integration tests.
+integrationtest: mockintegrationtest e2e-composite-lint ## Run credential-free OCI service-manager and lifecycle integration tests.
 	go test ./internal/e2e/lifecycle
 
 functionaltest: integrationtest ## Run deterministic controller integration tests.
 
 E2E_SERVICE ?= objectstorage
 E2E_SCENARIO ?= e2e/scenarios/$(E2E_SERVICE)/basic/scenario.yaml
+E2E_COMPOSITE ?= e2e/composite/$(E2E_SERVICE)/basic
 
 e2e-live: ## Run one real OCI create/update/delete lifecycle through a local Kind controller.
 	@[ -n "$(E2E_SERVICE)" ] || { echo "E2E_SERVICE must be set"; exit 1; }
 	@[ -f "$(E2E_SCENARIO)" ] || { echo "E2E_SCENARIO not found: $(E2E_SCENARIO)"; exit 1; }
 	SKIP_OLM=true ./e2e/e2e-lite-local test --service "$(E2E_SERVICE)" --scenario "$(E2E_SCENARIO)"
+
+e2e-composite-lint: ## Validate all checked-in Chainsaw composite test definitions.
+	@set -e; \
+		found=false; \
+		for test_file in $$(find e2e/composite -type f -name chainsaw-test.yaml | sort); do \
+			found=true; \
+			./e2e/chainsaw lint test --file "$$test_file"; \
+		done; \
+		$$found || { echo "No Chainsaw composite tests found"; exit 1; }
+
+e2e-composite: ## Run one real OCI dependency graph through a local Kind controller.
+	@[ -n "$(E2E_SERVICE)" ] || { echo "E2E_SERVICE must be set"; exit 1; }
+	@[ -d "$(E2E_COMPOSITE)" ] || { echo "E2E_COMPOSITE not found: $(E2E_COMPOSITE)"; exit 1; }
+	SKIP_OLM=true ./e2e/e2e-lite-local test --service "$(E2E_SERVICE)" --composite "$(E2E_COMPOSITE)"
 
 ##@ Build Service
 
