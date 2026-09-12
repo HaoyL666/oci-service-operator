@@ -66,6 +66,12 @@ spec:
               metadata:
                 name: ($gatewayName)
               status:
+                displayName: ($gatewayName)
+                endpointType: PRIVATE
+                subnetId: ($subnetId)
+                lifecycleState: ACTIVE
+                freeformTags:
+                  osok-e2e-phase: create
                 status:
                   (conditions[?type == 'Active' && status == 'True'] | length(@) > `0`): true
                   (ocid != null && length(ocid) > `0`): true
@@ -98,9 +104,18 @@ spec:
                 name: ($gatewayName)
               status:
                 displayName: ($gatewayUpdatedName)
+                endpointType: PRIVATE
+                subnetId: ($subnetId)
                 freeformTags:
                   osok-e2e-phase: update
                 lifecycleState: ACTIVE
+        - assert:
+            resource:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: ($gatewayName)
+              (data.hostname != null && length(data.hostname) > `0`): true
         - script:
             env:
               - name: RESOURCE_NAME
