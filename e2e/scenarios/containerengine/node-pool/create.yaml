@@ -6,11 +6,11 @@
 apiVersion: containerengine.oracle.com/v1beta1
 kind: NodePool
 metadata:
-  name: osok-oke-node-pool-${OSOK_E2E_SUFFIX}
+  name: osok-oke-np-${OSOK_E2E_SUFFIX}
 spec:
   compartmentId: ${OCI_COMPARTMENT_ID}
   clusterId: ${OCI_CLUSTER_ID}
-  name: osok-oke-node-pool-${OSOK_E2E_SUFFIX}
+  name: osok-oke-np-${OSOK_E2E_SUFFIX}
   nodeShape: ${OCI_COMPUTE_SHAPE}
   kubernetesVersion: ${OCI_KUBERNETES_VERSION}
   nodeMetadata:
@@ -27,5 +27,10 @@ spec:
     placementConfigs:
       - availabilityDomain: ${OCI_AVAILABILITY_DOMAIN}
         subnetId: ${OCI_SUBNET_ID}
+    nodePoolPodNetworkOptionDetails:
+      cniType: OCI_VCN_IP_NATIVE
+      maxPodsPerNode: 31
+      podSubnetIds:
+        - ${OCI_POD_SUBNET_ID}
   freeformTags:
     osok-e2e-phase: create

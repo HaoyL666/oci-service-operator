@@ -319,20 +319,40 @@ behaviors:
 | Core Security List | `OCI_VCN_ID` | network-rule lifecycle and metadata update |
 | Core Service Gateway | `OCI_VCN_ID` | empty-service gateway lifecycle, traffic blocking, and metadata update |
 | OKE Cluster | `OCI_VCN_ID`, `OCI_SUBNET_ID`, and a region-supported `OCI_KUBERNETES_VERSION` | private Basic control-plane lifecycle, work requests, and metadata update |
-| OKE NodePool | `OCI_CLUSTER_ID`, `OCI_SUBNET_ID`, `OCI_IMAGE_ID`, `OCI_COMPUTE_SHAPE`, and a cluster-compatible `OCI_KUBERNETES_VERSION`; availability domain is discovered | one-node IMDSv2 pool lifecycle, work requests, and metadata update |
+| OKE NodePool | `OCI_CLUSTER_ID`, `OCI_SUBNET_ID`, `OCI_POD_SUBNET_ID`, `OCI_IMAGE_ID`, `OCI_COMPUTE_SHAPE`, a cluster-compatible `OCI_KUBERNETES_VERSION`, and `OCI_AVAILABILITY_DOMAIN` for delegated cross-tenancy sessions | one-node VCN-native IMDSv2 pool lifecycle, work requests, and metadata update |
+| MySQL DBSystem | private `OCI_SUBNET_ID`, `OCI_MYSQL_SHAPE`, `OCI_MYSQL_ADMIN_PASSWORD`, and `OCI_AVAILABILITY_DOMAIN` for delegated cross-tenancy sessions | database lifecycle, secret-backed admin credentials, metadata update, and endpoint Secret |
+| Network Load Balancer | private `OCI_SUBNET_ID` | work-request lifecycle, private address allocation, and metadata update |
+| Logging LogGroup | none | work-request lifecycle, description update, and metadata convergence |
+| Logging Custom Log | `OCI_LOG_GROUP_ID` | parent-scoped lifecycle, retention update, and metadata convergence |
+| Bastion | private `OCI_SUBNET_ID` | work-request lifecycle, CIDR/TTL update, and private endpoint allocation |
+| Redis Cluster | private `OCI_SUBNET_ID` and `OCI_REDIS_SOFTWARE_VERSION` | two-node cache lifecycle, work requests, and metadata update |
+| PostgreSQL DBSystem | private `OCI_SUBNET_ID`, `OCI_PSQL_SHAPE`, `OCI_PSQL_DB_VERSION`, and `OCI_PSQL_ADMIN_PASSWORD` | database lifecycle, Secret-backed admin credentials, and metadata update |
+| API Gateway | private `OCI_SUBNET_ID` | private gateway lifecycle, metadata update, and endpoint Secret |
+| API Gateway Deployment | `OCI_APIGATEWAY_ID` | parent-scoped stock-response deployment lifecycle and route update |
+| Container Repository | none | empty public repository lifecycle, README update, and metadata convergence |
+| Events Rule | `OCI_NOTIFICATION_TOPIC_ID` | disabled ONS action lifecycle, filter update, and metadata convergence |
+| Certificate Management CA Bundle | none | public PEM bundle lifecycle, description update, and metadata convergence |
+| Autoscaling Configuration | `OCI_INSTANCE_POOL_ID` | disabled scheduled autoscaling lifecycle, cooldown update, and metadata convergence |
 | Queue | none | work requests plus endpoint Secret |
 | NoSQL Table | none | eventual-consistency lifecycle and sequenced updates |
 | Core Instance | `OCI_SUBNET_ID`, `OCI_IMAGE_ID`, and `OCI_COMPUTE_SHAPE` | compute lifecycle and in-place update |
 | File Storage File System | none; availability domain is discovered | foundational storage lifecycle |
+| File Storage Mount Target | private `OCI_SUBNET_ID`; availability domain is discovered | network-attached file-storage endpoint lifecycle and metadata update |
+| File Storage Export | `OCI_FILE_STORAGE_EXPORT_SET_ID` and `OCI_FILE_SYSTEM_ID` | parent-scoped NFS export lifecycle and access-policy update |
 | Load Balancer | `OCI_SUBNET_ID` | private flexible Load Balancer lifecycle |
 | Notifications Topic | none | notification lifecycle and metadata update |
+| Notifications Subscription | `OCI_NOTIFICATION_TOPIC_ID`, `OCI_NOTIFICATION_PROTOCOL`, and `OCI_NOTIFICATION_ENDPOINT`; use a confirmation-free endpoint | endpoint-scoped subscription lifecycle and metadata update |
+| Email Domain | none | email-domain lifecycle, description update, and metadata convergence |
+| Email Sender | `OCI_EMAIL_SENDER_ADDRESS` | approved-sender lifecycle and metadata update |
 | Monitoring Alarm | `OCI_NOTIFICATION_TOPIC_ID` | disabled alarm lifecycle and query update |
 
 The Instance and OKE NodePool scenarios disable legacy IMDS endpoints, which
 is required in tenancies that enforce IMDSv2. The OKE scenarios use long
 timeouts because create and delete are asynchronous, potentially expensive
 operations. Do not commit live OCIDs into these manifests; the per-operator
-inputs remain environment values.
+inputs remain environment values. The MySQL scenario creates a temporary
+Kubernetes admin Secret from `OCI_MYSQL_ADMIN_PASSWORD`; both that Secret and
+the generated endpoint Secret are removed during scenario cleanup.
 
 See [Service-manager mock integration](../docs/contributor/service-manager-mock-integration.md)
 for typed fixture authoring and test-selection guidance.
