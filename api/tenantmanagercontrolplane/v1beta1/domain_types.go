@@ -59,6 +59,8 @@ type DomainStatus struct {
 	Status string `json:"sdkStatus,omitempty"`
 	// The code that the owner of the domain will need to add as a TXT record to their domain.
 	TxtRecord string `json:"txtRecord,omitempty"`
+	// The tenancy OCID recorded for list identity matching and replacement-only drift checks.
+	CompartmentId string `json:"compartmentId,omitempty"`
 	// Date-time when this domain was created. An RFC 3339-formatted date and time string.
 	TimeCreated string `json:"timeCreated,omitempty"`
 	// Date-time when this domain was last updated. An RFC 3339-formatted date and time string.
@@ -69,8 +71,6 @@ type DomainStatus struct {
 	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
 	// Example: `{"foo-namespace": {"bar-key": "value"}}`
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
-	// The tenancy OCID recorded for list identity matching and replacement-only drift checks.
-	CompartmentId string `json:"compartmentId,omitempty"`
 	// The accepted subscription email tracked from the spec because the SDK does not echo it on reads.
 	SubscriptionEmail string `json:"subscriptionEmail,omitempty"`
 	// Whether governance was requested for the bound domain; tracked from the spec because the SDK does not echo it on reads.

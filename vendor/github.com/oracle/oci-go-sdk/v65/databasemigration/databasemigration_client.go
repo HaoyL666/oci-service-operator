@@ -141,7 +141,7 @@ func (client DatabaseMigrationClient) abortJob(ctx context.Context, request comm
 
 	var response AbortJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "AbortJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -199,7 +199,7 @@ func (client DatabaseMigrationClient) addAssessmentObjects(ctx context.Context, 
 
 	var response AddAssessmentObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "AddAssessmentObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -257,7 +257,7 @@ func (client DatabaseMigrationClient) addMigrationObjects(ctx context.Context, r
 
 	var response AddMigrationObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "AddMigrationObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -320,7 +320,7 @@ func (client DatabaseMigrationClient) changeAssessmentCompartment(ctx context.Co
 
 	var response ChangeAssessmentCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ChangeAssessmentCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -383,7 +383,7 @@ func (client DatabaseMigrationClient) changeConnectionCompartment(ctx context.Co
 
 	var response ChangeConnectionCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ChangeConnectionCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -446,7 +446,7 @@ func (client DatabaseMigrationClient) changeMigrationCompartment(ctx context.Con
 
 	var response ChangeMigrationCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ChangeMigrationCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -509,7 +509,7 @@ func (client DatabaseMigrationClient) cloneAssessment(ctx context.Context, reque
 
 	var response CloneAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "CloneAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -572,7 +572,7 @@ func (client DatabaseMigrationClient) cloneMigration(ctx context.Context, reques
 
 	var response CloneMigrationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "CloneMigration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -630,7 +630,7 @@ func (client DatabaseMigrationClient) collectTraces(ctx context.Context, request
 
 	var response CollectTracesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "CollectTraces")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -693,7 +693,7 @@ func (client DatabaseMigrationClient) connectionDiagnostics(ctx context.Context,
 
 	var response ConnectionDiagnosticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ConnectionDiagnostics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -758,7 +758,7 @@ func (client DatabaseMigrationClient) createAssessment(ctx context.Context, requ
 
 	var response CreateAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "CreateAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -822,7 +822,7 @@ func (client DatabaseMigrationClient) createConnection(ctx context.Context, requ
 
 	var response CreateConnectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "CreateConnection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -887,7 +887,7 @@ func (client DatabaseMigrationClient) createMigration(ctx context.Context, reque
 
 	var response CreateMigrationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "CreateMigration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -950,7 +950,7 @@ func (client DatabaseMigrationClient) createParameterFileVersion(ctx context.Con
 
 	var response CreateParameterFileVersionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "CreateParameterFileVersion")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1008,7 +1008,7 @@ func (client DatabaseMigrationClient) deleteAssessment(ctx context.Context, requ
 
 	var response DeleteAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "DeleteAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1066,7 +1066,7 @@ func (client DatabaseMigrationClient) deleteConnection(ctx context.Context, requ
 
 	var response DeleteConnectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "DeleteConnection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1124,7 +1124,7 @@ func (client DatabaseMigrationClient) deleteJob(ctx context.Context, request com
 
 	var response DeleteJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "DeleteJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1182,7 +1182,7 @@ func (client DatabaseMigrationClient) deleteMigration(ctx context.Context, reque
 
 	var response DeleteMigrationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "DeleteMigration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1240,7 +1240,7 @@ func (client DatabaseMigrationClient) deleteParameterFileVersion(ctx context.Con
 
 	var response DeleteParameterFileVersionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "DeleteParameterFileVersion")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1303,7 +1303,7 @@ func (client DatabaseMigrationClient) evaluateMigration(ctx context.Context, req
 
 	var response EvaluateMigrationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "EvaluateMigration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1361,7 +1361,7 @@ func (client DatabaseMigrationClient) getAdvisorReport(ctx context.Context, requ
 
 	var response GetAdvisorReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetAdvisorReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1419,7 +1419,7 @@ func (client DatabaseMigrationClient) getAssessment(ctx context.Context, request
 
 	var response GetAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1477,7 +1477,7 @@ func (client DatabaseMigrationClient) getAssessor(ctx context.Context, request c
 
 	var response GetAssessorResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetAssessor")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1535,7 +1535,7 @@ func (client DatabaseMigrationClient) getAssessorCheck(ctx context.Context, requ
 
 	var response GetAssessorCheckResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetAssessorCheck")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1593,7 +1593,7 @@ func (client DatabaseMigrationClient) getConnection(ctx context.Context, request
 
 	var response GetConnectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetConnection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1603,6 +1603,64 @@ func (client DatabaseMigrationClient) getConnection(ctx context.Context, request
 	}
 
 	err = common.UnmarshalResponseWithPolymorphicBody(httpResponse, &response, &connection{})
+	return response, err
+}
+
+// GetDataVerificationDetail Returns availability and report status information used by the Data Verification UI.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/databasemigration/GetDataVerificationDetail.go.html to see an example of how to use GetDataVerificationDetail API.
+// A default retry strategy applies to this operation GetDataVerificationDetail()
+func (client DatabaseMigrationClient) GetDataVerificationDetail(ctx context.Context, request GetDataVerificationDetailRequest) (response GetDataVerificationDetailResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getDataVerificationDetail, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetDataVerificationDetailResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetDataVerificationDetailResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetDataVerificationDetailResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetDataVerificationDetailResponse")
+	}
+	return
+}
+
+// getDataVerificationDetail implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseMigrationClient) getDataVerificationDetail(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/migrations/{migrationId}/dataVerification/detail", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetDataVerificationDetailResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetDataVerificationDetail")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-migration/20230518/DataVerificationDetail/GetDataVerificationDetail"
+		err = common.PostProcessServiceError(err, "DatabaseMigration", "GetDataVerificationDetail", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
 	return response, err
 }
 
@@ -1651,7 +1709,7 @@ func (client DatabaseMigrationClient) getJob(ctx context.Context, request common
 
 	var response GetJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1709,7 +1767,7 @@ func (client DatabaseMigrationClient) getJobOutputContent(ctx context.Context, r
 
 	var response GetJobOutputContentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetJobOutputContent")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-migration/20230518/Job/GetJobOutputContent"
@@ -1766,7 +1824,7 @@ func (client DatabaseMigrationClient) getMigration(ctx context.Context, request 
 
 	var response GetMigrationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetMigration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1825,7 +1883,7 @@ func (client DatabaseMigrationClient) getParameterFileVersion(ctx context.Contex
 
 	var response GetParameterFileVersionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetParameterFileVersion")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1888,7 +1946,7 @@ func (client DatabaseMigrationClient) getScript(ctx context.Context, request com
 
 	var response GetScriptResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetScript")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := ""
@@ -1945,7 +2003,7 @@ func (client DatabaseMigrationClient) getWorkRequest(ctx context.Context, reques
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2003,7 +2061,7 @@ func (client DatabaseMigrationClient) listAdvisorReportCheckObjects(ctx context.
 
 	var response ListAdvisorReportCheckObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListAdvisorReportCheckObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2061,7 +2119,7 @@ func (client DatabaseMigrationClient) listAdvisorReportChecks(ctx context.Contex
 
 	var response ListAdvisorReportChecksResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListAdvisorReportChecks")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2119,7 +2177,7 @@ func (client DatabaseMigrationClient) listAffectedObjects(ctx context.Context, r
 
 	var response ListAffectedObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListAffectedObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2177,7 +2235,7 @@ func (client DatabaseMigrationClient) listAssessmentObjectTypes(ctx context.Cont
 
 	var response ListAssessmentObjectTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListAssessmentObjectTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2235,7 +2293,7 @@ func (client DatabaseMigrationClient) listAssessmentObjects(ctx context.Context,
 
 	var response ListAssessmentObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListAssessmentObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2293,7 +2351,7 @@ func (client DatabaseMigrationClient) listAssessments(ctx context.Context, reque
 
 	var response ListAssessmentsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListAssessments")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2351,7 +2409,7 @@ func (client DatabaseMigrationClient) listAssessorChecks(ctx context.Context, re
 
 	var response ListAssessorChecksResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListAssessorChecks")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2409,7 +2467,7 @@ func (client DatabaseMigrationClient) listAssessors(ctx context.Context, request
 
 	var response ListAssessorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListAssessors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2467,12 +2525,188 @@ func (client DatabaseMigrationClient) listConnections(ctx context.Context, reque
 
 	var response ListConnectionsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListConnections")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-migration/20230518/ConnectionSummary/ListConnections"
 		err = common.PostProcessServiceError(err, "DatabaseMigration", "ListConnections", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListDataVerificationObjectStatuses Lists per-object status comparison results for a migration.
+// The `objectType` filter is a database-specific string and is validated by the backend.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/databasemigration/ListDataVerificationObjectStatuses.go.html to see an example of how to use ListDataVerificationObjectStatuses API.
+// A default retry strategy applies to this operation ListDataVerificationObjectStatuses()
+func (client DatabaseMigrationClient) ListDataVerificationObjectStatuses(ctx context.Context, request ListDataVerificationObjectStatusesRequest) (response ListDataVerificationObjectStatusesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listDataVerificationObjectStatuses, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListDataVerificationObjectStatusesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListDataVerificationObjectStatusesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListDataVerificationObjectStatusesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListDataVerificationObjectStatusesResponse")
+	}
+	return
+}
+
+// listDataVerificationObjectStatuses implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseMigrationClient) listDataVerificationObjectStatuses(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/migrations/{migrationId}/dataVerification/objectStatuses", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListDataVerificationObjectStatusesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListDataVerificationObjectStatuses")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-migration/20230518/DataVerificationObjectStatusCollection/ListDataVerificationObjectStatuses"
+		err = common.PostProcessServiceError(err, "DatabaseMigration", "ListDataVerificationObjectStatuses", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListDataVerificationObjectTypeCounts Lists object type count comparison results for a migration.
+// The `objectType` filter is a database-specific string and is validated by the backend.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/databasemigration/ListDataVerificationObjectTypeCounts.go.html to see an example of how to use ListDataVerificationObjectTypeCounts API.
+// A default retry strategy applies to this operation ListDataVerificationObjectTypeCounts()
+func (client DatabaseMigrationClient) ListDataVerificationObjectTypeCounts(ctx context.Context, request ListDataVerificationObjectTypeCountsRequest) (response ListDataVerificationObjectTypeCountsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listDataVerificationObjectTypeCounts, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListDataVerificationObjectTypeCountsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListDataVerificationObjectTypeCountsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListDataVerificationObjectTypeCountsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListDataVerificationObjectTypeCountsResponse")
+	}
+	return
+}
+
+// listDataVerificationObjectTypeCounts implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseMigrationClient) listDataVerificationObjectTypeCounts(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/migrations/{migrationId}/dataVerification/objectTypeCounts", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListDataVerificationObjectTypeCountsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListDataVerificationObjectTypeCounts")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-migration/20230518/DataVerificationObjectTypeCountCollection/ListDataVerificationObjectTypeCounts"
+		err = common.PostProcessServiceError(err, "DatabaseMigration", "ListDataVerificationObjectTypeCounts", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListDataVerificationTableRowCounts Lists table row count comparison results for a migration.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/databasemigration/ListDataVerificationTableRowCounts.go.html to see an example of how to use ListDataVerificationTableRowCounts API.
+// A default retry strategy applies to this operation ListDataVerificationTableRowCounts()
+func (client DatabaseMigrationClient) ListDataVerificationTableRowCounts(ctx context.Context, request ListDataVerificationTableRowCountsRequest) (response ListDataVerificationTableRowCountsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listDataVerificationTableRowCounts, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListDataVerificationTableRowCountsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListDataVerificationTableRowCountsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListDataVerificationTableRowCountsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListDataVerificationTableRowCountsResponse")
+	}
+	return
+}
+
+// listDataVerificationTableRowCounts implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseMigrationClient) listDataVerificationTableRowCounts(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/migrations/{migrationId}/dataVerification/tableRowCounts", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListDataVerificationTableRowCountsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListDataVerificationTableRowCounts")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-migration/20230518/DataVerificationTableRowCountCollection/ListDataVerificationTableRowCounts"
+		err = common.PostProcessServiceError(err, "DatabaseMigration", "ListDataVerificationTableRowCounts", apiReferenceLink)
 		return response, err
 	}
 
@@ -2525,7 +2759,7 @@ func (client DatabaseMigrationClient) listDatabaseConnectionType(ctx context.Con
 
 	var response ListDatabaseConnectionTypeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListDatabaseConnectionType")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2583,7 +2817,7 @@ func (client DatabaseMigrationClient) listExcludedObjects(ctx context.Context, r
 
 	var response ListExcludedObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListExcludedObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2641,7 +2875,7 @@ func (client DatabaseMigrationClient) listJobOutputs(ctx context.Context, reques
 
 	var response ListJobOutputsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListJobOutputs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2700,7 +2934,7 @@ func (client DatabaseMigrationClient) listJobs(ctx context.Context, request comm
 
 	var response ListJobsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListJobs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2758,7 +2992,7 @@ func (client DatabaseMigrationClient) listMigrationObjectTypes(ctx context.Conte
 
 	var response ListMigrationObjectTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListMigrationObjectTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2816,7 +3050,7 @@ func (client DatabaseMigrationClient) listMigrationObjects(ctx context.Context, 
 
 	var response ListMigrationObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListMigrationObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2874,7 +3108,7 @@ func (client DatabaseMigrationClient) listMigrationParameters(ctx context.Contex
 
 	var response ListMigrationParametersResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListMigrationParameters")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2932,7 +3166,7 @@ func (client DatabaseMigrationClient) listMigrations(ctx context.Context, reques
 
 	var response ListMigrationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListMigrations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2992,7 +3226,7 @@ func (client DatabaseMigrationClient) listParameterFileVersions(ctx context.Cont
 
 	var response ListParameterFileVersionsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListParameterFileVersions")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3050,7 +3284,7 @@ func (client DatabaseMigrationClient) listWorkRequestErrors(ctx context.Context,
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3108,7 +3342,7 @@ func (client DatabaseMigrationClient) listWorkRequestLogs(ctx context.Context, r
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3166,7 +3400,7 @@ func (client DatabaseMigrationClient) listWorkRequests(ctx context.Context, requ
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3229,7 +3463,7 @@ func (client DatabaseMigrationClient) makeCurrentParameterFileVersion(ctx contex
 
 	var response MakeCurrentParameterFileVersionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "MakeCurrentParameterFileVersion")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3287,7 +3521,7 @@ func (client DatabaseMigrationClient) performAssessorAction(ctx context.Context,
 
 	var response PerformAssessorActionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "PerformAssessorAction")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3350,7 +3584,7 @@ func (client DatabaseMigrationClient) performAssessorActionDownloadSql(ctx conte
 
 	var response PerformAssessorActionDownloadSqlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "PerformAssessorActionDownloadSql")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3413,7 +3647,7 @@ func (client DatabaseMigrationClient) performAssessorCheckAction(ctx context.Con
 
 	var response PerformAssessorCheckActionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "PerformAssessorCheckAction")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3471,7 +3705,7 @@ func (client DatabaseMigrationClient) removeAssessmentObjects(ctx context.Contex
 
 	var response RemoveAssessmentObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "RemoveAssessmentObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3529,7 +3763,7 @@ func (client DatabaseMigrationClient) removeMigrationObjects(ctx context.Context
 
 	var response RemoveMigrationObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "RemoveMigrationObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3592,7 +3826,7 @@ func (client DatabaseMigrationClient) resumeJob(ctx context.Context, request com
 
 	var response ResumeJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "ResumeJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3650,12 +3884,75 @@ func (client DatabaseMigrationClient) retrieveSupportedPhases(ctx context.Contex
 
 	var response RetrieveSupportedPhasesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "RetrieveSupportedPhases")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-migration/20230518/Migration/RetrieveSupportedPhases"
 		err = common.PostProcessServiceError(err, "DatabaseMigration", "RetrieveSupportedPhases", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// RunDataVerification Runs Data Verification for a migration and returns the updated Data Verification summary.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/databasemigration/RunDataVerification.go.html to see an example of how to use RunDataVerification API.
+// A default retry strategy applies to this operation RunDataVerification()
+func (client DatabaseMigrationClient) RunDataVerification(ctx context.Context, request RunDataVerificationRequest) (response RunDataVerificationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.runDataVerification, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = RunDataVerificationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = RunDataVerificationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(RunDataVerificationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into RunDataVerificationResponse")
+	}
+	return
+}
+
+// runDataVerification implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseMigrationClient) runDataVerification(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/migrations/{migrationId}/actions/runDataVerification", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response RunDataVerificationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "RunDataVerification")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-migration/20230518/Migration/RunDataVerification"
+		err = common.PostProcessServiceError(err, "DatabaseMigration", "RunDataVerification", apiReferenceLink)
 		return response, err
 	}
 
@@ -3713,7 +4010,7 @@ func (client DatabaseMigrationClient) startMigration(ctx context.Context, reques
 
 	var response StartMigrationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "StartMigration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3776,7 +4073,7 @@ func (client DatabaseMigrationClient) suspendJob(ctx context.Context, request co
 
 	var response SuspendJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "SuspendJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3834,7 +4131,7 @@ func (client DatabaseMigrationClient) updateAdvisorReportCheck(ctx context.Conte
 
 	var response UpdateAdvisorReportCheckResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "UpdateAdvisorReportCheck")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3892,7 +4189,7 @@ func (client DatabaseMigrationClient) updateAdvisorReportCheckObjects(ctx contex
 
 	var response UpdateAdvisorReportCheckObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "UpdateAdvisorReportCheckObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3950,7 +4247,7 @@ func (client DatabaseMigrationClient) updateAssessment(ctx context.Context, requ
 
 	var response UpdateAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "UpdateAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4008,7 +4305,7 @@ func (client DatabaseMigrationClient) updateCheckActionUpdateObject(ctx context.
 
 	var response UpdateCheckActionUpdateObjectResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "UpdateCheckActionUpdateObject")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4066,7 +4363,7 @@ func (client DatabaseMigrationClient) updateConnection(ctx context.Context, requ
 
 	var response UpdateConnectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "UpdateConnection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4124,7 +4421,7 @@ func (client DatabaseMigrationClient) updateJob(ctx context.Context, request com
 
 	var response UpdateJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "UpdateJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4182,7 +4479,7 @@ func (client DatabaseMigrationClient) updateMigration(ctx context.Context, reque
 
 	var response UpdateMigrationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseMigration", "UpdateMigration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

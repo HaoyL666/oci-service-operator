@@ -69,9 +69,16 @@ type DeploymentSpec struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup being referenced.
 	// +kubebuilder:validation:Optional
 	DeploymentBackupId string `json:"deploymentBackupId,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy.
-	// Can be provided only for public deployments. If provided, the loadbalancer will be created in this subnet instead of the service tenancy.
-	// For backward compatibility, this is an optional property. It will become mandatory for public deployments after October 1, 2024.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy used to host the public load balancer of the deployment.
+	// Rules:
+	// - Create: Mandatory when isPublic is true. Must be a public, regional subnet in the same VCN as subnetId.
+	// - Update:
+	//   - For public deployments, this property must be present and is immutable once set (cannot be changed to a different subnet).
+	//   - Legacy exception: a public deployment created without this property may continue to be updated without providing it; once set, it becomes immutable.
+	// Validation:
+	// - Must reference a public subnet.
+	// - Must be a regional subnet.
+	// - Must be in the same VCN as subnetId.
 	// +kubebuilder:validation:Optional
 	LoadBalancerSubnetId string `json:"loadBalancerSubnetId,omitempty"`
 	// A three-label Fully Qualified Domain Name (FQDN) for a resource.
@@ -107,6 +114,10 @@ type DeploymentSpec struct {
 	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
 	// +kubebuilder:validation:Optional
 	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
+	// Indicates if disaster recovery is enabled for a deployment.
+	// If not specified, disaster recovery is ENABLED when no clusterPlacementGroupId is provided, and DISABLED when a clusterPlacementGroupId is provided.
+	// +kubebuilder:validation:Optional
+	DisasterRecoveryStatus string `json:"disasterRecoveryStatus,omitempty"`
 	// +kubebuilder:validation:Optional
 	OggData DeploymentOggData `json:"oggData,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
@@ -163,9 +174,10 @@ type DeploymentOggDataGroupToRolesMapping struct {
 // DeploymentOggData defines nested fields for Deployment.OggData.
 type DeploymentOggData struct {
 	// The name given to the GoldenGate service deployment.
-	// The name must be 1 to 32 characters long, must contain only alphanumeric characters and must start with a letter.
-	// +kubebuilder:validation:Required
-	DeploymentName string `json:"deploymentName"`
+	// The name must contain only alphanumeric characters and must start with a letter.
+	// For standby deployment the deployment name is inherited from primary.
+	// +kubebuilder:validation:Optional
+	DeploymentName string `json:"deploymentName,omitempty"`
 	// The type of credential store for OGG.
 	// +kubebuilder:validation:Optional
 	CredentialStore string `json:"credentialStore,omitempty"`
@@ -190,6 +202,9 @@ type DeploymentOggData struct {
 	// The base64 encoded content of the PEM file containing the private key.
 	// +kubebuilder:validation:Optional
 	Key string `json:"key,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the deployment ssl private key is stored in PEM format.
+	// +kubebuilder:validation:Optional
+	KeySecretId string `json:"keySecretId,omitempty"`
 	// Version of OGG
 	// +kubebuilder:validation:Optional
 	OggVersion string `json:"oggVersion,omitempty"`
@@ -288,8 +303,8 @@ type DeploymentStatus struct {
 	SubnetId string `json:"subnetId,omitempty"`
 	// The Oracle license model that applies to a Deployment.
 	LicenseModel string `json:"licenseModel,omitempty"`
-	// The deployment category defines the broad separation of the deployment type into three categories.
-	// Currently the separation is 'DATA_REPLICATION', 'STREAM_ANALYTICS' and 'DATA_TRANSFORMS'.
+	// The deployment category defines the broad separation of the deployment type into four categories.
+	// Currently the separation is 'DATA_REPLICATION', 'STREAM_ANALYTICS', 'DATA_TRANSFORMS' and 'DATA_VERIFICATION'.
 	Category string `json:"category,omitempty"`
 	// The Minimum number of OCPUs to be made available for this Deployment.
 	CpuCoreCount int `json:"cpuCoreCount,omitempty"`
@@ -324,7 +339,7 @@ type DeploymentStatus struct {
 	// The time the resource was last updated. The format is defined by
 	// RFC3339 (https://tools.ietf.org/html/rfc3339), such as `2016-08-25T21:10:29.600Z`.
 	TimeUpdated string `json:"timeUpdated,omitempty"`
-	// Possible lifecycle states.
+	// Possible lifecycle states for a Deployment.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Possible GGS lifecycle sub-states.
 	LifecycleSubState string `json:"lifecycleSubState,omitempty"`
@@ -342,9 +357,16 @@ type DeploymentStatus struct {
 	Locks []DeploymentLock `json:"locks,omitempty"`
 	// True if all of the aggregate resources are working correctly.
 	IsHealthy bool `json:"isHealthy,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy.
-	// Can be provided only for public deployments. If provided, the loadbalancer will be created in this subnet instead of the service tenancy.
-	// For backward compatibility, this is an optional property. It will become mandatory for public deployments after October 1, 2024.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy used to host the public load balancer of the deployment.
+	// Rules:
+	// - Create: Mandatory when isPublic is true. Must be a public, regional subnet in the same VCN as subnetId.
+	// - Update:
+	//   - For public deployments, this property must be present and is immutable once set (cannot be changed to a different subnet).
+	//   - Legacy exception: a public deployment created without this property may continue to be updated without providing it; once set, it becomes immutable.
+	// Validation:
+	// - Must reference a public subnet.
+	// - Must be a regional subnet.
+	// - Must be in the same VCN as subnetId.
 	LoadBalancerSubnetId string `json:"loadBalancerSubnetId,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the loadbalancer in the customer's subnet.
 	// The loadbalancer of the public deployment created in the customer subnet.
@@ -377,14 +399,6 @@ type DeploymentStatus struct {
 	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 	// Indicates if the resource is the the latest available version.
 	IsLatestVersion bool `json:"isLatestVersion,omitempty"`
-	// Note: Deprecated: Use timeOfNextMaintenance instead, or related upgrade records
-	// to check, when deployment will be forced to upgrade to a newer version.
-	// Old description:
-	// The date the existing version in use will no longer be considered as usable
-	// and an upgrade will be required.  This date is typically 6 months after the
-	// version was released for use by GGS.  The format is defined by
-	// RFC3339 (https://tools.ietf.org/html/rfc3339), such as `2016-08-25T21:10:29.600Z`.
-	TimeUpgradeRequired string `json:"timeUpgradeRequired,omitempty"`
 	// The amount of storage being utilized (in bytes)
 	StorageUtilizationInBytes int64 `json:"storageUtilizationInBytes,omitempty"`
 	// Deprecated: This field is not updated and will be removed in future versions. If storage utilization exceeds the limit, the respective warning message will appear in deployment messages, which can be accessed through /messages?deploymentId=.
@@ -424,6 +438,9 @@ type DeploymentStatus struct {
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
 	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
+	// Indicates if disaster recovery is enabled for a deployment.
+	// If not specified, disaster recovery is ENABLED when no clusterPlacementGroupId is provided, and DISABLED when a clusterPlacementGroupId is provided.
+	DisasterRecoveryStatus string `json:"disasterRecoveryStatus,omitempty"`
 }
 
 // +kubebuilder:object:root=true

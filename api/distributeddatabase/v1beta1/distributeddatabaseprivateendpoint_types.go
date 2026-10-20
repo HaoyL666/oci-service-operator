@@ -26,9 +26,9 @@ type DistributedDatabasePrivateEndpointSpec struct {
 	// DistributedDatabasePrivateEndpoint description.
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
-	// The OCIDs of the network security groups that the private endpoint belongs to.
+	// The list of network security group (NSG) details to be associated with the private endpoint.
 	// +kubebuilder:validation:Optional
-	NsgIds []string `json:"nsgIds,omitempty"`
+	VcnNsgIds []DistributedDatabasePrivateEndpointVcnNsgId `json:"vcnNsgIds,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -39,20 +39,15 @@ type DistributedDatabasePrivateEndpointSpec struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 }
 
-// DistributedDatabasePrivateEndpointGloballyDistributedDatabase defines nested fields for DistributedDatabasePrivateEndpoint.GloballyDistributedDatabase.
-type DistributedDatabasePrivateEndpointGloballyDistributedDatabase struct {
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the distributed database.
-	Id string `json:"id,omitempty"`
-	// The dbDeploymentType associated with the distributed database.
-	DbDeploymentType string `json:"dbDeploymentType,omitempty"`
-}
-
-// DistributedDatabasePrivateEndpointGloballyDistributedAutonomousDatabase defines nested fields for DistributedDatabasePrivateEndpoint.GloballyDistributedAutonomousDatabase.
-type DistributedDatabasePrivateEndpointGloballyDistributedAutonomousDatabase struct {
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the distributed database.
-	Id string `json:"id,omitempty"`
-	// The dbDeploymentType associated with the distributed autonomous database.
-	DbDeploymentType string `json:"dbDeploymentType,omitempty"`
+// DistributedDatabasePrivateEndpointVcnNsgId defines nested fields for DistributedDatabasePrivateEndpoint.VcnNsgId.
+type DistributedDatabasePrivateEndpointVcnNsgId struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the customer Virtual Cloud Network.
+	// +kubebuilder:validation:Required
+	VcnId string `json:"vcnId"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) associated with resources in this VCN.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Required
+	NsgIds []string `json:"nsgIds"`
 }
 
 // DistributedDatabasePrivateEndpointStatus defines the observed state of DistributedDatabasePrivateEndpoint.
@@ -78,12 +73,8 @@ type DistributedDatabasePrivateEndpointStatus struct {
 	Description string `json:"description,omitempty"`
 	// IP address of the Private Endpoint.
 	PrivateIp string `json:"privateIp,omitempty"`
-	// The OCIDs of the network security groups that the private endpoint belongs to.
-	NsgIds []string `json:"nsgIds,omitempty"`
-	// This field is deprecated. Support for this field will be removed after Mon, 1 Mar 2027 00:00:00 GMT.
-	GloballyDistributedDatabases []DistributedDatabasePrivateEndpointGloballyDistributedDatabase `json:"globallyDistributedDatabases,omitempty"`
-	// This field is deprecated. Support for this field will be removed after Mon, 1 Mar 2027 00:00:00 GMT.
-	GloballyDistributedAutonomousDatabases []DistributedDatabasePrivateEndpointGloballyDistributedAutonomousDatabase `json:"globallyDistributedAutonomousDatabases,omitempty"`
+	// The list of network security group (NSG) details associated with the private endpoint.
+	VcnNsgIds []DistributedDatabasePrivateEndpointVcnNsgId `json:"vcnNsgIds,omitempty"`
 	// Detailed message for the lifecycle state.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
 	// The identifier of the proxy compute instance.

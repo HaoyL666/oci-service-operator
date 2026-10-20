@@ -35,6 +35,11 @@ type RecoveryServiceSubnetSpec struct {
 	// See NetworkSecurityGroup for more information.
 	// +kubebuilder:validation:Optional
 	NsgIds []string `json:"nsgIds,omitempty"`
+	// Security attributes for this resource. Each key is predefined and scoped to a namespace.
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
+	// +kubebuilder:validation:Optional
+	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -65,6 +70,10 @@ type RecoveryServiceSubnetStatus struct {
 	// Specify an empty array if you want to remove all the associated NSGs from a Recovery Service subnet.
 	// See NetworkSecurityGroup for more information.
 	NsgIds []string `json:"nsgIds,omitempty"`
+	// Security attributes for this resource. Each key is predefined and scoped to a namespace.
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
+	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
 	// An RFC3339 formatted datetime string that indicates the last created time for a recovery service subnet. For example: '2020-05-22T21:10:29.600Z'.
 	TimeCreated string `json:"timeCreated,omitempty"`
 	// An RFC3339 formatted datetime string that indicates the last updated time for a recovery service subnet. For example: '2020-05-22T21:10:29.600Z'.

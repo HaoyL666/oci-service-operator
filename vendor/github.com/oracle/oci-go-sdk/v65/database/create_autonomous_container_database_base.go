@@ -130,7 +130,7 @@ type CreateAutonomousContainerDatabaseBase interface {
 	// The CPU value beyond which an Autonomous AI Database will be opened across multiple nodes. The default value of this attribute is 16 for OCPUs and 64 for ECPUs.
 	GetDbSplitThreshold() *int
 
-	// The percentage of CPUs reserved across nodes to support node failover. Allowed values are 0%, 25%, and 50%, with 50% being the default option.
+	// The percentage of CPUs reserved across nodes to support node failover. Allowed values are 0%, 25%, 50%, 75%, and 100%, with 50% being the default option.
 	GetVmFailoverReservation() *int
 
 	// Determines whether an Autonomous AI Database must be opened across a minimum or maximum of nodes. By default, Minimum nodes is selected.
@@ -248,6 +248,10 @@ func (m *createautonomouscontainerdatabasebase) UnmarshalPolymorphicJSON(data []
 
 	var err error
 	switch m.Source {
+	case "BACKUP_FROM_TIMESTAMP":
+		mm := CreateAutonomousContainerDatabaseFromBackupTimestampDetails{}
+		err = json.Unmarshal(data, &mm)
+		return mm, err
 	case "NONE":
 		mm := CreateAutonomousContainerDatabaseDetails{}
 		err = json.Unmarshal(data, &mm)
@@ -708,16 +712,19 @@ type CreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnum string
 const (
 	CreateAutonomousContainerDatabaseBaseNetServicesArchitectureDedicated CreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnum = "DEDICATED"
 	CreateAutonomousContainerDatabaseBaseNetServicesArchitectureShared    CreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnum = "SHARED"
+	CreateAutonomousContainerDatabaseBaseNetServicesArchitectureDrcp      CreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnum = "DRCP"
 )
 
 var mappingCreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnum = map[string]CreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnum{
 	"DEDICATED": CreateAutonomousContainerDatabaseBaseNetServicesArchitectureDedicated,
 	"SHARED":    CreateAutonomousContainerDatabaseBaseNetServicesArchitectureShared,
+	"DRCP":      CreateAutonomousContainerDatabaseBaseNetServicesArchitectureDrcp,
 }
 
 var mappingCreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnumLowerCase = map[string]CreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnum{
 	"dedicated": CreateAutonomousContainerDatabaseBaseNetServicesArchitectureDedicated,
 	"shared":    CreateAutonomousContainerDatabaseBaseNetServicesArchitectureShared,
+	"drcp":      CreateAutonomousContainerDatabaseBaseNetServicesArchitectureDrcp,
 }
 
 // GetCreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnumValues Enumerates the set of values for CreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnum
@@ -734,6 +741,7 @@ func GetCreateAutonomousContainerDatabaseBaseNetServicesArchitectureEnumStringVa
 	return []string{
 		"DEDICATED",
 		"SHARED",
+		"DRCP",
 	}
 }
 
@@ -748,18 +756,21 @@ type CreateAutonomousContainerDatabaseBaseSourceEnum string
 
 // Set of constants representing the allowable values for CreateAutonomousContainerDatabaseBaseSourceEnum
 const (
-	CreateAutonomousContainerDatabaseBaseSourceNone         CreateAutonomousContainerDatabaseBaseSourceEnum = "NONE"
-	CreateAutonomousContainerDatabaseBaseSourceBackupFromId CreateAutonomousContainerDatabaseBaseSourceEnum = "BACKUP_FROM_ID"
+	CreateAutonomousContainerDatabaseBaseSourceNone                CreateAutonomousContainerDatabaseBaseSourceEnum = "NONE"
+	CreateAutonomousContainerDatabaseBaseSourceBackupFromId        CreateAutonomousContainerDatabaseBaseSourceEnum = "BACKUP_FROM_ID"
+	CreateAutonomousContainerDatabaseBaseSourceBackupFromTimestamp CreateAutonomousContainerDatabaseBaseSourceEnum = "BACKUP_FROM_TIMESTAMP"
 )
 
 var mappingCreateAutonomousContainerDatabaseBaseSourceEnum = map[string]CreateAutonomousContainerDatabaseBaseSourceEnum{
-	"NONE":           CreateAutonomousContainerDatabaseBaseSourceNone,
-	"BACKUP_FROM_ID": CreateAutonomousContainerDatabaseBaseSourceBackupFromId,
+	"NONE":                  CreateAutonomousContainerDatabaseBaseSourceNone,
+	"BACKUP_FROM_ID":        CreateAutonomousContainerDatabaseBaseSourceBackupFromId,
+	"BACKUP_FROM_TIMESTAMP": CreateAutonomousContainerDatabaseBaseSourceBackupFromTimestamp,
 }
 
 var mappingCreateAutonomousContainerDatabaseBaseSourceEnumLowerCase = map[string]CreateAutonomousContainerDatabaseBaseSourceEnum{
-	"none":           CreateAutonomousContainerDatabaseBaseSourceNone,
-	"backup_from_id": CreateAutonomousContainerDatabaseBaseSourceBackupFromId,
+	"none":                  CreateAutonomousContainerDatabaseBaseSourceNone,
+	"backup_from_id":        CreateAutonomousContainerDatabaseBaseSourceBackupFromId,
+	"backup_from_timestamp": CreateAutonomousContainerDatabaseBaseSourceBackupFromTimestamp,
 }
 
 // GetCreateAutonomousContainerDatabaseBaseSourceEnumValues Enumerates the set of values for CreateAutonomousContainerDatabaseBaseSourceEnum
@@ -776,6 +787,7 @@ func GetCreateAutonomousContainerDatabaseBaseSourceEnumStringValues() []string {
 	return []string{
 		"NONE",
 		"BACKUP_FROM_ID",
+		"BACKUP_FROM_TIMESTAMP",
 	}
 }
 

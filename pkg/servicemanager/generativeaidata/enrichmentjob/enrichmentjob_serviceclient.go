@@ -32,40 +32,8 @@ type defaultEnrichmentJobServiceClient struct {
 
 var _ EnrichmentJobServiceClient = defaultEnrichmentJobServiceClient{}
 
-type EnrichmentJobSDKClients struct {
-	generateEnrichmentJobClient generativeaidatasdk.GenerateEnrichmentJobClient
-	getEnrichmentJobClient      generativeaidatasdk.GetEnrichmentJobClient
-	listEnrichmentJobsClient    generativeaidatasdk.ListEnrichmentJobsClient
-	cancelEnrichmentJobClient   generativeaidatasdk.CancelEnrichmentJobClient
-}
-
-func newEnrichmentJobSDKClients(manager *EnrichmentJobServiceManager) (EnrichmentJobSDKClients, error) {
-	var clients EnrichmentJobSDKClients
-	generateEnrichmentJobClientClient, err := generativeaidatasdk.NewGenerateEnrichmentJobClientWithConfigurationProvider(manager.Provider)
-	if err != nil {
-		return clients, fmt.Errorf("initialize EnrichmentJob OCI client GenerateEnrichmentJobClient: %w", err)
-	}
-	clients.generateEnrichmentJobClient = generateEnrichmentJobClientClient
-	getEnrichmentJobClientClient, err := generativeaidatasdk.NewGetEnrichmentJobClientWithConfigurationProvider(manager.Provider)
-	if err != nil {
-		return clients, fmt.Errorf("initialize EnrichmentJob OCI client GetEnrichmentJobClient: %w", err)
-	}
-	clients.getEnrichmentJobClient = getEnrichmentJobClientClient
-	listEnrichmentJobsClientClient, err := generativeaidatasdk.NewListEnrichmentJobsClientWithConfigurationProvider(manager.Provider)
-	if err != nil {
-		return clients, fmt.Errorf("initialize EnrichmentJob OCI client ListEnrichmentJobsClient: %w", err)
-	}
-	clients.listEnrichmentJobsClient = listEnrichmentJobsClientClient
-	cancelEnrichmentJobClientClient, err := generativeaidatasdk.NewCancelEnrichmentJobClientWithConfigurationProvider(manager.Provider)
-	if err != nil {
-		return clients, fmt.Errorf("initialize EnrichmentJob OCI client CancelEnrichmentJobClient: %w", err)
-	}
-	clients.cancelEnrichmentJobClient = cancelEnrichmentJobClientClient
-	return clients, nil
-}
-
 var newEnrichmentJobServiceClient = func(manager *EnrichmentJobServiceManager) EnrichmentJobServiceClient {
-	sdkClient, err := newEnrichmentJobSDKClients(manager)
+	sdkClient, err := generativeaidatasdk.NewEnrichmentJobClientWithConfigurationProvider(manager.Provider)
 	hooks := newEnrichmentJobRuntimeHooks(manager, sdkClient)
 	config := buildEnrichmentJobGeneratedRuntimeConfig(manager, hooks)
 	if err != nil {

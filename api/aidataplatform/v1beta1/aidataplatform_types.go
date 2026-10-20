@@ -23,6 +23,18 @@ type AiDataPlatformSpec struct {
 	// The AiDataPlatform type.
 	// +kubebuilder:validation:Optional
 	AiDataPlatformType string `json:"aiDataPlatformType,omitempty"`
+	// The flag to enable/disable AiFeatures for the instance.
+	// +kubebuilder:validation:Optional
+	IsEnableAiFeature bool `json:"isEnableAiFeature,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the vector db Lakehouse 26ai.
+	// +kubebuilder:validation:Optional
+	VectorDbId string `json:"vectorDbId,omitempty"`
+	// The Vector DB Lakehouse 26ai ADMIN user password.
+	// +kubebuilder:validation:Optional
+	VectorDbAdminCred string `json:"vectorDbAdminCred,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI Vault secret holding the vector db Lakehouse 26ai Admin user password.
+	// +kubebuilder:validation:Optional
+	VectorDbAdminSecretId string `json:"vectorDbAdminSecretId,omitempty"`
 	// The name for the default workspace for the AiDataPlatform
 	// +kubebuilder:validation:Optional
 	DefaultWorkspaceName string `json:"defaultWorkspaceName,omitempty"`
@@ -75,6 +87,8 @@ type AiDataPlatformStatus struct {
 	AliasKey string `json:"aliasKey,omitempty"`
 	// The WebSocket URL of the AiDataPlatform.
 	WebSocketEndpoint string `json:"webSocketEndpoint,omitempty"`
+	// The current aiFeatureStatus of the AiDataPlatform.
+	AiFeatureStatus string `json:"aiFeatureStatus,omitempty"`
 	// A message that describes the current state of the AiDataPlatform in more detail. For example,
 	// can be used to provide actionable information for a resource in the Failed state.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`

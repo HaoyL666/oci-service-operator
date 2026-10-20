@@ -161,6 +161,9 @@ spec:
                 type: array
               jsonData:
                 type: string
+              migrationScope:
+                description: Assessment migration scope.
+                type: string
               networkSpeedMegabitPerSecond:
                 description: A network speed in Megabits per second.
                 type: string
@@ -266,6 +269,9 @@ spec:
                 type: string
               migrationId:
                 description: The OCID of the resource being referenced.
+                type: string
+              migrationScope:
+                description: Assessment migration scope.
                 type: string
               networkSpeedMegabitPerSecond:
                 description: A network speed in Megabits per second.

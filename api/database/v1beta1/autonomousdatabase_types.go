@@ -20,6 +20,9 @@ type AutonomousDatabaseSpec struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
 	// +kubebuilder:validation:Optional
 	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// The Autonomous Database Serverless instance's availability domain.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
 	// The character set for the Autonomous AI Database. The default is AL32UTF8. Allowed values for an Autonomous AI Database Serverless instance as as returned by List Autonomous AI Database Character Sets (https://docs.oracle.com/iaas/autonomous-database-serverless/doc/autonomous-character-set-selection.html)
 	// For an Autonomous AI Database on dedicated infrastructure, the allowed values are:
 	// AL32UTF8, AR8ADOS710, AR8ADOS720, AR8APTEC715, AR8ARABICMACS, AR8ASMO8X, AR8ISO8859P6, AR8MSWIN1256, AR8MUSSAD768, AR8NAFITHA711, AR8NAFITHA721, AR8SAKHR706, AR8SAKHR707, AZ8ISO8859P9E, BG8MSWIN, BG8PC437S, BLT8CP921, BLT8ISO8859P13, BLT8MSWIN1257, BLT8PC775, BN8BSCII, CDN8PC863, CEL8ISO8859P14, CL8ISO8859P5, CL8ISOIR111, CL8KOI8R, CL8KOI8U, CL8MACCYRILLICS, CL8MSWIN1251, EE8ISO8859P2, EE8MACCES, EE8MACCROATIANS, EE8MSWIN1250, EE8PC852, EL8DEC, EL8ISO8859P7, EL8MACGREEKS, EL8MSWIN1253, EL8PC437S, EL8PC851, EL8PC869, ET8MSWIN923, HU8ABMOD, HU8CWI2, IN8ISCII, IS8PC861, IW8ISO8859P8, IW8MACHEBREWS, IW8MSWIN1255, IW8PC1507, JA16EUC, JA16EUCTILDE, JA16SJIS, JA16SJISTILDE, JA16VMS, KO16KSC5601, KO16KSCCS, KO16MSWIN949, LA8ISO6937, LA8PASSPORT, LT8MSWIN921, LT8PC772, LT8PC774, LV8PC1117, LV8PC8LR, LV8RST104090, N8PC865, NE8ISO8859P10, NEE8ISO8859P4, RU8BESTA, RU8PC855, RU8PC866, SE8ISO8859P3, TH8MACTHAIS, TH8TISASCII, TR8DEC, TR8MACTURKISHS, TR8MSWIN1254, TR8PC857, US7ASCII, US8PC437, UTF8, VN8MSWIN1258, VN8VN3, WE8DEC, WE8DG, WE8ISO8859P1, WE8ISO8859P15, WE8ISO8859P9, WE8MACROMAN8S, WE8MSWIN1252, WE8NCR4970, WE8NEXTSTEP, WE8PC850, WE8PC858, WE8PC860, WE8ROMAN8, ZHS16CGB231280, ZHS16GBK, ZHT16BIG5, ZHT16CCDC, ZHT16DBT, ZHT16HKSCS, ZHT16MSWIN950, ZHT32EUC, ZHT32SOPS, ZHT32TRIS
@@ -89,7 +92,7 @@ type AutonomousDatabaseSpec struct {
 	// If set to `TRUE`, indicates that an Autonomous AI Database preview version is being provisioned, and that the preview version's terms of service have been accepted. Note that preview version software is only available for Autonomous AI Database Serverless instances (https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/).
 	// +kubebuilder:validation:Optional
 	IsPreviewVersionWithServiceTermsAccepted bool `json:"isPreviewVersionWithServiceTermsAccepted,omitempty"`
-	// Indicates if auto scaling is enabled for the Autonomous AI Database CPU core count. The default value is `TRUE`.
+	// Indicates if auto scaling is enabled for the Autonomous AI Database CPU core count. The default value is `FALSE`.
 	// +kubebuilder:validation:Optional
 	IsAutoScalingEnabled bool `json:"isAutoScalingEnabled,omitempty"`
 	// Autonomous AI Database for Developers are fixed-shape Autonomous AI Databases that developers can use to build and test new applications. On Serverless, these are low-cost and billed per instance, on Dedicated and Cloud@Customer there is no additional cost to create Developer databases. Developer databases come with limited resources and is not intended for large-scale testing and production deployments. When you need more compute or storage resources, you may upgrade to a full paid production database.
@@ -190,6 +193,7 @@ type AutonomousDatabaseSpec struct {
 	// When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
 	// When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
 	// For new databases, it is recommended to use either 19c or 26ai.
+	// The default database version is the Oracle-recommended version. You can retrieve the default DB version by calling the ListAutonomousDbVersions operation.
 	// **Note** Starting December 2026, 23ai will not be supported as a valid value for this parameter.
 	// +kubebuilder:validation:Optional
 	DbVersion string `json:"dbVersion,omitempty"`
@@ -250,6 +254,7 @@ type AutonomousDatabaseSpec struct {
 	// - APEX - indicates an Autonomous AI Database with the Oracle APEX AI Application Development workload type.
 	// - LH - indicates an Oracle Autonomous AI Lakehouse database
 	// **Note** Starting December 2026, DW will not be supported as a valid value for this parameter.
+	// When creating an Autonomous AI Database, if this parameter is not specified, the default value is `OLTP`.
 	//
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, isMTLSConnectionRequired, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
 	// +kubebuilder:validation:Optional
@@ -270,6 +275,15 @@ type AutonomousDatabaseSpec struct {
 	LocalAdgAutoFailoverMaxDataLossLimit int `json:"localAdgAutoFailoverMaxDataLossLimit,omitempty"`
 	// +kubebuilder:validation:Optional
 	LongTermBackupSchedule AutonomousDatabaseLongTermBackupSchedule `json:"longTermBackupSchedule,omitempty,omitzero"`
+	// The date and time when the Autonomous Database availability domain is to be updated.
+	// +kubebuilder:validation:Optional
+	TimeScheduledAdUpdate string `json:"timeScheduledAdUpdate,omitempty"`
+	// True, if you want to disable Autonomous Database availability domain scheduled update.
+	// +kubebuilder:validation:Optional
+	IsDisableAdUpdateSchedule bool `json:"isDisableAdUpdateSchedule,omitempty"`
+	// True, if you want to schedule Autonomous Database availability domain update to the earliest available time.
+	// +kubebuilder:validation:Optional
+	IsScheduleAdUpdateToEarliest bool `json:"isScheduleAdUpdateToEarliest,omitempty"`
 	// Indicates if the Autonomous AI Database is a refreshable clone.
 	// This cannot be updated in parallel with any of the following: cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, openMode, permissionLevel, dbWorkload, privateEndpointLabel, nsgIds, dbVersion, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
 	// +kubebuilder:validation:Optional
@@ -279,6 +293,7 @@ type AutonomousDatabaseSpec struct {
 	RefreshableMode string `json:"refreshableMode,omitempty"`
 	// The database OCID(/Content/General/Concepts/identifiers.htm) of the Disaster Recovery peer (source Primary) database, which is located in a different (remote) region from the current peer database.
 	// To create or delete a local (in-region) standby, see the `isDataGuardEnabled` parameter.
+	// When disconnecting a cross-region standby, specify the standby database OCID in this parameter together with `isDisconnectPeer=true`.
 	// +kubebuilder:validation:Optional
 	PeerDbId string `json:"peerDbId,omitempty"`
 	// Indicates the Autonomous AI Database mode. The database can be opened in `READ_ONLY` or `READ_WRITE` mode.
@@ -301,6 +316,11 @@ type AutonomousDatabaseSpec struct {
 	// The date until which Autonomous AI Database maintenance is temporarily paused.
 	// +kubebuilder:validation:Optional
 	TimeMaintenancePauseUntil string `json:"timeMaintenancePauseUntil,omitempty"`
+	// +kubebuilder:validation:Optional
+	ScheduledMaintenanceWindow AutonomousDatabaseScheduledMaintenanceWindow `json:"scheduledMaintenanceWindow,omitempty,omitzero"`
+	// The date and time at which operation to change Maintenance Window is scheduled to take place.
+	// +kubebuilder:validation:Optional
+	TimeScheduledMaintenanceWindowUpdate string `json:"timeScheduledMaintenanceWindowUpdate,omitempty"`
 	// The date and time the Autonomous AI Database scheduled to upgrade to 26ai.
 	// +kubebuilder:validation:Optional
 	TimeScheduledDbVersionUpgrade string `json:"timeScheduledDbVersionUpgrade,omitempty"`
@@ -312,8 +332,9 @@ type AutonomousDatabaseSpec struct {
 	IsScheduleDbVersionUpgradeToEarliest bool `json:"isScheduleDbVersionUpgradeToEarliest,omitempty"`
 	// +kubebuilder:validation:Optional
 	VanityUrlDetails AutonomousDatabaseVanityUrlDetails `json:"vanityUrlDetails,omitempty,omitzero"`
-	// If true, this will disconnect the Autonomous AI Database from its peer and the Autonomous AI Database can work permanently as a standalone database.
-	// To disconnect a cross region standby, please also provide the OCID of the standby database in the `peerDbId` parameter.
+	// If true, this disconnects the Autonomous AI Database from its peer. After the disconnect completes, the Autonomous AI Database works permanently as a standalone database.
+	// **Warning:** A disconnected standby is no longer part of the disaster recovery configuration. Operations and restrictions that apply to a connected standby do not apply in the same way after the database has been disconnected.
+	// To disconnect a cross region standby, also provide the OCID of the standby database in the `peerDbId` parameter.
 	// +kubebuilder:validation:Optional
 	IsDisconnectPeer bool `json:"isDisconnectPeer,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a dedicated resource pool leader Autonomous AI Database in the same region, that is required when local Autonomous Data Guard is enabled for a dedicated resource pool member using the parameter `isLocalDataGuardEnabled`.
@@ -466,6 +487,12 @@ type AutonomousDatabaseMaintenanceWindow struct {
 	// The maintenance end time. The value must use the ISO-8601 format "hh:mm".
 	// +kubebuilder:validation:Optional
 	MaintenanceEndTime string `json:"maintenanceEndTime,omitempty"`
+	// The AD in which the maintenance will occur.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// Indicates if the maintenance window change is scheduled or not for the Autonomous AI Database.
+	// +kubebuilder:validation:Optional
+	IsMaintenanceWindowChangeScheduled bool `json:"isMaintenanceWindowChangeScheduled,omitempty"`
 }
 
 // AutonomousDatabaseScheduledOperationDayOfWeek defines nested fields for AutonomousDatabase.ScheduledOperation.DayOfWeek.
@@ -526,6 +553,31 @@ type AutonomousDatabaseLongTermBackupSchedule struct {
 	IsDisabled bool `json:"isDisabled,omitempty"`
 }
 
+// AutonomousDatabaseScheduledMaintenanceWindowDayOfWeek defines nested fields for AutonomousDatabase.ScheduledMaintenanceWindow.DayOfWeek.
+type AutonomousDatabaseScheduledMaintenanceWindowDayOfWeek struct {
+	// Name of the day of the week.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+}
+
+// AutonomousDatabaseScheduledMaintenanceWindow defines nested fields for AutonomousDatabase.ScheduledMaintenanceWindow.
+type AutonomousDatabaseScheduledMaintenanceWindow struct {
+	// +kubebuilder:validation:Required
+	DayOfWeek AutonomousDatabaseScheduledMaintenanceWindowDayOfWeek `json:"dayOfWeek"`
+	// The maintenance start time. The value must use the ISO-8601 format "hh:mm".
+	// +kubebuilder:validation:Optional
+	MaintenanceStartTime string `json:"maintenanceStartTime,omitempty"`
+	// The maintenance end time. The value must use the ISO-8601 format "hh:mm".
+	// +kubebuilder:validation:Optional
+	MaintenanceEndTime string `json:"maintenanceEndTime,omitempty"`
+	// The AD in which the maintenance will occur.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// Indicates if the maintenance window change is scheduled or not for the Autonomous AI Database.
+	// +kubebuilder:validation:Optional
+	IsMaintenanceWindowChangeScheduled bool `json:"isMaintenanceWindowChangeScheduled,omitempty"`
+}
+
 // AutonomousDatabaseVanityUrlDetails defines nested fields for AutonomousDatabase.VanityUrlDetails.
 type AutonomousDatabaseVanityUrlDetails struct {
 	// Indicates if the vanity url details should be deleted for the Autonomous AI Database.
@@ -551,6 +603,8 @@ type AutonomousDatabaseEncryptionKeyLocationDetails struct {
 	AzureEncryptionKeyId string `json:"azureEncryptionKeyId,omitempty"`
 	// Provide the key OCID of a registered AWS key.
 	AwsEncryptionKeyId string `json:"awsEncryptionKeyId,omitempty"`
+	// Provide the key pool OCID of a registered AWS key.
+	AwsEncryptionKeyPoolId string `json:"awsEncryptionKeyPoolId,omitempty"`
 }
 
 // AutonomousDatabaseBackupConfig defines nested fields for AutonomousDatabase.BackupConfig.
@@ -666,18 +720,22 @@ type AutonomousDatabaseConnectionUrls struct {
 	SqlDevWebUrl string `json:"sqlDevWebUrl,omitempty"`
 	// Oracle Application Express (APEX) URL.
 	ApexUrl string `json:"apexUrl,omitempty"`
-	// Oracle Machine Learning user management URL.
+	// Oracle Machine Learning user management URL. Applicable to Autonomous AI Database Serverless only.
 	MachineLearningUserManagementUrl string `json:"machineLearningUserManagementUrl,omitempty"`
-	// The URL of the Graph Studio for the Autonomous AI Database.
+	// The URL of the Graph Studio for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	GraphStudioUrl string `json:"graphStudioUrl,omitempty"`
 	// The URL of the MongoDB API for the Autonomous AI Database.
 	MongoDbUrl string `json:"mongoDbUrl,omitempty"`
-	// The URL of the Oracle Machine Learning (OML) Notebook for the Autonomous AI Database.
+	// The URL of the Oracle Machine Learning (OML) Notebook for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	MachineLearningNotebookUrl string `json:"machineLearningNotebookUrl,omitempty"`
 	// The Oracle REST Data Services (ORDS) URL of the Web Access for the Autonomous AI Database.
 	OrdsUrl string `json:"ordsUrl,omitempty"`
-	// The URL of the Database Transforms for the Autonomous AI Database.
+	// The URL of the Database Transforms for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	DatabaseTransformsUrl string `json:"databaseTransformsUrl,omitempty"`
+	// Essbase URL for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
+	EssbaseUrl string `json:"essbaseUrl,omitempty"`
+	// The URL of the Spatial Studio for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
+	SpatialStudioUrl string `json:"spatialStudioUrl,omitempty"`
 }
 
 // AutonomousDatabasePublicConnectionUrls defines nested fields for AutonomousDatabase.PublicConnectionUrls.
@@ -686,18 +744,22 @@ type AutonomousDatabasePublicConnectionUrls struct {
 	SqlDevWebUrl string `json:"sqlDevWebUrl,omitempty"`
 	// Oracle Application Express (APEX) URL.
 	ApexUrl string `json:"apexUrl,omitempty"`
-	// Oracle Machine Learning user management URL.
+	// Oracle Machine Learning user management URL. Applicable to Autonomous AI Database Serverless only.
 	MachineLearningUserManagementUrl string `json:"machineLearningUserManagementUrl,omitempty"`
-	// The URL of the Graph Studio for the Autonomous AI Database.
+	// The URL of the Graph Studio for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	GraphStudioUrl string `json:"graphStudioUrl,omitempty"`
 	// The URL of the MongoDB API for the Autonomous AI Database.
 	MongoDbUrl string `json:"mongoDbUrl,omitempty"`
-	// The URL of the Oracle Machine Learning (OML) Notebook for the Autonomous AI Database.
+	// The URL of the Oracle Machine Learning (OML) Notebook for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	MachineLearningNotebookUrl string `json:"machineLearningNotebookUrl,omitempty"`
 	// The Oracle REST Data Services (ORDS) URL of the Web Access for the Autonomous AI Database.
 	OrdsUrl string `json:"ordsUrl,omitempty"`
-	// The URL of the Database Transforms for the Autonomous AI Database.
+	// The URL of the Database Transforms for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	DatabaseTransformsUrl string `json:"databaseTransformsUrl,omitempty"`
+	// Essbase URL for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
+	EssbaseUrl string `json:"essbaseUrl,omitempty"`
+	// The URL of the Spatial Studio for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
+	SpatialStudioUrl string `json:"spatialStudioUrl,omitempty"`
 }
 
 // AutonomousDatabaseVanityConnectionUrls defines nested fields for AutonomousDatabase.VanityConnectionUrls.
@@ -706,18 +768,22 @@ type AutonomousDatabaseVanityConnectionUrls struct {
 	SqlDevWebUrl string `json:"sqlDevWebUrl,omitempty"`
 	// Oracle Application Express (APEX) URL.
 	ApexUrl string `json:"apexUrl,omitempty"`
-	// Oracle Machine Learning user management URL.
+	// Oracle Machine Learning user management URL. Applicable to Autonomous AI Database Serverless only.
 	MachineLearningUserManagementUrl string `json:"machineLearningUserManagementUrl,omitempty"`
-	// The URL of the Graph Studio for the Autonomous AI Database.
+	// The URL of the Graph Studio for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	GraphStudioUrl string `json:"graphStudioUrl,omitempty"`
 	// The URL of the MongoDB API for the Autonomous AI Database.
 	MongoDbUrl string `json:"mongoDbUrl,omitempty"`
-	// The URL of the Oracle Machine Learning (OML) Notebook for the Autonomous AI Database.
+	// The URL of the Oracle Machine Learning (OML) Notebook for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	MachineLearningNotebookUrl string `json:"machineLearningNotebookUrl,omitempty"`
 	// The Oracle REST Data Services (ORDS) URL of the Web Access for the Autonomous AI Database.
 	OrdsUrl string `json:"ordsUrl,omitempty"`
-	// The URL of the Database Transforms for the Autonomous AI Database.
+	// The URL of the Database Transforms for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
 	DatabaseTransformsUrl string `json:"databaseTransformsUrl,omitempty"`
+	// Essbase URL for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
+	EssbaseUrl string `json:"essbaseUrl,omitempty"`
+	// The URL of the Spatial Studio for the Autonomous AI Database. Applicable to Autonomous AI Database Serverless only.
+	SpatialStudioUrl string `json:"spatialStudioUrl,omitempty"`
 }
 
 // AutonomousDatabaseApexDetails defines nested fields for AutonomousDatabase.ApexDetails.
@@ -748,6 +814,8 @@ type AutonomousDatabaseStandbyDb struct {
 	MaintenanceTargetComponent string `json:"maintenanceTargetComponent,omitempty"`
 	// The availability domain of a local Autonomous Data Guard standby database of an Autonomous AI Database Serverless instance.
 	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The external logical zone where the local Autonomous Data Guard is located (Intended for multicloud use).
+	ExternalLocationZone string `json:"externalLocationZone,omitempty"`
 }
 
 // AutonomousDatabaseLocalStandbyDb defines nested fields for AutonomousDatabase.LocalStandbyDb.
@@ -770,6 +838,8 @@ type AutonomousDatabaseLocalStandbyDb struct {
 	MaintenanceTargetComponent string `json:"maintenanceTargetComponent,omitempty"`
 	// The availability domain of a local Autonomous Data Guard standby database of an Autonomous AI Database Serverless instance.
 	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The external logical zone where the local Autonomous Data Guard is located (Intended for multicloud use).
+	ExternalLocationZone string `json:"externalLocationZone,omitempty"`
 }
 
 // AutonomousDatabaseRemoteDisasterRecoveryConfiguration defines nested fields for AutonomousDatabase.RemoteDisasterRecoveryConfiguration.
@@ -955,6 +1025,7 @@ type AutonomousDatabaseStatus struct {
 	// When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
 	// When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
 	// For new databases, it is recommended to use either 19c or 26ai.
+	// The default database version is the Oracle-recommended version. You can retrieve the default DB version by calling the ListAutonomousDbVersions operation.
 	// **Note** Starting December 2026, 23ai will not be supported as a valid value for this parameter.
 	DbVersion string `json:"dbVersion,omitempty"`
 	// Indicates if the Autonomous AI Database version is a preview version.
@@ -966,6 +1037,7 @@ type AutonomousDatabaseStatus struct {
 	// - APEX - indicates an Autonomous AI Database with the Oracle APEX AI Application Development workload type.
 	// - LH - indicates an Oracle Autonomous AI Lakehouse database
 	// **Note** Starting December 2026, DW will not be supported as a valid value for this parameter.
+	// When creating an Autonomous AI Database, if this parameter is not specified, the default value is `OLTP`.
 	//
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, isMTLSConnectionRequired, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
 	DbWorkload string `json:"dbWorkload,omitempty"`
@@ -1006,7 +1078,7 @@ type AutonomousDatabaseStatus struct {
 	StandbyWhitelistedIps []string `json:"standbyWhitelistedIps,omitempty"`
 	// Information about Oracle APEX AI Application Development.
 	ApexDetails AutonomousDatabaseApexDetails `json:"apexDetails,omitempty"`
-	// Indicates if auto scaling is enabled for the Autonomous AI Database CPU core count. The default value is `TRUE`.
+	// Indicates if auto scaling is enabled for the Autonomous AI Database CPU core count. The default value is `FALSE`.
 	IsAutoScalingEnabled bool `json:"isAutoScalingEnabled,omitempty"`
 	// Status of the Data Safe registration for this Autonomous AI Database.
 	DataSafeStatus string `json:"dataSafeStatus,omitempty"`
@@ -1106,7 +1178,10 @@ type AutonomousDatabaseStatus struct {
 	AutonomousMaintenanceScheduleType   string                              `json:"autonomousMaintenanceScheduleType,omitempty"`
 	AutonomousDatabaseMaintenanceWindow AutonomousDatabaseMaintenanceWindow `json:"autonomousDatabaseMaintenanceWindow,omitempty"`
 	// The date until which Autonomous AI Database maintenance is temporarily paused.
-	TimeMaintenancePauseUntil string `json:"timeMaintenancePauseUntil,omitempty"`
+	TimeMaintenancePauseUntil  string                                       `json:"timeMaintenancePauseUntil,omitempty"`
+	ScheduledMaintenanceWindow AutonomousDatabaseScheduledMaintenanceWindow `json:"scheduledMaintenanceWindow,omitempty"`
+	// The date and time at which operation to change Maintenance Window is scheduled to take place.
+	TimeScheduledMaintenanceWindowUpdate string `json:"timeScheduledMaintenanceWindowUpdate,omitempty"`
 	// The list of scheduled operations. Consists of values such as dayOfWeek, scheduledStartTime, scheduledStopTime.
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, whitelistedIps, isMTLSConnectionRequired, openMode, permissionLevel, dbWorkload, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
 	ScheduledOperations []AutonomousDatabaseScheduledOperation `json:"scheduledOperations,omitempty"`
@@ -1132,12 +1207,22 @@ type AutonomousDatabaseStatus struct {
 	// The date and time the Disaster Recovery role was switched for the standby Autonomous AI Database.
 	TimeDisasterRecoveryRoleChanged     string                                                `json:"timeDisasterRecoveryRoleChanged,omitempty"`
 	RemoteDisasterRecoveryConfiguration AutonomousDatabaseRemoteDisasterRecoveryConfiguration `json:"remoteDisasterRecoveryConfiguration,omitempty"`
+	// List of access types for an Autonomous AI Database.
+	AccessTypes []string `json:"accessTypes,omitempty"`
 	// Enabling SHARED server architecture enables a database server to allow many client processes to share very few server processes, thereby increasing the number of supported users.
 	NetServicesArchitecture string `json:"netServicesArchitecture,omitempty"`
 	// The availability domain where the Autonomous AI Database Serverless instance is located.
 	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the cluster placement group of the Autonomous Serverless Database.
 	ClusterPlacementGroupId string `json:"clusterPlacementGroupId,omitempty"`
+	// The Availability Domain which is planned for Scheduled Update
+	AdScheduledForUpdate string `json:"adScheduledForUpdate,omitempty"`
+	// The earliest date and time to which you can schedule an Autonomous Database availability domain update.
+	TimeEarliestAvailableAdUpdate string `json:"timeEarliestAvailableAdUpdate,omitempty"`
+	// The latest date and time to which you can schedule an Autonomous Database availability domain update.
+	TimeLatestAvailableAdUpdate string `json:"timeLatestAvailableAdUpdate,omitempty"`
+	// The date and time to which the Autonomous Database availability domain update is scheduled.
+	TimeScheduledAdUpdate string `json:"timeScheduledAdUpdate,omitempty"`
 	// A list of the source Autonomous AI Database's table space number(s) used to create this partial clone from the backup.
 	CloneTableSpaceList []int `json:"cloneTableSpaceList,omitempty"`
 	// The Autonomous AI Database clone type.
@@ -1147,6 +1232,8 @@ type AutonomousDatabaseStatus struct {
 	AdditionalAttributes map[string]string `json:"additionalAttributes,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the dedicated resource pool leader Autonomous AI Database in the same region, associated with local Autonomous Data Guard for a dedicated resource pool member.
 	LocalAdgResourcePoolLeaderId string `json:"localAdgResourcePoolLeaderId,omitempty"`
+	// The external logical zone where the Autonomous AI Database Serverless instance is located (Intended for multicloud use).
+	ExternalLocationZone string `json:"externalLocationZone,omitempty"`
 }
 
 // +kubebuilder:object:root=true

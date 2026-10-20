@@ -53,6 +53,9 @@ type SubscriptionSpec struct {
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
+	// Optional reason provided by the customer for the cancellation.
+	// +kubebuilder:validation:Optional
+	Reason string `json:"reason,omitempty"`
 }
 
 // SubscriptionDetailsPricingPlanRate defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Rate.
@@ -65,6 +68,41 @@ type SubscriptionDetailsPricingPlanRate struct {
 	Rate float32 `json:"rate"`
 }
 
+// SubscriptionDetailsPricingPlanDimensionRate defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.Rate.
+type SubscriptionDetailsPricingPlanDimensionRate struct {
+	// The currency supported, in the format specified by ISO-4217
+	// +kubebuilder:validation:Required
+	Currency string `json:"currency"`
+	// The amount charged for the plan in the specified currency.
+	// +kubebuilder:validation:Required
+	Rate float32 `json:"rate"`
+}
+
+// SubscriptionDetailsPricingPlanDimension defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.
+type SubscriptionDetailsPricingPlanDimension struct {
+	// The name of the usage dimension.
+	// +kubebuilder:validation:Required
+	DimensionName string `json:"dimensionName"`
+	// The stable key used internally to map this usage dimension to billing details.
+	// +kubebuilder:validation:Required
+	DimensionKey string `json:"dimensionKey"`
+	// A detailed explanation of the usage dimension.
+	// +kubebuilder:validation:Required
+	DimensionDescription string `json:"dimensionDescription"`
+	// The metric type in which usage is measured.
+	// +kubebuilder:validation:Required
+	MetricType string `json:"metricType"`
+	// Specifies the interval at which the usage dimension is billed.
+	// +kubebuilder:validation:Required
+	DimensionBillingFrequency string `json:"dimensionBillingFrequency"`
+	// Dimension-level rates in various supported currencies.
+	// +kubebuilder:validation:Required
+	Rates []SubscriptionDetailsPricingPlanDimensionRate `json:"rates"`
+	// Quantity included in the base fee for hybrid plans.
+	// +kubebuilder:validation:Optional
+	IncludedQuantity float32 `json:"includedQuantity,omitempty"`
+}
+
 // SubscriptionDetailsPricingPlan defines nested fields for Subscription.SubscriptionDetails.PricingPlan.
 type SubscriptionDetailsPricingPlan struct {
 	// The type of the subscription plan.
@@ -73,7 +111,7 @@ type SubscriptionDetailsPricingPlan struct {
 	// The name of the subscription plan used to identify the plan.
 	// +kubebuilder:validation:Required
 	PlanName string `json:"planName"`
-	// Specifies the interval at which billing occurs for the subscription plan.
+	// Specifies the interval at which billing occurs for the subscription plan or usage dimension.
 	// +kubebuilder:validation:Required
 	BillingFrequency string `json:"billingFrequency"`
 	// The pricing details of the subscription plan in various supported currencies.
@@ -82,13 +120,16 @@ type SubscriptionDetailsPricingPlan struct {
 	// A detailed explanation of the subscription plan.
 	// +kubebuilder:validation:Optional
 	PlanDescription string `json:"planDescription,omitempty"`
-	// Specifies the interval at which billing occurs for the subscription plan.
+	// Specifies the duration of the subscription plan.
 	// +kubebuilder:validation:Optional
 	PlanDuration string `json:"planDuration,omitempty"`
+	// Metered usage dimensions associated with the pricing plan.
+	// +kubebuilder:validation:Optional
+	Dimensions []SubscriptionDetailsPricingPlanDimension `json:"dimensions,omitempty"`
 }
 
-// SubscriptionDetailsBillingDetailsMeterExtendedMetadata defines nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.ExtendedMetadata.
-type SubscriptionDetailsBillingDetailsMeterExtendedMetadata struct {
+// SubscriptionDetailsBillingDetailMeterExtendedMetadata defines nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.ExtendedMetadata.
+type SubscriptionDetailsBillingDetailMeterExtendedMetadata struct {
 	// Additional attribute for extendedMetadata.
 	// +kubebuilder:validation:Required
 	Key string `json:"key"`
@@ -97,8 +138,8 @@ type SubscriptionDetailsBillingDetailsMeterExtendedMetadata struct {
 	Value string `json:"value"`
 }
 
-// SubscriptionDetailsBillingDetailsMeter defines nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.
-type SubscriptionDetailsBillingDetailsMeter struct {
+// SubscriptionDetailsBillingDetailMeter defines nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.
+type SubscriptionDetailsBillingDetailMeter struct {
 	// Name of meter.
 	// +kubebuilder:validation:Required
 	Name string `json:"name"`
@@ -107,11 +148,17 @@ type SubscriptionDetailsBillingDetailsMeter struct {
 	RateAllocation float32 `json:"rateAllocation"`
 	// Additional data give by sku.
 	// +kubebuilder:validation:Optional
-	ExtendedMetadata []SubscriptionDetailsBillingDetailsMeterExtendedMetadata `json:"extendedMetadata,omitempty"`
+	ExtendedMetadata []SubscriptionDetailsBillingDetailMeterExtendedMetadata `json:"extendedMetadata,omitempty"`
 }
 
-// SubscriptionDetailsBillingDetails defines nested fields for Subscription.SubscriptionDetails.BillingDetails.
-type SubscriptionDetailsBillingDetails struct {
+// SubscriptionDetailsBillingDetail defines nested fields for Subscription.SubscriptionDetails.BillingDetail.
+type SubscriptionDetailsBillingDetail struct {
+	// Unique key used to map this SKU to the pricing plan.
+	// +kubebuilder:validation:Required
+	PricingPlanKey string `json:"pricingPlanKey"`
+	// The billing model this billing detail applies to.
+	// +kubebuilder:validation:Required
+	BillingModel string `json:"billingModel"`
 	// Sku for service.
 	// +kubebuilder:validation:Required
 	Sku string `json:"sku"`
@@ -123,7 +170,7 @@ type SubscriptionDetailsBillingDetails struct {
 	RateAllocation float32 `json:"rateAllocation"`
 	// The meters associated with sku.
 	// +kubebuilder:validation:Required
-	Meters []SubscriptionDetailsBillingDetailsMeter `json:"meters"`
+	Meters []SubscriptionDetailsBillingDetailMeter `json:"meters"`
 	// Whether this sku is assign to gov product.
 	// +kubebuilder:validation:Optional
 	HasGovSku bool `json:"hasGovSku,omitempty"`
@@ -136,8 +183,9 @@ type SubscriptionDetails struct {
 	// The activation link given by the partner.
 	// +kubebuilder:validation:Required
 	PartnerRegistrationUrl string `json:"partnerRegistrationUrl"`
+	// Billing details associated with the subscription plan and its usage dimensions.
 	// +kubebuilder:validation:Required
-	BillingDetails SubscriptionDetailsBillingDetails `json:"billingDetails"`
+	BillingDetails []SubscriptionDetailsBillingDetail `json:"billingDetails"`
 	// The currency supported, in the format specified by ISO-4217
 	// +kubebuilder:validation:Optional
 	Currency string `json:"currency,omitempty"`

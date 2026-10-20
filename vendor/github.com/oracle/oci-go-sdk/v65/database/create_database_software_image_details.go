@@ -37,6 +37,9 @@ type CreateDatabaseSoftwareImageDetails struct {
 	// The PSU or PBP or Release Updates. To get a list of supported versions, use the ListDbVersions operation.
 	PatchSet *string `mandatory:"false" json:"patchSet"`
 
+	// If true, the caller acknowledges selecting or applying an older DB, Grid Infrastructure, or operating system software version that is outside the latest default version window.
+	IsOlderVersionAcknowledged *bool `mandatory:"false" json:"isOlderVersionAcknowledged"`
+
 	// List of one-off patches for Database Homes.
 	DatabaseSoftwareImageOneOffPatches []string `mandatory:"false" json:"databaseSoftwareImageOneOffPatches"`
 
@@ -54,6 +57,9 @@ type CreateDatabaseSoftwareImageDetails struct {
 
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
 	SourceDbHomeId *string `mandatory:"false" json:"sourceDbHomeId"`
+
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Grid Infrastructure Home.
+	SourceGiHomeId *string `mandatory:"false" json:"sourceGiHomeId"`
 }
 
 func (m CreateDatabaseSoftwareImageDetails) String() string {
@@ -87,6 +93,7 @@ const (
 	CreateDatabaseSoftwareImageDetailsImageShapeFamilyExadataShape CreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum = "EXADATA_SHAPE"
 	CreateDatabaseSoftwareImageDetailsImageShapeFamilyExaccShape   CreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum = "EXACC_SHAPE"
 	CreateDatabaseSoftwareImageDetailsImageShapeFamilyExadbxsShape CreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum = "EXADBXS_SHAPE"
+	CreateDatabaseSoftwareImageDetailsImageShapeFamilyBdbccShape   CreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum = "BDBCC_SHAPE"
 )
 
 var mappingCreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum = map[string]CreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum{
@@ -94,6 +101,7 @@ var mappingCreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum = map[string]C
 	"EXADATA_SHAPE": CreateDatabaseSoftwareImageDetailsImageShapeFamilyExadataShape,
 	"EXACC_SHAPE":   CreateDatabaseSoftwareImageDetailsImageShapeFamilyExaccShape,
 	"EXADBXS_SHAPE": CreateDatabaseSoftwareImageDetailsImageShapeFamilyExadbxsShape,
+	"BDBCC_SHAPE":   CreateDatabaseSoftwareImageDetailsImageShapeFamilyBdbccShape,
 }
 
 var mappingCreateDatabaseSoftwareImageDetailsImageShapeFamilyEnumLowerCase = map[string]CreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum{
@@ -101,6 +109,7 @@ var mappingCreateDatabaseSoftwareImageDetailsImageShapeFamilyEnumLowerCase = map
 	"exadata_shape": CreateDatabaseSoftwareImageDetailsImageShapeFamilyExadataShape,
 	"exacc_shape":   CreateDatabaseSoftwareImageDetailsImageShapeFamilyExaccShape,
 	"exadbxs_shape": CreateDatabaseSoftwareImageDetailsImageShapeFamilyExadbxsShape,
+	"bdbcc_shape":   CreateDatabaseSoftwareImageDetailsImageShapeFamilyBdbccShape,
 }
 
 // GetCreateDatabaseSoftwareImageDetailsImageShapeFamilyEnumValues Enumerates the set of values for CreateDatabaseSoftwareImageDetailsImageShapeFamilyEnum
@@ -119,6 +128,7 @@ func GetCreateDatabaseSoftwareImageDetailsImageShapeFamilyEnumStringValues() []s
 		"EXADATA_SHAPE",
 		"EXACC_SHAPE",
 		"EXADBXS_SHAPE",
+		"BDBCC_SHAPE",
 	}
 }
 

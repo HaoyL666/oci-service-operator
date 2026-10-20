@@ -76,6 +76,14 @@ type NodePoolSpec struct {
 	NodeEvictionNodePoolSettings NodePoolNodeEvictionNodePoolSettings `json:"nodeEvictionNodePoolSettings,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	NodePoolCyclingDetails NodePoolCyclingDetails `json:"nodePoolCyclingDetails,omitempty,omitzero"`
+	// A list of secondary vnics to attach to nodes
+	// +kubebuilder:validation:Optional
+	SecondaryVnics []NodePoolSecondaryVnic `json:"secondaryVnics,omitempty"`
+	// Emulation type for the physical network interface card (NIC) for nodes
+	// +kubebuilder:validation:Optional
+	NetworkLaunchType string `json:"networkLaunchType,omitempty"`
+	// +kubebuilder:validation:Optional
+	PrimaryVnic NodePoolPrimaryVnic `json:"primaryVnic,omitempty,omitzero"`
 }
 
 // NodePoolNodeSourceDetails defines nested fields for NodePool.NodeSourceDetails.
@@ -142,6 +150,9 @@ type NodePoolNodeConfigDetailsPlacementConfig struct {
 	// The OCID of the compute capacity reservation in which to place the compute instance.
 	// +kubebuilder:validation:Optional
 	CapacityReservationId string `json:"capacityReservationId,omitempty"`
+	// The OCID of the Host Group to be associated with the worker node instance.
+	// +kubebuilder:validation:Optional
+	HostGroupId string `json:"hostGroupId,omitempty"`
 	// +kubebuilder:validation:Optional
 	PreemptibleNodeConfig NodePoolNodeConfigDetailsPlacementConfigPreemptibleNodeConfig `json:"preemptibleNodeConfig,omitempty,omitzero"`
 	// A list of fault domains in which to place nodes.
@@ -187,6 +198,9 @@ type NodePoolNodeConfigDetails struct {
 	// Whether to enable in-transit encryption for the data volume's paravirtualized attachment. This field applies to both block volumes and boot volumes. The default value is false.
 	// +kubebuilder:validation:Optional
 	IsPvEncryptionInTransitEnabled bool `json:"isPvEncryptionInTransitEnabled,omitempty"`
+	// The OCID of the Compute Cluster to be associated with the worker node instance.
+	// +kubebuilder:validation:Optional
+	ComputeClusterId string `json:"computeClusterId,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -234,6 +248,85 @@ type NodePoolCyclingDetails struct {
 	// An ordered list of cycle modes that should be performed on the OKE nodes.
 	// +kubebuilder:validation:Optional
 	CycleModes []string `json:"cycleModes,omitempty"`
+}
+
+// NodePoolSecondaryVnicCreateVnicDetailsIpv6AddressIpv6SubnetCidrPairDetail defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails.Ipv6AddressIpv6SubnetCidrPairDetail.
+type NodePoolSecondaryVnicCreateVnicDetailsIpv6AddressIpv6SubnetCidrPairDetail struct {
+	// An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix
+	// +kubebuilder:validation:Optional
+	Ipv6Address string `json:"ipv6Address,omitempty"`
+	// The IPv6 prefix allocated to the subnet
+	// +kubebuilder:validation:Optional
+	Ipv6SubnetCidr string `json:"ipv6SubnetCidr,omitempty"`
+}
+
+// NodePoolSecondaryVnicCreateVnicDetails defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails.
+type NodePoolSecondaryVnicCreateVnicDetails struct {
+	// the ocid of the subnet to create the vnic in
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// Display name for secondary vnic
+	// +kubebuilder:validation:Optional
+	DisplayName string `json:"displayName,omitempty"`
+	// Whether to allocate an IPv6 address at instance and VNIC creation from an IPv6 enabled subnet
+	// +kubebuilder:validation:Optional
+	AssignIpv6Ip bool `json:"assignIpv6Ip,omitempty"`
+	// Whether the VNIC should be assigned a public IP address
+	// +kubebuilder:validation:Optional
+	AssignPublicIp bool `json:"assignPublicIp,omitempty"`
+	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+	// Example: `{"Operations": {"CostCenter": "42"}}`
+	// +kubebuilder:validation:Optional
+	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
+	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
+	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+	// Example: `{"Department": "Finance"}`
+	// +kubebuilder:validation:Optional
+	FreeformTags map[string]string `json:"freeformTags,omitempty"`
+	// The number of ip addresses to attach to secondary vnic
+	// +kubebuilder:validation:Optional
+	IpCount int `json:"ipCount,omitempty"`
+	// The application resource that corresponds to this secondary vnic. Used to map pods to this specific vnic for scheduling
+	// +kubebuilder:validation:Optional
+	ApplicationResources []string `json:"applicationResources,omitempty"`
+	// A list of IPv6 prefixes from which the VNIC should be assigned an IPv6 address. You can provide only the prefix
+	// and OCI selects an available address from the range. You can optionally choose to leave the prefix range empty
+	// and instead provide the specific IPv6 address that should be used from within that range.
+	// +kubebuilder:validation:Optional
+	Ipv6AddressIpv6SubnetCidrPairDetails []NodePoolSecondaryVnicCreateVnicDetailsIpv6AddressIpv6SubnetCidrPairDetail `json:"ipv6AddressIpv6SubnetCidrPairDetails,omitempty"`
+	// A list of the OCIDs of the network security groups (NSGs) to add the VNIC to
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// Whether the source/destination check is disabled on the VNIC
+	// +kubebuilder:validation:Optional
+	SkipSourceDestCheck bool `json:"skipSourceDestCheck,omitempty"`
+	// Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels
+	//         for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+	//         (ZPR) policy to control access to ZPR-supported resources.
+	// +kubebuilder:validation:Optional
+	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
+}
+
+// NodePoolSecondaryVnic defines nested fields for NodePool.SecondaryVnic.
+type NodePoolSecondaryVnic struct {
+	// +kubebuilder:validation:Required
+	CreateVnicDetails NodePoolSecondaryVnicCreateVnicDetails `json:"createVnicDetails"`
+	// Display name for vnic attachment
+	// +kubebuilder:validation:Optional
+	DisplayName string `json:"displayName,omitempty"`
+	// Which physical network interface card (NIC) the VNIC will use
+	// +kubebuilder:validation:Optional
+	NicIndex int `json:"nicIndex,omitempty"`
+}
+
+// NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic.
+type NodePoolPrimaryVnic struct {
+	// Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels
+	//         for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+	//         (ZPR) policy to control access to ZPR-supported resources.
+	// +kubebuilder:validation:Optional
+	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
 }
 
 // NodePoolNodeSource defines nested fields for NodePool.NodeSource.
@@ -353,6 +446,11 @@ type NodePoolStatus struct {
 	SystemTags                   map[string]shared.MapValue           `json:"systemTags,omitempty"`
 	NodeEvictionNodePoolSettings NodePoolNodeEvictionNodePoolSettings `json:"nodeEvictionNodePoolSettings,omitempty"`
 	NodePoolCyclingDetails       NodePoolCyclingDetails               `json:"nodePoolCyclingDetails,omitempty"`
+	// A list of secondary vnics to attach to nodes
+	SecondaryVnics []NodePoolSecondaryVnic `json:"secondaryVnics,omitempty"`
+	// Emulation type for the physical network interface card (NIC) for nodes
+	NetworkLaunchType string              `json:"networkLaunchType,omitempty"`
+	PrimaryVnic       NodePoolPrimaryVnic `json:"primaryVnic,omitempty"`
 }
 
 // +kubebuilder:object:root=true

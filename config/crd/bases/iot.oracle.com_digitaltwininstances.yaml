@@ -62,6 +62,9 @@ spec:
                   of the resource (like VaultSecret, ClientCertificate etc.,) used
                   to authenticate the digital twin instance.
                 type: string
+              connectivityType:
+                description: Connectivity type of the digital twin instance.
+                type: string
               definedTags:
                 additionalProperties:
                   additionalProperties:
@@ -104,6 +107,13 @@ spec:
                   For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
+              gateways:
+                description: An array of unique ids (OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm))
+                  of the IoT digital twin instances with connectivityType equals to
+                  GATEWAY.
+                items:
+                  type: string
+                type: array
               iotDomainId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the IoT domain.
@@ -119,6 +129,9 @@ spec:
                   of the resource (like VaultSecret, ClientCertificate etc.,) used
                   to authenticate the digital twin instance.
                 type: string
+              connectivityType:
+                description: Connectivity type of the digital twin instance.
+                type: string
               definedTags:
                 additionalProperties:
                   additionalProperties:
@@ -161,6 +174,13 @@ spec:
                   For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
+              gateways:
+                description: An array of unique ids (OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm))
+                  of the IoT digital twin instances with connectivityType equals to
+                  GATEWAY.
+                items:
+                  type: string
+                type: array
               id:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the resource.

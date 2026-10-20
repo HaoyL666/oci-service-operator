@@ -461,6 +461,7 @@ ListingRevisionSpec defines the desired state of ListingRevision.
 | `listingId` | The unique identifier for the listing this revision belongs to. | `string` | Yes | - | - |
 | `listingType` | - | `string` | No | - | - |
 | `longDescription` | A long description for the listing revision. | `string` | No | - | - |
+| `partnerRegistrationUrl` | The url provided by partner for the registration of subscription. | `string` | No | - | - |
 | [`pricingPlans`](#kind-listingrevision-spec-pricingplans) | List of Pricing Plans provider by publisher. | `list[object]` | No | - | - |
 | `pricingType` | The pricing model for the listing revision. | `string` | No | - | - |
 | `productCodes` | List of product codes subscribed by listing. | `list[string]` | No | - | - |
@@ -474,6 +475,7 @@ ListingRevisionSpec defines the desired state of ListingRevision.
 | [`supportedlanguages`](#kind-listingrevision-spec-supportedlanguages) | Languages supported by the publisher for the listing revision. | `list[object]` | No | - | - |
 | `systemRequirements` | System requirements for the listing revision. | `string` | No | - | - |
 | `tagline` | The tagline for the listing revision. | `string` | No | - | - |
+| `termId` | The unique id of the term attached to the listing. | `string` | No | - | - |
 | [`trainedProfessionals`](#kind-listingrevision-spec-trainedprofessionals) | Number of trained professional per product | `list[object]` | No | - | - |
 | `usageInformation` | Usage information for the listing revision. | `string` | No | - | - |
 | `vanityUrl` | Custom link to the listing | `string` | No | - | - |
@@ -525,12 +527,45 @@ ListingRevisionPricingPlan defines nested fields for ListingRevision.PricingPlan
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `billingFrequency` | The plan billing frequency. | `string` | No | - | - |
-| `extendedMetadata` | Additional metadata key/value pairs for the metering pricing. | `map[string, string]` | No | - | - |
+| [`dimensions`](#kind-listingrevision-spec-pricingplans-dimensions) | The usage dimensions that define included usage and overage billing for this plan. | `list[object]` | No | - | - |
+| `extendedMetadata` | Additional metadata key/value pairs for the hybrid pricing. | `map[string, string]` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
-| `name` | The listing's pricing plan name. | `string` | No | - | - |
+| `name` | The plan name. | `string` | No | - | - |
 | `planDescription` | The plan description. | `string` | No | - | - |
+| `planDuration` | The plan duration. | `string` | No | - | - |
 | `planType` | - | `string` | No | - | - |
+| `pricingPlanKey` | Unique identifier of the pricing plan. | `string` | No | - | - |
 | [`rates`](#kind-listingrevision-spec-pricingplans-rates) | List of pricing rates provider by publisher. | `list[object]` | Yes | - | - |
+
+<a id="kind-listingrevision-spec-pricingplans-dimensions"></a>
+##### Spec.pricingPlans[].dimensions[]
+
+[Back to ListingRevision spec](#kind-listingrevision-spec)
+
+ListingRevisionPricingPlanDimension defines nested fields for ListingRevision.PricingPlan.Dimension.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `additionalDetails` | Additional metadata key/value pairs for the dimension. | `map[string, string]` | No | - | - |
+| `dimensionBillingFrequency` | Billing frequency used for the dimension. | `string` | Yes | - | - |
+| `dimensionDescription` | The dimension description. | `string` | Yes | - | - |
+| `dimensionKey` | Server-generated unique identifier for the usage dimension. If omitted in the request, it is generated automatically. | `string` | No | - | - |
+| `dimensionName` | The dimension name. | `string` | Yes | - | - |
+| `includedQuantity` | Included quantity before overage rates apply. | `number` | No | - | - |
+| `metricType` | The metric type used to measure usage for the dimension. | `string` | Yes | - | - |
+| [`rates`](#kind-listingrevision-spec-pricingplans-dimensions-rates) | List of pricing rates provider by publisher for the dimension. | `list[object]` | Yes | - | - |
+
+<a id="kind-listingrevision-spec-pricingplans-dimensions-rates"></a>
+###### Spec.pricingPlans[].dimensions[].rates[]
+
+[Back to ListingRevision spec](#kind-listingrevision-spec)
+
+ListingRevisionPricingPlanDimensionRate defines nested fields for ListingRevision.PricingPlan.Dimension.Rate.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `billingCurrency` | The currency supported, in the format specified by ISO-4217 | `string` | Yes | - | - |
+| `rate` | Tha amount for the currency type. | `number` | Yes | - | - |
 
 <a id="kind-listingrevision-spec-pricingplans-rates"></a>
 ##### Spec.pricingPlans[].rates[]
@@ -642,6 +677,7 @@ ListingRevisionStatus defines the observed state of ListingRevision.
 | `allowedTenancies` | Allowed tenancies provided when a listing revision is published as private. | `list[string]` | No | - | - |
 | `areInternalTenancyLaunchAllowed` | Identifies whether publisher allows internal tenancy launches for the listing revision. | `boolean` | No | - | - |
 | `availabilityAndPricingPolicy` | Listing availability and Pricing Policy statement. | `string` | No | - | - |
+| [`banner`](#kind-listingrevision-status-banner) | ListingRevisionBanner defines nested fields for ListingRevision.Banner. | `object` | No | - | - |
 | `compartmentId` | The unique identifier for the compartment. | `string` | No | - | - |
 | `contactUs` | Custom text by partner regarding contact information | `string` | No | - | - |
 | [`contentLanguage`](#kind-listingrevision-status-contentlanguage) | ListingRevisionContentLanguage defines nested fields for ListingRevision.ContentLanguage. | `object` | No | - | - |
@@ -664,6 +700,7 @@ ListingRevisionStatus defines the observed state of ListingRevision.
 | `listingType` | - | `string` | No | - | - |
 | `longDescription` | A long description for the listing revision. | `string` | No | - | - |
 | `packageType` | The listing's package type. Populated from the listing. | `string` | No | - | - |
+| `partnerRegistrationUrl` | The url provided by partner for the registration of subscription. | `string` | No | - | - |
 | `pricingPlans` | Pricing details for lead gen listing | `string` | No | - | - |
 | `pricingType` | The pricing model for the listing revision. | `string` | No | - | - |
 | `productCodes` | List of product codes subscribed by listing. | `list[string]` | No | - | - |
@@ -681,12 +718,26 @@ ListingRevisionStatus defines the observed state of ListingRevision.
 | `systemRequirements` | System requirements for the listing revision. | `string` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `tagline` | The tagline of the listing revision. | `string` | No | - | - |
+| `termId` | The unique id of the term attached to the listing. | `string` | No | - | - |
 | `timeCreated` | The time the listing revision was created. An RFC3339 formatted datetime string. | `string` | No | - | - |
 | `timeUpdated` | The time the listing revision was updated. An RFC3339 formatted datetime string. | `string` | No | - | - |
 | [`trainedProfessionals`](#kind-listingrevision-status-trainedprofessionals) | Number of trained professional per product | `list[object]` | No | - | - |
 | `usageInformation` | Usage information for the listing revision. | `string` | No | - | - |
 | `vanityUrl` | Custom link to the listing | `string` | No | - | - |
 | [`versionDetails`](#kind-listingrevision-status-versiondetails) | ListingRevisionVersionDetails defines nested fields for ListingRevision.VersionDetails. | `object` | No | - | - |
+
+<a id="kind-listingrevision-status-banner"></a>
+#### Status.banner
+
+[Back to ListingRevision status](#kind-listingrevision-status)
+
+ListingRevisionBanner defines nested fields for ListingRevision.Banner.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `contentUrl` | The content URL of the uploaded data. | `string` | No | - | - |
+| `mimeType` | The MIME type of the uploaded data. | `string` | No | - | - |
+| `name` | The name of uploaded banner. | `string` | No | - | - |
 
 <a id="kind-listingrevision-status-contentlanguage"></a>
 #### Status.contentLanguage
@@ -909,10 +960,13 @@ ListingRevisionAttachmentSpec defines the desired state of ListingRevisionAttach
 | `documentCategory` | The document category of the listing revision attachment. | `string` | No | - | - |
 | `documentName` | Name of the review support document | `string` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
+| `isOracleUsersOnly` | Identifies whether the attachment is for Internal Oracle Users or external users as well. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `listingRevisionId` | The OCID for the listing revision in Marketplace Publisher. | `string` | Yes | - | - |
 | `productCodes` | List of product codes for success story | `list[string]` | No | - | - |
 | `serviceName` | Name of the service | `string` | No | - | - |
+| `sourceType` | The specified attachment type is Internal or External. | `string` | No | - | - |
+| `sourceUrl` | The document URL of the listing revision attachment. | `string` | No | - | - |
 | `templateCode` | Type of review support document | `string` | No | - | - |
 | `type` | Type of the service | `string` | No | - | - |
 | `url` | Optional url to service information | `string` | No | - | - |
@@ -928,6 +982,7 @@ ListingRevisionAttachmentVideoAttachmentDetails defines nested fields for Listin
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `contentUrl` | The URL of the video. | `string` | Yes | - | - |
+| `sourceType` | The specified attachment type is Internal or External. | `string` | No | - | - |
 
 <a id="kind-listingrevisionattachment-status"></a>
 ### Status
@@ -953,6 +1008,7 @@ ListingRevisionAttachmentStatus defines the observed state of ListingRevisionAtt
 | `mimeType` | The MIME type of the uploaded data. | `string` | No | - | - |
 | `productCodes` | List of product codes for customer story | `list[string]` | No | - | - |
 | `serviceName` | Name of the service | `string` | No | - | - |
+| `sourceType` | Possible values for the publisher listing revision attachments. The source type informs whether the type of attachment for the listing revision is external or internal. | `string` | No | - | - |
 | [`status`](#kind-listingrevisionattachment-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `templateCode` | Template code for the uploaded document | `string` | No | - | - |
@@ -1050,6 +1106,7 @@ ListingRevisionNoteStatus defines the observed state of ListingRevisionNote.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `adminEmail` | Email address of the administrator who created the note, if available. | `string` | No | - | - |
 | `compartmentId` | The unique identifier for the compartment. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |

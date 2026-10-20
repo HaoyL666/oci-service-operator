@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "fleetappsmanagement",
+    "apiVersion": "fleetappsmanagement.oracle.com/v1beta1",
+    "kind": "SchedulerDefinition",
+    "formalSlug": "schedulerdefinition",
+    "providerResource": "oci_fleet_apps_management_scheduler_definition",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "actionGroups.displayName",
+      "actionGroups.fleetId",
+      "actionGroups.kind",
+      "actionGroups.runbookId",
+      "actionGroups.runbookVersionName",
+      "actionGroups.sequence",
+      "definedTags",
+      "description",
+      "displayName",
+      "freeformTags",
+      "runBooks.inputParameters.arguments.content.checksum",
+      "runBooks.inputParameters.arguments.content.sourceType",
+      "runBooks.inputParameters.arguments.kind",
+      "runBooks.inputParameters.arguments.name",
+      "runBooks.inputParameters.arguments.value",
+      "runBooks.inputParameters.stepName",
+      "runBooks.runbookId",
+      "runBooks.runbookVersionName",
+      "schedule.duration",
+      "schedule.executionStartdate",
+      "schedule.maintenanceWindowId",
+      "schedule.recurrences"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "compartmentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "runBooks.inputParameters.arguments.content.bucket",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "runBooks.inputParameters.arguments.content.namespace",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "runBooks.inputParameters.arguments.content.object",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "schedule.type",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
+      }
+    ]
+  }
+}

@@ -200,6 +200,10 @@ type ReportDefinitionStatus struct {
 	ComplianceStandards []string `json:"complianceStandards,omitempty"`
 	// Details about the current state of the report definition in Data Safe.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
+	// Indicates if the reports being generated should be paginated.
+	// If set to true, multiple reports can be generated and the details of next and previous report are present in Report.
+	// Values can either be 'true' or 'false'.
+	IsSchedulePaginationEnabled bool `json:"isSchedulePaginationEnabled,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)
 	// Example: `{"Department": "Finance"}`
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`

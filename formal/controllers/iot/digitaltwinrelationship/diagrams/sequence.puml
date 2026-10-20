@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetDigitalTwinRelationship
 else tracked identity is missing
-ServiceManager -> OCI: ListDigitalTwinRelationship(filters:\ncontentPath, id, iotDomainId,\nsourceDigitalTwinInstanceId (+1\nmore))
+ServiceManager -> OCI: ListDigitalTwinRelationship(filters:\ncompartment_id, state)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateDigitalTwinRelationship
 loop create pending PROVISIONING
@@ -67,34 +67,25 @@ ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, U
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: content,
-definedTags, description, displayName
-(+1 more)
+Supported update surface: display_name
 Reject before mutate: force-new fields
-contentPath, iotDomainId,
-sourceDigitalTwinInstanceId,
-targetDigitalTwinInstanceId
-Lookup filters: contentPath, id,
-iotDomainId, sourceDigitalTwinInstanceId
-(+1 more)
-Lookup matching: exact resource identity
-match; duplicate matches fail
+compartment_id
+Lookup filters: compartment_id, state
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateDigitalTwinRelationship\nonly for mutable fields content,\ndefinedTags, description,\ndisplayName (+1 more)
+ServiceManager -> OCI: Apply UpdateDigitalTwinRelationship\nonly for mutable fields display_name
 loop update pending UPDATING
 ServiceManager -> OCI: GetDigitalTwinRelationship
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
-ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
-BaseReconciler --> Controller: requeue on terminating
+BaseReconciler --> Controller: requeue on provisioning, updating,\nterminating
 note right of ServiceManager
 shared diagram:
 shared/diagrams/shared-resolution-sequence.svg
@@ -116,30 +107,20 @@ kind: DigitalTwinRelationship
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: terminating
+requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-follow-up: create=read-after-write;
-update=read-after-write; delete=confirm-delete
-supported drift: content, definedTags,
-description, displayName (+1 more)
+supported drift: display_name
 reject before mutate: force-new fields
-contentPath, iotDomainId,
-sourceDigitalTwinInstanceId,
-targetDigitalTwinInstanceId
+compartment_id
 create-only fields: none
 list lookup:
 scaffold_iot_digitaltwinrelationship filters
-contentPath, id, iotDomainId,
-sourceDigitalTwinInstanceId (+1 more); exact
-resource identity match; duplicate matches fail
+compartment_id, state
 conflicts: none
 open gaps: none
-The runtime uses its declared lifecycle-state
-contract for DigitalTwinRelationship
-reconciliation.
-The credential-free mock exercises SDK request
-serialization, response projection, mutation
-when supported, and confirmed deletion.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 @enduml

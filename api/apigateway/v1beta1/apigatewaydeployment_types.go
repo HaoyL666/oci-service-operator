@@ -126,9 +126,6 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationValidationPol
 	Kid string `json:"kid"`
 	// +kubebuilder:validation:Optional
 	Format string `json:"format,omitempty"`
-	// The algorithm intended for use with this key.
-	// +kubebuilder:validation:Optional
-	Alg string `json:"alg,omitempty"`
 	// The base64 url encoded modulus of the RSA public key represented
 	// by this key.
 	// +kubebuilder:validation:Optional
@@ -137,6 +134,9 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationValidationPol
 	// by this key.
 	// +kubebuilder:validation:Optional
 	E string `json:"e,omitempty"`
+	// The algorithm intended for use with this key.
+	// +kubebuilder:validation:Optional
+	Alg string `json:"alg,omitempty"`
 	// The key type.
 	// +kubebuilder:validation:Optional
 	Kty string `json:"kty,omitempty"`
@@ -314,6 +314,11 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationValidationFai
 	// The path to be used as logout.
 	// +kubebuilder:validation:Optional
 	LogoutPath string `json:"logoutPath,omitempty"`
+	// The path (relative to the deployment) where the Identity Provider
+	// will redirect the user after authentication. This path must match
+	// a route in the specification that uses the OAUTH2_LOGIN_BACKEND.
+	// +kubebuilder:validation:Optional
+	LoginPath string `json:"loginPath,omitempty"`
 	// Response Type.
 	// +kubebuilder:validation:Optional
 	ResponseType string `json:"responseType,omitempty"`
@@ -329,9 +334,6 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationPublicKeysKey
 	Kid string `json:"kid"`
 	// +kubebuilder:validation:Optional
 	Format string `json:"format,omitempty"`
-	// The algorithm intended for use with this key.
-	// +kubebuilder:validation:Optional
-	Alg string `json:"alg,omitempty"`
 	// The base64 url encoded modulus of the RSA public key represented
 	// by this key.
 	// +kubebuilder:validation:Optional
@@ -340,6 +342,9 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationPublicKeysKey
 	// by this key.
 	// +kubebuilder:validation:Optional
 	E string `json:"e,omitempty"`
+	// The algorithm intended for use with this key.
+	// +kubebuilder:validation:Optional
+	Alg string `json:"alg,omitempty"`
 	// The key type.
 	// +kubebuilder:validation:Optional
 	Kty string `json:"kty,omitempty"`
@@ -604,9 +609,6 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthen
 	Kid string `json:"kid"`
 	// +kubebuilder:validation:Optional
 	Format string `json:"format,omitempty"`
-	// The algorithm intended for use with this key.
-	// +kubebuilder:validation:Optional
-	Alg string `json:"alg,omitempty"`
 	// The base64 url encoded modulus of the RSA public key represented
 	// by this key.
 	// +kubebuilder:validation:Optional
@@ -615,6 +617,9 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthen
 	// by this key.
 	// +kubebuilder:validation:Optional
 	E string `json:"e,omitempty"`
+	// The algorithm intended for use with this key.
+	// +kubebuilder:validation:Optional
+	Alg string `json:"alg,omitempty"`
 	// The key type.
 	// +kubebuilder:validation:Optional
 	Kty string `json:"kty,omitempty"`
@@ -792,6 +797,11 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthen
 	// The path to be used as logout.
 	// +kubebuilder:validation:Optional
 	LogoutPath string `json:"logoutPath,omitempty"`
+	// The path (relative to the deployment) where the Identity Provider
+	// will redirect the user after authentication. This path must match
+	// a route in the specification that uses the OAUTH2_LOGIN_BACKEND.
+	// +kubebuilder:validation:Optional
+	LoginPath string `json:"loginPath,omitempty"`
 	// Response Type.
 	// +kubebuilder:validation:Optional
 	ResponseType string `json:"responseType,omitempty"`
@@ -807,9 +817,6 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthen
 	Kid string `json:"kid"`
 	// +kubebuilder:validation:Optional
 	Format string `json:"format,omitempty"`
-	// The algorithm intended for use with this key.
-	// +kubebuilder:validation:Optional
-	Alg string `json:"alg,omitempty"`
 	// The base64 url encoded modulus of the RSA public key represented
 	// by this key.
 	// +kubebuilder:validation:Optional
@@ -818,6 +825,9 @@ type ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthen
 	// by this key.
 	// +kubebuilder:validation:Optional
 	E string `json:"e,omitempty"`
+	// The algorithm intended for use with this key.
+	// +kubebuilder:validation:Optional
+	Alg string `json:"alg,omitempty"`
 	// The key type.
 	// +kubebuilder:validation:Optional
 	Kty string `json:"kty,omitempty"`

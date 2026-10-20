@@ -190,6 +190,7 @@ IntegrationInstanceStatus defines the observed state of IntegrationInstance.
 | `messagePacks` | The number of configured message packs (if any) | `integer` | No | - | - |
 | [`networkEndpointDetails`](#kind-integrationinstance-status-networkendpointdetails) | IntegrationInstanceNetworkEndpointDetails defines nested fields for IntegrationInstance.NetworkEndpointDetails. | `object` | No | - | - |
 | [`privateEndpointOutboundConnection`](#kind-integrationinstance-status-privateendpointoutboundconnection) | IntegrationInstancePrivateEndpointOutboundConnection defines nested fields for IntegrationInstance.PrivateEndpointOutboundConnection. | `object` | No | - | - |
+| `processAutomationLogGroupId` | OCID of LogAnalytics LogGroup, enabled for given Process Automation attached to integration instance. | `string` | No | - | - |
 | `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `shape` | Shape | `string` | No | - | - |
 | `stateMessage` | An message describing the current state in more detail. For example, can be used to provide actionable information for a resource in Failed state. | `string` | No | - | - |

@@ -50,6 +50,12 @@ type OfferSpec struct {
 	// A list of key value pairs specified by the seller
 	// +kubebuilder:validation:Optional
 	CustomFields []OfferCustomField `json:"customFields,omitempty"`
+	// The type of the offer.
+	// +kubebuilder:validation:Optional
+	OfferType string `json:"offerType,omitempty"`
+	// A list of associated offer quotes.
+	// +kubebuilder:validation:Optional
+	OfferQuoteIds []string `json:"offerQuoteIds,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -62,39 +68,39 @@ type OfferSpec struct {
 
 // OfferPricing defines nested fields for Offer.Pricing.
 type OfferPricing struct {
-	// The currency supported for a given Offer, in the format specified by ISO-4217
+	// The currency supported for a given Offer, in the format specified by ISO-4217.
 	// +kubebuilder:validation:Optional
 	CurrencyType string `json:"currencyType,omitempty"`
-	// The total amount an Offer costs
+	// The total amount an offer costs.
 	// +kubebuilder:validation:Optional
 	TotalAmount int64 `json:"totalAmount,omitempty"`
-	// The frequency at which the customer is billed for the Offer
+	// The frequency at which the customer is billed for the offer.
 	// +kubebuilder:validation:Optional
 	BillingCycle string `json:"billingCycle,omitempty"`
 }
 
 // OfferBuyerInformationPrimaryContact defines nested fields for Offer.BuyerInformation.PrimaryContact.
 type OfferBuyerInformationPrimaryContact struct {
-	// The first name of the contact
+	// The first name of the contact.
 	// +kubebuilder:validation:Optional
 	FirstName string `json:"firstName,omitempty"`
-	// The last name of the contact
+	// The last name of the contact.
 	// +kubebuilder:validation:Optional
 	LastName string `json:"lastName,omitempty"`
-	// The email of the contact
+	// The email of the contact.
 	// +kubebuilder:validation:Optional
 	Email string `json:"email,omitempty"`
 }
 
 // OfferBuyerInformationAdditionalContact defines nested fields for Offer.BuyerInformation.AdditionalContact.
 type OfferBuyerInformationAdditionalContact struct {
-	// The first name of the contact
+	// The first name of the contact.
 	// +kubebuilder:validation:Optional
 	FirstName string `json:"firstName,omitempty"`
-	// The last name of the contact
+	// The last name of the contact.
 	// +kubebuilder:validation:Optional
 	LastName string `json:"lastName,omitempty"`
-	// The email of the contact
+	// The email of the contact.
 	// +kubebuilder:validation:Optional
 	Email string `json:"email,omitempty"`
 }
@@ -116,26 +122,26 @@ type OfferBuyerInformation struct {
 
 // OfferSellerInformationPrimaryContact defines nested fields for Offer.SellerInformation.PrimaryContact.
 type OfferSellerInformationPrimaryContact struct {
-	// The first name of the contact
+	// The first name of the contact.
 	// +kubebuilder:validation:Optional
 	FirstName string `json:"firstName,omitempty"`
-	// The last name of the contact
+	// The last name of the contact.
 	// +kubebuilder:validation:Optional
 	LastName string `json:"lastName,omitempty"`
-	// The email of the contact
+	// The email of the contact.
 	// +kubebuilder:validation:Optional
 	Email string `json:"email,omitempty"`
 }
 
 // OfferSellerInformationAdditionalContact defines nested fields for Offer.SellerInformation.AdditionalContact.
 type OfferSellerInformationAdditionalContact struct {
-	// The first name of the contact
+	// The first name of the contact.
 	// +kubebuilder:validation:Optional
 	FirstName string `json:"firstName,omitempty"`
-	// The last name of the contact
+	// The last name of the contact.
 	// +kubebuilder:validation:Optional
 	LastName string `json:"lastName,omitempty"`
-	// The email of the contact
+	// The email of the contact.
 	// +kubebuilder:validation:Optional
 	Email string `json:"email,omitempty"`
 }
@@ -151,26 +157,26 @@ type OfferSellerInformation struct {
 
 // OfferResourceBundle defines nested fields for Offer.ResourceBundle.
 type OfferResourceBundle struct {
-	// The type of resources in the bundle
+	// The type of resources in the bundle.
 	// +kubebuilder:validation:Optional
 	Type string `json:"type,omitempty"`
-	// The quantity of a resources associated with the bundle
+	// The quantity of a resources associated with the bundle.
 	// +kubebuilder:validation:Optional
 	Quantity int64 `json:"quantity,omitempty"`
-	// The unit of measurement for the resource bundle
+	// The unit of measurement for the resource bundle.
 	// +kubebuilder:validation:Optional
 	UnitOfMeasurement string `json:"unitOfMeasurement,omitempty"`
-	// the ids of the resources in the Offer
+	// The IDs of the resources in the offer.
 	// +kubebuilder:validation:Optional
 	ResourceIds []string `json:"resourceIds,omitempty"`
 }
 
 // OfferCustomField defines nested fields for Offer.CustomField.
 type OfferCustomField struct {
-	// the key of the custom field
+	// The key of the custom field.
 	// +kubebuilder:validation:Optional
 	Key string `json:"key,omitempty"`
-	// the value of the custom field
+	// The value of the custom field.
 	// +kubebuilder:validation:Optional
 	Value string `json:"value,omitempty"`
 }
@@ -278,6 +284,11 @@ type OfferStatus struct {
 	SellerInformation OfferSellerInformation `json:"sellerInformation,omitempty"`
 	// A list of Resource Bundles associated with an Offer.
 	ResourceBundles []OfferResourceBundle `json:"resourceBundles,omitempty"`
+	// The type of the offer.
+	OfferType string `json:"offerType,omitempty"`
+	// System tags for this resource. Each key is predefined and scoped to a namespace.
+	// Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
+	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 }
 
 // +kubebuilder:object:root=true

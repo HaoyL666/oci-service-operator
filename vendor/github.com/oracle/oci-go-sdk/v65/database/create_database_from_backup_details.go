@@ -44,6 +44,11 @@ type CreateDatabaseFromBackupDetails struct {
 
 	StorageSizeDetails *DatabaseStorageSizeDetails `mandatory:"false" json:"storageSizeDetails"`
 
+	ManagedSoftwareUpdateDetails *ManagedSoftwareUpdateInputDetails `mandatory:"false" json:"managedSoftwareUpdateDetails"`
+
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VM cluster.
+	VmClusterId *string `mandatory:"false" json:"vmClusterId"`
+
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -52,6 +57,11 @@ type CreateDatabaseFromBackupDetails struct {
 	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	DefinedTags map[string]map[string]interface{} `mandatory:"false" json:"definedTags"`
+
+	// The password for the VPC user that is used to access the Recovery Appliance, if the given backup is from a backup destination of type RECOVERY_APPLIANCE.
+	RecoveryApplianceVpcPassword *string `mandatory:"false" json:"recoveryApplianceVpcPassword" sensitive:"true"`
+
+	DataSafeRegistrationDetails *DataSafeRegistrationRequestDetails `mandatory:"false" json:"dataSafeRegistrationDetails"`
 }
 
 func (m CreateDatabaseFromBackupDetails) String() string {
@@ -73,17 +83,21 @@ func (m CreateDatabaseFromBackupDetails) ValidateEnumValue() (bool, error) {
 // UnmarshalJSON unmarshals from json
 func (m *CreateDatabaseFromBackupDetails) UnmarshalJSON(data []byte) (e error) {
 	model := struct {
-		BackupTDEPassword                  *string                           `json:"backupTDEPassword"`
-		SourceEncryptionKeyLocationDetails encryptionkeylocationdetails      `json:"sourceEncryptionKeyLocationDetails"`
-		DbUniqueName                       *string                           `json:"dbUniqueName"`
-		DbName                             *string                           `json:"dbName"`
-		SidPrefix                          *string                           `json:"sidPrefix"`
-		PluggableDatabases                 []string                          `json:"pluggableDatabases"`
-		StorageSizeDetails                 *DatabaseStorageSizeDetails       `json:"storageSizeDetails"`
-		FreeformTags                       map[string]string                 `json:"freeformTags"`
-		DefinedTags                        map[string]map[string]interface{} `json:"definedTags"`
-		BackupId                           *string                           `json:"backupId"`
-		AdminPassword                      *string                           `json:"adminPassword"`
+		BackupTDEPassword                  *string                             `json:"backupTDEPassword"`
+		SourceEncryptionKeyLocationDetails encryptionkeylocationdetails        `json:"sourceEncryptionKeyLocationDetails"`
+		DbUniqueName                       *string                             `json:"dbUniqueName"`
+		DbName                             *string                             `json:"dbName"`
+		SidPrefix                          *string                             `json:"sidPrefix"`
+		PluggableDatabases                 []string                            `json:"pluggableDatabases"`
+		StorageSizeDetails                 *DatabaseStorageSizeDetails         `json:"storageSizeDetails"`
+		ManagedSoftwareUpdateDetails       *ManagedSoftwareUpdateInputDetails  `json:"managedSoftwareUpdateDetails"`
+		VmClusterId                        *string                             `json:"vmClusterId"`
+		FreeformTags                       map[string]string                   `json:"freeformTags"`
+		DefinedTags                        map[string]map[string]interface{}   `json:"definedTags"`
+		RecoveryApplianceVpcPassword       *string                             `json:"recoveryApplianceVpcPassword"`
+		DataSafeRegistrationDetails        *DataSafeRegistrationRequestDetails `json:"dataSafeRegistrationDetails"`
+		BackupId                           *string                             `json:"backupId"`
+		AdminPassword                      *string                             `json:"adminPassword"`
 	}{}
 
 	e = json.Unmarshal(data, &model)
@@ -113,9 +127,17 @@ func (m *CreateDatabaseFromBackupDetails) UnmarshalJSON(data []byte) (e error) {
 	copy(m.PluggableDatabases, model.PluggableDatabases)
 	m.StorageSizeDetails = model.StorageSizeDetails
 
+	m.ManagedSoftwareUpdateDetails = model.ManagedSoftwareUpdateDetails
+
+	m.VmClusterId = model.VmClusterId
+
 	m.FreeformTags = model.FreeformTags
 
 	m.DefinedTags = model.DefinedTags
+
+	m.RecoveryApplianceVpcPassword = model.RecoveryApplianceVpcPassword
+
+	m.DataSafeRegistrationDetails = model.DataSafeRegistrationDetails
 
 	m.BackupId = model.BackupId
 

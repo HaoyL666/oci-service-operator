@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetPeerTargetDatabase;
 else (no)
-:Resolve an existing OCI resource through\nListPeerTargetDatabase using filters\ntargetDatabaseId, dataguardAssociationId,\ndisplayName;
+:Resolve an existing OCI resource through\nListPeerTargetDatabase using filters\ncompartment_id, state;
 :Create the OCI resource via\nCreatePeerTargetDatabase when no reusable\nmatch is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -46,7 +46,7 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in CREATING,\nUPDATING, DELETING;
+:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
@@ -55,18 +55,17 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the\nrepo-authored mutation surface;
+:Compare live OCI state against the imported\nfield surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields targetDatabaseId,\ndataguardAssociationId;
+:Reject drift before OCI mutation for force-new\nfields compartment_id;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdatePeerTargetDatabase only for\nmutable fields displayName, description,\ndatabaseDetails, tlsConfig;
+:Apply UpdatePeerTargetDatabase only for\nmutable fields display_name;
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Apply explicit follow-up semantics\ncreate=create-response;\nupdate=read-after-write; delete=confirm-delete;
 :Return success for the ACTIVE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
@@ -92,25 +91,19 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create CREATING; update
+provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-follow-up: create=create-response;
-update=read-after-write; delete=confirm-delete
-supported drift: displayName, description,
-databaseDetails, tlsConfig
+supported drift: display_name
 reject before mutate: force-new fields
-targetDatabaseId, dataguardAssociationId
+compartment_id
 create-only fields: none
 list lookup:
 scaffold_datasafe_peertargetdatabase filters
-targetDatabaseId, dataguardAssociationId,
-displayName; exact target database, Data Guard
-association, and display name match; duplicate
-matches fail
+compartment_id, state
 conflicts: none
 open gaps: none
-Peer identity is the integer key returned by
-Data Safe and is scoped to the parent target
-database.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 @enduml

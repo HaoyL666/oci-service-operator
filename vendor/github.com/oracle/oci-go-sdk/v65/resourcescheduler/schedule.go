@@ -76,6 +76,10 @@ type Schedule struct {
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeEnds *common.SDKTime `mandatory:"false" json:"timeEnds"`
 
+	// IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London').
+	// This determines the timezone context for evaluating the recurrence expression.
+	LocalTimeZone *string `mandatory:"false" json:"localTimeZone"`
+
 	// This is the date and time the schedule was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeUpdated *common.SDKTime `mandatory:"false" json:"timeUpdated"`
@@ -132,6 +136,7 @@ func (m *Schedule) UnmarshalJSON(data []byte) (e error) {
 		Resources         []Resource                        `json:"resources"`
 		TimeStarts        *common.SDKTime                   `json:"timeStarts"`
 		TimeEnds          *common.SDKTime                   `json:"timeEnds"`
+		LocalTimeZone     *string                           `json:"localTimeZone"`
 		TimeUpdated       *common.SDKTime                   `json:"timeUpdated"`
 		TimeLastRun       *common.SDKTime                   `json:"timeLastRun"`
 		TimeNextRun       *common.SDKTime                   `json:"timeNextRun"`
@@ -174,6 +179,8 @@ func (m *Schedule) UnmarshalJSON(data []byte) (e error) {
 
 	m.TimeEnds = model.TimeEnds
 
+	m.LocalTimeZone = model.LocalTimeZone
+
 	m.TimeUpdated = model.TimeUpdated
 
 	m.TimeLastRun = model.TimeLastRun
@@ -212,18 +219,21 @@ type ScheduleActionEnum string
 
 // Set of constants representing the allowable values for ScheduleActionEnum
 const (
-	ScheduleActionStartResource ScheduleActionEnum = "START_RESOURCE"
-	ScheduleActionStopResource  ScheduleActionEnum = "STOP_RESOURCE"
+	ScheduleActionStartResource  ScheduleActionEnum = "START_RESOURCE"
+	ScheduleActionStopResource   ScheduleActionEnum = "STOP_RESOURCE"
+	ScheduleActionBackupResource ScheduleActionEnum = "BACKUP_RESOURCE"
 )
 
 var mappingScheduleActionEnum = map[string]ScheduleActionEnum{
-	"START_RESOURCE": ScheduleActionStartResource,
-	"STOP_RESOURCE":  ScheduleActionStopResource,
+	"START_RESOURCE":  ScheduleActionStartResource,
+	"STOP_RESOURCE":   ScheduleActionStopResource,
+	"BACKUP_RESOURCE": ScheduleActionBackupResource,
 }
 
 var mappingScheduleActionEnumLowerCase = map[string]ScheduleActionEnum{
-	"start_resource": ScheduleActionStartResource,
-	"stop_resource":  ScheduleActionStopResource,
+	"start_resource":  ScheduleActionStartResource,
+	"stop_resource":   ScheduleActionStopResource,
+	"backup_resource": ScheduleActionBackupResource,
 }
 
 // GetScheduleActionEnumValues Enumerates the set of values for ScheduleActionEnum
@@ -240,6 +250,7 @@ func GetScheduleActionEnumStringValues() []string {
 	return []string{
 		"START_RESOURCE",
 		"STOP_RESOURCE",
+		"BACKUP_RESOURCE",
 	}
 }
 

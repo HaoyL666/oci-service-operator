@@ -77,7 +77,7 @@ type DeploymentBackupStatus struct {
 	DeploymentType string `json:"deploymentType,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment being referenced.
 	CompartmentId string `json:"compartmentId,omitempty"`
-	// Possible lifecycle states.
+	// Possible lifecycle states for a Deployment Backup.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Version of OGG
 	OggVersion string `json:"oggVersion,omitempty"`

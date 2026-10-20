@@ -65,11 +65,20 @@ type DedicatedVmHostSummary struct {
 	// Specifies if the Dedicated Virtual Machine Host is restricted to running only Confidential VMs. If `true`, only Confidential VMs can be launched. If `false`, Confidential VMs cannot be launched.
 	IsMemoryEncryptionEnabled *bool `mandatory:"false" json:"isMemoryEncryptionEnabled"`
 
+	// Specifies if the Dedicated Virtual Machine Host (DVMH) is to running only Burstable VMs. If `true`, only Burstable VMs can be launched. If `false`, Burstable VMs cannot be launched.
+	IsBurstable *bool `mandatory:"false" json:"isBurstable"`
+
 	// The current total memory of the dedicated VM host, in GBs.
 	TotalMemoryInGBs *float32 `mandatory:"false" json:"totalMemoryInGBs"`
 
 	// The current available memory of the dedicated VM host, in GBs.
 	RemainingMemoryInGBs *float32 `mandatory:"false" json:"remainingMemoryInGBs"`
+
+	// The current total local volume of the dedicated VM host, in GBs.
+	TotalLocalVolumeInGBs *float32 `mandatory:"false" json:"totalLocalVolumeInGBs"`
+
+	// The current available local volume of the dedicated VM host, in GBs.
+	RemainingLocalVolumeInGBs *float32 `mandatory:"false" json:"remainingLocalVolumeInGBs"`
 }
 
 func (m DedicatedVmHostSummary) String() string {

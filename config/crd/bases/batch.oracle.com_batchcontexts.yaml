@@ -93,28 +93,26 @@ spec:
                       type: string
                     maxConcurrentTasks:
                       description: Maximum number of concurrent tasks for the service
-                        managed fleet.
+                        managed GPU fleet.
                       type: integer
                     name:
-                      description: Name of the service managed fleet.
+                      description: Name of the service managed GPU fleet.
                       type: string
                     shape:
                       description: BatchContextFleetShape defines nested fields for
                         BatchContext.Fleet.Shape.
                       properties:
-                        memoryInGBs:
-                          description: Amount of memory in GBs required by the shape.
+                        diskSizeInGBs:
+                          description: Amount of disk space in GBs required for the
+                            shape.
                           type: integer
-                        ocpus:
-                          description: Number of OCPUs required by the shape.
-                          type: integer
-                        shapeName:
-                          description: The name of the shape.
+                        jsonData:
                           type: string
-                      required:
-                      - memoryInGBs
-                      - ocpus
-                      - shapeName
+                        shapeName:
+                          description: The name of the fixed GPU fleet shape.
+                          type: string
+                        type:
+                          type: string
                       type: object
                     type:
                       type: string
@@ -161,6 +159,10 @@ spec:
                 description: BatchContextLoggingConfiguration defines nested fields
                   for BatchContext.LoggingConfiguration.
                 properties:
+                  isJobTaskEventsPropagationEnabled:
+                    description: A switch to enable or disable propagation of job
+                      and task events to the customer's logs in OCI logging service.
+                    type: boolean
                   jsonData:
                     type: string
                   logGroupId:
@@ -234,28 +236,26 @@ spec:
                       type: string
                     maxConcurrentTasks:
                       description: Maximum number of concurrent tasks for the service
-                        managed fleet.
+                        managed GPU fleet.
                       type: integer
                     name:
-                      description: Name of the service managed fleet.
+                      description: Name of the service managed GPU fleet.
                       type: string
                     shape:
                       description: BatchContextFleetShape defines nested fields for
                         BatchContext.Fleet.Shape.
                       properties:
-                        memoryInGBs:
-                          description: Amount of memory in GBs required by the shape.
+                        diskSizeInGBs:
+                          description: Amount of disk space in GBs required for the
+                            shape.
                           type: integer
-                        ocpus:
-                          description: Number of OCPUs required by the shape.
-                          type: integer
-                        shapeName:
-                          description: The name of the shape.
+                        jsonData:
                           type: string
-                      required:
-                      - memoryInGBs
-                      - ocpus
-                      - shapeName
+                        shapeName:
+                          description: The name of the fixed GPU fleet shape.
+                          type: string
+                        type:
+                          type: string
                       type: object
                     type:
                       type: string
@@ -304,8 +304,8 @@ spec:
                 type: array
               lifecycleDetails:
                 description: A message that describes the current state in more detail.
-                  For example,   can be used to provide actionable information for
-                  a resource in the Failed state.
+                  For example, can be used to provide actionable information for a
+                  resource in the Failed state.
                 type: string
               lifecycleState:
                 description: The current state of the batch context.
@@ -314,6 +314,10 @@ spec:
                 description: BatchContextLoggingConfiguration defines nested fields
                   for BatchContext.LoggingConfiguration.
                 properties:
+                  isJobTaskEventsPropagationEnabled:
+                    description: A switch to enable or disable propagation of job
+                      and task events to the customer's logs in OCI logging service.
+                    type: boolean
                   jsonData:
                     type: string
                   logGroupId:

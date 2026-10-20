@@ -105,6 +105,9 @@ spec:
                 description: AutonomousDatabaseMaintenanceWindow defines nested fields
                   for AutonomousDatabase.AutonomousDatabaseMaintenanceWindow.
                 properties:
+                  availabilityDomain:
+                    description: The AD in which the maintenance will occur.
+                    type: string
                   dayOfWeek:
                     description: AutonomousDatabaseMaintenanceWindowDayOfWeek defines
                       nested fields for AutonomousDatabase.AutonomousDatabaseMaintenanceWindow.DayOfWeek.
@@ -115,6 +118,10 @@ spec:
                     required:
                     - name
                     type: object
+                  isMaintenanceWindowChangeScheduled:
+                    description: Indicates if the maintenance window change is scheduled
+                      or not for the Autonomous AI Database.
+                    type: boolean
                   maintenanceEndTime:
                     description: The maintenance end time. The value must use the
                       ISO-8601 format "hh:mm".
@@ -130,6 +137,10 @@ spec:
                 description: |-
                   The maintenance schedule type of the Autonomous AI Database Serverless. An EARLY maintenance schedule
                   follows a schedule applying patches prior to the REGULAR schedule. A REGULAR maintenance schedule follows the normal cycle
+                type: string
+              availabilityDomain:
+                description: The Autonomous Database Serverless instance's availability
+                  domain.
                 type: string
               backupRetentionPeriodInDays:
                 description: Retention period, in days, for long-term backups
@@ -245,6 +256,7 @@ spec:
                   When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
                   When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
                   For new databases, it is recommended to use either 19c or 26ai.
+                  The default database version is the Oracle-recommended version. You can retrieve the default DB version by calling the ListAutonomousDbVersions operation.
                   **Note** Starting December 2026, 23ai will not be supported as a valid value for this parameter.
                 type: string
               dbWorkload:
@@ -256,6 +268,7 @@ spec:
                   - APEX - indicates an Autonomous AI Database with the Oracle APEX AI Application Development workload type.
                   - LH - indicates an Oracle Autonomous AI Lakehouse database
                   **Note** Starting December 2026, DW will not be supported as a valid value for this parameter.
+                  When creating an Autonomous AI Database, if this parameter is not specified, the default value is `OLTP`.
 
                   This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, isMTLSConnectionRequired, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
                 type: string
@@ -368,7 +381,7 @@ spec:
                 type: boolean
               isAutoScalingEnabled:
                 description: Indicates if auto scaling is enabled for the Autonomous
-                  AI Database CPU core count. The default value is `TRUE`.
+                  AI Database CPU core count. The default value is `FALSE`.
                 type: boolean
               isAutoScalingForStorageEnabled:
                 description: Indicates if auto scaling is enabled for the Autonomous
@@ -399,14 +412,19 @@ spec:
                   production deployments. When you need more compute or storage resources,
                   you may upgrade to a full paid production database.
                 type: boolean
+              isDisableAdUpdateSchedule:
+                description: True, if you want to disable Autonomous Database availability
+                  domain scheduled update.
+                type: boolean
               isDisableDbVersionUpgradeSchedule:
                 description: True if user wants to disable Autonomous AI Database
                   scheduled upgrade to 26ai.
                 type: boolean
               isDisconnectPeer:
                 description: |-
-                  If true, this will disconnect the Autonomous AI Database from its peer and the Autonomous AI Database can work permanently as a standalone database.
-                  To disconnect a cross region standby, please also provide the OCID of the standby database in the `peerDbId` parameter.
+                  If true, this disconnects the Autonomous AI Database from its peer. After the disconnect completes, the Autonomous AI Database works permanently as a standalone database.
+                  **Warning:** A disconnected standby is no longer part of the disaster recovery configuration. Operations and restrictions that apply to a connected standby do not apply in the same way after the database has been disconnected.
+                  To disconnect a cross region standby, also provide the OCID of the standby database in the `peerDbId` parameter.
                 type: boolean
               isFreeTier:
                 description: |-
@@ -448,6 +466,10 @@ spec:
                   regions for Cross-Region ADB or Backup-Based DR between Primary
                   and Standby. If false, the backups taken on the Primary are not
                   replicated to the Standby database.
+                type: boolean
+              isScheduleAdUpdateToEarliest:
+                description: True, if you want to schedule Autonomous Database availability
+                  domain update to the earliest available time.
                 type: boolean
               isScheduleDbVersionUpgradeToEarliest:
                 description: True if user wants to schedule Autonomous AI Database
@@ -531,6 +553,7 @@ spec:
                 description: |-
                   The database OCID(/Content/General/Concepts/identifiers.htm) of the Disaster Recovery peer (source Primary) database, which is located in a different (remote) region from the current peer database.
                   To create or delete a local (in-region) standby, see the `isDataGuardEnabled` parameter.
+                  When disconnecting a cross-region standby, specify the standby database OCID in this parameter together with `isDisconnectPeer=true`.
                 type: string
               permissionLevel:
                 description: |-
@@ -590,6 +613,38 @@ spec:
                     description: Resource Pool total capacity, it's currently 4x of
                       pool size
                     type: integer
+                type: object
+              scheduledMaintenanceWindow:
+                description: AutonomousDatabaseScheduledMaintenanceWindow defines
+                  nested fields for AutonomousDatabase.ScheduledMaintenanceWindow.
+                properties:
+                  availabilityDomain:
+                    description: The AD in which the maintenance will occur.
+                    type: string
+                  dayOfWeek:
+                    description: AutonomousDatabaseScheduledMaintenanceWindowDayOfWeek
+                      defines nested fields for AutonomousDatabase.ScheduledMaintenanceWindow.DayOfWeek.
+                    properties:
+                      name:
+                        description: Name of the day of the week.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  isMaintenanceWindowChangeScheduled:
+                    description: Indicates if the maintenance window change is scheduled
+                      or not for the Autonomous AI Database.
+                    type: boolean
+                  maintenanceEndTime:
+                    description: The maintenance end time. The value must use the
+                      ISO-8601 format "hh:mm".
+                    type: string
+                  maintenanceStartTime:
+                    description: The maintenance start time. The value must use the
+                      ISO-8601 format "hh:mm".
+                    type: string
+                required:
+                - dayOfWeek
                 type: object
               scheduledOperations:
                 description: |-
@@ -687,9 +742,17 @@ spec:
                   (ongoing) refresh operations have start times controlled by the
                   value of the `autoRefreshFrequencyInSeconds` parameter.
                 type: string
+              timeScheduledAdUpdate:
+                description: The date and time when the Autonomous Database availability
+                  domain is to be updated.
+                type: string
               timeScheduledDbVersionUpgrade:
                 description: The date and time the Autonomous AI Database scheduled
                   to upgrade to 26ai.
+                type: string
+              timeScheduledMaintenanceWindowUpdate:
+                description: The date and time at which operation to change Maintenance
+                  Window is scheduled to take place.
                 type: string
               timestamp:
                 description: The timestamp specified for the point-in-time clone of
@@ -753,10 +816,19 @@ spec:
           status:
             description: AutonomousDatabaseStatus defines the observed state of AutonomousDatabase.
             properties:
+              accessTypes:
+                description: List of access types for an Autonomous AI Database.
+                items:
+                  type: string
+                type: array
               actualUsedDataStorageSizeInTBs:
                 description: The current amount of storage in use for user and system
                   data, in terabytes (TB).
                 type: number
+              adScheduledForUpdate:
+                description: The Availability Domain which is planned for Scheduled
+                  Update
+                type: string
               additionalAttributes:
                 additionalProperties:
                   type: string
@@ -806,6 +878,9 @@ spec:
                 description: AutonomousDatabaseMaintenanceWindow defines nested fields
                   for AutonomousDatabase.AutonomousDatabaseMaintenanceWindow.
                 properties:
+                  availabilityDomain:
+                    description: The AD in which the maintenance will occur.
+                    type: string
                   dayOfWeek:
                     description: AutonomousDatabaseMaintenanceWindowDayOfWeek defines
                       nested fields for AutonomousDatabase.AutonomousDatabaseMaintenanceWindow.DayOfWeek.
@@ -816,6 +891,10 @@ spec:
                     required:
                     - name
                     type: object
+                  isMaintenanceWindowChangeScheduled:
+                    description: Indicates if the maintenance window change is scheduled
+                      or not for the Autonomous AI Database.
+                    type: boolean
                   maintenanceEndTime:
                     description: The maintenance end time. The value must use the
                       ISO-8601 format "hh:mm".
@@ -987,18 +1066,25 @@ spec:
                     type: string
                   databaseTransformsUrl:
                     description: The URL of the Database Transforms for the Autonomous
-                      AI Database.
+                      AI Database. Applicable to Autonomous AI Database Serverless
+                      only.
+                    type: string
+                  essbaseUrl:
+                    description: Essbase URL for the Autonomous AI Database. Applicable
+                      to Autonomous AI Database Serverless only.
                     type: string
                   graphStudioUrl:
                     description: The URL of the Graph Studio for the Autonomous AI
-                      Database.
+                      Database. Applicable to Autonomous AI Database Serverless only.
                     type: string
                   machineLearningNotebookUrl:
                     description: The URL of the Oracle Machine Learning (OML) Notebook
-                      for the Autonomous AI Database.
+                      for the Autonomous AI Database. Applicable to Autonomous AI
+                      Database Serverless only.
                     type: string
                   machineLearningUserManagementUrl:
-                    description: Oracle Machine Learning user management URL.
+                    description: Oracle Machine Learning user management URL. Applicable
+                      to Autonomous AI Database Serverless only.
                     type: string
                   mongoDbUrl:
                     description: The URL of the MongoDB API for the Autonomous AI
@@ -1007,6 +1093,11 @@ spec:
                   ordsUrl:
                     description: The Oracle REST Data Services (ORDS) URL of the Web
                       Access for the Autonomous AI Database.
+                    type: string
+                  spatialStudioUrl:
+                    description: The URL of the Spatial Studio for the Autonomous
+                      AI Database. Applicable to Autonomous AI Database Serverless
+                      only.
                     type: string
                   sqlDevWebUrl:
                     description: Oracle SQL Developer Web URL.
@@ -1100,6 +1191,7 @@ spec:
                   When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
                   When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
                   For new databases, it is recommended to use either 19c or 26ai.
+                  The default database version is the Oracle-recommended version. You can retrieve the default DB version by calling the ListAutonomousDbVersions operation.
                   **Note** Starting December 2026, 23ai will not be supported as a valid value for this parameter.
                 type: string
               dbWorkload:
@@ -1111,6 +1203,7 @@ spec:
                   - APEX - indicates an Autonomous AI Database with the Oracle APEX AI Application Development workload type.
                   - LH - indicates an Oracle Autonomous AI Lakehouse database
                   **Note** Starting December 2026, DW will not be supported as a valid value for this parameter.
+                  When creating an Autonomous AI Database, if this parameter is not specified, the default value is `OLTP`.
 
                   This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, isMTLSConnectionRequired, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
                 type: string
@@ -1286,6 +1379,9 @@ spec:
                   awsEncryptionKeyId:
                     description: Provide the key OCID of a registered AWS key.
                     type: string
+                  awsEncryptionKeyPoolId:
+                    description: Provide the key pool OCID of a registered AWS key.
+                    type: string
                   azureEncryptionKeyId:
                     description: Provide the key OCID of a registered Azure key.
                     type: string
@@ -1302,6 +1398,10 @@ spec:
                   providerType:
                     type: string
                 type: object
+              externalLocationZone:
+                description: The external logical zone where the Autonomous AI Database
+                  Serverless instance is located (Intended for multicloud use).
+                type: string
               failedDataRecoveryInSeconds:
                 description: Indicates the number of seconds of data loss for a Data
                   Guard failover.
@@ -1342,7 +1442,7 @@ spec:
                 type: boolean
               isAutoScalingEnabled:
                 description: Indicates if auto scaling is enabled for the Autonomous
-                  AI Database CPU core count. The default value is `TRUE`.
+                  AI Database CPU core count. The default value is `FALSE`.
                 type: boolean
               isAutoScalingForStorageEnabled:
                 description: Indicates if auto scaling is enabled for the Autonomous
@@ -1507,6 +1607,10 @@ spec:
                       Guard standby database of an Autonomous AI Database Serverless
                       instance.
                     type: string
+                  externalLocationZone:
+                    description: The external logical zone where the local Autonomous
+                      Data Guard is located (Intended for multicloud use).
+                    type: string
                   lagTimeInSeconds:
                     description: The amount of time, in seconds, that the data of
                       the standby database lags the data of the primary database.
@@ -1656,18 +1760,25 @@ spec:
                     type: string
                   databaseTransformsUrl:
                     description: The URL of the Database Transforms for the Autonomous
-                      AI Database.
+                      AI Database. Applicable to Autonomous AI Database Serverless
+                      only.
+                    type: string
+                  essbaseUrl:
+                    description: Essbase URL for the Autonomous AI Database. Applicable
+                      to Autonomous AI Database Serverless only.
                     type: string
                   graphStudioUrl:
                     description: The URL of the Graph Studio for the Autonomous AI
-                      Database.
+                      Database. Applicable to Autonomous AI Database Serverless only.
                     type: string
                   machineLearningNotebookUrl:
                     description: The URL of the Oracle Machine Learning (OML) Notebook
-                      for the Autonomous AI Database.
+                      for the Autonomous AI Database. Applicable to Autonomous AI
+                      Database Serverless only.
                     type: string
                   machineLearningUserManagementUrl:
-                    description: Oracle Machine Learning user management URL.
+                    description: Oracle Machine Learning user management URL. Applicable
+                      to Autonomous AI Database Serverless only.
                     type: string
                   mongoDbUrl:
                     description: The URL of the MongoDB API for the Autonomous AI
@@ -1676,6 +1787,11 @@ spec:
                   ordsUrl:
                     description: The Oracle REST Data Services (ORDS) URL of the Web
                       Access for the Autonomous AI Database.
+                    type: string
+                  spatialStudioUrl:
+                    description: The URL of the Spatial Studio for the Autonomous
+                      AI Database. Applicable to Autonomous AI Database Serverless
+                      only.
                     type: string
                   sqlDevWebUrl:
                     description: Oracle SQL Developer Web URL.
@@ -1760,6 +1876,38 @@ spec:
                 description: The Data Guard role of the Autonomous Container Database
                   or Autonomous AI Database, if Autonomous Data Guard is enabled.
                 type: string
+              scheduledMaintenanceWindow:
+                description: AutonomousDatabaseScheduledMaintenanceWindow defines
+                  nested fields for AutonomousDatabase.ScheduledMaintenanceWindow.
+                properties:
+                  availabilityDomain:
+                    description: The AD in which the maintenance will occur.
+                    type: string
+                  dayOfWeek:
+                    description: AutonomousDatabaseScheduledMaintenanceWindowDayOfWeek
+                      defines nested fields for AutonomousDatabase.ScheduledMaintenanceWindow.DayOfWeek.
+                    properties:
+                      name:
+                        description: Name of the day of the week.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  isMaintenanceWindowChangeScheduled:
+                    description: Indicates if the maintenance window change is scheduled
+                      or not for the Autonomous AI Database.
+                    type: boolean
+                  maintenanceEndTime:
+                    description: The maintenance end time. The value must use the
+                      ISO-8601 format "hh:mm".
+                    type: string
+                  maintenanceStartTime:
+                    description: The maintenance start time. The value must use the
+                      ISO-8601 format "hh:mm".
+                    type: string
+                required:
+                - dayOfWeek
+                type: object
               scheduledOperations:
                 description: |-
                   The list of scheduled operations. Consists of values such as dayOfWeek, scheduledStartTime, scheduledStopTime.
@@ -1817,6 +1965,10 @@ spec:
                     description: The availability domain of a local Autonomous Data
                       Guard standby database of an Autonomous AI Database Serverless
                       instance.
+                    type: string
+                  externalLocationZone:
+                    description: The external logical zone where the local Autonomous
+                      Data Guard is located (Intended for multicloud use).
                     type: string
                   lagTimeInSeconds:
                     description: The amount of time, in seconds, that the data of
@@ -2014,9 +2166,17 @@ spec:
                 description: The date and time the Disaster Recovery role was switched
                   for the standby Autonomous AI Database.
                 type: string
+              timeEarliestAvailableAdUpdate:
+                description: The earliest date and time to which you can schedule
+                  an Autonomous Database availability domain update.
+                type: string
               timeEarliestAvailableDbVersionUpgrade:
                 description: The earliest(min) date and time the Autonomous AI Database
                   can be scheduled to upgrade to 26ai.
+                type: string
+              timeLatestAvailableAdUpdate:
+                description: The latest date and time to which you can schedule an
+                  Autonomous Database availability domain update.
                 type: string
               timeLatestAvailableDbVersionUpgrade:
                 description: The max date and time the Autonomous AI Database can
@@ -2071,9 +2231,17 @@ spec:
                   activity, the database will automatically be put into the STOPPED
                   state.
                 type: string
+              timeScheduledAdUpdate:
+                description: The date and time to which the Autonomous Database availability
+                  domain update is scheduled.
+                type: string
               timeScheduledDbVersionUpgrade:
                 description: The date and time the Autonomous AI Database scheduled
                   to upgrade to 26ai.
+                type: string
+              timeScheduledMaintenanceWindowUpdate:
+                description: The date and time at which operation to change Maintenance
+                  Window is scheduled to take place.
                 type: string
               timeUndeleted:
                 description: The date and time the Autonomous AI Database was most
@@ -2104,18 +2272,25 @@ spec:
                     type: string
                   databaseTransformsUrl:
                     description: The URL of the Database Transforms for the Autonomous
-                      AI Database.
+                      AI Database. Applicable to Autonomous AI Database Serverless
+                      only.
+                    type: string
+                  essbaseUrl:
+                    description: Essbase URL for the Autonomous AI Database. Applicable
+                      to Autonomous AI Database Serverless only.
                     type: string
                   graphStudioUrl:
                     description: The URL of the Graph Studio for the Autonomous AI
-                      Database.
+                      Database. Applicable to Autonomous AI Database Serverless only.
                     type: string
                   machineLearningNotebookUrl:
                     description: The URL of the Oracle Machine Learning (OML) Notebook
-                      for the Autonomous AI Database.
+                      for the Autonomous AI Database. Applicable to Autonomous AI
+                      Database Serverless only.
                     type: string
                   machineLearningUserManagementUrl:
-                    description: Oracle Machine Learning user management URL.
+                    description: Oracle Machine Learning user management URL. Applicable
+                      to Autonomous AI Database Serverless only.
                     type: string
                   mongoDbUrl:
                     description: The URL of the MongoDB API for the Autonomous AI
@@ -2124,6 +2299,11 @@ spec:
                   ordsUrl:
                     description: The Oracle REST Data Services (ORDS) URL of the Web
                       Access for the Autonomous AI Database.
+                    type: string
+                  spatialStudioUrl:
+                    description: The URL of the Spatial Studio for the Autonomous
+                      AI Database. Applicable to Autonomous AI Database Serverless
+                      only.
                     type: string
                   sqlDevWebUrl:
                     description: Oracle SQL Developer Web URL.

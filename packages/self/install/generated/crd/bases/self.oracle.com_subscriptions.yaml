@@ -107,6 +107,9 @@ spec:
               realm:
                 description: The realm from where customer is buying the subscription.
                 type: string
+              reason:
+                description: Optional reason provided by the customer for the cancellation.
+                type: string
               region:
                 description: The region from where customer is buying the subscription.
                 type: string
@@ -123,61 +126,76 @@ spec:
                     description: Tha amount for the currency type.
                     type: number
                   billingDetails:
-                    description: SubscriptionDetailsBillingDetails defines nested
-                      fields for Subscription.SubscriptionDetails.BillingDetails.
-                    properties:
-                      hasGovSku:
-                        description: Whether this sku is assign to gov product.
-                        type: boolean
-                      meters:
-                        description: The meters associated with sku.
-                        items:
-                          description: SubscriptionDetailsBillingDetailsMeter defines
-                            nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.
-                          properties:
-                            extendedMetadata:
-                              description: Additional data give by sku.
-                              items:
-                                description: SubscriptionDetailsBillingDetailsMeterExtendedMetadata
-                                  defines nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.ExtendedMetadata.
-                                properties:
-                                  key:
-                                    description: Additional attribute for extendedMetadata.
-                                    type: string
-                                  value:
-                                    description: It contains the value of above key.
-                                    type: string
-                                required:
-                                - key
-                                - value
-                                type: object
-                              type: array
-                            name:
-                              description: Name of meter.
-                              type: string
-                            rateAllocation:
-                              description: Tha rate of this sku meter.
-                              type: number
-                          required:
-                          - name
-                          - rateAllocation
-                          type: object
-                        type: array
-                      metricType:
-                        description: The part's metric.
-                        type: string
-                      rateAllocation:
-                        description: Tha rate of this sku meter.
-                        type: number
-                      sku:
-                        description: Sku for service.
-                        type: string
-                    required:
-                    - meters
-                    - metricType
-                    - rateAllocation
-                    - sku
-                    type: object
+                    description: Billing details associated with the subscription
+                      plan and its usage dimensions.
+                    items:
+                      description: SubscriptionDetailsBillingDetail defines nested
+                        fields for Subscription.SubscriptionDetails.BillingDetail.
+                      properties:
+                        billingModel:
+                          description: The billing model this billing detail applies
+                            to.
+                          type: string
+                        hasGovSku:
+                          description: Whether this sku is assign to gov product.
+                          type: boolean
+                        meters:
+                          description: The meters associated with sku.
+                          items:
+                            description: SubscriptionDetailsBillingDetailMeter defines
+                              nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.
+                            properties:
+                              extendedMetadata:
+                                description: Additional data give by sku.
+                                items:
+                                  description: SubscriptionDetailsBillingDetailMeterExtendedMetadata
+                                    defines nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.ExtendedMetadata.
+                                  properties:
+                                    key:
+                                      description: Additional attribute for extendedMetadata.
+                                      type: string
+                                    value:
+                                      description: It contains the value of above
+                                        key.
+                                      type: string
+                                  required:
+                                  - key
+                                  - value
+                                  type: object
+                                type: array
+                              name:
+                                description: Name of meter.
+                                type: string
+                              rateAllocation:
+                                description: Tha rate of this sku meter.
+                                type: number
+                            required:
+                            - name
+                            - rateAllocation
+                            type: object
+                          type: array
+                        metricType:
+                          description: The part's metric.
+                          type: string
+                        pricingPlanKey:
+                          description: Unique key used to map this SKU to the pricing
+                            plan.
+                          type: string
+                        rateAllocation:
+                          description: Tha rate of this sku meter.
+                          type: number
+                        sku:
+                          description: Sku for service.
+                          type: string
+                      required:
+                      - billingModel
+                      - meters
+                      - metricType
+                      - pricingPlanKey
+                      - rateAllocation
+                      - sku
+                      type: object
+                    type: array
                   currency:
                     description: The currency supported, in the format specified by
                       ISO-4217
@@ -195,14 +213,70 @@ spec:
                     properties:
                       billingFrequency:
                         description: Specifies the interval at which billing occurs
-                          for the subscription plan.
+                          for the subscription plan or usage dimension.
                         type: string
+                      dimensions:
+                        description: Metered usage dimensions associated with the
+                          pricing plan.
+                        items:
+                          description: SubscriptionDetailsPricingPlanDimension defines
+                            nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.
+                          properties:
+                            dimensionBillingFrequency:
+                              description: Specifies the interval at which the usage
+                                dimension is billed.
+                              type: string
+                            dimensionDescription:
+                              description: A detailed explanation of the usage dimension.
+                              type: string
+                            dimensionKey:
+                              description: The stable key used internally to map this
+                                usage dimension to billing details.
+                              type: string
+                            dimensionName:
+                              description: The name of the usage dimension.
+                              type: string
+                            includedQuantity:
+                              description: Quantity included in the base fee for hybrid
+                                plans.
+                              type: number
+                            metricType:
+                              description: The metric type in which usage is measured.
+                              type: string
+                            rates:
+                              description: Dimension-level rates in various supported
+                                currencies.
+                              items:
+                                description: SubscriptionDetailsPricingPlanDimensionRate
+                                  defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.Rate.
+                                properties:
+                                  currency:
+                                    description: The currency supported, in the format
+                                      specified by ISO-4217
+                                    type: string
+                                  rate:
+                                    description: The amount charged for the plan in
+                                      the specified currency.
+                                    type: number
+                                required:
+                                - currency
+                                - rate
+                                type: object
+                              type: array
+                          required:
+                          - dimensionBillingFrequency
+                          - dimensionDescription
+                          - dimensionKey
+                          - dimensionName
+                          - metricType
+                          - rates
+                          type: object
+                        type: array
                       planDescription:
                         description: A detailed explanation of the subscription plan.
                         type: string
                       planDuration:
-                        description: Specifies the interval at which billing occurs
-                          for the subscription plan.
+                        description: Specifies the duration of the subscription plan.
                         type: string
                       planName:
                         description: The name of the subscription plan used to identify
@@ -435,61 +509,76 @@ spec:
                     description: Tha amount for the currency type.
                     type: number
                   billingDetails:
-                    description: SubscriptionDetailsBillingDetails defines nested
-                      fields for Subscription.SubscriptionDetails.BillingDetails.
-                    properties:
-                      hasGovSku:
-                        description: Whether this sku is assign to gov product.
-                        type: boolean
-                      meters:
-                        description: The meters associated with sku.
-                        items:
-                          description: SubscriptionDetailsBillingDetailsMeter defines
-                            nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.
-                          properties:
-                            extendedMetadata:
-                              description: Additional data give by sku.
-                              items:
-                                description: SubscriptionDetailsBillingDetailsMeterExtendedMetadata
-                                  defines nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.ExtendedMetadata.
-                                properties:
-                                  key:
-                                    description: Additional attribute for extendedMetadata.
-                                    type: string
-                                  value:
-                                    description: It contains the value of above key.
-                                    type: string
-                                required:
-                                - key
-                                - value
-                                type: object
-                              type: array
-                            name:
-                              description: Name of meter.
-                              type: string
-                            rateAllocation:
-                              description: Tha rate of this sku meter.
-                              type: number
-                          required:
-                          - name
-                          - rateAllocation
-                          type: object
-                        type: array
-                      metricType:
-                        description: The part's metric.
-                        type: string
-                      rateAllocation:
-                        description: Tha rate of this sku meter.
-                        type: number
-                      sku:
-                        description: Sku for service.
-                        type: string
-                    required:
-                    - meters
-                    - metricType
-                    - rateAllocation
-                    - sku
-                    type: object
+                    description: Billing details associated with the subscription
+                      plan and its usage dimensions.
+                    items:
+                      description: SubscriptionDetailsBillingDetail defines nested
+                        fields for Subscription.SubscriptionDetails.BillingDetail.
+                      properties:
+                        billingModel:
+                          description: The billing model this billing detail applies
+                            to.
+                          type: string
+                        hasGovSku:
+                          description: Whether this sku is assign to gov product.
+                          type: boolean
+                        meters:
+                          description: The meters associated with sku.
+                          items:
+                            description: SubscriptionDetailsBillingDetailMeter defines
+                              nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.
+                            properties:
+                              extendedMetadata:
+                                description: Additional data give by sku.
+                                items:
+                                  description: SubscriptionDetailsBillingDetailMeterExtendedMetadata
+                                    defines nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.ExtendedMetadata.
+                                  properties:
+                                    key:
+                                      description: Additional attribute for extendedMetadata.
+                                      type: string
+                                    value:
+                                      description: It contains the value of above
+                                        key.
+                                      type: string
+                                  required:
+                                  - key
+                                  - value
+                                  type: object
+                                type: array
+                              name:
+                                description: Name of meter.
+                                type: string
+                              rateAllocation:
+                                description: Tha rate of this sku meter.
+                                type: number
+                            required:
+                            - name
+                            - rateAllocation
+                            type: object
+                          type: array
+                        metricType:
+                          description: The part's metric.
+                          type: string
+                        pricingPlanKey:
+                          description: Unique key used to map this SKU to the pricing
+                            plan.
+                          type: string
+                        rateAllocation:
+                          description: Tha rate of this sku meter.
+                          type: number
+                        sku:
+                          description: Sku for service.
+                          type: string
+                      required:
+                      - billingModel
+                      - meters
+                      - metricType
+                      - pricingPlanKey
+                      - rateAllocation
+                      - sku
+                      type: object
+                    type: array
                   currency:
                     description: The currency supported, in the format specified by
                       ISO-4217
@@ -507,14 +596,70 @@ spec:
                     properties:
                       billingFrequency:
                         description: Specifies the interval at which billing occurs
-                          for the subscription plan.
+                          for the subscription plan or usage dimension.
                         type: string
+                      dimensions:
+                        description: Metered usage dimensions associated with the
+                          pricing plan.
+                        items:
+                          description: SubscriptionDetailsPricingPlanDimension defines
+                            nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.
+                          properties:
+                            dimensionBillingFrequency:
+                              description: Specifies the interval at which the usage
+                                dimension is billed.
+                              type: string
+                            dimensionDescription:
+                              description: A detailed explanation of the usage dimension.
+                              type: string
+                            dimensionKey:
+                              description: The stable key used internally to map this
+                                usage dimension to billing details.
+                              type: string
+                            dimensionName:
+                              description: The name of the usage dimension.
+                              type: string
+                            includedQuantity:
+                              description: Quantity included in the base fee for hybrid
+                                plans.
+                              type: number
+                            metricType:
+                              description: The metric type in which usage is measured.
+                              type: string
+                            rates:
+                              description: Dimension-level rates in various supported
+                                currencies.
+                              items:
+                                description: SubscriptionDetailsPricingPlanDimensionRate
+                                  defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.Rate.
+                                properties:
+                                  currency:
+                                    description: The currency supported, in the format
+                                      specified by ISO-4217
+                                    type: string
+                                  rate:
+                                    description: The amount charged for the plan in
+                                      the specified currency.
+                                    type: number
+                                required:
+                                - currency
+                                - rate
+                                type: object
+                              type: array
+                          required:
+                          - dimensionBillingFrequency
+                          - dimensionDescription
+                          - dimensionKey
+                          - dimensionName
+                          - metricType
+                          - rates
+                          type: object
+                        type: array
                       planDescription:
                         description: A detailed explanation of the subscription plan.
                         type: string
                       planDuration:
-                        description: Specifies the interval at which billing occurs
-                          for the subscription plan.
+                        description: Specifies the duration of the subscription plan.
                         type: string
                       planName:
                         description: The name of the subscription plan used to identify

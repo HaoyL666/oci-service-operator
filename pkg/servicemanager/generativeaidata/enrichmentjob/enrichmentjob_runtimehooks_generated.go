@@ -101,7 +101,7 @@ func newEnrichmentJobRuntimeSemantics() *generatedruntime.Semantics {
 		Unsupported:         []generatedruntime.UnsupportedSemantic{},
 	}
 }
-func newEnrichmentJobDefaultRuntimeHooks(sdkClient EnrichmentJobSDKClients) EnrichmentJobRuntimeHooks {
+func newEnrichmentJobDefaultRuntimeHooks(sdkClient generativeaidatasdk.EnrichmentJobClient) EnrichmentJobRuntimeHooks {
 	return EnrichmentJobRuntimeHooks{
 		Semantics:       newEnrichmentJobRuntimeSemantics(),
 		Identity:        generatedruntime.IdentityHooks[*generativeaidatav1beta1.EnrichmentJob]{},
@@ -114,32 +114,32 @@ func newEnrichmentJobDefaultRuntimeHooks(sdkClient EnrichmentJobSDKClients) Enri
 		Create: runtimeOperationHooks[generativeaidatasdk.GenerateEnrichmentJobRequest, generativeaidatasdk.GenerateEnrichmentJobResponse]{
 			Fields: []generatedruntime.RequestField{{FieldName: "SemanticStoreId", RequestName: "semanticStoreId", Contribution: "path", PreferResourceID: false}, {FieldName: "GenerateEnrichmentJobDetails", RequestName: "GenerateEnrichmentJobDetails", Contribution: "body", PreferResourceID: false}},
 			Call: func(ctx context.Context, request generativeaidatasdk.GenerateEnrichmentJobRequest) (generativeaidatasdk.GenerateEnrichmentJobResponse, error) {
-				return sdkClient.generateEnrichmentJobClient.GenerateEnrichmentJob(ctx, request)
+				return sdkClient.GenerateEnrichmentJob(ctx, request)
 			},
 		},
 		Get: runtimeOperationHooks[generativeaidatasdk.GetEnrichmentJobRequest, generativeaidatasdk.GetEnrichmentJobResponse]{
 			Fields: []generatedruntime.RequestField{{FieldName: "SemanticStoreId", RequestName: "semanticStoreId", Contribution: "path", PreferResourceID: false}, {FieldName: "EnrichmentJobId", RequestName: "enrichmentJobId", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request generativeaidatasdk.GetEnrichmentJobRequest) (generativeaidatasdk.GetEnrichmentJobResponse, error) {
-				return sdkClient.getEnrichmentJobClient.GetEnrichmentJob(ctx, request)
+				return sdkClient.GetEnrichmentJob(ctx, request)
 			},
 		},
 		List: runtimeOperationHooks[generativeaidatasdk.ListEnrichmentJobsRequest, generativeaidatasdk.ListEnrichmentJobsResponse]{
 			Fields: []generatedruntime.RequestField{{FieldName: "SemanticStoreId", RequestName: "semanticStoreId", Contribution: "path", PreferResourceID: false}, {FieldName: "CompartmentId", RequestName: "compartmentId", Contribution: "query", PreferResourceID: false}, {FieldName: "DisplayName", RequestName: "displayName", Contribution: "query", PreferResourceID: false}, {FieldName: "LifecycleState", RequestName: "lifecycleState", Contribution: "query", PreferResourceID: false}, {FieldName: "Limit", RequestName: "limit", Contribution: "query", PreferResourceID: false}, {FieldName: "Page", RequestName: "page", Contribution: "query", PreferResourceID: false}, {FieldName: "SortBy", RequestName: "sortBy", Contribution: "query", PreferResourceID: false}, {FieldName: "SortOrder", RequestName: "sortOrder", Contribution: "query", PreferResourceID: false}},
 			Call: func(ctx context.Context, request generativeaidatasdk.ListEnrichmentJobsRequest) (generativeaidatasdk.ListEnrichmentJobsResponse, error) {
-				return sdkClient.listEnrichmentJobsClient.ListEnrichmentJobs(ctx, request)
+				return sdkClient.ListEnrichmentJobs(ctx, request)
 			},
 		},
 		Delete: runtimeOperationHooks[generativeaidatasdk.CancelEnrichmentJobRequest, generativeaidatasdk.CancelEnrichmentJobResponse]{
 			Fields: []generatedruntime.RequestField{{FieldName: "SemanticStoreId", RequestName: "semanticStoreId", Contribution: "path", PreferResourceID: false}, {FieldName: "EnrichmentJobId", RequestName: "enrichmentJobId", Contribution: "path", PreferResourceID: true}},
 			Call: func(ctx context.Context, request generativeaidatasdk.CancelEnrichmentJobRequest) (generativeaidatasdk.CancelEnrichmentJobResponse, error) {
-				return sdkClient.cancelEnrichmentJobClient.CancelEnrichmentJob(ctx, request)
+				return sdkClient.CancelEnrichmentJob(ctx, request)
 			},
 		},
 		WrapGeneratedClient: []func(EnrichmentJobServiceClient) EnrichmentJobServiceClient{},
 	}
 }
 
-func newEnrichmentJobRuntimeHooks(manager *EnrichmentJobServiceManager, sdkClient EnrichmentJobSDKClients) EnrichmentJobRuntimeHooks {
+func newEnrichmentJobRuntimeHooks(manager *EnrichmentJobServiceManager, sdkClient generativeaidatasdk.EnrichmentJobClient) EnrichmentJobRuntimeHooks {
 	hooks := newEnrichmentJobDefaultRuntimeHooks(sdkClient)
 	for _, mutator := range enrichmentjobRuntimeHooksMutators {
 		mutator(manager, &hooks)

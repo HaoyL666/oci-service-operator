@@ -18,8 +18,8 @@ type ApplicationGroupSpec struct {
 	// +kubebuilder:validation:Required
 	Name string `json:"name"`
 	// Collection of application names.
-	// +kubebuilder:validation:Required
-	Apps []string `json:"apps"`
+	// +kubebuilder:validation:Optional
+	Apps []string `json:"apps,omitempty"`
 	// The description of the application list. This field can be used to add additional info.
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
@@ -33,12 +33,12 @@ type ApplicationGroupStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
 	// Name of the application Group.
 	Name string `json:"name,omitempty"`
-	// List of apps in the group.
-	Apps []string `json:"apps,omitempty"`
 	// Count of total applications in the given application group.
 	TotalApps int `json:"totalApps,omitempty"`
 	// OCID of the Network Firewall Policy this application group belongs to.
 	ParentResourceId string `json:"parentResourceId,omitempty"`
+	// List of apps in the group.
+	Apps []string `json:"apps,omitempty"`
 	// The description of the application list. This field can be used to add additional info.
 	Description string `json:"description,omitempty"`
 }

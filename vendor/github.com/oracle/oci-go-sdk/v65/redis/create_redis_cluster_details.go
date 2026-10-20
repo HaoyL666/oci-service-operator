@@ -55,6 +55,14 @@ type CreateRedisClusterDetails struct {
 	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
 	SecurityAttributes map[string]map[string]interface{} `mandatory:"false" json:"securityAttributes"`
 
+	// The ID of the OCI Cache Backup from which this cluster was created.Mutually exclusive with 'importFromObjectStorageDetails'.
+	BackupId *string `mandatory:"false" json:"backupId"`
+
+	ImportFromObjectStorageDetails *ImportOciCacheFromObjectStorageDetails `mandatory:"false" json:"importFromObjectStorageDetails"`
+
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the primary cluster from which data will be replicated.
+	PrimaryClusterId *string `mandatory:"false" json:"primaryClusterId"`
+
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	FreeformTags map[string]string `mandatory:"false" json:"freeformTags"`

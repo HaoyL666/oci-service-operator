@@ -44,6 +44,7 @@ ApmDomainSpec defines the desired state of ApmDomain.
 | `displayName` | Display name of the APM domain. | `string` | Yes | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `isFreeTier` | Indicates whether this is an "Always Free" resource. The default value is false. | `boolean` | No | - | - |
+| `logGroupId` | The OCID of the Log Analytics log group to which the data uploaded to this APM domain will be mapped to. | `string` | No | - | - |
 
 <a id="kind-apmdomain-status"></a>
 ### Status
@@ -61,6 +62,7 @@ ApmDomainStatus defines the observed state of ApmDomain.
 | `id` | Unique identifier that is immutable on creation. | `string` | No | - | - |
 | `isFreeTier` | Indicates if this is an Always Free resource. | `boolean` | No | - | - |
 | `lifecycleState` | The current lifecycle state of the APM domain. | `string` | No | - | - |
+| `logGroupId` | The OCID of the Log Analytics log group to which the data uploaded to this APM domain will be mapped to. | `string` | No | - | - |
 | [`status`](#kind-apmdomain-status-status) | - | `object` | Yes | - | - |
 | `timeCreated` | The time the APM domain was created, expressed in RFC 3339 timestamp format. | `string` | No | - | - |
 | `timeUpdated` | The time the APM domain was updated, expressed in RFC 3339 timestamp format. | `string` | No | - | - |

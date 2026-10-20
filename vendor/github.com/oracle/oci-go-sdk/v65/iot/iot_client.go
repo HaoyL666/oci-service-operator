@@ -92,6 +92,69 @@ func (client *IotClient) ConfigurationProvider() *common.ConfigurationProvider {
 	return client.config
 }
 
+// ActivateIotFlowRuntime Activates the IoT flow runtime identified by the specified OCID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/ActivateIotFlowRuntime.go.html to see an example of how to use ActivateIotFlowRuntime API.
+// A default retry strategy applies to this operation ActivateIotFlowRuntime()
+func (client IotClient) ActivateIotFlowRuntime(ctx context.Context, request ActivateIotFlowRuntimeRequest) (response ActivateIotFlowRuntimeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.activateIotFlowRuntime, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ActivateIotFlowRuntimeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ActivateIotFlowRuntimeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ActivateIotFlowRuntimeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ActivateIotFlowRuntimeResponse")
+	}
+	return
+}
+
+// activateIotFlowRuntime implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) activateIotFlowRuntime(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/iotFlowRuntimes/{iotFlowRuntimeId}/actions/activate", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ActivateIotFlowRuntimeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ActivateIotFlowRuntime")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/ActivateIotFlowRuntime"
+		err = common.PostProcessServiceError(err, "Iot", "ActivateIotFlowRuntime", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
 // ChangeIotDomainCompartment Moves an IoT domain to a different compartment within the same tenancy. For information about moving resources between
 // compartments, see Moving Resources to a Different Compartment (https://docs.oracle.com/iaas/Content/Identity/Tasks/managingcompartments.htm#moveRes).
 //
@@ -143,7 +206,7 @@ func (client IotClient) changeIotDomainCompartment(ctx context.Context, request 
 
 	var response ChangeIotDomainCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ChangeIotDomainCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -206,7 +269,7 @@ func (client IotClient) changeIotDomainDataRetentionPeriod(ctx context.Context, 
 
 	var response ChangeIotDomainDataRetentionPeriodResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ChangeIotDomainDataRetentionPeriod")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -270,12 +333,76 @@ func (client IotClient) changeIotDomainGroupCompartment(ctx context.Context, req
 
 	var response ChangeIotDomainGroupCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ChangeIotDomainGroupCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/ChangeIotDomainGroupCompartment"
 		err = common.PostProcessServiceError(err, "Iot", "ChangeIotDomainGroupCompartment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ChangeIotFlowRuntimeCompartment Moves an IoT flow runtime to a different compartment within the same tenancy. For information about moving resources between
+// compartments, see Moving Resources to a Different Compartment (https://docs.oracle.com/iaas/Content/Identity/Tasks/managingcompartments.htm#moveRes).
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/ChangeIotFlowRuntimeCompartment.go.html to see an example of how to use ChangeIotFlowRuntimeCompartment API.
+// A default retry strategy applies to this operation ChangeIotFlowRuntimeCompartment()
+func (client IotClient) ChangeIotFlowRuntimeCompartment(ctx context.Context, request ChangeIotFlowRuntimeCompartmentRequest) (response ChangeIotFlowRuntimeCompartmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.changeIotFlowRuntimeCompartment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ChangeIotFlowRuntimeCompartmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ChangeIotFlowRuntimeCompartmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ChangeIotFlowRuntimeCompartmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ChangeIotFlowRuntimeCompartmentResponse")
+	}
+	return
+}
+
+// changeIotFlowRuntimeCompartment implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) changeIotFlowRuntimeCompartment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/iotFlowRuntimes/{iotFlowRuntimeId}/actions/changeCompartment", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ChangeIotFlowRuntimeCompartmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ChangeIotFlowRuntimeCompartment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/ChangeIotFlowRuntimeCompartment"
+		err = common.PostProcessServiceError(err, "Iot", "ChangeIotFlowRuntimeCompartment", apiReferenceLink)
 		return response, err
 	}
 
@@ -333,7 +460,7 @@ func (client IotClient) configureIotDomainDataAccess(ctx context.Context, reques
 
 	var response ConfigureIotDomainDataAccessResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ConfigureIotDomainDataAccess")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -396,7 +523,7 @@ func (client IotClient) configureIotDomainGroupDataAccess(ctx context.Context, r
 
 	var response ConfigureIotDomainGroupDataAccessResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ConfigureIotDomainGroupDataAccess")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -459,7 +586,7 @@ func (client IotClient) createDigitalTwinAdapter(ctx context.Context, request co
 
 	var response CreateDigitalTwinAdapterResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "CreateDigitalTwinAdapter")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -522,7 +649,7 @@ func (client IotClient) createDigitalTwinInstance(ctx context.Context, request c
 
 	var response CreateDigitalTwinInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "CreateDigitalTwinInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -585,7 +712,7 @@ func (client IotClient) createDigitalTwinModel(ctx context.Context, request comm
 
 	var response CreateDigitalTwinModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "CreateDigitalTwinModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -648,7 +775,7 @@ func (client IotClient) createDigitalTwinRelationship(ctx context.Context, reque
 
 	var response CreateDigitalTwinRelationshipResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "CreateDigitalTwinRelationship")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -711,7 +838,7 @@ func (client IotClient) createIotDomain(ctx context.Context, request common.OCIR
 
 	var response CreateIotDomainResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "CreateIotDomain")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -774,12 +901,138 @@ func (client IotClient) createIotDomainGroup(ctx context.Context, request common
 
 	var response CreateIotDomainGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "CreateIotDomainGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/CreateIotDomainGroup"
 		err = common.PostProcessServiceError(err, "Iot", "CreateIotDomainGroup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateIotFlowRuntime Creates an IoT flow runtime.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/CreateIotFlowRuntime.go.html to see an example of how to use CreateIotFlowRuntime API.
+// A default retry strategy applies to this operation CreateIotFlowRuntime()
+func (client IotClient) CreateIotFlowRuntime(ctx context.Context, request CreateIotFlowRuntimeRequest) (response CreateIotFlowRuntimeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createIotFlowRuntime, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateIotFlowRuntimeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateIotFlowRuntimeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateIotFlowRuntimeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateIotFlowRuntimeResponse")
+	}
+	return
+}
+
+// createIotFlowRuntime implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) createIotFlowRuntime(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/iotFlowRuntimes", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateIotFlowRuntimeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "CreateIotFlowRuntime")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/CreateIotFlowRuntime"
+		err = common.PostProcessServiceError(err, "Iot", "CreateIotFlowRuntime", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeactivateIotFlowRuntime Deactivates the IoT flow runtime identified by the specified OCID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/DeactivateIotFlowRuntime.go.html to see an example of how to use DeactivateIotFlowRuntime API.
+// A default retry strategy applies to this operation DeactivateIotFlowRuntime()
+func (client IotClient) DeactivateIotFlowRuntime(ctx context.Context, request DeactivateIotFlowRuntimeRequest) (response DeactivateIotFlowRuntimeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.deactivateIotFlowRuntime, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeactivateIotFlowRuntimeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeactivateIotFlowRuntimeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeactivateIotFlowRuntimeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeactivateIotFlowRuntimeResponse")
+	}
+	return
+}
+
+// deactivateIotFlowRuntime implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) deactivateIotFlowRuntime(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/iotFlowRuntimes/{iotFlowRuntimeId}/actions/deactivate", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeactivateIotFlowRuntimeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "DeactivateIotFlowRuntime")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/DeactivateIotFlowRuntime"
+		err = common.PostProcessServiceError(err, "Iot", "DeactivateIotFlowRuntime", apiReferenceLink)
 		return response, err
 	}
 
@@ -832,7 +1085,7 @@ func (client IotClient) deleteDigitalTwinAdapter(ctx context.Context, request co
 
 	var response DeleteDigitalTwinAdapterResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "DeleteDigitalTwinAdapter")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -890,7 +1143,7 @@ func (client IotClient) deleteDigitalTwinInstance(ctx context.Context, request c
 
 	var response DeleteDigitalTwinInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "DeleteDigitalTwinInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -948,7 +1201,7 @@ func (client IotClient) deleteDigitalTwinModel(ctx context.Context, request comm
 
 	var response DeleteDigitalTwinModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "DeleteDigitalTwinModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1006,7 +1259,7 @@ func (client IotClient) deleteDigitalTwinRelationship(ctx context.Context, reque
 
 	var response DeleteDigitalTwinRelationshipResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "DeleteDigitalTwinRelationship")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1064,7 +1317,7 @@ func (client IotClient) deleteIotDomain(ctx context.Context, request common.OCIR
 
 	var response DeleteIotDomainResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "DeleteIotDomain")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1122,12 +1375,70 @@ func (client IotClient) deleteIotDomainGroup(ctx context.Context, request common
 
 	var response DeleteIotDomainGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "DeleteIotDomainGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/DeleteIotDomainGroup"
 		err = common.PostProcessServiceError(err, "Iot", "DeleteIotDomainGroup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteIotFlowRuntime Deletes the IoT flow runtime identified by the specified OCID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/DeleteIotFlowRuntime.go.html to see an example of how to use DeleteIotFlowRuntime API.
+// A default retry strategy applies to this operation DeleteIotFlowRuntime()
+func (client IotClient) DeleteIotFlowRuntime(ctx context.Context, request DeleteIotFlowRuntimeRequest) (response DeleteIotFlowRuntimeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteIotFlowRuntime, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteIotFlowRuntimeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteIotFlowRuntimeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteIotFlowRuntimeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteIotFlowRuntimeResponse")
+	}
+	return
+}
+
+// deleteIotFlowRuntime implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) deleteIotFlowRuntime(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/iotFlowRuntimes/{iotFlowRuntimeId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteIotFlowRuntimeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "DeleteIotFlowRuntime")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/DeleteIotFlowRuntime"
+		err = common.PostProcessServiceError(err, "Iot", "DeleteIotFlowRuntime", apiReferenceLink)
 		return response, err
 	}
 
@@ -1180,7 +1491,7 @@ func (client IotClient) getDigitalTwinAdapter(ctx context.Context, request commo
 
 	var response GetDigitalTwinAdapterResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetDigitalTwinAdapter")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1238,7 +1549,7 @@ func (client IotClient) getDigitalTwinInstance(ctx context.Context, request comm
 
 	var response GetDigitalTwinInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetDigitalTwinInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1297,7 +1608,7 @@ func (client IotClient) getDigitalTwinInstanceContent(ctx context.Context, reque
 
 	var response GetDigitalTwinInstanceContentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetDigitalTwinInstanceContent")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1355,7 +1666,7 @@ func (client IotClient) getDigitalTwinModel(ctx context.Context, request common.
 
 	var response GetDigitalTwinModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetDigitalTwinModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1413,7 +1724,7 @@ func (client IotClient) getDigitalTwinModelSpec(ctx context.Context, request com
 
 	var response GetDigitalTwinModelSpecResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetDigitalTwinModelSpec")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1471,7 +1782,7 @@ func (client IotClient) getDigitalTwinRelationship(ctx context.Context, request 
 
 	var response GetDigitalTwinRelationshipResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetDigitalTwinRelationship")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1529,7 +1840,7 @@ func (client IotClient) getIotDomain(ctx context.Context, request common.OCIRequ
 
 	var response GetIotDomainResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetIotDomain")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1587,12 +1898,128 @@ func (client IotClient) getIotDomainGroup(ctx context.Context, request common.OC
 
 	var response GetIotDomainGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetIotDomainGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/GetIotDomainGroup"
 		err = common.PostProcessServiceError(err, "Iot", "GetIotDomainGroup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetIotFlowRuntime Gets the IoT flow runtime identified by the specified OCID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/GetIotFlowRuntime.go.html to see an example of how to use GetIotFlowRuntime API.
+// A default retry strategy applies to this operation GetIotFlowRuntime()
+func (client IotClient) GetIotFlowRuntime(ctx context.Context, request GetIotFlowRuntimeRequest) (response GetIotFlowRuntimeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getIotFlowRuntime, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetIotFlowRuntimeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetIotFlowRuntimeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetIotFlowRuntimeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetIotFlowRuntimeResponse")
+	}
+	return
+}
+
+// getIotFlowRuntime implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) getIotFlowRuntime(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/iotFlowRuntimes/{iotFlowRuntimeId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetIotFlowRuntimeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetIotFlowRuntime")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/GetIotFlowRuntime"
+		err = common.PostProcessServiceError(err, "Iot", "GetIotFlowRuntime", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetIotFlowRuntimeFlows Gets the opaque flows document for the IoT flow runtime identified by the specified OCID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/GetIotFlowRuntimeFlows.go.html to see an example of how to use GetIotFlowRuntimeFlows API.
+// A default retry strategy applies to this operation GetIotFlowRuntimeFlows()
+func (client IotClient) GetIotFlowRuntimeFlows(ctx context.Context, request GetIotFlowRuntimeFlowsRequest) (response GetIotFlowRuntimeFlowsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getIotFlowRuntimeFlows, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetIotFlowRuntimeFlowsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetIotFlowRuntimeFlowsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetIotFlowRuntimeFlowsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetIotFlowRuntimeFlowsResponse")
+	}
+	return
+}
+
+// getIotFlowRuntimeFlows implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) getIotFlowRuntimeFlows(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/iotFlowRuntimes/{iotFlowRuntimeId}/flows", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetIotFlowRuntimeFlowsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetIotFlowRuntimeFlows")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/GetIotFlowRuntimeFlows"
+		err = common.PostProcessServiceError(err, "Iot", "GetIotFlowRuntimeFlows", apiReferenceLink)
 		return response, err
 	}
 
@@ -1645,7 +2072,7 @@ func (client IotClient) getWorkRequest(ctx context.Context, request common.OCIRe
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1708,7 +2135,7 @@ func (client IotClient) invokeRawCommand(ctx context.Context, request common.OCI
 
 	var response InvokeRawCommandResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "InvokeRawCommand")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1766,7 +2193,7 @@ func (client IotClient) listDigitalTwinAdapters(ctx context.Context, request com
 
 	var response ListDigitalTwinAdaptersResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListDigitalTwinAdapters")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1824,7 +2251,7 @@ func (client IotClient) listDigitalTwinInstances(ctx context.Context, request co
 
 	var response ListDigitalTwinInstancesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListDigitalTwinInstances")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1882,7 +2309,7 @@ func (client IotClient) listDigitalTwinModels(ctx context.Context, request commo
 
 	var response ListDigitalTwinModelsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListDigitalTwinModels")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1940,7 +2367,7 @@ func (client IotClient) listDigitalTwinRelationships(ctx context.Context, reques
 
 	var response ListDigitalTwinRelationshipsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListDigitalTwinRelationships")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1998,7 +2425,7 @@ func (client IotClient) listIotDomainGroups(ctx context.Context, request common.
 
 	var response ListIotDomainGroupsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListIotDomainGroups")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2056,12 +2483,70 @@ func (client IotClient) listIotDomains(ctx context.Context, request common.OCIRe
 
 	var response ListIotDomainsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListIotDomains")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomain/ListIotDomains"
 		err = common.PostProcessServiceError(err, "Iot", "ListIotDomains", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListIotFlowRuntimes Lists IoT flow runtimes in the specified compartment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/ListIotFlowRuntimes.go.html to see an example of how to use ListIotFlowRuntimes API.
+// A default retry strategy applies to this operation ListIotFlowRuntimes()
+func (client IotClient) ListIotFlowRuntimes(ctx context.Context, request ListIotFlowRuntimesRequest) (response ListIotFlowRuntimesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listIotFlowRuntimes, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListIotFlowRuntimesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListIotFlowRuntimesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListIotFlowRuntimesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListIotFlowRuntimesResponse")
+	}
+	return
+}
+
+// listIotFlowRuntimes implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) listIotFlowRuntimes(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/iotFlowRuntimes", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListIotFlowRuntimesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListIotFlowRuntimes")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/ListIotFlowRuntimes"
+		err = common.PostProcessServiceError(err, "Iot", "ListIotFlowRuntimes", apiReferenceLink)
 		return response, err
 	}
 
@@ -2114,7 +2599,7 @@ func (client IotClient) listWorkRequestErrors(ctx context.Context, request commo
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2172,7 +2657,7 @@ func (client IotClient) listWorkRequestLogs(ctx context.Context, request common.
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2230,7 +2715,7 @@ func (client IotClient) listWorkRequests(ctx context.Context, request common.OCI
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2288,7 +2773,7 @@ func (client IotClient) updateDigitalTwinAdapter(ctx context.Context, request co
 
 	var response UpdateDigitalTwinAdapterResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "UpdateDigitalTwinAdapter")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2346,7 +2831,7 @@ func (client IotClient) updateDigitalTwinInstance(ctx context.Context, request c
 
 	var response UpdateDigitalTwinInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "UpdateDigitalTwinInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2404,7 +2889,7 @@ func (client IotClient) updateDigitalTwinModel(ctx context.Context, request comm
 
 	var response UpdateDigitalTwinModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "UpdateDigitalTwinModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2462,7 +2947,7 @@ func (client IotClient) updateDigitalTwinRelationship(ctx context.Context, reque
 
 	var response UpdateDigitalTwinRelationshipResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "UpdateDigitalTwinRelationship")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2520,7 +3005,7 @@ func (client IotClient) updateIotDomain(ctx context.Context, request common.OCIR
 
 	var response UpdateIotDomainResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "UpdateIotDomain")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2578,12 +3063,128 @@ func (client IotClient) updateIotDomainGroup(ctx context.Context, request common
 
 	var response UpdateIotDomainGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "UpdateIotDomainGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotDomainGroup/UpdateIotDomainGroup"
 		err = common.PostProcessServiceError(err, "Iot", "UpdateIotDomainGroup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateIotFlowRuntime Updates the IoT flow runtime identified by the specified OCID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/UpdateIotFlowRuntime.go.html to see an example of how to use UpdateIotFlowRuntime API.
+// A default retry strategy applies to this operation UpdateIotFlowRuntime()
+func (client IotClient) UpdateIotFlowRuntime(ctx context.Context, request UpdateIotFlowRuntimeRequest) (response UpdateIotFlowRuntimeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateIotFlowRuntime, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateIotFlowRuntimeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateIotFlowRuntimeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateIotFlowRuntimeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateIotFlowRuntimeResponse")
+	}
+	return
+}
+
+// updateIotFlowRuntime implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) updateIotFlowRuntime(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/iotFlowRuntimes/{iotFlowRuntimeId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateIotFlowRuntimeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "UpdateIotFlowRuntime")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/UpdateIotFlowRuntime"
+		err = common.PostProcessServiceError(err, "Iot", "UpdateIotFlowRuntime", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateIotFlowRuntimeFlows Replaces the complete flows document for the IoT flow runtime identified by the specified OCID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/iot/UpdateIotFlowRuntimeFlows.go.html to see an example of how to use UpdateIotFlowRuntimeFlows API.
+// A default retry strategy applies to this operation UpdateIotFlowRuntimeFlows()
+func (client IotClient) UpdateIotFlowRuntimeFlows(ctx context.Context, request UpdateIotFlowRuntimeFlowsRequest) (response UpdateIotFlowRuntimeFlowsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateIotFlowRuntimeFlows, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateIotFlowRuntimeFlowsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateIotFlowRuntimeFlowsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateIotFlowRuntimeFlowsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateIotFlowRuntimeFlowsResponse")
+	}
+	return
+}
+
+// updateIotFlowRuntimeFlows implements the OCIOperation interface (enables retrying operations)
+func (client IotClient) updateIotFlowRuntimeFlows(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/iotFlowRuntimes/{iotFlowRuntimeId}/flows", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateIotFlowRuntimeFlowsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "iot", "UpdateIotFlowRuntimeFlows")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/iot/20250531/IotFlowRuntime/UpdateIotFlowRuntimeFlows"
+		err = common.PostProcessServiceError(err, "Iot", "UpdateIotFlowRuntimeFlows", apiReferenceLink)
 		return response, err
 	}
 

@@ -75,7 +75,7 @@ spec:
                     description: Interval in minutes that query is run periodically.
                     type: integer
                   intervalInSeconds:
-                    description: Interval in minutes which query is run periodically.
+                    description: Interval in seconds which query is run periodically.
                     type: integer
                   jsonData:
                     type: string
@@ -95,7 +95,7 @@ spec:
                     description: Type of logging query for data source (Sighting/Insight)
                     type: string
                   operator:
-                    description: Operator used in data source
+                    description: DEPRECATED - Operator used in data source
                     type: string
                   query:
                     description: The continuous query expression that is run periodically.
@@ -140,9 +140,9 @@ spec:
                       type: object
                     type: array
                   threshold:
-                    description: The integer value that must be exceeded, fall below
-                      or equal to (depending on the operator), for the query result
-                      to trigger an event
+                    description: DEPRECATED - The integer value that must be exceeded,
+                      fall below or equal to (depending on the operator), for the
+                      query result to trigger an event
                     type: integer
                 type: object
               dataSourceFeedProvider:
@@ -198,7 +198,7 @@ spec:
                     description: Interval in minutes that query is run periodically.
                     type: integer
                   intervalInSeconds:
-                    description: Interval in minutes which query is run periodically.
+                    description: Interval in seconds which query is run periodically.
                     type: integer
                   jsonData:
                     type: string
@@ -218,7 +218,7 @@ spec:
                     description: Type of logging query for data source (Sighting/Insight)
                     type: string
                   operator:
-                    description: Operator used in data source
+                    description: DEPRECATED - Operator used in data source
                     type: string
                   query:
                     description: The continuous query expression that is run periodically.
@@ -263,9 +263,9 @@ spec:
                       type: object
                     type: array
                   threshold:
-                    description: The integer value that must be exceeded, fall below
-                      or equal to (depending on the operator), for the query result
-                      to trigger an event
+                    description: DEPRECATED - The integer value that must be exceeded,
+                      fall below or equal to (depending on the operator), for the
+                      query result to trigger an event
                     type: integer
                 type: object
               dataSourceDetectorMappingInfo:

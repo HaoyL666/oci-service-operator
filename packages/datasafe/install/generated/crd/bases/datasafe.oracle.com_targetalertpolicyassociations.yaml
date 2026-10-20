@@ -92,7 +92,11 @@ spec:
                 description: The OCID of the alert policy.
                 type: string
               targetId:
-                description: The OCID of the target.
+                description: The OCID of the target or target database group.
+                type: string
+              targetType:
+                description: The resource type that is represented by the alert policy
+                  association. Default is considered as TARGET_DATABASE.
                 type: string
             required:
             - compartmentId
@@ -256,8 +260,12 @@ spec:
                   Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
                 type: object
               targetId:
-                description: The OCID of the target on which alert policy is to be
-                  applied.
+                description: The OCID of the target or target database group on which
+                  alert policy is to be applied.
+                type: string
+              targetType:
+                description: The resource type that is represented by the target alert
+                  policy association.
                 type: string
               timeCreated:
                 description: Creation date and time of the alert policy, in the format

@@ -76,6 +76,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `securityListIds` | The OCIDs of the security list or lists that the subnet uses. Remember that security lists are associated *with the subnet*, but the rules are applied to the individual VNICs in the subnet. | `list[string]` | No |
 | [`status`](../../reference/api/core/v1beta1/index.md#kind-subnet-status-status) | - | `object` | Yes |
 | `subnetDomainName` | The subnet's domain name, which consists of the subnet's DNS label, the VCN's DNS label, and the `oraclevcn.com` domain. For more information, see DNS in Your Virtual Cloud Network (https://docs.oracle.com/iaas/Content/Network/Concepts/dns.htm). Example: `subnet123.vcn1.oraclevcn.com` | `string` | No |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No |
 | `timeCreated` | The date and time the subnet was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the subnet is in. | `string` | No |
 | `virtualRouterIp` | The IP address of the virtual router. Example: `10.0.14.1` | `string` | No |

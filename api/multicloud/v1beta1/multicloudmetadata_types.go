@@ -19,11 +19,11 @@ type MultiCloudMetadataSpec struct {
 // MultiCloudMetadataStatus defines the observed state of MultiCloudMetadata.
 type MultiCloudMetadataStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// MultiCloud base compartment OCID associated with subscriptionId.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Multicloud base compartment associated with the indicated subscription (`subscriptionId`).
 	CompartmentId string `json:"compartmentId,omitempty"`
-	// Oracle Cloud Infrastructure subscriptionId.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI subscription.
 	SubscriptionId string `json:"subscriptionId,omitempty"`
-	// The date and time the multicloud compartment was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+	// The date and time that the Multicloud base compartment was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeCreated string `json:"timeCreated,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.

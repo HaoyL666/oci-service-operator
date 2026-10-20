@@ -83,10 +83,19 @@ type RedisClusterSummary struct {
 	// see Using an NSG for Clusters (https://docs.oracle.com/iaas/Content/ocicache/connecttocluster.htm#connecttocluster__networksecuritygroup).
 	NsgIds []string `mandatory:"false" json:"nsgIds"`
 
+	// The ID of the OCI Cache Backup from which this cluster was created.
+	BackupId *string `mandatory:"false" json:"backupId"`
+
 	// Security attributes for redis cluster resource. Each key is predefined and scoped to a namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
 	SecurityAttributes map[string]map[string]interface{} `mandatory:"false" json:"securityAttributes"`
+
+	// The current role of the cluster.
+	ClusterRole RedisClusterClusterRoleEnum `mandatory:"false" json:"clusterRole,omitempty"`
+
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the primary cluster in CRR.
+	PrimaryClusterId *string `mandatory:"false" json:"primaryClusterId"`
 
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
@@ -119,6 +128,9 @@ func (m RedisClusterSummary) ValidateEnumValue() (bool, error) {
 	}
 	if _, ok := GetMappingRedisClusterClusterModeEnum(string(m.ClusterMode)); !ok && m.ClusterMode != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for ClusterMode: %s. Supported values are: %s.", m.ClusterMode, strings.Join(GetRedisClusterClusterModeEnumStringValues(), ",")))
+	}
+	if _, ok := GetMappingRedisClusterClusterRoleEnum(string(m.ClusterRole)); !ok && m.ClusterRole != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for ClusterRole: %s. Supported values are: %s.", m.ClusterRole, strings.Join(GetRedisClusterClusterRoleEnumStringValues(), ",")))
 	}
 	if len(errMessage) > 0 {
 		return true, fmt.Errorf("%s", strings.Join(errMessage, "\n"))

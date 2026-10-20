@@ -56,6 +56,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | [`ingressSecurityRules`](../../reference/api/core/v1beta1/index.md#kind-securitylist-status-ingresssecurityrules) | Rules for allowing ingress IP packets. | `list[object]` | No |
 | `lifecycleState` | The security list's current state. | `string` | No |
 | [`status`](../../reference/api/core/v1beta1/index.md#kind-securitylist-status-status) | - | `object` | Yes |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No |
 | `timeCreated` | The date and time the security list was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the security list belongs to. | `string` | No |
 

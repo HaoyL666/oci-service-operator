@@ -91,6 +91,69 @@ func (client *DatabaseRecoveryClient) ConfigurationProvider() *common.Configurat
 	return client.config
 }
 
+// CancelLongTermBackup Cancels a long-term backup that is being created or scheduled to be created. You must specify the unique identifier or OCID of the long-term backup that you want to cancel. You can cancel a long-term backup only if the current state of the backup resource is WAITING_FOR_BACKUP_FROM_DB, or SCHEDULED_FOR_ARCHIVAL, or ARCHIVAL_IN_PROGRESS.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/recovery/CancelLongTermBackup.go.html to see an example of how to use CancelLongTermBackup API.
+// A default retry strategy applies to this operation CancelLongTermBackup()
+func (client DatabaseRecoveryClient) CancelLongTermBackup(ctx context.Context, request CancelLongTermBackupRequest) (response CancelLongTermBackupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.cancelLongTermBackup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CancelLongTermBackupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CancelLongTermBackupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CancelLongTermBackupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CancelLongTermBackupResponse")
+	}
+	return
+}
+
+// cancelLongTermBackup implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseRecoveryClient) cancelLongTermBackup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/longTermBackups/{longTermBackupId}/actions/cancel", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CancelLongTermBackupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "CancelLongTermBackup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/LongTermBackup/CancelLongTermBackup"
+		err = common.PostProcessServiceError(err, "DatabaseRecovery", "CancelLongTermBackup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
 // CancelProtectedDatabaseDeletion Cancels the scheduled deletion of a protected database, and returns the protected database to an ACTIVE state. You can cancel the deletion only if the protected database is in the DELETE SCHEDULED state.
 //
 // # See also
@@ -106,6 +169,11 @@ func (client DatabaseRecoveryClient) CancelProtectedDatabaseDeletion(ctx context
 	if request.RetryPolicy() != nil {
 		policy = *request.RetryPolicy()
 	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
 	ociResponse, err = common.Retry(ctx, request, client.cancelProtectedDatabaseDeletion, policy)
 	if err != nil {
 		if ociResponse != nil {
@@ -136,7 +204,7 @@ func (client DatabaseRecoveryClient) cancelProtectedDatabaseDeletion(ctx context
 
 	var response CancelProtectedDatabaseDeletionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "CancelProtectedDatabaseDeletion")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -164,6 +232,11 @@ func (client DatabaseRecoveryClient) ChangeProtectedDatabaseCompartment(ctx cont
 	if request.RetryPolicy() != nil {
 		policy = *request.RetryPolicy()
 	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
 	ociResponse, err = common.Retry(ctx, request, client.changeProtectedDatabaseCompartment, policy)
 	if err != nil {
 		if ociResponse != nil {
@@ -194,7 +267,7 @@ func (client DatabaseRecoveryClient) changeProtectedDatabaseCompartment(ctx cont
 
 	var response ChangeProtectedDatabaseCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ChangeProtectedDatabaseCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -222,6 +295,11 @@ func (client DatabaseRecoveryClient) ChangeProtectedDatabaseSubscription(ctx con
 	if request.RetryPolicy() != nil {
 		policy = *request.RetryPolicy()
 	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
 	ociResponse, err = common.Retry(ctx, request, client.changeProtectedDatabaseSubscription, policy)
 	if err != nil {
 		if ociResponse != nil {
@@ -252,7 +330,7 @@ func (client DatabaseRecoveryClient) changeProtectedDatabaseSubscription(ctx con
 
 	var response ChangeProtectedDatabaseSubscriptionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ChangeProtectedDatabaseSubscription")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -280,6 +358,11 @@ func (client DatabaseRecoveryClient) ChangeProtectionPolicyCompartment(ctx conte
 	if request.RetryPolicy() != nil {
 		policy = *request.RetryPolicy()
 	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
 	ociResponse, err = common.Retry(ctx, request, client.changeProtectionPolicyCompartment, policy)
 	if err != nil {
 		if ociResponse != nil {
@@ -310,7 +393,7 @@ func (client DatabaseRecoveryClient) changeProtectionPolicyCompartment(ctx conte
 
 	var response ChangeProtectionPolicyCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ChangeProtectionPolicyCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -338,6 +421,11 @@ func (client DatabaseRecoveryClient) ChangeRecoveryServiceSubnetCompartment(ctx 
 	if request.RetryPolicy() != nil {
 		policy = *request.RetryPolicy()
 	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
 	ociResponse, err = common.Retry(ctx, request, client.changeRecoveryServiceSubnetCompartment, policy)
 	if err != nil {
 		if ociResponse != nil {
@@ -368,12 +456,75 @@ func (client DatabaseRecoveryClient) changeRecoveryServiceSubnetCompartment(ctx 
 
 	var response ChangeRecoveryServiceSubnetCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ChangeRecoveryServiceSubnetCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/RecoveryServiceSubnet/ChangeRecoveryServiceSubnetCompartment"
 		err = common.PostProcessServiceError(err, "DatabaseRecovery", "ChangeRecoveryServiceSubnetCompartment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateLongTermBackup Creates a long-term backup of a specified protected database.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/recovery/CreateLongTermBackup.go.html to see an example of how to use CreateLongTermBackup API.
+// A default retry strategy applies to this operation CreateLongTermBackup()
+func (client DatabaseRecoveryClient) CreateLongTermBackup(ctx context.Context, request CreateLongTermBackupRequest) (response CreateLongTermBackupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createLongTermBackup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateLongTermBackupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateLongTermBackupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateLongTermBackupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateLongTermBackupResponse")
+	}
+	return
+}
+
+// createLongTermBackup implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseRecoveryClient) createLongTermBackup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/longTermBackups", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateLongTermBackupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "CreateLongTermBackup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/LongTermBackup/CreateLongTermBackup"
+		err = common.PostProcessServiceError(err, "DatabaseRecovery", "CreateLongTermBackup", apiReferenceLink)
 		return response, err
 	}
 
@@ -431,7 +582,7 @@ func (client DatabaseRecoveryClient) createProtectedDatabase(ctx context.Context
 
 	var response CreateProtectedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "CreateProtectedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -494,7 +645,7 @@ func (client DatabaseRecoveryClient) createProtectionPolicy(ctx context.Context,
 
 	var response CreateProtectionPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "CreateProtectionPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -557,7 +708,7 @@ func (client DatabaseRecoveryClient) createRecoveryServiceSubnet(ctx context.Con
 
 	var response CreateRecoveryServiceSubnetResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "CreateRecoveryServiceSubnet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -570,7 +721,66 @@ func (client DatabaseRecoveryClient) createRecoveryServiceSubnet(ctx context.Con
 	return response, err
 }
 
+// DeleteLongTermBackup Deletes a long-term backup. You can delete a long-term backup only if the current state of the backup is ACTIVE, FAILED, or CANCELED.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/recovery/DeleteLongTermBackup.go.html to see an example of how to use DeleteLongTermBackup API.
+// A default retry strategy applies to this operation DeleteLongTermBackup()
+func (client DatabaseRecoveryClient) DeleteLongTermBackup(ctx context.Context, request DeleteLongTermBackupRequest) (response DeleteLongTermBackupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteLongTermBackup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteLongTermBackupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteLongTermBackupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteLongTermBackupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteLongTermBackupResponse")
+	}
+	return
+}
+
+// deleteLongTermBackup implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseRecoveryClient) deleteLongTermBackup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/longTermBackups/{longTermBackupId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteLongTermBackupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "DeleteLongTermBackup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/LongTermBackup/DeleteLongTermBackup"
+		err = common.PostProcessServiceError(err, "DatabaseRecovery", "DeleteLongTermBackup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
 // DeleteProtectedDatabase Deletes a protected database based on the specified protected database ID.
+// Only the user or the Oracle Database service that created the protected database is allowed to modify or delete it.
 //
 // # See also
 //
@@ -615,7 +825,7 @@ func (client DatabaseRecoveryClient) deleteProtectedDatabase(ctx context.Context
 
 	var response DeleteProtectedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "DeleteProtectedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -674,7 +884,7 @@ func (client DatabaseRecoveryClient) deleteProtectionPolicy(ctx context.Context,
 
 	var response DeleteProtectionPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "DeleteProtectionPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -732,7 +942,7 @@ func (client DatabaseRecoveryClient) deleteRecoveryServiceSubnet(ctx context.Con
 
 	var response DeleteRecoveryServiceSubnetResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "DeleteRecoveryServiceSubnet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -760,6 +970,11 @@ func (client DatabaseRecoveryClient) FetchProtectedDatabaseConfiguration(ctx con
 	if request.RetryPolicy() != nil {
 		policy = *request.RetryPolicy()
 	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
 	ociResponse, err = common.Retry(ctx, request, client.fetchProtectedDatabaseConfiguration, policy)
 	if err != nil {
 		if ociResponse != nil {
@@ -790,11 +1005,69 @@ func (client DatabaseRecoveryClient) fetchProtectedDatabaseConfiguration(ctx con
 
 	var response FetchProtectedDatabaseConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "FetchProtectedDatabaseConfiguration")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/ProtectedDatabase/FetchProtectedDatabaseConfiguration"
 		err = common.PostProcessServiceError(err, "DatabaseRecovery", "FetchProtectedDatabaseConfiguration", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetLongTermBackup Retrieves information regarding a long-term backup.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/recovery/GetLongTermBackup.go.html to see an example of how to use GetLongTermBackup API.
+// A default retry strategy applies to this operation GetLongTermBackup()
+func (client DatabaseRecoveryClient) GetLongTermBackup(ctx context.Context, request GetLongTermBackupRequest) (response GetLongTermBackupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getLongTermBackup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetLongTermBackupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetLongTermBackupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetLongTermBackupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetLongTermBackupResponse")
+	}
+	return
+}
+
+// getLongTermBackup implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseRecoveryClient) getLongTermBackup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/longTermBackups/{longTermBackupId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetLongTermBackupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "GetLongTermBackup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/LongTermBackup/GetLongTermBackup"
+		err = common.PostProcessServiceError(err, "DatabaseRecovery", "GetLongTermBackup", apiReferenceLink)
 		return response, err
 	}
 
@@ -847,7 +1120,7 @@ func (client DatabaseRecoveryClient) getProtectedDatabase(ctx context.Context, r
 
 	var response GetProtectedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "GetProtectedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -905,7 +1178,7 @@ func (client DatabaseRecoveryClient) getProtectionPolicy(ctx context.Context, re
 
 	var response GetProtectionPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "GetProtectionPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -963,7 +1236,7 @@ func (client DatabaseRecoveryClient) getRecoveryServiceSubnet(ctx context.Contex
 
 	var response GetRecoveryServiceSubnetResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "GetRecoveryServiceSubnet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1021,12 +1294,70 @@ func (client DatabaseRecoveryClient) getWorkRequest(ctx context.Context, request
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/WorkRequest/GetWorkRequest"
 		err = common.PostProcessServiceError(err, "DatabaseRecovery", "GetWorkRequest", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListLongTermBackups Lists the long-term backups associated with a protected database. You can filter the results using the unique identifier (OCID) of a specific compartment, a protected database, or a long-term backup.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/recovery/ListLongTermBackups.go.html to see an example of how to use ListLongTermBackups API.
+// A default retry strategy applies to this operation ListLongTermBackups()
+func (client DatabaseRecoveryClient) ListLongTermBackups(ctx context.Context, request ListLongTermBackupsRequest) (response ListLongTermBackupsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listLongTermBackups, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListLongTermBackupsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListLongTermBackupsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListLongTermBackupsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListLongTermBackupsResponse")
+	}
+	return
+}
+
+// listLongTermBackups implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseRecoveryClient) listLongTermBackups(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/longTermBackups", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListLongTermBackupsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ListLongTermBackups")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/LongTermBackupCollection/ListLongTermBackups"
+		err = common.PostProcessServiceError(err, "DatabaseRecovery", "ListLongTermBackups", apiReferenceLink)
 		return response, err
 	}
 
@@ -1079,7 +1410,7 @@ func (client DatabaseRecoveryClient) listProtectedDatabases(ctx context.Context,
 
 	var response ListProtectedDatabasesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ListProtectedDatabases")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1137,7 +1468,7 @@ func (client DatabaseRecoveryClient) listProtectionPolicies(ctx context.Context,
 
 	var response ListProtectionPoliciesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ListProtectionPolicies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1195,7 +1526,7 @@ func (client DatabaseRecoveryClient) listRecoveryServiceSubnets(ctx context.Cont
 
 	var response ListRecoveryServiceSubnetsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ListRecoveryServiceSubnets")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1253,7 +1584,7 @@ func (client DatabaseRecoveryClient) listWorkRequestErrors(ctx context.Context, 
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1311,7 +1642,7 @@ func (client DatabaseRecoveryClient) listWorkRequestLogs(ctx context.Context, re
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1369,7 +1700,7 @@ func (client DatabaseRecoveryClient) listWorkRequests(ctx context.Context, reque
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1383,6 +1714,7 @@ func (client DatabaseRecoveryClient) listWorkRequests(ctx context.Context, reque
 }
 
 // ScheduleProtectedDatabaseDeletion Defines a preferred schedule to delete a protected database after you terminate the source database.
+// Only the user or the Oracle Database service that created the protected database is allowed to modify or delete it.
 // The default schedule is DELETE_AFTER_72_HOURS, so that the delete operation can occur 72 hours (3 days) after the source database is terminated.
 // The alternate schedule is DELETE_AFTER_RETENTION_PERIOD. Specify this option if you want to delete a protected database only after the policy-defined backup retention period expires.
 //
@@ -1399,6 +1731,11 @@ func (client DatabaseRecoveryClient) ScheduleProtectedDatabaseDeletion(ctx conte
 	if request.RetryPolicy() != nil {
 		policy = *request.RetryPolicy()
 	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
 	ociResponse, err = common.Retry(ctx, request, client.scheduleProtectedDatabaseDeletion, policy)
 	if err != nil {
 		if ociResponse != nil {
@@ -1429,12 +1766,70 @@ func (client DatabaseRecoveryClient) scheduleProtectedDatabaseDeletion(ctx conte
 
 	var response ScheduleProtectedDatabaseDeletionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "ScheduleProtectedDatabaseDeletion")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/ProtectedDatabase/ScheduleProtectedDatabaseDeletion"
 		err = common.PostProcessServiceError(err, "DatabaseRecovery", "ScheduleProtectedDatabaseDeletion", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateLongTermBackup Updates the specified long term backup.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/recovery/UpdateLongTermBackup.go.html to see an example of how to use UpdateLongTermBackup API.
+// A default retry strategy applies to this operation UpdateLongTermBackup()
+func (client DatabaseRecoveryClient) UpdateLongTermBackup(ctx context.Context, request UpdateLongTermBackupRequest) (response UpdateLongTermBackupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateLongTermBackup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateLongTermBackupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateLongTermBackupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateLongTermBackupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateLongTermBackupResponse")
+	}
+	return
+}
+
+// updateLongTermBackup implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseRecoveryClient) updateLongTermBackup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/longTermBackups/{longTermBackupId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateLongTermBackupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "UpdateLongTermBackup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/recovery-service/20210216/LongTermBackup/UpdateLongTermBackup"
+		err = common.PostProcessServiceError(err, "DatabaseRecovery", "UpdateLongTermBackup", apiReferenceLink)
 		return response, err
 	}
 
@@ -1487,7 +1882,7 @@ func (client DatabaseRecoveryClient) updateProtectedDatabase(ctx context.Context
 
 	var response UpdateProtectedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "UpdateProtectedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1545,7 +1940,7 @@ func (client DatabaseRecoveryClient) updateProtectionPolicy(ctx context.Context,
 
 	var response UpdateProtectionPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "UpdateProtectionPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1603,7 +1998,7 @@ func (client DatabaseRecoveryClient) updateRecoveryServiceSubnet(ctx context.Con
 
 	var response UpdateRecoveryServiceSubnetResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "databaseRecovery", "UpdateRecoveryServiceSubnet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

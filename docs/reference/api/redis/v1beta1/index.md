@@ -40,19 +40,46 @@ RedisClusterSpec defines the desired state of RedisCluster.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `backupId` | The ID of the OCI Cache Backup from which this cluster was created.Mutually exclusive with 'importFromObjectStorageDetails'. | `string` | No | - | - |
 | `clusterMode` | Specifies whether the cluster is sharded or non-sharded. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the compartment that contains the cluster. | `string` | Yes | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | Yes | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
+| [`importFromObjectStorageDetails`](#kind-rediscluster-spec-importfromobjectstoragedetails) | RedisClusterImportFromObjectStorageDetails defines nested fields for RedisCluster.ImportFromObjectStorageDetails. | `object` | No | - | - |
 | `nodeCount` | The number of nodes per shard in the cluster when clusterMode is SHARDED. This is the total number of nodes when clusterMode is NONSHARDED. | `integer` | Yes | - | - |
 | `nodeMemoryInGBs` | The amount of memory allocated to the cluster's nodes, in gigabytes. | `number` | Yes | - | - |
 | `nsgIds` | A list of Network Security Group (NSG) OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) associated with this cluster. For more information, see Using an NSG for Clusters (https://docs.oracle.com/iaas/Content/ocicache/connecttocluster.htm#connecttocluster__networksecuritygroup). | `list[string]` | No | - | - |
 | `ociCacheConfigSetId` | The ID of the corresponding OCI Cache Config Set for the cluster. | `string` | No | - | - |
+| `primaryClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the primary cluster from which data will be replicated. | `string` | No | - | - |
 | `securityAttributes` | Security attributes for redis cluster resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `shardCount` | The number of shards in sharded cluster. Only applicable when clusterMode is SHARDED. | `integer` | No | - | - |
 | `softwareVersion` | The OCI Cache engine version that the cluster is running. | `string` | Yes | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the cluster's subnet. | `string` | Yes | - | - |
+
+<a id="kind-rediscluster-spec-importfromobjectstoragedetails"></a>
+#### Spec.importFromObjectStorageDetails
+
+[Back to RedisCluster spec](#kind-rediscluster-spec)
+
+RedisClusterImportFromObjectStorageDetails defines nested fields for RedisCluster.ImportFromObjectStorageDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucketName` | The Object Storage bucket name. | `string` | Yes | - | - |
+| `namespaceName` | The Object Storage namespace name. | `string` | Yes | - | - |
+| [`objects`](#kind-rediscluster-spec-importfromobjectstoragedetails-objects) | The list of objects to import from the specified bucket. | `list[object]` | Yes | - | - |
+
+<a id="kind-rediscluster-spec-importfromobjectstoragedetails-objects"></a>
+##### Spec.importFromObjectStorageDetails.objects[]
+
+[Back to RedisCluster spec](#kind-rediscluster-spec)
+
+RedisClusterImportFromObjectStorageDetailsObject defines nested fields for RedisCluster.ImportFromObjectStorageDetails.Object.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `objectName` | The name of the object in the bucket (for example, 'customerA/exports/backup_ocid/dump.rdb'). | `string` | Yes | - | - |
 
 <a id="kind-rediscluster-status"></a>
 ### Status
@@ -61,7 +88,10 @@ RedisClusterStatus defines the observed state of RedisCluster.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `backupId` | The ID of the OCI Cache Backup from which this cluster was created. | `string` | No | - | - |
 | `clusterMode` | Specifies whether the cluster is sharded or non-sharded. | `string` | No | - | - |
+| [`clusterReplicationTopology`](#kind-rediscluster-status-clusterreplicationtopology) | RedisClusterClusterReplicationTopology defines nested fields for RedisCluster.ClusterReplicationTopology. | `object` | No | - | - |
+| `clusterRole` | The current role of the cluster. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the compartment that contains the cluster. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
 | `discoveryEndpointIpAddress` | The private IP address of the API endpoint for sharded cluster discovery. | `string` | No | - | - |
@@ -69,6 +99,7 @@ RedisClusterStatus defines the observed state of RedisCluster.
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the cluster. | `string` | No | - | - |
+| [`importFromObjectStorageDetails`](#kind-rediscluster-status-importfromobjectstoragedetails) | RedisClusterImportFromObjectStorageDetails defines nested fields for RedisCluster.ImportFromObjectStorageDetails. | `object` | No | - | - |
 | `lifecycleDetails` | A message describing the current state in more detail. For example, the message might provide actionable information for a resource in `FAILED` state. | `string` | No | - | - |
 | `lifecycleState` | The current state of the cluster. | `string` | No | - | - |
 | [`nodeCollection`](#kind-rediscluster-status-nodecollection) | RedisClusterNodeCollection defines nested fields for RedisCluster.NodeCollection. | `object` | No | - | - |
@@ -76,6 +107,7 @@ RedisClusterStatus defines the observed state of RedisCluster.
 | `nodeMemoryInGBs` | The amount of memory allocated to the cluster's nodes, in gigabytes. | `number` | No | - | - |
 | `nsgIds` | A list of Network Security Group (NSG) OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) associated with this cluster. For more information, see Using an NSG for Clusters (https://docs.oracle.com/iaas/Content/ocicache/connecttocluster.htm#connecttocluster__networksecuritygroup). | `list[string]` | No | - | - |
 | `ociCacheConfigSetId` | The ID of the corresponding OCI Cache Config Set for the cluster. | `string` | No | - | - |
+| `primaryClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the primary cluster in CRR. | `string` | No | - | - |
 | `primaryEndpointIpAddress` | The private IP address of the API endpoint for the cluster's primary node. | `string` | No | - | - |
 | `primaryFqdn` | The fully qualified domain name (FQDN) of the API endpoint for the cluster's primary node. | `string` | No | - | - |
 | `replicasEndpointIpAddress` | The private IP address of the API endpoint for the cluster's replica nodes. | `string` | No | - | - |
@@ -88,6 +120,66 @@ RedisClusterStatus defines the observed state of RedisCluster.
 | `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the cluster was created. An RFC3339 (https://datatracker.ietf.org/doc/html/rfc3339) formatted datetime string. | `string` | No | - | - |
 | `timeUpdated` | The date and time the cluster was updated. An RFC3339 (https://datatracker.ietf.org/doc/html/rfc3339) formatted datetime string. | `string` | No | - | - |
+
+<a id="kind-rediscluster-status-clusterreplicationtopology"></a>
+#### Status.clusterReplicationTopology
+
+[Back to RedisCluster status](#kind-rediscluster-status)
+
+RedisClusterClusterReplicationTopology defines nested fields for RedisCluster.ClusterReplicationTopology.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`primaryCluster`](#kind-rediscluster-status-clusterreplicationtopology-primarycluster) | RedisClusterClusterReplicationTopologyPrimaryCluster defines nested fields for RedisCluster.ClusterReplicationTopology.PrimaryCluster. | `object` | No | - | - |
+| [`secondaryClusters`](#kind-rediscluster-status-clusterreplicationtopology-secondaryclusters) | The list of secondary clusters that replicate data from the primary cluster. | `list[object]` | No | - | - |
+
+<a id="kind-rediscluster-status-clusterreplicationtopology-primarycluster"></a>
+##### Status.clusterReplicationTopology.primaryCluster
+
+[Back to RedisCluster status](#kind-rediscluster-status)
+
+RedisClusterClusterReplicationTopologyPrimaryCluster defines nested fields for RedisCluster.ClusterReplicationTopology.PrimaryCluster.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `ociCacheClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the OCI Cache cluster. | `string` | No | - | - |
+| `region` | The OCI region to which the cluster belongs. | `string` | No | - | - |
+
+<a id="kind-rediscluster-status-clusterreplicationtopology-secondaryclusters"></a>
+##### Status.clusterReplicationTopology.secondaryClusters[]
+
+[Back to RedisCluster status](#kind-rediscluster-status)
+
+RedisClusterClusterReplicationTopologySecondaryCluster defines nested fields for RedisCluster.ClusterReplicationTopology.SecondaryCluster.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `ociCacheClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the OCI Cache cluster. | `string` | No | - | - |
+| `region` | The OCI region to which the cluster belongs. | `string` | No | - | - |
+
+<a id="kind-rediscluster-status-importfromobjectstoragedetails"></a>
+#### Status.importFromObjectStorageDetails
+
+[Back to RedisCluster status](#kind-rediscluster-status)
+
+RedisClusterImportFromObjectStorageDetails defines nested fields for RedisCluster.ImportFromObjectStorageDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucketName` | The Object Storage bucket name. | `string` | Yes | - | - |
+| `namespaceName` | The Object Storage namespace name. | `string` | Yes | - | - |
+| [`objects`](#kind-rediscluster-status-importfromobjectstoragedetails-objects) | The list of objects to import from the specified bucket. | `list[object]` | Yes | - | - |
+
+<a id="kind-rediscluster-status-importfromobjectstoragedetails-objects"></a>
+##### Status.importFromObjectStorageDetails.objects[]
+
+[Back to RedisCluster status](#kind-rediscluster-status)
+
+RedisClusterImportFromObjectStorageDetailsObject defines nested fields for RedisCluster.ImportFromObjectStorageDetails.Object.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `objectName` | The name of the object in the bucket (for example, 'customerA/exports/backup_ocid/dump.rdb'). | `string` | Yes | - | - |
 
 <a id="kind-rediscluster-status-nodecollection"></a>
 #### Status.nodeCollection

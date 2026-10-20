@@ -35,6 +35,11 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | [`backupPolicy`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-spec-backuppolicy) | OpensearchClusterBackupPolicy defines nested fields for OpensearchCluster.BackupPolicy. | `object` | No |
 | [`certificateConfig`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-spec-certificateconfig) | OpensearchClusterCertificateConfig defines nested fields for OpensearchCluster.CertificateConfig. | `object` | No |
 | `compartmentId` | The OCID of the compartment to create the cluster in. | `string` | Yes |
+| `coordinatorNodeCount` | The number of coordinator nodes configured for the cluster. | `integer` | No |
+| `coordinatorNodeHostMemoryGB` | The amount of memory in GB, for the cluster's coordinator nodes. | `integer` | No |
+| `coordinatorNodeHostOcpuCount` | The number of OCPUs configured for the cluster's coordinator nodes. | `integer` | No |
+| `coordinatorNodeHostShape` | The node shape for the cluster's coordinator nodes. | `string` | No |
+| `coordinatorNodeHostType` | The instance type for the cluster's coordinator nodes. | `string` | No |
 | `dataNodeCount` | The number of data nodes to configure for the cluster. | `integer` | Yes |
 | `dataNodeHostBareMetalShape` | The bare metal shape for the cluster's data nodes. | `string` | No |
 | `dataNodeHostMemoryGB` | The amount of memory in GB, to configure per node for the cluster's data nodes. | `integer` | Yes |
@@ -66,6 +71,7 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | `opendashboardNodeHostOcpuCount` | The number of OCPUs to configure for the cluster's OpenSearch Dashboard nodes. | `integer` | Yes |
 | `opendashboardNodeHostShape` | The node shape for the cluster's OpenSearch Dashboard nodes. | `string` | No |
 | [`outboundClusterConfig`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-spec-outboundclusterconfig) | OpensearchClusterOutboundClusterConfig defines nested fields for OpensearchCluster.OutboundClusterConfig. | `object` | No |
+| [`remoteReindexTrustConfig`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-spec-remotereindextrustconfig) | OpensearchClusterRemoteReindexTrustConfig defines nested fields for OpensearchCluster.RemoteReindexTrustConfig. | `object` | No |
 | `reverseConnectionEndpointCustomerIps` | The customer IP addresses of the endpoint in customer VCN | `list[string]` | No |
 | `searchNodeCount` | The number of search nodes configured for the cluster. | `integer` | No |
 | `searchNodeHostMemoryGB` | The amount of memory in GB, for the cluster's search nodes. | `integer` | No |
@@ -74,6 +80,7 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | `searchNodeHostType` | The instance type for the cluster's search nodes. | `string` | No |
 | `searchNodeStorageGB` | The amount of storage in GB, to configure per node for the cluster's search nodes. | `integer` | No |
 | `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No |
+| [`securityMasterUserAuthDetails`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-spec-securitymasteruserauthdetails) | OpensearchClusterSecurityMasterUserAuthDetails defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails. | `object` | No |
 | `securityMasterUserName` | The name of the master user that are used to manage security config | `string` | No |
 | `securityMasterUserPasswordHash` | The password hash of the master user that are used to manage security config | `string` | No |
 | `securityMode` | The security mode of the cluster. | `string` | No |
@@ -96,6 +103,11 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | [`backupPolicy`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-status-backuppolicy) | OpensearchClusterBackupPolicy defines nested fields for OpensearchCluster.BackupPolicy. | `object` | No |
 | [`certificateConfig`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-status-certificateconfig) | OpensearchClusterCertificateConfig defines nested fields for OpensearchCluster.CertificateConfig. | `object` | No |
 | `compartmentId` | The OCID of the compartment where the cluster is located. | `string` | No |
+| `coordinatorNodeCount` | The number of coordinator nodes configured for the cluster. | `integer` | No |
+| `coordinatorNodeHostMemoryGB` | The amount of memory in GB, for the cluster's coordinator nodes. | `integer` | No |
+| `coordinatorNodeHostOcpuCount` | The number of OCPUs configured for the cluster's coordinator nodes. | `integer` | No |
+| `coordinatorNodeHostShape` | The node shape for the cluster's coordinator nodes. | `string` | No |
+| `coordinatorNodeHostType` | The instance type for the cluster's coordinator nodes. | `string` | No |
 | `dataNodeCount` | The number of data nodes configured for the cluster. | `integer` | No |
 | `dataNodeHostBareMetalShape` | The bare metal shape for the cluster's data nodes. | `string` | No |
 | `dataNodeHostMemoryGB` | The amount of memory in GB, for the cluster's data nodes. | `integer` | No |
@@ -135,6 +147,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `opensearchFqdn` | The fully qualified domain name (FQDN) for the cluster's API endpoint. | `string` | No |
 | `opensearchPrivateIp` | The cluster's private IP address. | `string` | No |
 | [`outboundClusterConfig`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-status-outboundclusterconfig) | OpensearchClusterOutboundClusterConfig defines nested fields for OpensearchCluster.OutboundClusterConfig. | `object` | No |
+| [`remoteReindexTrustConfig`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-status-remotereindextrustconfig) | OpensearchClusterRemoteReindexTrustConfig defines nested fields for OpensearchCluster.RemoteReindexTrustConfig. | `object` | No |
 | `reverseConnectionEndpointCustomerIps` | The customer IP addresses of the endpoint in customer VCN | `list[string]` | No |
 | [`reverseConnectionEndpoints`](../../reference/api/opensearch/v1beta1/index.md#kind-opensearchcluster-status-reverseconnectionendpoints) | The list of reverse connection endpoints. | `list[object]` | No |
 | `searchNodeCount` | The number of search nodes configured for the cluster. | `integer` | No |

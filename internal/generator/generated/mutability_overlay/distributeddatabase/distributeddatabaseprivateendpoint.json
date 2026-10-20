@@ -170,7 +170,7 @@
     },
     {
       "astFieldPath": "nsgIds",
-      "terraformFieldPath": "nsg_ids",
+      "terraformFieldPath": "nsgIds",
       "canonicalJoinKey": "nsgIds",
       "pathShape": "scalar",
       "ast": {
@@ -179,21 +179,24 @@
         "conflictsWith": null
       },
       "docs": {
-        "evidenceState": "confirmedUpdatable",
-        "detail": "Argument Reference marks the field as updatable in place.",
-        "rawSignal": "(updatable)"
+        "evidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
       },
       "merge": {
-        "joinStatus": "matched",
-        "mergeCase": "docsConfirmedCandidate",
-        "finalPolicy": "allowInPlaceUpdate"
+        "joinStatus": "unresolved",
+        "mergeCase": "unresolvedJoin",
+        "finalPolicy": "unknown"
       },
       "provenance": {
         "formalImportPath": "imports/distributeddatabase/distributeddatabaseprivateendpoint.json",
         "formalSourceRef": "terraform-provider-oci",
         "astSourceBucket": "mutation.mutable",
         "terraformDocsPage": "distributeddatabase_distributed_database_private_endpoint#argument-reference",
-        "terraformDocsSection": "Argument Reference"
+        "terraformDocsSection": "Argument Reference",
+        "notes": [
+          "AST field path \"nsgIds\" did not resolve to exactly one canonical join key",
+          "segment \"nsgIds\" did not match any generated field under \u003croot\u003e"
+        ]
       }
     },
     {

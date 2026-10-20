@@ -312,9 +312,9 @@ InstanceLaunchOptions defines nested fields for Instance.LaunchOptions.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `bootVolumeType` | Emulation type for the boot volume. * `ISCSI` - ISCSI attached block storage device. * `PARAVIRTUALIZED` - Paravirtualized disk. This is the default for boot volumes and remote block storage volumes on platform images. Before you change the boot volume attachment type, detach all block volumes and VNICs except for the boot volume and the primary VNIC. If the instance is running when you change the boot volume attachment type, it will be rebooted. **Note:** Some instances might not function properly if you change the boot volume attachment type. After the instance reboots and is running, connect to it. If the connection fails or the OS doesn't behave as expected, the changes are not supported. Revert the instance to the original boot volume attachment type. | `string` | No | - | - |
+| `bootVolumeType` | Emulation type for the boot volume. * `ISCSI` - ISCSI attached block storage device. * `PARAVIRTUALIZED` - Paravirtualized disk. This is the default for boot volumes and remote block storage volumes on platform images. * `NVME` - NVMe attached remote block storage device. Before you change the boot volume attachment type, detach all block volumes and VNICs except for the boot volume and the primary VNIC. If the instance is running when you change the boot volume attachment type, it will be rebooted. **Note:** Some instances might not function properly if you change the boot volume attachment type. After the instance reboots and is running, connect to it. If the connection fails or the OS doesn't behave as expected, the changes are not supported. Revert the instance to the original boot volume attachment type. | `string` | No | - | - |
 | `isPvEncryptionInTransitEnabled` | Whether to enable in-transit encryption for the volume's paravirtualized attachment. To enable in-transit encryption for block volumes and boot volumes, this field must be set to `true`. Data in transit is transferred over an internal and highly secure network. If you have specific compliance requirements related to the encryption of the data while it is moving between the instance and the boot volume or the block volume, you can enable in-transit encryption. In-transit encryption is not enabled by default. All boot volumes and block volumes are encrypted at rest. For more information, see Block Volume Encryption (https://docs.oracle.com/iaas/Content/Block/Concepts/overview.htm#Encrypti). | `boolean` | No | - | - |
-| `networkType` | Emulation type for the physical network interface card (NIC). * `VFIO` - Direct attached Virtual Function network controller. This is the networking type when you launch an instance using hardware-assisted (SR-IOV) networking. * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers. Before you change the networking type, detach all VNICs and block volumes except for the primary VNIC and the boot volume. The image must have paravirtualized drivers installed. For more information, see Editing an Instance (https://docs.oracle.com/iaas/Content/Compute/Tasks/resizinginstances.htm). If the instance is running when you change the network type, it will be rebooted. **Note:** Some instances might not function properly if you change the networking type. After the instance reboots and is running, connect to it. If the connection fails or the OS doesn't behave as expected, the changes are not supported. Revert the instance to the original networking type. | `string` | No | - | - |
+| `networkType` | Emulation type for the physical network interface card (NIC). * `VFIO` - Direct attached Virtual Function network controller. This is the networking type when you launch an instance using hardware-assisted (SR-IOV) networking. * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers. * `ACCELERATEDPV` - VM instances launch with accelerated paravirtualized networking type. Before you change the networking type, detach all VNICs and block volumes except for the primary VNIC and the boot volume. The image must have paravirtualized drivers installed. For more information, see Editing an Instance (https://docs.oracle.com/iaas/Content/Compute/Tasks/resizinginstances.htm). If the instance is running when you change the network type, it will be rebooted. **Note:** Some instances might not function properly if you change the networking type. After the instance reboots and is running, connect to it. If the connection fails or the OS doesn't behave as expected, the changes are not supported. Revert the instance to the original networking type. | `string` | No | - | - |
 
 <a id="kind-instance-spec-launchvolumeattachments"></a>
 #### Spec.launchVolumeAttachments[]
@@ -360,7 +360,7 @@ InstanceLicensingConfig defines nested fields for Instance.LicensingConfig.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `jsonData` | - | `string` | No | - | - |
-| `licenseType` | License Type for the OS license. * `OCI_PROVIDED` - OCI provided license (e.g. metered $/OCPU-hour). * `BRING_YOUR_OWN_LICENSE` - Bring your own license. | `string` | No | - | - |
+| `licenseType` | License Type for the OS license. * `OCI_PROVIDED` - OCI provided license (e.g. metered $/OCPU-hour). * `BRING_YOUR_OWN_LICENSE` - Bring your own license. * `PARTNER_PROVIDED` - Partner provided license. | `string` | No | - | - |
 | `type` | - | `string` | No | - | - |
 
 <a id="kind-instance-spec-placementconstraintdetails"></a>
@@ -374,7 +374,11 @@ InstancePlacementConstraintDetails defines nested fields for Instance.PlacementC
 | --- | --- | --- | --- | --- | --- |
 | `computeBareMetalHostId` | The OCID of the compute bare metal host. This is only available for dedicated capacity customers. | `string` | No | - | - |
 | `computeHostGroupId` | The OCID of the compute host group. This is only available for dedicated capacity customers. | `string` | No | - | - |
+| `hpcIslandId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the HPC island for the compute cluster. This field cannot be updated after creation of the compute cluster. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `logicalPlacementConstraint` | The logical placement strategy to apply. Allowed values are `SINGLE_TIER`, `SINGLE_BLOCK`, and `PACKED_DISTRIBUTION_MULTI_BLOCK`. | `string` | No | - | - |
+| `targetMemoryFabricIds` | The list of target GPU memory fabric OCIDs to constrain placement. If GMFs are passed in, the `hpcIslandId` must be set on the compute cluster, and the provided GMFs must belong to that same HPC island. The ordering of the array will be preserved. Ensure that all items in the array are unique. | `list[string]` | No | - | - |
+| `targetNetworkBlockIds` | The list of target network block OCIDs to constrain placement. If `targetNetworkBlockIds` is provided, the `hpcIslandId` must be set on the compute cluster, and the provided network blocks must belong to that same HPC island. The ordering of the array will be preserved. Ensure that all items in the array are unique. | `list[string]` | No | - | - |
 | `type` | - | `string` | No | - | - |
 
 <a id="kind-instance-spec-platformconfig"></a>
@@ -424,6 +428,7 @@ InstanceShapeConfig defines nested fields for Instance.ShapeConfig.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `baselineOcpuUtilization` | The baseline OCPU utilization for a subcore burstable VM instance. Leave this attribute blank for a non-burstable instance, or explicitly specify non-burstable with `BASELINE_1_1`. The following values are supported: - `BASELINE_1_8` - baseline usage is 1/8 of an OCPU. - `BASELINE_1_2` - baseline usage is 1/2 of an OCPU. - `BASELINE_1_1` - baseline usage is an entire OCPU. This represents a non-burstable instance. | `string` | No | - | - |
+| `localVolumeSizeInGBs` | The NVMe-backed local storage capacity, in GB, for flexible dense (DenseLV) VM shapes. If the selected shape is DenseLV, the value must be greater than 0. For all other shapes, the value must be null (if specified); any non-null value for a non-DenseLV shape results in an error. | `integer` | No | - | - |
 | `memoryInGBs` | The total amount of memory available to the instance, in gigabytes. | `number` | No | - | - |
 | `nvmes` | The number of NVMe drives to be used for storage. A single drive has 6.8 TB available. | `integer` | No | - | - |
 | `ocpus` | The total number of OCPUs available to the instance. | `number` | No | - | - |
@@ -473,7 +478,7 @@ InstanceStatus defines the observed state of Instance.
 | `ipxeScript` | When a bare metal or virtual machine instance boots, the iPXE firmware that runs on the instance is configured to run an iPXE script to continue the boot process. If you want more control over the boot process, you can provide your own custom iPXE script that will run when the instance boots. Be aware that the same iPXE script will run every time an instance boots, not only after the initial LaunchInstance call. The default iPXE script connects to the instance's local boot volume over iSCSI and performs a network boot. If you use a custom iPXE script and want to network-boot from the instance's local boot volume over iSCSI the same way as the default iPXE script, use the following iSCSI IP address: 169.254.0.2, and boot volume IQN: iqn.2015-02.oracle.boot. If your instance boot volume attachment type is paravirtualized, the boot volume is attached to the instance through virtio-scsi and no iPXE script is used. If your instance boot volume attachment type is paravirtualized and you use custom iPXE to network boot into your instance, the primary boot volume is attached as a data volume through virtio-scsi drive. For more information about the Bring Your Own Image feature of Oracle Cloud Infrastructure, see Bring Your Own Image (https://docs.oracle.com/iaas/Content/Compute/References/bringyourownimage.htm). For more information about iPXE, see http://ipxe.org. | `string` | No | - | - |
 | `isAIEnterpriseEnabled` | Whether AI enterprise is enabled on the instance. | `boolean` | No | - | - |
 | `isCrossNumaNode` | Whether the instance’s OCPUs and memory are distributed across multiple NUMA nodes. | `boolean` | No | - | - |
-| `launchMode` | Specifies the configuration mode for launching virtual machine (VM) instances. The configuration modes are: * `NATIVE` - VM instances launch with iSCSI boot and VFIO devices. The default value for platform images. * `EMULATED` - VM instances launch with emulated devices, such as the E1000 network driver and emulated SCSI disk controller. * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers. * `CUSTOM` - VM instances launch with custom configuration settings specified in the `LaunchOptions` parameter. | `string` | No | - | - |
+| `launchMode` | Specifies the configuration mode for launching virtual machine (VM) instances. The configuration modes are: * `NATIVE` - VM instances launch with iSCSI boot and VFIO devices. The default value for platform images. * `EMULATED` - VM instances launch with emulated devices, such as the E1000 network driver and emulated SCSI disk controller. * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers. * `ACCELERATEDPV` - VM instances launch with accelerated paravirtualized networking type. * `CUSTOM` - VM instances launch with custom configuration settings specified in the `LaunchOptions` parameter. | `string` | No | - | - |
 | [`launchOptions`](#kind-instance-status-launchoptions) | InstanceLaunchOptions defines nested fields for Instance.LaunchOptions. | `object` | No | - | - |
 | [`licensingConfigs`](#kind-instance-status-licensingconfigs) | List of licensing configurations associated with the instance. | `list[object]` | No | - | - |
 | `lifecycleState` | The current state of the instance. | `string` | No | - | - |
@@ -552,9 +557,9 @@ InstanceLaunchOptions defines nested fields for Instance.LaunchOptions.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `bootVolumeType` | Emulation type for the boot volume. * `ISCSI` - ISCSI attached block storage device. * `PARAVIRTUALIZED` - Paravirtualized disk. This is the default for boot volumes and remote block storage volumes on platform images. Before you change the boot volume attachment type, detach all block volumes and VNICs except for the boot volume and the primary VNIC. If the instance is running when you change the boot volume attachment type, it will be rebooted. **Note:** Some instances might not function properly if you change the boot volume attachment type. After the instance reboots and is running, connect to it. If the connection fails or the OS doesn't behave as expected, the changes are not supported. Revert the instance to the original boot volume attachment type. | `string` | No | - | - |
+| `bootVolumeType` | Emulation type for the boot volume. * `ISCSI` - ISCSI attached block storage device. * `PARAVIRTUALIZED` - Paravirtualized disk. This is the default for boot volumes and remote block storage volumes on platform images. * `NVME` - NVMe attached remote block storage device. Before you change the boot volume attachment type, detach all block volumes and VNICs except for the boot volume and the primary VNIC. If the instance is running when you change the boot volume attachment type, it will be rebooted. **Note:** Some instances might not function properly if you change the boot volume attachment type. After the instance reboots and is running, connect to it. If the connection fails or the OS doesn't behave as expected, the changes are not supported. Revert the instance to the original boot volume attachment type. | `string` | No | - | - |
 | `isPvEncryptionInTransitEnabled` | Whether to enable in-transit encryption for the volume's paravirtualized attachment. To enable in-transit encryption for block volumes and boot volumes, this field must be set to `true`. Data in transit is transferred over an internal and highly secure network. If you have specific compliance requirements related to the encryption of the data while it is moving between the instance and the boot volume or the block volume, you can enable in-transit encryption. In-transit encryption is not enabled by default. All boot volumes and block volumes are encrypted at rest. For more information, see Block Volume Encryption (https://docs.oracle.com/iaas/Content/Block/Concepts/overview.htm#Encrypti). | `boolean` | No | - | - |
-| `networkType` | Emulation type for the physical network interface card (NIC). * `VFIO` - Direct attached Virtual Function network controller. This is the networking type when you launch an instance using hardware-assisted (SR-IOV) networking. * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers. Before you change the networking type, detach all VNICs and block volumes except for the primary VNIC and the boot volume. The image must have paravirtualized drivers installed. For more information, see Editing an Instance (https://docs.oracle.com/iaas/Content/Compute/Tasks/resizinginstances.htm). If the instance is running when you change the network type, it will be rebooted. **Note:** Some instances might not function properly if you change the networking type. After the instance reboots and is running, connect to it. If the connection fails or the OS doesn't behave as expected, the changes are not supported. Revert the instance to the original networking type. | `string` | No | - | - |
+| `networkType` | Emulation type for the physical network interface card (NIC). * `VFIO` - Direct attached Virtual Function network controller. This is the networking type when you launch an instance using hardware-assisted (SR-IOV) networking. * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers. * `ACCELERATEDPV` - VM instances launch with accelerated paravirtualized networking type. Before you change the networking type, detach all VNICs and block volumes except for the primary VNIC and the boot volume. The image must have paravirtualized drivers installed. For more information, see Editing an Instance (https://docs.oracle.com/iaas/Content/Compute/Tasks/resizinginstances.htm). If the instance is running when you change the network type, it will be rebooted. **Note:** Some instances might not function properly if you change the networking type. After the instance reboots and is running, connect to it. If the connection fails or the OS doesn't behave as expected, the changes are not supported. Revert the instance to the original networking type. | `string` | No | - | - |
 
 <a id="kind-instance-status-licensingconfigs"></a>
 #### Status.licensingConfigs[]
@@ -566,7 +571,7 @@ InstanceLicensingConfig defines nested fields for Instance.LicensingConfig.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `jsonData` | - | `string` | No | - | - |
-| `licenseType` | License Type for the OS license. * `OCI_PROVIDED` - OCI provided license (e.g. metered $/OCPU-hour). * `BRING_YOUR_OWN_LICENSE` - Bring your own license. | `string` | No | - | - |
+| `licenseType` | License Type for the OS license. * `OCI_PROVIDED` - OCI provided license (e.g. metered $/OCPU-hour). * `BRING_YOUR_OWN_LICENSE` - Bring your own license. * `PARTNER_PROVIDED` - Partner provided license. | `string` | No | - | - |
 | `type` | - | `string` | No | - | - |
 
 <a id="kind-instance-status-loadbalancerbackends"></a>
@@ -594,7 +599,11 @@ InstancePlacementConstraintDetails defines nested fields for Instance.PlacementC
 | --- | --- | --- | --- | --- | --- |
 | `computeBareMetalHostId` | The OCID of the compute bare metal host. This is only available for dedicated capacity customers. | `string` | No | - | - |
 | `computeHostGroupId` | The OCID of the compute host group. This is only available for dedicated capacity customers. | `string` | No | - | - |
+| `hpcIslandId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the HPC island for the compute cluster. This field cannot be updated after creation of the compute cluster. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `logicalPlacementConstraint` | The logical placement strategy to apply. Allowed values are `SINGLE_TIER`, `SINGLE_BLOCK`, and `PACKED_DISTRIBUTION_MULTI_BLOCK`. | `string` | No | - | - |
+| `targetMemoryFabricIds` | The list of target GPU memory fabric OCIDs to constrain placement. If GMFs are passed in, the `hpcIslandId` must be set on the compute cluster, and the provided GMFs must belong to that same HPC island. The ordering of the array will be preserved. Ensure that all items in the array are unique. | `list[string]` | No | - | - |
+| `targetNetworkBlockIds` | The list of target network block OCIDs to constrain placement. If `targetNetworkBlockIds` is provided, the `hpcIslandId` must be set on the compute cluster, and the provided network blocks must belong to that same HPC island. The ordering of the array will be preserved. Ensure that all items in the array are unique. | `list[string]` | No | - | - |
 | `type` | - | `string` | No | - | - |
 
 <a id="kind-instance-status-platformconfig"></a>
@@ -644,6 +653,7 @@ InstanceShapeConfig defines nested fields for Instance.ShapeConfig.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `baselineOcpuUtilization` | The baseline OCPU utilization for a subcore burstable VM instance. Leave this attribute blank for a non-burstable instance, or explicitly specify non-burstable with `BASELINE_1_1`. The following values are supported: - `BASELINE_1_8` - baseline usage is 1/8 of an OCPU. - `BASELINE_1_2` - baseline usage is 1/2 of an OCPU. - `BASELINE_1_1` - baseline usage is an entire OCPU. This represents a non-burstable instance. | `string` | No | - | - |
+| `localVolumeSizeInGBs` | The NVMe-backed local storage capacity, in GB, for flexible dense (DenseLV) VM shapes. If the selected shape is DenseLV, the value must be greater than 0. For all other shapes, the value must be null (if specified); any non-null value for a non-DenseLV shape results in an error. | `integer` | No | - | - |
 | `memoryInGBs` | The total amount of memory available to the instance, in gigabytes. | `number` | No | - | - |
 | `nvmes` | The number of NVMe drives to be used for storage. A single drive has 6.8 TB available. | `integer` | No | - | - |
 | `ocpus` | The total number of OCPUs available to the instance. | `number` | No | - | - |
@@ -768,6 +778,7 @@ InternetGatewayStatus defines the observed state of InternetGateway.
 | `lifecycleState` | The internet gateway's current state. | `string` | No | - | - |
 | `routeTableId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the route table the Internet Gateway is using. | `string` | No | - | - |
 | [`status`](#kind-internetgateway-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the internet gateway was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the Internet Gateway belongs to. | `string` | No | - | - |
 
@@ -976,6 +987,7 @@ NetworkSecurityGroupStatus defines the observed state of NetworkSecurityGroup.
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security group. | `string` | No | - | - |
 | `lifecycleState` | The network security group's current state. | `string` | No | - | - |
 | [`status`](#kind-networksecuritygroup-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the network security group was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security group's VCN. | `string` | No | - | - |
 
@@ -1094,6 +1106,7 @@ RouteTableStatus defines the observed state of RouteTable.
 | `lifecycleState` | The route table's current state. | `string` | No | - | - |
 | [`routeRules`](#kind-routetable-status-routerules) | The collection of rules for routing destination IPs to network devices. | `list[object]` | No | - | - |
 | [`status`](#kind-routetable-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the route table was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the route table list belongs to. | `string` | No | - | - |
 
@@ -1418,6 +1431,7 @@ SecurityListStatus defines the observed state of SecurityList.
 | [`ingressSecurityRules`](#kind-securitylist-status-ingresssecurityrules) | Rules for allowing ingress IP packets. | `list[object]` | No | - | - |
 | `lifecycleState` | The security list's current state. | `string` | No | - | - |
 | [`status`](#kind-securitylist-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the security list was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the security list belongs to. | `string` | No | - | - |
 
@@ -1874,6 +1888,7 @@ SubnetStatus defines the observed state of Subnet.
 | `securityListIds` | The OCIDs of the security list or lists that the subnet uses. Remember that security lists are associated *with the subnet*, but the rules are applied to the individual VNICs in the subnet. | `list[string]` | No | - | - |
 | [`status`](#kind-subnet-status-status) | - | `object` | Yes | - | - |
 | `subnetDomainName` | The subnet's domain name, which consists of the subnet's DNS label, the VCN's DNS label, and the `oraclevcn.com` domain. For more information, see DNS in Your Virtual Cloud Network (https://docs.oracle.com/iaas/Content/Network/Concepts/dns.htm). Example: `subnet123.vcn1.oraclevcn.com` | `string` | No | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the subnet was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the subnet is in. | `string` | No | - | - |
 | `virtualRouterIp` | The IP address of the virtual router. Example: `10.0.14.1` | `string` | No | - | - |
@@ -2007,6 +2022,7 @@ VcnStatus defines the observed state of Vcn.
 | `lifecycleState` | The VCN's current state. | `string` | No | - | - |
 | `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. Example: `{"Oracle-DataSecurity-ZPR": {"MaxEgressCount": {"value":"42","mode":"audit"}}}` | `map[string, map[string, string]]` | No | - | - |
 | [`status`](#kind-vcn-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the VCN was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `vcnDomainName` | The VCN's domain name, which consists of the VCN's DNS label, and the `oraclevcn.com` domain. For more information, see DNS in Your Virtual Cloud Network (https://docs.oracle.com/iaas/Content/Network/Concepts/dns.htm). Example: `vcn1.oraclevcn.com` | `string` | No | - | - |
 

@@ -82,6 +82,9 @@ spec:
                   The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the connection being
                   referenced.
                 type: string
+              connectionType:
+                description: The connection type.
+                type: string
               deploymentId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the deployment being referenced.

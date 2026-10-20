@@ -141,7 +141,7 @@ func (client DataSafeClient) activateTargetDatabase(ctx context.Context, request
 
 	var response ActivateTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ActivateTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -202,7 +202,7 @@ func (client DataSafeClient) addMaskingColumnsFromSdm(ctx context.Context, reque
 
 	var response AddMaskingColumnsFromSdmResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "AddMaskingColumnsFromSdm")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -265,7 +265,7 @@ func (client DataSafeClient) alertsUpdate(ctx context.Context, request common.OC
 
 	var response AlertsUpdateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "AlertsUpdate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -326,7 +326,7 @@ func (client DataSafeClient) applyDiscoveryJobResults(ctx context.Context, reque
 
 	var response ApplyDiscoveryJobResultsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ApplyDiscoveryJobResults")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -394,7 +394,7 @@ func (client DataSafeClient) applySdmMaskingPolicyDifference(ctx context.Context
 
 	var response ApplySdmMaskingPolicyDifferenceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ApplySdmMaskingPolicyDifference")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -457,7 +457,7 @@ func (client DataSafeClient) applySecurityAssessmentTemplate(ctx context.Context
 
 	var response ApplySecurityAssessmentTemplateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ApplySecurityAssessmentTemplate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -515,7 +515,7 @@ func (client DataSafeClient) bulkCreateSensitiveTypes(ctx context.Context, reque
 
 	var response BulkCreateSensitiveTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "BulkCreateSensitiveTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -578,7 +578,7 @@ func (client DataSafeClient) bulkCreateSqlFirewallAllowedSqls(ctx context.Contex
 
 	var response BulkCreateSqlFirewallAllowedSqlsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "BulkCreateSqlFirewallAllowedSqls")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -641,7 +641,7 @@ func (client DataSafeClient) bulkCreateUnifiedAuditPolicy(ctx context.Context, r
 
 	var response BulkCreateUnifiedAuditPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "BulkCreateUnifiedAuditPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -699,7 +699,7 @@ func (client DataSafeClient) bulkDeleteSqlFirewallAllowedSqls(ctx context.Contex
 
 	var response BulkDeleteSqlFirewallAllowedSqlsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "BulkDeleteSqlFirewallAllowedSqls")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -762,7 +762,7 @@ func (client DataSafeClient) calculateAuditVolumeAvailable(ctx context.Context, 
 
 	var response CalculateAuditVolumeAvailableResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CalculateAuditVolumeAvailable")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -825,7 +825,7 @@ func (client DataSafeClient) calculateAuditVolumeCollected(ctx context.Context, 
 
 	var response CalculateAuditVolumeCollectedResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CalculateAuditVolumeCollected")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -883,7 +883,7 @@ func (client DataSafeClient) cancelWorkRequest(ctx context.Context, request comm
 
 	var response CancelWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CancelWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -946,7 +946,7 @@ func (client DataSafeClient) changeAlertCompartment(ctx context.Context, request
 
 	var response ChangeAlertCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeAlertCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1009,7 +1009,7 @@ func (client DataSafeClient) changeAlertPolicyCompartment(ctx context.Context, r
 
 	var response ChangeAlertPolicyCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeAlertPolicyCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1072,7 +1072,7 @@ func (client DataSafeClient) changeAttributeSetCompartment(ctx context.Context, 
 
 	var response ChangeAttributeSetCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeAttributeSetCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1135,7 +1135,7 @@ func (client DataSafeClient) changeAuditArchiveRetrievalCompartment(ctx context.
 
 	var response ChangeAuditArchiveRetrievalCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeAuditArchiveRetrievalCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1198,7 +1198,7 @@ func (client DataSafeClient) changeAuditPolicyCompartment(ctx context.Context, r
 
 	var response ChangeAuditPolicyCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeAuditPolicyCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1261,12 +1261,76 @@ func (client DataSafeClient) changeAuditProfileCompartment(ctx context.Context, 
 
 	var response ChangeAuditProfileCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeAuditProfileCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/AuditProfile/ChangeAuditProfileCompartment"
 		err = common.PostProcessServiceError(err, "DataSafe", "ChangeAuditProfileCompartment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ChangeCryptoAssessmentCompartment Moves the specified saved crypto assessment into a different compartment.
+// Only `SAVED` crypto assessments are supported.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ChangeCryptoAssessmentCompartment.go.html to see an example of how to use ChangeCryptoAssessmentCompartment API.
+// A default retry strategy applies to this operation ChangeCryptoAssessmentCompartment()
+func (client DataSafeClient) ChangeCryptoAssessmentCompartment(ctx context.Context, request ChangeCryptoAssessmentCompartmentRequest) (response ChangeCryptoAssessmentCompartmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.changeCryptoAssessmentCompartment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ChangeCryptoAssessmentCompartmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ChangeCryptoAssessmentCompartmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ChangeCryptoAssessmentCompartmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ChangeCryptoAssessmentCompartmentResponse")
+	}
+	return
+}
+
+// changeCryptoAssessmentCompartment implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) changeCryptoAssessmentCompartment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/cryptoAssessments/{cryptoAssessmentId}/actions/changeCompartment", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ChangeCryptoAssessmentCompartmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeCryptoAssessmentCompartment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ChangeCryptoAssessmentCompartment"
+		err = common.PostProcessServiceError(err, "DataSafe", "ChangeCryptoAssessmentCompartment", apiReferenceLink)
 		return response, err
 	}
 
@@ -1319,7 +1383,7 @@ func (client DataSafeClient) changeDataSafePrivateEndpointCompartment(ctx contex
 
 	var response ChangeDataSafePrivateEndpointCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeDataSafePrivateEndpointCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1382,7 +1446,7 @@ func (client DataSafeClient) changeDatabaseSecurityConfigCompartment(ctx context
 
 	var response ChangeDatabaseSecurityConfigCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeDatabaseSecurityConfigCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1445,7 +1509,7 @@ func (client DataSafeClient) changeDiscoveryJobCompartment(ctx context.Context, 
 
 	var response ChangeDiscoveryJobCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeDiscoveryJobCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1508,7 +1572,7 @@ func (client DataSafeClient) changeLibraryMaskingFormatCompartment(ctx context.C
 
 	var response ChangeLibraryMaskingFormatCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeLibraryMaskingFormatCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1571,7 +1635,7 @@ func (client DataSafeClient) changeMaskingPolicyCompartment(ctx context.Context,
 
 	var response ChangeMaskingPolicyCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeMaskingPolicyCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1634,7 +1698,7 @@ func (client DataSafeClient) changeMaskingPolicyHealthReportCompartment(ctx cont
 
 	var response ChangeMaskingPolicyHealthReportCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeMaskingPolicyHealthReportCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1697,12 +1761,75 @@ func (client DataSafeClient) changeOnPremConnectorCompartment(ctx context.Contex
 
 	var response ChangeOnPremConnectorCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeOnPremConnectorCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/OnPremConnector/ChangeOnPremConnectorCompartment"
 		err = common.PostProcessServiceError(err, "DataSafe", "ChangeOnPremConnectorCompartment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ChangeRegistrationPolicyCompartment Moves the registration policy to the specified compartment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ChangeRegistrationPolicyCompartment.go.html to see an example of how to use ChangeRegistrationPolicyCompartment API.
+// A default retry strategy applies to this operation ChangeRegistrationPolicyCompartment()
+func (client DataSafeClient) ChangeRegistrationPolicyCompartment(ctx context.Context, request ChangeRegistrationPolicyCompartmentRequest) (response ChangeRegistrationPolicyCompartmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.changeRegistrationPolicyCompartment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ChangeRegistrationPolicyCompartmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ChangeRegistrationPolicyCompartmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ChangeRegistrationPolicyCompartmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ChangeRegistrationPolicyCompartmentResponse")
+	}
+	return
+}
+
+// changeRegistrationPolicyCompartment implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) changeRegistrationPolicyCompartment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/registrationPolicies/{registrationPolicyId}/actions/changeCompartment", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ChangeRegistrationPolicyCompartmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeRegistrationPolicyCompartment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/RegistrationPolicy/ChangeRegistrationPolicyCompartment"
+		err = common.PostProcessServiceError(err, "DataSafe", "ChangeRegistrationPolicyCompartment", apiReferenceLink)
 		return response, err
 	}
 
@@ -1760,7 +1887,7 @@ func (client DataSafeClient) changeReportCompartment(ctx context.Context, reques
 
 	var response ChangeReportCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeReportCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1823,7 +1950,7 @@ func (client DataSafeClient) changeReportDefinitionCompartment(ctx context.Conte
 
 	var response ChangeReportDefinitionCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeReportDefinitionCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1886,7 +2013,7 @@ func (client DataSafeClient) changeRetention(ctx context.Context, request common
 
 	var response ChangeRetentionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeRetention")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1949,7 +2076,7 @@ func (client DataSafeClient) changeSdmMaskingPolicyDifferenceCompartment(ctx con
 
 	var response ChangeSdmMaskingPolicyDifferenceCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSdmMaskingPolicyDifferenceCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2014,7 +2141,7 @@ func (client DataSafeClient) changeSecurityAssessmentCompartment(ctx context.Con
 
 	var response ChangeSecurityAssessmentCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSecurityAssessmentCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2077,7 +2204,7 @@ func (client DataSafeClient) changeSecurityPolicyCompartment(ctx context.Context
 
 	var response ChangeSecurityPolicyCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSecurityPolicyCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2140,7 +2267,7 @@ func (client DataSafeClient) changeSecurityPolicyConfigCompartment(ctx context.C
 
 	var response ChangeSecurityPolicyConfigCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSecurityPolicyConfigCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2203,7 +2330,7 @@ func (client DataSafeClient) changeSecurityPolicyDeploymentCompartment(ctx conte
 
 	var response ChangeSecurityPolicyDeploymentCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSecurityPolicyDeploymentCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2266,7 +2393,7 @@ func (client DataSafeClient) changeSensitiveDataModelCompartment(ctx context.Con
 
 	var response ChangeSensitiveDataModelCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSensitiveDataModelCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2329,7 +2456,7 @@ func (client DataSafeClient) changeSensitiveTypeCompartment(ctx context.Context,
 
 	var response ChangeSensitiveTypeCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSensitiveTypeCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2392,7 +2519,7 @@ func (client DataSafeClient) changeSensitiveTypeGroupCompartment(ctx context.Con
 
 	var response ChangeSensitiveTypeGroupCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSensitiveTypeGroupCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2455,7 +2582,7 @@ func (client DataSafeClient) changeSensitiveTypesExportCompartment(ctx context.C
 
 	var response ChangeSensitiveTypesExportCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSensitiveTypesExportCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2518,7 +2645,7 @@ func (client DataSafeClient) changeSqlCollectionCompartment(ctx context.Context,
 
 	var response ChangeSqlCollectionCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSqlCollectionCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2581,12 +2708,128 @@ func (client DataSafeClient) changeSqlFirewallPolicyCompartment(ctx context.Cont
 
 	var response ChangeSqlFirewallPolicyCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSqlFirewallPolicyCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlFirewallPolicy/ChangeSqlFirewallPolicyCompartment"
 		err = common.PostProcessServiceError(err, "DataSafe", "ChangeSqlFirewallPolicyCompartment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ChangeSubsettingPolicyCompartment Moves the specified subsetting policy and its dependent resources into a different compartment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ChangeSubsettingPolicyCompartment.go.html to see an example of how to use ChangeSubsettingPolicyCompartment API.
+// A default retry strategy applies to this operation ChangeSubsettingPolicyCompartment()
+func (client DataSafeClient) ChangeSubsettingPolicyCompartment(ctx context.Context, request ChangeSubsettingPolicyCompartmentRequest) (response ChangeSubsettingPolicyCompartmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.changeSubsettingPolicyCompartment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ChangeSubsettingPolicyCompartmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ChangeSubsettingPolicyCompartmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ChangeSubsettingPolicyCompartmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ChangeSubsettingPolicyCompartmentResponse")
+	}
+	return
+}
+
+// changeSubsettingPolicyCompartment implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) changeSubsettingPolicyCompartment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/changeCompartment", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ChangeSubsettingPolicyCompartmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSubsettingPolicyCompartment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/ChangeSubsettingPolicyCompartment"
+		err = common.PostProcessServiceError(err, "DataSafe", "ChangeSubsettingPolicyCompartment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ChangeSubsettingPolicyHealthReportCompartment Moves the specified subsetting policy health report and its dependent resources into a different compartment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ChangeSubsettingPolicyHealthReportCompartment.go.html to see an example of how to use ChangeSubsettingPolicyHealthReportCompartment API.
+// A default retry strategy applies to this operation ChangeSubsettingPolicyHealthReportCompartment()
+func (client DataSafeClient) ChangeSubsettingPolicyHealthReportCompartment(ctx context.Context, request ChangeSubsettingPolicyHealthReportCompartmentRequest) (response ChangeSubsettingPolicyHealthReportCompartmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.changeSubsettingPolicyHealthReportCompartment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ChangeSubsettingPolicyHealthReportCompartmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ChangeSubsettingPolicyHealthReportCompartmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ChangeSubsettingPolicyHealthReportCompartmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ChangeSubsettingPolicyHealthReportCompartmentResponse")
+	}
+	return
+}
+
+// changeSubsettingPolicyHealthReportCompartment implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) changeSubsettingPolicyHealthReportCompartment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicyHealthReports/{subsettingPolicyHealthReportId}/actions/changeCompartment", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ChangeSubsettingPolicyHealthReportCompartmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeSubsettingPolicyHealthReportCompartment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicyHealthReport/ChangeSubsettingPolicyHealthReportCompartment"
+		err = common.PostProcessServiceError(err, "DataSafe", "ChangeSubsettingPolicyHealthReportCompartment", apiReferenceLink)
 		return response, err
 	}
 
@@ -2644,7 +2887,7 @@ func (client DataSafeClient) changeTargetAlertPolicyAssociationCompartment(ctx c
 
 	var response ChangeTargetAlertPolicyAssociationCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeTargetAlertPolicyAssociationCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2707,7 +2950,7 @@ func (client DataSafeClient) changeTargetDatabaseCompartment(ctx context.Context
 
 	var response ChangeTargetDatabaseCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeTargetDatabaseCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2770,7 +3013,7 @@ func (client DataSafeClient) changeTargetDatabaseGroupCompartment(ctx context.Co
 
 	var response ChangeTargetDatabaseGroupCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeTargetDatabaseGroupCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2833,7 +3076,7 @@ func (client DataSafeClient) changeUnifiedAuditPolicyCompartment(ctx context.Con
 
 	var response ChangeUnifiedAuditPolicyCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeUnifiedAuditPolicyCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2896,7 +3139,7 @@ func (client DataSafeClient) changeUnifiedAuditPolicyDefinitionCompartment(ctx c
 
 	var response ChangeUnifiedAuditPolicyDefinitionCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeUnifiedAuditPolicyDefinitionCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2963,7 +3206,7 @@ func (client DataSafeClient) changeUserAssessmentCompartment(ctx context.Context
 
 	var response ChangeUserAssessmentCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ChangeUserAssessmentCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3027,7 +3270,7 @@ func (client DataSafeClient) compareSecurityAssessment(ctx context.Context, requ
 
 	var response CompareSecurityAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CompareSecurityAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3090,7 +3333,7 @@ func (client DataSafeClient) compareToTemplateBaseline(ctx context.Context, requ
 
 	var response CompareToTemplateBaselineResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CompareToTemplateBaseline")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3154,7 +3397,7 @@ func (client DataSafeClient) compareUserAssessment(ctx context.Context, request 
 
 	var response CompareUserAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CompareUserAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3217,7 +3460,7 @@ func (client DataSafeClient) createAlertPolicy(ctx context.Context, request comm
 
 	var response CreateAlertPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateAlertPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3280,7 +3523,7 @@ func (client DataSafeClient) createAlertPolicyRule(ctx context.Context, request 
 
 	var response CreateAlertPolicyRuleResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateAlertPolicyRule")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3343,7 +3586,7 @@ func (client DataSafeClient) createAttributeSet(ctx context.Context, request com
 
 	var response CreateAttributeSetResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateAttributeSet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3408,7 +3651,7 @@ func (client DataSafeClient) createAuditArchiveRetrieval(ctx context.Context, re
 
 	var response CreateAuditArchiveRetrievalResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateAuditArchiveRetrieval")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3471,7 +3714,7 @@ func (client DataSafeClient) createAuditProfile(ctx context.Context, request com
 
 	var response CreateAuditProfileResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateAuditProfile")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3534,7 +3777,7 @@ func (client DataSafeClient) createDataSafePrivateEndpoint(ctx context.Context, 
 
 	var response CreateDataSafePrivateEndpointResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateDataSafePrivateEndpoint")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3601,7 +3844,7 @@ func (client DataSafeClient) createDiscoveryJob(ctx context.Context, request com
 
 	var response CreateDiscoveryJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateDiscoveryJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3668,7 +3911,7 @@ func (client DataSafeClient) createLibraryMaskingFormat(ctx context.Context, req
 
 	var response CreateLibraryMaskingFormatResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateLibraryMaskingFormat")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3748,7 +3991,7 @@ func (client DataSafeClient) createMaskingColumn(ctx context.Context, request co
 
 	var response CreateMaskingColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateMaskingColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3824,7 +4067,7 @@ func (client DataSafeClient) createMaskingPolicy(ctx context.Context, request co
 
 	var response CreateMaskingPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateMaskingPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3887,7 +4130,7 @@ func (client DataSafeClient) createOnPremConnector(ctx context.Context, request 
 
 	var response CreateOnPremConnectorResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateOnPremConnector")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3950,7 +4193,7 @@ func (client DataSafeClient) createPeerTargetDatabase(ctx context.Context, reque
 
 	var response CreatePeerTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreatePeerTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4013,12 +4256,75 @@ func (client DataSafeClient) createReferentialRelation(ctx context.Context, requ
 
 	var response CreateReferentialRelationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateReferentialRelation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/ReferentialRelation/CreateReferentialRelation"
 		err = common.PostProcessServiceError(err, "DataSafe", "CreateReferentialRelation", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateRegistrationPolicy Creates a new OptIn/Registration Policy
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/CreateRegistrationPolicy.go.html to see an example of how to use CreateRegistrationPolicy API.
+// A default retry strategy applies to this operation CreateRegistrationPolicy()
+func (client DataSafeClient) CreateRegistrationPolicy(ctx context.Context, request CreateRegistrationPolicyRequest) (response CreateRegistrationPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createRegistrationPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateRegistrationPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateRegistrationPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateRegistrationPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateRegistrationPolicyResponse")
+	}
+	return
+}
+
+// createRegistrationPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) createRegistrationPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/registrationPolicies", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateRegistrationPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateRegistrationPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/RegistrationPolicy/CreateRegistrationPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "CreateRegistrationPolicy", apiReferenceLink)
 		return response, err
 	}
 
@@ -4076,7 +4382,7 @@ func (client DataSafeClient) createReportDefinition(ctx context.Context, request
 
 	var response CreateReportDefinitionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateReportDefinition")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4143,7 +4449,7 @@ func (client DataSafeClient) createSdmMaskingPolicyDifference(ctx context.Contex
 
 	var response CreateSdmMaskingPolicyDifferenceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSdmMaskingPolicyDifference")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4156,8 +4462,8 @@ func (client DataSafeClient) createSdmMaskingPolicyDifference(ctx context.Contex
 	return response, err
 }
 
-// CreateSecurityAssessment Creates a new saved security assessment for one or multiple targets in a compartment. When this operation is performed,
-// it will save the latest assessments in the specified compartment. If a schedule is passed, it will persist the latest assessments,
+// CreateSecurityAssessment Creates a new saved security assessment for a target database or target database group in a compartment. When this operation is performed,
+// it will save the latest assessment in the specified compartment. If a schedule is passed, it will persist the latest assessment,
 // at the defined date and time, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339).
 //
 // # See also
@@ -4208,7 +4514,7 @@ func (client DataSafeClient) createSecurityAssessment(ctx context.Context, reque
 
 	var response CreateSecurityAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSecurityAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4271,7 +4577,7 @@ func (client DataSafeClient) createSecurityPolicy(ctx context.Context, request c
 
 	var response CreateSecurityPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSecurityPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4334,7 +4640,7 @@ func (client DataSafeClient) createSecurityPolicyConfig(ctx context.Context, req
 
 	var response CreateSecurityPolicyConfigResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSecurityPolicyConfig")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4397,7 +4703,7 @@ func (client DataSafeClient) createSecurityPolicyDeployment(ctx context.Context,
 
 	var response CreateSecurityPolicyDeploymentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSecurityPolicyDeployment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4460,7 +4766,7 @@ func (client DataSafeClient) createSensitiveColumn(ctx context.Context, request 
 
 	var response CreateSensitiveColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSensitiveColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4525,7 +4831,7 @@ func (client DataSafeClient) createSensitiveDataModel(ctx context.Context, reque
 
 	var response CreateSensitiveDataModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSensitiveDataModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4590,7 +4896,7 @@ func (client DataSafeClient) createSensitiveType(ctx context.Context, request co
 
 	var response CreateSensitiveTypeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSensitiveType")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4653,7 +4959,7 @@ func (client DataSafeClient) createSensitiveTypeGroup(ctx context.Context, reque
 
 	var response CreateSensitiveTypeGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSensitiveTypeGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4718,7 +5024,7 @@ func (client DataSafeClient) createSensitiveTypesExport(ctx context.Context, req
 
 	var response CreateSensitiveTypesExportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSensitiveTypesExport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4781,12 +5087,210 @@ func (client DataSafeClient) createSqlCollection(ctx context.Context, request co
 
 	var response CreateSqlCollectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSqlCollection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlCollection/CreateSqlCollection"
 		err = common.PostProcessServiceError(err, "DataSafe", "CreateSqlCollection", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateSubsettingPolicy Creates a new subsetting policy and associates it with a sensitive data model or a target database.
+// To use a sensitive data model as the source of subsetting schemas, set the schemaSource attribute to
+// SENSITIVE_DATA_MODEL and provide the sensitiveDataModelId attribute. In this case, the target database associated with the
+// sensitive data model is used for subsetting rules validations.
+// You can also create a subsetting policy without using a sensitive data model. In this case,
+// you need to associate your subsetting policy with a target database by setting the schemaSource
+// attribute to TARGET and providing the targetId attribute. The specified target database
+// is used for subsetting rules validations.
+// After creating a subsetting policy, you can use the CreateSubsettingRule
+// operation to manually add subsetting rules to the policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/CreateSubsettingPolicy.go.html to see an example of how to use CreateSubsettingPolicy API.
+// A default retry strategy applies to this operation CreateSubsettingPolicy()
+func (client DataSafeClient) CreateSubsettingPolicy(ctx context.Context, request CreateSubsettingPolicyRequest) (response CreateSubsettingPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createSubsettingPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateSubsettingPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateSubsettingPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateSubsettingPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateSubsettingPolicyResponse")
+	}
+	return
+}
+
+// createSubsettingPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) createSubsettingPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateSubsettingPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSubsettingPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/CreateSubsettingPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "CreateSubsettingPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateSubsettingRule Details to create a new subsetting rule
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/CreateSubsettingRule.go.html to see an example of how to use CreateSubsettingRule API.
+// A default retry strategy applies to this operation CreateSubsettingRule()
+func (client DataSafeClient) CreateSubsettingRule(ctx context.Context, request CreateSubsettingRuleRequest) (response CreateSubsettingRuleResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createSubsettingRule, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateSubsettingRuleResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateSubsettingRuleResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateSubsettingRuleResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateSubsettingRuleResponse")
+	}
+	return
+}
+
+// createSubsettingRule implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) createSubsettingRule(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/subsettingRules", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateSubsettingRuleResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSubsettingRule")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingRule/CreateSubsettingRule"
+		err = common.PostProcessServiceError(err, "DataSafe", "CreateSubsettingRule", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateSubsettingSchemaRelation Details to create a new referential relation.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/CreateSubsettingSchemaRelation.go.html to see an example of how to use CreateSubsettingSchemaRelation API.
+// A default retry strategy applies to this operation CreateSubsettingSchemaRelation()
+func (client DataSafeClient) CreateSubsettingSchemaRelation(ctx context.Context, request CreateSubsettingSchemaRelationRequest) (response CreateSubsettingSchemaRelationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createSubsettingSchemaRelation, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateSubsettingSchemaRelationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateSubsettingSchemaRelationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateSubsettingSchemaRelationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateSubsettingSchemaRelationResponse")
+	}
+	return
+}
+
+// createSubsettingSchemaRelation implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) createSubsettingSchemaRelation(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/subsettingSchemaRelations", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateSubsettingSchemaRelationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateSubsettingSchemaRelation")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingSchemaRelationSummary/CreateSubsettingSchemaRelation"
+		err = common.PostProcessServiceError(err, "DataSafe", "CreateSubsettingSchemaRelation", apiReferenceLink)
 		return response, err
 	}
 
@@ -4844,7 +5348,7 @@ func (client DataSafeClient) createTargetAlertPolicyAssociation(ctx context.Cont
 
 	var response CreateTargetAlertPolicyAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateTargetAlertPolicyAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4907,7 +5411,7 @@ func (client DataSafeClient) createTargetDatabase(ctx context.Context, request c
 
 	var response CreateTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4970,7 +5474,7 @@ func (client DataSafeClient) createTargetDatabaseGroup(ctx context.Context, requ
 
 	var response CreateTargetDatabaseGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateTargetDatabaseGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5033,7 +5537,7 @@ func (client DataSafeClient) createUnifiedAuditPolicy(ctx context.Context, reque
 
 	var response CreateUnifiedAuditPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateUnifiedAuditPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5046,8 +5550,8 @@ func (client DataSafeClient) createUnifiedAuditPolicy(ctx context.Context, reque
 	return response, err
 }
 
-// CreateUserAssessment Creates a new saved user assessment for one or multiple targets in a compartment. It saves the latest assessments in the
-// specified compartment. If a scheduled is passed in, this operation persists the latest assessments that exist at the defined
+// CreateUserAssessment Creates a new saved user assessment for a target database or target database group in a compartment. It saves the latest assessment in the
+// specified compartment. If a schedule is passed in, this operation persists the latest assessment that exists at the defined
 // date and time, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339).
 //
 // # See also
@@ -5098,7 +5602,7 @@ func (client DataSafeClient) createUserAssessment(ctx context.Context, request c
 
 	var response CreateUserAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "CreateUserAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5161,7 +5665,7 @@ func (client DataSafeClient) deactivateTargetDatabase(ctx context.Context, reque
 
 	var response DeactivateTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeactivateTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5219,7 +5723,7 @@ func (client DataSafeClient) deleteAlertPolicy(ctx context.Context, request comm
 
 	var response DeleteAlertPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteAlertPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5277,7 +5781,7 @@ func (client DataSafeClient) deleteAlertPolicyRule(ctx context.Context, request 
 
 	var response DeleteAlertPolicyRuleResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteAlertPolicyRule")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5335,7 +5839,7 @@ func (client DataSafeClient) deleteAttributeSet(ctx context.Context, request com
 
 	var response DeleteAttributeSetResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteAttributeSet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5394,7 +5898,7 @@ func (client DataSafeClient) deleteAuditArchiveRetrieval(ctx context.Context, re
 
 	var response DeleteAuditArchiveRetrievalResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteAuditArchiveRetrieval")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5453,7 +5957,7 @@ func (client DataSafeClient) deleteAuditProfile(ctx context.Context, request com
 
 	var response DeleteAuditProfileResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteAuditProfile")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5511,12 +6015,71 @@ func (client DataSafeClient) deleteAuditTrail(ctx context.Context, request commo
 
 	var response DeleteAuditTrailResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteAuditTrail")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/AuditTrail/DeleteAuditTrail"
 		err = common.PostProcessServiceError(err, "DataSafe", "DeleteAuditTrail", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteCryptoAssessment Deletes the specified saved crypto assessment.
+// Only assessments of type `SAVED` can be deleted. Attempts to delete a `LATEST` assessment return `400 InvalidParameter`.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DeleteCryptoAssessment.go.html to see an example of how to use DeleteCryptoAssessment API.
+// A default retry strategy applies to this operation DeleteCryptoAssessment()
+func (client DataSafeClient) DeleteCryptoAssessment(ctx context.Context, request DeleteCryptoAssessmentRequest) (response DeleteCryptoAssessmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteCryptoAssessment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteCryptoAssessmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteCryptoAssessmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteCryptoAssessmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteCryptoAssessmentResponse")
+	}
+	return
+}
+
+// deleteCryptoAssessment implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) deleteCryptoAssessment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/cryptoAssessments/{cryptoAssessmentId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteCryptoAssessmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteCryptoAssessment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/DeleteCryptoAssessment"
+		err = common.PostProcessServiceError(err, "DataSafe", "DeleteCryptoAssessment", apiReferenceLink)
 		return response, err
 	}
 
@@ -5569,7 +6132,7 @@ func (client DataSafeClient) deleteDataSafePrivateEndpoint(ctx context.Context, 
 
 	var response DeleteDataSafePrivateEndpointResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteDataSafePrivateEndpoint")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5627,7 +6190,7 @@ func (client DataSafeClient) deleteDiscoveryJob(ctx context.Context, request com
 
 	var response DeleteDiscoveryJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteDiscoveryJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5685,7 +6248,7 @@ func (client DataSafeClient) deleteDiscoveryJobResult(ctx context.Context, reque
 
 	var response DeleteDiscoveryJobResultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteDiscoveryJobResult")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5743,7 +6306,7 @@ func (client DataSafeClient) deleteLibraryMaskingFormat(ctx context.Context, req
 
 	var response DeleteLibraryMaskingFormatResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteLibraryMaskingFormat")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5801,7 +6364,7 @@ func (client DataSafeClient) deleteMaskingColumn(ctx context.Context, request co
 
 	var response DeleteMaskingColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteMaskingColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5859,7 +6422,7 @@ func (client DataSafeClient) deleteMaskingPolicy(ctx context.Context, request co
 
 	var response DeleteMaskingPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteMaskingPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5917,7 +6480,7 @@ func (client DataSafeClient) deleteMaskingPolicyHealthReport(ctx context.Context
 
 	var response DeleteMaskingPolicyHealthReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteMaskingPolicyHealthReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5975,7 +6538,7 @@ func (client DataSafeClient) deleteMaskingReport(ctx context.Context, request co
 
 	var response DeleteMaskingReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteMaskingReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6033,7 +6596,7 @@ func (client DataSafeClient) deleteOnPremConnector(ctx context.Context, request 
 
 	var response DeleteOnPremConnectorResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteOnPremConnector")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6091,7 +6654,7 @@ func (client DataSafeClient) deletePeerTargetDatabase(ctx context.Context, reque
 
 	var response DeletePeerTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeletePeerTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6149,12 +6712,70 @@ func (client DataSafeClient) deleteReferentialRelation(ctx context.Context, requ
 
 	var response DeleteReferentialRelationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteReferentialRelation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/ReferentialRelation/DeleteReferentialRelation"
 		err = common.PostProcessServiceError(err, "DataSafe", "DeleteReferentialRelation", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteRegistrationPolicy Deletes the specified registration policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DeleteRegistrationPolicy.go.html to see an example of how to use DeleteRegistrationPolicy API.
+// A default retry strategy applies to this operation DeleteRegistrationPolicy()
+func (client DataSafeClient) DeleteRegistrationPolicy(ctx context.Context, request DeleteRegistrationPolicyRequest) (response DeleteRegistrationPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteRegistrationPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteRegistrationPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteRegistrationPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteRegistrationPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteRegistrationPolicyResponse")
+	}
+	return
+}
+
+// deleteRegistrationPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) deleteRegistrationPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/registrationPolicies/{registrationPolicyId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteRegistrationPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteRegistrationPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/RegistrationPolicy/DeleteRegistrationPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "DeleteRegistrationPolicy", apiReferenceLink)
 		return response, err
 	}
 
@@ -6207,7 +6828,7 @@ func (client DataSafeClient) deleteReportDefinition(ctx context.Context, request
 
 	var response DeleteReportDefinitionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteReportDefinition")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6265,7 +6886,7 @@ func (client DataSafeClient) deleteSdmMaskingPolicyDifference(ctx context.Contex
 
 	var response DeleteSdmMaskingPolicyDifferenceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSdmMaskingPolicyDifference")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6326,7 +6947,7 @@ func (client DataSafeClient) deleteSecurityAssessment(ctx context.Context, reque
 
 	var response DeleteSecurityAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSecurityAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6384,7 +7005,7 @@ func (client DataSafeClient) deleteSecurityPolicy(ctx context.Context, request c
 
 	var response DeleteSecurityPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSecurityPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6442,7 +7063,7 @@ func (client DataSafeClient) deleteSecurityPolicyConfig(ctx context.Context, req
 
 	var response DeleteSecurityPolicyConfigResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSecurityPolicyConfig")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6500,7 +7121,7 @@ func (client DataSafeClient) deleteSecurityPolicyDeployment(ctx context.Context,
 
 	var response DeleteSecurityPolicyDeploymentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSecurityPolicyDeployment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6558,7 +7179,7 @@ func (client DataSafeClient) deleteSensitiveColumn(ctx context.Context, request 
 
 	var response DeleteSensitiveColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSensitiveColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6616,7 +7237,7 @@ func (client DataSafeClient) deleteSensitiveDataModel(ctx context.Context, reque
 
 	var response DeleteSensitiveDataModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSensitiveDataModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6674,7 +7295,7 @@ func (client DataSafeClient) deleteSensitiveType(ctx context.Context, request co
 
 	var response DeleteSensitiveTypeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSensitiveType")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6732,7 +7353,7 @@ func (client DataSafeClient) deleteSensitiveTypeGroup(ctx context.Context, reque
 
 	var response DeleteSensitiveTypeGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSensitiveTypeGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6790,7 +7411,7 @@ func (client DataSafeClient) deleteSensitiveTypesExport(ctx context.Context, req
 
 	var response DeleteSensitiveTypesExportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSensitiveTypesExport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6848,7 +7469,7 @@ func (client DataSafeClient) deleteSqlCollection(ctx context.Context, request co
 
 	var response DeleteSqlCollectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSqlCollection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6906,7 +7527,7 @@ func (client DataSafeClient) deleteSqlFirewallAllowedSql(ctx context.Context, re
 
 	var response DeleteSqlFirewallAllowedSqlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSqlFirewallAllowedSql")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -6964,12 +7585,302 @@ func (client DataSafeClient) deleteSqlFirewallPolicy(ctx context.Context, reques
 
 	var response DeleteSqlFirewallPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSqlFirewallPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlFirewallPolicy/DeleteSqlFirewallPolicy"
 		err = common.PostProcessServiceError(err, "DataSafe", "DeleteSqlFirewallPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteSubsettingPolicy Deletes the specified subsetting policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DeleteSubsettingPolicy.go.html to see an example of how to use DeleteSubsettingPolicy API.
+// A default retry strategy applies to this operation DeleteSubsettingPolicy()
+func (client DataSafeClient) DeleteSubsettingPolicy(ctx context.Context, request DeleteSubsettingPolicyRequest) (response DeleteSubsettingPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteSubsettingPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteSubsettingPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteSubsettingPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteSubsettingPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteSubsettingPolicyResponse")
+	}
+	return
+}
+
+// deleteSubsettingPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) deleteSubsettingPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/subsettingPolicies/{subsettingPolicyId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteSubsettingPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSubsettingPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/DeleteSubsettingPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "DeleteSubsettingPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteSubsettingPolicyHealthReport Deletes the specified subsetting policy health report.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DeleteSubsettingPolicyHealthReport.go.html to see an example of how to use DeleteSubsettingPolicyHealthReport API.
+// A default retry strategy applies to this operation DeleteSubsettingPolicyHealthReport()
+func (client DataSafeClient) DeleteSubsettingPolicyHealthReport(ctx context.Context, request DeleteSubsettingPolicyHealthReportRequest) (response DeleteSubsettingPolicyHealthReportResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteSubsettingPolicyHealthReport, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteSubsettingPolicyHealthReportResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteSubsettingPolicyHealthReportResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteSubsettingPolicyHealthReportResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteSubsettingPolicyHealthReportResponse")
+	}
+	return
+}
+
+// deleteSubsettingPolicyHealthReport implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) deleteSubsettingPolicyHealthReport(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/subsettingPolicyHealthReports/{subsettingPolicyHealthReportId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteSubsettingPolicyHealthReportResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSubsettingPolicyHealthReport")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicyHealthReport/DeleteSubsettingPolicyHealthReport"
+		err = common.PostProcessServiceError(err, "DataSafe", "DeleteSubsettingPolicyHealthReport", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteSubsettingReport Deletes the specified subsetting report.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DeleteSubsettingReport.go.html to see an example of how to use DeleteSubsettingReport API.
+// A default retry strategy applies to this operation DeleteSubsettingReport()
+func (client DataSafeClient) DeleteSubsettingReport(ctx context.Context, request DeleteSubsettingReportRequest) (response DeleteSubsettingReportResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteSubsettingReport, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteSubsettingReportResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteSubsettingReportResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteSubsettingReportResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteSubsettingReportResponse")
+	}
+	return
+}
+
+// deleteSubsettingReport implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) deleteSubsettingReport(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/subsettingReports/{subsettingReportId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteSubsettingReportResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSubsettingReport")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingReport/DeleteSubsettingReport"
+		err = common.PostProcessServiceError(err, "DataSafe", "DeleteSubsettingReport", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteSubsettingRule Deletes the specified subsetting rule.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DeleteSubsettingRule.go.html to see an example of how to use DeleteSubsettingRule API.
+// A default retry strategy applies to this operation DeleteSubsettingRule()
+func (client DataSafeClient) DeleteSubsettingRule(ctx context.Context, request DeleteSubsettingRuleRequest) (response DeleteSubsettingRuleResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteSubsettingRule, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteSubsettingRuleResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteSubsettingRuleResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteSubsettingRuleResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteSubsettingRuleResponse")
+	}
+	return
+}
+
+// deleteSubsettingRule implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) deleteSubsettingRule(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/subsettingPolicies/{subsettingPolicyId}/subsettingRules/{subsettingRuleKey}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteSubsettingRuleResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSubsettingRule")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingRule/DeleteSubsettingRule"
+		err = common.PostProcessServiceError(err, "DataSafe", "DeleteSubsettingRule", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteSubsettingSchemaRelation Deletes the specified referential relation. Note that only the relation created by the user can be deleted
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DeleteSubsettingSchemaRelation.go.html to see an example of how to use DeleteSubsettingSchemaRelation API.
+// A default retry strategy applies to this operation DeleteSubsettingSchemaRelation()
+func (client DataSafeClient) DeleteSubsettingSchemaRelation(ctx context.Context, request DeleteSubsettingSchemaRelationRequest) (response DeleteSubsettingSchemaRelationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteSubsettingSchemaRelation, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteSubsettingSchemaRelationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteSubsettingSchemaRelationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteSubsettingSchemaRelationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteSubsettingSchemaRelationResponse")
+	}
+	return
+}
+
+// deleteSubsettingSchemaRelation implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) deleteSubsettingSchemaRelation(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/subsettingPolicies/{subsettingPolicyId}/subsettingSchemaRelations/{subsettingSchemaRelationKey}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteSubsettingSchemaRelationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteSubsettingSchemaRelation")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingSchemaRelation/DeleteSubsettingSchemaRelation"
+		err = common.PostProcessServiceError(err, "DataSafe", "DeleteSubsettingSchemaRelation", apiReferenceLink)
 		return response, err
 	}
 
@@ -7022,7 +7933,7 @@ func (client DataSafeClient) deleteTargetAlertPolicyAssociation(ctx context.Cont
 
 	var response DeleteTargetAlertPolicyAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteTargetAlertPolicyAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -7080,7 +7991,7 @@ func (client DataSafeClient) deleteTargetDatabase(ctx context.Context, request c
 
 	var response DeleteTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -7138,7 +8049,7 @@ func (client DataSafeClient) deleteTargetDatabaseGroup(ctx context.Context, requ
 
 	var response DeleteTargetDatabaseGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteTargetDatabaseGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -7196,7 +8107,7 @@ func (client DataSafeClient) deleteUnifiedAuditPolicy(ctx context.Context, reque
 
 	var response DeleteUnifiedAuditPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteUnifiedAuditPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -7254,7 +8165,7 @@ func (client DataSafeClient) deleteUnifiedAuditPolicyDefinition(ctx context.Cont
 
 	var response DeleteUnifiedAuditPolicyDefinitionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteUnifiedAuditPolicyDefinition")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -7315,7 +8226,7 @@ func (client DataSafeClient) deleteUserAssessment(ctx context.Context, request c
 
 	var response DeleteUserAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeleteUserAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -7378,7 +8289,7 @@ func (client DataSafeClient) deploySecurityPolicyDeployment(ctx context.Context,
 
 	var response DeploySecurityPolicyDeploymentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DeploySecurityPolicyDeployment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -7444,12 +8355,75 @@ func (client DataSafeClient) discoverAuditTrails(ctx context.Context, request co
 
 	var response DiscoverAuditTrailsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DiscoverAuditTrails")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/AuditProfile/DiscoverAuditTrails"
 		err = common.PostProcessServiceError(err, "DataSafe", "DiscoverAuditTrails", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DownloadCryptoAssessmentReport Downloads the report of the specified crypto assessment. To download the crypto assessment report, it needs to be generated first.
+// Please use GenerateCryptoAssessmentReport to generate a downloadable report in the preferred format (PDF, XLS).
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DownloadCryptoAssessmentReport.go.html to see an example of how to use DownloadCryptoAssessmentReport API.
+// A default retry strategy applies to this operation DownloadCryptoAssessmentReport()
+func (client DataSafeClient) DownloadCryptoAssessmentReport(ctx context.Context, request DownloadCryptoAssessmentReportRequest) (response DownloadCryptoAssessmentReportResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.downloadCryptoAssessmentReport, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DownloadCryptoAssessmentReportResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DownloadCryptoAssessmentReportResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DownloadCryptoAssessmentReportResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DownloadCryptoAssessmentReportResponse")
+	}
+	return
+}
+
+// downloadCryptoAssessmentReport implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) downloadCryptoAssessmentReport(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/cryptoAssessments/{cryptoAssessmentId}/actions/downloadReport", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DownloadCryptoAssessmentReportResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadCryptoAssessmentReport")
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/DownloadCryptoAssessmentReport"
+		err = common.PostProcessServiceError(err, "DataSafe", "DownloadCryptoAssessmentReport", apiReferenceLink)
 		return response, err
 	}
 
@@ -7505,7 +8479,7 @@ func (client DataSafeClient) downloadDiscoveryReport(ctx context.Context, reques
 
 	var response DownloadDiscoveryReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadDiscoveryReport")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SensitiveDataModel/DownloadDiscoveryReport"
@@ -7562,7 +8536,7 @@ func (client DataSafeClient) downloadMaskingLog(ctx context.Context, request com
 
 	var response DownloadMaskingLogResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadMaskingLog")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/MaskingPolicy/DownloadMaskingLog"
@@ -7622,7 +8596,7 @@ func (client DataSafeClient) downloadMaskingPolicy(ctx context.Context, request 
 
 	var response DownloadMaskingPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadMaskingPolicy")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/MaskingPolicy/DownloadMaskingPolicy"
@@ -7681,7 +8655,7 @@ func (client DataSafeClient) downloadMaskingReport(ctx context.Context, request 
 
 	var response DownloadMaskingReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadMaskingReport")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/MaskingPolicy/DownloadMaskingReport"
@@ -7743,7 +8717,7 @@ func (client DataSafeClient) downloadPrivilegeScript(ctx context.Context, reques
 
 	var response DownloadPrivilegeScriptResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadPrivilegeScript")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/TargetDatabase/DownloadPrivilegeScript"
@@ -7806,7 +8780,7 @@ func (client DataSafeClient) downloadSecurityAssessmentReport(ctx context.Contex
 
 	var response DownloadSecurityAssessmentReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadSecurityAssessmentReport")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SecurityAssessment/DownloadSecurityAssessmentReport"
@@ -7866,7 +8840,7 @@ func (client DataSafeClient) downloadSensitiveDataModel(ctx context.Context, req
 
 	var response DownloadSensitiveDataModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadSensitiveDataModel")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SensitiveDataModel/DownloadSensitiveDataModel"
@@ -7925,11 +8899,187 @@ func (client DataSafeClient) downloadSensitiveTypesExport(ctx context.Context, r
 
 	var response DownloadSensitiveTypesExportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadSensitiveTypesExport")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SensitiveTypesExport/DownloadSensitiveTypesExport"
 		err = common.PostProcessServiceError(err, "DataSafe", "DownloadSensitiveTypesExport", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DownloadSubsettingLog Downloads the subsetting log generated by the last subsetting operation on a target database using the specified subsetting policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DownloadSubsettingLog.go.html to see an example of how to use DownloadSubsettingLog API.
+// A default retry strategy applies to this operation DownloadSubsettingLog()
+func (client DataSafeClient) DownloadSubsettingLog(ctx context.Context, request DownloadSubsettingLogRequest) (response DownloadSubsettingLogResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.downloadSubsettingLog, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DownloadSubsettingLogResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DownloadSubsettingLogResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DownloadSubsettingLogResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DownloadSubsettingLogResponse")
+	}
+	return
+}
+
+// downloadSubsettingLog implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) downloadSubsettingLog(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/downloadLog", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DownloadSubsettingLogResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadSubsettingLog")
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/DownloadSubsettingLog"
+		err = common.PostProcessServiceError(err, "DataSafe", "DownloadSubsettingLog", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DownloadSubsettingPolicy Downloads an already-generated file corresponding to the specified subsetting policy.
+// Note that the GenerateSubsettingPolicyForDownload operation is a prerequisite for the
+// DownloadSubsettingPolicy operation. Use GenerateSubsettingPolicyForDownload to generate
+// a subsetting policy file and then use DownloadSubsettingPolicy to download the generated file.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DownloadSubsettingPolicy.go.html to see an example of how to use DownloadSubsettingPolicy API.
+// A default retry strategy applies to this operation DownloadSubsettingPolicy()
+func (client DataSafeClient) DownloadSubsettingPolicy(ctx context.Context, request DownloadSubsettingPolicyRequest) (response DownloadSubsettingPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.downloadSubsettingPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DownloadSubsettingPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DownloadSubsettingPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DownloadSubsettingPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DownloadSubsettingPolicyResponse")
+	}
+	return
+}
+
+// downloadSubsettingPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) downloadSubsettingPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/download", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DownloadSubsettingPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadSubsettingPolicy")
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/DownloadSubsettingPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "DownloadSubsettingPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DownloadSubsettingReport Downloads an already-generated subsetting report. Note that the GenerateSubsettingReportForDownload
+// operation is a prerequisite for the DownloadSubsettingReport operation. Use GenerateSubsettingReportForDownload
+// to generate a subsetting report file and then use DownloadSubsettingReport to download the generated file.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/DownloadSubsettingReport.go.html to see an example of how to use DownloadSubsettingReport API.
+// A default retry strategy applies to this operation DownloadSubsettingReport()
+func (client DataSafeClient) DownloadSubsettingReport(ctx context.Context, request DownloadSubsettingReportRequest) (response DownloadSubsettingReportResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.downloadSubsettingReport, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DownloadSubsettingReportResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DownloadSubsettingReportResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DownloadSubsettingReportResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DownloadSubsettingReportResponse")
+	}
+	return
+}
+
+// downloadSubsettingReport implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) downloadSubsettingReport(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/downloadReport", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DownloadSubsettingReportResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadSubsettingReport")
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/DownloadSubsettingReport"
+		err = common.PostProcessServiceError(err, "DataSafe", "DownloadSubsettingReport", apiReferenceLink)
 		return response, err
 	}
 
@@ -7988,7 +9138,7 @@ func (client DataSafeClient) downloadUserAssessmentReport(ctx context.Context, r
 
 	var response DownloadUserAssessmentReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "DownloadUserAssessmentReport")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/UserAssessment/DownloadUserAssessmentReport"
@@ -8045,12 +9195,139 @@ func (client DataSafeClient) enableDataSafeConfiguration(ctx context.Context, re
 
 	var response EnableDataSafeConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "EnableDataSafeConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/DataSafeConfiguration/EnableDataSafeConfiguration"
 		err = common.PostProcessServiceError(err, "DataSafe", "EnableDataSafeConfiguration", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// EstimateTableSizes Estimates table sizes for the specified subsetting policy and target database.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/EstimateTableSizes.go.html to see an example of how to use EstimateTableSizes API.
+// A default retry strategy applies to this operation EstimateTableSizes()
+func (client DataSafeClient) EstimateTableSizes(ctx context.Context, request EstimateTableSizesRequest) (response EstimateTableSizesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.estimateTableSizes, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = EstimateTableSizesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = EstimateTableSizesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(EstimateTableSizesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into EstimateTableSizesResponse")
+	}
+	return
+}
+
+// estimateTableSizes implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) estimateTableSizes(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/estimateTableSizes", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response EstimateTableSizesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "EstimateTableSizes")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/EstimateTableSizes"
+		err = common.PostProcessServiceError(err, "DataSafe", "EstimateTableSizes", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GenerateCryptoAssessmentReport Generates the report of the specified crypto assessment.
+// Supported output formats are PDF and XLS.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GenerateCryptoAssessmentReport.go.html to see an example of how to use GenerateCryptoAssessmentReport API.
+// A default retry strategy applies to this operation GenerateCryptoAssessmentReport()
+func (client DataSafeClient) GenerateCryptoAssessmentReport(ctx context.Context, request GenerateCryptoAssessmentReportRequest) (response GenerateCryptoAssessmentReportResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.generateCryptoAssessmentReport, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GenerateCryptoAssessmentReportResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GenerateCryptoAssessmentReportResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GenerateCryptoAssessmentReportResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GenerateCryptoAssessmentReportResponse")
+	}
+	return
+}
+
+// generateCryptoAssessmentReport implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) generateCryptoAssessmentReport(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/cryptoAssessments/{cryptoAssessmentId}/actions/generateReport", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GenerateCryptoAssessmentReportResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateCryptoAssessmentReport")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/GenerateCryptoAssessmentReport"
+		err = common.PostProcessServiceError(err, "DataSafe", "GenerateCryptoAssessmentReport", apiReferenceLink)
 		return response, err
 	}
 
@@ -8106,7 +9383,7 @@ func (client DataSafeClient) generateDiscoveryReportForDownload(ctx context.Cont
 
 	var response GenerateDiscoveryReportForDownloadResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateDiscoveryReportForDownload")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8169,7 +9446,7 @@ func (client DataSafeClient) generateHealthReport(ctx context.Context, request c
 
 	var response GenerateHealthReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateHealthReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8231,7 +9508,7 @@ func (client DataSafeClient) generateMaskingPolicyForDownload(ctx context.Contex
 
 	var response GenerateMaskingPolicyForDownloadResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateMaskingPolicyForDownload")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8292,7 +9569,7 @@ func (client DataSafeClient) generateMaskingReportForDownload(ctx context.Contex
 
 	var response GenerateMaskingReportForDownloadResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateMaskingReportForDownload")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8355,7 +9632,7 @@ func (client DataSafeClient) generateOnPremConnectorConfiguration(ctx context.Co
 
 	var response GenerateOnPremConnectorConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateOnPremConnectorConfiguration")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/OnPremConnector/GenerateOnPremConnectorConfiguration"
@@ -8417,7 +9694,7 @@ func (client DataSafeClient) generateReport(ctx context.Context, request common.
 
 	var response GenerateReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8481,7 +9758,7 @@ func (client DataSafeClient) generateSecurityAssessmentReport(ctx context.Contex
 
 	var response GenerateSecurityAssessmentReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateSecurityAssessmentReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8542,7 +9819,7 @@ func (client DataSafeClient) generateSensitiveDataModelForDownload(ctx context.C
 
 	var response GenerateSensitiveDataModelForDownloadResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateSensitiveDataModelForDownload")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8605,12 +9882,198 @@ func (client DataSafeClient) generateSqlFirewallPolicy(ctx context.Context, requ
 
 	var response GenerateSqlFirewallPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateSqlFirewallPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlCollection/GenerateSqlFirewallPolicy"
 		err = common.PostProcessServiceError(err, "DataSafe", "GenerateSqlFirewallPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GenerateSubsettingHealthReport Performs health check on the subsetting policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GenerateSubsettingHealthReport.go.html to see an example of how to use GenerateSubsettingHealthReport API.
+// A default retry strategy applies to this operation GenerateSubsettingHealthReport()
+func (client DataSafeClient) GenerateSubsettingHealthReport(ctx context.Context, request GenerateSubsettingHealthReportRequest) (response GenerateSubsettingHealthReportResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.generateSubsettingHealthReport, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GenerateSubsettingHealthReportResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GenerateSubsettingHealthReportResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GenerateSubsettingHealthReportResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GenerateSubsettingHealthReportResponse")
+	}
+	return
+}
+
+// generateSubsettingHealthReport implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) generateSubsettingHealthReport(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/generateHealthReport", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GenerateSubsettingHealthReportResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateSubsettingHealthReport")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicyHealthReport/GenerateSubsettingHealthReport"
+		err = common.PostProcessServiceError(err, "DataSafe", "GenerateSubsettingHealthReport", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GenerateSubsettingPolicyForDownload Generates a downloadable file corresponding to the specified subsetting policy. It's
+// a prerequisite for the DownloadSubsettingPolicy operation. Use this operation to generate
+// a subsetting policy file and then use DownloadSubsettingPolicy to download the generated file.
+// Note that file generation and download are serial operations. The download operation
+// can't be invoked while the generate operation is in progress.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GenerateSubsettingPolicyForDownload.go.html to see an example of how to use GenerateSubsettingPolicyForDownload API.
+// A default retry strategy applies to this operation GenerateSubsettingPolicyForDownload()
+func (client DataSafeClient) GenerateSubsettingPolicyForDownload(ctx context.Context, request GenerateSubsettingPolicyForDownloadRequest) (response GenerateSubsettingPolicyForDownloadResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.generateSubsettingPolicyForDownload, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GenerateSubsettingPolicyForDownloadResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GenerateSubsettingPolicyForDownloadResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GenerateSubsettingPolicyForDownloadResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GenerateSubsettingPolicyForDownloadResponse")
+	}
+	return
+}
+
+// generateSubsettingPolicyForDownload implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) generateSubsettingPolicyForDownload(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/generatePolicyForDownload", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GenerateSubsettingPolicyForDownloadResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateSubsettingPolicyForDownload")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/GenerateSubsettingPolicyForDownload"
+		err = common.PostProcessServiceError(err, "DataSafe", "GenerateSubsettingPolicyForDownload", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GenerateSubsettingReportForDownload Generates a downloadable subsetting report. It's a prerequisite for the
+// DownloadSubsettingReport operation. Use this endpoint to generate a
+// subsetting report file and then use DownloadSubsettingReport to download
+// the generated file.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GenerateSubsettingReportForDownload.go.html to see an example of how to use GenerateSubsettingReportForDownload API.
+// A default retry strategy applies to this operation GenerateSubsettingReportForDownload()
+func (client DataSafeClient) GenerateSubsettingReportForDownload(ctx context.Context, request GenerateSubsettingReportForDownloadRequest) (response GenerateSubsettingReportForDownloadResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.generateSubsettingReportForDownload, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GenerateSubsettingReportForDownloadResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GenerateSubsettingReportForDownloadResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GenerateSubsettingReportForDownloadResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GenerateSubsettingReportForDownloadResponse")
+	}
+	return
+}
+
+// generateSubsettingReportForDownload implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) generateSubsettingReportForDownload(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/generateReportForDownload", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GenerateSubsettingReportForDownloadResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateSubsettingReportForDownload")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/GenerateSubsettingReportForDownload"
+		err = common.PostProcessServiceError(err, "DataSafe", "GenerateSubsettingReportForDownload", apiReferenceLink)
 		return response, err
 	}
 
@@ -8669,7 +10132,7 @@ func (client DataSafeClient) generateUserAssessmentReport(ctx context.Context, r
 
 	var response GenerateUserAssessmentReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GenerateUserAssessmentReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8727,7 +10190,7 @@ func (client DataSafeClient) getAlert(ctx context.Context, request common.OCIReq
 
 	var response GetAlertResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetAlert")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8785,7 +10248,7 @@ func (client DataSafeClient) getAlertPolicy(ctx context.Context, request common.
 
 	var response GetAlertPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetAlertPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8843,7 +10306,7 @@ func (client DataSafeClient) getAlertPolicyRule(ctx context.Context, request com
 
 	var response GetAlertPolicyRuleResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetAlertPolicyRule")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8901,7 +10364,7 @@ func (client DataSafeClient) getAttributeSet(ctx context.Context, request common
 
 	var response GetAttributeSetResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetAttributeSet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -8959,7 +10422,7 @@ func (client DataSafeClient) getAuditArchiveRetrieval(ctx context.Context, reque
 
 	var response GetAuditArchiveRetrievalResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetAuditArchiveRetrieval")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9017,7 +10480,7 @@ func (client DataSafeClient) getAuditPolicy(ctx context.Context, request common.
 
 	var response GetAuditPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetAuditPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9075,7 +10538,7 @@ func (client DataSafeClient) getAuditProfile(ctx context.Context, request common
 
 	var response GetAuditProfileResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetAuditProfile")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9133,7 +10596,7 @@ func (client DataSafeClient) getAuditTrail(ctx context.Context, request common.O
 
 	var response GetAuditTrailResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetAuditTrail")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9197,7 +10660,7 @@ func (client DataSafeClient) getCompatibleFormatsForDataTypes(ctx context.Contex
 
 	var response GetCompatibleFormatsForDataTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetCompatibleFormatsForDataTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9258,12 +10721,128 @@ func (client DataSafeClient) getCompatibleFormatsForSensitiveTypes(ctx context.C
 
 	var response GetCompatibleFormatsForSensitiveTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetCompatibleFormatsForSensitiveTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/MaskingColumn/GetCompatibleFormatsForSensitiveTypes"
 		err = common.PostProcessServiceError(err, "DataSafe", "GetCompatibleFormatsForSensitiveTypes", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetCryptoAssessment Gets the details of the specified crypto assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GetCryptoAssessment.go.html to see an example of how to use GetCryptoAssessment API.
+// A default retry strategy applies to this operation GetCryptoAssessment()
+func (client DataSafeClient) GetCryptoAssessment(ctx context.Context, request GetCryptoAssessmentRequest) (response GetCryptoAssessmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getCryptoAssessment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetCryptoAssessmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetCryptoAssessmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetCryptoAssessmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetCryptoAssessmentResponse")
+	}
+	return
+}
+
+// getCryptoAssessment implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) getCryptoAssessment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/{cryptoAssessmentId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetCryptoAssessmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetCryptoAssessment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/GetCryptoAssessment"
+		err = common.PostProcessServiceError(err, "DataSafe", "GetCryptoAssessment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetCryptoAssessmentSqlnetParameters Gets SQLNET.ORA parameter values and quantum-readiness evaluation for the specified crypto assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GetCryptoAssessmentSqlnetParameters.go.html to see an example of how to use GetCryptoAssessmentSqlnetParameters API.
+// A default retry strategy applies to this operation GetCryptoAssessmentSqlnetParameters()
+func (client DataSafeClient) GetCryptoAssessmentSqlnetParameters(ctx context.Context, request GetCryptoAssessmentSqlnetParametersRequest) (response GetCryptoAssessmentSqlnetParametersResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getCryptoAssessmentSqlnetParameters, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetCryptoAssessmentSqlnetParametersResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetCryptoAssessmentSqlnetParametersResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetCryptoAssessmentSqlnetParametersResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetCryptoAssessmentSqlnetParametersResponse")
+	}
+	return
+}
+
+// getCryptoAssessmentSqlnetParameters implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) getCryptoAssessmentSqlnetParameters(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/{cryptoAssessmentId}/sqlnetParameters", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetCryptoAssessmentSqlnetParametersResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetCryptoAssessmentSqlnetParameters")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/GetCryptoAssessmentSqlnetParameters"
+		err = common.PostProcessServiceError(err, "DataSafe", "GetCryptoAssessmentSqlnetParameters", apiReferenceLink)
 		return response, err
 	}
 
@@ -9316,7 +10895,7 @@ func (client DataSafeClient) getDataSafeConfiguration(ctx context.Context, reque
 
 	var response GetDataSafeConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetDataSafeConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9374,7 +10953,7 @@ func (client DataSafeClient) getDataSafePrivateEndpoint(ctx context.Context, req
 
 	var response GetDataSafePrivateEndpointResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetDataSafePrivateEndpoint")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9432,7 +11011,7 @@ func (client DataSafeClient) getDatabaseSecurityConfig(ctx context.Context, requ
 
 	var response GetDatabaseSecurityConfigResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetDatabaseSecurityConfig")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9490,7 +11069,7 @@ func (client DataSafeClient) getDatabaseTableAccessEntry(ctx context.Context, re
 
 	var response GetDatabaseTableAccessEntryResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetDatabaseTableAccessEntry")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9548,7 +11127,7 @@ func (client DataSafeClient) getDatabaseViewAccessEntry(ctx context.Context, req
 
 	var response GetDatabaseViewAccessEntryResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetDatabaseViewAccessEntry")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9606,7 +11185,7 @@ func (client DataSafeClient) getDifferenceColumn(ctx context.Context, request co
 
 	var response GetDifferenceColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetDifferenceColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9664,7 +11243,7 @@ func (client DataSafeClient) getDiscoveryJob(ctx context.Context, request common
 
 	var response GetDiscoveryJobResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetDiscoveryJob")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9722,7 +11301,7 @@ func (client DataSafeClient) getDiscoveryJobResult(ctx context.Context, request 
 
 	var response GetDiscoveryJobResultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetDiscoveryJobResult")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9780,7 +11359,7 @@ func (client DataSafeClient) getGroupMembers(ctx context.Context, request common
 
 	var response GetGroupMembersResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetGroupMembers")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9838,7 +11417,7 @@ func (client DataSafeClient) getLibraryMaskingFormat(ctx context.Context, reques
 
 	var response GetLibraryMaskingFormatResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetLibraryMaskingFormat")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9896,7 +11475,7 @@ func (client DataSafeClient) getMaskingColumn(ctx context.Context, request commo
 
 	var response GetMaskingColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetMaskingColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -9954,7 +11533,7 @@ func (client DataSafeClient) getMaskingPolicy(ctx context.Context, request commo
 
 	var response GetMaskingPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetMaskingPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10012,7 +11591,7 @@ func (client DataSafeClient) getMaskingPolicyHealthReport(ctx context.Context, r
 
 	var response GetMaskingPolicyHealthReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetMaskingPolicyHealthReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10070,7 +11649,7 @@ func (client DataSafeClient) getMaskingReport(ctx context.Context, request commo
 
 	var response GetMaskingReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetMaskingReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10128,7 +11707,7 @@ func (client DataSafeClient) getOnPremConnector(ctx context.Context, request com
 
 	var response GetOnPremConnectorResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetOnPremConnector")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10186,7 +11765,7 @@ func (client DataSafeClient) getPeerTargetDatabase(ctx context.Context, request 
 
 	var response GetPeerTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetPeerTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10246,7 +11825,7 @@ func (client DataSafeClient) getProfile(ctx context.Context, request common.OCIR
 
 	var response GetProfileResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetProfile")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10304,12 +11883,70 @@ func (client DataSafeClient) getReferentialRelation(ctx context.Context, request
 
 	var response GetReferentialRelationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetReferentialRelation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/ReferentialRelation/GetReferentialRelation"
 		err = common.PostProcessServiceError(err, "DataSafe", "GetReferentialRelation", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetRegistrationPolicy Returns the details of the specified Registration Policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GetRegistrationPolicy.go.html to see an example of how to use GetRegistrationPolicy API.
+// A default retry strategy applies to this operation GetRegistrationPolicy()
+func (client DataSafeClient) GetRegistrationPolicy(ctx context.Context, request GetRegistrationPolicyRequest) (response GetRegistrationPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getRegistrationPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetRegistrationPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetRegistrationPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetRegistrationPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetRegistrationPolicyResponse")
+	}
+	return
+}
+
+// getRegistrationPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) getRegistrationPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/registrationPolicies/{registrationPolicyId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetRegistrationPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetRegistrationPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/RegistrationPolicy/GetRegistrationPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "GetRegistrationPolicy", apiReferenceLink)
 		return response, err
 	}
 
@@ -10362,7 +11999,7 @@ func (client DataSafeClient) getReport(ctx context.Context, request common.OCIRe
 
 	var response GetReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10420,7 +12057,7 @@ func (client DataSafeClient) getReportContent(ctx context.Context, request commo
 
 	var response GetReportContentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetReportContent")
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/Report/GetReportContent"
@@ -10477,7 +12114,7 @@ func (client DataSafeClient) getReportDefinition(ctx context.Context, request co
 
 	var response GetReportDefinitionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetReportDefinition")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10535,7 +12172,7 @@ func (client DataSafeClient) getSdmMaskingPolicyDifference(ctx context.Context, 
 
 	var response GetSdmMaskingPolicyDifferenceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSdmMaskingPolicyDifference")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10593,7 +12230,7 @@ func (client DataSafeClient) getSecurityAssessment(ctx context.Context, request 
 
 	var response GetSecurityAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSecurityAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10651,7 +12288,7 @@ func (client DataSafeClient) getSecurityAssessmentComparison(ctx context.Context
 
 	var response GetSecurityAssessmentComparisonResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSecurityAssessmentComparison")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10709,7 +12346,7 @@ func (client DataSafeClient) getSecurityPolicy(ctx context.Context, request comm
 
 	var response GetSecurityPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSecurityPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10767,7 +12404,7 @@ func (client DataSafeClient) getSecurityPolicyConfig(ctx context.Context, reques
 
 	var response GetSecurityPolicyConfigResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSecurityPolicyConfig")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10825,7 +12462,7 @@ func (client DataSafeClient) getSecurityPolicyDeployment(ctx context.Context, re
 
 	var response GetSecurityPolicyDeploymentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSecurityPolicyDeployment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10883,7 +12520,7 @@ func (client DataSafeClient) getSecurityPolicyEntryState(ctx context.Context, re
 
 	var response GetSecurityPolicyEntryStateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSecurityPolicyEntryState")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10941,7 +12578,7 @@ func (client DataSafeClient) getSecurityPolicyReport(ctx context.Context, reques
 
 	var response GetSecurityPolicyReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSecurityPolicyReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -10999,7 +12636,7 @@ func (client DataSafeClient) getSensitiveColumn(ctx context.Context, request com
 
 	var response GetSensitiveColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSensitiveColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11057,7 +12694,7 @@ func (client DataSafeClient) getSensitiveDataModel(ctx context.Context, request 
 
 	var response GetSensitiveDataModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSensitiveDataModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11115,7 +12752,7 @@ func (client DataSafeClient) getSensitiveType(ctx context.Context, request commo
 
 	var response GetSensitiveTypeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSensitiveType")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11173,7 +12810,7 @@ func (client DataSafeClient) getSensitiveTypeGroup(ctx context.Context, request 
 
 	var response GetSensitiveTypeGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSensitiveTypeGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11231,7 +12868,7 @@ func (client DataSafeClient) getSensitiveTypesExport(ctx context.Context, reques
 
 	var response GetSensitiveTypesExportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSensitiveTypesExport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11289,7 +12926,7 @@ func (client DataSafeClient) getSqlCollection(ctx context.Context, request commo
 
 	var response GetSqlCollectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSqlCollection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11347,7 +12984,7 @@ func (client DataSafeClient) getSqlFirewallAllowedSql(ctx context.Context, reque
 
 	var response GetSqlFirewallAllowedSqlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSqlFirewallAllowedSql")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11405,12 +13042,302 @@ func (client DataSafeClient) getSqlFirewallPolicy(ctx context.Context, request c
 
 	var response GetSqlFirewallPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSqlFirewallPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlFirewallPolicy/GetSqlFirewallPolicy"
 		err = common.PostProcessServiceError(err, "DataSafe", "GetSqlFirewallPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetSubsettingPolicy Gets the details of the specified subsetting policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GetSubsettingPolicy.go.html to see an example of how to use GetSubsettingPolicy API.
+// A default retry strategy applies to this operation GetSubsettingPolicy()
+func (client DataSafeClient) GetSubsettingPolicy(ctx context.Context, request GetSubsettingPolicyRequest) (response GetSubsettingPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getSubsettingPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetSubsettingPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetSubsettingPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetSubsettingPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetSubsettingPolicyResponse")
+	}
+	return
+}
+
+// getSubsettingPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) getSubsettingPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetSubsettingPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSubsettingPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/GetSubsettingPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "GetSubsettingPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetSubsettingPolicyHealthReport Gets the details of the specified subsetting policy health report.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GetSubsettingPolicyHealthReport.go.html to see an example of how to use GetSubsettingPolicyHealthReport API.
+// A default retry strategy applies to this operation GetSubsettingPolicyHealthReport()
+func (client DataSafeClient) GetSubsettingPolicyHealthReport(ctx context.Context, request GetSubsettingPolicyHealthReportRequest) (response GetSubsettingPolicyHealthReportResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getSubsettingPolicyHealthReport, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetSubsettingPolicyHealthReportResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetSubsettingPolicyHealthReportResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetSubsettingPolicyHealthReportResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetSubsettingPolicyHealthReportResponse")
+	}
+	return
+}
+
+// getSubsettingPolicyHealthReport implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) getSubsettingPolicyHealthReport(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicyHealthReports/{subsettingPolicyHealthReportId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetSubsettingPolicyHealthReportResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSubsettingPolicyHealthReport")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicyHealthReport/GetSubsettingPolicyHealthReport"
+		err = common.PostProcessServiceError(err, "DataSafe", "GetSubsettingPolicyHealthReport", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetSubsettingReport Gets the details of the specified subsetting report.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GetSubsettingReport.go.html to see an example of how to use GetSubsettingReport API.
+// A default retry strategy applies to this operation GetSubsettingReport()
+func (client DataSafeClient) GetSubsettingReport(ctx context.Context, request GetSubsettingReportRequest) (response GetSubsettingReportResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getSubsettingReport, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetSubsettingReportResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetSubsettingReportResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetSubsettingReportResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetSubsettingReportResponse")
+	}
+	return
+}
+
+// getSubsettingReport implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) getSubsettingReport(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingReports/{subsettingReportId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetSubsettingReportResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSubsettingReport")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingReport/GetSubsettingReport"
+		err = common.PostProcessServiceError(err, "DataSafe", "GetSubsettingReport", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetSubsettingRule Gets the details of the specified subsetting rule.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GetSubsettingRule.go.html to see an example of how to use GetSubsettingRule API.
+// A default retry strategy applies to this operation GetSubsettingRule()
+func (client DataSafeClient) GetSubsettingRule(ctx context.Context, request GetSubsettingRuleRequest) (response GetSubsettingRuleResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getSubsettingRule, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetSubsettingRuleResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetSubsettingRuleResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetSubsettingRuleResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetSubsettingRuleResponse")
+	}
+	return
+}
+
+// getSubsettingRule implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) getSubsettingRule(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}/subsettingRules/{subsettingRuleKey}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetSubsettingRuleResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSubsettingRule")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingRule/GetSubsettingRule"
+		err = common.PostProcessServiceError(err, "DataSafe", "GetSubsettingRule", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetSubsettingSchemaRelation Gets the details of the specified referential relation in the subsetting policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/GetSubsettingSchemaRelation.go.html to see an example of how to use GetSubsettingSchemaRelation API.
+// A default retry strategy applies to this operation GetSubsettingSchemaRelation()
+func (client DataSafeClient) GetSubsettingSchemaRelation(ctx context.Context, request GetSubsettingSchemaRelationRequest) (response GetSubsettingSchemaRelationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getSubsettingSchemaRelation, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetSubsettingSchemaRelationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetSubsettingSchemaRelationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetSubsettingSchemaRelationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetSubsettingSchemaRelationResponse")
+	}
+	return
+}
+
+// getSubsettingSchemaRelation implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) getSubsettingSchemaRelation(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}/subsettingSchemaRelations/{subsettingSchemaRelationKey}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetSubsettingSchemaRelationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetSubsettingSchemaRelation")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingSchemaRelation/GetSubsettingSchemaRelation"
+		err = common.PostProcessServiceError(err, "DataSafe", "GetSubsettingSchemaRelation", apiReferenceLink)
 		return response, err
 	}
 
@@ -11463,7 +13390,7 @@ func (client DataSafeClient) getTargetAlertPolicyAssociation(ctx context.Context
 
 	var response GetTargetAlertPolicyAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetTargetAlertPolicyAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11521,7 +13448,7 @@ func (client DataSafeClient) getTargetDatabase(ctx context.Context, request comm
 
 	var response GetTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11579,7 +13506,7 @@ func (client DataSafeClient) getTargetDatabaseGroup(ctx context.Context, request
 
 	var response GetTargetDatabaseGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetTargetDatabaseGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11637,7 +13564,7 @@ func (client DataSafeClient) getTemplateBaselineComparison(ctx context.Context, 
 
 	var response GetTemplateBaselineComparisonResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetTemplateBaselineComparison")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11695,7 +13622,7 @@ func (client DataSafeClient) getUnifiedAuditPolicy(ctx context.Context, request 
 
 	var response GetUnifiedAuditPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetUnifiedAuditPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11753,7 +13680,7 @@ func (client DataSafeClient) getUnifiedAuditPolicyDefinition(ctx context.Context
 
 	var response GetUnifiedAuditPolicyDefinitionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetUnifiedAuditPolicyDefinition")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11811,7 +13738,7 @@ func (client DataSafeClient) getUserAssessment(ctx context.Context, request comm
 
 	var response GetUserAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetUserAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11869,7 +13796,7 @@ func (client DataSafeClient) getUserAssessmentComparison(ctx context.Context, re
 
 	var response GetUserAssessmentComparisonResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetUserAssessmentComparison")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11927,7 +13854,7 @@ func (client DataSafeClient) getWorkRequest(ctx context.Context, request common.
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -11990,7 +13917,7 @@ func (client DataSafeClient) listAlertAnalytics(ctx context.Context, request com
 
 	var response ListAlertAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAlertAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12048,7 +13975,7 @@ func (client DataSafeClient) listAlertPolicies(ctx context.Context, request comm
 
 	var response ListAlertPoliciesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAlertPolicies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12107,7 +14034,7 @@ func (client DataSafeClient) listAlertPolicyRules(ctx context.Context, request c
 
 	var response ListAlertPolicyRulesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAlertPolicyRules")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12165,7 +14092,7 @@ func (client DataSafeClient) listAlerts(ctx context.Context, request common.OCIR
 
 	var response ListAlertsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAlerts")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12228,7 +14155,7 @@ func (client DataSafeClient) listAssociatedResources(ctx context.Context, reques
 
 	var response ListAssociatedResourcesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAssociatedResources")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12296,7 +14223,7 @@ func (client DataSafeClient) listAttributeSets(ctx context.Context, request comm
 
 	var response ListAttributeSetsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAttributeSets")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12354,7 +14281,7 @@ func (client DataSafeClient) listAuditArchiveRetrievals(ctx context.Context, req
 
 	var response ListAuditArchiveRetrievalsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditArchiveRetrievals")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12426,7 +14353,7 @@ func (client DataSafeClient) listAuditEventAnalytics(ctx context.Context, reques
 
 	var response ListAuditEventAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditEventAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12494,7 +14421,7 @@ func (client DataSafeClient) listAuditEvents(ctx context.Context, request common
 
 	var response ListAuditEventsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditEvents")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12563,7 +14490,7 @@ func (client DataSafeClient) listAuditPolicies(ctx context.Context, request comm
 
 	var response ListAuditPoliciesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditPolicies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12633,7 +14560,7 @@ func (client DataSafeClient) listAuditPolicyAnalytics(ctx context.Context, reque
 
 	var response ListAuditPolicyAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditPolicyAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12701,7 +14628,7 @@ func (client DataSafeClient) listAuditProfileAnalytics(ctx context.Context, requ
 
 	var response ListAuditProfileAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditProfileAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12770,7 +14697,7 @@ func (client DataSafeClient) listAuditProfiles(ctx context.Context, request comm
 
 	var response ListAuditProfilesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditProfiles")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12838,7 +14765,7 @@ func (client DataSafeClient) listAuditTrailAnalytics(ctx context.Context, reques
 
 	var response ListAuditTrailAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditTrailAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12907,7 +14834,7 @@ func (client DataSafeClient) listAuditTrails(ctx context.Context, request common
 
 	var response ListAuditTrailsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAuditTrails")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -12965,7 +14892,7 @@ func (client DataSafeClient) listAvailableAuditVolumes(ctx context.Context, requ
 
 	var response ListAvailableAuditVolumesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListAvailableAuditVolumes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13023,7 +14950,7 @@ func (client DataSafeClient) listChecks(ctx context.Context, request common.OCIR
 
 	var response ListChecksResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListChecks")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13081,7 +15008,7 @@ func (client DataSafeClient) listCollectedAuditVolumes(ctx context.Context, requ
 
 	var response ListCollectedAuditVolumesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCollectedAuditVolumes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13139,12 +15066,592 @@ func (client DataSafeClient) listColumns(ctx context.Context, request common.OCI
 
 	var response ListColumnsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListColumns")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/TargetDatabase/ListColumns"
 		err = common.PostProcessServiceError(err, "DataSafe", "ListColumns", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentBackupSets Gets backup set summaries across targets in a compartment. Use assessmentId to narrow results to one crypto assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentBackupSets.go.html to see an example of how to use ListCryptoAssessmentBackupSets API.
+// A default retry strategy applies to this operation ListCryptoAssessmentBackupSets()
+func (client DataSafeClient) ListCryptoAssessmentBackupSets(ctx context.Context, request ListCryptoAssessmentBackupSetsRequest) (response ListCryptoAssessmentBackupSetsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentBackupSets, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentBackupSetsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentBackupSetsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentBackupSetsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentBackupSetsResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentBackupSets implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentBackupSets(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/backupSets", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentBackupSetsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentBackupSets")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentBackupSets"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentBackupSets", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentCbomItems Lists the CBOM items for the specified crypto assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentCbomItems.go.html to see an example of how to use ListCryptoAssessmentCbomItems API.
+// A default retry strategy applies to this operation ListCryptoAssessmentCbomItems()
+func (client DataSafeClient) ListCryptoAssessmentCbomItems(ctx context.Context, request ListCryptoAssessmentCbomItemsRequest) (response ListCryptoAssessmentCbomItemsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentCbomItems, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentCbomItemsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentCbomItemsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentCbomItemsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentCbomItemsResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentCbomItems implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentCbomItems(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/{cryptoAssessmentId}/cbomItems", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentCbomItemsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentCbomItems")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentCbomItems"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentCbomItems", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentCertificates Lists certificates discovered across targets in a compartment, including target, wallet location, issuer, subject, validity window, expiry bucket, public key type, and status so expiring or weak certificates can be identified and prioritized.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentCertificates.go.html to see an example of how to use ListCryptoAssessmentCertificates API.
+// A default retry strategy applies to this operation ListCryptoAssessmentCertificates()
+func (client DataSafeClient) ListCryptoAssessmentCertificates(ctx context.Context, request ListCryptoAssessmentCertificatesRequest) (response ListCryptoAssessmentCertificatesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentCertificates, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentCertificatesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentCertificatesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentCertificatesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentCertificatesResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentCertificates implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentCertificates(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/certificates", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentCertificatesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentCertificates")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentCertificates"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentCertificates", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentFindingAnalytics Lists findings in a compartment with the number of affected targets.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentFindingAnalytics.go.html to see an example of how to use ListCryptoAssessmentFindingAnalytics API.
+// A default retry strategy applies to this operation ListCryptoAssessmentFindingAnalytics()
+func (client DataSafeClient) ListCryptoAssessmentFindingAnalytics(ctx context.Context, request ListCryptoAssessmentFindingAnalyticsRequest) (response ListCryptoAssessmentFindingAnalyticsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentFindingAnalytics, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentFindingAnalyticsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentFindingAnalyticsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentFindingAnalyticsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentFindingAnalyticsResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentFindingAnalytics implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentFindingAnalytics(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/findingAnalytics", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentFindingAnalyticsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentFindingAnalytics")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentFindingAnalytics"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentFindingAnalytics", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentFindingTargets For a selected finding, lists targets where it occurs in assessments.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentFindingTargets.go.html to see an example of how to use ListCryptoAssessmentFindingTargets API.
+// A default retry strategy applies to this operation ListCryptoAssessmentFindingTargets()
+func (client DataSafeClient) ListCryptoAssessmentFindingTargets(ctx context.Context, request ListCryptoAssessmentFindingTargetsRequest) (response ListCryptoAssessmentFindingTargetsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentFindingTargets, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentFindingTargetsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentFindingTargetsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentFindingTargetsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentFindingTargetsResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentFindingTargets implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentFindingTargets(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/findingTargets", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentFindingTargetsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentFindingTargets")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentFindingTargets"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentFindingTargets", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentFindings Lists crypto deviation findings for the specified crypto assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentFindings.go.html to see an example of how to use ListCryptoAssessmentFindings API.
+// A default retry strategy applies to this operation ListCryptoAssessmentFindings()
+func (client DataSafeClient) ListCryptoAssessmentFindings(ctx context.Context, request ListCryptoAssessmentFindingsRequest) (response ListCryptoAssessmentFindingsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentFindings, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentFindingsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentFindingsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentFindingsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentFindingsResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentFindings implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentFindings(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/{cryptoAssessmentId}/findings", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentFindingsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentFindings")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentFindings"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentFindings", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentKeys Gets a paginated list of cryptographic keys across targets in a compartment. Use assessmentId to narrow results to one crypto assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentKeys.go.html to see an example of how to use ListCryptoAssessmentKeys API.
+// A default retry strategy applies to this operation ListCryptoAssessmentKeys()
+func (client DataSafeClient) ListCryptoAssessmentKeys(ctx context.Context, request ListCryptoAssessmentKeysRequest) (response ListCryptoAssessmentKeysResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentKeys, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentKeysResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentKeysResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentKeysResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentKeysResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentKeys implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentKeys(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/keys", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentKeysResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentKeys")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentKeys"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentKeys", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentTdeObjects Lists TDE object encryption summaries across targets in a compartment. Use assessmentId to narrow results to one crypto assessment, and objectType to return either tablespace-level or column-level TDE observations.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentTdeObjects.go.html to see an example of how to use ListCryptoAssessmentTdeObjects API.
+// A default retry strategy applies to this operation ListCryptoAssessmentTdeObjects()
+func (client DataSafeClient) ListCryptoAssessmentTdeObjects(ctx context.Context, request ListCryptoAssessmentTdeObjectsRequest) (response ListCryptoAssessmentTdeObjectsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentTdeObjects, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentTdeObjectsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentTdeObjectsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentTdeObjectsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentTdeObjectsResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentTdeObjects implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentTdeObjects(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/tdeObjects", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentTdeObjectsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentTdeObjects")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentTdeObjects"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentTdeObjects", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessmentWallets Gets wallet details across targets in a compartment. Use assessmentId to narrow results to one crypto assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessmentWallets.go.html to see an example of how to use ListCryptoAssessmentWallets API.
+// A default retry strategy applies to this operation ListCryptoAssessmentWallets()
+func (client DataSafeClient) ListCryptoAssessmentWallets(ctx context.Context, request ListCryptoAssessmentWalletsRequest) (response ListCryptoAssessmentWalletsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessmentWallets, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentWalletsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentWalletsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentWalletsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentWalletsResponse")
+	}
+	return
+}
+
+// listCryptoAssessmentWallets implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessmentWallets(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments/wallets", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentWalletsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessmentWallets")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessmentWallets"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessmentWallets", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListCryptoAssessments Gets a list of crypto assessments with filtering and pagination support.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListCryptoAssessments.go.html to see an example of how to use ListCryptoAssessments API.
+// A default retry strategy applies to this operation ListCryptoAssessments()
+func (client DataSafeClient) ListCryptoAssessments(ctx context.Context, request ListCryptoAssessmentsRequest) (response ListCryptoAssessmentsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listCryptoAssessments, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListCryptoAssessmentsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListCryptoAssessmentsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListCryptoAssessmentsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListCryptoAssessmentsResponse")
+	}
+	return
+}
+
+// listCryptoAssessments implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listCryptoAssessments(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/cryptoAssessments", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListCryptoAssessmentsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListCryptoAssessments")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/ListCryptoAssessments"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListCryptoAssessments", apiReferenceLink)
 		return response, err
 	}
 
@@ -13197,7 +15704,7 @@ func (client DataSafeClient) listDataSafePrivateEndpoints(ctx context.Context, r
 
 	var response ListDataSafePrivateEndpointsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListDataSafePrivateEndpoints")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13265,7 +15772,7 @@ func (client DataSafeClient) listDatabaseSecurityConfigs(ctx context.Context, re
 
 	var response ListDatabaseSecurityConfigsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListDatabaseSecurityConfigs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13324,7 +15831,7 @@ func (client DataSafeClient) listDatabaseTableAccessEntries(ctx context.Context,
 
 	var response ListDatabaseTableAccessEntriesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListDatabaseTableAccessEntries")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13339,6 +15846,7 @@ func (client DataSafeClient) listDatabaseTableAccessEntries(ctx context.Context,
 
 // ListDatabaseViewAccessEntries Retrieves a list of all database view access entries in Data Safe.
 // The ListDatabaseViewAccessEntries operation returns only the database view access objects for the specified security policy report.
+// If targetId is specified, it must match the target associated with the securityPolicyReportId path parameter; otherwise, the request is rejected.
 //
 // # See also
 //
@@ -13383,7 +15891,7 @@ func (client DataSafeClient) listDatabaseViewAccessEntries(ctx context.Context, 
 
 	var response ListDatabaseViewAccessEntriesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListDatabaseViewAccessEntries")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13441,7 +15949,7 @@ func (client DataSafeClient) listDifferenceColumns(ctx context.Context, request 
 
 	var response ListDifferenceColumnsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListDifferenceColumns")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13501,7 +16009,7 @@ func (client DataSafeClient) listDiscoveryAnalytics(ctx context.Context, request
 
 	var response ListDiscoveryAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListDiscoveryAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13559,7 +16067,7 @@ func (client DataSafeClient) listDiscoveryJobResults(ctx context.Context, reques
 
 	var response ListDiscoveryJobResultsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListDiscoveryJobResults")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13617,7 +16125,7 @@ func (client DataSafeClient) listDiscoveryJobs(ctx context.Context, request comm
 
 	var response ListDiscoveryJobsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListDiscoveryJobs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13683,7 +16191,7 @@ func (client DataSafeClient) listFindingAnalytics(ctx context.Context, request c
 
 	var response ListFindingAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListFindingAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13741,7 +16249,7 @@ func (client DataSafeClient) listFindings(ctx context.Context, request common.OC
 
 	var response ListFindingsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListFindings")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13799,7 +16307,7 @@ func (client DataSafeClient) listFindingsChangeAuditLogs(ctx context.Context, re
 
 	var response ListFindingsChangeAuditLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListFindingsChangeAuditLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13860,7 +16368,7 @@ func (client DataSafeClient) listGrants(ctx context.Context, request common.OCIR
 
 	var response ListGrantsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListGrants")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13918,7 +16426,7 @@ func (client DataSafeClient) listGroupedSensitiveTypes(ctx context.Context, requ
 
 	var response ListGroupedSensitiveTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListGroupedSensitiveTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -13976,7 +16484,7 @@ func (client DataSafeClient) listLibraryMaskingFormats(ctx context.Context, requ
 
 	var response ListLibraryMaskingFormatsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListLibraryMaskingFormats")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14034,7 +16542,7 @@ func (client DataSafeClient) listMaskedColumns(ctx context.Context, request comm
 
 	var response ListMaskedColumnsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskedColumns")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14094,7 +16602,7 @@ func (client DataSafeClient) listMaskingAnalytics(ctx context.Context, request c
 
 	var response ListMaskingAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14152,7 +16660,7 @@ func (client DataSafeClient) listMaskingColumns(ctx context.Context, request com
 
 	var response ListMaskingColumnsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingColumns")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14210,7 +16718,7 @@ func (client DataSafeClient) listMaskingErrors(ctx context.Context, request comm
 
 	var response ListMaskingErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14268,7 +16776,7 @@ func (client DataSafeClient) listMaskingObjects(ctx context.Context, request com
 
 	var response ListMaskingObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14326,7 +16834,7 @@ func (client DataSafeClient) listMaskingPolicies(ctx context.Context, request co
 
 	var response ListMaskingPoliciesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingPolicies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14384,7 +16892,7 @@ func (client DataSafeClient) listMaskingPolicyHealthReportLogs(ctx context.Conte
 
 	var response ListMaskingPolicyHealthReportLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingPolicyHealthReportLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14442,7 +16950,7 @@ func (client DataSafeClient) listMaskingPolicyHealthReports(ctx context.Context,
 
 	var response ListMaskingPolicyHealthReportsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingPolicyHealthReports")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14500,7 +17008,7 @@ func (client DataSafeClient) listMaskingPolicyReferentialRelations(ctx context.C
 
 	var response ListMaskingPolicyReferentialRelationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingPolicyReferentialRelations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14558,7 +17066,7 @@ func (client DataSafeClient) listMaskingReports(ctx context.Context, request com
 
 	var response ListMaskingReportsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingReports")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14616,7 +17124,7 @@ func (client DataSafeClient) listMaskingSchemas(ctx context.Context, request com
 
 	var response ListMaskingSchemasResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListMaskingSchemas")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14674,7 +17182,7 @@ func (client DataSafeClient) listOnPremConnectors(ctx context.Context, request c
 
 	var response ListOnPremConnectorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListOnPremConnectors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14740,7 +17248,7 @@ func (client DataSafeClient) listPasswordExpiryDateAnalytics(ctx context.Context
 
 	var response ListPasswordExpiryDateAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListPasswordExpiryDateAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14803,7 +17311,7 @@ func (client DataSafeClient) listPeerTargetDatabases(ctx context.Context, reques
 
 	var response ListPeerTargetDatabasesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListPeerTargetDatabases")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14872,7 +17380,7 @@ func (client DataSafeClient) listProfileAnalytics(ctx context.Context, request c
 
 	var response ListProfileAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListProfileAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14941,7 +17449,7 @@ func (client DataSafeClient) listProfileSummaries(ctx context.Context, request c
 
 	var response ListProfileSummariesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListProfileSummaries")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -14999,12 +17507,128 @@ func (client DataSafeClient) listReferentialRelations(ctx context.Context, reque
 
 	var response ListReferentialRelationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListReferentialRelations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/ReferentialRelation/ListReferentialRelations"
 		err = common.PostProcessServiceError(err, "DataSafe", "ListReferentialRelations", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListRegistrationPolicies Retrieves a list of registration policies according to the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListRegistrationPolicies.go.html to see an example of how to use ListRegistrationPolicies API.
+// A default retry strategy applies to this operation ListRegistrationPolicies()
+func (client DataSafeClient) ListRegistrationPolicies(ctx context.Context, request ListRegistrationPoliciesRequest) (response ListRegistrationPoliciesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listRegistrationPolicies, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListRegistrationPoliciesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListRegistrationPoliciesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListRegistrationPoliciesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListRegistrationPoliciesResponse")
+	}
+	return
+}
+
+// listRegistrationPolicies implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listRegistrationPolicies(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/registrationPolicies", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListRegistrationPoliciesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListRegistrationPolicies")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/RegistrationPolicySummary/ListRegistrationPolicies"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListRegistrationPolicies", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListRegistrationPolicyTargetDatabases Retrieves the OCIDs of target databases registered via the specified registration policy. Supports optional filtering by registration status (OPTIN/OPTOUT) and by target database OCID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListRegistrationPolicyTargetDatabases.go.html to see an example of how to use ListRegistrationPolicyTargetDatabases API.
+// A default retry strategy applies to this operation ListRegistrationPolicyTargetDatabases()
+func (client DataSafeClient) ListRegistrationPolicyTargetDatabases(ctx context.Context, request ListRegistrationPolicyTargetDatabasesRequest) (response ListRegistrationPolicyTargetDatabasesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listRegistrationPolicyTargetDatabases, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListRegistrationPolicyTargetDatabasesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListRegistrationPolicyTargetDatabasesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListRegistrationPolicyTargetDatabasesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListRegistrationPolicyTargetDatabasesResponse")
+	}
+	return
+}
+
+// listRegistrationPolicyTargetDatabases implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listRegistrationPolicyTargetDatabases(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/registrationPolicies/{registrationPolicyId}/targetDatabases", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListRegistrationPolicyTargetDatabasesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListRegistrationPolicyTargetDatabases")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/RegistrationPolicy/ListRegistrationPolicyTargetDatabases"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListRegistrationPolicyTargetDatabases", apiReferenceLink)
 		return response, err
 	}
 
@@ -15059,7 +17683,7 @@ func (client DataSafeClient) listReportDefinitions(ctx context.Context, request 
 
 	var response ListReportDefinitionsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListReportDefinitions")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15117,7 +17741,7 @@ func (client DataSafeClient) listReports(ctx context.Context, request common.OCI
 
 	var response ListReportsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListReports")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15176,7 +17800,7 @@ func (client DataSafeClient) listRoleGrantPaths(ctx context.Context, request com
 
 	var response ListRoleGrantPathsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListRoleGrantPaths")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15234,7 +17858,7 @@ func (client DataSafeClient) listRoles(ctx context.Context, request common.OCIRe
 
 	var response ListRolesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListRoles")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15292,7 +17916,7 @@ func (client DataSafeClient) listSchemas(ctx context.Context, request common.OCI
 
 	var response ListSchemasResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSchemas")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15350,7 +17974,7 @@ func (client DataSafeClient) listSdmMaskingPolicyDifferences(ctx context.Context
 
 	var response ListSdmMaskingPolicyDifferencesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSdmMaskingPolicyDifferences")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15419,7 +18043,7 @@ func (client DataSafeClient) listSecurityAssessments(ctx context.Context, reques
 
 	var response ListSecurityAssessmentsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSecurityAssessments")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15483,7 +18107,7 @@ func (client DataSafeClient) listSecurityFeatureAnalytics(ctx context.Context, r
 
 	var response ListSecurityFeatureAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSecurityFeatureAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15541,7 +18165,7 @@ func (client DataSafeClient) listSecurityFeatures(ctx context.Context, request c
 
 	var response ListSecurityFeaturesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSecurityFeatures")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15609,7 +18233,7 @@ func (client DataSafeClient) listSecurityPolicies(ctx context.Context, request c
 
 	var response ListSecurityPoliciesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSecurityPolicies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15677,7 +18301,7 @@ func (client DataSafeClient) listSecurityPolicyConfigs(ctx context.Context, requ
 
 	var response ListSecurityPolicyConfigsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSecurityPolicyConfigs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15745,7 +18369,7 @@ func (client DataSafeClient) listSecurityPolicyDeployments(ctx context.Context, 
 
 	var response ListSecurityPolicyDeploymentsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSecurityPolicyDeployments")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15804,7 +18428,7 @@ func (client DataSafeClient) listSecurityPolicyEntryStates(ctx context.Context, 
 
 	var response ListSecurityPolicyEntryStatesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSecurityPolicyEntryStates")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15872,7 +18496,7 @@ func (client DataSafeClient) listSecurityPolicyReports(ctx context.Context, requ
 
 	var response ListSecurityPolicyReportsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSecurityPolicyReports")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15937,7 +18561,7 @@ func (client DataSafeClient) listSensitiveColumnAnalytics(ctx context.Context, r
 
 	var response ListSensitiveColumnAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveColumnAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -15995,7 +18619,7 @@ func (client DataSafeClient) listSensitiveColumns(ctx context.Context, request c
 
 	var response ListSensitiveColumnsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveColumns")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16053,7 +18677,7 @@ func (client DataSafeClient) listSensitiveDataModelSensitiveTypes(ctx context.Co
 
 	var response ListSensitiveDataModelSensitiveTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveDataModelSensitiveTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16111,7 +18735,7 @@ func (client DataSafeClient) listSensitiveDataModels(ctx context.Context, reques
 
 	var response ListSensitiveDataModelsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveDataModels")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16169,7 +18793,7 @@ func (client DataSafeClient) listSensitiveObjects(ctx context.Context, request c
 
 	var response ListSensitiveObjectsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveObjects")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16227,7 +18851,7 @@ func (client DataSafeClient) listSensitiveSchemas(ctx context.Context, request c
 
 	var response ListSensitiveSchemasResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveSchemas")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16285,7 +18909,7 @@ func (client DataSafeClient) listSensitiveTypeGroups(ctx context.Context, reques
 
 	var response ListSensitiveTypeGroupsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveTypeGroups")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16343,7 +18967,7 @@ func (client DataSafeClient) listSensitiveTypes(ctx context.Context, request com
 
 	var response ListSensitiveTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16402,7 +19026,7 @@ func (client DataSafeClient) listSensitiveTypesExports(ctx context.Context, requ
 
 	var response ListSensitiveTypesExportsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSensitiveTypesExports")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16470,7 +19094,7 @@ func (client DataSafeClient) listSqlCollectionAnalytics(ctx context.Context, req
 
 	var response ListSqlCollectionAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlCollectionAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16528,7 +19152,7 @@ func (client DataSafeClient) listSqlCollectionLogInsights(ctx context.Context, r
 
 	var response ListSqlCollectionLogInsightsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlCollectionLogInsights")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16596,7 +19220,7 @@ func (client DataSafeClient) listSqlCollections(ctx context.Context, request com
 
 	var response ListSqlCollectionsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlCollections")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16664,7 +19288,7 @@ func (client DataSafeClient) listSqlFirewallAllowedSqlAnalytics(ctx context.Cont
 
 	var response ListSqlFirewallAllowedSqlAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlFirewallAllowedSqlAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16732,7 +19356,7 @@ func (client DataSafeClient) listSqlFirewallAllowedSqls(ctx context.Context, req
 
 	var response ListSqlFirewallAllowedSqlsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlFirewallAllowedSqls")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16800,7 +19424,7 @@ func (client DataSafeClient) listSqlFirewallPolicies(ctx context.Context, reques
 
 	var response ListSqlFirewallPoliciesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlFirewallPolicies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16867,7 +19491,7 @@ func (client DataSafeClient) listSqlFirewallPolicyAnalytics(ctx context.Context,
 
 	var response ListSqlFirewallPolicyAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlFirewallPolicyAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16930,7 +19554,7 @@ func (client DataSafeClient) listSqlFirewallViolationAnalytics(ctx context.Conte
 
 	var response ListSqlFirewallViolationAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlFirewallViolationAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -16988,12 +19612,774 @@ func (client DataSafeClient) listSqlFirewallViolations(ctx context.Context, requ
 
 	var response ListSqlFirewallViolationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSqlFirewallViolations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlFirewallViolationSummary/ListSqlFirewallViolations"
 		err = common.PostProcessServiceError(err, "DataSafe", "ListSqlFirewallViolations", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettedObjects Gets a list of subsetted tables present in the specified subsetting report and based on the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettedObjects.go.html to see an example of how to use ListSubsettedObjects API.
+// A default retry strategy applies to this operation ListSubsettedObjects()
+func (client DataSafeClient) ListSubsettedObjects(ctx context.Context, request ListSubsettedObjectsRequest) (response ListSubsettedObjectsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettedObjects, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettedObjectsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettedObjectsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettedObjectsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettedObjectsResponse")
+	}
+	return
+}
+
+// listSubsettedObjects implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettedObjects(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingReports/{subsettingReportId}/subsettedObjects", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettedObjectsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettedObjects")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettedObjectSummary/ListSubsettedObjects"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettedObjects", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingAnalytics Gets consolidated subsetting analytics data based on the specified query parameters.
+// If CompartmentIdInSubtreeQueryParam is specified as true, the behaviour
+// is equivalent to accessLevel "ACCESSIBLE" by default.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingAnalytics.go.html to see an example of how to use ListSubsettingAnalytics API.
+// A default retry strategy applies to this operation ListSubsettingAnalytics()
+func (client DataSafeClient) ListSubsettingAnalytics(ctx context.Context, request ListSubsettingAnalyticsRequest) (response ListSubsettingAnalyticsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingAnalytics, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingAnalyticsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingAnalyticsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingAnalyticsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingAnalyticsResponse")
+	}
+	return
+}
+
+// listSubsettingAnalytics implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingAnalytics(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingAnalytics", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingAnalyticsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingAnalytics")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/ListSubsettingAnalytics"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingAnalytics", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingErrors Gets a list of subsetting errors in a subsetting run based on the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingErrors.go.html to see an example of how to use ListSubsettingErrors API.
+// A default retry strategy applies to this operation ListSubsettingErrors()
+func (client DataSafeClient) ListSubsettingErrors(ctx context.Context, request ListSubsettingErrorsRequest) (response ListSubsettingErrorsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingErrors, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingErrorsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingErrorsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingErrorsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingErrorsResponse")
+	}
+	return
+}
+
+// listSubsettingErrors implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingErrors(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingReports/{subsettingReportId}/subsettingErrors", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingErrorsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingErrors")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingErrorSummary/ListSubsettingErrors"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingErrors", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingPolicies Gets a list of subsetting policies based on the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingPolicies.go.html to see an example of how to use ListSubsettingPolicies API.
+// A default retry strategy applies to this operation ListSubsettingPolicies()
+func (client DataSafeClient) ListSubsettingPolicies(ctx context.Context, request ListSubsettingPoliciesRequest) (response ListSubsettingPoliciesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingPolicies, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingPoliciesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingPoliciesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingPoliciesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingPoliciesResponse")
+	}
+	return
+}
+
+// listSubsettingPolicies implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingPolicies(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingPoliciesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingPolicies")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/ListSubsettingPolicies"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingPolicies", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingPolicyHealthReportLogs Gets a list of errors and warnings from a subsetting policy health check.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingPolicyHealthReportLogs.go.html to see an example of how to use ListSubsettingPolicyHealthReportLogs API.
+// A default retry strategy applies to this operation ListSubsettingPolicyHealthReportLogs()
+func (client DataSafeClient) ListSubsettingPolicyHealthReportLogs(ctx context.Context, request ListSubsettingPolicyHealthReportLogsRequest) (response ListSubsettingPolicyHealthReportLogsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingPolicyHealthReportLogs, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingPolicyHealthReportLogsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingPolicyHealthReportLogsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingPolicyHealthReportLogsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingPolicyHealthReportLogsResponse")
+	}
+	return
+}
+
+// listSubsettingPolicyHealthReportLogs implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingPolicyHealthReportLogs(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicyHealthReports/{subsettingPolicyHealthReportId}/logs", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingPolicyHealthReportLogsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingPolicyHealthReportLogs")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicyHealthReport/ListSubsettingPolicyHealthReportLogs"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingPolicyHealthReportLogs", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingPolicyHealthReports Gets a list of subsetting policy health reports based on the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingPolicyHealthReports.go.html to see an example of how to use ListSubsettingPolicyHealthReports API.
+// A default retry strategy applies to this operation ListSubsettingPolicyHealthReports()
+func (client DataSafeClient) ListSubsettingPolicyHealthReports(ctx context.Context, request ListSubsettingPolicyHealthReportsRequest) (response ListSubsettingPolicyHealthReportsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingPolicyHealthReports, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingPolicyHealthReportsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingPolicyHealthReportsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingPolicyHealthReportsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingPolicyHealthReportsResponse")
+	}
+	return
+}
+
+// listSubsettingPolicyHealthReports implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingPolicyHealthReports(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicyHealthReports", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingPolicyHealthReportsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingPolicyHealthReports")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicyHealthReport/ListSubsettingPolicyHealthReports"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingPolicyHealthReports", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingReports Gets a list of subsetting reports based on the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingReports.go.html to see an example of how to use ListSubsettingReports API.
+// A default retry strategy applies to this operation ListSubsettingReports()
+func (client DataSafeClient) ListSubsettingReports(ctx context.Context, request ListSubsettingReportsRequest) (response ListSubsettingReportsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingReports, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingReportsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingReportsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingReportsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingReportsResponse")
+	}
+	return
+}
+
+// listSubsettingReports implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingReports(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingReports", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingReportsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingReports")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingReport/ListSubsettingReports"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingReports", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingRuleProcessingChainObjects Gets a list of objects of processing chain based on the specified query parameters generated for a subsetting rule.
+// A processing chain is the relationship path that determines how a subsetting rule is applied across related tables.
+// It is built from the selected subsetting table, subsetting rule, the chosen relatedTablesPropagation direction,
+// and the referential relationships in the schema.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingRuleProcessingChainObjects.go.html to see an example of how to use ListSubsettingRuleProcessingChainObjects API.
+// A default retry strategy applies to this operation ListSubsettingRuleProcessingChainObjects()
+func (client DataSafeClient) ListSubsettingRuleProcessingChainObjects(ctx context.Context, request ListSubsettingRuleProcessingChainObjectsRequest) (response ListSubsettingRuleProcessingChainObjectsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingRuleProcessingChainObjects, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingRuleProcessingChainObjectsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingRuleProcessingChainObjectsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingRuleProcessingChainObjectsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingRuleProcessingChainObjectsResponse")
+	}
+	return
+}
+
+// listSubsettingRuleProcessingChainObjects implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingRuleProcessingChainObjects(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}/subsettingRules/{subsettingRuleKey}/processingChainObjects", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingRuleProcessingChainObjectsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingRuleProcessingChainObjects")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingRuleProcessingChainObjectSummary/ListSubsettingRuleProcessingChainObjects"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingRuleProcessingChainObjects", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingRules Gets a list of subsetting rules present in the specified subsetting policy and based on the specified query parameters.
+// A subsetting rule is the criteria that tells Data Safe which rows to retain from the selected starting table for a subsetting operation.
+// It is the entry point for the subset. Data Safe uses this rule, along with the propagation setting,
+// to determine the related rows that must also be retained across parent and child tables.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingRules.go.html to see an example of how to use ListSubsettingRules API.
+// A default retry strategy applies to this operation ListSubsettingRules()
+func (client DataSafeClient) ListSubsettingRules(ctx context.Context, request ListSubsettingRulesRequest) (response ListSubsettingRulesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingRules, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingRulesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingRulesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingRulesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingRulesResponse")
+	}
+	return
+}
+
+// listSubsettingRules implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingRules(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}/subsettingRules", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingRulesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingRules")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingRule/ListSubsettingRules"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingRules", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingSchemaObjects Gets a list of objects/tables present in the specified subsetting policy schemas based on the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingSchemaObjects.go.html to see an example of how to use ListSubsettingSchemaObjects API.
+// A default retry strategy applies to this operation ListSubsettingSchemaObjects()
+func (client DataSafeClient) ListSubsettingSchemaObjects(ctx context.Context, request ListSubsettingSchemaObjectsRequest) (response ListSubsettingSchemaObjectsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingSchemaObjects, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingSchemaObjectsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingSchemaObjectsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingSchemaObjectsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingSchemaObjectsResponse")
+	}
+	return
+}
+
+// listSubsettingSchemaObjects implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingSchemaObjects(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}/subsettingSchemaObjects", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingSchemaObjectsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingSchemaObjects")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingSchemaObjectSummary/ListSubsettingSchemaObjects"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingSchemaObjects", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingSchemaRelations Gets a list of referential relations present in the specified subsetting policy schemas based on the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingSchemaRelations.go.html to see an example of how to use ListSubsettingSchemaRelations API.
+// A default retry strategy applies to this operation ListSubsettingSchemaRelations()
+func (client DataSafeClient) ListSubsettingSchemaRelations(ctx context.Context, request ListSubsettingSchemaRelationsRequest) (response ListSubsettingSchemaRelationsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingSchemaRelations, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingSchemaRelationsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingSchemaRelationsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingSchemaRelationsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingSchemaRelationsResponse")
+	}
+	return
+}
+
+// listSubsettingSchemaRelations implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingSchemaRelations(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}/subsettingSchemaRelations", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingSchemaRelationsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingSchemaRelations")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingSchemaRelationSummary/ListSubsettingSchemaRelations"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingSchemaRelations", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListSubsettingSchemas Gets a list of subsetting schemas present in the specified subsetting policy and based on the specified query parameters.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListSubsettingSchemas.go.html to see an example of how to use ListSubsettingSchemas API.
+// A default retry strategy applies to this operation ListSubsettingSchemas()
+func (client DataSafeClient) ListSubsettingSchemas(ctx context.Context, request ListSubsettingSchemasRequest) (response ListSubsettingSchemasResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listSubsettingSchemas, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListSubsettingSchemasResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListSubsettingSchemasResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListSubsettingSchemasResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListSubsettingSchemasResponse")
+	}
+	return
+}
+
+// listSubsettingSchemas implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listSubsettingSchemas(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}/subsettingSchemas", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListSubsettingSchemasResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListSubsettingSchemas")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingSchemaCollection/ListSubsettingSchemas"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListSubsettingSchemas", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListTableEstimates Gets table size estimates for the specified subsetting policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListTableEstimates.go.html to see an example of how to use ListTableEstimates API.
+// A default retry strategy applies to this operation ListTableEstimates()
+func (client DataSafeClient) ListTableEstimates(ctx context.Context, request ListTableEstimatesRequest) (response ListTableEstimatesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listTableEstimates, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListTableEstimatesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListTableEstimatesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListTableEstimatesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListTableEstimatesResponse")
+	}
+	return
+}
+
+// listTableEstimates implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listTableEstimates(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/subsettingPolicies/{subsettingPolicyId}/tableEstimates", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListTableEstimatesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTableEstimates")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/TableEstimateSummary/ListTableEstimates"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListTableEstimates", apiReferenceLink)
 		return response, err
 	}
 
@@ -17046,7 +20432,7 @@ func (client DataSafeClient) listTables(ctx context.Context, request common.OCIR
 
 	var response ListTablesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTables")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17104,12 +20490,70 @@ func (client DataSafeClient) listTargetAlertPolicyAssociations(ctx context.Conte
 
 	var response ListTargetAlertPolicyAssociationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTargetAlertPolicyAssociations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/TargetAlertPolicyAssociationSummary/ListTargetAlertPolicyAssociations"
 		err = common.PostProcessServiceError(err, "DataSafe", "ListTargetAlertPolicyAssociations", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListTargetAlertPolicyUnassociatedMembers Gets the details of target-alert policy association and its unassociated members by its ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ListTargetAlertPolicyUnassociatedMembers.go.html to see an example of how to use ListTargetAlertPolicyUnassociatedMembers API.
+// A default retry strategy applies to this operation ListTargetAlertPolicyUnassociatedMembers()
+func (client DataSafeClient) ListTargetAlertPolicyUnassociatedMembers(ctx context.Context, request ListTargetAlertPolicyUnassociatedMembersRequest) (response ListTargetAlertPolicyUnassociatedMembersResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listTargetAlertPolicyUnassociatedMembers, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListTargetAlertPolicyUnassociatedMembersResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListTargetAlertPolicyUnassociatedMembersResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListTargetAlertPolicyUnassociatedMembersResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListTargetAlertPolicyUnassociatedMembersResponse")
+	}
+	return
+}
+
+// listTargetAlertPolicyUnassociatedMembers implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) listTargetAlertPolicyUnassociatedMembers(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/targetAlertPolicyAssociations/{targetAlertPolicyAssociationId}/unassociatedTargetMembers", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListTargetAlertPolicyUnassociatedMembersResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTargetAlertPolicyUnassociatedMembers")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/TargetAlertPolicyAssociation/ListTargetAlertPolicyUnassociatedMembers"
+		err = common.PostProcessServiceError(err, "DataSafe", "ListTargetAlertPolicyUnassociatedMembers", apiReferenceLink)
 		return response, err
 	}
 
@@ -17162,7 +20606,7 @@ func (client DataSafeClient) listTargetDatabaseGroups(ctx context.Context, reque
 
 	var response ListTargetDatabaseGroupsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTargetDatabaseGroups")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17220,7 +20664,7 @@ func (client DataSafeClient) listTargetDatabases(ctx context.Context, request co
 
 	var response ListTargetDatabasesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTargetDatabases")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17278,7 +20722,7 @@ func (client DataSafeClient) listTargetOverrides(ctx context.Context, request co
 
 	var response ListTargetOverridesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTargetOverrides")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17348,7 +20792,7 @@ func (client DataSafeClient) listTemplateAnalytics(ctx context.Context, request 
 
 	var response ListTemplateAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTemplateAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17417,7 +20861,7 @@ func (client DataSafeClient) listTemplateAssociationAnalytics(ctx context.Contex
 
 	var response ListTemplateAssociationAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListTemplateAssociationAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17485,7 +20929,7 @@ func (client DataSafeClient) listUnifiedAuditPolicies(ctx context.Context, reque
 
 	var response ListUnifiedAuditPoliciesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListUnifiedAuditPolicies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17553,7 +20997,7 @@ func (client DataSafeClient) listUnifiedAuditPolicyDefinitions(ctx context.Conte
 
 	var response ListUnifiedAuditPolicyDefinitionsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListUnifiedAuditPolicyDefinitions")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17611,7 +21055,7 @@ func (client DataSafeClient) listUserAccessAnalytics(ctx context.Context, reques
 
 	var response ListUserAccessAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListUserAccessAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17680,7 +21124,7 @@ func (client DataSafeClient) listUserAnalytics(ctx context.Context, request comm
 
 	var response ListUserAnalyticsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListUserAnalytics")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17749,7 +21193,7 @@ func (client DataSafeClient) listUserAssessments(ctx context.Context, request co
 
 	var response ListUserAssessmentsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListUserAssessments")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17810,7 +21254,7 @@ func (client DataSafeClient) listUsers(ctx context.Context, request common.OCIRe
 
 	var response ListUsersResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListUsers")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17868,7 +21312,7 @@ func (client DataSafeClient) listWorkRequestErrors(ctx context.Context, request 
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17926,7 +21370,7 @@ func (client DataSafeClient) listWorkRequestLogs(ctx context.Context, request co
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -17984,12 +21428,75 @@ func (client DataSafeClient) listWorkRequests(ctx context.Context, request commo
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/WorkRequestSummary/ListWorkRequests"
 		err = common.PostProcessServiceError(err, "DataSafe", "ListWorkRequests", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ManagePrivileges Updates the Data Safe target database Privileges.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/ManagePrivileges.go.html to see an example of how to use ManagePrivileges API.
+// A default retry strategy applies to this operation ManagePrivileges()
+func (client DataSafeClient) ManagePrivileges(ctx context.Context, request ManagePrivilegesRequest) (response ManagePrivilegesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.managePrivileges, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ManagePrivilegesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ManagePrivilegesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ManagePrivilegesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ManagePrivilegesResponse")
+	}
+	return
+}
+
+// managePrivileges implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) managePrivileges(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/targetDatabases/{targetDatabaseId}/actions/managePrivileges", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ManagePrivilegesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ManagePrivileges")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/TargetDatabase/ManagePrivileges"
+		err = common.PostProcessServiceError(err, "DataSafe", "ManagePrivileges", apiReferenceLink)
 		return response, err
 	}
 
@@ -18047,7 +21554,7 @@ func (client DataSafeClient) maskData(ctx context.Context, request common.OCIReq
 
 	var response MaskDataResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "MaskData")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18110,7 +21617,7 @@ func (client DataSafeClient) modifyGlobalSettings(ctx context.Context, request c
 
 	var response ModifyGlobalSettingsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ModifyGlobalSettings")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18168,7 +21675,7 @@ func (client DataSafeClient) patchAlerts(ctx context.Context, request common.OCI
 
 	var response PatchAlertsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchAlerts")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18227,7 +21734,7 @@ func (client DataSafeClient) patchChecks(ctx context.Context, request common.OCI
 
 	var response PatchChecksResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchChecks")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18286,7 +21793,7 @@ func (client DataSafeClient) patchDiscoveryJobResults(ctx context.Context, reque
 
 	var response PatchDiscoveryJobResultsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchDiscoveryJobResults")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18344,7 +21851,7 @@ func (client DataSafeClient) patchFindings(ctx context.Context, request common.O
 
 	var response PatchFindingsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchFindings")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18403,7 +21910,7 @@ func (client DataSafeClient) patchGroupedSensitiveTypes(ctx context.Context, req
 
 	var response PatchGroupedSensitiveTypesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchGroupedSensitiveTypes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18463,7 +21970,7 @@ func (client DataSafeClient) patchMaskingColumns(ctx context.Context, request co
 
 	var response PatchMaskingColumnsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchMaskingColumns")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18522,7 +22029,7 @@ func (client DataSafeClient) patchSdmMaskingPolicyDifferenceColumns(ctx context.
 
 	var response PatchSdmMaskingPolicyDifferenceColumnsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchSdmMaskingPolicyDifferenceColumns")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18582,7 +22089,7 @@ func (client DataSafeClient) patchSensitiveColumns(ctx context.Context, request 
 
 	var response PatchSensitiveColumnsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchSensitiveColumns")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18641,12 +22148,73 @@ func (client DataSafeClient) patchSqlFirewallAllowedSql(ctx context.Context, req
 
 	var response PatchSqlFirewallAllowedSqlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchSqlFirewallAllowedSql")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlFirewallAllowedSql/PatchSqlFirewallAllowedSql"
 		err = common.PostProcessServiceError(err, "DataSafe", "PatchSqlFirewallAllowedSql", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// PatchSubsettingRules Patches one or more subsetting rules in the specified subsetting policy. Use INSERT to add
+// a new rule with CreateSubsettingRuleDetails as the patch value, and MERGE to update an
+// existing rule with UpdateSubsettingRuleDetails as the patch value. To delete a rule, use
+// the existing DeleteSubsettingRule API.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/PatchSubsettingRules.go.html to see an example of how to use PatchSubsettingRules API.
+// A default retry strategy applies to this operation PatchSubsettingRules()
+func (client DataSafeClient) PatchSubsettingRules(ctx context.Context, request PatchSubsettingRulesRequest) (response PatchSubsettingRulesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.patchSubsettingRules, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = PatchSubsettingRulesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = PatchSubsettingRulesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(PatchSubsettingRulesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into PatchSubsettingRulesResponse")
+	}
+	return
+}
+
+// patchSubsettingRules implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) patchSubsettingRules(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPatch, "/subsettingPolicies/{subsettingPolicyId}/subsettingRules", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response PatchSubsettingRulesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchSubsettingRules")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingRule/PatchSubsettingRules"
+		err = common.PostProcessServiceError(err, "DataSafe", "PatchSubsettingRules", apiReferenceLink)
 		return response, err
 	}
 
@@ -18699,7 +22267,7 @@ func (client DataSafeClient) patchTargetAlertPolicyAssociation(ctx context.Conte
 
 	var response PatchTargetAlertPolicyAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PatchTargetAlertPolicyAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18762,7 +22330,7 @@ func (client DataSafeClient) provisionAuditPolicy(ctx context.Context, request c
 
 	var response ProvisionAuditPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ProvisionAuditPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18825,12 +22393,77 @@ func (client DataSafeClient) purgeSqlCollectionLogs(ctx context.Context, request
 
 	var response PurgeSqlCollectionLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "PurgeSqlCollectionLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlCollection/PurgeSqlCollectionLogs"
 		err = common.PostProcessServiceError(err, "DataSafe", "PurgeSqlCollectionLogs", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// RefreshCryptoAssessment Runs a crypto assessment, refreshes the latest assessment, and saves it for future reference.
+// This operation runs with a cryptoAssessmentId of type LATEST.
+// Before you start, first call the ListCryptoAssessments operation with filter "type = latest" to get the crypto assessment ID for the target's latest assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/RefreshCryptoAssessment.go.html to see an example of how to use RefreshCryptoAssessment API.
+// A default retry strategy applies to this operation RefreshCryptoAssessment()
+func (client DataSafeClient) RefreshCryptoAssessment(ctx context.Context, request RefreshCryptoAssessmentRequest) (response RefreshCryptoAssessmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.refreshCryptoAssessment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = RefreshCryptoAssessmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = RefreshCryptoAssessmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(RefreshCryptoAssessmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into RefreshCryptoAssessmentResponse")
+	}
+	return
+}
+
+// refreshCryptoAssessment implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) refreshCryptoAssessment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/cryptoAssessments/{cryptoAssessmentId}/actions/refresh", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response RefreshCryptoAssessmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RefreshCryptoAssessment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/RefreshCryptoAssessment"
+		err = common.PostProcessServiceError(err, "DataSafe", "RefreshCryptoAssessment", apiReferenceLink)
 		return response, err
 	}
 
@@ -18888,7 +22521,7 @@ func (client DataSafeClient) refreshDatabaseSecurityConfiguration(ctx context.Co
 
 	var response RefreshDatabaseSecurityConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RefreshDatabaseSecurityConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -18952,7 +22585,7 @@ func (client DataSafeClient) refreshSecurityAssessment(ctx context.Context, requ
 
 	var response RefreshSecurityAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RefreshSecurityAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19015,7 +22648,7 @@ func (client DataSafeClient) refreshSecurityPolicyDeployment(ctx context.Context
 
 	var response RefreshSecurityPolicyDeploymentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RefreshSecurityPolicyDeployment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19078,7 +22711,7 @@ func (client DataSafeClient) refreshSqlCollectionLogInsights(ctx context.Context
 
 	var response RefreshSqlCollectionLogInsightsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RefreshSqlCollectionLogInsights")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19141,7 +22774,7 @@ func (client DataSafeClient) refreshTargetDatabase(ctx context.Context, request 
 
 	var response RefreshTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RefreshTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19206,7 +22839,7 @@ func (client DataSafeClient) refreshUserAssessment(ctx context.Context, request 
 
 	var response RefreshUserAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RefreshUserAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19269,7 +22902,7 @@ func (client DataSafeClient) removeScheduleReport(ctx context.Context, request c
 
 	var response RemoveScheduleReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RemoveScheduleReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19332,7 +22965,7 @@ func (client DataSafeClient) removeSecurityAssessmentTemplate(ctx context.Contex
 
 	var response RemoveSecurityAssessmentTemplateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RemoveSecurityAssessmentTemplate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19390,7 +23023,7 @@ func (client DataSafeClient) resumeAuditTrail(ctx context.Context, request commo
 
 	var response ResumeAuditTrailResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ResumeAuditTrail")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19453,7 +23086,7 @@ func (client DataSafeClient) resumeWorkRequest(ctx context.Context, request comm
 
 	var response ResumeWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ResumeWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19516,7 +23149,7 @@ func (client DataSafeClient) retrieveAuditPolicies(ctx context.Context, request 
 
 	var response RetrieveAuditPoliciesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "RetrieveAuditPolicies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19579,7 +23212,7 @@ func (client DataSafeClient) scheduleReport(ctx context.Context, request common.
 
 	var response ScheduleReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "ScheduleReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19642,7 +23275,7 @@ func (client DataSafeClient) setSecurityAssessmentBaseline(ctx context.Context, 
 
 	var response SetSecurityAssessmentBaselineResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "SetSecurityAssessmentBaseline")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19705,7 +23338,7 @@ func (client DataSafeClient) setUserAssessmentBaseline(ctx context.Context, requ
 
 	var response SetUserAssessmentBaselineResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "SetUserAssessmentBaseline")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19768,7 +23401,7 @@ func (client DataSafeClient) startAuditTrail(ctx context.Context, request common
 
 	var response StartAuditTrailResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "StartAuditTrail")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19831,7 +23464,7 @@ func (client DataSafeClient) startSqlCollection(ctx context.Context, request com
 
 	var response StartSqlCollectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "StartSqlCollection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19889,7 +23522,7 @@ func (client DataSafeClient) stopAuditTrail(ctx context.Context, request common.
 
 	var response StopAuditTrailResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "StopAuditTrail")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -19952,12 +23585,75 @@ func (client DataSafeClient) stopSqlCollection(ctx context.Context, request comm
 
 	var response StopSqlCollectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "StopSqlCollection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlCollection/StopSqlCollection"
 		err = common.PostProcessServiceError(err, "DataSafe", "StopSqlCollection", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// SubsetData Subsets data using the specified subsetting policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/SubsetData.go.html to see an example of how to use SubsetData API.
+// A default retry strategy applies to this operation SubsetData()
+func (client DataSafeClient) SubsetData(ctx context.Context, request SubsetDataRequest) (response SubsetDataResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.subsetData, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = SubsetDataResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = SubsetDataResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(SubsetDataResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into SubsetDataResponse")
+	}
+	return
+}
+
+// subsetData implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) subsetData(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/subset", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response SubsetDataResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "SubsetData")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/SubsetData"
+		err = common.PostProcessServiceError(err, "DataSafe", "SubsetData", apiReferenceLink)
 		return response, err
 	}
 
@@ -20015,7 +23711,7 @@ func (client DataSafeClient) suspendWorkRequest(ctx context.Context, request com
 
 	var response SuspendWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "SuspendWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20080,7 +23776,7 @@ func (client DataSafeClient) unsetSecurityAssessmentBaseline(ctx context.Context
 
 	var response UnsetSecurityAssessmentBaselineResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UnsetSecurityAssessmentBaseline")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20145,7 +23841,7 @@ func (client DataSafeClient) unsetUserAssessmentBaseline(ctx context.Context, re
 
 	var response UnsetUserAssessmentBaselineResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UnsetUserAssessmentBaseline")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20203,7 +23899,7 @@ func (client DataSafeClient) updateAlert(ctx context.Context, request common.OCI
 
 	var response UpdateAlertResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateAlert")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20261,7 +23957,7 @@ func (client DataSafeClient) updateAlertPolicy(ctx context.Context, request comm
 
 	var response UpdateAlertPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateAlertPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20319,7 +24015,7 @@ func (client DataSafeClient) updateAlertPolicyRule(ctx context.Context, request 
 
 	var response UpdateAlertPolicyRuleResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateAlertPolicyRule")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20377,7 +24073,7 @@ func (client DataSafeClient) updateAttributeSet(ctx context.Context, request com
 
 	var response UpdateAttributeSetResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateAttributeSet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20435,7 +24131,7 @@ func (client DataSafeClient) updateAuditArchiveRetrieval(ctx context.Context, re
 
 	var response UpdateAuditArchiveRetrievalResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateAuditArchiveRetrieval")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20493,7 +24189,7 @@ func (client DataSafeClient) updateAuditPolicy(ctx context.Context, request comm
 
 	var response UpdateAuditPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateAuditPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20551,7 +24247,7 @@ func (client DataSafeClient) updateAuditProfile(ctx context.Context, request com
 
 	var response UpdateAuditProfileResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateAuditProfile")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20609,12 +24305,70 @@ func (client DataSafeClient) updateAuditTrail(ctx context.Context, request commo
 
 	var response UpdateAuditTrailResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateAuditTrail")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/AuditTrail/UpdateAuditTrail"
 		err = common.PostProcessServiceError(err, "DataSafe", "UpdateAuditTrail", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateCryptoAssessment Updates one or more attributes of the specified crypto assessment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/UpdateCryptoAssessment.go.html to see an example of how to use UpdateCryptoAssessment API.
+// A default retry strategy applies to this operation UpdateCryptoAssessment()
+func (client DataSafeClient) UpdateCryptoAssessment(ctx context.Context, request UpdateCryptoAssessmentRequest) (response UpdateCryptoAssessmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateCryptoAssessment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateCryptoAssessmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateCryptoAssessmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateCryptoAssessmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateCryptoAssessmentResponse")
+	}
+	return
+}
+
+// updateCryptoAssessment implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) updateCryptoAssessment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/cryptoAssessments/{cryptoAssessmentId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateCryptoAssessmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateCryptoAssessment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/CryptoAssessment/UpdateCryptoAssessment"
+		err = common.PostProcessServiceError(err, "DataSafe", "UpdateCryptoAssessment", apiReferenceLink)
 		return response, err
 	}
 
@@ -20667,7 +24421,7 @@ func (client DataSafeClient) updateDataSafePrivateEndpoint(ctx context.Context, 
 
 	var response UpdateDataSafePrivateEndpointResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateDataSafePrivateEndpoint")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20725,7 +24479,7 @@ func (client DataSafeClient) updateDatabaseSecurityConfig(ctx context.Context, r
 
 	var response UpdateDatabaseSecurityConfigResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateDatabaseSecurityConfig")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20788,7 +24542,7 @@ func (client DataSafeClient) updateFinding(ctx context.Context, request common.O
 
 	var response UpdateFindingResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateFinding")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20846,7 +24600,7 @@ func (client DataSafeClient) updateLibraryMaskingFormat(ctx context.Context, req
 
 	var response UpdateLibraryMaskingFormatResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateLibraryMaskingFormat")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20905,7 +24659,7 @@ func (client DataSafeClient) updateMaskingColumn(ctx context.Context, request co
 
 	var response UpdateMaskingColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateMaskingColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -20963,7 +24717,7 @@ func (client DataSafeClient) updateMaskingPolicy(ctx context.Context, request co
 
 	var response UpdateMaskingPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateMaskingPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21021,7 +24775,7 @@ func (client DataSafeClient) updateOnPremConnector(ctx context.Context, request 
 
 	var response UpdateOnPremConnectorResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateOnPremConnector")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21084,7 +24838,7 @@ func (client DataSafeClient) updateOnPremConnectorWallet(ctx context.Context, re
 
 	var response UpdateOnPremConnectorWalletResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateOnPremConnectorWallet")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21147,12 +24901,133 @@ func (client DataSafeClient) updatePeerTargetDatabase(ctx context.Context, reque
 
 	var response UpdatePeerTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdatePeerTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/PeerTargetDatabase/UpdatePeerTargetDatabase"
 		err = common.PostProcessServiceError(err, "DataSafe", "UpdatePeerTargetDatabase", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateProcessingChainObject Updates one or more attributes of the specified processing chain object.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/UpdateProcessingChainObject.go.html to see an example of how to use UpdateProcessingChainObject API.
+// A default retry strategy applies to this operation UpdateProcessingChainObject()
+func (client DataSafeClient) UpdateProcessingChainObject(ctx context.Context, request UpdateProcessingChainObjectRequest) (response UpdateProcessingChainObjectResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateProcessingChainObject, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateProcessingChainObjectResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateProcessingChainObjectResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateProcessingChainObjectResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateProcessingChainObjectResponse")
+	}
+	return
+}
+
+// updateProcessingChainObject implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) updateProcessingChainObject(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/subsettingPolicies/{subsettingPolicyId}/subsettingRules/{subsettingRuleKey}/processingChainObjects/{processingChainObjectKey}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateProcessingChainObjectResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateProcessingChainObject")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingRuleProcessingChainObjectSummary/UpdateProcessingChainObject"
+		err = common.PostProcessServiceError(err, "DataSafe", "UpdateProcessingChainObject", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateRegistrationPolicy Updates one or more attributes of the specified registration policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/UpdateRegistrationPolicy.go.html to see an example of how to use UpdateRegistrationPolicy API.
+// A default retry strategy applies to this operation UpdateRegistrationPolicy()
+func (client DataSafeClient) UpdateRegistrationPolicy(ctx context.Context, request UpdateRegistrationPolicyRequest) (response UpdateRegistrationPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.updateRegistrationPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateRegistrationPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateRegistrationPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateRegistrationPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateRegistrationPolicyResponse")
+	}
+	return
+}
+
+// updateRegistrationPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) updateRegistrationPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/registrationPolicies/{registrationPolicyId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateRegistrationPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateRegistrationPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/RegistrationPolicy/UpdateRegistrationPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "UpdateRegistrationPolicy", apiReferenceLink)
 		return response, err
 	}
 
@@ -21210,7 +25085,7 @@ func (client DataSafeClient) updateReport(ctx context.Context, request common.OC
 
 	var response UpdateReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21273,7 +25148,7 @@ func (client DataSafeClient) updateReportDefinition(ctx context.Context, request
 
 	var response UpdateReportDefinitionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateReportDefinition")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21331,7 +25206,7 @@ func (client DataSafeClient) updateSdmMaskingPolicyDifference(ctx context.Contex
 
 	var response UpdateSdmMaskingPolicyDifferenceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSdmMaskingPolicyDifference")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21389,7 +25264,7 @@ func (client DataSafeClient) updateSecurityAssessment(ctx context.Context, reque
 
 	var response UpdateSecurityAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSecurityAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21447,7 +25322,7 @@ func (client DataSafeClient) updateSecurityPolicy(ctx context.Context, request c
 
 	var response UpdateSecurityPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSecurityPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21505,7 +25380,7 @@ func (client DataSafeClient) updateSecurityPolicyConfig(ctx context.Context, req
 
 	var response UpdateSecurityPolicyConfigResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSecurityPolicyConfig")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21563,7 +25438,7 @@ func (client DataSafeClient) updateSecurityPolicyDeployment(ctx context.Context,
 
 	var response UpdateSecurityPolicyDeploymentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSecurityPolicyDeployment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21621,7 +25496,7 @@ func (client DataSafeClient) updateSensitiveColumn(ctx context.Context, request 
 
 	var response UpdateSensitiveColumnResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSensitiveColumn")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21680,7 +25555,7 @@ func (client DataSafeClient) updateSensitiveDataModel(ctx context.Context, reque
 
 	var response UpdateSensitiveDataModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSensitiveDataModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21738,7 +25613,7 @@ func (client DataSafeClient) updateSensitiveType(ctx context.Context, request co
 
 	var response UpdateSensitiveTypeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSensitiveType")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21796,7 +25671,7 @@ func (client DataSafeClient) updateSensitiveTypeGroup(ctx context.Context, reque
 
 	var response UpdateSensitiveTypeGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSensitiveTypeGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21854,7 +25729,7 @@ func (client DataSafeClient) updateSensitiveTypesExport(ctx context.Context, req
 
 	var response UpdateSensitiveTypesExportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSensitiveTypesExport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21912,7 +25787,7 @@ func (client DataSafeClient) updateSqlCollection(ctx context.Context, request co
 
 	var response UpdateSqlCollectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSqlCollection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -21970,12 +25845,128 @@ func (client DataSafeClient) updateSqlFirewallPolicy(ctx context.Context, reques
 
 	var response UpdateSqlFirewallPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSqlFirewallPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SqlFirewallPolicy/UpdateSqlFirewallPolicy"
 		err = common.PostProcessServiceError(err, "DataSafe", "UpdateSqlFirewallPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateSubsettingPolicy Updates one or more attributes of the specified subsetting policy.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/UpdateSubsettingPolicy.go.html to see an example of how to use UpdateSubsettingPolicy API.
+// A default retry strategy applies to this operation UpdateSubsettingPolicy()
+func (client DataSafeClient) UpdateSubsettingPolicy(ctx context.Context, request UpdateSubsettingPolicyRequest) (response UpdateSubsettingPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateSubsettingPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateSubsettingPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateSubsettingPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateSubsettingPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateSubsettingPolicyResponse")
+	}
+	return
+}
+
+// updateSubsettingPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) updateSubsettingPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/subsettingPolicies/{subsettingPolicyId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateSubsettingPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSubsettingPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/UpdateSubsettingPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "UpdateSubsettingPolicy", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateSubsettingRule Updates one or more attributes of the specified subsetting rule. Note that updating the subsettingRuleEntry attribute replaces the currently assigned subsettingRuleEntry
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/UpdateSubsettingRule.go.html to see an example of how to use UpdateSubsettingRule API.
+// A default retry strategy applies to this operation UpdateSubsettingRule()
+func (client DataSafeClient) UpdateSubsettingRule(ctx context.Context, request UpdateSubsettingRuleRequest) (response UpdateSubsettingRuleResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateSubsettingRule, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateSubsettingRuleResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateSubsettingRuleResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateSubsettingRuleResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateSubsettingRuleResponse")
+	}
+	return
+}
+
+// updateSubsettingRule implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) updateSubsettingRule(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/subsettingPolicies/{subsettingPolicyId}/subsettingRules/{subsettingRuleKey}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateSubsettingRuleResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateSubsettingRule")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingRule/UpdateSubsettingRule"
+		err = common.PostProcessServiceError(err, "DataSafe", "UpdateSubsettingRule", apiReferenceLink)
 		return response, err
 	}
 
@@ -22028,7 +26019,7 @@ func (client DataSafeClient) updateTargetAlertPolicyAssociation(ctx context.Cont
 
 	var response UpdateTargetAlertPolicyAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateTargetAlertPolicyAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -22091,7 +26082,7 @@ func (client DataSafeClient) updateTargetDatabase(ctx context.Context, request c
 
 	var response UpdateTargetDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateTargetDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -22154,7 +26145,7 @@ func (client DataSafeClient) updateTargetDatabaseGroup(ctx context.Context, requ
 
 	var response UpdateTargetDatabaseGroupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateTargetDatabaseGroup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -22212,7 +26203,7 @@ func (client DataSafeClient) updateUnifiedAuditPolicy(ctx context.Context, reque
 
 	var response UpdateUnifiedAuditPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateUnifiedAuditPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -22270,7 +26261,7 @@ func (client DataSafeClient) updateUnifiedAuditPolicyDefinition(ctx context.Cont
 
 	var response UpdateUnifiedAuditPolicyDefinitionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateUnifiedAuditPolicyDefinition")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -22328,7 +26319,7 @@ func (client DataSafeClient) updateUserAssessment(ctx context.Context, request c
 
 	var response UpdateUserAssessmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UpdateUserAssessment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -22390,7 +26381,7 @@ func (client DataSafeClient) uploadMaskingPolicy(ctx context.Context, request co
 
 	var response UploadMaskingPolicyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UploadMaskingPolicy")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -22451,12 +26442,74 @@ func (client DataSafeClient) uploadSensitiveDataModel(ctx context.Context, reque
 
 	var response UploadSensitiveDataModelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UploadSensitiveDataModel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SensitiveDataModel/UploadSensitiveDataModel"
 		err = common.PostProcessServiceError(err, "DataSafe", "UploadSensitiveDataModel", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UploadSubsettingPolicy Uploads a subsetting policy file (also called template) to update the specified subsetting policy.
+// To create a new subsetting policy using a file, first use the CreateSubsettingPolicy operation
+// to create an empty subsetting policy and then use this operation to upload the subsetting policy file.
+// Note that the upload operation replaces the content of the specified subsetting policy,
+// including all the subsetting rules, with the content of the file.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/datasafe/UploadSubsettingPolicy.go.html to see an example of how to use UploadSubsettingPolicy API.
+// A default retry strategy applies to this operation UploadSubsettingPolicy()
+func (client DataSafeClient) UploadSubsettingPolicy(ctx context.Context, request UploadSubsettingPolicyRequest) (response UploadSubsettingPolicyResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.uploadSubsettingPolicy, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UploadSubsettingPolicyResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UploadSubsettingPolicyResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UploadSubsettingPolicyResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UploadSubsettingPolicyResponse")
+	}
+	return
+}
+
+// uploadSubsettingPolicy implements the OCIOperation interface (enables retrying operations)
+func (client DataSafeClient) uploadSubsettingPolicy(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/subsettingPolicies/{subsettingPolicyId}/actions/upload", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UploadSubsettingPolicyResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "dataSafe", "UploadSubsettingPolicy")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/data-safe/20181201/SubsettingPolicy/UploadSubsettingPolicy"
+		err = common.PostProcessServiceError(err, "DataSafe", "UploadSubsettingPolicy", apiReferenceLink)
 		return response, err
 	}
 

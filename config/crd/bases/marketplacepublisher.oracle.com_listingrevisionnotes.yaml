@@ -83,6 +83,10 @@ spec:
           status:
             description: ListingRevisionNoteStatus defines the observed state of ListingRevisionNote.
             properties:
+              adminEmail:
+                description: Email address of the administrator who created the note,
+                  if available.
+                type: string
               compartmentId:
                 description: The unique identifier for the compartment.
                 type: string

@@ -32,8 +32,8 @@ type DeploymentSummary struct {
 	// The Oracle license model that applies to a Deployment.
 	LicenseModel LicenseModelEnum `mandatory:"true" json:"licenseModel"`
 
-	// The deployment category defines the broad separation of the deployment type into three categories.
-	// Currently the separation is 'DATA_REPLICATION', 'STREAM_ANALYTICS' and 'DATA_TRANSFORMS'.
+	// The deployment category defines the broad separation of the deployment type into four categories.
+	// Currently the separation is 'DATA_REPLICATION', 'STREAM_ANALYTICS', 'DATA_TRANSFORMS' and 'DATA_VERIFICATION'.
 	Category DeploymentCategoryEnum `mandatory:"true" json:"category"`
 
 	// The type of deployment, which can be any one of the Allowed values.
@@ -55,8 +55,8 @@ type DeploymentSummary struct {
 	// RFC3339 (https://tools.ietf.org/html/rfc3339), such as `2016-08-25T21:10:29.600Z`.
 	TimeUpdated *common.SDKTime `mandatory:"false" json:"timeUpdated"`
 
-	// Possible lifecycle states.
-	LifecycleState LifecycleStateEnum `mandatory:"false" json:"lifecycleState,omitempty"`
+	// Possible lifecycle states for a Deployment.
+	LifecycleState DeploymentLifecycleStateEnum `mandatory:"false" json:"lifecycleState,omitempty"`
 
 	// Possible GGS lifecycle sub-states.
 	LifecycleSubState LifecycleSubStateEnum `mandatory:"false" json:"lifecycleSubState,omitempty"`
@@ -74,9 +74,16 @@ type DeploymentSummary struct {
 	// Example: `{"foo-namespace": {"bar-key": "value"}}`
 	DefinedTags map[string]map[string]interface{} `mandatory:"false" json:"definedTags"`
 
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy.
-	// Can be provided only for public deployments. If provided, the loadbalancer will be created in this subnet instead of the service tenancy.
-	// For backward compatibility, this is an optional property. It will become mandatory for public deployments after October 1, 2024.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy used to host the public load balancer of the deployment.
+	// Rules:
+	// - Create: Mandatory when isPublic is true. Must be a public, regional subnet in the same VCN as subnetId.
+	// - Update:
+	//   - For public deployments, this property must be present and is immutable once set (cannot be changed to a different subnet).
+	//   - Legacy exception: a public deployment created without this property may continue to be updated without providing it; once set, it becomes immutable.
+	// Validation:
+	// - Must reference a public subnet.
+	// - Must be a regional subnet.
+	// - Must be in the same VCN as subnetId.
 	LoadBalancerSubnetId *string `mandatory:"false" json:"loadBalancerSubnetId"`
 
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the loadbalancer in the customer's subnet.
@@ -125,15 +132,6 @@ type DeploymentSummary struct {
 	// Indicates if the resource is the the latest available version.
 	IsLatestVersion *bool `mandatory:"false" json:"isLatestVersion"`
 
-	// Note: Deprecated: Use timeOfNextMaintenance instead, or related upgrade records
-	// to check, when deployment will be forced to upgrade to a newer version.
-	// Old description:
-	// The date the existing version in use will no longer be considered as usable
-	// and an upgrade will be required.  This date is typically 6 months after the
-	// version was released for use by GGS.  The format is defined by
-	// RFC3339 (https://tools.ietf.org/html/rfc3339), such as `2016-08-25T21:10:29.600Z`.
-	TimeUpgradeRequired *common.SDKTime `mandatory:"false" json:"timeUpgradeRequired"`
-
 	// The amount of storage being utilized (in bytes)
 	StorageUtilizationInBytes *int64 `mandatory:"false" json:"storageUtilizationInBytes"`
 
@@ -153,6 +151,13 @@ type DeploymentSummary struct {
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
 	SecurityAttributes map[string]map[string]interface{} `mandatory:"false" json:"securityAttributes"`
+
+	// Indicates if disaster recovery is enabled for a deployment.
+	// If not specified, disaster recovery is ENABLED when no clusterPlacementGroupId is provided, and DISABLED when a clusterPlacementGroupId is provided.
+	DisasterRecoveryStatus DisasterRecoveryStatusEnum `mandatory:"false" json:"disasterRecoveryStatus,omitempty"`
+
+	// The type of the deployment role.
+	DeploymentRole DeploymentRoleEnum `mandatory:"false" json:"deploymentRole,omitempty"`
 
 	// Locks associated with this resource.
 	Locks []ResourceLock `mandatory:"false" json:"locks"`
@@ -177,14 +182,20 @@ func (m DeploymentSummary) ValidateEnumValue() (bool, error) {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for DeploymentType: %s. Supported values are: %s.", m.DeploymentType, strings.Join(GetDeploymentTypeEnumStringValues(), ",")))
 	}
 
-	if _, ok := GetMappingLifecycleStateEnum(string(m.LifecycleState)); !ok && m.LifecycleState != "" {
-		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for LifecycleState: %s. Supported values are: %s.", m.LifecycleState, strings.Join(GetLifecycleStateEnumStringValues(), ",")))
+	if _, ok := GetMappingDeploymentLifecycleStateEnum(string(m.LifecycleState)); !ok && m.LifecycleState != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for LifecycleState: %s. Supported values are: %s.", m.LifecycleState, strings.Join(GetDeploymentLifecycleStateEnumStringValues(), ",")))
 	}
 	if _, ok := GetMappingLifecycleSubStateEnum(string(m.LifecycleSubState)); !ok && m.LifecycleSubState != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for LifecycleSubState: %s. Supported values are: %s.", m.LifecycleSubState, strings.Join(GetLifecycleSubStateEnumStringValues(), ",")))
 	}
 	if _, ok := GetMappingEnvironmentTypeEnum(string(m.EnvironmentType)); !ok && m.EnvironmentType != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for EnvironmentType: %s. Supported values are: %s.", m.EnvironmentType, strings.Join(GetEnvironmentTypeEnumStringValues(), ",")))
+	}
+	if _, ok := GetMappingDisasterRecoveryStatusEnum(string(m.DisasterRecoveryStatus)); !ok && m.DisasterRecoveryStatus != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for DisasterRecoveryStatus: %s. Supported values are: %s.", m.DisasterRecoveryStatus, strings.Join(GetDisasterRecoveryStatusEnumStringValues(), ",")))
+	}
+	if _, ok := GetMappingDeploymentRoleEnum(string(m.DeploymentRole)); !ok && m.DeploymentRole != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for DeploymentRole: %s. Supported values are: %s.", m.DeploymentRole, strings.Join(GetDeploymentRoleEnumStringValues(), ",")))
 	}
 	if len(errMessage) > 0 {
 		return true, fmt.Errorf("%s", strings.Join(errMessage, "\n"))

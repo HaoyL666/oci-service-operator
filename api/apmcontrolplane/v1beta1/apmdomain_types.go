@@ -23,6 +23,9 @@ type ApmDomainSpec struct {
 	// Description of the APM domain.
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
+	// The OCID of the Log Analytics log group to which the data uploaded to this APM domain will be mapped to.
+	// +kubebuilder:validation:Optional
+	LogGroupId string `json:"logGroupId,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -51,6 +54,8 @@ type ApmDomainStatus struct {
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Indicates if this is an Always Free resource.
 	IsFreeTier bool `json:"isFreeTier,omitempty"`
+	// The OCID of the Log Analytics log group to which the data uploaded to this APM domain will be mapped to.
+	LogGroupId string `json:"logGroupId,omitempty"`
 	// The time the APM domain was created, expressed in RFC 3339 timestamp format.
 	TimeCreated string `json:"timeCreated,omitempty"`
 	// The time the APM domain was updated, expressed in RFC 3339 timestamp format.

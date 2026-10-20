@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "fusionapps",
+    "apiVersion": "fusionapps.oracle.com/v1beta1",
+    "kind": "FusionEnvironmentFamily",
+    "formalSlug": "fusionenvironmentfamily",
+    "providerResource": "oci_fusion_apps_fusion_environment_family",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "compartmentId",
+      "definedTags",
+      "displayName",
+      "familyMaintenancePolicy.concurrentMaintenance",
+      "familyMaintenancePolicy.isMonthlyPatchingEnabled",
+      "freeformTags"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "familyMaintenancePolicy.quarterlyUpgradeBeginTimes",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "subscriptionIds",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
+      },
+      {
+        "fieldPath": "timeUpdated",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      }
+    ]
+  }
+}

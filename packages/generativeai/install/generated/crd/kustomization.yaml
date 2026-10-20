@@ -1,0 +1,6 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- bases/generativeai.oracle.com_dedicatedaiclusters.yaml
+- bases/generativeai.oracle.com_endpoints.yaml
+- bases/generativeai.oracle.com_models.yaml

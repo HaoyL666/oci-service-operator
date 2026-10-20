@@ -190,7 +190,7 @@ spec:
                   actionable information for a resource in a Failed state.
                 type: string
               lifecycleState:
-                description: Possible lifecycle states.
+                description: Possible lifecycle states for a Deployment Backup.
                 type: string
               locks:
                 description: Locks associated with this resource.

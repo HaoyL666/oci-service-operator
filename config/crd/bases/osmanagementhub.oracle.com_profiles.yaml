@@ -78,7 +78,7 @@ spec:
                 type: string
               displayName:
                 description: |-
-                  A user-friendly name. Does not have to be unique and you can change the name later. Avoid entering
+                  A user-friendly name. Must be unique and you can change the name later. Avoid entering
                   confidential information.
                 type: string
               freeformTags:
@@ -110,7 +110,7 @@ spec:
               managementStationId:
                 description: |-
                   description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the management station to associate
-                  with an instance once registered. This is required when creating a profile for non-OCI instances.
+                  with an instance once registered. This is used when creating a profile for non-OCI instances.
                 type: string
               osFamily:
                 description: The operating system family.

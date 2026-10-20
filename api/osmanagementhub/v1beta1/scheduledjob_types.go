@@ -44,30 +44,37 @@ type ScheduledJobSpec struct {
 	// The list of locations this scheduled job should operate on for a job targeting on compartments. (Empty list means apply to all locations). This can only be set when managedCompartmentIds is not empty.
 	// +kubebuilder:validation:Optional
 	Locations []string `json:"locations,omitempty"`
-	// The frequency schedule for a recurring scheduled job.
+	// The frequency schedule for a recurring scheduled job in the RFC5535 (https://www.rfc-editor.org/rfc/rfc5535) format.
+	// Note: Currently, only FREQ/INTERVAL/BYMONTHDAY/BYDAY/BYSETPOS/BYMONTH/BYHOUR/BYMINUTE/BYSECOND rules are supported.
+	// In FREQ, only YEARLY, MONTHLY, WEEKLY, DAILY", HOURLY are supported.
 	// +kubebuilder:validation:Optional
 	RecurringRule string `json:"recurringRule,omitempty"`
 	// The managed instance OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on.
 	// A scheduled job can only operate on one type of target, therefore you must supply either this or
-	// managedInstanceGroupIds, or managedCompartmentIds, or lifecycleStageIds.
+	// managedInstanceGroupIds, or managedCompartmentIds, or lifecycleStageIds, or dynamicSetIds.
 	// +kubebuilder:validation:Optional
 	ManagedInstanceIds []string `json:"managedInstanceIds,omitempty"`
 	// The managed instance group OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on.
 	// A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceIds,
-	// or managedCompartmentIds, or lifecycleStageIds.
+	// or managedCompartmentIds, or lifecycleStageIds, or dynamicSetIds.
 	// +kubebuilder:validation:Optional
 	ManagedInstanceGroupIds []string `json:"managedInstanceGroupIds,omitempty"`
 	// The compartment OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on.
 	// To apply the job to all compartments in the tenancy, set this to the tenancy OCID (root compartment) and set
 	// isSubcompartmentIncluded to true. A scheduled job can only operate on one type of target, therefore you must
-	// supply either this or managedInstanceIds, or managedInstanceGroupIds, or lifecycleStageIds.
+	// supply either this or managedInstanceIds, or managedInstanceGroupIds, or lifecycleStageIds, or dynamicSetIds.
 	// +kubebuilder:validation:Optional
 	ManagedCompartmentIds []string `json:"managedCompartmentIds,omitempty"`
 	// The lifecycle stage OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on.
 	// A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceIds,
-	// or managedInstanceGroupIds, or managedCompartmentIds.
+	// or managedInstanceGroupIds, or managedCompartmentIds, or dynamicSetIds.
 	// +kubebuilder:validation:Optional
 	LifecycleStageIds []string `json:"lifecycleStageIds,omitempty"`
+	// The dynamic set OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on.
+	// A scheduled job can only operate on one type of target. therefore this parameter is mutually exclusive with
+	// managedInstanceIds, managedInstanceGroupIds, lifecycleStageIds, managedCompartmentIds.
+	// +kubebuilder:validation:Optional
+	DynamicSetIds []string `json:"dynamicSetIds,omitempty"`
 	// Indicates whether to apply the scheduled job to all compartments in the tenancy when managedCompartmentIds specifies
 	// the tenancy OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) (root compartment).
 	// +kubebuilder:validation:Optional
@@ -183,6 +190,45 @@ type ScheduledJobOperationSwitchModuleStreamsDetails struct {
 	SoftwareSourceId string `json:"softwareSourceId,omitempty"`
 }
 
+// ScheduledJobOperationInstallSnapDetails defines nested fields for ScheduledJob.Operation.InstallSnapDetails.
+type ScheduledJobOperationInstallSnapDetails struct {
+	// The name of the snap to install.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// The snap channel to install from (e.g. stable, 1.2/edge, beta, candidate, or a custom channel).
+	// +kubebuilder:validation:Optional
+	Channel string `json:"channel,omitempty"`
+	// If false, allows installing snaps not signed by the Snap Store. E.g., snaps from local file. Use with caution.
+	// +kubebuilder:validation:Optional
+	IsSigned bool `json:"isSigned,omitempty"`
+	// The confinement mode for the snap.
+	// +kubebuilder:validation:Optional
+	Mode string `json:"mode,omitempty"`
+	// The snap revision to install.
+	// +kubebuilder:validation:Optional
+	Revision string `json:"revision,omitempty"`
+}
+
+// ScheduledJobOperationRemoveSnapDetails defines nested fields for ScheduledJob.Operation.RemoveSnapDetails.
+type ScheduledJobOperationRemoveSnapDetails struct {
+	// The name of the snap to remove.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// The revision to remove. Note: This option cannot be used when removing multiple snaps.
+	// +kubebuilder:validation:Optional
+	Revision string `json:"revision,omitempty"`
+}
+
+// ScheduledJobOperationSwitchSnapChannelDetails defines nested fields for ScheduledJob.Operation.SwitchSnapChannelDetails.
+type ScheduledJobOperationSwitchSnapChannelDetails struct {
+	// The name of the snap.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// The channel to switch to (e.g. stable, edge, beta, candidate, or a custom channel).
+	// +kubebuilder:validation:Optional
+	Channel string `json:"channel,omitempty"`
+}
+
 // ScheduledJobOperation defines nested fields for ScheduledJob.Operation.
 type ScheduledJobOperation struct {
 	// The type of operation this scheduled job performs.
@@ -208,6 +254,12 @@ type ScheduledJobOperation struct {
 	// timeout, the service marks the reboot job as failed.
 	// +kubebuilder:validation:Optional
 	RebootTimeoutInMins int `json:"rebootTimeoutInMins,omitempty"`
+	// +kubebuilder:validation:Optional
+	InstallSnapDetails ScheduledJobOperationInstallSnapDetails `json:"installSnapDetails,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	RemoveSnapDetails ScheduledJobOperationRemoveSnapDetails `json:"removeSnapDetails,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	SwitchSnapChannelDetails ScheduledJobOperationSwitchSnapChannelDetails `json:"switchSnapChannelDetails,omitempty,omitzero"`
 }
 
 // ScheduledJobStatus defines the observed state of ScheduledJob.
@@ -254,7 +306,9 @@ type ScheduledJobStatus struct {
 	Locations []string `json:"locations,omitempty"`
 	// The time of the last execution of this scheduled job (in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) format).
 	TimeLastExecution string `json:"timeLastExecution,omitempty"`
-	// The frequency schedule for a recurring scheduled job.
+	// The frequency schedule for a recurring scheduled job in the RFC5535 (https://www.rfc-editor.org/rfc/rfc5535) format.
+	// Currently, only FREQ/INTERVAL/BYMONTHDAY/BYDAY/BYSETPOS/BYMONTH/BYHOUR/BYMINUTE/BYSECOND rules are supported.
+	// In FREQ, only YEARLY, MONTHLY, WEEKLY, DAILY", HOURLY are supported.
 	RecurringRule string `json:"recurringRule,omitempty"`
 	// The managed instance OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on.
 	// A scheduled job can only operate on one type of target, therefore this parameter is mutually exclusive with
@@ -266,8 +320,12 @@ type ScheduledJobStatus struct {
 	ManagedCompartmentIds []string `json:"managedCompartmentIds,omitempty"`
 	// The lifecycle stage OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on.
 	// A scheduled job can only operate on one type of target, therefore this parameter is mutually exclusive with
-	// managedInstanceIds, managedInstanceGroupIds, and managedCompartmentIds.
+	// managedInstanceIds, managedInstanceGroupIds, managedCompartmentIds, and dynamicSetIds.
 	LifecycleStageIds []string `json:"lifecycleStageIds,omitempty"`
+	// The dynamic set OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on.
+	// A scheduled job can only operate on one type of target. therefore this parameter is mutually exclusive with
+	// managedInstanceIds, managedInstanceGroupIds, and managedCompartmentIds.
+	DynamicSetIds []string `json:"dynamicSetIds,omitempty"`
 	// Indicates whether to apply the scheduled job to all compartments in the tenancy when managedCompartmentIds specifies the tenancy OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) (root compartment).
 	IsSubcompartmentIncluded bool `json:"isSubcompartmentIncluded,omitempty"`
 	// The list of work request OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) associated with this scheduled job.

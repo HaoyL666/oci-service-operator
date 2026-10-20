@@ -53,6 +53,7 @@ ClusterSpec defines the desired state of Cluster.
 | `esxiSoftwareVersion` | The ESXi software bundle to install on the ESXi hosts in the Cluster. Only versions under the same vmwareSoftwareVersion and have been validate by Oracle Cloud VMware Solution will be accepted. To get a list of the available versions, use ListSupportedVmwareSoftwareVersions. | `string` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `initialCommitment` | The billing option selected during Cluster creation. ListSupportedCommitments. | `string` | No | - | - |
+| `initialFaultDomainHostDistribution` | The initial fault domain host distribution mode for the Cluster. | `string` | No | - | - |
 | `initialHostOcpuCount` | The initial OCPU count of the Cluster's ESXi hosts. | `number` | No | - | - |
 | `initialHostShapeName` | The initial compute shape of the Cluster's ESXi hosts. ListSupportedHostShapes. | `string` | No | - | - |
 | `initialVcfByolAllocationId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation. | `string` | No | - | - |
@@ -128,6 +129,7 @@ ClusterStatus defines the observed state of Cluster.
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Cluster. | `string` | No | - | - |
 | `initialCommitment` | The billing option selected during Cluster creation. ListSupportedCommitments. | `string` | No | - | - |
+| `initialFaultDomainHostDistribution` | The initial fault domain host distribution mode for the Cluster. | `string` | No | - | - |
 | `initialHostOcpuCount` | The initial OCPU count of the Cluster's ESXi hosts. | `number` | No | - | - |
 | `initialHostShapeName` | The initial compute shape of the Cluster's ESXi hosts. ListSupportedHostShapes. | `string` | No | - | - |
 | `initialVcfByolAllocationId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation. | `string` | No | - | - |
@@ -303,6 +305,7 @@ EsxiHostSpec defines the desired state of EsxiHost.
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `hostOcpuCount` | The OCPU count of the ESXi host. | `number` | No | - | - |
 | `hostShapeName` | The compute shape name of the ESXi host. ListSupportedHostShapes. | `string` | No | - | - |
+| `initialFaultDomainHostDistribution` | The initial fault domain host distribution mode for the ESXi host. | `string` | No | - | - |
 | `isVsanByolEnabled` | Indicates whether this host embedded VMware vSAN with BYOL Allocation. | `boolean` | No | - | - |
 | `nextCommitment` | The billing option to switch to after the existing billing cycle ends. If `nextCommitment` is null or empty, `currentCommitment` continues to the next billing cycle. ListSupportedCommitments. | `string` | No | - | - |
 | `vcfByolAllocationId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Byol Allocation for VCF (VMware Cloud Foundation) deployment. | `string` | No | - | - |
@@ -320,6 +323,7 @@ EsxiHostStatus defines the observed state of EsxiHost.
 | `clusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Cluster that the ESXi host belongs to. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the Cluster. | `string` | No | - | - |
 | `computeAvailabilityDomain` | The availability domain of the ESXi host. | `string` | No | - | - |
+| `computeFaultDomain` | The fault domain of the ESXi host. | `string` | No | - | - |
 | `computeInstanceId` | In terms of implementation, an ESXi host is a Compute instance that is configured with the chosen bundle of VMware software. The `computeInstanceId` is the OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of that Compute instance. | `string` | No | - | - |
 | `currentCommitment` | The billing option currently used by the ESXi host. ListSupportedCommitments. | `string` | No | - | - |
 | [`datastoreAttachments`](#kind-esxihost-status-datastoreattachments) | List of DatastoreAttachment objects containing information about attachment details | `list[object]` | No | - | - |
@@ -333,6 +337,7 @@ EsxiHostStatus defines the observed state of EsxiHost.
 | `hostOcpuCount` | The OCPU count of the ESXi host. | `number` | No | - | - |
 | `hostShapeName` | The compute shape name of the ESXi host. ListSupportedHostShapes. | `string` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the ESXi host. | `string` | No | - | - |
+| `initialFaultDomainHostDistribution` | The initial fault domain host distribution mode for the ESXi host. | `string` | No | - | - |
 | `isBillingContinuationInProgress` | Indicates whether this host is in the progress of billing continuation. | `boolean` | No | - | - |
 | `isBillingSwappingInProgress` | Indicates whether this host is in the progress of swapping billing. | `boolean` | No | - | - |
 | `isVsanByolEnabled` | Indicates whether this host embedded VMware vSAN with BYOL Allocation. | `boolean` | No | - | - |
@@ -483,6 +488,7 @@ SddcInitialConfigurationInitialClusterConfiguration defines nested fields for Sd
 | `displayName` | A descriptive name for the Cluster. Cluster name requirements are 1-22 character length limit, Must start with a letter, Must be English letters, numbers, - only, No repeating hyphens, Must be unique within the region. Avoid entering confidential information. | `string` | No | - | - |
 | `esxiHostsCount` | The number of ESXi hosts to create in the Cluster. You can add more hosts later (see CreateEsxiHost). Creating a Cluster with a ESXi host count of 1 will be considered a single ESXi host Cluster. **Note:** If you later delete EXSi hosts from a production Cluster to total less than 3, you are still billed for the 3 minimum recommended ESXi hosts. Also, you cannot add more VMware workloads to the Cluster until it again has at least 3 ESXi hosts. | `integer` | Yes | - | - |
 | `initialCommitment` | The billing option selected during Cluster creation. ListSupportedCommitments. | `string` | No | - | - |
+| `initialFaultDomainHostDistribution` | Initial Fault Domain Host distribution mode for the Cluster. | `string` | No | - | - |
 | `initialHostOcpuCount` | The initial OCPU count of the Cluster's ESXi hosts. | `number` | No | - | - |
 | `initialHostShapeName` | The initial compute shape of the Cluster's ESXi hosts. ListSupportedHostShapes. | `string` | No | - | - |
 | `initialVcfByolAllocationId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation. | `string` | No | - | - |
@@ -629,6 +635,7 @@ SddcInitialConfigurationInitialClusterConfiguration defines nested fields for Sd
 | `displayName` | A descriptive name for the Cluster. Cluster name requirements are 1-22 character length limit, Must start with a letter, Must be English letters, numbers, - only, No repeating hyphens, Must be unique within the region. Avoid entering confidential information. | `string` | No | - | - |
 | `esxiHostsCount` | The number of ESXi hosts to create in the Cluster. You can add more hosts later (see CreateEsxiHost). Creating a Cluster with a ESXi host count of 1 will be considered a single ESXi host Cluster. **Note:** If you later delete EXSi hosts from a production Cluster to total less than 3, you are still billed for the 3 minimum recommended ESXi hosts. Also, you cannot add more VMware workloads to the Cluster until it again has at least 3 ESXi hosts. | `integer` | Yes | - | - |
 | `initialCommitment` | The billing option selected during Cluster creation. ListSupportedCommitments. | `string` | No | - | - |
+| `initialFaultDomainHostDistribution` | Initial Fault Domain Host distribution mode for the Cluster. | `string` | No | - | - |
 | `initialHostOcpuCount` | The initial OCPU count of the Cluster's ESXi hosts. | `number` | No | - | - |
 | `initialHostShapeName` | The initial compute shape of the Cluster's ESXi hosts. ListSupportedHostShapes. | `string` | No | - | - |
 | `initialVcfByolAllocationId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation. | `string` | No | - | - |

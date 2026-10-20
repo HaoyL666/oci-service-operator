@@ -64,10 +64,15 @@ const (
 	WorkRequestOperationTypeScheduleDeactivate                WorkRequestOperationTypeEnum = "SCHEDULE_DEACTIVATE"
 	WorkRequestOperationTypeRegisterModelArtifact             WorkRequestOperationTypeEnum = "REGISTER_MODEL_ARTIFACT"
 	WorkRequestOperationTypeRestoreArchivedModel              WorkRequestOperationTypeEnum = "RESTORE_ARCHIVED_MODEL"
+	WorkRequestOperationTypeComputeTargetCreate               WorkRequestOperationTypeEnum = "COMPUTE_TARGET_CREATE"
+	WorkRequestOperationTypeComputeTargetUpdate               WorkRequestOperationTypeEnum = "COMPUTE_TARGET_UPDATE"
+	WorkRequestOperationTypeComputeTargetDelete               WorkRequestOperationTypeEnum = "COMPUTE_TARGET_DELETE"
 	WorkRequestOperationTypeModelGroupCreate                  WorkRequestOperationTypeEnum = "MODEL_GROUP_CREATE"
 	WorkRequestOperationTypeModelGroupUpdate                  WorkRequestOperationTypeEnum = "MODEL_GROUP_UPDATE"
 	WorkRequestOperationTypeModelGroupDelete                  WorkRequestOperationTypeEnum = "MODEL_GROUP_DELETE"
 	WorkRequestOperationTypeModelGroupVersionHistoryDelete    WorkRequestOperationTypeEnum = "MODEL_GROUP_VERSION_HISTORY_DELETE"
+	WorkRequestOperationTypeCreateModelArtifactSignature      WorkRequestOperationTypeEnum = "CREATE_MODEL_ARTIFACT_SIGNATURE"
+	WorkRequestOperationTypeVerifyModelArtifactSignature      WorkRequestOperationTypeEnum = "VERIFY_MODEL_ARTIFACT_SIGNATURE"
 )
 
 var mappingWorkRequestOperationTypeEnum = map[string]WorkRequestOperationTypeEnum{
@@ -117,10 +122,15 @@ var mappingWorkRequestOperationTypeEnum = map[string]WorkRequestOperationTypeEnu
 	"SCHEDULE_DEACTIVATE":                  WorkRequestOperationTypeScheduleDeactivate,
 	"REGISTER_MODEL_ARTIFACT":              WorkRequestOperationTypeRegisterModelArtifact,
 	"RESTORE_ARCHIVED_MODEL":               WorkRequestOperationTypeRestoreArchivedModel,
+	"COMPUTE_TARGET_CREATE":                WorkRequestOperationTypeComputeTargetCreate,
+	"COMPUTE_TARGET_UPDATE":                WorkRequestOperationTypeComputeTargetUpdate,
+	"COMPUTE_TARGET_DELETE":                WorkRequestOperationTypeComputeTargetDelete,
 	"MODEL_GROUP_CREATE":                   WorkRequestOperationTypeModelGroupCreate,
 	"MODEL_GROUP_UPDATE":                   WorkRequestOperationTypeModelGroupUpdate,
 	"MODEL_GROUP_DELETE":                   WorkRequestOperationTypeModelGroupDelete,
 	"MODEL_GROUP_VERSION_HISTORY_DELETE":   WorkRequestOperationTypeModelGroupVersionHistoryDelete,
+	"CREATE_MODEL_ARTIFACT_SIGNATURE":      WorkRequestOperationTypeCreateModelArtifactSignature,
+	"VERIFY_MODEL_ARTIFACT_SIGNATURE":      WorkRequestOperationTypeVerifyModelArtifactSignature,
 }
 
 var mappingWorkRequestOperationTypeEnumLowerCase = map[string]WorkRequestOperationTypeEnum{
@@ -170,10 +180,15 @@ var mappingWorkRequestOperationTypeEnumLowerCase = map[string]WorkRequestOperati
 	"schedule_deactivate":                  WorkRequestOperationTypeScheduleDeactivate,
 	"register_model_artifact":              WorkRequestOperationTypeRegisterModelArtifact,
 	"restore_archived_model":               WorkRequestOperationTypeRestoreArchivedModel,
+	"compute_target_create":                WorkRequestOperationTypeComputeTargetCreate,
+	"compute_target_update":                WorkRequestOperationTypeComputeTargetUpdate,
+	"compute_target_delete":                WorkRequestOperationTypeComputeTargetDelete,
 	"model_group_create":                   WorkRequestOperationTypeModelGroupCreate,
 	"model_group_update":                   WorkRequestOperationTypeModelGroupUpdate,
 	"model_group_delete":                   WorkRequestOperationTypeModelGroupDelete,
 	"model_group_version_history_delete":   WorkRequestOperationTypeModelGroupVersionHistoryDelete,
+	"create_model_artifact_signature":      WorkRequestOperationTypeCreateModelArtifactSignature,
+	"verify_model_artifact_signature":      WorkRequestOperationTypeVerifyModelArtifactSignature,
 }
 
 // GetWorkRequestOperationTypeEnumValues Enumerates the set of values for WorkRequestOperationTypeEnum
@@ -234,10 +249,15 @@ func GetWorkRequestOperationTypeEnumStringValues() []string {
 		"SCHEDULE_DEACTIVATE",
 		"REGISTER_MODEL_ARTIFACT",
 		"RESTORE_ARCHIVED_MODEL",
+		"COMPUTE_TARGET_CREATE",
+		"COMPUTE_TARGET_UPDATE",
+		"COMPUTE_TARGET_DELETE",
 		"MODEL_GROUP_CREATE",
 		"MODEL_GROUP_UPDATE",
 		"MODEL_GROUP_DELETE",
 		"MODEL_GROUP_VERSION_HISTORY_DELETE",
+		"CREATE_MODEL_ARTIFACT_SIGNATURE",
+		"VERIFY_MODEL_ARTIFACT_SIGNATURE",
 	}
 }
 

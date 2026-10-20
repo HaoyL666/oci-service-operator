@@ -44,6 +44,9 @@ type ListingRevisionAttachmentSpec struct {
 	// Type of the service
 	// +kubebuilder:validation:Optional
 	Type string `json:"type,omitempty"`
+	// The specified attachment type is Internal or External.
+	// +kubebuilder:validation:Optional
+	SourceType string `json:"sourceType,omitempty"`
 	// Name of the customer
 	// +kubebuilder:validation:Optional
 	CustomerName string `json:"customerName,omitempty"`
@@ -58,6 +61,12 @@ type ListingRevisionAttachmentSpec struct {
 	TemplateCode string `json:"templateCode,omitempty"`
 	// +kubebuilder:validation:Optional
 	VideoAttachmentDetails ListingRevisionAttachmentVideoAttachmentDetails `json:"videoAttachmentDetails,omitempty,omitzero"`
+	// The document URL of the listing revision attachment.
+	// +kubebuilder:validation:Optional
+	SourceUrl string `json:"sourceUrl,omitempty"`
+	// Identifies whether the attachment is for Internal Oracle Users or external users as well.
+	// +kubebuilder:validation:Optional
+	IsOracleUsersOnly bool `json:"isOracleUsersOnly,omitempty"`
 	// The document category of the listing revision attachment.
 	// +kubebuilder:validation:Optional
 	DocumentCategory string `json:"documentCategory,omitempty"`
@@ -68,6 +77,9 @@ type ListingRevisionAttachmentVideoAttachmentDetails struct {
 	// The URL of the video.
 	// +kubebuilder:validation:Required
 	ContentUrl string `json:"contentUrl"`
+	// The specified attachment type is Internal or External.
+	// +kubebuilder:validation:Optional
+	SourceType string `json:"sourceType,omitempty"`
 }
 
 // ListingRevisionAttachmentStatus defines the observed state of ListingRevisionAttachment.
@@ -76,6 +88,8 @@ type ListingRevisionAttachmentStatus struct {
 	JsonData   string            `json:"jsonData,omitempty"`
 	// Description of the listing revision attachment.
 	Description string `json:"description,omitempty"`
+	// Possible values for the publisher listing revision attachments. The source type informs whether the type of attachment for the listing revision is external or internal.
+	SourceType string `json:"sourceType,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`

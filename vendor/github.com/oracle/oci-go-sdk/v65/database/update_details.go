@@ -21,11 +21,22 @@ type UpdateDetails struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the maintenance update.
 	UpdateId *string `mandatory:"false" json:"updateId"`
 
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Grid Infrastructure Home.
+	// Specify this field for out of place Grid Infrastructure Home patching and upgrade of the Cloud VM Cluster.
+	// This is mutually exclusive option to `updateId` and `giSoftwareImageId` which are used for in place patching and upgrade using Oracle supplied and custom images respectively.
+	GiHomeId *string `mandatory:"false" json:"giHomeId"`
+
 	// The update action.
 	UpdateAction UpdateDetailsUpdateActionEnum `mandatory:"false" json:"updateAction,omitempty"`
 
+	// The update mode to perform for OS Update.
+	UpdateMode UpdateDetailsUpdateModeEnum `mandatory:"false" json:"updateMode,omitempty"`
+
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a grid infrastructure software image. This is a database software image of the type `GRID_IMAGE`.
 	GiSoftwareImageId *string `mandatory:"false" json:"giSoftwareImageId"`
+
+	// If true, the caller acknowledges selecting or applying an older DB, Grid Infrastructure, or operating system software version that is outside the latest default version window.
+	IsOlderVersionAcknowledged *bool `mandatory:"false" json:"isOlderVersionAcknowledged"`
 }
 
 func (m UpdateDetails) String() string {
@@ -40,6 +51,9 @@ func (m UpdateDetails) ValidateEnumValue() (bool, error) {
 
 	if _, ok := GetMappingUpdateDetailsUpdateActionEnum(string(m.UpdateAction)); !ok && m.UpdateAction != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for UpdateAction: %s. Supported values are: %s.", m.UpdateAction, strings.Join(GetUpdateDetailsUpdateActionEnumStringValues(), ",")))
+	}
+	if _, ok := GetMappingUpdateDetailsUpdateModeEnum(string(m.UpdateMode)); !ok && m.UpdateMode != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for UpdateMode: %s. Supported values are: %s.", m.UpdateMode, strings.Join(GetUpdateDetailsUpdateModeEnumStringValues(), ",")))
 	}
 	if len(errMessage) > 0 {
 		return true, fmt.Errorf("%s", strings.Join(errMessage, "\n"))
@@ -94,5 +108,59 @@ func GetUpdateDetailsUpdateActionEnumStringValues() []string {
 // GetMappingUpdateDetailsUpdateActionEnum performs case Insensitive comparison on enum value and return the desired enum
 func GetMappingUpdateDetailsUpdateActionEnum(val string) (UpdateDetailsUpdateActionEnum, bool) {
 	enum, ok := mappingUpdateDetailsUpdateActionEnumLowerCase[strings.ToLower(val)]
+	return enum, ok
+}
+
+// UpdateDetailsUpdateModeEnum Enum with underlying type: string
+type UpdateDetailsUpdateModeEnum string
+
+// Set of constants representing the allowable values for UpdateDetailsUpdateModeEnum
+const (
+	UpdateDetailsUpdateModeOnlineHighcvss   UpdateDetailsUpdateModeEnum = "ONLINE_HIGHCVSS"
+	UpdateDetailsUpdateModeOnlineAllcvss    UpdateDetailsUpdateModeEnum = "ONLINE_ALLCVSS"
+	UpdateDetailsUpdateModeOnlineAllUpdates UpdateDetailsUpdateModeEnum = "ONLINE_ALL_UPDATES"
+	UpdateDetailsUpdateModePendingUpdates   UpdateDetailsUpdateModeEnum = "PENDING_UPDATES"
+	UpdateDetailsUpdateModeFullUpdate       UpdateDetailsUpdateModeEnum = "FULL_UPDATE"
+)
+
+var mappingUpdateDetailsUpdateModeEnum = map[string]UpdateDetailsUpdateModeEnum{
+	"ONLINE_HIGHCVSS":    UpdateDetailsUpdateModeOnlineHighcvss,
+	"ONLINE_ALLCVSS":     UpdateDetailsUpdateModeOnlineAllcvss,
+	"ONLINE_ALL_UPDATES": UpdateDetailsUpdateModeOnlineAllUpdates,
+	"PENDING_UPDATES":    UpdateDetailsUpdateModePendingUpdates,
+	"FULL_UPDATE":        UpdateDetailsUpdateModeFullUpdate,
+}
+
+var mappingUpdateDetailsUpdateModeEnumLowerCase = map[string]UpdateDetailsUpdateModeEnum{
+	"online_highcvss":    UpdateDetailsUpdateModeOnlineHighcvss,
+	"online_allcvss":     UpdateDetailsUpdateModeOnlineAllcvss,
+	"online_all_updates": UpdateDetailsUpdateModeOnlineAllUpdates,
+	"pending_updates":    UpdateDetailsUpdateModePendingUpdates,
+	"full_update":        UpdateDetailsUpdateModeFullUpdate,
+}
+
+// GetUpdateDetailsUpdateModeEnumValues Enumerates the set of values for UpdateDetailsUpdateModeEnum
+func GetUpdateDetailsUpdateModeEnumValues() []UpdateDetailsUpdateModeEnum {
+	values := make([]UpdateDetailsUpdateModeEnum, 0)
+	for _, v := range mappingUpdateDetailsUpdateModeEnum {
+		values = append(values, v)
+	}
+	return values
+}
+
+// GetUpdateDetailsUpdateModeEnumStringValues Enumerates the set of values in String for UpdateDetailsUpdateModeEnum
+func GetUpdateDetailsUpdateModeEnumStringValues() []string {
+	return []string{
+		"ONLINE_HIGHCVSS",
+		"ONLINE_ALLCVSS",
+		"ONLINE_ALL_UPDATES",
+		"PENDING_UPDATES",
+		"FULL_UPDATE",
+	}
+}
+
+// GetMappingUpdateDetailsUpdateModeEnum performs case Insensitive comparison on enum value and return the desired enum
+func GetMappingUpdateDetailsUpdateModeEnum(val string) (UpdateDetailsUpdateModeEnum, bool) {
+	enum, ok := mappingUpdateDetailsUpdateModeEnumLowerCase[strings.ToLower(val)]
 	return enum, ok
 }

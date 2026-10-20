@@ -26,7 +26,7 @@
 // <br>
 // <b>AWS</b>:<br>
 // <b>Oracle AWS Connector Resource:</b>&nbsp;&nbsp;The Oracle AWS Connector Resource is used to install the AWS Identity Connector on an Exadata VM cluster in Oracle Exadata Database Service on Dedicated Infrastructure (ExaDB-D).
-// <b>Google AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
+// <b>Oracle AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
 //
 
 package dbmulticloud
@@ -163,7 +163,7 @@ func (client OracleDbAzureVaultAssociationClient) cascadingDeleteOracleDbAzureVa
 
 	var response CascadingDeleteOracleDbAzureVaultAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVaultAssociation", "CascadingDeleteOracleDbAzureVaultAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -226,7 +226,7 @@ func (client OracleDbAzureVaultAssociationClient) changeOracleDbAzureVaultAssoci
 
 	var response ChangeOracleDbAzureVaultAssociationCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVaultAssociation", "ChangeOracleDbAzureVaultAssociationCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -289,7 +289,7 @@ func (client OracleDbAzureVaultAssociationClient) createOracleDbAzureVaultAssoci
 
 	var response CreateOracleDbAzureVaultAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVaultAssociation", "CreateOracleDbAzureVaultAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -347,7 +347,7 @@ func (client OracleDbAzureVaultAssociationClient) deleteOracleDbAzureVaultAssoci
 
 	var response DeleteOracleDbAzureVaultAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVaultAssociation", "DeleteOracleDbAzureVaultAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -405,7 +405,7 @@ func (client OracleDbAzureVaultAssociationClient) getOracleDbAzureVaultAssociati
 
 	var response GetOracleDbAzureVaultAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVaultAssociation", "GetOracleDbAzureVaultAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -463,7 +463,7 @@ func (client OracleDbAzureVaultAssociationClient) listOracleDbAzureVaultAssociat
 
 	var response ListOracleDbAzureVaultAssociationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVaultAssociation", "ListOracleDbAzureVaultAssociations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -521,7 +521,7 @@ func (client OracleDbAzureVaultAssociationClient) updateOracleDbAzureVaultAssoci
 
 	var response UpdateOracleDbAzureVaultAssociationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVaultAssociation", "UpdateOracleDbAzureVaultAssociation")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

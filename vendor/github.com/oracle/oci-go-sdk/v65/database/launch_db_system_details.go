@@ -40,9 +40,6 @@ type LaunchDbSystemDetails struct {
 	// To get a list of shapes, use the ListDbSystemShapes operation.
 	Shape *string `mandatory:"true" json:"shape"`
 
-	// The public key portion of the key pair to use for SSH access to the DB system. Multiple public keys can be provided. The length of the combined keys cannot exceed 40,000 characters.
-	SshPublicKeys []string `mandatory:"true" json:"sshPublicKeys"`
-
 	// The hostname for the DB system. The hostname must begin with an alphabetic character, and
 	// can contain alphanumeric characters and hyphens (-). The maximum length of the hostname is 16 characters for bare metal and virtual machine DB systems, and 12 characters for Exadata DB systems.
 	// The maximum length of the combined hostname and domain is 63 characters.
@@ -89,6 +86,9 @@ type LaunchDbSystemDetails struct {
 
 	// If true, Sparse Diskgroup is configured for Exadata dbsystem. If False, Sparse diskgroup is not configured.
 	SparseDiskgroup *bool `mandatory:"false" json:"sparseDiskgroup"`
+
+	// The public key portion of the key pair to use for SSH access to the DB system. Multiple public keys can be provided. The length of the combined keys cannot exceed 40,000 characters.
+	SshPublicKeys []string `mandatory:"false" json:"sshPublicKeys"`
 
 	// A domain name used for the DB system. If the Oracle-provided Internet and VCN
 	// Resolver is enabled for the specified subnet, the domain name for the subnet is used
@@ -162,6 +162,9 @@ type LaunchDbSystemDetails struct {
 
 	// The number of compute servers for the DB system.
 	ComputeCount *int `mandatory:"false" json:"computeCount"`
+
+	// If true, the caller acknowledges selecting or applying an older DB, Grid Infrastructure, or operating system software version that is outside the latest default version window.
+	IsOlderVersionAcknowledged *bool `mandatory:"false" json:"isOlderVersionAcknowledged"`
 
 	MaintenanceWindowDetails *MaintenanceWindow `mandatory:"false" json:"maintenanceWindowDetails"`
 
@@ -347,6 +350,11 @@ func (m LaunchDbSystemDetails) GetComputeModel() LaunchDbSystemBaseComputeModelE
 // GetComputeCount returns ComputeCount
 func (m LaunchDbSystemDetails) GetComputeCount() *int {
 	return m.ComputeCount
+}
+
+// GetIsOlderVersionAcknowledged returns IsOlderVersionAcknowledged
+func (m LaunchDbSystemDetails) GetIsOlderVersionAcknowledged() *bool {
+	return m.IsOlderVersionAcknowledged
 }
 
 func (m LaunchDbSystemDetails) String() string {

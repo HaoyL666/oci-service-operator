@@ -75,6 +75,8 @@ DigitalTwinAdapterInboundEnvelopeEnvelopeMapping defines nested fields for Digit
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `contentRoot` | JSON Path string to override the context root before delegating to the adapter of the target digital twin instance. | `string` | No | - | - |
+| `target` | Optional. JQ expression to map the target resource, which is externalKey of digital twin instance, the incoming data belongs to. | `string` | No | - | - |
 | `timeObserved` | JQ expression to extract the observation timestamp from the payload. If not specified, the system will default to using `timeReceived` as the timestamp. Example: For payload `{"time": "<timestamp>","temp": 65,"hum": 55}` 'timeObserved' can be mapped as JQ Expression (https://jqplay.org/) `$.time`. | `string` | No | - | - |
 
 <a id="kind-digitaltwinadapter-spec-inboundenvelope-referencepayload"></a>
@@ -100,9 +102,11 @@ DigitalTwinAdapterInboundRoute defines nested fields for DigitalTwinAdapter.Inbo
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `condition` | A boolean expression used to determine whether the following transformation should be processed for the incoming payload. This expression is typically based on fields defined at the inbound Envelope and is evaluated before applying the `payloadMapping`. | `string` | Yes | - | - |
+| `contentRoot` | JSON Path string to override the context root before delegating to the adapter of the target digital twin instance. | `string` | No | - | - |
 | `description` | Meaningful write up about the inbound route. | `string` | No | - | - |
 | `payloadMapping` | A set of key-value JQ expressions used to transform the incoming payload into a shape compatible with the digital twin model's context or schema. The keys are target fields (in the digital twin model), and values are JQ expressions pointing to data in the reference payload. Example: Given payload: { "time": "<timestamp>", "temp": 65, "hum": 55 } And mapping: { "temperature": "$.temp", "humidity": "$.hum", "timeObserved": "$.time" } The output will be: { "temperature": 65, "humidity": 55, "timeObserved": "<timestamp>" } | `map[string, string]` | No | - | - |
 | [`referencePayload`](#kind-digitaltwinadapter-spec-inboundroutes-referencepayload) | DigitalTwinAdapterInboundRouteReferencePayload defines nested fields for DigitalTwinAdapter.InboundRoute.ReferencePayload. | `object` | No | - | - |
+| `target` | Optional. JQ expression to map the target resource, which is externalKey of digital twin instance, the incoming data belongs to. | `string` | No | - | - |
 
 <a id="kind-digitaltwinadapter-spec-inboundroutes-referencepayload"></a>
 ##### Spec.inboundRoutes[].referencePayload
@@ -162,6 +166,8 @@ DigitalTwinAdapterInboundEnvelopeEnvelopeMapping defines nested fields for Digit
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `contentRoot` | JSON Path string to override the context root before delegating to the adapter of the target digital twin instance. | `string` | No | - | - |
+| `target` | Optional. JQ expression to map the target resource, which is externalKey of digital twin instance, the incoming data belongs to. | `string` | No | - | - |
 | `timeObserved` | JQ expression to extract the observation timestamp from the payload. If not specified, the system will default to using `timeReceived` as the timestamp. Example: For payload `{"time": "<timestamp>","temp": 65,"hum": 55}` 'timeObserved' can be mapped as JQ Expression (https://jqplay.org/) `$.time`. | `string` | No | - | - |
 
 <a id="kind-digitaltwinadapter-status-inboundenvelope-referencepayload"></a>
@@ -187,9 +193,11 @@ DigitalTwinAdapterInboundRoute defines nested fields for DigitalTwinAdapter.Inbo
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `condition` | A boolean expression used to determine whether the following transformation should be processed for the incoming payload. This expression is typically based on fields defined at the inbound Envelope and is evaluated before applying the `payloadMapping`. | `string` | Yes | - | - |
+| `contentRoot` | JSON Path string to override the context root before delegating to the adapter of the target digital twin instance. | `string` | No | - | - |
 | `description` | Meaningful write up about the inbound route. | `string` | No | - | - |
 | `payloadMapping` | A set of key-value JQ expressions used to transform the incoming payload into a shape compatible with the digital twin model's context or schema. The keys are target fields (in the digital twin model), and values are JQ expressions pointing to data in the reference payload. Example: Given payload: { "time": "<timestamp>", "temp": 65, "hum": 55 } And mapping: { "temperature": "$.temp", "humidity": "$.hum", "timeObserved": "$.time" } The output will be: { "temperature": 65, "humidity": 55, "timeObserved": "<timestamp>" } | `map[string, string]` | No | - | - |
 | [`referencePayload`](#kind-digitaltwinadapter-status-inboundroutes-referencepayload) | DigitalTwinAdapterInboundRouteReferencePayload defines nested fields for DigitalTwinAdapter.InboundRoute.ReferencePayload. | `object` | No | - | - |
+| `target` | Optional. JQ expression to map the target resource, which is externalKey of digital twin instance, the incoming data belongs to. | `string` | No | - | - |
 
 <a id="kind-digitaltwinadapter-status-inboundroutes-referencepayload"></a>
 ##### Status.inboundRoutes[].referencePayload
@@ -282,6 +290,7 @@ DigitalTwinInstanceSpec defines the desired state of DigitalTwinInstance.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `authId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource (like VaultSecret, ClientCertificate etc.,) used to authenticate the digital twin instance. | `string` | No | - | - |
+| `connectivityType` | Connectivity type of the digital twin instance. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | A short description of the resource. | `string` | No | - | - |
 | `digitalTwinAdapterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the digital twin adapter. | `string` | No | - | - |
@@ -290,6 +299,7 @@ DigitalTwinInstanceSpec defines the desired state of DigitalTwinInstance.
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
 | `externalKey` | A unique identifier for the physical entity (typically an IoT device) represented by the digital twin instance. This could be a Bluetooth address, Ethernet MAC address, or serial number, depending on the use case. If not provided, the system will automatically generate one. | `string` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `gateways` | An array of unique ids (OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)) of the IoT digital twin instances with connectivityType equals to GATEWAY. | `list[string]` | No | - | - |
 | `iotDomainId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the IoT domain. | `string` | Yes | - | - |
 
 <a id="kind-digitaltwininstance-status"></a>
@@ -300,6 +310,7 @@ DigitalTwinInstanceStatus defines the observed state of DigitalTwinInstance.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `authId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource (like VaultSecret, ClientCertificate etc.,) used to authenticate the digital twin instance. | `string` | No | - | - |
+| `connectivityType` | Connectivity type of the digital twin instance. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | A short description of the resource. | `string` | No | - | - |
 | `digitalTwinAdapterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the digital twin adapter. | `string` | No | - | - |
@@ -308,6 +319,7 @@ DigitalTwinInstanceStatus defines the observed state of DigitalTwinInstance.
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
 | `externalKey` | A unique identifier for the physical entity (typically an IoT device) represented by the digital twin instance. This could be a Bluetooth address, Ethernet MAC address, or serial number, depending on the use case. If not provided, the system will automatically generate one. | `string` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `gateways` | An array of unique ids (OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)) of the IoT digital twin instances with connectivityType equals to GATEWAY. | `list[string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource. | `string` | No | - | - |
 | `iotDomainId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the IoT domain. | `string` | No | - | - |
 | `lifecycleState` | The current state of the digital twin instance. | `string` | No | - | - |
@@ -734,7 +746,7 @@ IotDomainGroupSpec defines the desired state of IotDomainGroup.
 | `description` | A short description of the resource. | `string` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
-| `type` | Type of the domain group. LIGHTWEIGHT uses fewer resources and has a higher Recovery Time Objective (RTO), making it suitable for development and testing. STANDARD is recommended for production. | `string` | No | - | - |
+| `type` | Type of domain group. DEVELOPMENT uses fewer resources and has a higher Recovery Time Objective (RTO), making it suitable for development and testing. PRODUCTION is recommended for production workloads. LIGHTWEIGHT and STANDARD are deprecated aliases for DEVELOPMENT and PRODUCTION respectively and will be removed in a future release. | `string` | No | - | - |
 
 <a id="kind-iotdomaingroup-status"></a>
 ### Status
@@ -758,7 +770,7 @@ IotDomainGroupStatus defines the observed state of IotDomainGroup.
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time when the resource was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `timeUpdated` | The date and time when the resource was last updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
-| `type` | Type of the domain group. LIGHTWEIGHT uses fewer resources and has a higher Recovery Time Objective (RTO), making it suitable for development and testing. STANDARD is recommended for production. | `string` | No | - | - |
+| `type` | Type of domain group. DEVELOPMENT uses fewer resources and has a higher Recovery Time Objective (RTO), making it suitable for development and testing. PRODUCTION is recommended for production workloads. LIGHTWEIGHT and STANDARD are deprecated aliases for DEVELOPMENT and PRODUCTION respectively and will be removed in a future release. | `string` | No | - | - |
 
 <a id="kind-iotdomaingroup-status-status"></a>
 #### Status.status

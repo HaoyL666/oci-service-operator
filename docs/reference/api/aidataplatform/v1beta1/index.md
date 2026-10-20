@@ -44,7 +44,11 @@ AiDataPlatformSpec defines the desired state of AiDataPlatform.
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `isEnableAiFeature` | The flag to enable/disable AiFeatures for the instance. | `boolean` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
+| `vectorDbAdminCred` | The Vector DB Lakehouse 26ai ADMIN user password. | `string` | No | - | - |
+| `vectorDbAdminSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI Vault secret holding the vector db Lakehouse 26ai Admin user password. | `string` | No | - | - |
+| `vectorDbId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the vector db Lakehouse 26ai. | `string` | No | - | - |
 
 <a id="kind-aidataplatform-status"></a>
 ### Status
@@ -54,6 +58,7 @@ AiDataPlatformStatus defines the observed state of AiDataPlatform.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `aiDataPlatformType` | The AiDataPlatform type. | `string` | No | - | - |
+| `aiFeatureStatus` | The current aiFeatureStatus of the AiDataPlatform. | `string` | No | - | - |
 | `aliasKey` | The alias Id of the AiDataPlatform which is the short form of OCID. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment. | `string` | No | - | - |
 | `createdBy` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the IAM user. | `string` | No | - | - |

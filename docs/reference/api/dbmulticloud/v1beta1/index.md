@@ -321,6 +321,7 @@ OracleDbAwsKeySpec defines the desired state of OracleDbAwsKey.
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `isAwsKeyEnabled` | The Oracle AWS Key resource is enabled or disabled at AWS. | `boolean` | No | - | - |
 | `location` | AWS Key resource Location. | `string` | No | - | - |
+| `oracleDbAwsKeyPoolId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB AWS Key Pool resource. | `string` | No | - | - |
 | `oracleDbConnectorId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB Connector resource. | `string` | Yes | - | - |
 | `properties` | AWS Key resource's properties. | `map[string, string]` | No | - | - |
 | `type` | AWS Key resource type. | `string` | No | - | - |
@@ -340,16 +341,45 @@ OracleDbAwsKeyStatus defines the observed state of OracleDbAwsKey.
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the DB AWS Key Ring resource. | `string` | No | - | - |
 | `isAwsKeyEnabled` | The Oracle AWS Key resource is enabled or disabled at AWS. | `boolean` | No | - | - |
+| `isOracleAwsKeyUsed` | Indicates whether the Oracle AWS Key resource is currently in use. | `boolean` | No | - | - |
 | `lifecycleState` | The lifecycle state of the Oracle DB AWS Key resource. | `string` | No | - | - |
 | `lifecycleStateDetails` | Description of the current lifecycle state in more detail. | `string` | No | - | - |
 | `location` | AWS Key resource location. | `string` | No | - | - |
+| `oracleDbAwsKeyPoolId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB AWS Key Pool resource. | `string` | No | - | - |
 | `oracleDbConnectorId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB Connector resource. | `string` | No | - | - |
 | `properties` | AWS Key resource's properties. | `map[string, string]` | No | - | - |
+| `refCount` | The number of active references to the Oracle AWS Key resource. | `integer` | No | - | - |
+| [`replicationMetadata`](#kind-oracledbawskey-status-replicationmetadata) | OracleDbAwsKeyReplicationMetadata defines nested fields for OracleDbAwsKey.ReplicationMetadata. | `object` | No | - | - |
 | [`status`](#kind-oracledbawskey-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | Time when the DB AWS Key resource was created in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z'. | `string` | No | - | - |
 | `timeUpdated` | Time when the DB AWS Key resource was last modified, expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z'. | `string` | No | - | - |
 | `type` | Key resource type. | `string` | No | - | - |
+
+<a id="kind-oracledbawskey-status-replicationmetadata"></a>
+#### Status.replicationMetadata
+
+[Back to OracleDbAwsKey status](#kind-oracledbawskey-status)
+
+OracleDbAwsKeyReplicationMetadata defines nested fields for OracleDbAwsKey.ReplicationMetadata.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`replicationDetails`](#kind-oracledbawskey-status-replicationmetadata-replicationdetails) | List of all regions and their respective resource ID. | `list[object]` | No | - | - |
+
+<a id="kind-oracledbawskey-status-replicationmetadata-replicationdetails"></a>
+##### Status.replicationMetadata.replicationDetails[]
+
+[Back to OracleDbAwsKey status](#kind-oracledbawskey-status)
+
+OracleDbAwsKeyReplicationMetadataReplicationDetail defines nested fields for OracleDbAwsKey.ReplicationMetadata.ReplicationDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `replicationState` | The lifecycle state of the Oracle DB Azure Vault resource. | `string` | No | - | - |
+| `targetRegion` | The target region, where resource is replicated. | `string` | No | - | - |
+| `timeCreated` | Time when the Replication was created in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
+| `timeUpdated` | Time when the Replication was last modified, expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
 
 <a id="kind-oracledbawskey-status-status"></a>
 #### Status.status
@@ -811,11 +841,37 @@ OracleDbAzureVaultStatus defines the observed state of OracleDbAzureVault.
 | `oracleDbAzureResourceGroup` | Oracle DB Azure resource group name. | `string` | No | - | - |
 | `oracleDbConnectorId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB Connector resource that contains Oracle DB Azure Vault resource. | `string` | No | - | - |
 | `properties` | Oracle DB Azure Vault resource's properties. | `map[string, string]` | No | - | - |
+| [`replicationMetadata`](#kind-oracledbazurevault-status-replicationmetadata) | OracleDbAzureVaultReplicationMetadata defines nested fields for OracleDbAzureVault.ReplicationMetadata. | `object` | No | - | - |
 | [`status`](#kind-oracledbazurevault-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | Time when the DB Azure Vault resource was created in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
 | `timeUpdated` | Time when the DB Azure Vault resource was last modified, expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
 | `type` | Oracle DB Azure Vault resource type. | `string` | No | - | - |
+
+<a id="kind-oracledbazurevault-status-replicationmetadata"></a>
+#### Status.replicationMetadata
+
+[Back to OracleDbAzureVault status](#kind-oracledbazurevault-status)
+
+OracleDbAzureVaultReplicationMetadata defines nested fields for OracleDbAzureVault.ReplicationMetadata.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`replicationDetails`](#kind-oracledbazurevault-status-replicationmetadata-replicationdetails) | List of all regions and their respective resource ID. | `list[object]` | No | - | - |
+
+<a id="kind-oracledbazurevault-status-replicationmetadata-replicationdetails"></a>
+##### Status.replicationMetadata.replicationDetails[]
+
+[Back to OracleDbAzureVault status](#kind-oracledbazurevault-status)
+
+OracleDbAzureVaultReplicationMetadataReplicationDetail defines nested fields for OracleDbAzureVault.ReplicationMetadata.ReplicationDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `replicationState` | The lifecycle state of the Oracle DB Azure Vault resource. | `string` | No | - | - |
+| `targetRegion` | The target region, where resource is replicated. | `string` | No | - | - |
+| `timeCreated` | Time when the Replication was created in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
+| `timeUpdated` | Time when the Replication was last modified, expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
 
 <a id="kind-oracledbazurevault-status-status"></a>
 #### Status.status
@@ -1160,11 +1216,37 @@ OracleDbGcpKeyRingStatus defines the observed state of OracleDbGcpKeyRing.
 | `location` | Location of the GCP Key Ring resource. | `string` | No | - | - |
 | `oracleDbConnectorId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment where the Oracle DB GCP Identity Connector resource resides. | `string` | No | - | - |
 | `properties` | Oracle DB GCP Key Ring resource's properties. | `map[string, string]` | No | - | - |
+| [`replicationMetadata`](#kind-oracledbgcpkeyring-status-replicationmetadata) | OracleDbGcpKeyRingReplicationMetadata defines nested fields for OracleDbGcpKeyRing.ReplicationMetadata. | `object` | No | - | - |
 | [`status`](#kind-oracledbgcpkeyring-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | Time when the DB GCP Key Ring resource was created in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
 | `timeUpdated` | Time when the DB GCP Key Ring resource was last modified, expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
 | `type` | Oracle DB GCP Key Ring resource Type. | `string` | No | - | - |
+
+<a id="kind-oracledbgcpkeyring-status-replicationmetadata"></a>
+#### Status.replicationMetadata
+
+[Back to OracleDbGcpKeyRing status](#kind-oracledbgcpkeyring-status)
+
+OracleDbGcpKeyRingReplicationMetadata defines nested fields for OracleDbGcpKeyRing.ReplicationMetadata.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`replicationDetails`](#kind-oracledbgcpkeyring-status-replicationmetadata-replicationdetails) | List of all regions and their respective resource ID. | `list[object]` | No | - | - |
+
+<a id="kind-oracledbgcpkeyring-status-replicationmetadata-replicationdetails"></a>
+##### Status.replicationMetadata.replicationDetails[]
+
+[Back to OracleDbGcpKeyRing status](#kind-oracledbgcpkeyring-status)
+
+OracleDbGcpKeyRingReplicationMetadataReplicationDetail defines nested fields for OracleDbGcpKeyRing.ReplicationMetadata.ReplicationDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `replicationState` | The lifecycle state of the Oracle DB Azure Vault resource. | `string` | No | - | - |
+| `targetRegion` | The target region, where resource is replicated. | `string` | No | - | - |
+| `timeCreated` | Time when the Replication was created in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
+| `timeUpdated` | Time when the Replication was last modified, expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z' | `string` | No | - | - |
 
 <a id="kind-oracledbgcpkeyring-status-status"></a>
 #### Status.status

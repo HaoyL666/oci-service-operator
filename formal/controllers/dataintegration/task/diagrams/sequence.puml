@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetTask
 else tracked identity is missing
-ServiceManager -> OCI: ListTask(filters: name)
+ServiceManager -> OCI: ListTask(filters: compartment_id,\nstate)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateTask
 loop create pending PROVISIONING
@@ -67,30 +67,25 @@ ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, U
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: jsonData, key,
-modelVersion, parentRef (+36 more)
+Supported update surface: display_name
 Reject before mutate: force-new fields
-modelType, workspaceId
-Lookup filters: name
-Lookup matching: exact unique match on
-fields exposed by the scoped OCI list
-response
+compartment_id
+Lookup filters: compartment_id, state
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateTask only for mutable\nfields jsonData, key, modelVersion,\nparentRef (+36 more)
+ServiceManager -> OCI: Apply UpdateTask only for mutable\nfields display_name
 loop update pending UPDATING
 ServiceManager -> OCI: GetTask
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
-ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
-BaseReconciler --> Controller: requeue on terminating
+BaseReconciler --> Controller: requeue on provisioning, updating,\nterminating
 note right of ServiceManager
 shared diagram:
 shared/diagrams/shared-resolution-sequence.svg
@@ -112,30 +107,19 @@ kind: Task
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: terminating
+requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-follow-up: create=read-after-write;
-update=read-after-write; delete=confirm-delete
-supported drift: jsonData, key, modelVersion,
-parentRef (+36 more)
+supported drift: display_name
 reject before mutate: force-new fields
-modelType, workspaceId
+compartment_id
 create-only fields: none
 list lookup: scaffold_dataintegration_task
-filters name; exact unique match on fields
-exposed by the scoped OCI list response
+filters compartment_id, state
 conflicts: none
 open gaps: none
-The vendored SDK response has no lifecycle state
-or required work-request flow; successful writes
-settle from the response and configured
-follow-up.
-Parent identifiers scope composite OCI request
-paths and remain replacement-only unless the SDK
-update details explicitly expose them.
-Create, get, list where available, update, and
-delete request shapes are exercised by the
-package-local typed OCI mock integration test.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 @enduml

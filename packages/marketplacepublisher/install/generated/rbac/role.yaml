@@ -1,0 +1,60 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - marketplacepublisher.oracle.com
+  resources:
+  - artifacts
+  - listingrevisionattachments
+  - listingrevisionnotes
+  - listingrevisionpackages
+  - listingrevisions
+  - listings
+  - terms
+  - termversions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - marketplacepublisher.oracle.com
+  resources:
+  - artifacts/finalizers
+  - listingrevisionattachments/finalizers
+  - listingrevisionnotes/finalizers
+  - listingrevisionpackages/finalizers
+  - listingrevisions/finalizers
+  - listings/finalizers
+  - terms/finalizers
+  - termversions/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - marketplacepublisher.oracle.com
+  resources:
+  - artifacts/status
+  - listingrevisionattachments/status
+  - listingrevisionnotes/status
+  - listingrevisionpackages/status
+  - listingrevisions/status
+  - listings/status
+  - terms/status
+  - termversions/status
+  verbs:
+  - get
+  - patch
+  - update

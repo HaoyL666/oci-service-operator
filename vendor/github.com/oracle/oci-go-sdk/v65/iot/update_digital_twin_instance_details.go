@@ -19,6 +19,9 @@ import (
 // UpdateDigitalTwinInstanceDetails The information to be updated for the given digital twin instance.
 type UpdateDigitalTwinInstanceDetails struct {
 
+	// Connectivity type of the digital twin instance.
+	ConnectivityType DigitalTwinInstanceConnectivityTypeEnum `mandatory:"false" json:"connectivityType,omitempty"`
+
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource (like VaultSecret, ClientCertificate etc.,) used to authenticate the digital twin instance.
 	AuthId *string `mandatory:"false" json:"authId"`
 
@@ -42,6 +45,9 @@ type UpdateDigitalTwinInstanceDetails struct {
 	// The URI of the digital twin model specification.
 	DigitalTwinModelSpecUri *string `mandatory:"false" json:"digitalTwinModelSpecUri"`
 
+	// An array of unique ids (OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)) of the IoT digital twin instances with connectivityType equals to GATEWAY.
+	Gateways []string `mandatory:"false" json:"gateways"`
+
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -63,6 +69,9 @@ func (m UpdateDigitalTwinInstanceDetails) String() string {
 func (m UpdateDigitalTwinInstanceDetails) ValidateEnumValue() (bool, error) {
 	errMessage := []string{}
 
+	if _, ok := GetMappingDigitalTwinInstanceConnectivityTypeEnum(string(m.ConnectivityType)); !ok && m.ConnectivityType != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for ConnectivityType: %s. Supported values are: %s.", m.ConnectivityType, strings.Join(GetDigitalTwinInstanceConnectivityTypeEnumStringValues(), ",")))
+	}
 	if len(errMessage) > 0 {
 		return true, fmt.Errorf("%s", strings.Join(errMessage, "\n"))
 	}

@@ -27,12 +27,9 @@ type DistributedDatabaseSpec struct {
 	// has to be a letter followed by any combination of letter and number.
 	// +kubebuilder:validation:Required
 	Prefix string `json:"prefix"`
-	// The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the private endpoint associated with Globally distributed autonomous database.
+	// The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the private endpoints associated with the Globally distributed database.
 	// +kubebuilder:validation:Required
 	PrivateEndpointIds []string `json:"privateEndpointIds"`
-	// Sharding Methods for the Globally distributed database.
-	// +kubebuilder:validation:Required
-	ShardingMethod string `json:"shardingMethod"`
 	// The character set for the database.
 	// +kubebuilder:validation:Required
 	CharacterSet string `json:"characterSet"`
@@ -54,51 +51,51 @@ type DistributedDatabaseSpec struct {
 	// re-used for any other distributed database.
 	// +kubebuilder:validation:Required
 	OnsPortRemote int `json:"onsPortRemote"`
-	// The distributed database deployment type.
-	// +kubebuilder:validation:Required
-	DbDeploymentType string `json:"dbDeploymentType"`
-	// Collection of shards for the Globally distributed database.
-	// +kubebuilder:validation:Required
-	ShardDetails []DistributedDatabaseShardDetail `json:"shardDetails"`
-	// Collection of catalog for the Globally distributed database.
+	// Collection of catalog details for the Globally distributed database.
 	// +kubebuilder:validation:Required
 	CatalogDetails []DistributedDatabaseCatalogDetail `json:"catalogDetails"`
-	// Number of chunks in a shardspace. The value of chunks must be
-	// greater than 2 times the size of the largest shardgroup in any shardspace. Chunks is
-	// required to be provided for distributed databases being created with
-	// SYSTEM shardingMethod. For USER shardingMethod, chunks should not be set in create payload.
+	// The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the notification topics associated with the globally distributed database.
 	// +kubebuilder:validation:Optional
-	Chunks int `json:"chunks,omitempty"`
+	NotificationTopicIds []string `json:"notificationTopicIds,omitempty"`
 	// The TLS listener port number for the Globally distributed database. The TLS listener port number
 	// has to be unique for a customer tenancy across all distributed databases. Same port number should
-	// not be re-used for any other distributed database. For BASE_DB and EXADB_XS based distributed databases,
+	// not be re-used for any other distributed database. For EXADB based distributed databases,
 	// tls is not supported hence the listenerPortTls is not needed to be provided in create payload.
 	// +kubebuilder:validation:Optional
 	ListenerPortTls int `json:"listenerPortTls,omitempty"`
-	// The TCP Single Client Access Name (SCAN) port for clusters created for Globally distributed database.
-	// The scanListenerPort number should only be provided if shard and catalog have source type NEW_VAULT_AND_CLUSTER.
-	// If shard and catalog have source type NEW_VAULT_AND_CLUSTER and scanListenerPort is not provided then the
-	// scanListenerPort will default to value 1521.
+	// TCP SCAN listener port for new clusters to be created.
+	// Applicable only when shard and catalog source types are XS_NEW_VAULT_AND_CLUSTER or XS_NEW_CLUSTER.
+	// Defaults to 1521 when not provided.
 	// +kubebuilder:validation:Optional
 	ScanListenerPort int `json:"scanListenerPort,omitempty"`
-	// The Replication method for Globally distributed database. Use RAFT for Raft based replication.
-	// With RAFT replication, shards cannot have peers details set on them. In case shards need to
-	// have peers, please do not set RAFT replicationMethod. For all non RAFT replication cases (with or
-	// without peers), please set replicationMethod as DG or do not set any value for replicationMethod.
+	// Count of chunks associated with system raft clusters or system data guard databases.
 	// +kubebuilder:validation:Optional
-	ReplicationMethod string `json:"replicationMethod,omitempty"`
-	// The Replication factor for RAFT replication based Globally distributed database. Currently supported values are 3, 5 and 7.
+	SystemChunkCount int `json:"systemChunkCount,omitempty"`
+	// Number of replication units associated with system raft clusters.
 	// +kubebuilder:validation:Optional
-	ReplicationFactor int `json:"replicationFactor,omitempty"`
-	// The replication unit count for RAFT based distributed database. For RAFT replication based
-	// Globally distributed database, the value should be at least twice the number of shards.
+	SystemRaftReplicationUnitCount int `json:"systemRaftReplicationUnitCount,omitempty"`
+	// Collection of composite raft shards.
 	// +kubebuilder:validation:Optional
-	ReplicationUnit int `json:"replicationUnit,omitempty"`
+	CompositeRaftShardSpaces []DistributedDatabaseCompositeRaftShardSpace `json:"compositeRaftShardSpaces,omitempty"`
+	// Collection of composite data guard shard spaces.
+	// +kubebuilder:validation:Optional
+	CompositeDataGuardShardSpaces []DistributedDatabaseCompositeDataGuardShardSpace `json:"compositeDataGuardShardSpaces,omitempty"`
+	// Collection of system raft clusters.
+	// +kubebuilder:validation:Optional
+	SystemRaftClusters []DistributedDatabaseSystemRaftCluster `json:"systemRaftClusters,omitempty"`
+	// +kubebuilder:validation:Optional
+	SystemDataGuardDatabases DistributedDatabaseSystemDataGuardDatabases `json:"systemDataGuardDatabases,omitempty,omitzero"`
+	// Collection of user defined shard spaces.
+	// +kubebuilder:validation:Optional
+	UserShardSpaces []DistributedDatabaseUserShardSpace `json:"userShardSpaces,omitempty"`
 	// The SSH public key for Global service manager instances.
 	// +kubebuilder:validation:Optional
 	GsmSshPublicKey string `json:"gsmSshPublicKey,omitempty"`
 	// +kubebuilder:validation:Optional
 	DbBackupConfig DistributedDatabaseDbBackupConfig `json:"dbBackupConfig,omitempty,omitzero"`
+	// The list of network security group (NSG) details to be associated with the distributed database.
+	// +kubebuilder:validation:Optional
+	VcnNsgIds []DistributedDatabaseVcnNsgId `json:"vcnNsgIds,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -109,18 +106,33 @@ type DistributedDatabaseSpec struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 }
 
-// DistributedDatabaseShardDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.DbStorageVaultDetails.
-type DistributedDatabaseShardDetailDbStorageVaultDetails struct {
+// DistributedDatabaseCatalogDetailOriginalReplicaDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.OriginalReplica.Database.DbStorageVaultDetails.
+type DistributedDatabaseCatalogDetailOriginalReplicaDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
 	// Total storage capacity in GB for vault storage.
 	// +kubebuilder:validation:Required
 	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
 	// The size of additional Flash Cache in percentage of High Capacity database storage.
 	// +kubebuilder:validation:Optional
 	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
 }
 
-// DistributedDatabaseShardDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.VmClusterDetails.
-type DistributedDatabaseShardDetailVmClusterDetails struct {
+// DistributedDatabaseCatalogDetailOriginalReplicaDatabaseVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.OriginalReplica.Database.VmClusterDetails.
+type DistributedDatabaseCatalogDetailOriginalReplicaDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
 	// +kubebuilder:validation:Required
 	SubnetId string `json:"subnetId"`
@@ -178,149 +190,109 @@ type DistributedDatabaseShardDetailVmClusterDetails struct {
 	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
 	// +kubebuilder:validation:Optional
 	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
 }
 
-// DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.DbStorageVaultDetails.
-type DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails struct {
-	// Total storage capacity in GB for vault storage.
-	// +kubebuilder:validation:Required
-	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
-	// The size of additional Flash Cache in percentage of High Capacity database storage.
-	// +kubebuilder:validation:Optional
-	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
-}
-
-// DistributedDatabaseShardDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.VmClusterDetails.
-type DistributedDatabaseShardDetailPeerDetailVmClusterDetails struct {
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Required
-	SubnetId string `json:"subnetId"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Required
-	BackupSubnetId string `json:"backupSubnetId"`
-	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Required
-	EnabledECpuCount int `json:"enabledECpuCount"`
-	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Required
-	SshPublicKeys []string `json:"sshPublicKeys"`
-	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Optional
-	TotalECpuCount int `json:"totalECpuCount,omitempty"`
-	// File System Storage Size in GBs for Exadata VM cluster.
-	// +kubebuilder:validation:Optional
-	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
-	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
-	// +kubebuilder:validation:Optional
-	LicenseModel string `json:"licenseModel,omitempty"`
-	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
-	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
-	// (do not provide one). Otherwise, provide a valid DNS domain name.
-	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
-	// +kubebuilder:validation:Optional
-	Domain string `json:"domain,omitempty"`
-	// The private zone ID in which you want DNS records to be created.
-	// +kubebuilder:validation:Optional
-	PrivateZoneId string `json:"privateZoneId,omitempty"`
-	// Indicates whether diagnostic collection is enabled for the VM cluster.
-	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
-	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
-	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
-	// +kubebuilder:validation:Optional
-	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
-	// Indicates whether health monitoring is enabled for the VM cluster.
-	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
-	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
-	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
-	// +kubebuilder:validation:Optional
-	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
-	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
-	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
-	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
-	// +kubebuilder:validation:Optional
-	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
-	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
-	// Setting this to an empty list removes all resources from all NSGs.
-	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
-	// +kubebuilder:validation:Optional
-	NsgIds []string `json:"nsgIds,omitempty"`
-	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
-	// Setting this to an empty array after the list is created removes the resource from all NSGs.
-	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
-	// +kubebuilder:validation:Optional
-	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
-}
-
-// DistributedDatabaseShardDetailPeerDetail defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.
-type DistributedDatabaseShardDetailPeerDetail struct {
-	// The name of the availability domain that the distributed database shard will be located in.
-	// +kubebuilder:validation:Required
-	AvailabilityDomain string `json:"availabilityDomain"`
-	// +kubebuilder:validation:Required
-	DbStorageVaultDetails DistributedDatabaseShardDetailPeerDetailDbStorageVaultDetails `json:"dbStorageVaultDetails"`
-	// +kubebuilder:validation:Required
-	VmClusterDetails DistributedDatabaseShardDetailPeerDetailVmClusterDetails `json:"vmClusterDetails"`
-	// The protectionMode for the shard peer.
-	// +kubebuilder:validation:Optional
-	ProtectionMode string `json:"protectionMode,omitempty"`
-	// The redo transport type to use for this Data Guard association.
-	// +kubebuilder:validation:Optional
-	TransportType string `json:"transportType,omitempty"`
-}
-
-// DistributedDatabaseShardDetail defines nested fields for DistributedDatabase.ShardDetail.
-type DistributedDatabaseShardDetail struct {
+// DistributedDatabaseCatalogDetailOriginalReplicaDatabase defines nested fields for DistributedDatabase.CatalogDetail.OriginalReplica.Database.
+type DistributedDatabaseCatalogDetailOriginalReplicaDatabase struct {
 	// +kubebuilder:validation:Optional
 	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
 	// +kubebuilder:validation:Optional
 	Source string `json:"source,omitempty"`
-	// The admin password for the shard associated with Globally distributed database.
-	// +kubebuilder:validation:Optional
-	AdminPassword string `json:"adminPassword,omitempty"`
-	// The name of the availability domain that the distributed database shard will be located in.
+	// The name of the availability domain that the distributed database catalog will be located in.
 	// +kubebuilder:validation:Optional
 	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
 	// +kubebuilder:validation:Optional
-	DbStorageVaultDetails DistributedDatabaseShardDetailDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	DbStorageVaultDetails DistributedDatabaseCatalogDetailOriginalReplicaDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	VmClusterDetails DistributedDatabaseShardDetailVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
-	// The details required for creation of the peer for the ExadbXs infrastructure based shard.
+	VmClusterDetails DistributedDatabaseCatalogDetailOriginalReplicaDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the catalog associated with Globally distributed database.
 	// +kubebuilder:validation:Optional
-	PeerDetails []DistributedDatabaseShardDetailPeerDetail `json:"peerDetails,omitempty"`
-	// The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created.
-	// Shard space name shall be used while creation of new shards.
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
 	// +kubebuilder:validation:Optional
-	ShardSpace string `json:"shardSpace,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts). This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
 	// +kubebuilder:validation:Optional
 	VaultId string `json:"vaultId,omitempty"`
-	// The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
 	// +kubebuilder:validation:Optional
 	KmsKeyId string `json:"kmsKeyId,omitempty"`
-	// The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
 	// +kubebuilder:validation:Optional
 	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
 	// +kubebuilder:validation:Optional
 	VmClusterId string `json:"vmClusterId,omitempty"`
-	// This field is deprecated. This should not be used while creation of new distributed database. To set the peers
-	// on new shards of distributed database please use peerDetails.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
 	// +kubebuilder:validation:Optional
-	PeerVmClusterIds []string `json:"peerVmClusterIds,omitempty"`
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
 }
 
-// DistributedDatabaseCatalogDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.DbStorageVaultDetails.
-type DistributedDatabaseCatalogDetailDbStorageVaultDetails struct {
+// DistributedDatabaseCatalogDetailOriginalReplica defines nested fields for DistributedDatabase.CatalogDetail.OriginalReplica.
+type DistributedDatabaseCatalogDetailOriginalReplica struct {
+	// The name of the catalog replica.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// +kubebuilder:validation:Required
+	Database DistributedDatabaseCatalogDetailOriginalReplicaDatabase `json:"database"`
+}
+
+// DistributedDatabaseCatalogDetailDataGuardReplicaDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.DataGuardReplica.Database.DbStorageVaultDetails.
+type DistributedDatabaseCatalogDetailDataGuardReplicaDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
 	// Total storage capacity in GB for vault storage.
 	// +kubebuilder:validation:Required
 	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
 	// The size of additional Flash Cache in percentage of High Capacity database storage.
 	// +kubebuilder:validation:Optional
 	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
 }
 
-// DistributedDatabaseCatalogDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.VmClusterDetails.
-type DistributedDatabaseCatalogDetailVmClusterDetails struct {
+// DistributedDatabaseCatalogDetailDataGuardReplicaDatabaseVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.DataGuardReplica.Database.VmClusterDetails.
+type DistributedDatabaseCatalogDetailDataGuardReplicaDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
 	// +kubebuilder:validation:Required
 	SubnetId string `json:"subnetId"`
@@ -378,135 +350,1451 @@ type DistributedDatabaseCatalogDetailVmClusterDetails struct {
 	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
 	// +kubebuilder:validation:Optional
 	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
 }
 
-// DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.DbStorageVaultDetails.
-type DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails struct {
-	// Total storage capacity in GB for vault storage.
-	// +kubebuilder:validation:Required
-	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
-	// The size of additional Flash Cache in percentage of High Capacity database storage.
+// DistributedDatabaseCatalogDetailDataGuardReplicaDatabase defines nested fields for DistributedDatabase.CatalogDetail.DataGuardReplica.Database.
+type DistributedDatabaseCatalogDetailDataGuardReplicaDatabase struct {
 	// +kubebuilder:validation:Optional
-	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
-}
-
-// DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.VmClusterDetails.
-type DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails struct {
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Required
-	SubnetId string `json:"subnetId"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Required
-	BackupSubnetId string `json:"backupSubnetId"`
-	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Required
-	EnabledECpuCount int `json:"enabledECpuCount"`
-	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
-	// +kubebuilder:validation:Required
-	SshPublicKeys []string `json:"sshPublicKeys"`
-	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
 	// +kubebuilder:validation:Optional
-	TotalECpuCount int `json:"totalECpuCount,omitempty"`
-	// File System Storage Size in GBs for Exadata VM cluster.
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
 	// +kubebuilder:validation:Optional
-	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
-	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
 	// +kubebuilder:validation:Optional
-	LicenseModel string `json:"licenseModel,omitempty"`
-	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
-	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
-	// (do not provide one). Otherwise, provide a valid DNS domain name.
-	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
 	// +kubebuilder:validation:Optional
-	Domain string `json:"domain,omitempty"`
-	// The private zone ID in which you want DNS records to be created.
+	Source string `json:"source,omitempty"`
+	// The name of the availability domain that the distributed database catalog will be located in.
 	// +kubebuilder:validation:Optional
-	PrivateZoneId string `json:"privateZoneId,omitempty"`
-	// Indicates whether diagnostic collection is enabled for the VM cluster.
-	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
-	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
-	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
 	// +kubebuilder:validation:Optional
-	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
-	// Indicates whether health monitoring is enabled for the VM cluster.
-	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
-	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
-	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	DbStorageVaultDetails DistributedDatabaseCatalogDetailDataGuardReplicaDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
-	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
-	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
-	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
-	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	VmClusterDetails DistributedDatabaseCatalogDetailDataGuardReplicaDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the catalog associated with Globally distributed database.
 	// +kubebuilder:validation:Optional
-	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
-	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
-	// Setting this to an empty list removes all resources from all NSGs.
-	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
 	// +kubebuilder:validation:Optional
-	NsgIds []string `json:"nsgIds,omitempty"`
-	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
-	// Setting this to an empty array after the list is created removes the resource from all NSGs.
-	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
 	// +kubebuilder:validation:Optional
-	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
-}
-
-// DistributedDatabaseCatalogDetailPeerDetail defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.
-type DistributedDatabaseCatalogDetailPeerDetail struct {
-	// The name of the availability domain that the distributed database shard will be located in.
-	// +kubebuilder:validation:Required
-	AvailabilityDomain string `json:"availabilityDomain"`
-	// +kubebuilder:validation:Required
-	DbStorageVaultDetails DistributedDatabaseCatalogDetailPeerDetailDbStorageVaultDetails `json:"dbStorageVaultDetails"`
-	// +kubebuilder:validation:Required
-	VmClusterDetails DistributedDatabaseCatalogDetailPeerDetailVmClusterDetails `json:"vmClusterDetails"`
-	// The protectionMode for the catalog peer.
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	// +kubebuilder:validation:Optional
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// +kubebuilder:validation:Optional
+	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
 	// +kubebuilder:validation:Optional
 	ProtectionMode string `json:"protectionMode,omitempty"`
-	// The redo transport type to use for this Data Guard association.
+	// The transport type used for the Data Guard association.
 	// +kubebuilder:validation:Optional
 	TransportType string `json:"transportType,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
+	// +kubebuilder:validation:Optional
+	VmClusterId string `json:"vmClusterId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
+	// +kubebuilder:validation:Optional
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
+}
+
+// DistributedDatabaseCatalogDetailDataGuardReplica defines nested fields for DistributedDatabase.CatalogDetail.DataGuardReplica.
+type DistributedDatabaseCatalogDetailDataGuardReplica struct {
+	// The name of the catalog replica.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// +kubebuilder:validation:Required
+	Database DistributedDatabaseCatalogDetailDataGuardReplicaDatabase `json:"database"`
 }
 
 // DistributedDatabaseCatalogDetail defines nested fields for DistributedDatabase.CatalogDetail.
 type DistributedDatabaseCatalogDetail struct {
+	// +kubebuilder:validation:Required
+	OriginalReplica DistributedDatabaseCatalogDetailOriginalReplica `json:"originalReplica"`
+	// Details required to create data guard replicas for the catalog.
+	// +kubebuilder:validation:Optional
+	DataGuardReplicas []DistributedDatabaseCatalogDetailDataGuardReplica `json:"dataGuardReplicas,omitempty"`
+}
+
+// DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabaseVmClusterDetails defines nested fields for DistributedDatabase.CompositeRaftShardSpace.RaftCluster.Database.VmClusterDetails.
+type DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	BackupSubnetId string `json:"backupSubnetId"`
+	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	EnabledECpuCount int `json:"enabledECpuCount"`
+	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SshPublicKeys []string `json:"sshPublicKeys"`
+	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Optional
+	TotalECpuCount int `json:"totalECpuCount,omitempty"`
+	// File System Storage Size in GBs for Exadata VM cluster.
+	// +kubebuilder:validation:Optional
+	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
+	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	// +kubebuilder:validation:Optional
+	LicenseModel string `json:"licenseModel,omitempty"`
+	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+	// (do not provide one). Otherwise, provide a valid DNS domain name.
+	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	// +kubebuilder:validation:Optional
+	Domain string `json:"domain,omitempty"`
+	// The private zone ID in which you want DNS records to be created.
+	// +kubebuilder:validation:Optional
+	PrivateZoneId string `json:"privateZoneId,omitempty"`
+	// Indicates whether diagnostic collection is enabled for the VM cluster.
+	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
+	// Indicates whether health monitoring is enabled for the VM cluster.
+	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
+	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
+	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+	// Setting this to an empty list removes all resources from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+	// Setting this to an empty array after the list is created removes the resource from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	// +kubebuilder:validation:Optional
+	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+}
+
+// DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.CompositeRaftShardSpace.RaftCluster.Database.DbStorageVaultDetails.
+type DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// Total storage capacity in GB for vault storage.
+	// +kubebuilder:validation:Required
+	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
+	// The size of additional Flash Cache in percentage of High Capacity database storage.
+	// +kubebuilder:validation:Optional
+	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
+}
+
+// DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabase defines nested fields for DistributedDatabase.CompositeRaftShardSpace.RaftCluster.Database.
+type DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabase struct {
 	// +kubebuilder:validation:Optional
 	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
 	// +kubebuilder:validation:Optional
 	Source string `json:"source,omitempty"`
-	// The admin password for the catalog associated with Globally distributed database.
-	// +kubebuilder:validation:Optional
-	AdminPassword string `json:"adminPassword,omitempty"`
-	// The name of the availability domain that the distributed database shard will be located in.
+	// The name of the availability domain that the distributed database shard will be located in  like yKoY:US-ASHBURN-AD-3.
 	// +kubebuilder:validation:Optional
 	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
 	// +kubebuilder:validation:Optional
-	DbStorageVaultDetails DistributedDatabaseCatalogDetailDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
 	// +kubebuilder:validation:Optional
-	VmClusterDetails DistributedDatabaseCatalogDetailVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
-	// The details required for creation of the peer for the ExadbXs infrastructure based catalog.
+	VmClusterDetails DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the shard associated with Globally distributed database.
 	// +kubebuilder:validation:Optional
-	PeerDetails []DistributedDatabaseCatalogDetailPeerDetail `json:"peerDetails,omitempty"`
-	// The shard space name for the Globally distributed database. Shard space for existing shard cannot be changed, once shard is created.
-	// Shard space name shall be used while creation of new shards.
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
 	// +kubebuilder:validation:Optional
-	ShardSpace string `json:"shardSpace,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts). This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
 	// +kubebuilder:validation:Optional
 	VaultId string `json:"vaultId,omitempty"`
-	// The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
 	// +kubebuilder:validation:Optional
 	KmsKeyId string `json:"kmsKeyId,omitempty"`
-	// The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
 	// +kubebuilder:validation:Optional
 	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// +kubebuilder:validation:Optional
+	DbStorageVaultDetails DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
 	// +kubebuilder:validation:Optional
 	VmClusterId string `json:"vmClusterId,omitempty"`
-	// This field is deprecated. This should not be used while creation of new distributed database. To set the peers
-	// on catalog of distributed database please use peerDetails.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
 	// +kubebuilder:validation:Optional
-	PeerVmClusterIds []string `json:"peerVmClusterIds,omitempty"`
+	DbHomeId string `json:"dbHomeId,omitempty"`
+}
+
+// DistributedDatabaseCompositeRaftShardSpaceRaftCluster defines nested fields for DistributedDatabase.CompositeRaftShardSpace.RaftCluster.
+type DistributedDatabaseCompositeRaftShardSpaceRaftCluster struct {
+	// The name of raft cluster.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Replication factor associated with the raft cluster.
+	// +kubebuilder:validation:Required
+	ReplicationFactor int `json:"replicationFactor"`
+	// Witnesses RU count associated with the raft cluster.
+	// +kubebuilder:validation:Required
+	WitnessCount int `json:"witnessCount"`
+	// Replication factor associated with the raft cluster.
+	// +kubebuilder:validation:Required
+	RuMode string `json:"ruMode"`
+	// The details of databases associated with the composite shard space raft cluster.
+	// +kubebuilder:validation:Required
+	Databases []DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabase `json:"databases"`
+}
+
+// DistributedDatabaseCompositeRaftShardSpace defines nested fields for DistributedDatabase.CompositeRaftShardSpace.
+type DistributedDatabaseCompositeRaftShardSpace struct {
+	// The name of shard space.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Count of chunks associated with the shard space.
+	// +kubebuilder:validation:Required
+	ChunkCount int `json:"chunkCount"`
+	// Number of replication units in the shard space.
+	// +kubebuilder:validation:Required
+	ReplicationUnitCount int `json:"replicationUnitCount"`
+	// The details of raft clusters associated with the shard space.
+	// +kubebuilder:validation:Required
+	RaftClusters []DistributedDatabaseCompositeRaftShardSpaceRaftCluster `json:"raftClusters"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabaseVmClusterDetails defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.OriginalReplica.Database.VmClusterDetails.
+type DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	BackupSubnetId string `json:"backupSubnetId"`
+	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	EnabledECpuCount int `json:"enabledECpuCount"`
+	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SshPublicKeys []string `json:"sshPublicKeys"`
+	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Optional
+	TotalECpuCount int `json:"totalECpuCount,omitempty"`
+	// File System Storage Size in GBs for Exadata VM cluster.
+	// +kubebuilder:validation:Optional
+	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
+	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	// +kubebuilder:validation:Optional
+	LicenseModel string `json:"licenseModel,omitempty"`
+	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+	// (do not provide one). Otherwise, provide a valid DNS domain name.
+	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	// +kubebuilder:validation:Optional
+	Domain string `json:"domain,omitempty"`
+	// The private zone ID in which you want DNS records to be created.
+	// +kubebuilder:validation:Optional
+	PrivateZoneId string `json:"privateZoneId,omitempty"`
+	// Indicates whether diagnostic collection is enabled for the VM cluster.
+	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
+	// Indicates whether health monitoring is enabled for the VM cluster.
+	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
+	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
+	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+	// Setting this to an empty list removes all resources from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+	// Setting this to an empty array after the list is created removes the resource from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	// +kubebuilder:validation:Optional
+	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.OriginalReplica.Database.DbStorageVaultDetails.
+type DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// Total storage capacity in GB for vault storage.
+	// +kubebuilder:validation:Required
+	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
+	// The size of additional Flash Cache in percentage of High Capacity database storage.
+	// +kubebuilder:validation:Optional
+	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabase defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.OriginalReplica.Database.
+type DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabase struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
+	// +kubebuilder:validation:Optional
+	Source string `json:"source,omitempty"`
+	// The name of the availability domain that the distributed database shard will be located in  like yKoY:US-ASHBURN-AD-3.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
+	// +kubebuilder:validation:Optional
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
+	// +kubebuilder:validation:Optional
+	VmClusterDetails DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the shard associated with Globally distributed database.
+	// +kubebuilder:validation:Optional
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	// +kubebuilder:validation:Optional
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// +kubebuilder:validation:Optional
+	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// +kubebuilder:validation:Optional
+	DbStorageVaultDetails DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
+	// +kubebuilder:validation:Optional
+	VmClusterId string `json:"vmClusterId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplica defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.OriginalReplica.
+type DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplica struct {
+	// The name of shard space replica.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// The details of composite data guard shard space replica databases.
+	// +kubebuilder:validation:Required
+	Databases []DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabase `json:"databases"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabaseVmClusterDetails defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.DataGuardReplica.Database.VmClusterDetails.
+type DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	BackupSubnetId string `json:"backupSubnetId"`
+	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	EnabledECpuCount int `json:"enabledECpuCount"`
+	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SshPublicKeys []string `json:"sshPublicKeys"`
+	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Optional
+	TotalECpuCount int `json:"totalECpuCount,omitempty"`
+	// File System Storage Size in GBs for Exadata VM cluster.
+	// +kubebuilder:validation:Optional
+	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
+	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	// +kubebuilder:validation:Optional
+	LicenseModel string `json:"licenseModel,omitempty"`
+	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+	// (do not provide one). Otherwise, provide a valid DNS domain name.
+	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	// +kubebuilder:validation:Optional
+	Domain string `json:"domain,omitempty"`
+	// The private zone ID in which you want DNS records to be created.
+	// +kubebuilder:validation:Optional
+	PrivateZoneId string `json:"privateZoneId,omitempty"`
+	// Indicates whether diagnostic collection is enabled for the VM cluster.
+	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
+	// Indicates whether health monitoring is enabled for the VM cluster.
+	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
+	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
+	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+	// Setting this to an empty list removes all resources from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+	// Setting this to an empty array after the list is created removes the resource from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	// +kubebuilder:validation:Optional
+	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.DataGuardReplica.Database.DbStorageVaultDetails.
+type DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// Total storage capacity in GB for vault storage.
+	// +kubebuilder:validation:Required
+	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
+	// The size of additional Flash Cache in percentage of High Capacity database storage.
+	// +kubebuilder:validation:Optional
+	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabase defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.DataGuardReplica.Database.
+type DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabase struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
+	// +kubebuilder:validation:Optional
+	Source string `json:"source,omitempty"`
+	// The name of the availability domain that the distributed database shard will be located in  like yKoY:US-ASHBURN-AD-3.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
+	// +kubebuilder:validation:Optional
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
+	// +kubebuilder:validation:Optional
+	VmClusterDetails DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the shard associated with Globally distributed database.
+	// +kubebuilder:validation:Optional
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	// +kubebuilder:validation:Optional
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// +kubebuilder:validation:Optional
+	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// +kubebuilder:validation:Optional
+	DbStorageVaultDetails DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
+	// +kubebuilder:validation:Optional
+	VmClusterId string `json:"vmClusterId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplica defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.DataGuardReplica.
+type DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplica struct {
+	// The name of shard space replica.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// The details of composite data guard shard space replica databases.
+	// +kubebuilder:validation:Required
+	Databases []DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabase `json:"databases"`
+}
+
+// DistributedDatabaseCompositeDataGuardShardSpace defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.
+type DistributedDatabaseCompositeDataGuardShardSpace struct {
+	// The name of shard space.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Count of chunks associated with the shard space.
+	// +kubebuilder:validation:Required
+	ChunkCount int `json:"chunkCount"`
+	// +kubebuilder:validation:Required
+	OriginalReplica DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplica `json:"originalReplica"`
+	// The details of data guard replica for the shard being created.
+	// +kubebuilder:validation:Optional
+	DataGuardReplicas []DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplica `json:"dataGuardReplicas,omitempty"`
+}
+
+// DistributedDatabaseSystemRaftClusterDatabaseVmClusterDetails defines nested fields for DistributedDatabase.SystemRaftCluster.Database.VmClusterDetails.
+type DistributedDatabaseSystemRaftClusterDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	BackupSubnetId string `json:"backupSubnetId"`
+	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	EnabledECpuCount int `json:"enabledECpuCount"`
+	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SshPublicKeys []string `json:"sshPublicKeys"`
+	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Optional
+	TotalECpuCount int `json:"totalECpuCount,omitempty"`
+	// File System Storage Size in GBs for Exadata VM cluster.
+	// +kubebuilder:validation:Optional
+	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
+	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	// +kubebuilder:validation:Optional
+	LicenseModel string `json:"licenseModel,omitempty"`
+	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+	// (do not provide one). Otherwise, provide a valid DNS domain name.
+	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	// +kubebuilder:validation:Optional
+	Domain string `json:"domain,omitempty"`
+	// The private zone ID in which you want DNS records to be created.
+	// +kubebuilder:validation:Optional
+	PrivateZoneId string `json:"privateZoneId,omitempty"`
+	// Indicates whether diagnostic collection is enabled for the VM cluster.
+	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
+	// Indicates whether health monitoring is enabled for the VM cluster.
+	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
+	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
+	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+	// Setting this to an empty list removes all resources from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+	// Setting this to an empty array after the list is created removes the resource from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	// +kubebuilder:validation:Optional
+	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+}
+
+// DistributedDatabaseSystemRaftClusterDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.SystemRaftCluster.Database.DbStorageVaultDetails.
+type DistributedDatabaseSystemRaftClusterDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// Total storage capacity in GB for vault storage.
+	// +kubebuilder:validation:Required
+	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
+	// The size of additional Flash Cache in percentage of High Capacity database storage.
+	// +kubebuilder:validation:Optional
+	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
+}
+
+// DistributedDatabaseSystemRaftClusterDatabase defines nested fields for DistributedDatabase.SystemRaftCluster.Database.
+type DistributedDatabaseSystemRaftClusterDatabase struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
+	// +kubebuilder:validation:Optional
+	Source string `json:"source,omitempty"`
+	// The name of the availability domain that the distributed database shard will be located in  like yKoY:US-ASHBURN-AD-3.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
+	// +kubebuilder:validation:Optional
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
+	// +kubebuilder:validation:Optional
+	VmClusterDetails DistributedDatabaseSystemRaftClusterDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the shard associated with Globally distributed database.
+	// +kubebuilder:validation:Optional
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	// +kubebuilder:validation:Optional
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// +kubebuilder:validation:Optional
+	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// +kubebuilder:validation:Optional
+	DbStorageVaultDetails DistributedDatabaseSystemRaftClusterDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
+	// +kubebuilder:validation:Optional
+	VmClusterId string `json:"vmClusterId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
+}
+
+// DistributedDatabaseSystemRaftCluster defines nested fields for DistributedDatabase.SystemRaftCluster.
+type DistributedDatabaseSystemRaftCluster struct {
+	// The name of raft cluster.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Replication factor associated with the raft cluster.
+	// +kubebuilder:validation:Required
+	ReplicationFactor int `json:"replicationFactor"`
+	// Witnesses RU count associated with the raft cluster.
+	// +kubebuilder:validation:Required
+	WitnessCount int `json:"witnessCount"`
+	// Replication factor associated with the raft cluster.
+	// +kubebuilder:validation:Required
+	RuMode string `json:"ruMode"`
+	// Details of the databases associated with the system raft cluster.
+	// +kubebuilder:validation:Required
+	Databases []DistributedDatabaseSystemRaftClusterDatabase `json:"databases"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabaseVmClusterDetails defines nested fields for DistributedDatabase.SystemDataGuardDatabases.OriginalReplica.Database.VmClusterDetails.
+type DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	BackupSubnetId string `json:"backupSubnetId"`
+	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	EnabledECpuCount int `json:"enabledECpuCount"`
+	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SshPublicKeys []string `json:"sshPublicKeys"`
+	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Optional
+	TotalECpuCount int `json:"totalECpuCount,omitempty"`
+	// File System Storage Size in GBs for Exadata VM cluster.
+	// +kubebuilder:validation:Optional
+	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
+	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	// +kubebuilder:validation:Optional
+	LicenseModel string `json:"licenseModel,omitempty"`
+	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+	// (do not provide one). Otherwise, provide a valid DNS domain name.
+	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	// +kubebuilder:validation:Optional
+	Domain string `json:"domain,omitempty"`
+	// The private zone ID in which you want DNS records to be created.
+	// +kubebuilder:validation:Optional
+	PrivateZoneId string `json:"privateZoneId,omitempty"`
+	// Indicates whether diagnostic collection is enabled for the VM cluster.
+	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
+	// Indicates whether health monitoring is enabled for the VM cluster.
+	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
+	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
+	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+	// Setting this to an empty list removes all resources from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+	// Setting this to an empty array after the list is created removes the resource from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	// +kubebuilder:validation:Optional
+	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.SystemDataGuardDatabases.OriginalReplica.Database.DbStorageVaultDetails.
+type DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// Total storage capacity in GB for vault storage.
+	// +kubebuilder:validation:Required
+	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
+	// The size of additional Flash Cache in percentage of High Capacity database storage.
+	// +kubebuilder:validation:Optional
+	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabase defines nested fields for DistributedDatabase.SystemDataGuardDatabases.OriginalReplica.Database.
+type DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabase struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
+	// +kubebuilder:validation:Optional
+	Source string `json:"source,omitempty"`
+	// The name of the availability domain that the distributed database shard will be located in  like yKoY:US-ASHBURN-AD-3.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
+	// +kubebuilder:validation:Optional
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
+	// +kubebuilder:validation:Optional
+	VmClusterDetails DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the shard associated with Globally distributed database.
+	// +kubebuilder:validation:Optional
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	// +kubebuilder:validation:Optional
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// +kubebuilder:validation:Optional
+	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// +kubebuilder:validation:Optional
+	DbStorageVaultDetails DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
+	// +kubebuilder:validation:Optional
+	VmClusterId string `json:"vmClusterId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesOriginalReplica defines nested fields for DistributedDatabase.SystemDataGuardDatabases.OriginalReplica.
+type DistributedDatabaseSystemDataGuardDatabasesOriginalReplica struct {
+	// The name of data guard replica.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Details of the databases associated with the system data guard replica.
+	// +kubebuilder:validation:Required
+	Databases []DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabase `json:"databases"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabaseVmClusterDetails defines nested fields for DistributedDatabase.SystemDataGuardDatabases.DataGuardReplica.Database.VmClusterDetails.
+type DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	BackupSubnetId string `json:"backupSubnetId"`
+	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	EnabledECpuCount int `json:"enabledECpuCount"`
+	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SshPublicKeys []string `json:"sshPublicKeys"`
+	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Optional
+	TotalECpuCount int `json:"totalECpuCount,omitempty"`
+	// File System Storage Size in GBs for Exadata VM cluster.
+	// +kubebuilder:validation:Optional
+	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
+	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	// +kubebuilder:validation:Optional
+	LicenseModel string `json:"licenseModel,omitempty"`
+	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+	// (do not provide one). Otherwise, provide a valid DNS domain name.
+	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	// +kubebuilder:validation:Optional
+	Domain string `json:"domain,omitempty"`
+	// The private zone ID in which you want DNS records to be created.
+	// +kubebuilder:validation:Optional
+	PrivateZoneId string `json:"privateZoneId,omitempty"`
+	// Indicates whether diagnostic collection is enabled for the VM cluster.
+	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
+	// Indicates whether health monitoring is enabled for the VM cluster.
+	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
+	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
+	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+	// Setting this to an empty list removes all resources from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+	// Setting this to an empty array after the list is created removes the resource from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	// +kubebuilder:validation:Optional
+	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.SystemDataGuardDatabases.DataGuardReplica.Database.DbStorageVaultDetails.
+type DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// Total storage capacity in GB for vault storage.
+	// +kubebuilder:validation:Required
+	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
+	// The size of additional Flash Cache in percentage of High Capacity database storage.
+	// +kubebuilder:validation:Optional
+	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabase defines nested fields for DistributedDatabase.SystemDataGuardDatabases.DataGuardReplica.Database.
+type DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabase struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
+	// +kubebuilder:validation:Optional
+	Source string `json:"source,omitempty"`
+	// The name of the availability domain that the distributed database shard will be located in  like yKoY:US-ASHBURN-AD-3.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
+	// +kubebuilder:validation:Optional
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
+	// +kubebuilder:validation:Optional
+	VmClusterDetails DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the shard associated with Globally distributed database.
+	// +kubebuilder:validation:Optional
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	// +kubebuilder:validation:Optional
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// +kubebuilder:validation:Optional
+	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// +kubebuilder:validation:Optional
+	DbStorageVaultDetails DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
+	// +kubebuilder:validation:Optional
+	VmClusterId string `json:"vmClusterId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesDataGuardReplica defines nested fields for DistributedDatabase.SystemDataGuardDatabases.DataGuardReplica.
+type DistributedDatabaseSystemDataGuardDatabasesDataGuardReplica struct {
+	// The name of data guard replica.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Details of the databases associated with the system data guard replica.
+	// +kubebuilder:validation:Required
+	Databases []DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabase `json:"databases"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabases defines nested fields for DistributedDatabase.SystemDataGuardDatabases.
+type DistributedDatabaseSystemDataGuardDatabases struct {
+	// +kubebuilder:validation:Required
+	OriginalReplica DistributedDatabaseSystemDataGuardDatabasesOriginalReplica `json:"originalReplica"`
+	// The details required to create system data guard replicas.
+	// +kubebuilder:validation:Optional
+	DataGuardReplicas []DistributedDatabaseSystemDataGuardDatabasesDataGuardReplica `json:"dataGuardReplicas,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceOriginalReplicaDatabaseVmClusterDetails defines nested fields for DistributedDatabase.UserShardSpace.OriginalReplica.Database.VmClusterDetails.
+type DistributedDatabaseUserShardSpaceOriginalReplicaDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	BackupSubnetId string `json:"backupSubnetId"`
+	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	EnabledECpuCount int `json:"enabledECpuCount"`
+	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SshPublicKeys []string `json:"sshPublicKeys"`
+	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Optional
+	TotalECpuCount int `json:"totalECpuCount,omitempty"`
+	// File System Storage Size in GBs for Exadata VM cluster.
+	// +kubebuilder:validation:Optional
+	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
+	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	// +kubebuilder:validation:Optional
+	LicenseModel string `json:"licenseModel,omitempty"`
+	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+	// (do not provide one). Otherwise, provide a valid DNS domain name.
+	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	// +kubebuilder:validation:Optional
+	Domain string `json:"domain,omitempty"`
+	// The private zone ID in which you want DNS records to be created.
+	// +kubebuilder:validation:Optional
+	PrivateZoneId string `json:"privateZoneId,omitempty"`
+	// Indicates whether diagnostic collection is enabled for the VM cluster.
+	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
+	// Indicates whether health monitoring is enabled for the VM cluster.
+	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
+	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
+	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+	// Setting this to an empty list removes all resources from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+	// Setting this to an empty array after the list is created removes the resource from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	// +kubebuilder:validation:Optional
+	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceOriginalReplicaDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.UserShardSpace.OriginalReplica.Database.DbStorageVaultDetails.
+type DistributedDatabaseUserShardSpaceOriginalReplicaDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// Total storage capacity in GB for vault storage.
+	// +kubebuilder:validation:Required
+	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
+	// The size of additional Flash Cache in percentage of High Capacity database storage.
+	// +kubebuilder:validation:Optional
+	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceOriginalReplicaDatabase defines nested fields for DistributedDatabase.UserShardSpace.OriginalReplica.Database.
+type DistributedDatabaseUserShardSpaceOriginalReplicaDatabase struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
+	// +kubebuilder:validation:Optional
+	Source string `json:"source,omitempty"`
+	// The name of the availability domain that the distributed database shard will be located in  like yKoY:US-ASHBURN-AD-3.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
+	// +kubebuilder:validation:Optional
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
+	// +kubebuilder:validation:Optional
+	VmClusterDetails DistributedDatabaseUserShardSpaceOriginalReplicaDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the shard associated with Globally distributed database.
+	// +kubebuilder:validation:Optional
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	// +kubebuilder:validation:Optional
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// +kubebuilder:validation:Optional
+	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// +kubebuilder:validation:Optional
+	DbStorageVaultDetails DistributedDatabaseUserShardSpaceOriginalReplicaDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
+	// +kubebuilder:validation:Optional
+	VmClusterId string `json:"vmClusterId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceOriginalReplica defines nested fields for DistributedDatabase.UserShardSpace.OriginalReplica.
+type DistributedDatabaseUserShardSpaceOriginalReplica struct {
+	// The name of user shard space replica.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// +kubebuilder:validation:Required
+	Database DistributedDatabaseUserShardSpaceOriginalReplicaDatabase `json:"database"`
+}
+
+// DistributedDatabaseUserShardSpaceDataGuardReplicaDatabaseVmClusterDetails defines nested fields for DistributedDatabase.UserShardSpace.DataGuardReplica.Database.VmClusterDetails.
+type DistributedDatabaseUserShardSpaceDataGuardReplicaDatabaseVmClusterDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for VM Cluster.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SubnetId string `json:"subnetId"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup network subnet associated with the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	BackupSubnetId string `json:"backupSubnetId"`
+	// The number of ECPUs to enable for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	EnabledECpuCount int `json:"enabledECpuCount"`
+	// The public key portion of one or more key pairs used for SSH access to the Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Required
+	SshPublicKeys []string `json:"sshPublicKeys"`
+	// The number of Total ECPUs for an Exadata VM cluster on Exascale Infrastructure.
+	// +kubebuilder:validation:Optional
+	TotalECpuCount int `json:"totalECpuCount,omitempty"`
+	// File System Storage Size in GBs for Exadata VM cluster.
+	// +kubebuilder:validation:Optional
+	VmFileSystemStorageSize int `json:"vmFileSystemStorageSize,omitempty"`
+	// The Oracle license model that applies to the Exadata VM cluster on Exascale Infrastructure. The default is BRING_YOUR_OWN_LICENSE.
+	// +kubebuilder:validation:Optional
+	LicenseModel string `json:"licenseModel,omitempty"`
+	// A domain name used for the Exadata VM cluster on Exascale Infrastructure.
+	// If the Oracle-provided internet and VCN resolver is enabled for the specified subnet, then the domain name for the subnet is used
+	// (do not provide one). Otherwise, provide a valid DNS domain name.
+	// Hyphens (-) are not permitted. Applies to Exadata Database Service on Exascale Infrastructure only.
+	// +kubebuilder:validation:Optional
+	Domain string `json:"domain,omitempty"`
+	// The private zone ID in which you want DNS records to be created.
+	// +kubebuilder:validation:Optional
+	PrivateZoneId string `json:"privateZoneId,omitempty"`
+	// Indicates whether diagnostic collection is enabled for the VM cluster.
+	// Enabling diagnostic collection allows you to receive Events service notifications for guest VM issues.
+	// Diagnostic collection also allows Oracle to provide enhanced service and proactive support for your Exadata system.
+	// You can enable diagnostic collection during VM cluster provisioning. You can also disable or enable it at any time using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsDiagnosticsEventsEnabled bool `json:"isDiagnosticsEventsEnabled,omitempty"`
+	// Indicates whether health monitoring is enabled for the VM cluster.
+	// Enabling health monitoring allows Oracle to collect diagnostic data and share it with its operations and support personnel.
+	// You may also receive notifications for some events. Collecting health diagnostics enables Oracle to provide proactive support and enhanced service for your system.
+	// Optionally enable health monitoring while provisioning a system. You can also disable or enable health monitoring anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsHealthMonitoringEnabled bool `json:"isHealthMonitoringEnabled,omitempty"`
+	// Indicates whether incident logs and trace collection are enabled for the VM cluster.
+	// Enabling incident logs collection allows Oracle to receive Events service notifications for guest VM issues, collect incident logs and traces, and use them to diagnose issues and resolve them.
+	// Optionally enable incident logs collection while provisioning a system. You can also disable or enable incident logs collection anytime using the `UpdateVmCluster` API.
+	// +kubebuilder:validation:Optional
+	IsIncidentLogsEnabled bool `json:"isIncidentLogsEnabled,omitempty"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the network security groups (NSGs) to which this resource belongs.
+	// Setting this to an empty list removes all resources from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Optional
+	NsgIds []string `json:"nsgIds,omitempty"`
+	// A list of the OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) that the backup network of this DB system belongs to.
+	// Setting this to an empty array after the list is created removes the resource from all NSGs.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm). Applicable only to Exadata systems.
+	// +kubebuilder:validation:Optional
+	BackupNetworkNsgIds []string `json:"backupNetworkNsgIds,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceDataGuardReplicaDatabaseDbStorageVaultDetails defines nested fields for DistributedDatabase.UserShardSpace.DataGuardReplica.Database.DbStorageVaultDetails.
+type DistributedDatabaseUserShardSpaceDataGuardReplicaDatabaseDbStorageVaultDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for Db Storage Vault.
+	// +kubebuilder:validation:Required
+	CompartmentId string `json:"compartmentId"`
+	// Total storage capacity in GB for vault storage.
+	// +kubebuilder:validation:Required
+	HighCapacityDatabaseStorage int `json:"highCapacityDatabaseStorage"`
+	// The size of additional Flash Cache in percentage of High Capacity database storage.
+	// +kubebuilder:validation:Optional
+	AdditionalFlashCacheInPercent int `json:"additionalFlashCacheInPercent,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
+	// +kubebuilder:validation:Optional
+	SubscriptionId string `json:"subscriptionId,omitempty"`
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	// +kubebuilder:validation:Optional
+	IsAutoscaleEnabled bool `json:"isAutoscaleEnabled,omitempty"`
+	// The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault.
+	// +kubebuilder:validation:Optional
+	AutoscaleLimitInGBs int `json:"autoscaleLimitInGBs,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceDataGuardReplicaDatabase defines nested fields for DistributedDatabase.UserShardSpace.DataGuardReplica.Database.
+type DistributedDatabaseUserShardSpaceDataGuardReplicaDatabase struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// The password to open the TDE wallet.
+	// The password must be 9 to 255 characters and contain at least two uppercase letters, two lowercase letters, two numeric characters, and two special characters.
+	// The allowed special characters are _, \#, and -.
+	// +kubebuilder:validation:Optional
+	TdeWalletPassword string `json:"tdeWalletPassword,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI vault secret. This cannot be used in conjunction with tdeWalletPassword.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretId string `json:"tdeWalletPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	TdeWalletPasswordSecretVersionNumber int `json:"tdeWalletPasswordSecretVersionNumber,omitempty"`
+	// +kubebuilder:validation:Optional
+	Source string `json:"source,omitempty"`
+	// The name of the availability domain that the distributed database shard will be located in  like yKoY:US-ASHBURN-AD-3.
+	// +kubebuilder:validation:Optional
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the exascale db storage vault.
+	// +kubebuilder:validation:Optional
+	ExascaleDbStorageVaultId string `json:"exascaleDbStorageVaultId,omitempty"`
+	// +kubebuilder:validation:Optional
+	VmClusterDetails DistributedDatabaseUserShardSpaceDataGuardReplicaDatabaseVmClusterDetails `json:"vmClusterDetails,omitempty,omitzero"`
+	// The admin password for the shard associated with Globally distributed database.
+	// +kubebuilder:validation:Optional
+	AdminPassword string `json:"adminPassword,omitempty"`
+	// The OCI vault secret [/Content/General/Concepts/identifiers.htm]OCID. This cannot be used in conjunction with adminPassword.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretId string `json:"adminPasswordSecretId,omitempty"`
+	// The version of the vault secret. If no version is specified, the latest version will be used.
+	// +kubebuilder:validation:Optional
+	AdminPasswordSecretVersionNumber int `json:"adminPasswordSecretVersionNumber,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle Cloud Infrastructure vault (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+	// This parameter and `kmsKeyId` are required for Customer Managed Keys.
+	// +kubebuilder:validation:Optional
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions.
+	// +kubebuilder:validation:Optional
+	KmsKeyVersionId string `json:"kmsKeyVersionId,omitempty"`
+	// The protection mode used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	ProtectionMode string `json:"protectionMode,omitempty"`
+	// The transport type used for the Data Guard association.
+	// +kubebuilder:validation:Optional
+	TransportType string `json:"transportType,omitempty"`
+	// +kubebuilder:validation:Optional
+	DbStorageVaultDetails DistributedDatabaseUserShardSpaceDataGuardReplicaDatabaseDbStorageVaultDetails `json:"dbStorageVaultDetails,omitempty,omitzero"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VmCluster.
+	// +kubebuilder:validation:Optional
+	VmClusterId string `json:"vmClusterId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Home.
+	// +kubebuilder:validation:Optional
+	DbHomeId string `json:"dbHomeId,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceDataGuardReplica defines nested fields for DistributedDatabase.UserShardSpace.DataGuardReplica.
+type DistributedDatabaseUserShardSpaceDataGuardReplica struct {
+	// The name of user shard space replica.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// +kubebuilder:validation:Required
+	Database DistributedDatabaseUserShardSpaceDataGuardReplicaDatabase `json:"database"`
+}
+
+// DistributedDatabaseUserShardSpace defines nested fields for DistributedDatabase.UserShardSpace.
+type DistributedDatabaseUserShardSpace struct {
+	// The name of user shard space.
+	// It must start with a letter and contain only letters, digits, and underscores.
+	// Maximum length is 40 characters.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// +kubebuilder:validation:Required
+	OriginalReplica DistributedDatabaseUserShardSpaceOriginalReplica `json:"originalReplica"`
+	// The details of data guard replica for the user shard space being created.
+	// +kubebuilder:validation:Optional
+	DataGuardReplicas []DistributedDatabaseUserShardSpaceDataGuardReplica `json:"dataGuardReplicas,omitempty"`
 }
 
 // DistributedDatabaseDbBackupConfigBackupDestinationDetail defines nested fields for DistributedDatabase.DbBackupConfig.BackupDestinationDetail.
@@ -517,15 +1805,6 @@ type DistributedDatabaseDbBackupConfigBackupDestinationDetail struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup destination.
 	// +kubebuilder:validation:Optional
 	Id string `json:"id,omitempty"`
-	// For a RECOVERY_APPLIANCE backup destination, the Virtual Private Catalog (VPC) user that is used to access the Recovery Appliance.
-	// +kubebuilder:validation:Optional
-	VpcUser string `json:"vpcUser,omitempty"`
-	// For a RECOVERY_APPLIANCE backup destination, the password for the VPC user that is used to access the Recovery Appliance.
-	// +kubebuilder:validation:Optional
-	VpcPassword string `json:"vpcPassword,omitempty"`
-	// Indicates whether Zero Data Loss functionality is enabled for a Recovery Appliance backup destination in an Autonomous Container Database. When enabled, the database automatically ships all redo logs in real-time to the Recovery Appliance for a Zero Data Loss recovery setup (sub-second RPO). Defaults to `TRUE` if no value is given.
-	// +kubebuilder:validation:Optional
-	IsZeroDataLossEnabled bool `json:"isZeroDataLossEnabled,omitempty"`
 	// Proxy URL to connect to object store.
 	// +kubebuilder:validation:Optional
 	InternetProxy string `json:"internetProxy,omitempty"`
@@ -584,6 +1863,17 @@ type DistributedDatabaseDbBackupConfig struct {
 	BackupDeletionPolicy string `json:"backupDeletionPolicy,omitempty"`
 }
 
+// DistributedDatabaseVcnNsgId defines nested fields for DistributedDatabase.VcnNsgId.
+type DistributedDatabaseVcnNsgId struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the customer Virtual Cloud Network.
+	// +kubebuilder:validation:Required
+	VcnId string `json:"vcnId"`
+	// The list of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups (NSGs) associated with resources in this VCN.
+	// For more information about NSGs, see Security Rules (https://docs.oracle.com/iaas/Content/Network/Concepts/securityrules.htm).
+	// +kubebuilder:validation:Required
+	NsgIds []string `json:"nsgIds"`
+}
+
 // DistributedDatabaseConnectionStrings defines nested fields for DistributedDatabase.ConnectionStrings.
 type DistributedDatabaseConnectionStrings struct {
 	// Collection of connection strings.
@@ -594,30 +1884,66 @@ type DistributedDatabaseConnectionStrings struct {
 type DistributedDatabaseLatestGsmImageDetails struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Global service manager software image.
 	Id string `json:"id,omitempty"`
-	// The version number associated with the image identified by id.
-	VersionNumber int `json:"versionNumber,omitempty"`
+	// The version associated with the image identified by id.
+	Version string `json:"version,omitempty"`
 }
 
-// DistributedDatabaseShardDetailPeerDetailMetadata defines nested fields for DistributedDatabase.ShardDetail.PeerDetail.Metadata.
-type DistributedDatabaseShardDetailPeerDetailMetadata struct {
+// DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabaseMetadata defines nested fields for DistributedDatabase.CompositeRaftShardSpace.RaftCluster.Database.Metadata.
+type DistributedDatabaseCompositeRaftShardSpaceRaftClusterDatabaseMetadata struct {
 	// The map containing key-value pair of additional metadata.
 	PropertiesMap map[string]string `json:"map,omitempty"`
 }
 
-// DistributedDatabaseShardDetailMetadata defines nested fields for DistributedDatabase.ShardDetail.Metadata.
-type DistributedDatabaseShardDetailMetadata struct {
+// DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabaseMetadata defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.OriginalReplica.Database.Metadata.
+type DistributedDatabaseCompositeDataGuardShardSpaceOriginalReplicaDatabaseMetadata struct {
 	// The map containing key-value pair of additional metadata.
 	PropertiesMap map[string]string `json:"map,omitempty"`
 }
 
-// DistributedDatabaseCatalogDetailPeerDetailMetadata defines nested fields for DistributedDatabase.CatalogDetail.PeerDetail.Metadata.
-type DistributedDatabaseCatalogDetailPeerDetailMetadata struct {
+// DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabaseMetadata defines nested fields for DistributedDatabase.CompositeDataGuardShardSpace.DataGuardReplica.Database.Metadata.
+type DistributedDatabaseCompositeDataGuardShardSpaceDataGuardReplicaDatabaseMetadata struct {
 	// The map containing key-value pair of additional metadata.
 	PropertiesMap map[string]string `json:"map,omitempty"`
 }
 
-// DistributedDatabaseCatalogDetailMetadata defines nested fields for DistributedDatabase.CatalogDetail.Metadata.
-type DistributedDatabaseCatalogDetailMetadata struct {
+// DistributedDatabaseSystemRaftClusterDatabaseMetadata defines nested fields for DistributedDatabase.SystemRaftCluster.Database.Metadata.
+type DistributedDatabaseSystemRaftClusterDatabaseMetadata struct {
+	// The map containing key-value pair of additional metadata.
+	PropertiesMap map[string]string `json:"map,omitempty"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabaseMetadata defines nested fields for DistributedDatabase.SystemDataGuardDatabases.OriginalReplica.Database.Metadata.
+type DistributedDatabaseSystemDataGuardDatabasesOriginalReplicaDatabaseMetadata struct {
+	// The map containing key-value pair of additional metadata.
+	PropertiesMap map[string]string `json:"map,omitempty"`
+}
+
+// DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabaseMetadata defines nested fields for DistributedDatabase.SystemDataGuardDatabases.DataGuardReplica.Database.Metadata.
+type DistributedDatabaseSystemDataGuardDatabasesDataGuardReplicaDatabaseMetadata struct {
+	// The map containing key-value pair of additional metadata.
+	PropertiesMap map[string]string `json:"map,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceOriginalReplicaDatabaseMetadata defines nested fields for DistributedDatabase.UserShardSpace.OriginalReplica.Database.Metadata.
+type DistributedDatabaseUserShardSpaceOriginalReplicaDatabaseMetadata struct {
+	// The map containing key-value pair of additional metadata.
+	PropertiesMap map[string]string `json:"map,omitempty"`
+}
+
+// DistributedDatabaseUserShardSpaceDataGuardReplicaDatabaseMetadata defines nested fields for DistributedDatabase.UserShardSpace.DataGuardReplica.Database.Metadata.
+type DistributedDatabaseUserShardSpaceDataGuardReplicaDatabaseMetadata struct {
+	// The map containing key-value pair of additional metadata.
+	PropertiesMap map[string]string `json:"map,omitempty"`
+}
+
+// DistributedDatabaseCatalogDetailOriginalReplicaDatabaseMetadata defines nested fields for DistributedDatabase.CatalogDetail.OriginalReplica.Database.Metadata.
+type DistributedDatabaseCatalogDetailOriginalReplicaDatabaseMetadata struct {
+	// The map containing key-value pair of additional metadata.
+	PropertiesMap map[string]string `json:"map,omitempty"`
+}
+
+// DistributedDatabaseCatalogDetailDataGuardReplicaDatabaseMetadata defines nested fields for DistributedDatabase.CatalogDetail.DataGuardReplica.Database.Metadata.
+type DistributedDatabaseCatalogDetailDataGuardReplicaDatabaseMetadata struct {
 	// The map containing key-value pair of additional metadata.
 	PropertiesMap map[string]string `json:"map,omitempty"`
 }
@@ -626,8 +1952,8 @@ type DistributedDatabaseCatalogDetailMetadata struct {
 type DistributedDatabaseGsmDetailGsmImageDetails struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Global service manager software image.
 	Id string `json:"id,omitempty"`
-	// The version number associated with the image identified by id.
-	VersionNumber int `json:"versionNumber,omitempty"`
+	// The version associated with the image identified by id.
+	Version string `json:"version,omitempty"`
 }
 
 // DistributedDatabaseGsmDetailMetadata defines nested fields for DistributedDatabase.GsmDetail.Metadata.
@@ -644,9 +1970,9 @@ type DistributedDatabaseGsmDetail struct {
 	ComputeCount float32 `json:"computeCount,omitempty"`
 	// The data disk group size to be allocated in GBs for the Global service manager instance.
 	DataStorageSizeInGbs float64 `json:"dataStorageSizeInGbs,omitempty"`
-	// The time the Global service manager instance was created. An RFC3339 formatted datetime string
+	// The time the Global service manager instance was created. An RFC3339 formatted datetime string.
 	TimeCreated string `json:"timeCreated,omitempty"`
-	// The time the Global service manager instance was last updated. An RFC3339 formatted datetime string
+	// The time the Global service manager instance was last updated. An RFC3339 formatted datetime string.
 	TimeUpdated string `json:"timeUpdated,omitempty"`
 	// Status of the gsm.
 	Status string `json:"status,omitempty"`
@@ -656,6 +1982,60 @@ type DistributedDatabaseGsmDetail struct {
 	SupportingResourceId string                                      `json:"supportingResourceId,omitempty"`
 	GsmImageDetails      DistributedDatabaseGsmDetailGsmImageDetails `json:"gsmImageDetails,omitempty"`
 	Metadata             DistributedDatabaseGsmDetailMetadata        `json:"metadata,omitempty"`
+}
+
+// DistributedDatabaseGdsControlNodeDetailGdsControlNodeImageDetails defines nested fields for DistributedDatabase.GdsControlNodeDetail.GdsControlNodeImageDetails.
+type DistributedDatabaseGdsControlNodeDetailGdsControlNodeImageDetails struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Global Database Services Control(GDS CTL) software image.
+	Id string `json:"id,omitempty"`
+	// The version associated with the image identified by id.
+	Version string `json:"version,omitempty"`
+}
+
+// DistributedDatabaseGdsControlNodeDetailMetadata defines nested fields for DistributedDatabase.GdsControlNodeDetail.Metadata.
+type DistributedDatabaseGdsControlNodeDetailMetadata struct {
+	// The map containing key-value pair of additional metadata.
+	PropertiesMap map[string]string `json:"map,omitempty"`
+}
+
+// DistributedDatabaseGdsControlNodeDetail defines nested fields for DistributedDatabase.GdsControlNodeDetail.
+type DistributedDatabaseGdsControlNodeDetail struct {
+	// Name of the Global Database Services Control instance
+	Name string `json:"name,omitempty"`
+	// The time the Global Database Services Control instance was created. An RFC3339 formatted datetime string.
+	TimeCreated string `json:"timeCreated,omitempty"`
+	// The time the Global Database Services Control instance was last updated. An RFC3339 formatted datetime string.
+	TimeUpdated string `json:"timeUpdated,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Global Database Services Control instance.
+	SubnetId string `json:"subnetId,omitempty"`
+	// The name of the availability domain where the Global Database Services Control instance is located in.
+	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The identifier of the underlying supporting resource.
+	SupportingResourceId string `json:"supportingResourceId,omitempty"`
+	// IP address of the Global Database Services Control instance.
+	PrivateIp                  string                                                            `json:"privateIp,omitempty"`
+	GdsControlNodeImageDetails DistributedDatabaseGdsControlNodeDetailGdsControlNodeImageDetails `json:"gdsControlNodeImageDetails,omitempty"`
+	Metadata                   DistributedDatabaseGdsControlNodeDetailMetadata                   `json:"metadata,omitempty"`
+}
+
+// DistributedDatabaseAutoResourceManagementConfig defines nested fields for DistributedDatabase.AutoResourceManagementConfig.
+type DistributedDatabaseAutoResourceManagementConfig struct {
+	// Flag indicating if autoResourceManagement is enabled or disabled.
+	IsEnabled bool `json:"isEnabled,omitempty"`
+	// Time period to wait for the database to get stable after autoResourceManagement event.
+	CoolOffPeriodInMinutes int `json:"coolOffPeriodInMinutes,omitempty"`
+	// Maximum number of move replication unit attempts allowed within the configured period per database.
+	MaxMoveRuAttempts int `json:"maxMoveRuAttempts,omitempty"`
+	// Time unit applicable to maxMoveRuAttempts.
+	MaxMoveRuUnit string `json:"maxMoveRuUnit,omitempty"`
+	// Mode of autoResourceManagement execution.
+	Mode string `json:"mode,omitempty"`
+	// The action that will be taken when autoResourceManagement is triggered.
+	ActionType string `json:"actionType,omitempty"`
+	// The list of notification topic ids OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) to receive autoResourceManagement events.
+	NotificationTopicIds []string `json:"notificationTopicIds,omitempty"`
+	// The list of stream ids OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that receive shard-related telemetry.
+	StreamIds []string `json:"streamIds,omitempty"`
 }
 
 // DistributedDatabaseMetadata defines nested fields for DistributedDatabase.Metadata.
@@ -673,14 +2053,18 @@ type DistributedDatabaseStatus struct {
 	CompartmentId string `json:"compartmentId,omitempty"`
 	// The display name of the Globally distributed database.
 	DisplayName string `json:"displayName,omitempty"`
-	// The time the Globally distributed database was created. An RFC3339 formatted datetime string
+	// The time the Globally distributed database was created. An RFC3339 formatted datetime string.
 	TimeCreated string `json:"timeCreated,omitempty"`
-	// The time the Globally distributed database was last updated. An RFC3339 formatted datetime string
+	// The time the Globally distributed database was last updated. An RFC3339 formatted datetime string.
 	TimeUpdated string `json:"timeUpdated,omitempty"`
 	// Oracle Database version for the shards and catalog used in Globally distributed database.
 	DatabaseVersion string `json:"databaseVersion,omitempty"`
 	// Lifecycle states for the Globally distributed database.
 	LifecycleState string `json:"lifecycleState,omitempty"`
+	// Sharding methods for the Globally distributed database.
+	ShardingMethod string `json:"shardingMethod,omitempty"`
+	// The distributed database deployment type.
+	DbDeploymentType string `json:"dbDeploymentType,omitempty"`
 	// The lifecycleDetails for the Globally distributed database.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
 	// Unique name prefix for the Globally distributed databases. Only alpha-numeric values are allowed. First character
@@ -688,8 +2072,6 @@ type DistributedDatabaseStatus struct {
 	Prefix string `json:"prefix,omitempty"`
 	// The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the private endpoint associated with Globally distributed autonomous database.
 	PrivateEndpointIds []string `json:"privateEndpointIds,omitempty"`
-	// Sharding Methods for the Globally distributed database.
-	ShardingMethod string `json:"shardingMethod,omitempty"`
 	// The character set for the database.
 	CharacterSet string `json:"characterSet,omitempty"`
 	// The national character set for the database.
@@ -700,35 +2082,45 @@ type DistributedDatabaseStatus struct {
 	OnsPortLocal int `json:"onsPortLocal,omitempty"`
 	// Ons remote port number.
 	OnsPortRemote int `json:"onsPortRemote,omitempty"`
-	// The distributed database deployment type.
-	DbDeploymentType      string                                   `json:"dbDeploymentType,omitempty"`
-	ConnectionStrings     DistributedDatabaseConnectionStrings     `json:"connectionStrings,omitempty"`
+	// The Replication method for Globally distributed database. Use RAFT for Raft based replication.
+	// With RAFT replication, shards cannot have peers details set on them. In case shards need to
+	// have peers, please do not set RAFT replicationMethod. For all non RAFT replication cases (with or
+	// without peers), please set replicationMethod as DG or do not set any value for replicationMethod.
+	ReplicationMethod string                               `json:"replicationMethod,omitempty"`
+	ConnectionStrings DistributedDatabaseConnectionStrings `json:"connectionStrings,omitempty"`
+	// The collection of OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for the notification topics associated with the globally distributed database.
+	NotificationTopicIds  []string                                 `json:"notificationTopicIds,omitempty"`
 	LatestGsmImageDetails DistributedDatabaseLatestGsmImageDetails `json:"latestGsmImageDetails,omitempty"`
-	// The default number of unique chunks in a shardspace. The value of chunks must be
-	// greater than 2 times the size of the largest shardgroup in any shardspace.
-	Chunks int `json:"chunks,omitempty"`
 	// The TLS listener port number for Globally distributed database.
 	ListenerPortTls int `json:"listenerPortTls,omitempty"`
-	// The TCP Single Client Access Name (SCAN) port for Globally distributed database clusters.
+	// The TCP SCAN listener port for database clusters with source type XS_NEW_VAULT_AND_CLUSTER or XS_NEW_CLUSTER.
 	ScanListenerPort int `json:"scanListenerPort,omitempty"`
-	// The Replication method for Globally distributed database. Use RAFT for Raft replication, and DG for
-	// DataGuard. If replicationMethod is not provided, it defaults to DG.
-	ReplicationMethod string `json:"replicationMethod,omitempty"`
-	// The Replication factor for RAFT replication based Globally distributed database. Currently supported values are 3, 5 and 7.
-	ReplicationFactor int `json:"replicationFactor,omitempty"`
-	// The replication unit count for RAFT based distributed database. For RAFT replication based
-	// Globally distributed database, the value should be at least twice the number of shards.
-	ReplicationUnit int `json:"replicationUnit,omitempty"`
-	// Collection of shards associated with the Globally distributed database.
-	ShardDetails []DistributedDatabaseShardDetail `json:"shardDetails,omitempty"`
-	// Collection of catalogs associated with the Globally distributed database.
+	// Count of chunks associated with system raft clusters or system data guard databases.
+	SystemChunkCount int `json:"systemChunkCount,omitempty"`
+	// Number of replication units associated with system raft clusters.
+	SystemRaftReplicationUnitCount int `json:"systemRaftReplicationUnitCount,omitempty"`
+	// Collection of composite raft shards.
+	CompositeRaftShardSpaces []DistributedDatabaseCompositeRaftShardSpace `json:"compositeRaftShardSpaces,omitempty"`
+	// Collection of composite data guard shard spaces.
+	CompositeDataGuardShardSpaces []DistributedDatabaseCompositeDataGuardShardSpace `json:"compositeDataGuardShardSpaces,omitempty"`
+	// Collection of system raft clusters.
+	SystemRaftClusters       []DistributedDatabaseSystemRaftCluster      `json:"systemRaftClusters,omitempty"`
+	SystemDataGuardDatabases DistributedDatabaseSystemDataGuardDatabases `json:"systemDataGuardDatabases,omitempty"`
+	// Collection of user defined shard spaces.
+	UserShardSpaces []DistributedDatabaseUserShardSpace `json:"userShardSpaces,omitempty"`
+	// Catalog details associated with the distributed database.
 	CatalogDetails []DistributedDatabaseCatalogDetail `json:"catalogDetails,omitempty"`
-	// Collection of catalogs associated with the Globally distributed database.
-	GsmDetails     []DistributedDatabaseGsmDetail    `json:"gsmDetails,omitempty"`
-	DbBackupConfig DistributedDatabaseDbBackupConfig `json:"dbBackupConfig,omitempty"`
+	// Global Service Manager (GSM) instances associated with the distributed database.
+	GsmDetails []DistributedDatabaseGsmDetail `json:"gsmDetails,omitempty"`
+	// Global Database Services Control(GDS CTL) instances associated with the distributed database.
+	GdsControlNodeDetails        []DistributedDatabaseGdsControlNodeDetail       `json:"gdsControlNodeDetails,omitempty"`
+	DbBackupConfig               DistributedDatabaseDbBackupConfig               `json:"dbBackupConfig,omitempty"`
+	AutoResourceManagementConfig DistributedDatabaseAutoResourceManagementConfig `json:"autoResourceManagementConfig,omitempty"`
 	// The SSH public key for Global service manager instances.
-	GsmSshPublicKey string                      `json:"gsmSshPublicKey,omitempty"`
-	Metadata        DistributedDatabaseMetadata `json:"metadata,omitempty"`
+	GsmSshPublicKey string `json:"gsmSshPublicKey,omitempty"`
+	// The list of network security group (NSG) details associated with the distributed database.
+	VcnNsgIds []DistributedDatabaseVcnNsgId `json:"vcnNsgIds,omitempty"`
+	Metadata  DistributedDatabaseMetadata   `json:"metadata,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`

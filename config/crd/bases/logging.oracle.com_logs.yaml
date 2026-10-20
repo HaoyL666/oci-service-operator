@@ -85,11 +85,14 @@ spec:
                       parameters:
                         additionalProperties:
                           type: string
-                        description: Log category parameters are stored here.
+                        description: Log category parameters are stored here. The
+                          resource for a service log can't be updated.
                         type: object
                       resource:
                         description: The unique identifier of the resource emitting
-                          the log.
+                          the log. The resource can be updated, and the resource value
+                          can vary depending on the OCI service to which the resource
+                          belongs to.
                         type: string
                       service:
                         description: Service generating log.
@@ -178,11 +181,14 @@ spec:
                       parameters:
                         additionalProperties:
                           type: string
-                        description: Log category parameters are stored here.
+                        description: Log category parameters are stored here. The
+                          resource for a service log can't be updated.
                         type: object
                       resource:
                         description: The unique identifier of the resource emitting
-                          the log.
+                          the log. The resource can be updated, and the resource value
+                          can vary depending on the OCI service to which the resource
+                          belongs to.
                         type: string
                       service:
                         description: Service generating log.
@@ -335,6 +341,15 @@ spec:
                   updatedAt:
                     format: date-time
                     type: string
+                type: object
+              systemTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Usage of system tag keys. These predefined keys are scoped to namespaces.
+                  Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
                 type: object
               tenancyId:
                 description: The OCID of the tenancy.

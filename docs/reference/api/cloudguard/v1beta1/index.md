@@ -411,16 +411,16 @@ DataSourceDetails defines nested fields for DataSource.DataSourceDetails.
 | `dataSourceFeedProvider` | - | `string` | No | - | - |
 | `description` | Description text for the query | `string` | No | - | - |
 | `intervalInMinutes` | Interval in minutes that query is run periodically. | `integer` | No | - | - |
-| `intervalInSeconds` | Interval in minutes which query is run periodically. | `integer` | No | - | - |
+| `intervalInSeconds` | Interval in seconds which query is run periodically. | `integer` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | [`loggingQueryDetails`](#kind-datasource-spec-datasourcedetails-loggingquerydetails) | DataSourceDetailsLoggingQueryDetails defines nested fields for DataSource.DataSourceDetails.LoggingQueryDetails. | `object` | No | - | - |
 | `loggingQueryType` | Type of logging query for data source (Sighting/Insight) | `string` | No | - | - |
-| `operator` | Operator used in data source | `string` | No | - | - |
+| `operator` | DEPRECATED - Operator used in data source | `string` | No | - | - |
 | `query` | The continuous query expression that is run periodically. | `string` | No | - | - |
 | [`queryStartTime`](#kind-datasource-spec-datasourcedetails-querystarttime) | DataSourceDetailsQueryStartTime defines nested fields for DataSource.DataSourceDetails.QueryStartTime. | `object` | No | - | - |
 | `regions` | List of logging query regions | `list[string]` | No | - | - |
 | [`scheduledQueryScopeDetails`](#kind-datasource-spec-datasourcedetails-scheduledqueryscopedetails) | Target information in which scheduled query will be run | `list[object]` | No | - | - |
-| `threshold` | The integer value that must be exceeded, fall below or equal to (depending on the operator), for the query result to trigger an event | `integer` | No | - | - |
+| `threshold` | DEPRECATED - The integer value that must be exceeded, fall below or equal to (depending on the operator), for the query result to trigger an event | `integer` | No | - | - |
 
 <a id="kind-datasource-spec-datasourcedetails-loggingquerydetails"></a>
 ##### Spec.dataSourceDetails.loggingQueryDetails
@@ -501,16 +501,16 @@ DataSourceDetails defines nested fields for DataSource.DataSourceDetails.
 | `dataSourceFeedProvider` | - | `string` | No | - | - |
 | `description` | Description text for the query | `string` | No | - | - |
 | `intervalInMinutes` | Interval in minutes that query is run periodically. | `integer` | No | - | - |
-| `intervalInSeconds` | Interval in minutes which query is run periodically. | `integer` | No | - | - |
+| `intervalInSeconds` | Interval in seconds which query is run periodically. | `integer` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | [`loggingQueryDetails`](#kind-datasource-status-datasourcedetails-loggingquerydetails) | DataSourceDetailsLoggingQueryDetails defines nested fields for DataSource.DataSourceDetails.LoggingQueryDetails. | `object` | No | - | - |
 | `loggingQueryType` | Type of logging query for data source (Sighting/Insight) | `string` | No | - | - |
-| `operator` | Operator used in data source | `string` | No | - | - |
+| `operator` | DEPRECATED - Operator used in data source | `string` | No | - | - |
 | `query` | The continuous query expression that is run periodically. | `string` | No | - | - |
 | [`queryStartTime`](#kind-datasource-status-datasourcedetails-querystarttime) | DataSourceDetailsQueryStartTime defines nested fields for DataSource.DataSourceDetails.QueryStartTime. | `object` | No | - | - |
 | `regions` | List of logging query regions | `list[string]` | No | - | - |
 | [`scheduledQueryScopeDetails`](#kind-datasource-status-datasourcedetails-scheduledqueryscopedetails) | Target information in which scheduled query will be run | `list[object]` | No | - | - |
-| `threshold` | The integer value that must be exceeded, fall below or equal to (depending on the operator), for the query result to trigger an event | `integer` | No | - | - |
+| `threshold` | DEPRECATED - The integer value that must be exceeded, fall below or equal to (depending on the operator), for the query result to trigger an event | `integer` | No | - | - |
 
 <a id="kind-datasource-status-datasourcedetails-loggingquerydetails"></a>
 ##### Status.dataSourceDetails.loggingQueryDetails
@@ -2383,6 +2383,7 @@ SecurityZoneSpec defines the desired state of SecurityZone.
 | `description` | The security zone's description | `string` | No | - | - |
 | `displayName` | The security zone's display name | `string` | Yes | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` Avoid entering confidential information. | `map[string, string]` | No | - | - |
+| `isInheritanceAfterDeleteEnabled` | Indicates if upon deletion of the security zone the comparment should inherit parent security zone | `boolean` | No | - | - |
 | `securityZoneRecipeId` | The OCID of the security zone recipe (`SecurityRecipe` resource) for the security zone | `string` | Yes | - | - |
 
 <a id="kind-securityzone-status"></a>
@@ -2399,6 +2400,7 @@ SecurityZoneStatus defines the observed state of SecurityZone.
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` Avoid entering confidential information. | `map[string, string]` | No | - | - |
 | `id` | Unique identifier that can’t be changed after creation | `string` | No | - | - |
 | `inheritedByCompartments` | List of inherited compartments | `list[string]` | No | - | - |
+| `isInheritanceAfterDeleteEnabled` | Indicates if upon deletion of the security zone the comparment should inherit parent security zone | `boolean` | No | - | - |
 | `lifecycleDetails` | A message describing the current state in more detail. For example, this can be used to provide actionable information for a zone in the `Failed` state. | `string` | No | - | - |
 | `lifecycleState` | The current lifecycle state of the security zone | `string` | No | - | - |
 | `securityZoneRecipeId` | The OCID of the recipe (`SecurityRecipe` resource) for the security zone | `string` | No | - | - |

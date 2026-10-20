@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetListingRevisionPackage
 else tracked identity is missing
-ServiceManager -> OCI: ListListingRevisionPackage(filters:\nid, listingRevisionId,\npackageVersion)
+ServiceManager -> OCI: ListListingRevisionPackage(filters:\ncompartment_id, state)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateListingRevisionPackage
-loop create pending CREATING
+loop create pending PROVISIONING
 ServiceManager -> OCI: GetListingRevisionPackage
 end
 else reusable OCI resource already exists
@@ -53,7 +53,7 @@ alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteListingRevisionPackage
 ServiceManager -> OCI: confirm delete via\nGetListingRevisionPackage or\nListListingRevisionPackage
-loop delete pending CREATING, DELETING,\nUPDATING
+loop delete pending DELETING
 ServiceManager -> OCI: GetListingRevisionPackage or\nListListingRevisionPackage
 end
 alt cleanup or finalizer release is blocked
@@ -63,31 +63,25 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nCREATING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface:
-areSecurityUpgradesProvided, artifactId,
-definedTags, description (+5 more)
+Supported update surface: display_name
 Reject before mutate: force-new fields
-listingRevisionId
-Lookup filters: id, listingRevisionId,
-packageVersion
-Lookup matching: exact resource identity
-match; duplicate matches fail
+compartment_id
+Lookup filters: compartment_id, state
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateListingRevisionPackage\nonly for mutable fields\nareSecurityUpgradesProvided,\nartifactId, definedTags, description\n(+5 more)
+ServiceManager -> OCI: Apply UpdateListingRevisionPackage\nonly for mutable fields display_name
 loop update pending UPDATING
 ServiceManager -> OCI: GetListingRevisionPackage
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
-ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -114,27 +108,19 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create CREATING; update
-UPDATING; delete CREATING, DELETING, UPDATING
-follow-up: create=read-after-write;
-update=read-after-write; delete=confirm-delete
-supported drift: areSecurityUpgradesProvided,
-artifactId, definedTags, description (+5 more)
+provider states: create PROVISIONING; update
+UPDATING; delete DELETING
+supported drift: display_name
 reject before mutate: force-new fields
-listingRevisionId
+compartment_id
 create-only fields: none
 list lookup:
 scaffold_marketplacepublisher_listingrevisionpackage
-filters id, listingRevisionId, packageVersion;
-exact resource identity match; duplicate matches
-fail
+filters compartment_id, state
 conflicts: none
 open gaps: none
-The runtime uses its declared lifecycle-state
-contract for ListingRevisionPackage
-reconciliation.
-The credential-free mock exercises SDK request
-serialization, response projection, mutation
-when supported, and confirmed deletion.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 @enduml

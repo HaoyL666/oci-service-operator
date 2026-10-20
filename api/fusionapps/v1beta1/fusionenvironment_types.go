@@ -23,7 +23,7 @@ type FusionEnvironmentSpec struct {
 	// The unique identifier (OCID) of the Fusion Environment Family that the Fusion Environment belongs to.
 	// +kubebuilder:validation:Required
 	FusionEnvironmentFamilyId string `json:"fusionEnvironmentFamilyId"`
-	// The type of environment. Valid values are Production, Test, or Development.
+	// The type of environment. Valid values are Production, Test, Development, or Demo.
 	// +kubebuilder:validation:Required
 	FusionEnvironmentType string `json:"fusionEnvironmentType"`
 	// +kubebuilder:validation:Required
@@ -39,12 +39,15 @@ type FusionEnvironmentSpec struct {
 	// Language packs.
 	// +kubebuilder:validation:Optional
 	AdditionalLanguagePacks []string `json:"additionalLanguagePacks,omitempty"`
-	// Enable IPv4/IPv6 dual stack support for the environment.  Setting to true will assign an IPv6 address to the environment in addition to an IPv4 address. Default value will be false if not set
+	// Enable IPv4/IPv6 dual stack support for the environment (where available). Setting to true will assign an IPv6 address to the environment in addition to an IPv4 address. The default value is false.
 	// +kubebuilder:validation:Optional
 	IsIPv6DualStackEnabled bool `json:"isIPv6DualStackEnabled,omitempty"`
 	// Rules.
 	// +kubebuilder:validation:Optional
 	Rules []FusionEnvironmentRule `json:"rules,omitempty"`
+	// Additional egress rules that should be applied to the environment. Some standard ports are open for general use; see Securing Network Access to a Fusion Applications Environment (https://docs.oracle.com/iaas/Content/fusion-applications/plan-environment.htm#internet-cache). If access to a non-standard port is required, however, they can be listed here.
+	// +kubebuilder:validation:Optional
+	AdditionalEgressRules []FusionEnvironmentAdditionalEgressRule `json:"additionalEgressRules,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -107,6 +110,22 @@ type FusionEnvironmentRule struct {
 	// example: `192.168.0.0/16 and 2001:db8::/32 are trusted clients. Whitelist them.`
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
+}
+
+// FusionEnvironmentAdditionalEgressRule defines nested fields for FusionEnvironment.AdditionalEgressRule.
+type FusionEnvironmentAdditionalEgressRule struct {
+	// Rule description.
+	// +kubebuilder:validation:Required
+	Description string `json:"description"`
+	// Specifies the destination CIDR block the port should be opened for. Must be IPv4 only, and cannot be part of any private range from RFC 1918 (https://datatracker.ietf.org/doc/html/rfc1918).
+	// +kubebuilder:validation:Required
+	DestinationCidr string `json:"destinationCidr"`
+	// The maximum port number, which must not be less than the minimum port number. To specify a single port number, set both the min and max to the same value.
+	// +kubebuilder:validation:Required
+	MaxDestinationPort int `json:"maxDestinationPort"`
+	// The minimum port number, which must not be greater than the maximum port number.
+	// +kubebuilder:validation:Required
+	MinDestinationPort int `json:"minDestinationPort"`
 }
 
 // FusionEnvironmentMaintenancePolicyQuarterlyUpgradeBeginTimes defines nested fields for FusionEnvironment.MaintenancePolicy.QuarterlyUpgradeBeginTimes.
@@ -175,7 +194,7 @@ type FusionEnvironmentStatus struct {
 	DnsPrefix string `json:"dnsPrefix,omitempty"`
 	// Language packs
 	AdditionalLanguagePacks []string `json:"additionalLanguagePacks,omitempty"`
-	// Enable IPv4/IPv6 dual stack support for the environment.  Setting to true will assign an IPv6 address to the environment in addition to an IPv4 address.
+	// Enable IPv4/IPv6 dual stack support for the environment (where available). Setting to true will assign an IPv6 address to the environment in addition to an IPv4 address.
 	IsIPv6DualStackEnabled bool `json:"isIPv6DualStackEnabled,omitempty"`
 	// The lockbox Id of this fusion environment. If there's no lockbox id, this field will be null
 	LockboxId string `json:"lockboxId,omitempty"`
@@ -201,6 +220,8 @@ type FusionEnvironmentStatus struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 	// Environment suspended status
 	IsSuspended bool `json:"isSuspended,omitempty"`
+	// Additional egress rules that should be applied to the environment. Some standard ports are open for general use; see [Securing Network Access to a Fusion Applications Environment][iaas/Content/fusion-applications/plan-environment.htm#internet-cache]. If access to a non-standard port is required, however, they can be listed here.
+	AdditionalEgressRules []FusionEnvironmentAdditionalEgressRule `json:"additionalEgressRules,omitempty"`
 }
 
 // +kubebuilder:object:root=true

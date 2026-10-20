@@ -120,6 +120,6 @@
     ]
   },
   "notes": [
-    "The pinned Terraform provider has no corresponding resource implementation. The formal row remains scaffolded while the recorded SDK lifecycle supplies integration evidence."
+    "Scaffold placeholder for managementdashboard/managementsavedsearch; replace imported facts before promoting this row beyond scaffold."
   ]
 }

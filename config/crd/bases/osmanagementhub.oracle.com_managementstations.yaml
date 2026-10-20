@@ -56,6 +56,9 @@ spec:
           spec:
             description: ManagementStationSpec defines the desired state of ManagementStation.
             properties:
+              archType:
+                description: The architecture type.
+                type: string
               compartmentId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment that contains the management station.
@@ -120,6 +123,9 @@ spec:
                 - port
                 - sslport
                 type: object
+              osFamily:
+                description: The operating system family.
+                type: string
               proxy:
                 description: ManagementStationProxy defines nested fields for ManagementStation.Proxy.
                 properties:
@@ -151,6 +157,9 @@ spec:
           status:
             description: ManagementStationStatus defines the observed state of ManagementStation.
             properties:
+              archType:
+                description: The architecture type.
+                type: string
               compartmentId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment that contains the management station.
@@ -288,6 +297,9 @@ spec:
                   software sources on the station. Each package is counted only once,
                   regardless of how many versions it has.
                 type: integer
+              osFamily:
+                description: The operating system family.
+                type: string
               overallPercentage:
                 description: A decimal number representing the progress of the current
                   mirror sync.

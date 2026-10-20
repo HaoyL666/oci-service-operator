@@ -50,6 +50,7 @@ MigrationSpec defines the desired state of Migration.
 | [`migrationConfig`](#kind-migration-spec-migrationconfig) | MigrationConfig defines nested fields for Migration.MigrationConfig. | `object` | No | - | - |
 | `migrationType` | Type of migration project (OCI/OLVM). This determines the target environment for the migration. | `string` | No | - | - |
 | `replicationScheduleId` | Replication schedule identifier | `string` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 
 <a id="kind-migration-spec-migrationconfig"></a>
 #### Spec.migrationConfig
@@ -80,6 +81,7 @@ MigrationStatus defines the observed state of Migration.
 | [`migrationConfig`](#kind-migration-status-migrationconfig) | MigrationConfig defines nested fields for Migration.MigrationConfig. | `object` | No | - | - |
 | `migrationType` | Type of migration project (OCI/OLVM). This determines the target environment for the migration. | `string` | No | - | - |
 | `replicationScheduleId` | Replication schedule identifier | `string` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | [`status`](#kind-migration-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The time when the migration project was created. An RFC3339 formatted datetime string | `string` | No | - | - |

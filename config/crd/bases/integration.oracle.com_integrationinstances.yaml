@@ -609,6 +609,10 @@ spec:
                       a required argument.
                     type: string
                 type: object
+              processAutomationLogGroupId:
+                description: OCID of LogAnalytics LogGroup, enabled for given Process
+                  Automation attached to integration instance.
+                type: string
               securityAttributes:
                 additionalProperties:
                   additionalProperties:

@@ -14,13 +14,14 @@ import (
 
 // AnalyticsInstanceSpec defines the desired state of AnalyticsInstance.
 type AnalyticsInstanceSpec struct {
-	// The name of the Analytics instance. This name must be unique in the tenancy and cannot be changed.
+	// The name of the Analytics instance. This name must be unique in the tenancy and can't be changed.
+	// The name must start with a letter and can contain only letters, numbers and dash (-).
 	// +kubebuilder:validation:Required
 	Name string `json:"name"`
 	// The OCID of the compartment.
 	// +kubebuilder:validation:Required
 	CompartmentId string `json:"compartmentId"`
-	// Analytics feature set.
+	// The feature set. Either `SELF_SERVICE_ANALYTICS` (Professional Edition) or `ENTERPRISE_ANALYTICS` (Enterprise Edition).
 	// +kubebuilder:validation:Required
 	FeatureSet string `json:"featureSet"`
 	// +kubebuilder:validation:Required
@@ -49,16 +50,16 @@ type AnalyticsInstanceSpec struct {
 	// Example: `{"Department": "Finance"}`
 	// +kubebuilder:validation:Optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
-	// Analytics instance update channel.
+	// The Analytics instance update cycle.
 	// +kubebuilder:validation:Optional
 	UpdateChannel string `json:"updateChannel,omitempty"`
-	// OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates Oracle managed default encryption.
+	// OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates that the default Oracle-managed encryption is used.
 	// +kubebuilder:validation:Optional
 	KmsKeyId string `json:"kmsKeyId,omitempty"`
-	// domain id for which the user is authorized.
+	// The OCID of the identity domain to use for the new Analytics instance. For example: ocid1.domain.oc1..ocid1.domain.oc1..aaaaaa111111bbbbbb222222cccccc333333dddddd444444eeeeee5555.
 	// +kubebuilder:validation:Optional
 	DomainId string `json:"domainId,omitempty"`
-	// user name of the authorized user.
+	// The Analytics instance administrator user. This must be the user name (not OCID) of a user in the nominated identity domain. For example: john.smith@example.com.
 	// +kubebuilder:validation:Optional
 	AdminUser string `json:"adminUser,omitempty"`
 	// The feature set of an Analytics instance.
@@ -74,7 +75,7 @@ type AnalyticsInstanceCapacity struct {
 	// +kubebuilder:validation:Required
 	CapacityType string `json:"capacityType"`
 	// The capacity value selected, either the number of OCPUs (OLPU_COUNT) or the number of users (USER_COUNT).
-	// This parameter affects the number of OCPUs, amount of memory, and other resources allocated to the instance.
+	// This parameter affects the number of OCPUs, amount of memory, and other resources allocated to the Analytics instance.
 	// +kubebuilder:validation:Required
 	CapacityValue int `json:"capacityValue"`
 }
@@ -101,7 +102,7 @@ type AnalyticsInstanceNetworkEndpointDetails struct {
 	// The subnet OCID for the private endpoint.
 	// +kubebuilder:validation:Optional
 	SubnetId string `json:"subnetId,omitempty"`
-	// Network Security Group OCIDs for an Analytics instance.
+	// Network Security Group OCIDs for the Analytics instance.
 	// +kubebuilder:validation:Optional
 	NetworkSecurityGroupIds []string `json:"networkSecurityGroupIds,omitempty"`
 	// Source IP addresses or IP address ranges in ingress rules.
@@ -110,66 +111,80 @@ type AnalyticsInstanceNetworkEndpointDetails struct {
 	// Virtual Cloud Networks allowed to access this network endpoint.
 	// +kubebuilder:validation:Optional
 	WhitelistedVcns []AnalyticsInstanceNetworkEndpointDetailsWhitelistedVcn `json:"whitelistedVcns,omitempty"`
-	// Oracle Cloud Services that are allowed to access this Analytics instance.
+	// Oracle Cloud services that are allowed to access this Analytics instance.
 	// +kubebuilder:validation:Optional
 	WhitelistedServices []string `json:"whitelistedServices,omitempty"`
 }
 
 // AnalyticsInstancePrivateAccessChannelsPrivateSourceDnsZone defines nested fields for AnalyticsInstance.PrivateAccessChannels.PrivateSourceDnsZone.
 type AnalyticsInstancePrivateAccessChannelsPrivateSourceDnsZone struct {
-	// Private Source DNS Zone. Ex: example-vcn.oraclevcn.com, corp.example.com.
+	// Private source DNS zone. For example: example-vcn.oraclevcn.com, corp.example.com.
 	DnsZone string `json:"dnsZone,omitempty"`
-	// Description of private source dns zone.
+	// Description of the private source DNS zone.
 	Description string `json:"description,omitempty"`
 }
 
 // AnalyticsInstancePrivateAccessChannelsPrivateSourceScanHost defines nested fields for AnalyticsInstance.PrivateAccessChannels.PrivateSourceScanHost.
 type AnalyticsInstancePrivateAccessChannelsPrivateSourceScanHost struct {
-	// Private Source Scan hostname. Ex: db01-scan.corp.example.com, prd-db01-scan.mycompany.com.
+	// Private source SCAN hostname. For example: db01-scan.corp.example.com, prd-db01-scan.mycompany.com.
 	ScanHostname string `json:"scanHostname,omitempty"`
-	// Private Source Scan host port. This is the source port where SCAN protocol will get connected (e.g. 1521).
+	// Private source SCAN host port. This is the source port where the SCAN protocol connects (for example, 1521).
 	ScanPort int `json:"scanPort,omitempty"`
-	// Description of private source scan host zone.
+	// Description of private source SCAN host zone.
 	Description string `json:"description,omitempty"`
 }
 
 // AnalyticsInstancePrivateAccessChannels defines nested fields for AnalyticsInstance.PrivateAccessChannels.
 type AnalyticsInstancePrivateAccessChannels struct {
-	// Private Access Channel unique identifier key.
+	// Private access channel unique identifier key.
 	Key string `json:"key,omitempty"`
-	// Display Name of the Private Access Channel.
+	// Display name of the private access channel.
 	DisplayName string `json:"displayName,omitempty"`
-	// OCID of the customer VCN peered with private access channel.
+	// OCID of the customer VCN peered with the private access channel.
 	VcnId string `json:"vcnId,omitempty"`
-	// OCID of the customer subnet connected to private access channel.
+	// OCID of the customer subnet connected to the private access channel.
 	SubnetId string `json:"subnetId,omitempty"`
-	// IP Address of the Private Access channel.
+	// IP address of the private access channel.
 	IpAddress string `json:"ipAddress,omitempty"`
-	// The list of IP addresses from the customer subnet connected to private access channel, used as a source Ip by Private Access Channel
-	// for network traffic from the AnalyticsInstance to Private Sources.
+	// List of IP addresses from the customer subnet connected to the private access channel, used as a source IP by the private access channel
+	// for network traffic from the Analytics instance to the private sources.
 	EgressSourceIpAddresses []string `json:"egressSourceIpAddresses,omitempty"`
-	// List of Private Source DNS zones registered with Private Access Channel,
-	// where datasource hostnames from these dns zones / domains will be resolved in the peered VCN for access from Analytics Instance.
-	// Min of 1 is required and Max of 30 Private Source DNS zones can be registered.
+	// List of private source DNS zones registered with the private access channel. The
+	//  datasource hostnames from these DNS zones / domains will be resolved in the peered VCN for access from  the Analytics instance.
+	// Minimum 1 private source is required. Maximum 30 private source DNS zones can be registered.
 	PrivateSourceDnsZones []AnalyticsInstancePrivateAccessChannelsPrivateSourceDnsZone `json:"privateSourceDnsZones,omitempty"`
-	// List of Private Source DB SCAN hosts registered with Private Access Channel for access from Analytics Instance.
+	// List of private source database SCAN hosts registered with the private access channel for access from the Analytics instance.
 	PrivateSourceScanHosts []AnalyticsInstancePrivateAccessChannelsPrivateSourceScanHost `json:"privateSourceScanHosts,omitempty"`
-	// Network Security Group OCIDs for an Analytics instance.
+	// Network Security Group OCIDs for the Analytics instance.
 	NetworkSecurityGroupIds []string `json:"networkSecurityGroupIds,omitempty"`
 }
 
 // AnalyticsInstanceVanityUrlDetails defines nested fields for AnalyticsInstance.VanityUrlDetails.
 type AnalyticsInstanceVanityUrlDetails struct {
-	// The vanity url unique identifier key.
+	// The vanity URL unique identifier key.
 	Key string `json:"key,omitempty"`
-	// Description of the vanity url.
+	// Description of the vanity URL.
 	Description string `json:"description,omitempty"`
-	// List of urls supported by this vanity URL definition (max of 3).
+	// List of URLs supported by this vanity URL definition (maximum of 3).
 	Urls []string `json:"urls,omitempty"`
-	// List of fully qualified hostnames supported by this vanity URL definition (max of 3).
+	// List of fully-qualified hostnames supported by this vanity URL definition (maximum of 3).
 	Hosts []string `json:"hosts,omitempty"`
 	// PEM certificate for HTTPS connections.
 	PublicCertificate string `json:"publicCertificate,omitempty"`
+}
+
+// AnalyticsInstanceResourceGroup defines nested fields for AnalyticsInstance.ResourceGroup.
+type AnalyticsInstanceResourceGroup struct {
+	// Unique identifier and name of resource group.  Must be unique within the instance
+	Id string `json:"id,omitempty"`
+	// Meaningful name of resource group for end user
+	ResourceName string `json:"resourceName,omitempty"`
+	// The capacity (in OCPU's) to be allocated for this resource.
+	Capacity int `json:"capacity,omitempty"`
+	// Meaningful name of resource group for end user
+	DisplayName string `json:"displayName,omitempty"`
+	// Optional description of the resource group
+	Description string `json:"description,omitempty"`
 }
 
 // AnalyticsInstanceStatus defines the observed state of AnalyticsInstance.
@@ -177,17 +192,18 @@ type AnalyticsInstanceStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
 	// The resource OCID.
 	Id string `json:"id,omitempty"`
-	// The name of the Analytics instance. This name must be unique in the tenancy and cannot be changed.
+	// The name of the Analytics instance. This name must be unique in the tenancy and can't be changed.
+	// The name must start with a letter and can contain only letters, numbers and dash (-).
 	Name string `json:"name,omitempty"`
 	// The OCID of the compartment.
 	CompartmentId string `json:"compartmentId,omitempty"`
-	// The current state of an instance.
+	// The current state of the Analytics instance.
 	LifecycleState string `json:"lifecycleState,omitempty"`
-	// Analytics feature set.
+	// The feature set. Either `SELF_SERVICE_ANALYTICS` (Professional Edition) or `ENTERPRISE_ANALYTICS` (Enterprise Edition).
 	FeatureSet             string                                  `json:"featureSet,omitempty"`
 	Capacity               AnalyticsInstanceCapacity               `json:"capacity,omitempty"`
 	NetworkEndpointDetails AnalyticsInstanceNetworkEndpointDetails `json:"networkEndpointDetails,omitempty"`
-	// The date and time the instance was created, in the format defined by RFC3339.
+	// The date and time the Analytics instance was created, in the format defined by RFC3339.
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeCreated string `json:"timeCreated,omitempty"`
 	// Optional description.
@@ -196,13 +212,13 @@ type AnalyticsInstanceStatus struct {
 	LicenseType string `json:"licenseType,omitempty"`
 	// Email address receiving notifications.
 	EmailNotification string `json:"emailNotification,omitempty"`
-	// Analytics instance update channel.
+	// The Analytics instance update cycle.
 	UpdateChannel string `json:"updateChannel,omitempty"`
 	// Map of PrivateAccessChannel unique identifier key as KEY and PrivateAccessChannel Object as VALUE.
 	PrivateAccessChannels map[string]AnalyticsInstancePrivateAccessChannels `json:"privateAccessChannels,omitempty"`
 	// Map of VanityUrl unique identifier key as KEY and VanityUrl Object as VALUE.
 	VanityUrlDetails map[string]AnalyticsInstanceVanityUrlDetails `json:"vanityUrlDetails,omitempty"`
-	// URL of the Analytics service.
+	// URL of the Analytics instance.
 	ServiceUrl string `json:"serviceUrl,omitempty"`
 	// Defined tags for this resource. Each key is predefined and scoped to a
 	// namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
@@ -215,16 +231,18 @@ type AnalyticsInstanceStatus struct {
 	// System tags for this resource. These predefined keys are scoped to namespaces.
 	// Example: `{"orcl-cloud": {"key": "value"}}`
 	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
-	// OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates Oracle managed default encryption.
+	// OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates that the default Oracle-managed encryption is used.
 	KmsKeyId string `json:"kmsKeyId,omitempty"`
-	// The date and time the instance was last updated (in the format defined by RFC3339).
-	// This timestamp represents updates made through this API. External events do not
-	// influence it.
+	// The date and time the Analytics instance was last updated (in the format defined by RFC3339).
+	// This timestamp represents updates made through this API. External events don't
+	// affect it.
 	TimeUpdated string `json:"timeUpdated,omitempty"`
 	// The feature set of an Analytics instance.
 	FeatureBundle string `json:"featureBundle,omitempty"`
 	// Identity domain OCID.
 	DomainId string `json:"domainId,omitempty"`
+	// List of resource groups for this Analytics instance. The resource group id must be unique within the instance.
+	ResourceGroups []AnalyticsInstanceResourceGroup `json:"resourceGroups,omitempty"`
 }
 
 // +kubebuilder:object:root=true

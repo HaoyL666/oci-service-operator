@@ -49,10 +49,10 @@ type NatRulePosition struct {
 
 // NatRuleCondition defines nested fields for NatRule.Condition.
 type NatRuleCondition struct {
-	// An array of IP address list names to be evaluated against the traffic source address.
+	// An array of address list names to be evaluated against the traffic source address.
 	// +kubebuilder:validation:Optional
 	SourceAddress []string `json:"sourceAddress,omitempty"`
-	// An array of IP address list names to be evaluated against the traffic destination address.
+	// An array of address list names to be evaluated against the traffic destination address.
 	// +kubebuilder:validation:Optional
 	DestinationAddress []string `json:"destinationAddress,omitempty"`
 	// A Service name to be evaluated against the traffic protocol and protocol-specific parameters.

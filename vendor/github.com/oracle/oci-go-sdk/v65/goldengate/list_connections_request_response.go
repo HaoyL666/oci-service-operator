@@ -30,6 +30,9 @@ type ListConnectionsRequest struct {
 	// The array of connection types.
 	ConnectionType []ConnectionTypeEnum `contributesTo:"query" name:"connectionType" omitEmpty:"true" collectionFormat:"multi"`
 
+	// The array of connection types to exclude.
+	ConnectionTypeNotEqualTo []ConnectionTypeEnum `contributesTo:"query" name:"connectionTypeNotEqualTo" omitEmpty:"true" collectionFormat:"multi"`
+
 	// The OCID of the deployment which for the connection must be assigned.
 	AssignedDeploymentId *string `mandatory:"false" contributesTo:"query" name:"assignedDeploymentId"`
 
@@ -111,6 +114,12 @@ func (request ListConnectionsRequest) ValidateEnumValue() (bool, error) {
 		}
 	}
 
+	for _, val := range request.ConnectionTypeNotEqualTo {
+		if _, ok := GetMappingConnectionTypeEnum(string(val)); !ok && val != "" {
+			errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for ConnectionTypeNotEqualTo: %s. Supported values are: %s.", val, strings.Join(GetConnectionTypeEnumStringValues(), ",")))
+		}
+	}
+
 	if _, ok := GetMappingListConnectionsAssignableDeploymentTypeEnum(string(request.AssignableDeploymentType)); !ok && request.AssignableDeploymentType != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for AssignableDeploymentType: %s. Supported values are: %s.", request.AssignableDeploymentType, strings.Join(GetListConnectionsAssignableDeploymentTypeEnumStringValues(), ",")))
 	}
@@ -171,6 +180,8 @@ const (
 	ListConnectionsAssignableDeploymentTypeDatabaseDb2i               ListConnectionsAssignableDeploymentTypeEnum = "DATABASE_DB2I"
 	ListConnectionsAssignableDeploymentTypeGgsa                       ListConnectionsAssignableDeploymentTypeEnum = "GGSA"
 	ListConnectionsAssignableDeploymentTypeDataTransforms             ListConnectionsAssignableDeploymentTypeEnum = "DATA_TRANSFORMS"
+	ListConnectionsAssignableDeploymentTypeVeridataServer             ListConnectionsAssignableDeploymentTypeEnum = "VERIDATA_SERVER"
+	ListConnectionsAssignableDeploymentTypeVeridataAgent              ListConnectionsAssignableDeploymentTypeEnum = "VERIDATA_AGENT"
 )
 
 var mappingListConnectionsAssignableDeploymentTypeEnum = map[string]ListConnectionsAssignableDeploymentTypeEnum{
@@ -184,6 +195,8 @@ var mappingListConnectionsAssignableDeploymentTypeEnum = map[string]ListConnecti
 	"DATABASE_DB2I":                ListConnectionsAssignableDeploymentTypeDatabaseDb2i,
 	"GGSA":                         ListConnectionsAssignableDeploymentTypeGgsa,
 	"DATA_TRANSFORMS":              ListConnectionsAssignableDeploymentTypeDataTransforms,
+	"VERIDATA_SERVER":              ListConnectionsAssignableDeploymentTypeVeridataServer,
+	"VERIDATA_AGENT":               ListConnectionsAssignableDeploymentTypeVeridataAgent,
 }
 
 var mappingListConnectionsAssignableDeploymentTypeEnumLowerCase = map[string]ListConnectionsAssignableDeploymentTypeEnum{
@@ -197,6 +210,8 @@ var mappingListConnectionsAssignableDeploymentTypeEnumLowerCase = map[string]Lis
 	"database_db2i":                ListConnectionsAssignableDeploymentTypeDatabaseDb2i,
 	"ggsa":                         ListConnectionsAssignableDeploymentTypeGgsa,
 	"data_transforms":              ListConnectionsAssignableDeploymentTypeDataTransforms,
+	"veridata_server":              ListConnectionsAssignableDeploymentTypeVeridataServer,
+	"veridata_agent":               ListConnectionsAssignableDeploymentTypeVeridataAgent,
 }
 
 // GetListConnectionsAssignableDeploymentTypeEnumValues Enumerates the set of values for ListConnectionsAssignableDeploymentTypeEnum
@@ -221,6 +236,8 @@ func GetListConnectionsAssignableDeploymentTypeEnumStringValues() []string {
 		"DATABASE_DB2I",
 		"GGSA",
 		"DATA_TRANSFORMS",
+		"VERIDATA_SERVER",
+		"VERIDATA_AGENT",
 	}
 }
 

@@ -251,7 +251,7 @@ ApplicationGroupSpec defines the desired state of ApplicationGroup.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `apps` | Collection of application names. | `list[string]` | Yes | - | - |
+| `apps` | Collection of application names. | `list[string]` | No | - | - |
 | `description` | The description of the application list. This field can be used to add additional info. | `string` | No | - | - |
 | `name` | Name of the application Group. | `string` | Yes | - | - |
 | `networkFirewallPolicyId` | The OCID of the Network Firewall policy that owns this resource. | `string` | Yes | - | - |
@@ -470,6 +470,7 @@ DecryptionRuleSpec defines the desired state of DecryptionRule.
 | `networkFirewallPolicyId` | The OCID of the Network Firewall policy that owns this resource. | `string` | Yes | - | - |
 | [`position`](#kind-decryptionrule-spec-position) | DecryptionRulePosition defines nested fields for DecryptionRule.Position. | `object` | No | - | - |
 | `secret` | The name of a mapped secret. Its `type` must match that of the specified decryption profile. | `string` | No | - | - |
+| `secrets` | An array of mapped secrets. | `list[string]` | No | - | - |
 
 <a id="kind-decryptionrule-spec-condition"></a>
 #### Spec.condition
@@ -480,8 +481,8 @@ DecryptionRuleCondition defines nested fields for DecryptionRule.Condition.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `destinationAddress` | An array of IP address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
-| `sourceAddress` | An array of IP address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
+| `destinationAddress` | An array of address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
+| `sourceAddress` | An array of address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
 
 <a id="kind-decryptionrule-spec-position"></a>
 #### Spec.position
@@ -510,6 +511,7 @@ DecryptionRuleStatus defines the observed state of DecryptionRule.
 | `parentResourceId` | OCID of the Network Firewall Policy this decryption rule belongs to. | `string` | No | - | - |
 | [`position`](#kind-decryptionrule-status-position) | DecryptionRulePosition defines nested fields for DecryptionRule.Position. | `object` | No | - | - |
 | `priorityOrder` | The priority order in which this rule should be evaluated. | `integer (int64)` | No | - | - |
+| `secrets` | An array of mapped secrets. | `list[string]` | No | - | - |
 | [`status`](#kind-decryptionrule-status-status) | - | `object` | Yes | - | - |
 
 <a id="kind-decryptionrule-status-condition"></a>
@@ -521,8 +523,8 @@ DecryptionRuleCondition defines nested fields for DecryptionRule.Condition.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `destinationAddress` | An array of IP address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
-| `sourceAddress` | An array of IP address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
+| `destinationAddress` | An array of address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
+| `sourceAddress` | An array of address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
 
 <a id="kind-decryptionrule-status-position"></a>
 #### Status.position
@@ -734,9 +736,9 @@ NatRuleCondition defines nested fields for NatRule.Condition.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `destinationAddress` | An array of IP address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
+| `destinationAddress` | An array of address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
 | `service` | A Service name to be evaluated against the traffic protocol and protocol-specific parameters. | `string` | No | - | - |
-| `sourceAddress` | An array of IP address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
+| `sourceAddress` | An array of address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
 
 <a id="kind-natrule-spec-position"></a>
 #### Spec.position
@@ -777,9 +779,9 @@ NatRuleCondition defines nested fields for NatRule.Condition.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `destinationAddress` | An array of IP address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
+| `destinationAddress` | An array of address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
 | `service` | A Service name to be evaluated against the traffic protocol and protocol-specific parameters. | `string` | No | - | - |
-| `sourceAddress` | An array of IP address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
+| `sourceAddress` | An array of address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
 
 <a id="kind-natrule-status-position"></a>
 #### Status.position
@@ -880,6 +882,7 @@ NetworkFirewallSpec defines the desired state of NetworkFirewall.
 | [`natConfiguration`](#kind-networkfirewall-spec-natconfiguration) | NetworkFirewallNatConfiguration defines nested fields for NetworkFirewall.NatConfiguration. | `object` | No | - | - |
 | `networkFirewallPolicyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Network Firewall Policy. | `string` | Yes | - | - |
 | `networkSecurityGroupIds` | An array of network security groups OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) associated with the Network Firewall. | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: {"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}} | `map[string, map[string, string]]` | No | - | - |
 | `shape` | The shape of a firewall to determine the bandwidth that the firewall allows. | `string` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Network Firewall. | `string` | Yes | - | - |
 
@@ -914,6 +917,7 @@ NetworkFirewallStatus defines the observed state of NetworkFirewall.
 | [`natConfiguration`](#kind-networkfirewall-status-natconfiguration) | NetworkFirewallNatConfiguration defines nested fields for NetworkFirewall.NatConfiguration. | `object` | No | - | - |
 | `networkFirewallPolicyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Network Firewall Policy. | `string` | No | - | - |
 | `networkSecurityGroupIds` | An array of network security groups OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) associated with the Network Firewall. | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: {"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}} | `map[string, map[string, string]]` | No | - | - |
 | `shape` | The shape of a firewall to determine the bandwidth that the firewall allows. | `string` | No | - | - |
 | [`status`](#kind-networkfirewall-status-status) | - | `object` | Yes | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet associated with the Network Firewall. | `string` | No | - | - |
@@ -1131,9 +1135,9 @@ SecurityRuleCondition defines nested fields for SecurityRule.Condition.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `application` | An array of application list names to be evaluated against the traffic protocol and protocol-specific parameters. | `list[string]` | No | - | - |
-| `destinationAddress` | An array of IP address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
+| `destinationAddress` | An array of address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
 | `service` | An array of service list names to be evaluated against the traffic protocol and protocol-specific parameters. | `list[string]` | No | - | - |
-| `sourceAddress` | An array of IP address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
+| `sourceAddress` | An array of address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
 | `url` | An array of URL pattern list names to be evaluated against the HTTP(S) request target. | `list[string]` | No | - | - |
 
 <a id="kind-securityrule-spec-position"></a>
@@ -1175,9 +1179,9 @@ SecurityRuleCondition defines nested fields for SecurityRule.Condition.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `application` | An array of application list names to be evaluated against the traffic protocol and protocol-specific parameters. | `list[string]` | No | - | - |
-| `destinationAddress` | An array of IP address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
+| `destinationAddress` | An array of address list names to be evaluated against the traffic destination address. | `list[string]` | No | - | - |
 | `service` | An array of service list names to be evaluated against the traffic protocol and protocol-specific parameters. | `list[string]` | No | - | - |
-| `sourceAddress` | An array of IP address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
+| `sourceAddress` | An array of address list names to be evaluated against the traffic source address. | `list[string]` | No | - | - |
 | `url` | An array of URL pattern list names to be evaluated against the HTTP(S) request target. | `list[string]` | No | - | - |
 
 <a id="kind-securityrule-status-position"></a>

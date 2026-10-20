@@ -290,6 +290,11 @@ type InstanceShapeConfig struct {
 	// This field is reserved for internal use.
 	// +kubebuilder:validation:Optional
 	ResourceManagement string `json:"resourceManagement,omitempty"`
+	// The NVMe-backed local storage capacity, in GB, for flexible dense (DenseLV) VM shapes. If the selected shape
+	// is DenseLV, the value must be greater than 0. For all other shapes, the value must be null (if specified);
+	// any non-null value for a non-DenseLV shape results in an error.
+	// +kubebuilder:validation:Optional
+	LocalVolumeSizeInGBs int `json:"localVolumeSizeInGBs,omitempty"`
 }
 
 // InstanceSourceDetails defines nested fields for Instance.SourceDetails.
@@ -330,6 +335,7 @@ type InstanceLaunchOptions struct {
 	// * `ISCSI` - ISCSI attached block storage device.
 	// * `PARAVIRTUALIZED` - Paravirtualized disk. This is the default for boot volumes and remote block
 	// storage volumes on platform images.
+	// * `NVME` - NVMe attached remote block storage device.
 	// Before you change the boot volume attachment type, detach all block volumes and VNICs except for
 	// the boot volume and the primary VNIC.
 	// If the instance is running when you change the boot volume attachment type, it will be rebooted.
@@ -342,6 +348,7 @@ type InstanceLaunchOptions struct {
 	// * `VFIO` - Direct attached Virtual Function network controller. This is the networking type
 	// when you launch an instance using hardware-assisted (SR-IOV) networking.
 	// * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers.
+	// * `ACCELERATEDPV` - VM instances launch with accelerated paravirtualized networking type.
 	// Before you change the networking type, detach all VNICs and block volumes except for the primary
 	// VNIC and the boot volume.
 	// The image must have paravirtualized drivers installed. For more information, see
@@ -402,6 +409,7 @@ type InstanceLicensingConfig struct {
 	// License Type for the OS license.
 	// * `OCI_PROVIDED` - OCI provided license (e.g. metered $/OCPU-hour).
 	// * `BRING_YOUR_OWN_LICENSE` - Bring your own license.
+	// * `PARTNER_PROVIDED` - Partner provided license.
 	// +kubebuilder:validation:Optional
 	LicenseType string `json:"licenseType,omitempty"`
 	// +kubebuilder:validation:Optional
@@ -665,6 +673,26 @@ type InstancePlacementConstraintDetails struct {
 	// The OCID of the compute host group. This is only available for dedicated capacity customers.
 	// +kubebuilder:validation:Optional
 	ComputeHostGroupId string `json:"computeHostGroupId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the HPC island for the compute cluster.
+	// This field cannot be updated after creation of the compute cluster.
+	// +kubebuilder:validation:Optional
+	HpcIslandId string `json:"hpcIslandId,omitempty"`
+	// The list of target network block OCIDs to constrain placement.
+	// If `targetNetworkBlockIds` is provided, the `hpcIslandId` must be set on the compute cluster,
+	// and the provided network blocks must belong to that same HPC island.
+	// The ordering of the array will be preserved. Ensure that all items in the array are unique.
+	// +kubebuilder:validation:Optional
+	TargetNetworkBlockIds []string `json:"targetNetworkBlockIds,omitempty"`
+	// The list of target GPU memory fabric OCIDs to constrain placement.
+	// If GMFs are passed in, the `hpcIslandId` must be set on the compute cluster, and
+	// the provided GMFs must belong to that same HPC island.
+	// The ordering of the array will be preserved. Ensure that all items in the array are unique.
+	// +kubebuilder:validation:Optional
+	TargetMemoryFabricIds []string `json:"targetMemoryFabricIds,omitempty"`
+	// The logical placement strategy to apply.
+	// Allowed values are `SINGLE_TIER`, `SINGLE_BLOCK`, and `PACKED_DISTRIBUTION_MULTI_BLOCK`.
+	// +kubebuilder:validation:Optional
+	LogicalPlacementConstraint string `json:"logicalPlacementConstraint,omitempty"`
 	// The OCID of the compute bare metal host. This is only available for dedicated capacity customers.
 	// +kubebuilder:validation:Optional
 	ComputeBareMetalHostId string `json:"computeBareMetalHostId,omitempty"`
@@ -779,6 +807,7 @@ type InstanceStatus struct {
 	// * `NATIVE` - VM instances launch with iSCSI boot and VFIO devices. The default value for platform images.
 	// * `EMULATED` - VM instances launch with emulated devices, such as the E1000 network driver and emulated SCSI disk controller.
 	// * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers.
+	// * `ACCELERATEDPV` - VM instances launch with accelerated paravirtualized networking type.
 	// * `CUSTOM` - VM instances launch with custom configuration settings specified in the `LaunchOptions` parameter.
 	LaunchMode                string                            `json:"launchMode,omitempty"`
 	LaunchOptions             InstanceLaunchOptions             `json:"launchOptions,omitempty"`

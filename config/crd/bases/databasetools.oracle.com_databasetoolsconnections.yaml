@@ -63,6 +63,10 @@ spec:
                   type: string
                 description: The advanced connection properties key-value pair.
                 type: object
+              authenticationType:
+                description: Specifies the authentication type used by the Database
+                  Tools service to authenticate with the database.
+                type: string
               compartmentId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment containing the Database Tools connection.
@@ -210,8 +214,10 @@ spec:
                 - identifier
                 type: object
               runtimeIdentity:
-                description: Specifies the identity used by the Database Tools service
-                  to issue requests to other OCI services (e.g., Secrets in Vault).
+                description: Specifies the identity used when accessing OCI resources
+                  at runtime. AUTHENTICATED_PRINCIPAL to use the caller’s identity
+                  (On-Behalf-Of token), or RESOURCE_PRINCIPAL to use the connection’s
+                  resource principal (RPST).
                 type: string
               runtimeSupport:
                 description: Specifies whether this connection is supported by the
@@ -253,6 +259,10 @@ spec:
                 description: The advanced connection properties key-value pair (for
                   example, `oracle.net.ssl_server_dn_match`).
                 type: object
+              authenticationType:
+                description: Specifies the authentication type used to connect to
+                  the database.
+                type: string
               compartmentId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment containing the Database Tools connection.
@@ -415,8 +425,10 @@ spec:
                 description: Specifies the Database Tools Runtime endpoint.
                 type: string
               runtimeIdentity:
-                description: Specifies the identity used by the Database Tools service
-                  to issue requests to other OCI services (e.g., Secrets in Vault).
+                description: Specifies the identity used when accessing OCI resources
+                  at runtime. AUTHENTICATED_PRINCIPAL to use the caller’s identity
+                  (On-Behalf-Of token), or RESOURCE_PRINCIPAL to use the connection’s
+                  resource principal (RPST).
                 type: string
               runtimeSupport:
                 description: Specifies whether this connection is supported by the
@@ -546,7 +558,8 @@ spec:
                   system.
                 type: string
               userName:
-                description: The database user name.
+                description: The database user name. When authenticationType is TOKEN,
+                  if provided, userName must be in square brackets (for example, [proxyClient]).
                 type: string
               userPassword:
                 description: DatabaseToolsConnectionUserPassword defines nested fields

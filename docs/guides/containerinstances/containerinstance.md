@@ -43,6 +43,7 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No |
 | `gracefulShutdownTimeoutInSeconds` | The amount of time that processes in a container have to gracefully end when the container must be stopped. For example, when you delete a container instance. After the timeout is reached, the processes are sent a signal to be deleted. | `integer (int64)` | No |
 | [`imagePullSecrets`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-spec-imagepullsecrets) | The image pulls secrets so you can access private registry to pull container images. | `list[object]` | No |
+| [`securityContext`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-spec-securitycontext) | ContainerInstanceSecurityContext defines nested fields for ContainerInstance.SecurityContext. | `object` | No |
 | `shape` | The shape of the container instance. The shape determines the resources available to the container instance. | `string` | Yes |
 | [`shapeConfig`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-spec-shapeconfig) | ContainerInstanceShapeConfig defines nested fields for ContainerInstance.ShapeConfig. | `object` | Yes |
 | [`vnics`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-spec-vnics) | The networks available to containers on this container instance. | `list[object]` | Yes |
@@ -70,10 +71,12 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | [`imagePullSecrets`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-status-imagepullsecrets) | The image pulls secrets so you can access private registry to pull container images. | `list[object]` | No |
 | `lifecycleDetails` | A message that describes the current state of the container in more detail. Can be used to provide actionable information. | `string` | No |
 | `lifecycleState` | The current state of the container instance. | `string` | No |
+| [`securityContext`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-status-securitycontext) | ContainerInstanceSecurityContext defines nested fields for ContainerInstance.SecurityContext. | `object` | No |
 | `shape` | The shape of the container instance. The shape determines the number of OCPUs, amount of memory, and other resources that are allocated to a container instance. | `string` | No |
 | [`shapeConfig`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-status-shapeconfig) | ContainerInstanceShapeConfigObservedState defines nested fields for ContainerInstance.ShapeConfig. | `object` | No |
 | [`status`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-status-status) | - | `object` | Yes |
 | `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`. | `map[string, map[string, string]]` | No |
+| `tenantId` | TenantId id of the container instance. | `string` | No |
 | `timeCreated` | The time the container instance was created, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No |
 | `timeUpdated` | The time the container instance was updated, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No |
 | [`vnics`](../../reference/api/containerinstances/v1beta1/index.md#kind-containerinstance-status-vnics) | The virtual networks available to the containers in the container instance. | `list[object]` | No |

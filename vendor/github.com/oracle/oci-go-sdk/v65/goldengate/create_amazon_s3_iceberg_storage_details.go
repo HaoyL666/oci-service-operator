@@ -20,10 +20,8 @@ import (
 type CreateAmazonS3IcebergStorageDetails struct {
 
 	// Access key ID to access the Amazon S3 bucket.
+	// Note: Despite the "Id" suffix, this value is not an OCI OCID.
 	AccessKeyId *string `mandatory:"true" json:"accessKeyId"`
-
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the Secret Access Key is stored.
-	SecretAccessKeySecretId *string `mandatory:"true" json:"secretAccessKeySecretId"`
 
 	// The AMAZON region where the S3 bucket is hosted.
 	// e.g.: 'us-east-2'
@@ -35,6 +33,15 @@ type CreateAmazonS3IcebergStorageDetails struct {
 	// The endpoint URL of the Amazon S3 storage service.
 	// e.g.: 'https://s3.amazonaws.com'
 	Endpoint *string `mandatory:"false" json:"endpoint"`
+
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the Secret Access Key is stored.
+	SecretAccessKeySecretId *string `mandatory:"false" json:"secretAccessKeySecretId"`
+
+	// Secret access key to access the Amazon S3 bucket.
+	// Deprecated: This field is deprecated and replaced by "secretAccessKeySecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	SecretAccessKey *string `mandatory:"false" json:"secretAccessKey" sensitive:"true"`
 
 	// The scheme of the storage.
 	SchemeType AmazonS3IcebergStorageSchemeTypeEnum `mandatory:"true" json:"schemeType"`

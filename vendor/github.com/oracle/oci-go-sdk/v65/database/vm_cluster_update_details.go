@@ -21,11 +21,22 @@ type VmClusterUpdateDetails struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the maintenance update.
 	UpdateId *string `mandatory:"false" json:"updateId"`
 
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Grid Infrastructure Home.
+	// Specify this field for out of place Grid Infrastructure Home patching and upgrade of the VM Cluster.
+	// This is mutually exclusive option to `updateId` and `giSoftwareImageId` which are used for in place patching and upgrade using Oracle supplied and custom images respectively.
+	GiHomeId *string `mandatory:"false" json:"giHomeId"`
+
+	// The update mode to perform for OS Update.
+	UpdateMode VmClusterUpdateDetailsUpdateModeEnum `mandatory:"false" json:"updateMode,omitempty"`
+
 	// The update action to perform.
 	UpdateAction VmClusterUpdateDetailsUpdateActionEnum `mandatory:"false" json:"updateAction,omitempty"`
 
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a grid infrastructure software image. This is a database software image of the type `GRID_IMAGE`.
 	GiSoftwareImageId *string `mandatory:"false" json:"giSoftwareImageId"`
+
+	// If true, the caller acknowledges selecting or applying an older DB, Grid Infrastructure, or operating system software version that is outside the latest default version window.
+	IsOlderVersionAcknowledged *bool `mandatory:"false" json:"isOlderVersionAcknowledged"`
 }
 
 func (m VmClusterUpdateDetails) String() string {
@@ -38,6 +49,9 @@ func (m VmClusterUpdateDetails) String() string {
 func (m VmClusterUpdateDetails) ValidateEnumValue() (bool, error) {
 	errMessage := []string{}
 
+	if _, ok := GetMappingVmClusterUpdateDetailsUpdateModeEnum(string(m.UpdateMode)); !ok && m.UpdateMode != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for UpdateMode: %s. Supported values are: %s.", m.UpdateMode, strings.Join(GetVmClusterUpdateDetailsUpdateModeEnumStringValues(), ",")))
+	}
 	if _, ok := GetMappingVmClusterUpdateDetailsUpdateActionEnum(string(m.UpdateAction)); !ok && m.UpdateAction != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for UpdateAction: %s. Supported values are: %s.", m.UpdateAction, strings.Join(GetVmClusterUpdateDetailsUpdateActionEnumStringValues(), ",")))
 	}
@@ -45,6 +59,60 @@ func (m VmClusterUpdateDetails) ValidateEnumValue() (bool, error) {
 		return true, fmt.Errorf("%s", strings.Join(errMessage, "\n"))
 	}
 	return false, nil
+}
+
+// VmClusterUpdateDetailsUpdateModeEnum Enum with underlying type: string
+type VmClusterUpdateDetailsUpdateModeEnum string
+
+// Set of constants representing the allowable values for VmClusterUpdateDetailsUpdateModeEnum
+const (
+	VmClusterUpdateDetailsUpdateModeOnlineHighcvss   VmClusterUpdateDetailsUpdateModeEnum = "ONLINE_HIGHCVSS"
+	VmClusterUpdateDetailsUpdateModeOnlineAllcvss    VmClusterUpdateDetailsUpdateModeEnum = "ONLINE_ALLCVSS"
+	VmClusterUpdateDetailsUpdateModeOnlineAllUpdates VmClusterUpdateDetailsUpdateModeEnum = "ONLINE_ALL_UPDATES"
+	VmClusterUpdateDetailsUpdateModePendingUpdates   VmClusterUpdateDetailsUpdateModeEnum = "PENDING_UPDATES"
+	VmClusterUpdateDetailsUpdateModeFullUpdate       VmClusterUpdateDetailsUpdateModeEnum = "FULL_UPDATE"
+)
+
+var mappingVmClusterUpdateDetailsUpdateModeEnum = map[string]VmClusterUpdateDetailsUpdateModeEnum{
+	"ONLINE_HIGHCVSS":    VmClusterUpdateDetailsUpdateModeOnlineHighcvss,
+	"ONLINE_ALLCVSS":     VmClusterUpdateDetailsUpdateModeOnlineAllcvss,
+	"ONLINE_ALL_UPDATES": VmClusterUpdateDetailsUpdateModeOnlineAllUpdates,
+	"PENDING_UPDATES":    VmClusterUpdateDetailsUpdateModePendingUpdates,
+	"FULL_UPDATE":        VmClusterUpdateDetailsUpdateModeFullUpdate,
+}
+
+var mappingVmClusterUpdateDetailsUpdateModeEnumLowerCase = map[string]VmClusterUpdateDetailsUpdateModeEnum{
+	"online_highcvss":    VmClusterUpdateDetailsUpdateModeOnlineHighcvss,
+	"online_allcvss":     VmClusterUpdateDetailsUpdateModeOnlineAllcvss,
+	"online_all_updates": VmClusterUpdateDetailsUpdateModeOnlineAllUpdates,
+	"pending_updates":    VmClusterUpdateDetailsUpdateModePendingUpdates,
+	"full_update":        VmClusterUpdateDetailsUpdateModeFullUpdate,
+}
+
+// GetVmClusterUpdateDetailsUpdateModeEnumValues Enumerates the set of values for VmClusterUpdateDetailsUpdateModeEnum
+func GetVmClusterUpdateDetailsUpdateModeEnumValues() []VmClusterUpdateDetailsUpdateModeEnum {
+	values := make([]VmClusterUpdateDetailsUpdateModeEnum, 0)
+	for _, v := range mappingVmClusterUpdateDetailsUpdateModeEnum {
+		values = append(values, v)
+	}
+	return values
+}
+
+// GetVmClusterUpdateDetailsUpdateModeEnumStringValues Enumerates the set of values in String for VmClusterUpdateDetailsUpdateModeEnum
+func GetVmClusterUpdateDetailsUpdateModeEnumStringValues() []string {
+	return []string{
+		"ONLINE_HIGHCVSS",
+		"ONLINE_ALLCVSS",
+		"ONLINE_ALL_UPDATES",
+		"PENDING_UPDATES",
+		"FULL_UPDATE",
+	}
+}
+
+// GetMappingVmClusterUpdateDetailsUpdateModeEnum performs case Insensitive comparison on enum value and return the desired enum
+func GetMappingVmClusterUpdateDetailsUpdateModeEnum(val string) (VmClusterUpdateDetailsUpdateModeEnum, bool) {
+	enum, ok := mappingVmClusterUpdateDetailsUpdateModeEnumLowerCase[strings.ToLower(val)]
+	return enum, ok
 }
 
 // VmClusterUpdateDetailsUpdateActionEnum Enum with underlying type: string

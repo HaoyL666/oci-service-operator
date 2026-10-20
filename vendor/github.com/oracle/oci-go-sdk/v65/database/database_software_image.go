@@ -75,6 +75,9 @@ type DatabaseSoftwareImage struct {
 
 	// True if this Database software image is supported for Upgrade.
 	IsUpgradeSupported *bool `mandatory:"false" json:"isUpgradeSupported"`
+
+	// True when selecting or applying this DB, Grid Infrastructure, or operating system software version requires older-version acknowledgment.
+	IsOlderVersionAcknowledgmentRequired *bool `mandatory:"false" json:"isOlderVersionAcknowledgmentRequired"`
 }
 
 func (m DatabaseSoftwareImage) String() string {
@@ -219,6 +222,7 @@ const (
 	DatabaseSoftwareImageImageShapeFamilyExadataShape DatabaseSoftwareImageImageShapeFamilyEnum = "EXADATA_SHAPE"
 	DatabaseSoftwareImageImageShapeFamilyExaccShape   DatabaseSoftwareImageImageShapeFamilyEnum = "EXACC_SHAPE"
 	DatabaseSoftwareImageImageShapeFamilyExadbxsShape DatabaseSoftwareImageImageShapeFamilyEnum = "EXADBXS_SHAPE"
+	DatabaseSoftwareImageImageShapeFamilyBdbccShape   DatabaseSoftwareImageImageShapeFamilyEnum = "BDBCC_SHAPE"
 )
 
 var mappingDatabaseSoftwareImageImageShapeFamilyEnum = map[string]DatabaseSoftwareImageImageShapeFamilyEnum{
@@ -226,6 +230,7 @@ var mappingDatabaseSoftwareImageImageShapeFamilyEnum = map[string]DatabaseSoftwa
 	"EXADATA_SHAPE": DatabaseSoftwareImageImageShapeFamilyExadataShape,
 	"EXACC_SHAPE":   DatabaseSoftwareImageImageShapeFamilyExaccShape,
 	"EXADBXS_SHAPE": DatabaseSoftwareImageImageShapeFamilyExadbxsShape,
+	"BDBCC_SHAPE":   DatabaseSoftwareImageImageShapeFamilyBdbccShape,
 }
 
 var mappingDatabaseSoftwareImageImageShapeFamilyEnumLowerCase = map[string]DatabaseSoftwareImageImageShapeFamilyEnum{
@@ -233,6 +238,7 @@ var mappingDatabaseSoftwareImageImageShapeFamilyEnumLowerCase = map[string]Datab
 	"exadata_shape": DatabaseSoftwareImageImageShapeFamilyExadataShape,
 	"exacc_shape":   DatabaseSoftwareImageImageShapeFamilyExaccShape,
 	"exadbxs_shape": DatabaseSoftwareImageImageShapeFamilyExadbxsShape,
+	"bdbcc_shape":   DatabaseSoftwareImageImageShapeFamilyBdbccShape,
 }
 
 // GetDatabaseSoftwareImageImageShapeFamilyEnumValues Enumerates the set of values for DatabaseSoftwareImageImageShapeFamilyEnum
@@ -251,6 +257,7 @@ func GetDatabaseSoftwareImageImageShapeFamilyEnumStringValues() []string {
 		"EXADATA_SHAPE",
 		"EXACC_SHAPE",
 		"EXADBXS_SHAPE",
+		"BDBCC_SHAPE",
 	}
 }
 

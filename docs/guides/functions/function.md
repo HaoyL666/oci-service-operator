@@ -39,11 +39,9 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | `displayName` | The display name of the function. The display name must be unique within the application containing the function. Avoid entering confidential information. | `string` | Yes |
 | [`failureDestination`](../../reference/api/functions/v1beta1/index.md#kind-function-spec-failuredestination) | FunctionFailureDestination defines nested fields for Function.FailureDestination. | `object` | No |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No |
-| `image` | The qualified name of the Docker image to use in the function, including the image tag. The image should be in the OCI Registry that is in the same region as the function itself. Example: `phx.ocir.io/ten/functions/function:0.0.1` | `string` | No |
-| `imageDigest` | The image digest for the version of the image that will be pulled when invoking this function. If no value is specified, the digest currently associated with the image in the OCI Registry will be used. Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7` | `string` | No |
 | `memoryInMBs` | Maximum usable memory for the function (MiB). | `integer (int64)` | Yes |
 | [`provisionedConcurrencyConfig`](../../reference/api/functions/v1beta1/index.md#kind-function-spec-provisionedconcurrencyconfig) | FunctionProvisionedConcurrencyConfig defines nested fields for Function.ProvisionedConcurrencyConfig. | `object` | No |
-| [`sourceDetails`](../../reference/api/functions/v1beta1/index.md#kind-function-spec-sourcedetails) | FunctionSourceDetails defines nested fields for Function.SourceDetails. | `object` | No |
+| [`sourceDetails`](../../reference/api/functions/v1beta1/index.md#kind-function-spec-sourcedetails) | FunctionSourceDetails defines nested fields for Function.SourceDetails. | `object` | Yes |
 | [`successDestination`](../../reference/api/functions/v1beta1/index.md#kind-function-spec-successdestination) | FunctionSuccessDestination defines nested fields for Function.SuccessDestination. | `object` | No |
 | `timeoutInSeconds` | Timeout for executions of the function. Value in seconds. | `integer` | No |
 | [`traceConfig`](../../reference/api/functions/v1beta1/index.md#kind-function-spec-traceconfig) | FunctionTraceConfig defines nested fields for Function.TraceConfig. | `object` | No |
@@ -64,8 +62,6 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | [`failureDestination`](../../reference/api/functions/v1beta1/index.md#kind-function-status-failuredestination) | FunctionFailureDestination defines nested fields for Function.FailureDestination. | `object` | No |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the function. | `string` | No |
-| `image` | The qualified name of the Docker image to use in the function, including the image tag. The image should be in the OCI Registry that is in the same region as the function itself. Example: `phx.ocir.io/ten/functions/function:0.0.1` | `string` | No |
-| `imageDigest` | The image digest for the version of the image that will be pulled when invoking this function. If no value is specified, the digest currently associated with the image in the OCI Registry will be used. Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7` | `string` | No |
 | `invokeEndpoint` | The base https invoke URL to set on a client in order to invoke a function. This URL will never change over the lifetime of the function and can be cached. | `string` | No |
 | `lifecycleState` | The current state of the function. | `string` | No |
 | `memoryInMBs` | Maximum usable memory for the function (MiB). | `integer (int64)` | No |

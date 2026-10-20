@@ -56,6 +56,26 @@ spec:
           spec:
             description: BdsInstanceSpec defines the desired state of BdsInstance.
             properties:
+              bdsCapacityReservationConfigurations:
+                description: Optional BDS capacity reservation configurations to associate
+                  with the cluster during creation.
+                items:
+                  description: BdsInstanceBdsCapacityReservationConfiguration defines
+                    nested fields for BdsInstance.BdsCapacityReservationConfiguration.
+                  properties:
+                    bdsCapacityReservationId:
+                      description: The OCID of the BDS capacity reservation to associate
+                        with the BDS cluster.
+                      type: string
+                    displayName:
+                      description: A user-friendly name for the BDS capacity reservation
+                        configuration.
+                      type: string
+                  required:
+                  - bdsCapacityReservationId
+                  - displayName
+                  type: object
+                type: array
               bdsClusterVersionSummary:
                 description: BdsInstanceBdsClusterVersionSummary defines nested fields
                   for BdsInstance.BdsClusterVersionSummary.
@@ -66,8 +86,6 @@ spec:
                   odhVersion:
                     description: ODH version to be used for cluster creation
                     type: string
-                required:
-                - bdsVersion
                 type: object
               bootstrapScriptUrl:
                 description: Pre-authenticated URL of the script in Object Store that
@@ -196,6 +214,26 @@ spec:
           status:
             description: BdsInstanceStatus defines the observed state of BdsInstance.
             properties:
+              bdsCapacityReservationConfigurations:
+                description: The list of BDS capacity reservation configurations associated
+                  with the cluster.
+                items:
+                  description: BdsInstanceBdsCapacityReservationConfiguration defines
+                    nested fields for BdsInstance.BdsCapacityReservationConfiguration.
+                  properties:
+                    bdsCapacityReservationId:
+                      description: The OCID of the BDS capacity reservation to associate
+                        with the BDS cluster.
+                      type: string
+                    displayName:
+                      description: A user-friendly name for the BDS capacity reservation
+                        configuration.
+                      type: string
+                  required:
+                  - bdsCapacityReservationId
+                  - displayName
+                  type: object
+                type: array
               bdsClusterVersionSummary:
                 description: BdsInstanceBdsClusterVersionSummary defines nested fields
                   for BdsInstance.BdsClusterVersionSummary.
@@ -206,8 +244,6 @@ spec:
                   odhVersion:
                     description: ODH version to be used for cluster creation
                     type: string
-                required:
-                - bdsVersion
                 type: object
               bootstrapScriptUrl:
                 description: pre-authenticated URL of the bootstrap script in Object

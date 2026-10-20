@@ -47,6 +47,10 @@ type ScheduleSpec struct {
 	// Example: `2016-08-25T21:10:29.600Z`
 	// +kubebuilder:validation:Optional
 	TimeEnds string `json:"timeEnds,omitempty"`
+	// IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London').
+	// This determines the timezone context for evaluating the recurrence expression.
+	// +kubebuilder:validation:Optional
+	LocalTimeZone string `json:"localTimeZone,omitempty"`
 	// These are free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -188,6 +192,9 @@ type ScheduleStatus struct {
 	// This is the date and time the schedule ends, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339)
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeEnds string `json:"timeEnds,omitempty"`
+	// IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London').
+	// This determines the timezone context for evaluating the recurrence expression.
+	LocalTimeZone string `json:"localTimeZone,omitempty"`
 	// This is the date and time the schedule was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeUpdated string `json:"timeUpdated,omitempty"`

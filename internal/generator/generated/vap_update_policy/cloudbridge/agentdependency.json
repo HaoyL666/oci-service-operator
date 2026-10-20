@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "cloudbridge",
+    "apiVersion": "cloudbridge.oracle.com/v1beta1",
+    "kind": "AgentDependency",
+    "formalSlug": "agentdependency",
+    "providerResource": "oci_cloud_bridge_agent_dependency",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "bucket",
+      "compartmentId",
+      "definedTags",
+      "dependencyName",
+      "dependencyVersion",
+      "description",
+      "displayName",
+      "freeformTags",
+      "namespace"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "object",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "systemTags",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
+      }
+    ]
+  }
+}

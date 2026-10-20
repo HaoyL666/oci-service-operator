@@ -65,6 +65,12 @@ type DigitalTwinAdapterInboundEnvelopeEnvelopeMapping struct {
 	// 'timeObserved' can be mapped as JQ Expression (https://jqplay.org/) `$.time`.
 	// +kubebuilder:validation:Optional
 	TimeObserved string `json:"timeObserved,omitempty"`
+	// Optional. JQ expression to map the target resource, which is externalKey of digital twin instance, the incoming data belongs to.
+	// +kubebuilder:validation:Optional
+	Target string `json:"target,omitempty"`
+	// JSON Path string to override the context root before delegating to the adapter of the target digital twin instance.
+	// +kubebuilder:validation:Optional
+	ContentRoot string `json:"contentRoot,omitempty"`
 }
 
 // DigitalTwinAdapterInboundEnvelope defines nested fields for DigitalTwinAdapter.InboundEnvelope.
@@ -98,6 +104,12 @@ type DigitalTwinAdapterInboundRoute struct {
 	Condition string `json:"condition"`
 	// +kubebuilder:validation:Optional
 	ReferencePayload DigitalTwinAdapterInboundRouteReferencePayload `json:"referencePayload,omitempty,omitzero"`
+	// Optional. JQ expression to map the target resource, which is externalKey of digital twin instance, the incoming data belongs to.
+	// +kubebuilder:validation:Optional
+	Target string `json:"target,omitempty"`
+	// JSON Path string to override the context root before delegating to the adapter of the target digital twin instance.
+	// +kubebuilder:validation:Optional
+	ContentRoot string `json:"contentRoot,omitempty"`
 	// A set of key-value JQ expressions used to transform the incoming payload into a shape
 	// compatible with the digital twin model's context or schema.
 	// The keys are target fields (in the digital twin model), and values are JQ expressions

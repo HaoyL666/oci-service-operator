@@ -30,8 +30,6 @@ type DbSystemSpec struct {
 	// +kubebuilder:validation:Required
 	Shape string `json:"shape"`
 	// +kubebuilder:validation:Required
-	Credentials DbSystemCredentials `json:"credentials"`
-	// +kubebuilder:validation:Required
 	NetworkDetails DbSystemNetworkDetails `json:"networkDetails"`
 	// A user-provided description of a database system.
 	// +kubebuilder:validation:Optional
@@ -56,9 +54,15 @@ type DbSystemSpec struct {
 	// +kubebuilder:validation:Optional
 	InstancesDetails []DbSystemInstancesDetail `json:"instancesDetails,omitempty"`
 	// +kubebuilder:validation:Optional
+	Credentials DbSystemCredentials `json:"credentials,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
 	ManagementPolicy DbSystemManagementPolicy `json:"managementPolicy,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	Source DbSystemSource `json:"source,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	ReplicationConfig DbSystemReplicationConfig `json:"replicationConfig,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	OdspInsightDetails DbSystemOdspInsightDetails `json:"odspInsightDetails,omitempty,omitzero"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -69,6 +73,8 @@ type DbSystemSpec struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 	// +kubebuilder:validation:Optional
 	DbConfigurationParams DbSystemDbConfigurationParams `json:"dbConfigurationParams,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	KerberosAuthDetails DbSystemKerberosAuthDetails `json:"kerberosAuthDetails,omitempty,omitzero"`
 	// The administrative username sourced from a Kubernetes Secret in the same namespace.
 	// The referenced Secret must contain a `username` key. If omitted, `spec.credentials.username` remains available for direct credential input.
 	// +kubebuilder:validation:Optional
@@ -88,6 +94,9 @@ type DbSystemStorageDetails struct {
 	// If `isRegionallyDurable` is set to false, `availabilityDomain` must be specified.
 	// +kubebuilder:validation:Optional
 	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID of the Vault service key to assign as the master encryption key for the database system.
+	// +kubebuilder:validation:Optional
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
 	// Specifies if the block volume used for the database system is regional or AD-local.
 	// If not specified, it will be set to false.
 	// If `isRegionallyDurable` is set to true, `availabilityDomain` should not be specified.
@@ -99,32 +108,6 @@ type DbSystemStorageDetails struct {
 	// Guaranteed input/output storage requests per second (IOPS) available to the database system.
 	// +kubebuilder:validation:Optional
 	Iops int64 `json:"iops,omitempty"`
-}
-
-// DbSystemCredentialsPasswordDetails defines nested fields for DbSystem.Credentials.PasswordDetails.
-type DbSystemCredentialsPasswordDetails struct {
-	// +kubebuilder:validation:Optional
-	JsonData string `json:"jsonData,omitempty"`
-	// +kubebuilder:validation:Optional
-	PasswordType string `json:"passwordType,omitempty"`
-	// The database system password.
-	// +kubebuilder:validation:Optional
-	Password string `json:"password,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the secret where the password is stored.
-	// +kubebuilder:validation:Optional
-	SecretId string `json:"secretId,omitempty"`
-	// The secret version of the stored password.
-	// +kubebuilder:validation:Optional
-	SecretVersion string `json:"secretVersion,omitempty"`
-}
-
-// DbSystemCredentials defines nested fields for DbSystem.Credentials.
-type DbSystemCredentials struct {
-	// The database system administrator username.
-	// +kubebuilder:validation:Required
-	Username string `json:"username"`
-	// +kubebuilder:validation:Required
-	PasswordDetails DbSystemCredentialsPasswordDetails `json:"passwordDetails"`
 }
 
 // DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails.
@@ -158,6 +141,32 @@ type DbSystemInstancesDetail struct {
 	PrivateIp string `json:"privateIp,omitempty"`
 }
 
+// DbSystemCredentialsPasswordDetails defines nested fields for DbSystem.Credentials.PasswordDetails.
+type DbSystemCredentialsPasswordDetails struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	PasswordType string `json:"passwordType,omitempty"`
+	// The database system password.
+	// +kubebuilder:validation:Optional
+	Password string `json:"password,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the secret where the password is stored.
+	// +kubebuilder:validation:Optional
+	SecretId string `json:"secretId,omitempty"`
+	// The secret version of the stored password.
+	// +kubebuilder:validation:Optional
+	SecretVersion string `json:"secretVersion,omitempty"`
+}
+
+// DbSystemCredentials defines nested fields for DbSystem.Credentials.
+type DbSystemCredentials struct {
+	// The database system administrator username.
+	// +kubebuilder:validation:Required
+	Username string `json:"username"`
+	// +kubebuilder:validation:Required
+	PasswordDetails DbSystemCredentialsPasswordDetails `json:"passwordDetails"`
+}
+
 // DbSystemManagementPolicyBackupPolicyCopyPolicy defines nested fields for DbSystem.ManagementPolicy.BackupPolicy.CopyPolicy.
 type DbSystemManagementPolicyBackupPolicyCopyPolicy struct {
 	// target compartment to place a new backup
@@ -169,6 +178,9 @@ type DbSystemManagementPolicyBackupPolicyCopyPolicy struct {
 	// List of region names of the remote region
 	// +kubebuilder:validation:Optional
 	Regions []string `json:"regions,omitempty"`
+	// List of key ids of the remote regions
+	// +kubebuilder:validation:Optional
+	KmsKeyIds []string `json:"kmsKeyIds,omitempty"`
 }
 
 // DbSystemManagementPolicyBackupPolicy defines nested fields for DbSystem.ManagementPolicy.BackupPolicy.
@@ -194,6 +206,17 @@ type DbSystemManagementPolicyBackupPolicy struct {
 	DaysOfTheMonth []int `json:"daysOfTheMonth,omitempty"`
 }
 
+// DbSystemManagementPolicyPitrPolicy defines nested fields for DbSystem.ManagementPolicy.PitrPolicy.
+type DbSystemManagementPolicyPitrPolicy struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	Kind string `json:"kind,omitempty"`
+	// The number of days the database system retains backups required for point-in-time recovery.
+	// +kubebuilder:validation:Optional
+	RestoreDays int `json:"restoreDays,omitempty"`
+}
+
 // DbSystemManagementPolicy defines nested fields for DbSystem.ManagementPolicy.
 type DbSystemManagementPolicy struct {
 	// The start of the maintenance window in UTC.
@@ -204,6 +227,8 @@ type DbSystemManagementPolicy struct {
 	MaintenanceWindowStart string `json:"maintenanceWindowStart,omitempty"`
 	// +kubebuilder:validation:Optional
 	BackupPolicy DbSystemManagementPolicyBackupPolicy `json:"backupPolicy,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	PitrPolicy DbSystemManagementPolicyPitrPolicy `json:"pitrPolicy,omitempty,omitzero"`
 }
 
 // DbSystemSource defines nested fields for DbSystem.Source.
@@ -218,6 +243,51 @@ type DbSystemSource struct {
 	// Deprecated. Don't use.
 	// +kubebuilder:validation:Optional
 	IsHavingRestoreConfigOverrides bool `json:"isHavingRestoreConfigOverrides,omitempty"`
+	// The [OCID] of the primary database system.
+	// +kubebuilder:validation:Optional
+	PrimaryDbSystemId string `json:"primaryDbSystemId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the source database system which will be used to perform point-in-time recovery.
+	// +kubebuilder:validation:Optional
+	DbSystemId string `json:"dbSystemId,omitempty"`
+	// The target point-in-time of the source database system that will be restored, expressed in
+	// RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format.
+	// Point-in-time recovery can only performed in granularity of seconds.
+	// Example: `2016-08-25T21:10:29Z`
+	// +kubebuilder:validation:Optional
+	TimeToRestore string `json:"timeToRestore,omitempty"`
+}
+
+// DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig.
+type DbSystemReplicationConfig struct {
+	// Specify if Recovery point objective (RPO) enforcement needs to be enabled on the database
+	// system.
+	// +kubebuilder:validation:Optional
+	IsRpoEnforced bool `json:"isRpoEnforced,omitempty"`
+	// Specifies the Recovery point objective (RPO) in seconds that will be enforced, if the
+	// `isRpoEnforced` flag is true.
+	// +kubebuilder:validation:Optional
+	RpoInSeconds int64 `json:"rpoInSeconds,omitempty"`
+}
+
+// DbSystemOdspInsightDetailsOdspInsightList defines nested fields for DbSystem.OdspInsightDetails.OdspInsightList.
+type DbSystemOdspInsightDetailsOdspInsightList struct {
+	// Type of Insight collected for the database system.
+	// +kubebuilder:validation:Required
+	InsightType string `json:"insightType"`
+	// Retention period for Insight data, in days. Current supported value is 7 days. the system default is 7 days.
+	// +kubebuilder:validation:Optional
+	RetentionPeriodInDays int `json:"retentionPeriodInDays,omitempty"`
+}
+
+// DbSystemOdspInsightDetails defines nested fields for DbSystem.OdspInsightDetails.
+type DbSystemOdspInsightDetails struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	Kind string `json:"kind,omitempty"`
+	// List of ODSP Insight and their configurations.
+	// +kubebuilder:validation:Optional
+	OdspInsightList []DbSystemOdspInsightDetailsOdspInsightList `json:"odspInsightList,omitempty"`
 }
 
 // DbSystemDbConfigurationParams defines nested fields for DbSystem.DbConfigurationParams.
@@ -231,6 +301,58 @@ type DbSystemDbConfigurationParams struct {
 	ApplyConfig string `json:"applyConfig,omitempty"`
 }
 
+// DbSystemKerberosAuthDetailsCredential defines nested fields for DbSystem.KerberosAuthDetails.Credential.
+type DbSystemKerberosAuthDetailsCredential struct {
+	// Kerberos realm name.
+	// https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html
+	// Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name
+	// except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos
+	// service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string,
+	// but configuration and maintenance might then require more work. Use realm names that follow the standard
+	// Internet naming structure.
+	// +kubebuilder:validation:Required
+	RealmName string `json:"realmName"`
+	// The OCID of the secret where the Kerberos keytab file is stored as base64 text.
+	// +kubebuilder:validation:Required
+	KeytabSecretId string `json:"keytabSecretId"`
+	// The secret version of the stored Kerberos keytab file.
+	// +kubebuilder:validation:Required
+	KeytabSecretVersion int64 `json:"keytabSecretVersion"`
+}
+
+// DbSystemKerberosAuthDetailsBackupCredential defines nested fields for DbSystem.KerberosAuthDetails.BackupCredential.
+type DbSystemKerberosAuthDetailsBackupCredential struct {
+	// Kerberos realm name.
+	// https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html
+	// Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name
+	// except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos
+	// service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string,
+	// but configuration and maintenance might then require more work. Use realm names that follow the standard
+	// Internet naming structure.
+	// +kubebuilder:validation:Required
+	RealmName string `json:"realmName"`
+	// The OCID of the secret where the Kerberos keytab file is stored as base64 text.
+	// +kubebuilder:validation:Required
+	KeytabSecretId string `json:"keytabSecretId"`
+	// The secret version of the stored Kerberos keytab file.
+	// +kubebuilder:validation:Required
+	KeytabSecretVersion int64 `json:"keytabSecretVersion"`
+}
+
+// DbSystemKerberosAuthDetails defines nested fields for DbSystem.KerberosAuthDetails.
+type DbSystemKerberosAuthDetails struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	Kind string `json:"kind,omitempty"`
+	// List of Kerberos Credentials to be configured for the dbsystem. Currently supports only one entry.
+	// +kubebuilder:validation:Optional
+	Credentials []DbSystemKerberosAuthDetailsCredential `json:"credentials,omitempty"`
+	// Optional. List of Kerberos Credentials previously configured for the dbsystem. Currently supports only one entry.
+	// +kubebuilder:validation:Optional
+	BackupCredentials []DbSystemKerberosAuthDetailsBackupCredential `json:"backupCredentials,omitempty"`
+}
+
 // DbSystemStorageDetailsObservedState defines nested fields for DbSystem.StorageDetails.
 type DbSystemStorageDetailsObservedState struct {
 	JsonData string `json:"jsonData,omitempty"`
@@ -238,6 +360,8 @@ type DbSystemStorageDetailsObservedState struct {
 	// If `isRegionallyDurable` is set to true, `availabilityDomain` should not be specified.
 	// If `isRegionallyDurable` is set to false, `availabilityDomain` must be specified.
 	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The OCID of the Vault service key to assign as the master encryption key for the database system.
+	KmsKeyId string `json:"kmsKeyId,omitempty"`
 	// Specifies if the block volume used for the database system is regional or AD-local.
 	// If not specified, it will be set to false.
 	// If `isRegionallyDurable` is set to true, `availabilityDomain` should not be specified.
@@ -289,6 +413,8 @@ type DbSystemStatus struct {
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Type of the database system.
 	SystemType string `json:"systemType,omitempty"`
+	// Type of the database system.
+	SystemRole string `json:"systemRole,omitempty"`
 	// The major and minor versions of the database system software.
 	DbVersion string `json:"dbVersion,omitempty"`
 	// The name of the shape for the database instance.
@@ -319,14 +445,17 @@ type DbSystemStatus struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 	// System tags for this resource. Each key is predefined and scoped to a namespace.
 	// Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
-	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
+	SystemTags        map[string]shared.MapValue `json:"systemTags,omitempty"`
+	ReplicationConfig DbSystemReplicationConfig  `json:"replicationConfig,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the configuration associated with the database system.
 	ConfigId string `json:"configId,omitempty"`
 	// Count of instances, or nodes, in the database system.
 	InstanceCount int `json:"instanceCount,omitempty"`
 	// The list of instances, or nodes, in the database system.
-	Instances []DbSystemInstance `json:"instances,omitempty"`
-	Source    DbSystemSource     `json:"source,omitempty"`
+	Instances           []DbSystemInstance          `json:"instances,omitempty"`
+	Source              DbSystemSource              `json:"source,omitempty"`
+	KerberosAuthDetails DbSystemKerberosAuthDetails `json:"kerberosAuthDetails,omitempty"`
+	OdspInsightDetails  DbSystemOdspInsightDetails  `json:"odspInsightDetails,omitempty"`
 	// The last applied secret reference for the administrative username.
 	AdminUsernameSource shared.UsernameSource `json:"adminUsernameSource,omitempty,omitzero"`
 	// The last applied secret reference for the administrative password.

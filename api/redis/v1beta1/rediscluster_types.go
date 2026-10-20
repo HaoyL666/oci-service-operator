@@ -51,6 +51,14 @@ type RedisClusterSpec struct {
 	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
 	// +kubebuilder:validation:Optional
 	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
+	// The ID of the OCI Cache Backup from which this cluster was created.Mutually exclusive with 'importFromObjectStorageDetails'.
+	// +kubebuilder:validation:Optional
+	BackupId string `json:"backupId,omitempty"`
+	// +kubebuilder:validation:Optional
+	ImportFromObjectStorageDetails RedisClusterImportFromObjectStorageDetails `json:"importFromObjectStorageDetails,omitempty,omitzero"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the primary cluster from which data will be replicated.
+	// +kubebuilder:validation:Optional
+	PrimaryClusterId string `json:"primaryClusterId,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -59,6 +67,26 @@ type RedisClusterSpec struct {
 	// Example: `{"foo-namespace": {"bar-key": "value"}}`
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
+}
+
+// RedisClusterImportFromObjectStorageDetailsObject defines nested fields for RedisCluster.ImportFromObjectStorageDetails.Object.
+type RedisClusterImportFromObjectStorageDetailsObject struct {
+	// The name of the object in the bucket (for example, 'customerA/exports/backup_ocid/dump.rdb').
+	// +kubebuilder:validation:Required
+	ObjectName string `json:"objectName"`
+}
+
+// RedisClusterImportFromObjectStorageDetails defines nested fields for RedisCluster.ImportFromObjectStorageDetails.
+type RedisClusterImportFromObjectStorageDetails struct {
+	// The Object Storage namespace name.
+	// +kubebuilder:validation:Required
+	NamespaceName string `json:"namespaceName"`
+	// The Object Storage bucket name.
+	// +kubebuilder:validation:Required
+	BucketName string `json:"bucketName"`
+	// The list of objects to import from the specified bucket.
+	// +kubebuilder:validation:Required
+	Objects []RedisClusterImportFromObjectStorageDetailsObject `json:"objects"`
 }
 
 // RedisClusterNodeCollectionItem defines nested fields for RedisCluster.NodeCollection.Item.
@@ -75,6 +103,29 @@ type RedisClusterNodeCollectionItem struct {
 type RedisClusterNodeCollection struct {
 	// Collection of node objects.
 	Items []RedisClusterNodeCollectionItem `json:"items,omitempty"`
+}
+
+// RedisClusterClusterReplicationTopologyPrimaryCluster defines nested fields for RedisCluster.ClusterReplicationTopology.PrimaryCluster.
+type RedisClusterClusterReplicationTopologyPrimaryCluster struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the OCI Cache cluster.
+	OciCacheClusterId string `json:"ociCacheClusterId,omitempty"`
+	// The OCI region to which the cluster belongs.
+	Region string `json:"region,omitempty"`
+}
+
+// RedisClusterClusterReplicationTopologySecondaryCluster defines nested fields for RedisCluster.ClusterReplicationTopology.SecondaryCluster.
+type RedisClusterClusterReplicationTopologySecondaryCluster struct {
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the OCI Cache cluster.
+	OciCacheClusterId string `json:"ociCacheClusterId,omitempty"`
+	// The OCI region to which the cluster belongs.
+	Region string `json:"region,omitempty"`
+}
+
+// RedisClusterClusterReplicationTopology defines nested fields for RedisCluster.ClusterReplicationTopology.
+type RedisClusterClusterReplicationTopology struct {
+	PrimaryCluster RedisClusterClusterReplicationTopologyPrimaryCluster `json:"primaryCluster,omitempty"`
+	// The list of secondary clusters that replicate data from the primary cluster.
+	SecondaryClusters []RedisClusterClusterReplicationTopologySecondaryCluster `json:"secondaryClusters,omitempty"`
 }
 
 // RedisClusterStatus defines the observed state of RedisCluster.
@@ -125,10 +176,18 @@ type RedisClusterStatus struct {
 	// associated with this cluster. For more information,
 	// see Using an NSG for Clusters (https://docs.oracle.com/iaas/Content/ocicache/connecttocluster.htm#connecttocluster__networksecuritygroup).
 	NsgIds []string `json:"nsgIds,omitempty"`
+	// The ID of the OCI Cache Backup from which this cluster was created.
+	BackupId                       string                                     `json:"backupId,omitempty"`
+	ImportFromObjectStorageDetails RedisClusterImportFromObjectStorageDetails `json:"importFromObjectStorageDetails,omitempty"`
 	// Security attributes for redis cluster resource. Each key is predefined and scoped to a namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
 	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
+	// The current role of the cluster.
+	ClusterRole string `json:"clusterRole,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle) of the primary cluster in CRR.
+	PrimaryClusterId           string                                 `json:"primaryClusterId,omitempty"`
+	ClusterReplicationTopology RedisClusterClusterReplicationTopology `json:"clusterReplicationTopology,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`

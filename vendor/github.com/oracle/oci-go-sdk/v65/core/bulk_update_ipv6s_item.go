@@ -21,10 +21,10 @@ import (
 	"strings"
 )
 
-// BulkUpdateIpv6sItem Secondary IPv6 object to update as part of bulk update.
+// BulkUpdateIpv6sItem A secondary IPv6 object to update as part of a bulk update.
 type BulkUpdateIpv6sItem struct {
 
-	// The OCID of the IPv6.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the IPv6 object.
 	Ipv6Id *string `mandatory:"true" json:"ipv6Id"`
 
 	// Defined tags for this resource. Each key is predefined and scoped to a
@@ -50,6 +50,9 @@ type BulkUpdateIpv6sItem struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the route table the IP address or VNIC will use. For more information, see
 	// Per-resource Routing (https://docs.oracle.com/iaas/Content/Network/Tasks/managingroutetables.htm#Overview_of_Routing_for_Your_VCN__source_routing).
 	RouteTableId *string `mandatory:"false" json:"routeTableId"`
+
+	// The hostname associated with the IPv6 address. Only the hostname label, not the FQDN.
+	Hostname *string `mandatory:"false" json:"hostname"`
 }
 
 func (m BulkUpdateIpv6sItem) String() string {

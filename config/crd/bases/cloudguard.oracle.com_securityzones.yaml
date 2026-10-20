@@ -82,6 +82,10 @@ spec:
                   Example: `{"bar-key": "value"}`
                   Avoid entering confidential information.
                 type: object
+              isInheritanceAfterDeleteEnabled:
+                description: Indicates if upon deletion of the security zone the comparment
+                  should inherit parent security zone
+                type: boolean
               securityZoneRecipeId:
                 description: The OCID of the security zone recipe (`SecurityRecipe`
                   resource) for the security zone
@@ -128,6 +132,10 @@ spec:
                 items:
                   type: string
                 type: array
+              isInheritanceAfterDeleteEnabled:
+                description: Indicates if upon deletion of the security zone the comparment
+                  should inherit parent security zone
+                type: boolean
               lifecycleDetails:
                 description: A message describing the current state in more detail.
                   For example, this can be used to provide actionable information

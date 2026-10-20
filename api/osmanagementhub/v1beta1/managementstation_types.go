@@ -33,6 +33,12 @@ type ManagementStationSpec struct {
 	// When enabled, the station setup script automatically runs to configure the firewall and SELinux settings on the station.
 	// +kubebuilder:validation:Optional
 	IsAutoConfigEnabled bool `json:"isAutoConfigEnabled,omitempty"`
+	// The operating system family.
+	// +kubebuilder:validation:Optional
+	OsFamily string `json:"osFamily,omitempty"`
+	// The architecture type.
+	// +kubebuilder:validation:Optional
+	ArchType string `json:"archType,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -159,6 +165,10 @@ type ManagementStationStatus struct {
 	MirrorUniquePackageCount int `json:"mirrorUniquePackageCount,omitempty"`
 	// The total number of all packages within the mirrored software sources.
 	MirrorPackageCount int `json:"mirrorPackageCount,omitempty"`
+	// The operating system family.
+	OsFamily string `json:"osFamily,omitempty"`
+	// The architecture type.
+	ArchType string `json:"archType,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`

@@ -47,9 +47,9 @@ type ConfigurationSourceProviderSpec struct {
 	// The personal access token to be configured on the GitLab repository. Avoid entering confidential information.
 	// +kubebuilder:validation:Optional
 	AccessToken string `json:"accessToken,omitempty"`
-	// The username for the user of the Bitbucket cloud repository.
+	// Atlassian account email used for Bitbucket Cloud API token authentication.
 	// +kubebuilder:validation:Optional
-	Username string `json:"username,omitempty"`
+	Email string `json:"email,omitempty"`
 	// The secret ocid which is used to authorize the user.
 	// +kubebuilder:validation:Optional
 	SecretId string `json:"secretId,omitempty"`
@@ -88,6 +88,10 @@ type ConfigurationSourceProviderStatus struct {
 	PrivateServerConfigDetails ConfigurationSourceProviderPrivateServerConfigDetails `json:"privateServerConfigDetails,omitempty"`
 	// Username which is used to authorize the user.
 	Username string `json:"username,omitempty"`
+	// Atlassian account email used for Bitbucket Cloud API token authentication.
+	Email string `json:"email,omitempty"`
+	// Indicates whether this configuration source provider uses legacy Bitbucket Cloud username/app-password credentials and must be migrated.
+	IsMigrationRequired bool `json:"isMigrationRequired,omitempty"`
 	// Secret ocid which is used to authorize the user.
 	SecretId string `json:"secretId,omitempty"`
 	// Free-form tags associated with the resource. Each tag is a key-value pair with no predefined name, type, or namespace.

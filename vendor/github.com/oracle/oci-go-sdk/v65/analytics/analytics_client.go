@@ -92,7 +92,7 @@ func (client *AnalyticsClient) ConfigurationProvider() *common.ConfigurationProv
 }
 
 // ChangeAnalyticsInstanceCompartment Change the compartment of an Analytics instance. The operation is long-running
-// and creates a new WorkRequest.
+// and creates a new work request.
 //
 // # See also
 //
@@ -142,7 +142,7 @@ func (client AnalyticsClient) changeAnalyticsInstanceCompartment(ctx context.Con
 
 	var response ChangeAnalyticsInstanceCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "ChangeAnalyticsInstanceCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -155,8 +155,8 @@ func (client AnalyticsClient) changeAnalyticsInstanceCompartment(ctx context.Con
 	return response, err
 }
 
-// ChangeAnalyticsInstanceNetworkEndpoint Change an Analytics instance network endpoint. The operation is long-running
-// and creates a new WorkRequest.
+// ChangeAnalyticsInstanceNetworkEndpoint Change the network endpoint for an Analytics instance. The operation is long-running
+// and creates a new work request.
 //
 // # See also
 //
@@ -206,7 +206,7 @@ func (client AnalyticsClient) changeAnalyticsInstanceNetworkEndpoint(ctx context
 
 	var response ChangeAnalyticsInstanceNetworkEndpointResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "ChangeAnalyticsInstanceNetworkEndpoint")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -219,8 +219,8 @@ func (client AnalyticsClient) changeAnalyticsInstanceNetworkEndpoint(ctx context
 	return response, err
 }
 
-// CreateAnalyticsInstance Create a new AnalyticsInstance in the specified compartment. The operation is long-running
-// and creates a new WorkRequest.
+// CreateAnalyticsInstance Create a new Analytics instance in the specified compartment. The operation is long-running
+// and creates a new work request.
 //
 // # See also
 //
@@ -270,7 +270,7 @@ func (client AnalyticsClient) createAnalyticsInstance(ctx context.Context, reque
 
 	var response CreateAnalyticsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "CreateAnalyticsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -283,8 +283,8 @@ func (client AnalyticsClient) createAnalyticsInstance(ctx context.Context, reque
 	return response, err
 }
 
-// CreatePrivateAccessChannel Create an Private access Channel for the Analytics instance. The operation is long-running
-// and creates a new WorkRequest.
+// CreatePrivateAccessChannel Create an private access channel for the Analytics instance. The operation is long-running
+// and creates a new work request.
 //
 // # See also
 //
@@ -334,7 +334,7 @@ func (client AnalyticsClient) createPrivateAccessChannel(ctx context.Context, re
 
 	var response CreatePrivateAccessChannelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "CreatePrivateAccessChannel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -347,8 +347,70 @@ func (client AnalyticsClient) createPrivateAccessChannel(ctx context.Context, re
 	return response, err
 }
 
-// CreateVanityUrl Allows specifying a custom host name to be used to access the analytics instance.  This requires prior setup of DNS entry and certificate
-// for this host.
+// CreateResourceGroup Create a new resource group for the instance
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/analytics/CreateResourceGroup.go.html to see an example of how to use CreateResourceGroup API.
+// A default retry strategy applies to this operation CreateResourceGroup()
+func (client AnalyticsClient) CreateResourceGroup(ctx context.Context, request CreateResourceGroupRequest) (response CreateResourceGroupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createResourceGroup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateResourceGroupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateResourceGroupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateResourceGroupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateResourceGroupResponse")
+	}
+	return
+}
+
+// createResourceGroup implements the OCIOperation interface (enables retrying operations)
+func (client AnalyticsClient) createResourceGroup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/analyticsInstances/{analyticsInstanceId}/resourceGroups", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateResourceGroupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "CreateResourceGroup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/analytics/20190331/AnalyticsInstance/CreateResourceGroup"
+		err = common.PostProcessServiceError(err, "Analytics", "CreateResourceGroup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateVanityUrl Allows you to specify a custom host name to be used to access the Analytics instance.  You must set up a DNS entry and certificate for this host in advance.
 //
 // # See also
 //
@@ -398,7 +460,7 @@ func (client AnalyticsClient) createVanityUrl(ctx context.Context, request commo
 
 	var response CreateVanityUrlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "CreateVanityUrl")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -411,8 +473,8 @@ func (client AnalyticsClient) createVanityUrl(ctx context.Context, request commo
 	return response, err
 }
 
-// DeleteAnalyticsInstance Terminates the specified Analytics instance. The operation is long-running
-// and creates a new WorkRequest.
+// DeleteAnalyticsInstance Deletes the specified Analytics instance. The operation is long-running
+// and creates a new work request.
 //
 // # See also
 //
@@ -462,7 +524,7 @@ func (client AnalyticsClient) deleteAnalyticsInstance(ctx context.Context, reque
 
 	var response DeleteAnalyticsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "DeleteAnalyticsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -475,7 +537,7 @@ func (client AnalyticsClient) deleteAnalyticsInstance(ctx context.Context, reque
 	return response, err
 }
 
-// DeletePrivateAccessChannel Delete an Analytics instance's Private access channel with the given unique identifier key.
+// DeletePrivateAccessChannel Delete a private access channel with a given unique identifier key, for an Analytics instance.
 //
 // # See also
 //
@@ -525,7 +587,7 @@ func (client AnalyticsClient) deletePrivateAccessChannel(ctx context.Context, re
 
 	var response DeletePrivateAccessChannelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "DeletePrivateAccessChannel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -538,7 +600,70 @@ func (client AnalyticsClient) deletePrivateAccessChannel(ctx context.Context, re
 	return response, err
 }
 
-// DeleteVanityUrl Allows deleting a previously created vanity url.
+// DeleteResourceGroup Allows deleting a previously created resource group.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/analytics/DeleteResourceGroup.go.html to see an example of how to use DeleteResourceGroup API.
+// A default retry strategy applies to this operation DeleteResourceGroup()
+func (client AnalyticsClient) DeleteResourceGroup(ctx context.Context, request DeleteResourceGroupRequest) (response DeleteResourceGroupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.deleteResourceGroup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteResourceGroupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteResourceGroupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteResourceGroupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteResourceGroupResponse")
+	}
+	return
+}
+
+// deleteResourceGroup implements the OCIOperation interface (enables retrying operations)
+func (client AnalyticsClient) deleteResourceGroup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/analyticsInstances/{analyticsInstanceId}/resourceGroups/{analyticsInstanceResourceGroupId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteResourceGroupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "DeleteResourceGroup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/analytics/20190331/AnalyticsInstance/DeleteResourceGroup"
+		err = common.PostProcessServiceError(err, "Analytics", "DeleteResourceGroup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteVanityUrl Deletes a previously created vanity URL.
 //
 // # See also
 //
@@ -588,7 +713,7 @@ func (client AnalyticsClient) deleteVanityUrl(ctx context.Context, request commo
 
 	var response DeleteVanityUrlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "DeleteVanityUrl")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -601,7 +726,7 @@ func (client AnalyticsClient) deleteVanityUrl(ctx context.Context, request commo
 	return response, err
 }
 
-// DeleteWorkRequest Cancel a work request that has not started yet.
+// DeleteWorkRequest Cancel a work request that hasn't started yet.
 //
 // # See also
 //
@@ -645,7 +770,7 @@ func (client AnalyticsClient) deleteWorkRequest(ctx context.Context, request com
 
 	var response DeleteWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "DeleteWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -658,7 +783,7 @@ func (client AnalyticsClient) deleteWorkRequest(ctx context.Context, request com
 	return response, err
 }
 
-// GetAnalyticsInstance Info for a specific Analytics instance.
+// GetAnalyticsInstance Information about a specific Analytics instance.
 //
 // # See also
 //
@@ -703,7 +828,7 @@ func (client AnalyticsClient) getAnalyticsInstance(ctx context.Context, request 
 
 	var response GetAnalyticsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "GetAnalyticsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -716,7 +841,7 @@ func (client AnalyticsClient) getAnalyticsInstance(ctx context.Context, request 
 	return response, err
 }
 
-// GetPrivateAccessChannel Retrieve private access channel in the specified Analytics Instance.
+// GetPrivateAccessChannel Retrieve private access channel for the specified Analytics Instance.
 //
 // # See also
 //
@@ -761,12 +886,70 @@ func (client AnalyticsClient) getPrivateAccessChannel(ctx context.Context, reque
 
 	var response GetPrivateAccessChannelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "GetPrivateAccessChannel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/analytics/20190331/AnalyticsInstance/GetPrivateAccessChannel"
 		err = common.PostProcessServiceError(err, "Analytics", "GetPrivateAccessChannel", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetResourceGroup Get details of a resource group for an instance
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/analytics/GetResourceGroup.go.html to see an example of how to use GetResourceGroup API.
+// A default retry strategy applies to this operation GetResourceGroup()
+func (client AnalyticsClient) GetResourceGroup(ctx context.Context, request GetResourceGroupRequest) (response GetResourceGroupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getResourceGroup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetResourceGroupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetResourceGroupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetResourceGroupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetResourceGroupResponse")
+	}
+	return
+}
+
+// getResourceGroup implements the OCIOperation interface (enables retrying operations)
+func (client AnalyticsClient) getResourceGroup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/analyticsInstances/{analyticsInstanceId}/resourceGroups/{analyticsInstanceResourceGroupId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetResourceGroupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "GetResourceGroup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/analytics/20190331/AnalyticsInstance/GetResourceGroup"
+		err = common.PostProcessServiceError(err, "Analytics", "GetResourceGroup", apiReferenceLink)
 		return response, err
 	}
 
@@ -819,7 +1002,7 @@ func (client AnalyticsClient) getWorkRequest(ctx context.Context, request common
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -877,12 +1060,70 @@ func (client AnalyticsClient) listAnalyticsInstances(ctx context.Context, reques
 
 	var response ListAnalyticsInstancesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "ListAnalyticsInstances")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/analytics/20190331/AnalyticsInstanceSummary/ListAnalyticsInstances"
 		err = common.PostProcessServiceError(err, "Analytics", "ListAnalyticsInstances", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListResourceGroups List resource groups associated with an instance.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/analytics/ListResourceGroups.go.html to see an example of how to use ListResourceGroups API.
+// A default retry strategy applies to this operation ListResourceGroups()
+func (client AnalyticsClient) ListResourceGroups(ctx context.Context, request ListResourceGroupsRequest) (response ListResourceGroupsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listResourceGroups, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListResourceGroupsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListResourceGroupsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListResourceGroupsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListResourceGroupsResponse")
+	}
+	return
+}
+
+// listResourceGroups implements the OCIOperation interface (enables retrying operations)
+func (client AnalyticsClient) listResourceGroups(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/analyticsInstances/{analyticsInstanceId}/resourceGroups", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListResourceGroupsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "ListResourceGroups")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/analytics/20190331/AnalyticsInstance/ListResourceGroups"
+		err = common.PostProcessServiceError(err, "Analytics", "ListResourceGroups", apiReferenceLink)
 		return response, err
 	}
 
@@ -935,7 +1176,7 @@ func (client AnalyticsClient) listWorkRequestErrors(ctx context.Context, request
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -993,7 +1234,7 @@ func (client AnalyticsClient) listWorkRequestLogs(ctx context.Context, request c
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1051,7 +1292,7 @@ func (client AnalyticsClient) listWorkRequests(ctx context.Context, request comm
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1065,7 +1306,7 @@ func (client AnalyticsClient) listWorkRequests(ctx context.Context, request comm
 }
 
 // ScaleAnalyticsInstance Scale an Analytics instance up or down. The operation is long-running
-// and creates a new WorkRequest.
+// and creates a new work request.
 //
 // # See also
 //
@@ -1115,7 +1356,7 @@ func (client AnalyticsClient) scaleAnalyticsInstance(ctx context.Context, reques
 
 	var response ScaleAnalyticsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "ScaleAnalyticsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1178,7 +1419,7 @@ func (client AnalyticsClient) setFeatureBundle(ctx context.Context, request comm
 
 	var response SetFeatureBundleResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "SetFeatureBundle")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1191,7 +1432,7 @@ func (client AnalyticsClient) setFeatureBundle(ctx context.Context, request comm
 	return response, err
 }
 
-// SetKmsKey Encrypts the customer data of this Analytics instance using either a customer OCI Vault Key or Oracle managed default key.
+// SetKmsKey Encrypts the customer data of this Analytics instance using either a customer OCI vault key or default Oracle-managed key.
 //
 // # See also
 //
@@ -1241,7 +1482,7 @@ func (client AnalyticsClient) setKmsKey(ctx context.Context, request common.OCIR
 
 	var response SetKmsKeyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "SetKmsKey")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1255,7 +1496,7 @@ func (client AnalyticsClient) setKmsKey(ctx context.Context, request common.OCIR
 }
 
 // StartAnalyticsInstance Starts the specified Analytics instance. The operation is long-running
-// and creates a new WorkRequest.
+// and creates a new work request.
 //
 // # See also
 //
@@ -1305,7 +1546,7 @@ func (client AnalyticsClient) startAnalyticsInstance(ctx context.Context, reques
 
 	var response StartAnalyticsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "StartAnalyticsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1319,7 +1560,7 @@ func (client AnalyticsClient) startAnalyticsInstance(ctx context.Context, reques
 }
 
 // StopAnalyticsInstance Stop the specified Analytics instance. The operation is long-running
-// and creates a new WorkRequest.
+// and creates a new work request.
 //
 // # See also
 //
@@ -1369,7 +1610,7 @@ func (client AnalyticsClient) stopAnalyticsInstance(ctx context.Context, request
 
 	var response StopAnalyticsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "StopAnalyticsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1427,7 +1668,7 @@ func (client AnalyticsClient) updateAnalyticsInstance(ctx context.Context, reque
 
 	var response UpdateAnalyticsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "UpdateAnalyticsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1440,7 +1681,7 @@ func (client AnalyticsClient) updateAnalyticsInstance(ctx context.Context, reque
 	return response, err
 }
 
-// UpdatePrivateAccessChannel Update the Private Access Channel with the given unique identifier key in the specified Analytics Instance.
+// UpdatePrivateAccessChannel Update the private access channel with the given unique identifier key in the specified Analytics instance.
 //
 // # See also
 //
@@ -1490,7 +1731,7 @@ func (client AnalyticsClient) updatePrivateAccessChannel(ctx context.Context, re
 
 	var response UpdatePrivateAccessChannelResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "UpdatePrivateAccessChannel")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1503,7 +1744,70 @@ func (client AnalyticsClient) updatePrivateAccessChannel(ctx context.Context, re
 	return response, err
 }
 
-// UpdateVanityUrl Allows uploading a new certificate for a vanity url, which will have to be done when the current certificate is expiring.
+// UpdateResourceGroup Update any fields in a resource group
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/analytics/UpdateResourceGroup.go.html to see an example of how to use UpdateResourceGroup API.
+// A default retry strategy applies to this operation UpdateResourceGroup()
+func (client AnalyticsClient) UpdateResourceGroup(ctx context.Context, request UpdateResourceGroupRequest) (response UpdateResourceGroupResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.updateResourceGroup, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateResourceGroupResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateResourceGroupResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateResourceGroupResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateResourceGroupResponse")
+	}
+	return
+}
+
+// updateResourceGroup implements the OCIOperation interface (enables retrying operations)
+func (client AnalyticsClient) updateResourceGroup(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/analyticsInstances/{analyticsInstanceId}/resourceGroups/{analyticsInstanceResourceGroupId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateResourceGroupResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "UpdateResourceGroup")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/analytics/20190331/AnalyticsInstance/UpdateResourceGroup"
+		err = common.PostProcessServiceError(err, "Analytics", "UpdateResourceGroup", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateVanityUrl Uploads a new certificate for a vanity URL. Required before the current certificate expires.
 //
 // # See also
 //
@@ -1553,7 +1857,7 @@ func (client AnalyticsClient) updateVanityUrl(ctx context.Context, request commo
 
 	var response UpdateVanityUrlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "analytics", "UpdateVanityUrl")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
