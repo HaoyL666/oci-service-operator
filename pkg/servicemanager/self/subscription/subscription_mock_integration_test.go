@@ -49,17 +49,21 @@ func TestMockIntegrationSubscriptionWorkRequestCRUD(t *testing.T) {
   "sellerId": "<ocid:3>",
   "sourceType": "OCI_NATIVE",
   "subscriptionDetails": {
-    "billingDetails": {
-      "meters": [
-        {
-          "name": "meter-a",
-          "rateAllocation": 100
-        }
-      ],
-      "metricType": "OCPU_HOURS",
-      "rateAllocation": 100,
-      "sku": "gold-sku"
-    },
+    "billingDetails": [
+      {
+        "billingModel": "USAGE_BASED",
+        "meters": [
+          {
+            "name": "meter-a",
+            "rateAllocation": 100
+          }
+        ],
+        "metricType": "OCPU_HOURS",
+        "pricingPlanKey": "gold-plan-key",
+        "rateAllocation": 100,
+        "sku": "gold-sku"
+      }
+    ],
     "partnerRegistrationUrl": "https://partner.example.com/register",
     "pricingPlan": {
       "billingFrequency": "YEARLY",
@@ -103,17 +107,21 @@ func TestMockIntegrationSubscriptionWorkRequestCRUD(t *testing.T) {
   "sellerId": "<ocid:3>",
   "sourceType": "OCI_NATIVE",
   "subscriptionDetails": {
-    "billingDetails": {
-      "meters": [
-        {
-          "name": "meter-a",
-          "rateAllocation": 100
-        }
-      ],
-      "metricType": "OCPU_HOURS",
-      "rateAllocation": 100,
-      "sku": "gold-sku"
-    },
+    "billingDetails": [
+      {
+        "billingModel": "USAGE_BASED",
+        "meters": [
+          {
+            "name": "meter-a",
+            "rateAllocation": 100
+          }
+        ],
+        "metricType": "OCPU_HOURS",
+        "pricingPlanKey": "gold-plan-key",
+        "rateAllocation": 100,
+        "sku": "gold-sku"
+      }
+    ],
     "partnerRegistrationUrl": "https://partner.example.com/register",
     "pricingPlan": {
       "billingFrequency": "YEARLY",
@@ -159,19 +167,23 @@ func TestMockIntegrationSubscriptionWorkRequestCRUD(t *testing.T) {
   "sourceType": "OCI_NATIVE",
   "subscriptionDetails": {
     "amount": null,
-    "billingDetails": {
-      "hasGovSku": null,
-      "meters": [
-        {
-          "extendedMetadata": null,
-          "name": "meter-a",
-          "rateAllocation": 100
-        }
-      ],
-      "metricType": "OCPU_HOURS",
-      "rateAllocation": 100,
-      "sku": "gold-sku"
-    },
+    "billingDetails": [
+      {
+        "billingModel": "USAGE_BASED",
+        "hasGovSku": null,
+        "meters": [
+          {
+            "extendedMetadata": null,
+            "name": "meter-a",
+            "rateAllocation": 100
+          }
+        ],
+        "metricType": "OCPU_HOURS",
+        "pricingPlanKey": "gold-plan-key",
+        "rateAllocation": 100,
+        "sku": "gold-sku"
+      }
+    ],
     "currency": null,
     "isAutoRenew": null,
     "partnerRegistrationUrl": "https://partner.example.com/register",
@@ -222,19 +234,23 @@ func TestMockIntegrationSubscriptionWorkRequestCRUD(t *testing.T) {
   "sourceType": "OCI_NATIVE",
   "subscriptionDetails": {
     "amount": null,
-    "billingDetails": {
-      "hasGovSku": null,
-      "meters": [
-        {
-          "extendedMetadata": null,
-          "name": "meter-a",
-          "rateAllocation": 100
-        }
-      ],
-      "metricType": "OCPU_HOURS",
-      "rateAllocation": 100,
-      "sku": "gold-sku"
-    },
+    "billingDetails": [
+      {
+        "billingModel": "USAGE_BASED",
+        "hasGovSku": null,
+        "meters": [
+          {
+            "extendedMetadata": null,
+            "name": "meter-a",
+            "rateAllocation": 100
+          }
+        ],
+        "metricType": "OCPU_HOURS",
+        "pricingPlanKey": "gold-plan-key",
+        "rateAllocation": 100,
+        "sku": "gold-sku"
+      }
+    ],
     "currency": null,
     "isAutoRenew": null,
     "partnerRegistrationUrl": "https://partner.example.com/register",
