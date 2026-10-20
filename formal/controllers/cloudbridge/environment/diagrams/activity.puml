@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetEnvironment;
 else (no)
-:Resolve an existing OCI resource through\nListEnvironment using filters compartment_id,\ndisplay_name, environment_id;
+:Resolve an existing OCI resource through\nListEnvironment using filters compartment_id,\nstate;
 :Create the OCI resource via CreateEnvironment\nwhen no reusable match is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -55,18 +55,17 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the\nrepo-authored mutation surface;
+:Compare live OCI state against the imported\nfield surface;
 if ("Force-new or conflicting drift detected?") then (yes)
 :Reject drift before OCI mutation for force-new\nfields compartment_id;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateEnvironment only for mutable\nfields defined_tags, display_name,\nfreeform_tags;
+:Apply UpdateEnvironment only for mutable\nfields display_name;
 else (no)
 :Skip the no-op mutation path;
 endif
-:Run provider helper hooks\ncreate=CreateEnvironment;\nupdate=UpdateEnvironment;\ndelete=DeleteEnvironment when the matching\nfield-driven path executes;
-:Apply explicit follow-up semantics\ncreate=read-after-write;\nupdate=read-after-write; delete=confirm-delete;
+:Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
 :Return success for the ACTIVE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
@@ -94,25 +93,16 @@ retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-follow-up: create=read-after-write;
-update=read-after-write; delete=confirm-delete
-supported drift: defined_tags, display_name,
-freeform_tags
+supported drift: display_name
 reject before mutate: force-new fields
 compartment_id
 create-only fields: none
 list lookup: scaffold_cloudbridge_environment
-filters compartment_id, display_name,
-environment_id; Adopt only a unique environment
-match in the requested compartment.
+filters compartment_id, state
 conflicts: none
 open gaps: none
-Live create, update, and delete verification
-established `CREATING`, `UPDATING`, `ACTIVE`,
-`DELETING`, and `DELETED` as the lifecycle
-contract.
-The controller projects endpoint-free resource
-status and has no Secret or external side
-effects.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 @enduml

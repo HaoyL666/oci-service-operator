@@ -8,4 +8,6 @@ gaps: []
 
 # Logic Gaps
 
-The pinned Terraform provider does not expose Lockbox. The checked-in runtime lifecycle and vendored OCI SDK remain authoritative until a provider mapping becomes available.
+This scaffold row tracks the published Lockbox API shape for lockbox. Replace this
+placeholder with repo-authored semantics and explicit stop conditions before
+adding formalSpec or promoting runtime ownership.

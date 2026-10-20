@@ -8,6 +8,6 @@ gaps: []
 
 # Logic Gaps
 
-The pinned Terraform provider has no corresponding resource implementation. This row therefore remains scaffolded. The sanitized live recording
-and stateful SDK-HTTP mock provide executable CRUD evidence without claiming
-imported Terraform semantics.
+This scaffold row tracks the published ManagementSavedSearch API shape for managementdashboard. Replace this
+placeholder with repo-authored semantics and explicit stop conditions before
+adding formalSpec or promoting runtime ownership.

@@ -8,4 +8,6 @@ gaps: []
 
 # Logic Gaps
 
-The pinned Terraform provider registers DetectorRecipe, but `formal-import` cannot resolve its CRUD type. The checked-in runtime lifecycle and vendored OCI SDK remain authoritative until importer support is added.
+This scaffold row tracks the published DetectorRecipe API shape for cloudguard. Replace this
+placeholder with repo-authored semantics and explicit stop conditions before
+adding formalSpec or promoting runtime ownership.
