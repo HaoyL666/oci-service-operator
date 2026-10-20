@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetAlarmCondition
 else tracked identity is missing
-ServiceManager -> OCI: ListAlarmCondition(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListAlarmCondition(filters:\nmonitoringTemplateId, namespace,\nresourceType, metricName (+3 more))
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateAlarmCondition
-loop create pending PROVISIONING
+loop create pending CREATING
 ServiceManager -> OCI: GetAlarmCondition
 end
 else reusable OCI resource already exists
@@ -63,25 +63,33 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nCREATING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: namespace,
+resourceType, metricName, conditionType
+(+4 more)
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+monitoringTemplateId
+Lookup filters: monitoringTemplateId,
+namespace, resourceType, metricName (+3
+more)
+Lookup matching: exact parent template
+and alarm signature match; tracked ID is
+preferred and duplicate matches fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateAlarmCondition only for\nmutable fields display_name
+ServiceManager -> OCI: Apply UpdateAlarmCondition only for\nmutable fields namespace,\nresourceType, metricName,\nconditionType (+4 more)
 loop update pending UPDATING
 ServiceManager -> OCI: GetAlarmCondition
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -108,19 +116,25 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: namespace, resourceType,
+metricName, conditionType (+4 more)
 reject before mutate: force-new fields
-compartment_id
+monitoringTemplateId
 create-only fields: none
 list lookup:
 scaffold_stackmonitoring_alarmcondition filters
-compartment_id, state
+monitoringTemplateId, namespace, resourceType,
+metricName (+3 more); exact parent template and
+alarm signature match; tracked ID is preferred
+and duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+monitoringTemplateId is supplied by the required
+metadata annotation because the generated CRD
+has no spec field for the parent path.
 end note
 @enduml

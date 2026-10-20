@@ -9,5 +9,13 @@ states:
   - active
   - updating
   - terminating
+repoAuthored:
+  listLookup:
+    filters: ["securityAttributeNamespaceId","name"]
+    matchRule: exact parent namespace and attribute name match
+  mutation:
+    mutable: ["description","isRetired","validator"]
+    forceNew: ["name","securityAttributeNamespaceId"]
+  followUp: {create: read-after-write, update: read-after-write, delete: confirm-delete}
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - "The namespace OCID and attribute name form the immutable request path; ACTIVE and INACTIVE are both steady states."

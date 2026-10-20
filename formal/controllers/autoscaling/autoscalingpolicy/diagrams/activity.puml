@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetAutoScalingPolicy;
 else (no)
-:Resolve an existing OCI resource through\nListAutoScalingPolicy using filters\ncompartment_id, state;
+:Resolve an existing OCI resource through\nListAutoScalingPolicy using filters\ndisplayName, policyType;
 :Create the OCI resource via\nCreateAutoScalingPolicy when no reusable match\nis found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -55,20 +55,21 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields autoScalingConfigurationId, policyType;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateAutoScalingPolicy only for mutable\nfields display_name;
+:Apply UpdateAutoScalingPolicy only for mutable\nfields capacity, displayName, isEnabled,\nexecutionSchedule (+2 more);
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
+:Apply explicit follow-up semantics\ncreate=response-body; update=response-body;\ndelete=confirm-delete;
 :Return success for the ACTIVE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
-:Requeue on provisioning, updating, terminating;
+:Requeue on terminating;
 }
 endif
 stop
@@ -90,20 +91,31 @@ kind: AutoScalingPolicy
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
+requeue: terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=response-body;
+update=response-body; delete=confirm-delete
+supported drift: capacity, displayName,
+isEnabled, executionSchedule (+2 more)
 reject before mutate: force-new fields
-compartment_id
+autoScalingConfigurationId, policyType
 create-only fields: none
 list lookup:
 scaffold_autoscaling_autoscalingpolicy filters
-compartment_id, state
+displayName, policyType; exact unique match on
+fields exposed by the scoped OCI list response
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+The vendored SDK response has no lifecycle state
+or required work-request flow; successful writes
+settle from the response and configured
+follow-up.
+Parent identifiers scope composite OCI request
+paths and remain replacement-only unless the SDK
+update details explicitly expose them.
+Create, get, list where available, update, and
+delete request shapes are exercised by the
+package-local typed OCI mock integration test.
 end note
 @enduml

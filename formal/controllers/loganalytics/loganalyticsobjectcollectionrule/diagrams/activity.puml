@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetLogAnalyticsObjectCollectionRule;
 else (no)
-:Resolve an existing OCI resource through\nListLogAnalyticsObjectCollectionRule using\nfilters compartment_id, state;
+:Resolve an existing OCI resource through\nListLogAnalyticsObjectCollectionRule using\nfilters osNamespace, compartmentId, name;
 :Create the OCI resource via\nCreateLogAnalyticsObjectCollectionRule when no\nreusable match is found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -55,17 +55,18 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields collectionType, compartmentId,\nisForceHistoricCollection, logType (+5 more);
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateLogAnalyticsObjectCollectionRule\nonly for mutable fields display_name;
+:Apply UpdateLogAnalyticsObjectCollectionRule\nonly for mutable fields charEncoding,\ndefinedTags, description, entityId (+13 more);
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
+:Apply explicit follow-up semantics\ncreate=read-after-write;\nupdate=read-after-write; delete=confirm-delete;
 :Return success for the ACTIVE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
@@ -93,17 +94,23 @@ retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: charEncoding, definedTags,
+description, entityId (+13 more)
 reject before mutate: force-new fields
-compartment_id
+collectionType, compartmentId,
+isForceHistoricCollection, logType (+5 more)
 create-only fields: none
 list lookup:
 scaffold_loganalytics_loganalyticsobjectcollectionrule
-filters compartment_id, state
+filters osNamespace, compartmentId, name; exact
+object-storage namespace, compartment, and rule
+name match; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+ACTIVE and INACTIVE are steady states; a DELETED
+read or an unambiguous not-found response
+completes deletion.
 end note
 @enduml

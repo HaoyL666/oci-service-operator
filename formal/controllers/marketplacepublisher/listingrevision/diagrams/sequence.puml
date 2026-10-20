@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetListingRevision
 else tracked identity is missing
-ServiceManager -> OCI: ListListingRevision(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListListingRevision(filters:\ndisplayName, id, listingId,\nlistingType)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateListingRevision
-loop create pending PROVISIONING
+loop create pending CREATING
 ServiceManager -> OCI: GetListingRevision
 end
 else reusable OCI resource already exists
@@ -63,25 +63,31 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nCREATING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: jsonData,
+displayName, headline, tagline (+28
+more)
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+listingId, listingType
+Lookup filters: displayName, id,
+listingId, listingType
+Lookup matching: exact resource identity
+match; duplicate matches fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateListingRevision only for\nmutable fields display_name
+ServiceManager -> OCI: Apply UpdateListingRevision only for\nmutable fields jsonData,\ndisplayName, headline, tagline (+28\nmore)
 loop update pending UPDATING
 ServiceManager -> OCI: GetListingRevision
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -108,19 +114,27 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: jsonData, displayName,
+headline, tagline (+28 more)
 reject before mutate: force-new fields
-compartment_id
+listingId, listingType
 create-only fields: none
 list lookup:
 scaffold_marketplacepublisher_listingrevision
-filters compartment_id, state
+filters displayName, id, listingId, listingType;
+exact resource identity match; duplicate matches
+fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+The runtime selects the concrete SERVICE, OCI,
+or LEAD_GENERATION update payload and applies
+only fields supported by that listing subtype.
+listingId and listingType define immutable
+identity; subtype-inapplicable fields do not
+trigger an update.
 end note
 @enduml

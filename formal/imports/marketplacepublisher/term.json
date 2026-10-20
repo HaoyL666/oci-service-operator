@@ -120,6 +120,6 @@
     ]
   },
   "notes": [
-    "Scaffold placeholder for marketplacepublisher/term; replace imported facts before promoting this row beyond scaffold."
+    "The pinned provider does not expose this resource; the row remains scaffolded from OSOK runtime and SDK evidence."
   ]
 }

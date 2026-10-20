@@ -9,5 +9,13 @@ states:
   - active
   - updating
   - terminating
+repoAuthored:
+  listLookup:
+    filters: ["networkFirewallPolicyId","name"]
+    matchRule: exact parent policy and mapped-secret name match
+  mutation:
+    mutable: ["description","type","source","vaultSecretId","versionNumber"]
+    forceNew: ["networkFirewallPolicyId","name"]
+  followUp: {create: read-after-write, update: read-after-write, delete: confirm-delete}
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - "MappedSecret is a state-free named policy child; its parent policy and name form the stable tracked identity."

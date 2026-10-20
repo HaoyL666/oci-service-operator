@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetDataFlow
 else tracked identity is missing
-ServiceManager -> OCI: ListDataFlow(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListDataFlow(filters: name)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateDataFlow
 loop create pending PROVISIONING
@@ -67,25 +67,31 @@ ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, U
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: name,
+identifier, registryMetadata, key (+9
+more)
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+workspaceId
+Lookup filters: name
+Lookup matching: exact unique match on
+fields exposed by the scoped OCI list
+response
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateDataFlow only for\nmutable fields display_name
+ServiceManager -> OCI: Apply UpdateDataFlow only for\nmutable fields name, identifier,\nregistryMetadata, key (+9 more)
 loop update pending UPDATING
 ServiceManager -> OCI: GetDataFlow
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
-BaseReconciler --> Controller: requeue on provisioning, updating,\nterminating
+BaseReconciler --> Controller: requeue on terminating
 note right of ServiceManager
 shared diagram:
 shared/diagrams/shared-resolution-sequence.svg
@@ -107,19 +113,30 @@ kind: DataFlow
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
+requeue: terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: name, identifier,
+registryMetadata, key (+9 more)
 reject before mutate: force-new fields
-compartment_id
+workspaceId
 create-only fields: none
 list lookup: scaffold_dataintegration_dataflow
-filters compartment_id, state
+filters name; exact unique match on fields
+exposed by the scoped OCI list response
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+The vendored SDK response has no lifecycle state
+or required work-request flow; successful writes
+settle from the response and configured
+follow-up.
+Parent identifiers scope composite OCI request
+paths and remain replacement-only unless the SDK
+update details explicitly expose them.
+Create, get, list where available, update, and
+delete request shapes are exercised by the
+package-local typed OCI mock integration test.
 end note
 @enduml

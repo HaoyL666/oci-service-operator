@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetLogAnalyticsObjectCollectionRule
 else tracked identity is missing
-ServiceManager -> OCI: ListLogAnalyticsObjectCollectionRule(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListLogAnalyticsObjectCollectionRule(filters:\nosNamespace, compartmentId, name)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateLogAnalyticsObjectCollectionRule
 loop create pending PROVISIONING
@@ -67,21 +67,30 @@ ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, U
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: charEncoding,
+definedTags, description, entityId (+13
+more)
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+collectionType, compartmentId,
+isForceHistoricCollection, logType (+5
+more)
+Lookup filters: osNamespace,
+compartmentId, name
+Lookup matching: exact object-storage
+namespace, compartment, and rule name
+match; duplicate matches fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply\nUpdateLogAnalyticsObjectCollectionRule\nonly for mutable fields display_name
+ServiceManager -> OCI: Apply\nUpdateLogAnalyticsObjectCollectionRule\nonly for mutable fields\ncharEncoding, definedTags,\ndescription, entityId (+13 more)
 loop update pending UPDATING
 ServiceManager -> OCI: GetLogAnalyticsObjectCollectionRule
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -110,17 +119,23 @@ retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: charEncoding, definedTags,
+description, entityId (+13 more)
 reject before mutate: force-new fields
-compartment_id
+collectionType, compartmentId,
+isForceHistoricCollection, logType (+5 more)
 create-only fields: none
 list lookup:
 scaffold_loganalytics_loganalyticsobjectcollectionrule
-filters compartment_id, state
+filters osNamespace, compartmentId, name; exact
+object-storage namespace, compartment, and rule
+name match; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+ACTIVE and INACTIVE are steady states; a DELETED
+read or an unambiguous not-found response
+completes deletion.
 end note
 @enduml

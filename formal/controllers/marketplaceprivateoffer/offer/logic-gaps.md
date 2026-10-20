@@ -8,6 +8,4 @@ gaps: []
 
 # Logic Gaps
 
-This scaffold row tracks the published Offer API shape for marketplaceprivateoffer. Replace this
-placeholder with repo-authored semantics and explicit stop conditions before
-adding formalSpec or promoting runtime ownership.
+The pinned Terraform provider does not expose Offer. The checked-in runtime lifecycle and vendored OCI SDK remain authoritative until a provider mapping becomes available.

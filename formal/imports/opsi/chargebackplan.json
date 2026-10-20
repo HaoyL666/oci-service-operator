@@ -120,6 +120,6 @@
     ]
   },
   "notes": [
-    "Scaffold placeholder for opsi/chargebackplan; replace imported facts before promoting this row beyond scaffold."
+    "The pinned provider registers this resource, but formal-import cannot resolve its CRUD type; the row remains scaffolded."
   ]
 }

@@ -5,9 +5,23 @@ slug: digitaltwinrelationship
 kind: DigitalTwinRelationship
 archetype: generated-service-manager
 states:
-  - provisioning
   - active
-  - updating
   - terminating
+repoAuthored:
+  providerLifecycle:
+    createPending: []
+    updatePending: []
+    deletePending: []
+  listLookup:
+    filters: ["contentPath","id","iotDomainId","sourceDigitalTwinInstanceId","targetDigitalTwinInstanceId"]
+    matchRule: exact resource identity match; duplicate matches fail
+  mutation:
+    mutable: ["content","definedTags","description","displayName","freeformTags"]
+    forceNew: ["contentPath","iotDomainId","sourceDigitalTwinInstanceId","targetDigitalTwinInstanceId"]
+  followUp:
+    create: read-after-write
+    update: read-after-write
+    delete: confirm-delete
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - "The runtime uses its declared lifecycle-state contract for DigitalTwinRelationship reconciliation."
+  - "The credential-free mock exercises SDK request serialization, response projection, mutation when supported, and confirmed deletion."

@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetExportRequest
 else tracked identity is missing
-ServiceManager -> OCI: ListExportRequest(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListExportRequest(filters:\nbucketName)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateExportRequest
-loop create pending PROVISIONING
+loop create pending IN_PROGRESS, QUEUED,\nPUBLISHING, NOT_STARTED (+1 more)
 ServiceManager -> OCI: GetExportRequest
 end
 else reusable OCI resource already exists
@@ -53,7 +53,7 @@ alt delete requested
 group Delete
 ServiceManager -> OCI: DeleteExportRequest
 ServiceManager -> OCI: confirm delete via GetExportRequest\nor ListExportRequest
-loop delete pending DELETING
+loop delete pending DELETING, TERMINATING
 ServiceManager -> OCI: GetExportRequest or\nListExportRequest
 end
 alt cleanup or finalizer release is blocked
@@ -63,25 +63,31 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nIN_PROGRESS, QUEUED, PUBLISHING,\nNOT_STARTED (+4 more)
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: status
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+bucketName, fileName,
+objectStorageTenancyId,
+objectStorageRegion (+5 more)
+Lookup filters: bucketName
+Lookup matching: exact unique match on
+fields exposed by the scoped OCI list
+response
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateExportRequest only for\nmutable fields display_name
+ServiceManager -> OCI: Apply UpdateExportRequest only for\nmutable fields status
 loop update pending UPDATING
 ServiceManager -> OCI: GetExportRequest
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -108,19 +114,30 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+provider states: create IN_PROGRESS, QUEUED,
+PUBLISHING, NOT_STARTED (+1 more); update
+UPDATING; delete DELETING, TERMINATING
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: status
 reject before mutate: force-new fields
-compartment_id
+bucketName, fileName, objectStorageTenancyId,
+objectStorageRegion (+5 more)
 create-only fields: none
 list lookup:
 scaffold_dataintegration_exportrequest filters
-compartment_id, state
+bucketName; exact unique match on fields exposed
+by the scoped OCI list response
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+The runtime projects the vendored SDK lifecycle
+states and treats SUCCESS, SUCCESSFUL,
+TERMINATED as converged.
+Parent identifiers scope composite OCI request
+paths and remain replacement-only unless the SDK
+update details explicitly expose them.
+Create, get, list where available, update, and
+delete request shapes are exercised by the
+package-local typed OCI mock integration test.
 end note
 @enduml

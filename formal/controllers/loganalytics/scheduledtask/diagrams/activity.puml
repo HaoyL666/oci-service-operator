@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetScheduledTask;
 else (no)
-:Resolve an existing OCI resource through\nListScheduledTask using filters\ncompartment_id, state;
+:Resolve an existing OCI resource through\nListScheduledTask using filters namespaceName,\ncompartmentId, taskType, displayName (+2 more);
 :Create the OCI resource via\nCreateScheduledTask when no reusable match is\nfound;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -55,17 +55,18 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields compartmentId, kind, savedSearchId,\ntaskType;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateScheduledTask only for mutable\nfields display_name;
+:Apply UpdateScheduledTask only for mutable\nfields action, definedTags, description,\ndisplayName (+2 more);
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
+:Apply explicit follow-up semantics\ncreate=read-after-write;\nupdate=read-after-write; delete=confirm-delete;
 :Return success for the ACTIVE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
@@ -93,16 +94,21 @@ retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: action, definedTags,
+description, displayName (+2 more)
 reject before mutate: force-new fields
-compartment_id
+compartmentId, kind, savedSearchId, taskType
 create-only fields: none
 list lookup: scaffold_loganalytics_scheduledtask
-filters compartment_id, state
+filters namespaceName, compartmentId, taskType,
+displayName (+2 more); exact resolved namespace
+and task identity match; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+The runtime resolves the tenancy Log Analytics
+namespace before every operation and preserves
+explicit zero values in schedule bodies.
 end note
 @enduml

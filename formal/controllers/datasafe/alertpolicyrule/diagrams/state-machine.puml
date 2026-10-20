@@ -33,14 +33,14 @@ state "DeleteCleanupBlocked" as delete_cleanup_blocked
 [*] --> observe : CreateAlertPolicyRule
 observe --> resolve_by_lookup : tracked identity missing
 resolve_by_lookup --> evaluate_ready : lookup or create reaches\nACTIVE
-resolve_by_lookup --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+resolve_by_lookup --> retryable : OCI state in CREATING,\nUPDATING, DELETING
 resolve_by_lookup --> failed : unresolved OCI error or non-success state
 observe --> evaluate_ready : OCI state in ACTIVE
-observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
+observe --> retryable : OCI state in CREATING,\nUPDATING, DELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndisplay_name
+evaluate_ready --> apply_update : supported mutable drift for\nexpression, description,\ndisplayName
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -69,19 +69,26 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=work-request-or-response;
+update=work-request-or-read;
+delete=work-request-or-confirm-delete
+supported drift: expression, description,
+displayName
 reject before mutate: force-new fields
-compartment_id
+alertPolicyId
 create-only fields: none
 list lookup: scaffold_datasafe_alertpolicyrule
-filters compartment_id, state
+filters alertPolicyId, expression, displayName;
+exact parent policy plus expression and display
+name match; duplicate matches fail
 conflicts: none
-open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+open gaps: seed-corpus
+Write responses may include a Data Safe work
+request. The runtime resumes that request when
+present and otherwise converges from the
+response or a confirmed read.
 end note
 note right of delete_pending
 delete policy: required

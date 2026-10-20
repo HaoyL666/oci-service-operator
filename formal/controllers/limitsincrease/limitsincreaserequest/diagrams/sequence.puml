@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetLimitsIncreaseRequest
 else tracked identity is missing
-ServiceManager -> OCI: ListLimitsIncreaseRequest(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListLimitsIncreaseRequest(filters:\ncompartmentId, displayName, id,\njustification (+1 more))
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateLimitsIncreaseRequest
-loop create pending PROVISIONING
+loop create pending ACCEPTED, IN_PROGRESS
 ServiceManager -> OCI: GetLimitsIncreaseRequest
 end
 else reusable OCI resource already exists
@@ -63,29 +63,36 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nACCEPTED, IN_PROGRESS, UPDATING,\nDELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: definedTags,
+freeformTags
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+compartmentId, displayName,
+justification,
+limitsIncreaseItemRequests (+1 more)
+Lookup filters: compartmentId,
+displayName, id, justification (+1 more)
+Lookup matching: exact resource identity
+match; duplicate matches fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateLimitsIncreaseRequest\nonly for mutable fields display_name
+ServiceManager -> OCI: Apply UpdateLimitsIncreaseRequest\nonly for mutable fields definedTags,\nfreeformTags
 loop update pending UPDATING
 ServiceManager -> OCI: GetLimitsIncreaseRequest
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
-BaseReconciler --> Controller: requeue on provisioning, updating,\nterminating
+BaseReconciler --> Controller: requeue on provisioning, terminating
 note right of ServiceManager
 shared diagram:
 shared/diagrams/shared-resolution-sequence.svg
@@ -107,20 +114,28 @@ kind: LimitsIncreaseRequest
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
-UPDATING; delete DELETING
-supported drift: display_name
+requeue: provisioning, terminating
+provider states: create ACCEPTED, IN_PROGRESS;
+update UPDATING; delete DELETING
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: definedTags, freeformTags
 reject before mutate: force-new fields
-compartment_id
+compartmentId, displayName, justification,
+limitsIncreaseItemRequests (+1 more)
 create-only fields: none
 list lookup:
 scaffold_limitsincrease_limitsincreaserequest
-filters compartment_id, state
+filters compartmentId, displayName, id,
+justification (+1 more); exact resource identity
+match; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+The runtime uses its declared lifecycle-state
+contract for LimitsIncreaseRequest
+reconciliation.
+The credential-free mock exercises SDK request
+serialization, response projection, mutation
+when supported, and confirmed deletion.
 end note
 @enduml

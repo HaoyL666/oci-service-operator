@@ -40,7 +40,7 @@ observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ndisplay_name
+evaluate_ready --> apply_update : supported mutable drift for\ncharEncoding, definedTags,\ndescription (+14 more)
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -71,18 +71,24 @@ retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: charEncoding, definedTags,
+description, entityId (+13 more)
 reject before mutate: force-new fields
-compartment_id
+collectionType, compartmentId,
+isForceHistoricCollection, logType (+5 more)
 create-only fields: none
 list lookup:
 scaffold_loganalytics_loganalyticsobjectcollectionrule
-filters compartment_id, state
+filters osNamespace, compartmentId, name; exact
+object-storage namespace, compartment, and rule
+name match; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+ACTIVE and INACTIVE are steady states; a DELETED
+read or an unambiguous not-found response
+completes deletion.
 end note
 note right of delete_pending
 delete policy: required

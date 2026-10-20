@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetTermVersion
 else tracked identity is missing
-ServiceManager -> OCI: ListTermVersion(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListTermVersion(filters:\ndisplayName, id, termId)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateTermVersion
 loop create pending PROVISIONING
@@ -67,25 +67,30 @@ ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, U
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: contentSecret,
+contentSecretKey, definedTags,
+displayName (+1 more)
 Reject before mutate: force-new fields
-compartment_id
-Lookup filters: compartment_id, state
+termId
+Lookup filters: displayName, id, termId
+Lookup matching: exact resource identity
+match; duplicate matches fail
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateTermVersion only for\nmutable fields display_name
+ServiceManager -> OCI: Apply UpdateTermVersion only for\nmutable fields contentSecret,\ncontentSecretKey, definedTags,\ndisplayName (+1 more)
 loop update pending UPDATING
 ServiceManager -> OCI: GetTermVersion
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
-BaseReconciler --> Controller: requeue on provisioning, updating,\nterminating
+BaseReconciler --> Controller: requeue on terminating
 note right of ServiceManager
 shared diagram:
 shared/diagrams/shared-resolution-sequence.svg
@@ -107,20 +112,26 @@ kind: TermVersion
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: provisioning, updating, terminating
+requeue: terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-supported drift: display_name
-reject before mutate: force-new fields
-compartment_id
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: contentSecret,
+contentSecretKey, definedTags, displayName (+1
+more)
+reject before mutate: force-new fields termId
 create-only fields: none
 list lookup:
 scaffold_marketplacepublisher_termversion
-filters compartment_id, state
+filters displayName, id, termId; exact resource
+identity match; duplicate matches fail
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+The runtime uses its declared lifecycle-state
+contract for TermVersion reconciliation.
+The credential-free mock exercises SDK request
+serialization, response projection, mutation
+when supported, and confirmed deletion.
 end note
 @enduml

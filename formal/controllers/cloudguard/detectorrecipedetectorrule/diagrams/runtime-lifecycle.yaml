@@ -9,5 +9,14 @@ states:
   - active
   - updating
   - terminating
+repoAuthored:
+  providerLifecycle: {createPending: ["CREATING"], updatePending: ["UPDATING"], deletePending: ["DELETING"]}
+  listLookup:
+    filters: ["detectorRecipeId","compartmentId","details.name"]
+    matchRule: exact parent recipe and rule name match; deleted rules are excluded
+  mutation:
+    mutable: ["details"]
+    forceNew: ["detectorRecipeId"]
+  followUp: {create: none, update: none, delete: confirm-delete}
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - "Detector rule identity is the service rule key nested under detectorRecipeId; status projects that key as the tracked identity."

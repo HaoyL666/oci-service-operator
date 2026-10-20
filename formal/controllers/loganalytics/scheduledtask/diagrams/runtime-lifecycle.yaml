@@ -9,5 +9,13 @@ states:
   - active
   - updating
   - terminating
+repoAuthored:
+  listLookup:
+    filters: ["namespaceName","compartmentId","taskType","displayName","savedSearchId","id"]
+    matchRule: exact resolved namespace and task identity match; duplicate matches fail
+  mutation:
+    mutable: ["action","definedTags","description","displayName","freeformTags","schedules"]
+    forceNew: ["compartmentId","kind","savedSearchId","taskType"]
+  followUp: {create: read-after-write, update: read-after-write, delete: confirm-delete}
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - "The runtime resolves the tenancy Log Analytics namespace before every operation and preserves explicit zero values in schedule bodies."

@@ -5,9 +5,23 @@ slug: term
 kind: Term
 archetype: generated-service-manager
 states:
-  - provisioning
   - active
-  - updating
   - terminating
+repoAuthored:
+  providerLifecycle:
+    createPending: []
+    updatePending: []
+    deletePending: []
+  listLookup:
+    filters: ["compartmentId","id","name"]
+    matchRule: exact resource identity match; duplicate matches fail
+  mutation:
+    mutable: ["definedTags","freeformTags"]
+    forceNew: ["compartmentId","name"]
+  followUp:
+    create: read-after-write
+    update: read-after-write
+    delete: confirm-delete
 notes:
-  - Scaffold metadata only; replace with controller-specific runtime states before promotion.
+  - "The runtime uses its declared lifecycle-state contract for Term reconciliation."
+  - "The credential-free mock exercises SDK request serialization, response projection, mutation when supported, and confirmed deletion."

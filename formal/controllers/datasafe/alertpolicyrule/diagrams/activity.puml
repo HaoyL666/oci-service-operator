@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetAlertPolicyRule;
 else (no)
-:Resolve an existing OCI resource through\nListAlertPolicyRule using filters\ncompartment_id, state;
+:Resolve an existing OCI resource through\nListAlertPolicyRule using filters\nalertPolicyId, expression, displayName;
 :Create the OCI resource via\nCreateAlertPolicyRule when no reusable match\nis found;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -46,7 +46,7 @@ stop
 else (no)
 partition "Lifecycle Classification" {
 if ("OCI state in retryable set?") then (yes)
-:Request requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING;
+:Request requeue while OCI remains in CREATING,\nUPDATING, DELETING;
 stop
 endif
 if ("OCI state is outside success targets?") then (yes)
@@ -55,20 +55,22 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the imported\nfield surface;
+:Compare live OCI state against the\nrepo-authored mutation surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields compartment_id;
+:Reject drift before OCI mutation for force-new\nfields alertPolicyId;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateAlertPolicyRule only for mutable\nfields display_name;
+:Apply UpdateAlertPolicyRule only for mutable\nfields expression, description, displayName;
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
+:Apply explicit follow-up semantics\ncreate=work-request-or-response;\nupdate=work-request-or-read;\ndelete=work-request-or-confirm-delete;
 :Return success for the ACTIVE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
+:Keep promotion blocked on seed-corpus;
 }
 endif
 stop
@@ -91,18 +93,25 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create PROVISIONING; update
+provider states: create CREATING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=work-request-or-response;
+update=work-request-or-read;
+delete=work-request-or-confirm-delete
+supported drift: expression, description,
+displayName
 reject before mutate: force-new fields
-compartment_id
+alertPolicyId
 create-only fields: none
 list lookup: scaffold_datasafe_alertpolicyrule
-filters compartment_id, state
+filters alertPolicyId, expression, displayName;
+exact parent policy plus expression and display
+name match; duplicate matches fail
 conflicts: none
-open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+open gaps: seed-corpus
+Write responses may include a Data Safe work
+request. The runtime resumes that request when
+present and otherwise converges from the
+response or a confirmed read.
 end note
 @enduml

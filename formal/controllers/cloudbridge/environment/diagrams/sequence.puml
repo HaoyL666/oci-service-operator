@@ -38,7 +38,7 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetEnvironment
 else tracked identity is missing
-ServiceManager -> OCI: ListEnvironment(filters:\ncompartment_id, state)
+ServiceManager -> OCI: ListEnvironment(filters:\ncompartment_id, display_name,\nenvironment_id)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateEnvironment
 loop create pending PROVISIONING
@@ -67,21 +67,27 @@ ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, U
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface: display_name
+Supported update surface: defined_tags,
+display_name, freeform_tags
 Reject before mutate: force-new fields
 compartment_id
-Lookup filters: compartment_id, state
+Lookup filters: compartment_id,
+display_name, environment_id
+Lookup matching: Adopt only a unique
+environment match in the requested
+compartment.
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateEnvironment only for\nmutable fields display_name
+ServiceManager -> OCI: Apply UpdateEnvironment only for\nmutable fields defined_tags,\ndisplay_name, freeform_tags
 loop update pending UPDATING
 ServiceManager -> OCI: GetEnvironment
 end
 end
-ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
+ServiceManager -> OCI: run helper hooks\ncreate=CreateEnvironment;\nupdate=UpdateEnvironment;\ndelete=DeleteEnvironment
+ServiceManager -> OCI: apply follow-up strategy\ncreate=read-after-write;\nupdate=read-after-write;\ndelete=confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -110,16 +116,25 @@ retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-supported drift: display_name
+follow-up: create=read-after-write;
+update=read-after-write; delete=confirm-delete
+supported drift: defined_tags, display_name,
+freeform_tags
 reject before mutate: force-new fields
 compartment_id
 create-only fields: none
 list lookup: scaffold_cloudbridge_environment
-filters compartment_id, state
+filters compartment_id, display_name,
+environment_id; Adopt only a unique environment
+match in the requested compartment.
 conflicts: none
 open gaps: none
-Scaffold metadata only; replace with
-controller-specific runtime states before
-promotion.
+Live create, update, and delete verification
+established `CREATING`, `UPDATING`, `ACTIVE`,
+`DELETING`, and `DELETED` as the lifecycle
+contract.
+The controller projects endpoint-free resource
+status and has no Secret or external side
+effects.
 end note
 @enduml
