@@ -3829,7 +3829,7 @@ func TestCheckedInAnalyticsSDKDiscoveryFindsAuxiliaryFamilies(t *testing.T) {
 		gotKinds = append(gotKinds, candidate.rawName)
 	}
 
-	wantKinds := []string{"AnalyticsInstance", "PrivateAccessChannel", "VanityUrl", "WorkRequest", "WorkRequestError", "WorkRequestLog"}
+	wantKinds := []string{"AnalyticsInstance", "PrivateAccessChannel", "ResourceGroup", "VanityUrl", "WorkRequest", "WorkRequestError", "WorkRequestLog"}
 	if !slices.Equal(gotKinds, wantKinds) {
 		t.Fatalf("analytics discovered kinds = %v, want %v", gotKinds, wantKinds)
 	}
@@ -3999,12 +3999,7 @@ func TestCheckedInGenerativeAIDataEnrichmentJobRuntimeDiscoveryMatchesPinnedSDK(
 	for _, client := range enrichmentJob.Runtime.Clients {
 		gotClientTypes = append(gotClientTypes, client.TypeName)
 	}
-	wantClientTypes := []string{
-		"GenerateEnrichmentJobClient",
-		"GetEnrichmentJobClient",
-		"ListEnrichmentJobsClient",
-		"CancelEnrichmentJobClient",
-	}
+	wantClientTypes := []string{"EnrichmentJobClient"}
 	if !slices.Equal(gotClientTypes, wantClientTypes) {
 		t.Fatalf("EnrichmentJob runtime clients = %v, want %v", gotClientTypes, wantClientTypes)
 	}
@@ -4225,6 +4220,9 @@ func TestCheckedInBDSSDKDiscoveryFindsBdsInstanceAndAuxiliaryFamilies(t *testing
 		"AutoScalingConfiguration",
 		"BdsApiKey",
 		"BdsCapacityReport",
+		"BdsCapacityReservation",
+		"BdsCapacityReservationAssociatedConfiguration",
+		"BdsCapacityReservationConfiguration",
 		"BdsCertificate",
 		"BdsCertificateConfiguration",
 		"BdsClusterVersion",
