@@ -80,50 +80,41 @@ func TestDistributedDatabaseUnsupportedDriftEquivalent(t *testing.T) {
 	t.Parallel()
 
 	desired := []any{map[string]any{
-		"source":           "EXADB_XS",
-		"adminPassword":    "secret",
-		"peerVmClusterIds": []any{"ocid1.vmcluster.oc1..peer"},
-		"vmClusterId":      "ocid1.vmcluster.oc1..primary",
+		"originalReplica": map[string]any{
+			"name": "catalog",
+			"database": map[string]any{
+				"source":                "XS_NEW_VAULT_AND_CLUSTER",
+				"availabilityDomain":    "Uocm:PHX-AD-1",
+				"adminPassword":         "secret",
+				"dbStorageVaultDetails": map[string]any{"highCapacityDatabaseStorage": 128},
+				"vmClusterDetails":      map[string]any{"subnetId": "ocid1.subnet.oc1..catalog"},
+			},
+		},
 	}}
 	observed := []any{map[string]any{
-		"source":      "EXADB_XS",
-		"vmClusterId": "ocid1.vmcluster.oc1..primary",
-		"name":        "server-generated",
+		"originalReplica": map[string]any{
+			"name": "catalog",
+			"database": map[string]any{
+				"source":             "XS_NEW_VAULT_AND_CLUSTER",
+				"availabilityDomain": "Uocm:PHX-AD-1",
+			},
+		},
 	}}
 
-	handled, equivalent := distributedDatabaseUnsupportedDriftEquivalent("shardDetails", desired, observed)
+	handled, equivalent := distributedDatabaseUnsupportedDriftEquivalent("catalogDetails", desired, observed)
 	if !handled || !equivalent {
-		t.Fatalf("unobservable create fields = handled %t, equivalent %t; want true, true", handled, equivalent)
+		t.Fatalf("unobservable catalog create fields = handled %t, equivalent %t; want true, true", handled, equivalent)
 	}
 
-	observed[0].(map[string]any)["vmClusterId"] = "ocid1.vmcluster.oc1..different"
-	handled, equivalent = distributedDatabaseUnsupportedDriftEquivalent("shardDetails", desired, observed)
+	observed[0].(map[string]any)["originalReplica"].(map[string]any)["database"].(map[string]any)["source"] = "XS_EXISTING_CLUSTER"
+	handled, equivalent = distributedDatabaseUnsupportedDriftEquivalent("catalogDetails", desired, observed)
 	if !handled || equivalent {
-		t.Fatalf("observable drift = handled %t, equivalent %t; want true, false", handled, equivalent)
+		t.Fatalf("observable catalog drift = handled %t, equivalent %t; want true, false", handled, equivalent)
 	}
 
-	catalogDesired := []any{map[string]any{
-		"source":        "NEW_VAULT_AND_CLUSTER",
-		"adminPassword": "secret",
-		"shardSpace":    "CATALOG",
-		"vmClusterDetails": map[string]any{
-			"subnetId": "ocid1.subnet.oc1..catalog",
-		},
-	}}
-	catalogObserved := []any{map[string]any{
-		"source": "NEW_VAULT_AND_CLUSTER",
-		"vmClusterDetails": map[string]any{
-			"subnetId": "ocid1.subnet.oc1..catalog",
-		},
-	}}
-	handled, equivalent = distributedDatabaseUnsupportedDriftEquivalent("catalogDetails", catalogDesired, catalogObserved)
-	if !handled || !equivalent {
-		t.Fatalf("unobservable catalog fields = handled %t, equivalent %t; want true, true", handled, equivalent)
-	}
-
-	handled, equivalent = distributedDatabaseUnsupportedDriftEquivalent("displayName", "a", "a")
+	handled, equivalent = distributedDatabaseUnsupportedDriftEquivalent("shardDetails", desired, observed)
 	if handled || equivalent {
-		t.Fatalf("unowned path = handled %t, equivalent %t; want false, false", handled, equivalent)
+		t.Fatalf("removed shard path = handled %t, equivalent %t; want false, false", handled, equivalent)
 	}
 }
 
@@ -131,7 +122,7 @@ func TestBuildDistributedDatabaseCreateBodyNormalizesExistingClusterAndPreserves
 	t.Parallel()
 
 	resource := newTestDistributedDatabaseResource()
-	resource.Spec.ShardDetails[0].Source = "EXISTING_CLUSTER"
+	resource.Spec.CatalogDetails[0].OriginalReplica.Database.Source = "XS_NEW_VAULT_AND_CLUSTER"
 
 	details, err := buildDistributedDatabaseCreateBody(context.Background(), nil, resource, "default")
 	if err != nil {
@@ -148,8 +139,8 @@ func TestBuildDistributedDatabaseCreateBodyNormalizesExistingClusterAndPreserves
 	)
 
 	for _, want := range []string{
-		`"source":"EXADB_XS"`,
-		`"source":"NEW_VAULT_AND_CLUSTER"`,
+		`"source":"XS_NEW_VAULT_AND_CLUSTER"`,
+		`"source":"XS_NEW_VAULT_AND_CLUSTER"`,
 		`"isDiagnosticsEventsEnabled":false`,
 		`"isHealthMonitoringEnabled":false`,
 		`"isIncidentLogsEnabled":false`,
@@ -243,47 +234,40 @@ func newTestDistributedDatabaseResource() *distributeddatabasev1beta1.Distribute
 			PrivateEndpointIds: []string{
 				"ocid1.distributeddatabaseprivateendpoint.oc1..privateendpoint",
 			},
-			ShardingMethod:   "USER",
-			CharacterSet:     "AL32UTF8",
-			NcharacterSet:    "AL16UTF16",
-			ListenerPort:     1521,
-			OnsPortLocal:     6234,
-			OnsPortRemote:    6235,
-			DbDeploymentType: "EXADB_XS",
-			ShardDetails: []distributeddatabasev1beta1.DistributedDatabaseShardDetail{
-				{
-					Source:        "EXADB_XS",
-					AdminPassword: "ShardPassword#123",
-					VmClusterId:   "ocid1.vmcluster.oc1..shard",
-					ShardSpace:    "PRIMARY",
-					PeerVmClusterIds: []string{
-						"ocid1.vmcluster.oc1..peer",
-					},
-				},
-			},
+			CharacterSet:  "AL32UTF8",
+			NcharacterSet: "AL16UTF16",
+			ListenerPort:  1521,
+			OnsPortLocal:  6234,
+			OnsPortRemote: 6235,
 			CatalogDetails: []distributeddatabasev1beta1.DistributedDatabaseCatalogDetail{
 				{
-					Source:             "NEW_VAULT_AND_CLUSTER",
-					AdminPassword:      "CatalogPassword#123",
-					AvailabilityDomain: "Uocm:PHX-AD-1",
-					DbStorageVaultDetails: distributeddatabasev1beta1.DistributedDatabaseCatalogDetailDbStorageVaultDetails{
-						HighCapacityDatabaseStorage: 128,
+					OriginalReplica: distributeddatabasev1beta1.DistributedDatabaseCatalogDetailOriginalReplica{
+						Name: "catalog",
+						Database: distributeddatabasev1beta1.DistributedDatabaseCatalogDetailOriginalReplicaDatabase{
+							Source:             "XS_NEW_VAULT_AND_CLUSTER",
+							AdminPassword:      "CatalogPassword#123",
+							AvailabilityDomain: "Uocm:PHX-AD-1",
+							DbStorageVaultDetails: distributeddatabasev1beta1.DistributedDatabaseCatalogDetailOriginalReplicaDatabaseDbStorageVaultDetails{
+								CompartmentId:               "ocid1.compartment.oc1..exampleuniqueID",
+								HighCapacityDatabaseStorage: 128,
+							},
+							VmClusterDetails: distributeddatabasev1beta1.DistributedDatabaseCatalogDetailOriginalReplicaDatabaseVmClusterDetails{
+								CompartmentId:              "ocid1.compartment.oc1..exampleuniqueID",
+								SubnetId:                   "ocid1.subnet.oc1..catalog",
+								BackupSubnetId:             "ocid1.subnet.oc1..catalogbackup",
+								EnabledECpuCount:           16,
+								SshPublicKeys:              []string{"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcatalog"},
+								IsDiagnosticsEventsEnabled: false,
+								IsHealthMonitoringEnabled:  false,
+								IsIncidentLogsEnabled:      false,
+								BackupNetworkNsgIds:        []string{"ocid1.networksecuritygroup.oc1..backup"},
+								NsgIds:                     []string{"ocid1.networksecuritygroup.oc1..catalog"},
+								PrivateZoneId:              "ocid1.dnszone.oc1..catalog",
+								TotalECpuCount:             32,
+								VmFileSystemStorageSize:    2048,
+							},
+						},
 					},
-					VmClusterDetails: distributeddatabasev1beta1.DistributedDatabaseCatalogDetailVmClusterDetails{
-						SubnetId:                   "ocid1.subnet.oc1..catalog",
-						BackupSubnetId:             "ocid1.subnet.oc1..catalogbackup",
-						EnabledECpuCount:           16,
-						SshPublicKeys:              []string{"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcatalog"},
-						IsDiagnosticsEventsEnabled: false,
-						IsHealthMonitoringEnabled:  false,
-						IsIncidentLogsEnabled:      false,
-						BackupNetworkNsgIds:        []string{"ocid1.networksecuritygroup.oc1..backup"},
-						NsgIds:                     []string{"ocid1.networksecuritygroup.oc1..catalog"},
-						PrivateZoneId:              "ocid1.dnszone.oc1..catalog",
-						TotalECpuCount:             32,
-						VmFileSystemStorageSize:    2048,
-					},
-					ShardSpace: "CATALOG",
 				},
 			},
 			FreeformTags: map[string]string{
@@ -315,13 +299,13 @@ func observedDistributedDatabaseFromSpec(
 		LifecycleDetails:   common.String("ready"),
 		Prefix:             common.String(spec.Prefix),
 		PrivateEndpointIds: append([]string(nil), spec.PrivateEndpointIds...),
-		ShardingMethod:     distributeddatabasesdk.DistributedDatabaseShardingMethodEnum(spec.ShardingMethod),
+		ShardingMethod:     distributeddatabasesdk.DistributedDatabaseShardingMethodUser,
 		CharacterSet:       common.String(spec.CharacterSet),
 		NcharacterSet:      common.String(spec.NcharacterSet),
 		ListenerPort:       common.Int(spec.ListenerPort),
 		OnsPortLocal:       common.Int(spec.OnsPortLocal),
 		OnsPortRemote:      common.Int(spec.OnsPortRemote),
-		DbDeploymentType:   distributeddatabasesdk.DistributedDatabaseDbDeploymentTypeEnum(spec.DbDeploymentType),
+		DbDeploymentType:   distributeddatabasesdk.DistributedDatabaseDbDeploymentTypeExadb,
 		FreeformTags: map[string]string{
 			"managed-by": "oci-service-operator",
 		},

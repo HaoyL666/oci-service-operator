@@ -182,7 +182,12 @@ func (m *FunctionsApplicationServiceManager) UpdateApplication(
 		return nil, false, err
 	}
 	servicemanager.RecordResponseOpcRequestID(&resource.Status.OsokStatus, response)
-	return &response.Application, true, nil
+	updated, err := m.GetApplication(ctx, applicationID, nil)
+	if err != nil {
+		servicemanager.RecordErrorOpcRequestID(&resource.Status.OsokStatus, err)
+		return nil, false, err
+	}
+	return updated, true, nil
 }
 
 func (m *FunctionsApplicationServiceManager) DeleteApplication(ctx context.Context, resource *functionsv1beta1.Application, applicationID shared.OCID) error {

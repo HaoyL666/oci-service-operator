@@ -4,425 +4,39 @@ package distributeddatabase
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"testing"
+
+	"github.com/oracle/oci-go-sdk/v65/common"
 	distributeddatabasesdk "github.com/oracle/oci-go-sdk/v65/distributeddatabase"
 	distributeddatabasev1beta1 "github.com/oracle/oci-service-operator/api/distributeddatabase/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
 	"github.com/oracle/oci-service-operator/pkg/loggerutil"
 	generatedruntime "github.com/oracle/oci-service-operator/pkg/servicemanager/generatedruntime"
-	"reflect"
 	ctrl "sigs.k8s.io/controller-runtime"
-	"testing"
 )
 
-// Explicit typed service-manager lifecycle; package-owned typed fixtures define the exercised behavior.
+// Contract evidence: v65.127 catalog/replica SDK types, generated manager, and typed OCI mock lifecycle.
 func TestMockIntegrationDistributedDatabaseLifecycleCRUD(t *testing.T) {
 	t.Parallel()
 
 	resource := newTestDistributedDatabaseResource()
+	resource.Namespace = "default"
+	resource.Name = "mock-distributeddatabase"
 	ocimock.InitializeResource(resource, "mock-distributeddatabase")
-	resource.Spec = ocimock.MustJSONFixture[distributeddatabasev1beta1.DistributedDatabaseSpec](t, `{
-  "catalogDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "availabilityDomain": "Uocm:PHX-AD-1",
-      "dbStorageVaultDetails": {
-        "highCapacityDatabaseStorage": 128
-      },
-      "shardSpace": "CATALOG",
-      "source": "NEW_VAULT_AND_CLUSTER",
-      "vmClusterDetails": {
-        "backupNetworkNsgIds": [
-          "\u003cocid:1\u003e"
-        ],
-        "backupSubnetId": "\u003cocid:2\u003e",
-        "enabledECpuCount": 16,
-        "isDiagnosticsEventsEnabled": false,
-        "isHealthMonitoringEnabled": false,
-        "isIncidentLogsEnabled": false,
-        "nsgIds": [
-          "\u003cocid:3\u003e"
-        ],
-        "privateZoneId": "\u003cocid:4\u003e",
-        "sshPublicKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcatalog"
-        ],
-        "subnetId": "\u003cocid:5\u003e",
-        "totalECpuCount": 32,
-        "vmFileSystemStorageSize": 2048
-      }
-    }
-  ],
-  "characterSet": "AL32UTF8",
-  "compartmentId": "\u003cocid:6\u003e",
-  "databaseVersion": "23ai",
-  "dbDeploymentType": "EXADB_XS",
-  "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
-    }
-  },
-  "displayName": "ddb-runtime",
-  "freeformTags": {
-    "managed-by": "oci-service-operator"
-  },
-  "listenerPort": 1521,
-  "ncharacterSet": "AL16UTF16",
-  "onsPortLocal": 6234,
-  "onsPortRemote": 6235,
-  "prefix": "ddb123",
-  "privateEndpointIds": [
-    "\u003cocid:7\u003e"
-  ],
-  "shardDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "peerVmClusterIds": [
-        "\u003cocid:8\u003e"
-      ],
-      "shardSpace": "PRIMARY",
-      "source": "EXADB_XS",
-      "vmClusterId": "\u003cocid:9\u003e"
-    }
-  ],
-  "shardingMethod": "USER"
-}`)
 	updatedSpec := resource.Spec
-	ocimock.MustMergeJSONFixture(t, &updatedSpec, `{
-  "displayName": "ddb-runtime-updated"
-}`)
-	createRequest := ocimock.MustJSONFixture[distributeddatabasesdk.CreateDistributedDatabaseDetails](t, `{
-  "catalogDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "availabilityDomain": "Uocm:PHX-AD-1",
-      "dbStorageVaultDetails": {
-        "highCapacityDatabaseStorage": 128
-      },
-      "shardSpace": "CATALOG",
-      "source": "NEW_VAULT_AND_CLUSTER",
-      "vmClusterDetails": {
-        "backupNetworkNsgIds": [
-          "\u003cocid:1\u003e"
-        ],
-        "backupSubnetId": "\u003cocid:2\u003e",
-        "enabledECpuCount": 16,
-        "isDiagnosticsEventsEnabled": false,
-        "isHealthMonitoringEnabled": false,
-        "isIncidentLogsEnabled": false,
-        "nsgIds": [
-          "\u003cocid:3\u003e"
-        ],
-        "privateZoneId": "\u003cocid:4\u003e",
-        "sshPublicKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcatalog"
-        ],
-        "subnetId": "\u003cocid:5\u003e",
-        "totalECpuCount": 32,
-        "vmFileSystemStorageSize": 2048
-      }
-    }
-  ],
-  "characterSet": "AL32UTF8",
-  "compartmentId": "\u003cocid:6\u003e",
-  "databaseVersion": "23ai",
-  "dbDeploymentType": "EXADB_XS",
-  "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
-    }
-  },
-  "displayName": "ddb-runtime",
-  "freeformTags": {
-    "managed-by": "oci-service-operator"
-  },
-  "listenerPort": 1521,
-  "ncharacterSet": "AL16UTF16",
-  "onsPortLocal": 6234,
-  "onsPortRemote": 6235,
-  "prefix": "ddb123",
-  "privateEndpointIds": [
-    "\u003cocid:7\u003e"
-  ],
-  "shardDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "peerVmClusterIds": [
-        "\u003cocid:8\u003e"
-      ],
-      "shardSpace": "PRIMARY",
-      "source": "EXADB_XS",
-      "vmClusterId": "\u003cocid:9\u003e"
-    }
-  ],
-  "shardingMethod": "USER"
-}`)
-	createdState := ocimock.MustOCIResponseFixture[distributeddatabasesdk.DistributedDatabase](t, `{
-  "catalogDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "availabilityDomain": "Uocm:PHX-AD-1",
-      "dbStorageVaultDetails": {
-        "highCapacityDatabaseStorage": 128
-      },
-      "shardSpace": "CATALOG",
-      "source": "NEW_VAULT_AND_CLUSTER",
-      "vmClusterDetails": {
-        "backupNetworkNsgIds": [
-          "\u003cocid:1\u003e"
-        ],
-        "backupSubnetId": "\u003cocid:2\u003e",
-        "enabledECpuCount": 16,
-        "nsgIds": [
-          "\u003cocid:3\u003e"
-        ],
-        "privateZoneId": "\u003cocid:4\u003e",
-        "sshPublicKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcatalog"
-        ],
-        "subnetId": "\u003cocid:5\u003e",
-        "totalECpuCount": 32,
-        "vmFileSystemStorageSize": 2048
-      }
-    }
-  ],
-  "characterSet": "AL32UTF8",
-  "compartmentId": "\u003cocid:6\u003e",
-  "databaseVersion": "23ai",
-  "dbDeploymentType": "EXADB_XS",
-  "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
-    }
-  },
-  "displayName": "ddb-runtime",
-  "freeformTags": {
-    "managed-by": "oci-service-operator"
-  },
-  "id": "\u003cocid:10\u003e",
-  "lifecycleState": "ACTIVE",
-  "listenerPort": 1521,
-  "ncharacterSet": "AL16UTF16",
-  "onsPortLocal": 6234,
-  "onsPortRemote": 6235,
-  "prefix": "ddb123",
-  "privateEndpointIds": [
-    "\u003cocid:7\u003e"
-  ],
-  "shardDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "peerVmClusterIds": [
-        "\u003cocid:8\u003e"
-      ],
-      "shardSpace": "PRIMARY",
-      "source": "EXADB_XS",
-      "vmClusterId": "\u003cocid:9\u003e"
-    }
-  ],
-  "shardingMethod": "USER"
-}`)
-	createdReadStates := []distributeddatabasesdk.DistributedDatabase{
-		ocimock.MustOCIResponseFixture[distributeddatabasesdk.DistributedDatabase](t, `{
-  "catalogDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "availabilityDomain": "Uocm:PHX-AD-1",
-      "dbStorageVaultDetails": {
-        "highCapacityDatabaseStorage": 128
-      },
-      "shardSpace": "CATALOG",
-      "source": "NEW_VAULT_AND_CLUSTER",
-      "vmClusterDetails": {
-        "backupNetworkNsgIds": [
-          "\u003cocid:1\u003e"
-        ],
-        "backupSubnetId": "\u003cocid:2\u003e",
-        "enabledECpuCount": 16,
-        "nsgIds": [
-          "\u003cocid:3\u003e"
-        ],
-        "privateZoneId": "\u003cocid:4\u003e",
-        "sshPublicKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcatalog"
-        ],
-        "subnetId": "\u003cocid:5\u003e",
-        "totalECpuCount": 32,
-        "vmFileSystemStorageSize": 2048
-      }
-    }
-  ],
-  "characterSet": "AL32UTF8",
-  "compartmentId": "\u003cocid:6\u003e",
-  "databaseVersion": "23ai",
-  "dbDeploymentType": "EXADB_XS",
-  "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
-    }
-  },
-  "displayName": "ddb-runtime",
-  "freeformTags": {
-    "managed-by": "oci-service-operator"
-  },
-  "id": "\u003cocid:10\u003e",
-  "lifecycleState": "ACTIVE",
-  "listenerPort": 1521,
-  "ncharacterSet": "AL16UTF16",
-  "onsPortLocal": 6234,
-  "onsPortRemote": 6235,
-  "prefix": "ddb123",
-  "privateEndpointIds": [
-    "\u003cocid:7\u003e"
-  ],
-  "shardDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "peerVmClusterIds": [
-        "\u003cocid:8\u003e"
-      ],
-      "shardSpace": "PRIMARY",
-      "source": "EXADB_XS",
-      "vmClusterId": "\u003cocid:9\u003e"
-    }
-  ],
-  "shardingMethod": "USER"
-}`),
+	updatedSpec.DisplayName = "ddb-runtime-updated"
+
+	createRequest, err := buildDistributedDatabaseCreateBody(context.Background(), nil, resource, resource.Namespace)
+	if err != nil {
+		t.Fatalf("buildDistributedDatabaseCreateBody() error = %v", err)
 	}
-	updateRequest := ocimock.MustJSONFixture[distributeddatabasesdk.UpdateDistributedDatabaseDetails](t, `{
-  "displayName": "ddb-runtime-updated"
-}`)
-	updatedState := ocimock.MustOCIResponseFixture[distributeddatabasesdk.DistributedDatabase](t, `{
-  "catalogDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "availabilityDomain": "Uocm:PHX-AD-1",
-      "dbStorageVaultDetails": {
-        "highCapacityDatabaseStorage": 128
-      },
-      "shardSpace": "CATALOG",
-      "source": "NEW_VAULT_AND_CLUSTER",
-      "vmClusterDetails": {
-        "backupNetworkNsgIds": [
-          "\u003cocid:1\u003e"
-        ],
-        "backupSubnetId": "\u003cocid:2\u003e",
-        "enabledECpuCount": 16,
-        "nsgIds": [
-          "\u003cocid:3\u003e"
-        ],
-        "privateZoneId": "\u003cocid:4\u003e",
-        "sshPublicKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcatalog"
-        ],
-        "subnetId": "\u003cocid:5\u003e",
-        "totalECpuCount": 32,
-        "vmFileSystemStorageSize": 2048
-      }
-    }
-  ],
-  "characterSet": "AL32UTF8",
-  "compartmentId": "\u003cocid:6\u003e",
-  "databaseVersion": "23ai",
-  "dbDeploymentType": "EXADB_XS",
-  "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
-    }
-  },
-  "displayName": "ddb-runtime-updated",
-  "freeformTags": {
-    "managed-by": "oci-service-operator"
-  },
-  "id": "\u003cocid:10\u003e",
-  "lifecycleState": "ACTIVE",
-  "listenerPort": 1521,
-  "ncharacterSet": "AL16UTF16",
-  "onsPortLocal": 6234,
-  "onsPortRemote": 6235,
-  "prefix": "ddb123",
-  "privateEndpointIds": [
-    "\u003cocid:7\u003e"
-  ],
-  "shardDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "peerVmClusterIds": [
-        "\u003cocid:8\u003e"
-      ],
-      "shardSpace": "PRIMARY",
-      "source": "EXADB_XS",
-      "vmClusterId": "\u003cocid:9\u003e"
-    }
-  ],
-  "shardingMethod": "USER"
-}`)
-	updatedReadStates := []distributeddatabasesdk.DistributedDatabase{
-		ocimock.MustOCIResponseFixture[distributeddatabasesdk.DistributedDatabase](t, `{
-  "catalogDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "availabilityDomain": "Uocm:PHX-AD-1",
-      "dbStorageVaultDetails": {
-        "highCapacityDatabaseStorage": 128
-      },
-      "shardSpace": "CATALOG",
-      "source": "NEW_VAULT_AND_CLUSTER",
-      "vmClusterDetails": {
-        "backupNetworkNsgIds": [
-          "\u003cocid:1\u003e"
-        ],
-        "backupSubnetId": "\u003cocid:2\u003e",
-        "enabledECpuCount": 16,
-        "nsgIds": [
-          "\u003cocid:3\u003e"
-        ],
-        "privateZoneId": "\u003cocid:4\u003e",
-        "sshPublicKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcatalog"
-        ],
-        "subnetId": "\u003cocid:5\u003e",
-        "totalECpuCount": 32,
-        "vmFileSystemStorageSize": 2048
-      }
-    }
-  ],
-  "characterSet": "AL32UTF8",
-  "compartmentId": "\u003cocid:6\u003e",
-  "databaseVersion": "23ai",
-  "dbDeploymentType": "EXADB_XS",
-  "definedTags": {
-    "Operations": {
-      "CostCenter": "42"
-    }
-  },
-  "displayName": "ddb-runtime-updated",
-  "freeformTags": {
-    "managed-by": "oci-service-operator"
-  },
-  "id": "\u003cocid:10\u003e",
-  "lifecycleState": "ACTIVE",
-  "listenerPort": 1521,
-  "ncharacterSet": "AL16UTF16",
-  "onsPortLocal": 6234,
-  "onsPortRemote": 6235,
-  "prefix": "ddb123",
-  "privateEndpointIds": [
-    "\u003cocid:7\u003e"
-  ],
-  "shardDetails": [
-    {
-      "adminPassword": "\u003credacted\u003e",
-      "peerVmClusterIds": [
-        "\u003cocid:8\u003e"
-      ],
-      "shardSpace": "PRIMARY",
-      "source": "EXADB_XS",
-      "vmClusterId": "\u003cocid:9\u003e"
-    }
-  ],
-  "shardingMethod": "USER"
-}`),
-	}
+	createdState := observedDistributedDatabaseFromSpec("<ocid:10>", resource.Spec, distributeddatabasesdk.DistributedDatabaseLifecycleStateActive)
+	createdState.CatalogDetails = []distributeddatabasesdk.DistributedDatabaseCatalog{distributedDatabaseCatalogStatus()}
+	updatedState := observedDistributedDatabaseFromSpec("<ocid:10>", updatedSpec, distributeddatabasesdk.DistributedDatabaseLifecycleStateActive)
+	updatedState.CatalogDetails = []distributeddatabasesdk.DistributedDatabaseCatalog{distributedDatabaseCatalogStatus()}
+	updateRequest := distributeddatabasesdk.UpdateDistributedDatabaseDetails{DisplayName: common.String(updatedSpec.DisplayName)}
+
 	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[
 		distributeddatabasesdk.DistributedDatabase,
 		distributeddatabasesdk.CreateDistributedDatabaseDetails,
@@ -437,8 +51,8 @@ func TestMockIntegrationDistributedDatabaseLifecycleCRUD(t *testing.T) {
 		UpdateRequest:      &updateRequest,
 		UpdatedState:       &updatedState,
 		DeletedReadStates:  ocimock.LifecycleStates(t, updatedState, "DELETING"),
-		CreatedReadStates:  append(ocimock.LifecycleStates(t, createdState, "CREATING"), createdReadStates...),
-		UpdatedReadStates:  append(ocimock.LifecycleStates(t, updatedState, "UPDATING"), updatedReadStates...),
+		CreatedReadStates:  append(ocimock.LifecycleStates(t, createdState, "CREATING"), createdState),
+		UpdatedReadStates:  append(ocimock.LifecycleStates(t, updatedState, "UPDATING"), updatedState),
 		DeleteEndsNotFound: true,
 		RequireCreateRead:  true,
 		RequireUpdateRead:  true,
@@ -472,11 +86,13 @@ func TestMockIntegrationDistributedDatabaseLifecycleCRUD(t *testing.T) {
 			t.Errorf("close DistributedDatabase OCI mock: %v", err)
 		}
 	})
+
 	sdkClient := distributeddatabasesdk.DistributedDbServiceClient{BaseClient: session.BaseClient()}
 	manager := &DistributedDatabaseServiceManager{Log: loggerutil.OSOKLogger{Logger: ctrl.Log.WithName("synthetic-integration")}}
 	hooks := newDistributedDatabaseDefaultRuntimeHooks(sdkClient)
 	applyDistributedDatabaseRuntimeHooks(manager, &hooks)
 	client := wrapDistributedDatabaseGeneratedClient(hooks, defaultDistributedDatabaseServiceClient{ServiceClient: generatedruntime.NewServiceClient[*distributeddatabasev1beta1.DistributedDatabase](buildDistributedDatabaseGeneratedRuntimeConfig(manager, hooks))})
+
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*distributeddatabasev1beta1.DistributedDatabase]{
 		Resource:      resource,
 		Client:        client,
@@ -485,26 +101,13 @@ func TestMockIntegrationDistributedDatabaseLifecycleCRUD(t *testing.T) {
 			if current.Status.Id != "<ocid:10>" ||
 				string(current.Status.OsokStatus.Ocid) != "<ocid:10>" ||
 				current.Status.LifecycleState != "ACTIVE" ||
-				!reflect.DeepEqual(current.Status.CharacterSet, current.Spec.CharacterSet) ||
-				!reflect.DeepEqual(current.Status.CompartmentId, current.Spec.CompartmentId) ||
-				!reflect.DeepEqual(current.Status.DatabaseVersion, current.Spec.DatabaseVersion) ||
-				!reflect.DeepEqual(current.Status.DbDeploymentType, current.Spec.DbDeploymentType) ||
-				!reflect.DeepEqual(current.Status.DefinedTags, current.Spec.DefinedTags) ||
-				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
-				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
-				!reflect.DeepEqual(current.Status.ListenerPort, current.Spec.ListenerPort) ||
-				!reflect.DeepEqual(current.Status.NcharacterSet, current.Spec.NcharacterSet) ||
-				!reflect.DeepEqual(current.Status.OnsPortLocal, current.Spec.OnsPortLocal) ||
-				!reflect.DeepEqual(current.Status.OnsPortRemote, current.Spec.OnsPortRemote) ||
-				!reflect.DeepEqual(current.Status.Prefix, current.Spec.Prefix) ||
-				!reflect.DeepEqual(current.Status.PrivateEndpointIds, current.Spec.PrivateEndpointIds) ||
-				!reflect.DeepEqual(current.Status.ShardingMethod, current.Spec.ShardingMethod) ||
-				len(current.Status.ShardDetails) != 1 ||
-				current.Status.ShardDetails[0].Source != "EXADB_XS" ||
-				current.Status.ShardDetails[0].VmClusterId != "<ocid:9>" ||
+				current.Status.DisplayName != current.Spec.DisplayName ||
+				current.Status.ShardingMethod != "USER" ||
+				current.Status.DbDeploymentType != "EXADB" ||
 				len(current.Status.CatalogDetails) != 1 ||
-				current.Status.CatalogDetails[0].Source != "NEW_VAULT_AND_CLUSTER" ||
-				current.Status.CatalogDetails[0].AvailabilityDomain != "Uocm:PHX-AD-1" {
+				current.Status.CatalogDetails[0].OriginalReplica.Name != "catalog" ||
+				current.Status.CatalogDetails[0].OriginalReplica.Database.Source != "XS_NEW_VAULT_AND_CLUSTER" ||
+				current.Status.CatalogDetails[0].OriginalReplica.Database.AvailabilityDomain != "Uocm:PHX-AD-1" {
 				return fmt.Errorf("created DistributedDatabase status = %+v", current.Status)
 			}
 			return nil
@@ -514,7 +117,7 @@ func TestMockIntegrationDistributedDatabaseLifecycleCRUD(t *testing.T) {
 			if current.Status.Id != "<ocid:10>" ||
 				string(current.Status.OsokStatus.Ocid) != "<ocid:10>" ||
 				current.Status.LifecycleState != "ACTIVE" ||
-				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) {
+				current.Status.DisplayName != current.Spec.DisplayName {
 				return fmt.Errorf("updated DistributedDatabase status = %+v", current.Status)
 			}
 			return nil
@@ -523,7 +126,29 @@ func TestMockIntegrationDistributedDatabaseLifecycleCRUD(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	if err := session.Close(); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func distributedDatabaseCatalogStatus() distributeddatabasesdk.DistributedDatabaseCatalog {
+	return distributeddatabasesdk.DistributedDatabaseCatalog{
+		OriginalReplica: &distributeddatabasesdk.DistributedDatabaseCatalogReplicaDetails{
+			Name: common.String("catalog"),
+			Database: distributeddatabasesdk.DistributedDatabaseCatalogDatabaseWithExadbXsNewVaultAndCluster{
+				Name:               common.String("catalog"),
+				AvailabilityDomain: common.String("Uocm:PHX-AD-1"),
+				Status:             distributeddatabasesdk.DistributedDatabaseCatalogDatabaseWithExadbXsNewVaultAndClusterStatusConfigured,
+			},
+		},
+	}
+}
+
+func TestDistributedDatabaseCatalogStatusFixtureIsComparable(t *testing.T) {
+	t.Parallel()
+	status := distributedDatabaseCatalogStatus()
+	if status.OriginalReplica == nil || status.OriginalReplica.Database == nil || !reflect.DeepEqual(status.OriginalReplica.Name, common.String("catalog")) {
+		t.Fatalf("catalog status fixture = %#v", status)
 	}
 }

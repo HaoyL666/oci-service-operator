@@ -64,7 +64,7 @@ func applyDistributedDatabaseRuntimeHooks(
 
 func distributedDatabaseUnsupportedDriftEquivalent(path string, desired, observed any) (bool, bool) {
 	switch path {
-	case "catalogDetails", "shardDetails":
+	case "catalogDetails":
 		return true, distributedDatabaseDesiredSubsetMatches(path, desired, observed)
 	default:
 		return false, false
@@ -104,12 +104,10 @@ func distributedDatabaseDesiredSubsetMatches(rootPath string, desired, observed 
 	}
 }
 
-func distributedDatabaseUnobservableCreateField(rootPath, field string) bool {
+func distributedDatabaseUnobservableCreateField(_ string, field string) bool {
 	switch strings.ToLower(strings.TrimSpace(field)) {
-	case "adminpassword", "peervmclusterids":
+	case "adminpassword", "tdewalletpassword", "dbstoragevaultdetails", "vmclusterdetails":
 		return true
-	case "shardspace":
-		return rootPath == "catalogDetails"
 	default:
 		return false
 	}
@@ -210,55 +208,91 @@ func buildDistributedDatabaseCreateBody(
 }
 
 func normalizeDistributedDatabaseCreateBody(body map[string]any) error {
-	if err := normalizeDistributedDatabaseCreateSource(body, "shardDetails"); err != nil {
-		return err
-	}
-	if err := normalizeDistributedDatabaseCreateSource(body, "catalogDetails"); err != nil {
-		return err
-	}
-	return nil
-}
-
-func normalizeDistributedDatabaseCreateSource(body map[string]any, field string) error {
-	rawItems, ok := body[field]
-	if !ok || rawItems == nil {
+	rawCatalogs, ok := body["catalogDetails"]
+	if !ok || rawCatalogs == nil {
 		return nil
 	}
 
-	items, ok := rawItems.([]any)
+	catalogs, ok := rawCatalogs.([]any)
 	if !ok {
-		return fmt.Errorf("resolved DistributedDatabase %s is %T, want []any", field, rawItems)
+		return fmt.Errorf("resolved DistributedDatabase catalogDetails is %T, want []any", rawCatalogs)
 	}
 
-	for index, rawItem := range items {
-		item, ok := rawItem.(map[string]any)
+	for index, rawCatalog := range catalogs {
+		catalog, ok := rawCatalog.(map[string]any)
 		if !ok {
-			return fmt.Errorf("resolved DistributedDatabase %s[%d] is %T, want map[string]any", field, index, rawItem)
+			return fmt.Errorf("resolved DistributedDatabase catalogDetails[%d] is %T, want map[string]any", index, rawCatalog)
 		}
-		delete(item, "jsonData")
-
-		source, err := normalizedDistributedDatabaseSource(item["source"])
-		if err != nil {
-			return fmt.Errorf("normalize DistributedDatabase %s[%d] source: %w", field, index, err)
+		if err := normalizeDistributedDatabaseCatalogReplica(catalog, "originalReplica"); err != nil {
+			return fmt.Errorf("normalize DistributedDatabase catalogDetails[%d] original replica: %w", index, err)
 		}
-		item["source"] = source
+		if err := normalizeDistributedDatabaseCatalogReplicas(catalog, "dataGuardReplicas"); err != nil {
+			return fmt.Errorf("normalize DistributedDatabase catalogDetails[%d] data guard replicas: %w", index, err)
+		}
 	}
 
 	return nil
 }
 
-func normalizedDistributedDatabaseSource(raw any) (string, error) {
+func normalizeDistributedDatabaseCatalogReplicas(catalog map[string]any, field string) error {
+	rawReplicas, ok := catalog[field]
+	if !ok || rawReplicas == nil {
+		return nil
+	}
+	replicas, ok := rawReplicas.([]any)
+	if !ok {
+		return fmt.Errorf("%s is %T, want []any", field, rawReplicas)
+	}
+	for index, rawReplica := range replicas {
+		replica, ok := rawReplica.(map[string]any)
+		if !ok {
+			return fmt.Errorf("%s[%d] is %T, want map[string]any", field, index, rawReplica)
+		}
+		if err := normalizeDistributedDatabaseCatalogReplica(replica, ""); err != nil {
+			return fmt.Errorf("%s[%d]: %w", field, index, err)
+		}
+	}
+	return nil
+}
+
+func normalizeDistributedDatabaseCatalogReplica(replica map[string]any, field string) error {
+	if field != "" {
+		rawReplica, ok := replica[field]
+		if !ok || rawReplica == nil {
+			return fmt.Errorf("%s is required", field)
+		}
+		value, ok := rawReplica.(map[string]any)
+		if !ok {
+			return fmt.Errorf("%s is %T, want map[string]any", field, rawReplica)
+		}
+		replica = value
+	}
+	rawDatabase, ok := replica["database"]
+	if !ok || rawDatabase == nil {
+		return fmt.Errorf("database is required")
+	}
+	database, ok := rawDatabase.(map[string]any)
+	if !ok {
+		return fmt.Errorf("database is %T, want map[string]any", rawDatabase)
+	}
+	delete(database, "jsonData")
+	source, err := normalizedDistributedDatabaseCatalogSource(database["source"])
+	if err != nil {
+		return err
+	}
+	database["source"] = source
+	return nil
+}
+
+func normalizedDistributedDatabaseCatalogSource(raw any) (string, error) {
 	source, ok := raw.(string)
 	if !ok {
 		return "", fmt.Errorf("expected source string, got %T", raw)
 	}
 
 	switch normalized := strings.ToUpper(strings.TrimSpace(source)); normalized {
-	case "NEW_VAULT_AND_CLUSTER", "EXADB_XS":
+	case "XS_NEW_VAULT_AND_CLUSTER", "XS_NEW_CLUSTER", "XS_EXISTING_CLUSTER", "XD_EXISTING_CLUSTER", "EXISTING_DB_HOME":
 		return normalized, nil
-	case "EXISTING_CLUSTER":
-		// The provider treats EXISTING_CLUSTER as the EXADB_XS create family.
-		return "EXADB_XS", nil
 	case "":
 		return "", fmt.Errorf("source is required")
 	default:
@@ -280,40 +314,48 @@ func normalizeDistributedDatabaseCreateDetails(
 		applyDistributedDatabaseBackupConfigBoolPointers(spec.DbBackupConfig, details.DbBackupConfig)
 	}
 
-	for index := range spec.ShardDetails {
-		if index >= len(details.ShardDetails) {
-			break
-		}
-		current, ok := details.ShardDetails[index].(distributeddatabasesdk.CreateDistributedDatabaseShardWithExadbXsNewVaultAndClusterDetails)
-		if !ok {
-			continue
-		}
-		applyDistributedDatabaseVmClusterBoolPointers(
-			spec.ShardDetails[index].VmClusterDetails.IsDiagnosticsEventsEnabled,
-			spec.ShardDetails[index].VmClusterDetails.IsHealthMonitoringEnabled,
-			spec.ShardDetails[index].VmClusterDetails.IsIncidentLogsEnabled,
-			current.VmClusterDetails,
-		)
-		applyDistributedDatabaseShardPeerBoolPointers(spec.ShardDetails[index].PeerDetails, current.PeerDetails)
-		details.ShardDetails[index] = current
-	}
-
 	for index := range spec.CatalogDetails {
 		if index >= len(details.CatalogDetails) {
 			break
 		}
-		current, ok := details.CatalogDetails[index].(distributeddatabasesdk.CreateDistributedDatabaseCatalogWithExadbXsNewVaultAndClusterDetails)
-		if !ok {
-			continue
+		catalog := &details.CatalogDetails[index]
+		if catalog.OriginalReplica != nil {
+			catalog.OriginalReplica.Database = applyDistributedDatabaseCatalogVmClusterBoolPointers(
+				spec.CatalogDetails[index].OriginalReplica.Database.VmClusterDetails.IsDiagnosticsEventsEnabled,
+				spec.CatalogDetails[index].OriginalReplica.Database.VmClusterDetails.IsHealthMonitoringEnabled,
+				spec.CatalogDetails[index].OriginalReplica.Database.VmClusterDetails.IsIncidentLogsEnabled,
+				catalog.OriginalReplica.Database,
+			)
 		}
-		applyDistributedDatabaseVmClusterBoolPointers(
-			spec.CatalogDetails[index].VmClusterDetails.IsDiagnosticsEventsEnabled,
-			spec.CatalogDetails[index].VmClusterDetails.IsHealthMonitoringEnabled,
-			spec.CatalogDetails[index].VmClusterDetails.IsIncidentLogsEnabled,
-			current.VmClusterDetails,
-		)
-		applyDistributedDatabaseCatalogPeerBoolPointers(spec.CatalogDetails[index].PeerDetails, current.PeerDetails)
-		details.CatalogDetails[index] = current
+		for replicaIndex := range spec.CatalogDetails[index].DataGuardReplicas {
+			if replicaIndex >= len(catalog.DataGuardReplicas) {
+				break
+			}
+			catalog.DataGuardReplicas[replicaIndex].Database = applyDistributedDatabaseCatalogVmClusterBoolPointers(
+				spec.CatalogDetails[index].DataGuardReplicas[replicaIndex].Database.VmClusterDetails.IsDiagnosticsEventsEnabled,
+				spec.CatalogDetails[index].DataGuardReplicas[replicaIndex].Database.VmClusterDetails.IsHealthMonitoringEnabled,
+				spec.CatalogDetails[index].DataGuardReplicas[replicaIndex].Database.VmClusterDetails.IsIncidentLogsEnabled,
+				catalog.DataGuardReplicas[replicaIndex].Database,
+			)
+		}
+	}
+}
+
+func applyDistributedDatabaseCatalogVmClusterBoolPointers(
+	isDiagnosticsEventsEnabled bool,
+	isHealthMonitoringEnabled bool,
+	isIncidentLogsEnabled bool,
+	database distributeddatabasesdk.CreateDistributedDatabaseCatalogDatabaseDetails,
+) distributeddatabasesdk.CreateDistributedDatabaseCatalogDatabaseDetails {
+	switch current := database.(type) {
+	case distributeddatabasesdk.CreateDistributedDatabaseCatalogWithExadbXsNewVaultAndClusterDetails:
+		applyDistributedDatabaseVmClusterBoolPointers(isDiagnosticsEventsEnabled, isHealthMonitoringEnabled, isIncidentLogsEnabled, current.VmClusterDetails)
+		return current
+	case distributeddatabasesdk.CreateDistributedDatabaseCatalogWithExadbXsNewClusterDetails:
+		applyDistributedDatabaseVmClusterBoolPointers(isDiagnosticsEventsEnabled, isHealthMonitoringEnabled, isIncidentLogsEnabled, current.VmClusterDetails)
+		return current
+	default:
+		return database
 	}
 }
 
@@ -330,41 +372,6 @@ func applyDistributedDatabaseVmClusterBoolPointers(
 	details.IsHealthMonitoringEnabled = common.Bool(isHealthMonitoringEnabled)
 	details.IsIncidentLogsEnabled = common.Bool(isIncidentLogsEnabled)
 }
-
-func applyDistributedDatabaseShardPeerBoolPointers(
-	specPeers []distributeddatabasev1beta1.DistributedDatabaseShardDetailPeerDetail,
-	details []distributeddatabasesdk.CreateShardPeerWithExadbXsNewVaultAndClusterDetails,
-) {
-	for index := range specPeers {
-		if index >= len(details) {
-			break
-		}
-		applyDistributedDatabaseVmClusterBoolPointers(
-			specPeers[index].VmClusterDetails.IsDiagnosticsEventsEnabled,
-			specPeers[index].VmClusterDetails.IsHealthMonitoringEnabled,
-			specPeers[index].VmClusterDetails.IsIncidentLogsEnabled,
-			details[index].VmClusterDetails,
-		)
-	}
-}
-
-func applyDistributedDatabaseCatalogPeerBoolPointers(
-	specPeers []distributeddatabasev1beta1.DistributedDatabaseCatalogDetailPeerDetail,
-	details []distributeddatabasesdk.CreateCatalogPeerWithExadbXsNewVaultAndClusterDetails,
-) {
-	for index := range specPeers {
-		if index >= len(details) {
-			break
-		}
-		applyDistributedDatabaseVmClusterBoolPointers(
-			specPeers[index].VmClusterDetails.IsDiagnosticsEventsEnabled,
-			specPeers[index].VmClusterDetails.IsHealthMonitoringEnabled,
-			specPeers[index].VmClusterDetails.IsIncidentLogsEnabled,
-			details[index].VmClusterDetails,
-		)
-	}
-}
-
 func applyDistributedDatabaseBackupConfigBoolPointers(
 	spec distributeddatabasev1beta1.DistributedDatabaseDbBackupConfig,
 	details *distributeddatabasesdk.DistributedDbBackupConfig,
@@ -380,7 +387,6 @@ func applyDistributedDatabaseBackupConfigBoolPointers(
 		if index >= len(details.BackupDestinationDetails) {
 			break
 		}
-		details.BackupDestinationDetails[index].IsZeroDataLossEnabled = common.Bool(spec.BackupDestinationDetails[index].IsZeroDataLossEnabled)
 		details.BackupDestinationDetails[index].IsRemote = common.Bool(spec.BackupDestinationDetails[index].IsRemote)
 	}
 }
@@ -470,33 +476,33 @@ func distributedDatabaseFromSummary(
 	summary distributeddatabasesdk.DistributedDatabaseSummary,
 ) distributeddatabasesdk.DistributedDatabase {
 	return distributeddatabasesdk.DistributedDatabase{
-		Id:                 summary.Id,
-		CompartmentId:      summary.CompartmentId,
-		DisplayName:        summary.DisplayName,
-		TimeCreated:        summary.TimeCreated,
-		TimeUpdated:        summary.TimeUpdated,
-		DatabaseVersion:    summary.DatabaseVersion,
-		LifecycleState:     summary.LifecycleState,
-		LifecycleDetails:   summary.LifecycleDetails,
-		Prefix:             summary.Prefix,
-		PrivateEndpointIds: append([]string(nil), summary.PrivateEndpointIds...),
-		ShardingMethod:     summary.ShardingMethod,
-		CharacterSet:       summary.CharacterSet,
-		NcharacterSet:      summary.NcharacterSet,
-		ListenerPort:       summary.ListenerPort,
-		OnsPortLocal:       summary.OnsPortLocal,
-		OnsPortRemote:      summary.OnsPortRemote,
-		DbDeploymentType:   distributeddatabasesdk.DistributedDatabaseDbDeploymentTypeEnum(summary.DbDeploymentType),
-		ConnectionStrings:  summary.ConnectionStrings,
-		Chunks:             summary.Chunks,
-		ListenerPortTls:    summary.ListenerPortTls,
-		ReplicationMethod:  summary.ReplicationMethod,
-		ReplicationFactor:  summary.ReplicationFactor,
-		ReplicationUnit:    summary.ReplicationUnit,
-		Metadata:           summary.Metadata,
-		FreeformTags:       cloneDistributedDatabaseStringMap(summary.FreeformTags),
-		DefinedTags:        cloneDistributedDatabaseDefinedTags(summary.DefinedTags),
-		SystemTags:         cloneDistributedDatabaseDefinedTags(summary.SystemTags),
+		Id:                             summary.Id,
+		CompartmentId:                  summary.CompartmentId,
+		DisplayName:                    summary.DisplayName,
+		TimeCreated:                    summary.TimeCreated,
+		TimeUpdated:                    summary.TimeUpdated,
+		DatabaseVersion:                summary.DatabaseVersion,
+		LifecycleState:                 summary.LifecycleState,
+		LifecycleDetails:               summary.LifecycleDetails,
+		Prefix:                         summary.Prefix,
+		PrivateEndpointIds:             append([]string(nil), summary.PrivateEndpointIds...),
+		ShardingMethod:                 distributeddatabasesdk.DistributedDatabaseShardingMethodEnum(summary.ShardingMethod),
+		CharacterSet:                   summary.CharacterSet,
+		NcharacterSet:                  summary.NcharacterSet,
+		ListenerPort:                   summary.ListenerPort,
+		OnsPortLocal:                   summary.OnsPortLocal,
+		OnsPortRemote:                  summary.OnsPortRemote,
+		DbDeploymentType:               distributeddatabasesdk.DistributedDatabaseDbDeploymentTypeEnum(summary.DbDeploymentType),
+		NotificationTopicIds:           append([]string(nil), summary.NotificationTopicIds...),
+		ListenerPortTls:                summary.ListenerPortTls,
+		SystemChunkCount:               summary.SystemChunkCount,
+		AutoResourceManagementConfig:   summary.AutoResourceManagementConfig,
+		SystemRaftReplicationUnitCount: summary.SystemRaftReplicationUnitCount,
+		ReplicationMethod:              distributeddatabasesdk.DistributedDatabaseReplicationMethodEnum(summary.ReplicationMethod),
+		Metadata:                       summary.Metadata,
+		FreeformTags:                   cloneDistributedDatabaseStringMap(summary.FreeformTags),
+		DefinedTags:                    cloneDistributedDatabaseDefinedTags(summary.DefinedTags),
+		SystemTags:                     cloneDistributedDatabaseDefinedTags(summary.SystemTags),
 	}
 }
 

@@ -350,7 +350,7 @@ func TestFunctionsApplicationCreateOrUpdateUpdatesMutableConfig(t *testing.T) {
 					CompartmentId:  common.String("ocid1.compartment.oc1..example"),
 					DisplayName:    common.String("sample-app"),
 					SubnetIds:      []string{"ocid1.subnet.oc1..example"},
-					Config:         map[string]string{"mode": "old"},
+					Config:         map[string]string{"mode": map[bool]string{true: "new", false: "old"}[updateCalls > 0]},
 					Shape:          ocifunctions.ApplicationShapeX86,
 					LifecycleState: ocifunctions.ApplicationLifecycleStateActive,
 				},
@@ -369,15 +369,6 @@ func TestFunctionsApplicationCreateOrUpdateUpdatesMutableConfig(t *testing.T) {
 			}
 			return ocifunctions.UpdateApplicationResponse{
 				OpcRequestId: common.String("opc-update-app-1"),
-				Application: ocifunctions.Application{
-					Id:             common.String("ocid1.application.oc1..tracked"),
-					CompartmentId:  common.String("ocid1.compartment.oc1..example"),
-					DisplayName:    common.String("sample-app"),
-					SubnetIds:      []string{"ocid1.subnet.oc1..example"},
-					Config:         map[string]string{"mode": "new"},
-					Shape:          ocifunctions.ApplicationShapeX86,
-					LifecycleState: ocifunctions.ApplicationLifecycleStateActive,
-				},
 			}, nil
 		},
 	}
@@ -895,7 +886,10 @@ func TestFunctionsFunctionCreateOrUpdateUpdatesMutableFields(t *testing.T) {
 			}
 			current := testFunction(existingID, ocifunctions.FunctionLifecycleStateActive)
 			current.MemoryInMBs = common.Int64(128)
-			current.Image = common.String("phx.ocir.io/tenant/functions/sample-function:0.9.0")
+			if updateCalls > 0 {
+				current.MemoryInMBs = common.Int64(256)
+				current.LifecycleState = ocifunctions.FunctionLifecycleStateUpdating
+			}
 			return ocifunctions.GetFunctionResponse{Function: current}, nil
 		},
 		updateFunctionFn: func(_ context.Context, req ocifunctions.UpdateFunctionRequest) (ocifunctions.UpdateFunctionResponse, error) {
@@ -906,14 +900,10 @@ func TestFunctionsFunctionCreateOrUpdateUpdatesMutableFields(t *testing.T) {
 			if req.UpdateFunctionDetails.MemoryInMBs == nil || *req.UpdateFunctionDetails.MemoryInMBs != 256 {
 				t.Fatalf("UpdateFunctionDetails.MemoryInMBs = %v, want 256", req.UpdateFunctionDetails.MemoryInMBs)
 			}
-			if got := safeFunctionsString(req.UpdateFunctionDetails.Image); got != "phx.ocir.io/tenant/functions/sample-function:1.0.0" {
-				t.Fatalf("UpdateFunctionDetails.Image = %q, want desired image", got)
+			if req.UpdateFunctionDetails.SourceDetails != nil {
+				t.Fatalf("UpdateFunctionDetails.SourceDetails = %#v, want omitted on mutable-only update", req.UpdateFunctionDetails.SourceDetails)
 			}
-			updated := testFunction(existingID, ocifunctions.FunctionLifecycleStateUpdating)
-			return ocifunctions.UpdateFunctionResponse{
-				OpcRequestId: common.String("opc-update-function-1"),
-				Function:     updated,
-			}, nil
+			return ocifunctions.UpdateFunctionResponse{OpcRequestId: common.String("opc-update-function-1")}, nil
 		},
 	}
 
@@ -957,6 +947,10 @@ func TestFunctionsFunctionCreateOrUpdateUpdatesTraceConfigToFalse(t *testing.T) 
 			}
 			current := testFunction(existingID, ocifunctions.FunctionLifecycleStateActive)
 			current.TraceConfig = &ocifunctions.FunctionTraceConfig{IsEnabled: common.Bool(true)}
+			if updateCalls > 0 {
+				current.TraceConfig = &ocifunctions.FunctionTraceConfig{IsEnabled: common.Bool(false)}
+				current.LifecycleState = ocifunctions.FunctionLifecycleStateUpdating
+			}
 			return ocifunctions.GetFunctionResponse{Function: current}, nil
 		},
 		updateFunctionFn: func(_ context.Context, req ocifunctions.UpdateFunctionRequest) (ocifunctions.UpdateFunctionResponse, error) {
@@ -970,19 +964,14 @@ func TestFunctionsFunctionCreateOrUpdateUpdatesTraceConfigToFalse(t *testing.T) 
 			if *req.UpdateFunctionDetails.TraceConfig.IsEnabled {
 				t.Fatalf("UpdateFunctionDetails.TraceConfig.IsEnabled = true, want false")
 			}
-			if req.UpdateFunctionDetails.Image != nil {
-				t.Fatalf("UpdateFunctionDetails.Image = %q, want omitted unchanged image", safeFunctionsString(req.UpdateFunctionDetails.Image))
+			if req.UpdateFunctionDetails.SourceDetails != nil {
+				t.Fatalf("UpdateFunctionDetails.SourceDetails = %#v, want omitted on mutable-only update", req.UpdateFunctionDetails.SourceDetails)
 			}
 			if req.UpdateFunctionDetails.MemoryInMBs != nil {
 				t.Fatalf("UpdateFunctionDetails.MemoryInMBs = %d, want omitted unchanged memory", *req.UpdateFunctionDetails.MemoryInMBs)
 			}
 
-			updated := testFunction(existingID, ocifunctions.FunctionLifecycleStateUpdating)
-			updated.TraceConfig = &ocifunctions.FunctionTraceConfig{IsEnabled: common.Bool(false)}
-			return ocifunctions.UpdateFunctionResponse{
-				OpcRequestId: common.String("opc-update-function-trace"),
-				Function:     updated,
-			}, nil
+			return ocifunctions.UpdateFunctionResponse{OpcRequestId: common.String("opc-update-function-trace")}, nil
 		},
 	}
 
@@ -1497,7 +1486,10 @@ func testFunctionResource() *functionsv1beta1.Function {
 			DisplayName:   "sample-function",
 			ApplicationId: "ocid1.application.oc1..example",
 			MemoryInMBs:   256,
-			Image:         "phx.ocir.io/tenant/functions/sample-function:1.0.0",
+			SourceDetails: functionsv1beta1.FunctionSourceDetails{
+				SourceType:   "PRE_BUILT_FUNCTIONS",
+				PbfListingId: "ocid1.fnprebuiltlisting.oc1..sample",
+			},
 		},
 	}
 }
@@ -1508,7 +1500,7 @@ func testFunction(id string, lifecycleState ocifunctions.FunctionLifecycleStateE
 		DisplayName:    common.String("sample-function"),
 		ApplicationId:  common.String("ocid1.application.oc1..example"),
 		CompartmentId:  common.String("ocid1.compartment.oc1..example"),
-		Image:          common.String("phx.ocir.io/tenant/functions/sample-function:1.0.0"),
+		SourceDetails:  ocifunctions.PreBuiltFunctionSourceDetails{PbfListingId: common.String("ocid1.fnprebuiltlisting.oc1..sample")},
 		MemoryInMBs:    common.Int64(256),
 		LifecycleState: lifecycleState,
 	}
@@ -1520,7 +1512,7 @@ func testFunctionSummary(id string, lifecycleState ocifunctions.FunctionLifecycl
 		DisplayName:    common.String("sample-function"),
 		ApplicationId:  common.String("ocid1.application.oc1..example"),
 		CompartmentId:  common.String("ocid1.compartment.oc1..example"),
-		Image:          common.String("phx.ocir.io/tenant/functions/sample-function:1.0.0"),
+		SourceDetails:  ocifunctions.PreBuiltFunctionSourceDetails{PbfListingId: common.String("ocid1.fnprebuiltlisting.oc1..sample")},
 		MemoryInMBs:    common.Int64(256),
 		LifecycleState: lifecycleState,
 	}

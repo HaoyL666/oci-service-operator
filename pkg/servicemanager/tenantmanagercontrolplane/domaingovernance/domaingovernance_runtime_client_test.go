@@ -402,6 +402,7 @@ func trackedDomainGovernanceResource() *tenantmanagercontrolplanev1beta1.DomainG
 		OsokStatus:          shared.OSOKStatus{Ocid: shared.OCID(testDomainGovernanceID)},
 		Id:                  testDomainGovernanceID,
 		OwnerId:             testDomainGovernanceCompartment,
+		CompartmentId:       testDomainGovernanceCompartment,
 		DomainId:            testDomainID,
 		LifecycleState:      string(tenantmanagercontrolplanesdk.DomainGovernanceLifecycleStateActive),
 		OnsTopicId:          testOnsTopicID,
@@ -426,6 +427,7 @@ func activeDomainGovernanceSDK(id string) tenantmanagercontrolplanesdk.DomainGov
 	return tenantmanagercontrolplanesdk.DomainGovernance{
 		Id:                  common.String(id),
 		OwnerId:             common.String(testDomainGovernanceCompartment),
+		CompartmentId:       common.String(testDomainGovernanceCompartment),
 		DomainId:            common.String(testDomainID),
 		LifecycleState:      tenantmanagercontrolplanesdk.DomainGovernanceLifecycleStateActive,
 		OnsTopicId:          common.String(testOnsTopicID),
@@ -446,6 +448,7 @@ func activeDomainGovernanceSummarySDK(id string) tenantmanagercontrolplanesdk.Do
 	return tenantmanagercontrolplanesdk.DomainGovernanceSummary{
 		Id:                  common.String(id),
 		OwnerId:             common.String(testDomainGovernanceCompartment),
+		CompartmentId:       common.String(testDomainGovernanceCompartment),
 		DomainId:            common.String(testDomainID),
 		LifecycleState:      tenantmanagercontrolplanesdk.DomainGovernanceLifecycleStateActive,
 		IsGovernanceEnabled: common.Bool(false),

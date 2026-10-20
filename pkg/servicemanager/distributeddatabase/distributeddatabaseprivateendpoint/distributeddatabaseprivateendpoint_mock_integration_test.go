@@ -32,9 +32,8 @@ func TestMockIntegrationDistributedDatabasePrivateEndpointLifecycleCRUD(t *testi
   "freeformTags": {
     "managed-by": "oci-service-operator"
   },
-  "nsgIds": [
-    "\u003cocid:2\u003e",
-    "\u003cocid:3\u003e"
+  "vcnNsgIds": [
+    {"vcnId": "\u003cocid:6\u003e", "nsgIds": ["\u003cocid:2\u003e", "\u003cocid:3\u003e"]}
   ],
   "subnetId": "\u003cocid:4\u003e"
 }`)
@@ -54,9 +53,8 @@ func TestMockIntegrationDistributedDatabasePrivateEndpointLifecycleCRUD(t *testi
   "freeformTags": {
     "managed-by": "oci-service-operator"
   },
-  "nsgIds": [
-    "\u003cocid:2\u003e",
-    "\u003cocid:3\u003e"
+  "vcnNsgIds": [
+    {"vcnId": "\u003cocid:6\u003e", "nsgIds": ["\u003cocid:2\u003e", "\u003cocid:3\u003e"]}
   ],
   "subnetId": "\u003cocid:4\u003e"
 }`)
@@ -74,9 +72,8 @@ func TestMockIntegrationDistributedDatabasePrivateEndpointLifecycleCRUD(t *testi
   },
   "id": "\u003cocid:5\u003e",
   "lifecycleState": "ACTIVE",
-  "nsgIds": [
-    "\u003cocid:2\u003e",
-    "\u003cocid:3\u003e"
+  "vcnNsgIds": [
+    {"vcnId": "\u003cocid:6\u003e", "nsgIds": ["\u003cocid:2\u003e", "\u003cocid:3\u003e"]}
   ],
   "subnetId": "\u003cocid:4\u003e"
 }`)
@@ -97,9 +94,8 @@ func TestMockIntegrationDistributedDatabasePrivateEndpointLifecycleCRUD(t *testi
   },
   "id": "\u003cocid:5\u003e",
   "lifecycleState": "ACTIVE",
-  "nsgIds": [
-    "\u003cocid:2\u003e",
-    "\u003cocid:3\u003e"
+  "vcnNsgIds": [
+    {"vcnId": "\u003cocid:6\u003e", "nsgIds": ["\u003cocid:2\u003e", "\u003cocid:3\u003e"]}
   ],
   "subnetId": "\u003cocid:4\u003e"
 }`)
@@ -170,7 +166,7 @@ func TestMockIntegrationDistributedDatabasePrivateEndpointLifecycleCRUD(t *testi
 				!reflect.DeepEqual(current.Status.Description, current.Spec.Description) ||
 				!reflect.DeepEqual(current.Status.DisplayName, current.Spec.DisplayName) ||
 				!reflect.DeepEqual(current.Status.FreeformTags, current.Spec.FreeformTags) ||
-				!reflect.DeepEqual(current.Status.NsgIds, current.Spec.NsgIds) ||
+				!reflect.DeepEqual(current.Status.VcnNsgIds, current.Spec.VcnNsgIds) ||
 				!reflect.DeepEqual(current.Status.SubnetId, current.Spec.SubnetId) {
 				return fmt.Errorf("created DistributedDatabasePrivateEndpoint status = %+v", current.Status)
 			}
