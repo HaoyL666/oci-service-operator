@@ -105,23 +105,58 @@ func (m *FunctionsApplicationServiceManager) FindApplication(
 		return nil, err
 	}
 
-	response, err := client.ListApplications(ctx, ocifunctions.ListApplicationsRequest{
-		CompartmentId: common.String(resource.Spec.CompartmentId),
-		DisplayName:   common.String(resource.Spec.DisplayName),
-		Limit:         common.Int(1),
-	})
-	if err != nil {
-		return nil, err
-	}
+	var matchedID shared.OCID
+	matchedIDs := make(map[shared.OCID]struct{})
+	seenPageTokens := make(map[string]struct{})
+	var page *string
 
-	for _, item := range response.Items {
-		if item.Id == nil || strings.EqualFold(string(item.LifecycleState), "DELETED") {
-			continue
+	for {
+		response, err := client.ListApplications(ctx, ocifunctions.ListApplicationsRequest{
+			CompartmentId: common.String(resource.Spec.CompartmentId),
+			DisplayName:   common.String(resource.Spec.DisplayName),
+			Limit:         common.Int(50),
+			Page:          page,
+		})
+		if err != nil {
+			return nil, err
 		}
-		return m.GetApplication(ctx, shared.OCID(*item.Id), nil)
+
+		for _, item := range response.Items {
+			if item.Id == nil || item.DisplayName == nil ||
+				*item.DisplayName != resource.Spec.DisplayName ||
+				strings.EqualFold(string(item.LifecycleState), "DELETED") {
+				continue
+			}
+
+			candidateID := shared.OCID(strings.TrimSpace(*item.Id))
+			if candidateID == "" {
+				continue
+			}
+			matchedIDs[candidateID] = struct{}{}
+			matchedID = candidateID
+			if len(matchedIDs) > 1 {
+				return nil, fmt.Errorf("ambiguous Functions application lookup: multiple active applications match display name %q", resource.Spec.DisplayName)
+			}
+		}
+
+		nextPage := ""
+		if response.OpcNextPage != nil {
+			nextPage = strings.TrimSpace(*response.OpcNextPage)
+		}
+		if nextPage == "" {
+			break
+		}
+		if _, repeated := seenPageTokens[nextPage]; repeated {
+			return nil, fmt.Errorf("Functions application lookup received repeated page token %q", nextPage)
+		}
+		seenPageTokens[nextPage] = struct{}{}
+		page = common.String(nextPage)
 	}
 
-	return nil, nil
+	if matchedID == "" {
+		return nil, nil
+	}
+	return m.GetApplication(ctx, matchedID, nil)
 }
 
 func buildApplicationUpdateDetails(

@@ -215,6 +215,7 @@ func TestTargetAlertPolicyAssociationCreateStartsWorkRequest(t *testing.T) {
 	requireTargetAlertPolicyAssociationCallCount(t, "GetWorkRequest", len(fake.workRequestRequests), 1)
 	requireTargetAlertPolicyAssociationRecordedID(t, resource, testTargetAlertPolicyAssociationID)
 	requireTargetAlertPolicyAssociationString(t, "status.lifecycleState", resource.Status.LifecycleState, "CREATING")
+	requireTargetAlertPolicyAssociationString(t, "status.targetType", resource.Status.TargetType, "TARGET_DATABASE")
 	requireTargetAlertPolicyAssociationString(t, "status.status.opcRequestId", resource.Status.OsokStatus.OpcRequestID, "opc-create")
 	requireTargetAlertPolicyAssociationWorkRequestAsync(t, resource, shared.OSOKAsyncPhaseCreate, "wr-create", "IN_PROGRESS")
 }
@@ -579,6 +580,7 @@ func targetAlertPolicyAssociationBody(
 		Description:      common.String(resource.Spec.Description),
 		PolicyId:         common.String(resource.Spec.PolicyId),
 		TargetId:         common.String(resource.Spec.TargetId),
+		TargetType:       datasafesdk.TargetAlertPolicyAssociationTargetTypeDatabase,
 		IsEnabled:        common.Bool(resource.Spec.IsEnabled),
 		LifecycleDetails: common.String("lifecycle detail"),
 		FreeformTags:     targetAlertPolicyAssociationStringMap(resource.Spec.FreeformTags),

@@ -143,6 +143,7 @@ func makeSDKDigitalTwinInstance(
 		DigitalTwinAdapterId:    common.String(spec.DigitalTwinAdapterId),
 		DigitalTwinModelId:      common.String(spec.DigitalTwinModelId),
 		DigitalTwinModelSpecUri: common.String(spec.DigitalTwinModelSpecUri),
+		ConnectivityType:        iotsdk.DigitalTwinInstanceConnectivityTypeEnum("PRIVATE"),
 		LifecycleState:          state,
 		FreeformTags:            cloneDigitalTwinInstanceStringMap(spec.FreeformTags),
 		DefinedTags:             digitalTwinInstanceDefinedTags(spec.DefinedTags),
@@ -301,6 +302,9 @@ func TestDigitalTwinInstanceCreateRecordsPayloadRetryTokenRequestIDAndStatus(t *
 	}
 	if got := resource.Status.ExternalKey; got != resource.Spec.ExternalKey {
 		t.Fatalf("status.externalKey = %q, want %q", got, resource.Spec.ExternalKey)
+		if got := resource.Status.ConnectivityType; got != "PRIVATE" {
+			t.Fatalf("status.connectivityType = %q, want PRIVATE", got)
+		}
 	}
 	requireLastCondition(t, resource, shared.Active)
 }

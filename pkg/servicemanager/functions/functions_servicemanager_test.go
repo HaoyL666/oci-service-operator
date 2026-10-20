@@ -263,6 +263,144 @@ func TestIsFunctionsNotFoundTreatsAll404sAsMissing(t *testing.T) {
 		})
 	}
 }
+func TestFunctionsApplicationFindApplicationPaginatesAndForwardsPageToken(t *testing.T) {
+	t.Parallel()
+
+	resource := testApplicationResource()
+	listCalls := 0
+	getCalls := 0
+	manager := &FunctionsApplicationServiceManager{ociClient: &fakeFunctionsManagementClient{
+		listApplicationsFn: func(_ context.Context, request ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error) {
+			listCalls++
+			if request.CompartmentId == nil || *request.CompartmentId != resource.Spec.CompartmentId {
+				t.Fatalf("ListApplicationsRequest.CompartmentId = %v, want %q", request.CompartmentId, resource.Spec.CompartmentId)
+			}
+			if request.DisplayName == nil || *request.DisplayName != resource.Spec.DisplayName {
+				t.Fatalf("ListApplicationsRequest.DisplayName = %v, want %q", request.DisplayName, resource.Spec.DisplayName)
+			}
+			if request.Limit == nil || *request.Limit != 50 {
+				t.Fatalf("ListApplicationsRequest.Limit = %v, want 50", request.Limit)
+			}
+			switch listCalls {
+			case 1:
+				if request.Page != nil {
+					t.Fatalf("first ListApplicationsRequest.Page = %q, want nil", *request.Page)
+				}
+				return ocifunctions.ListApplicationsResponse{
+					Items: []ocifunctions.ApplicationSummary{{
+						Id:             common.String("ocid1.application.oc1..other"),
+						DisplayName:    common.String("other-app"),
+						LifecycleState: ocifunctions.ApplicationLifecycleStateActive,
+					}},
+					OpcNextPage: common.String("page-2"),
+				}, nil
+			case 2:
+				if request.Page == nil || *request.Page != "page-2" {
+					t.Fatalf("second ListApplicationsRequest.Page = %v, want page-2", request.Page)
+				}
+				return ocifunctions.ListApplicationsResponse{Items: []ocifunctions.ApplicationSummary{{
+					Id:             common.String("ocid1.application.oc1..target"),
+					DisplayName:    common.String(resource.Spec.DisplayName),
+					LifecycleState: ocifunctions.ApplicationLifecycleStateActive,
+				}}}, nil
+			default:
+				t.Fatalf("ListApplications() calls = %d, want 2", listCalls)
+				return ocifunctions.ListApplicationsResponse{}, nil
+			}
+		},
+		getApplicationFn: func(_ context.Context, request ocifunctions.GetApplicationRequest) (ocifunctions.GetApplicationResponse, error) {
+			getCalls++
+			if request.ApplicationId == nil || *request.ApplicationId != "ocid1.application.oc1..target" {
+				t.Fatalf("GetApplicationRequest.ApplicationId = %v, want target OCID", request.ApplicationId)
+			}
+			return ocifunctions.GetApplicationResponse{Application: ocifunctions.Application{
+				Id:          common.String("ocid1.application.oc1..target"),
+				DisplayName: common.String(resource.Spec.DisplayName),
+			}}, nil
+		},
+	}}
+
+	application, err := manager.FindApplication(context.Background(), resource)
+	if err != nil {
+		t.Fatalf("FindApplication() error = %v", err)
+	}
+	if application == nil || application.Id == nil || *application.Id != "ocid1.application.oc1..target" {
+		t.Fatalf("FindApplication() = %#v, want target application", application)
+	}
+	if listCalls != 2 {
+		t.Fatalf("ListApplications() calls = %d, want 2", listCalls)
+	}
+	if getCalls != 1 {
+		t.Fatalf("GetApplication() calls = %d, want 1", getCalls)
+	}
+}
+
+func TestFunctionsApplicationFindApplicationRejectsDuplicateOrRepeatedPage(t *testing.T) {
+	t.Parallel()
+
+	resource := testApplicationResource()
+	testCases := []struct {
+		name      string
+		respond   func(int, ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error)
+		wantError string
+		wantCalls int
+	}{
+		{
+			name: "duplicate active matches",
+			respond: func(_ int, _ ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error) {
+				return ocifunctions.ListApplicationsResponse{Items: []ocifunctions.ApplicationSummary{
+					{Id: common.String("ocid1.application.oc1..first"), DisplayName: common.String(resource.Spec.DisplayName), LifecycleState: ocifunctions.ApplicationLifecycleStateActive},
+					{Id: common.String("ocid1.application.oc1..second"), DisplayName: common.String(resource.Spec.DisplayName), LifecycleState: ocifunctions.ApplicationLifecycleStateActive},
+				}}, nil
+			},
+			wantError: "ambiguous Functions application lookup",
+			wantCalls: 1,
+		},
+		{
+			name: "repeated page token",
+			respond: func(call int, request ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error) {
+				if call == 2 && (request.Page == nil || *request.Page != "page-2") {
+					t.Fatalf("second ListApplicationsRequest.Page = %v, want page-2", request.Page)
+				}
+				return ocifunctions.ListApplicationsResponse{OpcNextPage: common.String("page-2")}, nil
+			},
+			wantError: "repeated page token",
+			wantCalls: 2,
+		},
+	}
+
+	for _, testCase := range testCases {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			listCalls := 0
+			getCalls := 0
+			manager := &FunctionsApplicationServiceManager{ociClient: &fakeFunctionsManagementClient{
+				listApplicationsFn: func(_ context.Context, request ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error) {
+					listCalls++
+					return testCase.respond(listCalls, request)
+				},
+				getApplicationFn: func(context.Context, ocifunctions.GetApplicationRequest) (ocifunctions.GetApplicationResponse, error) {
+					getCalls++
+					return ocifunctions.GetApplicationResponse{}, nil
+				},
+			}}
+
+			application, err := manager.FindApplication(context.Background(), resource)
+			if err == nil || !strings.Contains(err.Error(), testCase.wantError) {
+				t.Fatalf("FindApplication() error = %v, want %q", err, testCase.wantError)
+			}
+			if application != nil {
+				t.Fatalf("FindApplication() = %#v, want nil", application)
+			}
+			if listCalls != testCase.wantCalls {
+				t.Fatalf("ListApplications() calls = %d, want %d", listCalls, testCase.wantCalls)
+			}
+			if getCalls != 0 {
+				t.Fatalf("GetApplication() calls = %d, want 0", getCalls)
+			}
+		})
+	}
+}
 
 func TestFunctionsApplicationCreateOrUpdateTracked404FallsBackToCreate(t *testing.T) {
 	t.Parallel()

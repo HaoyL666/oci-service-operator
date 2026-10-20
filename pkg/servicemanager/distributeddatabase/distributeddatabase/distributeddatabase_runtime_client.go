@@ -208,86 +208,140 @@ func buildDistributedDatabaseCreateBody(
 }
 
 func normalizeDistributedDatabaseCreateBody(body map[string]any) error {
-	rawCatalogs, ok := body["catalogDetails"]
-	if !ok || rawCatalogs == nil {
-		return nil
-	}
-
-	catalogs, ok := rawCatalogs.([]any)
-	if !ok {
-		return fmt.Errorf("resolved DistributedDatabase catalogDetails is %T, want []any", rawCatalogs)
-	}
-
-	for index, rawCatalog := range catalogs {
-		catalog, ok := rawCatalog.(map[string]any)
-		if !ok {
-			return fmt.Errorf("resolved DistributedDatabase catalogDetails[%d] is %T, want map[string]any", index, rawCatalog)
-		}
-		if err := normalizeDistributedDatabaseCatalogReplica(catalog, "originalReplica"); err != nil {
-			return fmt.Errorf("normalize DistributedDatabase catalogDetails[%d] original replica: %w", index, err)
-		}
-		if err := normalizeDistributedDatabaseCatalogReplicas(catalog, "dataGuardReplicas"); err != nil {
-			return fmt.Errorf("normalize DistributedDatabase catalogDetails[%d] data guard replicas: %w", index, err)
-		}
-	}
-
-	return nil
-}
-
-func normalizeDistributedDatabaseCatalogReplicas(catalog map[string]any, field string) error {
-	rawReplicas, ok := catalog[field]
-	if !ok || rawReplicas == nil {
-		return nil
-	}
-	replicas, ok := rawReplicas.([]any)
-	if !ok {
-		return fmt.Errorf("%s is %T, want []any", field, rawReplicas)
-	}
-	for index, rawReplica := range replicas {
-		replica, ok := rawReplica.(map[string]any)
-		if !ok {
-			return fmt.Errorf("%s[%d] is %T, want map[string]any", field, index, rawReplica)
-		}
-		if err := normalizeDistributedDatabaseCatalogReplica(replica, ""); err != nil {
-			return fmt.Errorf("%s[%d]: %w", field, index, err)
-		}
-	}
-	return nil
-}
-
-func normalizeDistributedDatabaseCatalogReplica(replica map[string]any, field string) error {
-	if field != "" {
-		rawReplica, ok := replica[field]
-		if !ok || rawReplica == nil {
-			return fmt.Errorf("%s is required", field)
-		}
-		value, ok := rawReplica.(map[string]any)
-		if !ok {
-			return fmt.Errorf("%s is %T, want map[string]any", field, rawReplica)
-		}
-		replica = value
-	}
-	rawDatabase, ok := replica["database"]
-	if !ok || rawDatabase == nil {
-		return fmt.Errorf("database is required")
-	}
-	database, ok := rawDatabase.(map[string]any)
-	if !ok {
-		return fmt.Errorf("database is %T, want map[string]any", rawDatabase)
-	}
-	delete(database, "jsonData")
-	source, err := normalizedDistributedDatabaseCatalogSource(database["source"])
-	if err != nil {
+	if err := normalizeDistributedDatabaseMapSlice(body, "catalogDetails", "catalogDetails", func(catalog map[string]any, path string) error {
+		return normalizeDistributedDatabaseReplicaSet(catalog, path, "database")
+	}); err != nil {
 		return err
+	}
+	if err := normalizeDistributedDatabaseMapSlice(body, "compositeRaftShardSpaces", "compositeRaftShardSpaces", func(shardSpace map[string]any, path string) error {
+		return normalizeDistributedDatabaseMapSlice(shardSpace, "raftClusters", path+".raftClusters", func(cluster map[string]any, clusterPath string) error {
+			return normalizeDistributedDatabaseDatabaseSlice(cluster, "databases", clusterPath+".databases")
+		})
+	}); err != nil {
+		return err
+	}
+	if err := normalizeDistributedDatabaseMapSlice(body, "compositeDataGuardShardSpaces", "compositeDataGuardShardSpaces", func(shardSpace map[string]any, path string) error {
+		return normalizeDistributedDatabaseReplicaSet(shardSpace, path, "databases")
+	}); err != nil {
+		return err
+	}
+	if err := normalizeDistributedDatabaseMapSlice(body, "systemRaftClusters", "systemRaftClusters", func(cluster map[string]any, path string) error {
+		return normalizeDistributedDatabaseDatabaseSlice(cluster, "databases", path+".databases")
+	}); err != nil {
+		return err
+	}
+	if raw, ok := body["systemDataGuardDatabases"]; ok && raw != nil {
+		systemDatabases, ok := raw.(map[string]any)
+		if !ok {
+			return fmt.Errorf("resolved DistributedDatabase systemDataGuardDatabases is %T, want map[string]any", raw)
+		}
+		if err := normalizeDistributedDatabaseReplicaSet(systemDatabases, "systemDataGuardDatabases", "databases"); err != nil {
+			return err
+		}
+	}
+	return normalizeDistributedDatabaseMapSlice(body, "userShardSpaces", "userShardSpaces", func(shardSpace map[string]any, path string) error {
+		return normalizeDistributedDatabaseReplicaSet(shardSpace, path, "database")
+	})
+}
+
+func normalizeDistributedDatabaseMapSlice(parent map[string]any, field, path string, normalize func(map[string]any, string) error) error {
+	rawItems, ok := parent[field]
+	if !ok || rawItems == nil {
+		return nil
+	}
+	items, ok := rawItems.([]any)
+	if !ok {
+		return fmt.Errorf("resolved DistributedDatabase %s is %T, want []any", path, rawItems)
+	}
+	for index, rawItem := range items {
+		item, ok := rawItem.(map[string]any)
+		if !ok {
+			return fmt.Errorf("resolved DistributedDatabase %s[%d] is %T, want map[string]any", path, index, rawItem)
+		}
+		if err := normalize(item, fmt.Sprintf("%s[%d]", path, index)); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func normalizeDistributedDatabaseReplicaSet(parent map[string]any, path, databaseField string) error {
+	if err := normalizeDistributedDatabaseReplica(parent, "originalReplica", path+".originalReplica", databaseField); err != nil {
+		return err
+	}
+	return normalizeDistributedDatabaseMapSlice(parent, "dataGuardReplicas", path+".dataGuardReplicas", func(replica map[string]any, replicaPath string) error {
+		return normalizeDistributedDatabaseReplicaDatabases(replica, replicaPath, databaseField)
+	})
+}
+
+func normalizeDistributedDatabaseReplica(parent map[string]any, field, path, databaseField string) error {
+	rawReplica, ok := parent[field]
+	if !ok || rawReplica == nil {
+		return fmt.Errorf("resolved DistributedDatabase %s is required", path)
+	}
+	replica, ok := rawReplica.(map[string]any)
+	if !ok {
+		return fmt.Errorf("resolved DistributedDatabase %s is %T, want map[string]any", path, rawReplica)
+	}
+	return normalizeDistributedDatabaseReplicaDatabases(replica, path, databaseField)
+}
+
+func normalizeDistributedDatabaseReplicaDatabases(replica map[string]any, path, databaseField string) error {
+	if databaseField == "database" {
+		rawDatabase, ok := replica[databaseField]
+		if !ok || rawDatabase == nil {
+			return fmt.Errorf("resolved DistributedDatabase %s.database is required", path)
+		}
+		database, ok := rawDatabase.(map[string]any)
+		if !ok {
+			return fmt.Errorf("resolved DistributedDatabase %s.database is %T, want map[string]any", path, rawDatabase)
+		}
+		return normalizeDistributedDatabaseDatabase(database, path+".database")
+	}
+	return normalizeDistributedDatabaseDatabaseSlice(replica, databaseField, path+"."+databaseField)
+}
+
+func normalizeDistributedDatabaseDatabaseSlice(parent map[string]any, field, path string) error {
+	return normalizeDistributedDatabaseMapSlice(parent, field, path, func(database map[string]any, databasePath string) error {
+		return normalizeDistributedDatabaseDatabase(database, databasePath)
+	})
+}
+
+func normalizeDistributedDatabaseDatabase(database map[string]any, path string) error {
+	if rawJSONData, ok := database["jsonData"]; ok {
+		delete(database, "jsonData")
+		if rawJSONData != nil {
+			jsonData, ok := rawJSONData.(string)
+			if !ok {
+				return fmt.Errorf("resolved DistributedDatabase %s.jsonData is %T, want string", path, rawJSONData)
+			}
+			if strings.TrimSpace(jsonData) != "" {
+				var payload map[string]any
+				if err := json.Unmarshal([]byte(jsonData), &payload); err != nil || payload == nil {
+					return fmt.Errorf("resolved DistributedDatabase %s.jsonData must be a JSON object", path)
+				}
+				for key, value := range payload {
+					if existing, exists := database[key]; exists && !reflect.DeepEqual(existing, value) {
+						return fmt.Errorf("resolved DistributedDatabase %s.jsonData conflicts with explicit %s", path, key)
+					}
+					database[key] = value
+				}
+			}
+		}
+	}
+
+	source, err := normalizedDistributedDatabaseSource(database["source"])
+	if err != nil {
+		return fmt.Errorf("resolved DistributedDatabase %s: %w", path, err)
 	}
 	database["source"] = source
 	return nil
 }
 
-func normalizedDistributedDatabaseCatalogSource(raw any) (string, error) {
+func normalizedDistributedDatabaseSource(raw any) (string, error) {
 	source, ok := raw.(string)
 	if !ok {
-		return "", fmt.Errorf("expected source string, got %T", raw)
+		return "", fmt.Errorf("source is %T, want string", raw)
 	}
 
 	switch normalized := strings.ToUpper(strings.TrimSpace(source)); normalized {
@@ -296,7 +350,7 @@ func normalizedDistributedDatabaseCatalogSource(raw any) (string, error) {
 	case "":
 		return "", fmt.Errorf("source is required")
 	default:
-		return "", fmt.Errorf("unsupported source %q", source)
+		return "", fmt.Errorf("unsupported source")
 	}
 }
 

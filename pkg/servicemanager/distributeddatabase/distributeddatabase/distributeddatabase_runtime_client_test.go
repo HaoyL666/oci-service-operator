@@ -7,6 +7,7 @@ package distributeddatabase
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"net/http"
 	"reflect"
@@ -151,6 +152,110 @@ func TestBuildDistributedDatabaseCreateBodyNormalizesExistingClusterAndPreserves
 	}
 	if strings.Contains(body, `"jsonData"`) {
 		t.Fatalf("request body %s unexpectedly contains jsonData", body)
+	}
+}
+func TestNormalizeDistributedDatabaseCreateBodyNormalizesAllNestedDatabaseShapes(t *testing.T) {
+	t.Parallel()
+
+	database := func(source string) map[string]any {
+		return map[string]any{"source": source, "vmClusterId": "ocid1.vmcluster.oc1..example"}
+	}
+	body := map[string]any{
+		"catalogDetails": []any{map[string]any{
+			"originalReplica": map[string]any{"database": map[string]any{
+				"jsonData": "{\"source\":\"xs_new_vault_and_cluster\",\"availabilityDomain\":\"Uocm:PHX-AD-1\",\"dbStorageVaultDetails\":{\"compartmentId\":\"ocid1.compartment.oc1..catalog\",\"highCapacityDatabaseStorage\":0},\"vmClusterDetails\":{\"compartmentId\":\"ocid1.compartment.oc1..catalog\",\"subnetId\":\"ocid1.subnet.oc1..catalog\",\"backupSubnetId\":\"ocid1.subnet.oc1..backup\",\"enabledECpuCount\":0,\"sshPublicKeys\":[],\"isDiagnosticsEventsEnabled\":false,\"nsgIds\":[]}}",
+			}},
+		}},
+		"compositeRaftShardSpaces": []any{map[string]any{
+			"raftClusters": []any{map[string]any{"databases": []any{database("xs_existing_cluster")}}},
+		}},
+		"compositeDataGuardShardSpaces": []any{map[string]any{
+			"originalReplica":   map[string]any{"databases": []any{database("xs_existing_cluster")}},
+			"dataGuardReplicas": []any{map[string]any{"databases": []any{database("xs_existing_cluster")}}},
+		}},
+		"systemRaftClusters": []any{map[string]any{"databases": []any{database("xs_existing_cluster")}}},
+		"systemDataGuardDatabases": map[string]any{
+			"originalReplica":   map[string]any{"databases": []any{database("xs_existing_cluster")}},
+			"dataGuardReplicas": []any{map[string]any{"databases": []any{database("xs_existing_cluster")}}},
+		},
+		"userShardSpaces": []any{map[string]any{
+			"originalReplica":   map[string]any{"database": database("xs_existing_cluster")},
+			"dataGuardReplicas": []any{map[string]any{"database": database("xs_existing_cluster")}},
+		}},
+	}
+
+	if err := normalizeDistributedDatabaseCreateBody(body); err != nil {
+		t.Fatalf("normalizeDistributedDatabaseCreateBody() error = %v", err)
+	}
+	payload, err := json.Marshal(body)
+	if err != nil {
+		t.Fatalf("json.Marshal(normalized body) error = %v", err)
+	}
+	var details distributeddatabasesdk.CreateDistributedDatabaseDetails
+	if err := json.Unmarshal(payload, &details); err != nil {
+		t.Fatalf("json.Unmarshal(CreateDistributedDatabaseDetails) error = %v", err)
+	}
+
+	assertShardDatabase := func(name string, database distributeddatabasesdk.CreateDistributedDatabaseShardDatabaseDetails) {
+		t.Helper()
+		if _, ok := database.(distributeddatabasesdk.CreateDistributedDatabaseShardDatabaseWithExadbXsDetails); !ok {
+			t.Fatalf("%s type = %T, want CreateDistributedDatabaseShardDatabaseWithExadbXsDetails", name, database)
+		}
+	}
+	if _, ok := details.CatalogDetails[0].OriginalReplica.Database.(distributeddatabasesdk.CreateDistributedDatabaseCatalogWithExadbXsNewVaultAndClusterDetails); !ok {
+		t.Fatalf("catalog database type = %T, want CreateDistributedDatabaseCatalogWithExadbXsNewVaultAndClusterDetails", details.CatalogDetails[0].OriginalReplica.Database)
+	}
+	assertShardDatabase("composite raft", details.CompositeRaftShardSpaces[0].RaftClusters[0].Databases[0])
+	assertShardDatabase("composite data guard original", details.CompositeDataGuardShardSpaces[0].OriginalReplica.Databases[0])
+	assertShardDatabase("composite data guard replica", details.CompositeDataGuardShardSpaces[0].DataGuardReplicas[0].Databases[0])
+	assertShardDatabase("system raft", details.SystemRaftClusters[0].Databases[0])
+	assertShardDatabase("system data guard original", details.SystemDataGuardDatabases.OriginalReplica.Databases[0])
+	assertShardDatabase("system data guard replica", details.SystemDataGuardDatabases.DataGuardReplicas[0].Databases[0])
+	assertShardDatabase("user original", details.UserShardSpaces[0].OriginalReplica.Database)
+	assertShardDatabase("user replica", details.UserShardSpaces[0].DataGuardReplicas[0].Database)
+
+	serializedPayload, err := json.Marshal(details)
+	if err != nil {
+		t.Fatalf("json.Marshal(CreateDistributedDatabaseDetails) error = %v", err)
+	}
+	serialized := string(serializedPayload)
+	for _, want := range []string{"\"source\":\"XS_NEW_VAULT_AND_CLUSTER\"", "\"subnetId\":\"ocid1.subnet.oc1..catalog\"", "\"enabledECpuCount\":0", "\"isDiagnosticsEventsEnabled\":false", "\"nsgIds\":[]"} {
+		if !strings.Contains(serialized, want) {
+			t.Fatalf("request body %s does not contain %s", serialized, want)
+		}
+	}
+	if strings.Contains(serialized, "\"jsonData\"") {
+		t.Fatalf("request body unexpectedly contains jsonData helper field: %s", serialized)
+	}
+}
+
+func TestNormalizeDistributedDatabaseCreateBodyRejectsInvalidJsonDataAndSource(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name string
+		body map[string]any
+		want string
+	}{
+		{
+			name: "json data must be object",
+			body: map[string]any{"catalogDetails": []any{map[string]any{"originalReplica": map[string]any{"database": map[string]any{"jsonData": "[]"}}}}},
+			want: "jsonData must be a JSON object",
+		},
+		{
+			name: "source is normalized and validated",
+			body: map[string]any{"userShardSpaces": []any{map[string]any{"originalReplica": map[string]any{"database": map[string]any{"source": "unsupported"}}}}},
+			want: "unsupported source",
+		},
+	}
+	for _, testCase := range testCases {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			err := normalizeDistributedDatabaseCreateBody(testCase.body)
+			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("normalizeDistributedDatabaseCreateBody() error = %v, want %q", err, testCase.want)
+			}
+		})
 	}
 }
 

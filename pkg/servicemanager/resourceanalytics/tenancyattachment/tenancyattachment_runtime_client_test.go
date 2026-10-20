@@ -126,6 +126,16 @@ func newSDKTenancyAttachment(
 		TenancyId:                   common.String(tenancyID),
 		IsReportingTenancy:          common.Bool(false),
 		LifecycleState:              state,
+		DataPopulationStatus:        resourceanalyticssdk.TenancyAttachmentDataPopulationStatusInProgress,
+		MonitoredRegions: []resourceanalyticssdk.TenancyAttachmentMonitoredRegionSummary{{
+			RegionId: common.String("us-phoenix-1"),
+			DataPopulation: &resourceanalyticssdk.TenancyAttachmentDataPopulation{
+				Status:          resourceanalyticssdk.TenancyAttachmentDataPopulationStatusInProgress,
+				InProgressCount: common.Int(0),
+				SucceededCount:  common.Int(0),
+				TotalCount:      common.Int(0),
+			},
+		}},
 	}
 	if description != "" {
 		attachment.Description = common.String(description)
@@ -146,6 +156,7 @@ func newSDKTenancyAttachmentSummary(
 		TenancyId:                   common.String(tenancyID),
 		IsReportingTenancy:          common.Bool(false),
 		LifecycleState:              state,
+		DataPopulationStatus:        resourceanalyticssdk.TenancyAttachmentDataPopulationStatusInProgress,
 	}
 	if description != "" {
 		summary.Description = common.String(description)
@@ -686,6 +697,12 @@ func requireTenancyAttachmentStatus(
 	}
 	if got := resource.Status.LifecycleState; got != wantLifecycleState {
 		t.Fatalf("status.lifecycleState = %q, want %q", got, wantLifecycleState)
+	}
+	if got := resource.Status.DataPopulationStatus; got != "IN_PROGRESS" {
+		t.Fatalf("status.dataPopulationStatus = %q, want IN_PROGRESS", got)
+	}
+	if len(resource.Status.MonitoredRegions) != 1 || resource.Status.MonitoredRegions[0].RegionId != "us-phoenix-1" || resource.Status.MonitoredRegions[0].DataPopulation.InProgressCount != 0 || resource.Status.MonitoredRegions[0].DataPopulation.TotalCount != 0 {
+		t.Fatalf("status.monitoredRegions = %#v, want zero-count phoenix region", resource.Status.MonitoredRegions)
 	}
 }
 

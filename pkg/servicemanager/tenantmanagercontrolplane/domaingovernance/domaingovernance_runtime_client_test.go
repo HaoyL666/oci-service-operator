@@ -157,6 +157,9 @@ func TestDomainGovernanceCreateOrUpdateCreatesWithoutFollowUpReadAndTreatsInacti
 	if got := resource.Status.LifecycleState; got != string(tenantmanagercontrolplanesdk.DomainGovernanceLifecycleStateInactive) {
 		t.Fatalf("status.lifecycleState = %q, want %q", got, tenantmanagercontrolplanesdk.DomainGovernanceLifecycleStateInactive)
 	}
+	if got := resource.Status.CompartmentId; got != testDomainGovernanceCompartment {
+		t.Fatalf("status.compartmentId = %q, want %q", got, testDomainGovernanceCompartment)
+	}
 }
 
 func TestDomainGovernanceCreateOrUpdateBindsExistingByPagedList(t *testing.T) {
