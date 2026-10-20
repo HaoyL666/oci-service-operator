@@ -52,6 +52,11 @@ type AttachmentStatus struct {
 	BuyerCompartmentId string `json:"buyerCompartmentId,omitempty"`
 	// The MIME type of the uploaded data.
 	MimeType string `json:"mimeType,omitempty"`
+	// The type of the offer.
+	OfferType string `json:"offerType,omitempty"`
+	// System tags for this resource. Each key is predefined and scoped to a namespace.
+	// Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
+	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 }
 
 // +kubebuilder:object:root=true

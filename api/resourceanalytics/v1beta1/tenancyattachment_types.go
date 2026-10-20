@@ -25,6 +25,31 @@ type TenancyAttachmentSpec struct {
 	Description string `json:"description,omitempty"`
 }
 
+// TenancyAttachmentMonitoredRegionDataPopulation defines nested fields for TenancyAttachment.MonitoredRegion.DataPopulation.
+type TenancyAttachmentMonitoredRegionDataPopulation struct {
+	// The overall status of the data population from the monitored region of the tenancy.
+	Status string `json:"status,omitempty"`
+	// The date and time the data population task was started, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+	// Example: `2016-08-25T21:10:29.600Z`
+	TimeStarted string `json:"timeStarted,omitempty"`
+	// The number of data population tasks currently in progress.
+	InProgressCount int `json:"inProgressCount,omitempty"`
+	// The number of data population tasks that have succeeded.
+	SucceededCount int `json:"succeededCount,omitempty"`
+	// The total number of data population tasks.
+	TotalCount int `json:"totalCount,omitempty"`
+	// The date and time the data population task completed, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+	// Example: `2016-08-25T21:10:29.600Z`
+	TimeEnded string `json:"timeEnded,omitempty"`
+}
+
+// TenancyAttachmentMonitoredRegion defines nested fields for TenancyAttachment.MonitoredRegion.
+type TenancyAttachmentMonitoredRegion struct {
+	// The Region Identifier (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm) of the monitored region. E.g. us-ashburn-1
+	RegionId       string                                         `json:"regionId,omitempty"`
+	DataPopulation TenancyAttachmentMonitoredRegionDataPopulation `json:"dataPopulation,omitempty"`
+}
+
 // TenancyAttachmentStatus defines the observed state of TenancyAttachment.
 type TenancyAttachmentStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
@@ -36,6 +61,10 @@ type TenancyAttachmentStatus struct {
 	TenancyId string `json:"tenancyId,omitempty"`
 	// Whether the tenancy is the tenancy used when creating Resource Analytics Instance.
 	IsReportingTenancy bool `json:"isReportingTenancy,omitempty"`
+	// List of monitored regions with their data population status.
+	MonitoredRegions []TenancyAttachmentMonitoredRegion `json:"monitoredRegions,omitempty"`
+	// The overall status of the data population from the tenancy.
+	DataPopulationStatus string `json:"dataPopulationStatus,omitempty"`
 	// The date and time the TenancyAttachment was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeCreated string `json:"timeCreated,omitempty"`
@@ -43,6 +72,12 @@ type TenancyAttachmentStatus struct {
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// A description of the tenancy.
 	Description string `json:"description,omitempty"`
+	// The date and time the data population tasks started, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+	// Example: `2016-08-25T21:10:29.600Z`
+	TimeDataPopulationStarted string `json:"timeDataPopulationStarted,omitempty"`
+	// The date and time the data population tasks completed, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+	// Example: `2016-08-25T21:10:29.600Z`
+	TimeDataPopulationEnded string `json:"timeDataPopulationEnded,omitempty"`
 	// The date and time the TenancyAttachment was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeUpdated string `json:"timeUpdated,omitempty"`

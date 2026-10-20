@@ -70,6 +70,9 @@ spec:
           status:
             description: TenancyAttachmentStatus defines the observed state of TenancyAttachment.
             properties:
+              dataPopulationStatus:
+                description: The overall status of the data population from the tenancy.
+                type: string
               description:
                 description: A description of the tenancy.
                 type: string
@@ -89,6 +92,49 @@ spec:
               lifecycleState:
                 description: The current state of the TenancyAttachment.
                 type: string
+              monitoredRegions:
+                description: List of monitored regions with their data population
+                  status.
+                items:
+                  description: TenancyAttachmentMonitoredRegion defines nested fields
+                    for TenancyAttachment.MonitoredRegion.
+                  properties:
+                    dataPopulation:
+                      description: TenancyAttachmentMonitoredRegionDataPopulation
+                        defines nested fields for TenancyAttachment.MonitoredRegion.DataPopulation.
+                      properties:
+                        inProgressCount:
+                          description: The number of data population tasks currently
+                            in progress.
+                          type: integer
+                        status:
+                          description: The overall status of the data population from
+                            the monitored region of the tenancy.
+                          type: string
+                        succeededCount:
+                          description: The number of data population tasks that have
+                            succeeded.
+                          type: integer
+                        timeEnded:
+                          description: |-
+                            The date and time the data population task completed, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+                            Example: `2016-08-25T21:10:29.600Z`
+                          type: string
+                        timeStarted:
+                          description: |-
+                            The date and time the data population task was started, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+                            Example: `2016-08-25T21:10:29.600Z`
+                          type: string
+                        totalCount:
+                          description: The total number of data population tasks.
+                          type: integer
+                      type: object
+                    regionId:
+                      description: The Region Identifier (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm)
+                        of the monitored region. E.g. us-ashburn-1
+                      type: string
+                  type: object
+                type: array
               resourceAnalyticsInstanceId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the ResourceAnalyticsInstance associated with this TenancyAttachment.
@@ -209,6 +255,16 @@ spec:
               timeCreated:
                 description: |-
                   The date and time the TenancyAttachment was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+                  Example: `2016-08-25T21:10:29.600Z`
+                type: string
+              timeDataPopulationEnded:
+                description: |-
+                  The date and time the data population tasks completed, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+                  Example: `2016-08-25T21:10:29.600Z`
+                type: string
+              timeDataPopulationStarted:
+                description: |-
+                  The date and time the data population tasks started, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
                   Example: `2016-08-25T21:10:29.600Z`
                 type: string
               timeUpdated:

@@ -122,17 +122,11 @@ spec:
                     healthChecks:
                       description: |-
                         list of container health checks to check container status and take appropriate action if container status is failed.
-                        There are three types of health checks that we currently support HTTP, TCP, and Command.
+                        There are two types of health checks that we currently support HTTP and TCP.
                       items:
                         description: ContainerInstanceContainerHealthCheck defines
                           nested fields for ContainerInstance.Container.HealthCheck.
                         properties:
-                          command:
-                            description: The list of strings that will be simplified
-                              to a single command for checking the status of the container.
-                            items:
-                              type: string
-                            type: array
                           failureAction:
                             description: |-
                               The action will be triggered when the container health check fails. There are two types of action: KILL or NONE. The default
@@ -403,6 +397,35 @@ spec:
                   - registryEndpoint
                   type: object
                 type: array
+              securityContext:
+                description: ContainerInstanceSecurityContext defines nested fields
+                  for ContainerInstance.SecurityContext.
+                properties:
+                  fsGroup:
+                    description: A special supplemental group that applies to all
+                      containers in the container instance. Some volume types allow
+                      the container instance to change ownership of the volume. The
+                      owning GID will be the fsGroup, the setgid bit will be set (new
+                      files will be owned by the fsGroup), and the permission bits
+                      are OR'd with rw-rw----. If unset, the container instance will
+                      not modify the ownership and permissions of volumes.
+                    type: integer
+                  fsGroupChangePolicy:
+                    description: Defines behavior of changing ownership and permission
+                      of the volume before being exposed inside the containers. This
+                      only applies to volumes which support fsGroup ownership and
+                      permissions, and will have no effect on ephemeral volumes. ON_ROOT_MISMATCH
+                      only changes permissions and ownership if the permission and
+                      ownership of the root directory does not match the expected
+                      permissions and ownership of the volume. This can improve container
+                      instance start times. ALWAYS  changes permission and ownership
+                      of the volume when it is mounted. If unset, ALWAYS is used.
+                    type: string
+                  jsonData:
+                    type: string
+                  securityContextType:
+                    type: string
+                type: object
               shape:
                 description: The shape of the container instance. The shape determines
                   the resources available to the container instance.
@@ -519,11 +542,81 @@ spec:
                         - fileName
                         type: object
                       type: array
+                    export:
+                      description: ContainerInstanceVolumeExport defines nested fields
+                        for ContainerInstance.Volume.Export.
+                      properties:
+                        id:
+                          description: The OCID of the OCI File Storage Service (FSS)
+                            Export.
+                          type: string
+                        jsonData:
+                          type: string
+                        ociFssExportType:
+                          type: string
+                      type: object
                     jsonData:
                       type: string
+                    mountCommand:
+                      description: ContainerInstanceVolumeMountCommand defines nested
+                        fields for ContainerInstance.Volume.MountCommand.
+                      properties:
+                        mountOptions:
+                          description: List of mount options to be used in the mount
+                            command. The order of this array will be maintained while
+                            preparing the mount command.
+                          items:
+                            description: ContainerInstanceVolumeMountCommandMountOption
+                              defines nested fields for ContainerInstance.Volume.MountCommand.MountOption.
+                            properties:
+                              option:
+                                description: A generic (https://man7.org/linux/man-pages/man8/mount.8.html)
+                                  or nfs (https://man7.org/linux/man-pages/man5/nfs.5.html)
+                                  mount option.
+                                type: string
+                              value:
+                                description: The value of the mount option.
+                                type: string
+                            required:
+                            - option
+                            type: object
+                          type: array
+                      type: object
+                    mountTarget:
+                      description: ContainerInstanceVolumeMountTarget defines nested
+                        fields for ContainerInstance.Volume.MountTarget.
+                      properties:
+                        id:
+                          description: The OCID of the OCI File Storage Service (FSS)
+                            Mount Target.
+                          type: string
+                        jsonData:
+                          type: string
+                        ociFssMountTargetType:
+                          type: string
+                      type: object
                     name:
                       description: The name of the volume. This must be unique within
                         a single container instance.
+                      type: string
+                    security:
+                      description: ContainerInstanceVolumeSecurity defines nested
+                        fields for ContainerInstance.Volume.Security.
+                      properties:
+                        auth:
+                          type: string
+                        isEncryptedInTransit:
+                          description: |-
+                            Determines whether in-transit encryption needs to be enables.
+                            Check https://docs.oracle.com/en-us/iaas/Content/File/Tasks/intransitencryption.htm#Using_Intransit_Encryption for more details.
+                          type: boolean
+                        jsonData:
+                          type: string
+                      type: object
+                    subnetId:
+                      description: |-
+                        Specifies the network interface to be used for the OCI File Storage Service (FSS) volume.
+                        This is a required parameter when a Container Instance is attached to more than one subnets.
                       type: string
                     volumeType:
                       type: string
@@ -655,6 +748,35 @@ spec:
               lifecycleState:
                 description: The current state of the container instance.
                 type: string
+              securityContext:
+                description: ContainerInstanceSecurityContext defines nested fields
+                  for ContainerInstance.SecurityContext.
+                properties:
+                  fsGroup:
+                    description: A special supplemental group that applies to all
+                      containers in the container instance. Some volume types allow
+                      the container instance to change ownership of the volume. The
+                      owning GID will be the fsGroup, the setgid bit will be set (new
+                      files will be owned by the fsGroup), and the permission bits
+                      are OR'd with rw-rw----. If unset, the container instance will
+                      not modify the ownership and permissions of volumes.
+                    type: integer
+                  fsGroupChangePolicy:
+                    description: Defines behavior of changing ownership and permission
+                      of the volume before being exposed inside the containers. This
+                      only applies to volumes which support fsGroup ownership and
+                      permissions, and will have no effect on ephemeral volumes. ON_ROOT_MISMATCH
+                      only changes permissions and ownership if the permission and
+                      ownership of the root directory does not match the expected
+                      permissions and ownership of the volume. This can improve container
+                      instance start times. ALWAYS  changes permission and ownership
+                      of the volume when it is mounted. If unset, ALWAYS is used.
+                    type: string
+                  jsonData:
+                    type: string
+                  securityContextType:
+                    type: string
+                type: object
               shape:
                 description: The shape of the container instance. The shape determines
                   the number of OCPUs, amount of memory, and other resources that
@@ -790,6 +912,9 @@ spec:
                   Usage of system tag keys. These predefined keys are scoped to namespaces.
                   Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`.
                 type: object
+              tenantId:
+                description: TenantId id of the container instance.
+                type: string
               timeCreated:
                 description: The time the container instance was created, in the format
                   defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
@@ -857,11 +982,81 @@ spec:
                         - fileName
                         type: object
                       type: array
+                    export:
+                      description: ContainerInstanceVolumeExport defines nested fields
+                        for ContainerInstance.Volume.Export.
+                      properties:
+                        id:
+                          description: The OCID of the OCI File Storage Service (FSS)
+                            Export.
+                          type: string
+                        jsonData:
+                          type: string
+                        ociFssExportType:
+                          type: string
+                      type: object
                     jsonData:
                       type: string
+                    mountCommand:
+                      description: ContainerInstanceVolumeMountCommand defines nested
+                        fields for ContainerInstance.Volume.MountCommand.
+                      properties:
+                        mountOptions:
+                          description: List of mount options to be used in the mount
+                            command. The order of this array will be maintained while
+                            preparing the mount command.
+                          items:
+                            description: ContainerInstanceVolumeMountCommandMountOption
+                              defines nested fields for ContainerInstance.Volume.MountCommand.MountOption.
+                            properties:
+                              option:
+                                description: A generic (https://man7.org/linux/man-pages/man8/mount.8.html)
+                                  or nfs (https://man7.org/linux/man-pages/man5/nfs.5.html)
+                                  mount option.
+                                type: string
+                              value:
+                                description: The value of the mount option.
+                                type: string
+                            required:
+                            - option
+                            type: object
+                          type: array
+                      type: object
+                    mountTarget:
+                      description: ContainerInstanceVolumeMountTarget defines nested
+                        fields for ContainerInstance.Volume.MountTarget.
+                      properties:
+                        id:
+                          description: The OCID of the OCI File Storage Service (FSS)
+                            Mount Target.
+                          type: string
+                        jsonData:
+                          type: string
+                        ociFssMountTargetType:
+                          type: string
+                      type: object
                     name:
                       description: The name of the volume. This must be unique within
                         a single container instance.
+                      type: string
+                    security:
+                      description: ContainerInstanceVolumeSecurity defines nested
+                        fields for ContainerInstance.Volume.Security.
+                      properties:
+                        auth:
+                          type: string
+                        isEncryptedInTransit:
+                          description: |-
+                            Determines whether in-transit encryption needs to be enables.
+                            Check https://docs.oracle.com/en-us/iaas/Content/File/Tasks/intransitencryption.htm#Using_Intransit_Encryption for more details.
+                          type: boolean
+                        jsonData:
+                          type: string
+                      type: object
+                    subnetId:
+                      description: |-
+                        Specifies the network interface to be used for the OCI File Storage Service (FSS) volume.
+                        This is a required parameter when a Container Instance is attached to more than one subnets.
                       type: string
                     volumeType:
                       type: string

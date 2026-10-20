@@ -402,13 +402,13 @@ MultiCloudMetadataStatus defines the observed state of MultiCloudMetadata.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `compartmentId` | MultiCloud base compartment OCID associated with subscriptionId. | `string` | No | - | - |
+| `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Multicloud base compartment associated with the indicated subscription (`subscriptionId`). | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | [`status`](#kind-multicloudmetadata-status-status) | - | `object` | Yes | - | - |
-| `subscriptionId` | Oracle Cloud Infrastructure subscriptionId. | `string` | No | - | - |
+| `subscriptionId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI subscription. | `string` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
-| `timeCreated` | The date and time the multicloud compartment was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeCreated` | The date and time that the Multicloud base compartment was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 
 <a id="kind-multicloudmetadata-status-status"></a>
 #### Status.status
@@ -494,24 +494,25 @@ MulticloudResourceStatus defines the observed state of MulticloudResource.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `compartmentId` | Compartment Id of the resource. | `string` | No | - | - |
-| `compartmentName` | Compartment name associated the resource. | `string` | No | - | - |
-| `cspAdditionalProperties` | CSP Specific Additional Properties, AzureSubnetId for Azure | `map[string, string]` | No | - | - |
-| `cspResourceId` | Resource Id that comes from the Multi Cloud Control Plane | `string` | No | - | - |
+| `compartmentId` | Id of the compartment associated with the resource. | `string` | No | - | - |
+| `compartmentName` | Name of the compartment associated with the resource. | `string` | No | - | - |
+| `cspAdditionalProperties` | Properties specific to the cloud service provider. For example, AzureSubnetId for Azure. | `map[string, string]` | No | - | - |
+| `cspResourceId` | The resource Id that comes from the Multicloud control plane. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
-| `lifecycleState` | The current state of the multicloud resource. | `string` | No | - | - |
-| `networkAnchorId` | OCID of the Network Anchor | `string` | No | - | - |
-| `networkAnchorName` | Name of the network anchor associated to the resource. | `string` | No | - | - |
-| `resourceDisplayName` | Endpoint used to retrieve displayName and lifeCycleState of the resource. | `string` | No | - | - |
+| `lifecycleState` | The current state of the Multicloud resource. | `string` | No | - | - |
+| `networkAnchorId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network anchor associated with the resource. | `string` | No | - | - |
+| `networkAnchorName` | Name of the network anchor associated with the resource. | `string` | No | - | - |
+| `resourceAdditionalProperties` | Additional attributes specific to certain resource types, used to construct a URL for accessing the resource in the OCI console. | `map[string, object (preserves unknown fields)]` | No | - | - |
+| `resourceDisplayName` | Endpoint used to retrieve the resource's display name and lifecycle state. | `string` | No | - | - |
 | `resourceId` | The Id of the multicloud resource. | `string` | No | - | - |
-| `resourceType` | What resource it refers to. Eg. VMCluster, ExaInfra, etc. | `string` | No | - | - |
+| `resourceType` | Type of resource, such as `VMCluster` or `ExaInfra`, | `string` | No | - | - |
 | [`status`](#kind-multicloudresource-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the subscription was created, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
 | `timeUpdated` | The date and time the subscription was updated, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
-| `vcnId` | Id of the Virtual Cloud Network associated to the resource. | `string` | No | - | - |
-| `vcnName` | Resource Anchor name. | `string` | No | - | - |
+| `vcnId` | Id of the virtual cloud network (VCN) associated with the resource. | `string` | No | - | - |
+| `vcnName` | Name of the virtual cloud network (VCN) associated with the resource. | `string` | No | - | - |
 
 <a id="kind-multicloudresource-status-status"></a>
 #### Status.status
@@ -598,21 +599,22 @@ MulticloudSubscriptionStatus defines the observed state of MulticloudSubscriptio
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `activeCommitment` | Total value for the subscription. | `string` | No | - | - |
-| `classicSubscriptionId` | Subscription ID for OCI and Partner cloud in classic format. | `string` | No | - | - |
-| `cspAdditionalProperties` | CSP Specific Additional Properties, AzureSubnetId for Azure | `map[string, string]` | No | - | - |
+| `classicSubscriptionId` | Subscription ID for OCI and partner cloud in classic format. | `string` | No | - | - |
+| `cspAdditionalProperties` | Properties specific to the cloud service provider. For example, AzureSubnetId for Azure. | `map[string, string]` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `lifecycleState` | The current state of the subscription. | `string` | No | - | - |
 | `partnerCloudAccountIdentifier` | The partner cloud account ID. | `string` | No | - | - |
+| `partnerCloudTenantIdentifier` | The partner cloud tenant ID. | `string` | No | - | - |
 | `paymentPlan` | Payment plan for the subscription. | `string` | No | - | - |
-| `serviceName` | The serviceName that externalLocation map object belongs to. | `string` | No | - | - |
+| `serviceName` | The cloud service provider. | `string` | No | - | - |
 | [`status`](#kind-multicloudsubscription-status-status) | - | `object` | Yes | - | - |
-| `subscriptionId` | URL to the subscription page https://{console-url}/org-mgmt/subscription/ocid1.organizationssubscription.oc1.iad.amaaaaaapf266qyaqohz27zvh45jzaielgwojo53bh24s7cy5q5g7fiknpxa?region=us-ashburn-1. | `string` | No | - | - |
+| `subscriptionId` | URL to the subscription details page. Example: `https://{console-url}/org-mgmt/subscription/ocid1.organizationssubscription.oc1.iad.exampleuniqueid?region=us-ashburn-1`. | `string` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
-| `timeCreated` | The date and time the subscription was created, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
-| `timeEndDate` | The date and time for when the subscription is finishing, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
-| `timeLinkedDate` | The date and time for when the multicloud was created, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
-| `timeUpdated` | The date and time the subscription was updated, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
+| `timeCreated` | The date and time that the subscription was created, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
+| `timeEndDate` | The end date and time for the subscription, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
+| `timeLinkedDate` | The date and time that the Multicloud base compartment was created, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
+| `timeUpdated` | The date and time that the subscription was updated, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
 
 <a id="kind-multicloudsubscription-status-status"></a>
 #### Status.status
@@ -698,6 +700,7 @@ NetworkAnchorStatus defines the observed state of NetworkAnchor.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `cidrBlocks` | An Azure/GCP/AWS cidrBlocks | `list[string]` | No | - | - |
 | [`cloudServiceProviderMetadataItem`](#kind-networkanchor-status-cloudserviceprovidermetadataitem) | NetworkAnchorCloudServiceProviderMetadataItem defines nested fields for NetworkAnchor.CloudServiceProviderMetadataItem. | `object` | No | - | - |
 | `clusterPlacementGroupId` | The CPG ID in which Network Anchor will be created. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment. | `string` | No | - | - |
@@ -881,26 +884,27 @@ ResourceAnchorStatus defines the observed state of ResourceAnchor.
 | [`cloudServiceProviderMetadataItem`](#kind-resourceanchor-status-cloudserviceprovidermetadataitem) | ResourceAnchorCloudServiceProviderMetadataItem defines nested fields for ResourceAnchor.CloudServiceProviderMetadataItem. | `object` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment. | `string` | No | - | - |
 | `compartmentName` | The name assigned to the compartment during creation. | `string` | No | - | - |
-| `cspAdditionalProperties` | CSP Specific Additional Properties, AzureSubnetId for Azure | `map[string, string]` | No | - | - |
-| `cspResourceAnchorId` | Resource Anchor Id in the Cloud Service Provider. | `string` | No | - | - |
-| `cspResourceAnchorName` | Resource Anchor Name in the Cloud Service Provider. | `string` | No | - | - |
+| `cspAdditionalProperties` | Cloud service provider-specific properties, such as AzureSubnetId for Azure. | `map[string, string]` | No | - | - |
+| `cspResourceAnchorId` | Resource anchor ID in the cloud service provider. | `string` | No | - | - |
+| `cspResourceAnchorName` | Resource anchor name in the cloud service provider. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. | `string` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
-| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the ResourceAnchor. | `string` | No | - | - |
-| `lifecycleDetails` | A message that describes the current state of the ResourceAnchor in more detail. For example, can be used to provide actionable information for a resource in the Failed state. | `string` | No | - | - |
-| `lifecycleState` | The current state of the ResourceAnchor. | `string` | No | - | - |
+| `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource anchor. | `string` | No | - | - |
+| `lifecycleDetails` | A message that describes the current state of the resource anchor in more detail. For example, can be used to provide actionable information for a resource in the Failed state. | `string` | No | - | - |
+| `lifecycleState` | The current state of the resource anchor. | `string` | No | - | - |
 | `linkedCompartmentId` | Optional - Oracle Cloud Infrastructure compartment Id (OCID) which was created or linked by customer with resource anchor. This compartmentId is different from where resource Anchor live. | `string` | No | - | - |
 | `linkedCompartmentName` | The name assigned to the compartment which was created or linked by customer with resource anchor. This compartment is different from where resource Anchor live. | `string` | No | - | - |
-| `partnerCloudAccountIdentifier` | Partner Cloud Account Identifier of the Cloud Service Provider. | `string` | No | - | - |
+| `partnerCloudAccountIdentifier` | Partner cloud account identifier of the cloud service provider. | `string` | No | - | - |
 | `region` | OCI Region that resource is created. | `string` | No | - | - |
+| `resourceAnchorUri` | URI for the cloud service provider's resource anchor. | `string` | No | - | - |
 | `setupMode` | AUTO_BIND - when passed compartment will be created on-behalf of customer and bind to this resource anchor NO_AUTO_BIND - compartment will not be created and later customer can bind existing compartment. to this resource anchor. This is for future use only | `string` | No | - | - |
 | [`status`](#kind-resourceanchor-status-status) | - | `object` | Yes | - | - |
 | `subscriptionId` | Oracle Cloud Infrastructure Subscription Id | `string` | No | - | - |
 | `subscriptionType` | subscription type | `string` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
-| `timeCreated` | The date and time the ResourceAnchor was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
-| `timeUpdated` | The date and time the ResourceAnchor was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeCreated` | The date and time the resource anchor was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeUpdated` | The date and time the resource anchor was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 
 <a id="kind-resourceanchor-status-cloudserviceprovidermetadataitem"></a>
 #### Status.cloudServiceProviderMetadataItem

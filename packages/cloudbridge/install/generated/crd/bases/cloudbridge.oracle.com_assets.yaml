@@ -56,6 +56,20 @@ spec:
           spec:
             description: AssetSpec defines the desired state of Asset.
             properties:
+              assetClassName:
+                description: The class name of the asset.
+                type: string
+              assetClassVersion:
+                description: The version of the asset class.
+                type: string
+              assetDetails:
+                additionalProperties:
+                  description: JSONValue preserves arbitrary JSON values inside generated
+                    CRD fields.
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                description: The details of the asset.
+                type: object
               assetSourceIds:
                 description: List of asset source OCID.
                 items:
@@ -729,6 +743,11 @@ spec:
               displayName:
                 description: Asset display name.
                 type: string
+              environmentType:
+                description: Specifies if this is the Source or Destination point
+                  for migration - different assets may be discovered depending on
+                  setting.
+                type: string
               externalAssetKey:
                 description: The key of the asset from the external environment.
                 type: string
@@ -836,6 +855,20 @@ spec:
           status:
             description: AssetStatus defines the observed state of Asset.
             properties:
+              assetClassName:
+                description: The class name of the asset.
+                type: string
+              assetClassVersion:
+                description: The version of the asset class.
+                type: string
+              assetDetails:
+                additionalProperties:
+                  description: JSONValue preserves arbitrary JSON values inside generated
+                    CRD fields.
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                description: The details of the asset.
+                type: object
               assetSourceIds:
                 description: List of asset source OCID.
                 items:
@@ -1509,6 +1542,11 @@ spec:
                 type: object
               displayName:
                 description: Asset display name.
+                type: string
+              environmentType:
+                description: Specifies if this is the Source or Destination point
+                  for migration - different assets may be discovered depending on
+                  setting.
                 type: string
               externalAssetKey:
                 description: The key of the asset from the external environment.

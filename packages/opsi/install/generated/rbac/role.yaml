@@ -1,0 +1,75 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - opsi.oracle.com
+  resources:
+  - awrhubs
+  - awrhubsources
+  - chargebackplanreports
+  - chargebackplans
+  - databaseinsights
+  - enterprisemanagerbridges
+  - exadatainsights
+  - hostinsights
+  - newsreports
+  - operationsinsightsprivateendpoints
+  - operationsinsightswarehouses
+  - operationsinsightswarehouseusers
+  - opsiconfigurations
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - opsi.oracle.com
+  resources:
+  - awrhubs/finalizers
+  - awrhubsources/finalizers
+  - chargebackplanreports/finalizers
+  - chargebackplans/finalizers
+  - databaseinsights/finalizers
+  - enterprisemanagerbridges/finalizers
+  - exadatainsights/finalizers
+  - hostinsights/finalizers
+  - newsreports/finalizers
+  - operationsinsightsprivateendpoints/finalizers
+  - operationsinsightswarehouses/finalizers
+  - operationsinsightswarehouseusers/finalizers
+  - opsiconfigurations/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - opsi.oracle.com
+  resources:
+  - awrhubs/status
+  - awrhubsources/status
+  - chargebackplanreports/status
+  - chargebackplans/status
+  - databaseinsights/status
+  - enterprisemanagerbridges/status
+  - exadatainsights/status
+  - hostinsights/status
+  - newsreports/status
+  - operationsinsightsprivateendpoints/status
+  - operationsinsightswarehouses/status
+  - operationsinsightswarehouseusers/status
+  - opsiconfigurations/status
+  verbs:
+  - get
+  - patch
+  - update

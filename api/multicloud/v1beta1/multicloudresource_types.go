@@ -24,30 +24,32 @@ type MulticloudResourceStatus struct {
 	// The date and time the subscription was created, in the format defined by
 	// RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
 	TimeCreated string `json:"timeCreated,omitempty"`
-	// Endpoint used to retrieve displayName and lifeCycleState of the resource.
+	// Endpoint used to retrieve the resource's display name and lifecycle state.
 	ResourceDisplayName string `json:"resourceDisplayName,omitempty"`
-	// What resource it refers to. Eg. VMCluster, ExaInfra, etc.
+	// Type of resource, such as `VMCluster` or `ExaInfra`,
 	ResourceType string `json:"resourceType,omitempty"`
-	// Compartment name associated the resource.
+	// Name of the compartment associated with the resource.
 	CompartmentName string `json:"compartmentName,omitempty"`
-	// Compartment Id of the resource.
+	// Id of the compartment associated with the resource.
 	CompartmentId string `json:"compartmentId,omitempty"`
-	// Resource Anchor name.
+	// Name of the virtual cloud network (VCN) associated with the resource.
 	VcnName string `json:"vcnName,omitempty"`
-	// Id of the Virtual Cloud Network associated to the resource.
+	// Id of the virtual cloud network (VCN) associated with the resource.
 	VcnId string `json:"vcnId,omitempty"`
-	// Name of the network anchor associated to the resource.
+	// Name of the network anchor associated with the resource.
 	NetworkAnchorName string `json:"networkAnchorName,omitempty"`
-	// OCID of the Network Anchor
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network anchor associated with the resource.
 	NetworkAnchorId string `json:"networkAnchorId,omitempty"`
-	// Resource Id that comes from the Multi Cloud Control Plane
+	// The resource Id that comes from the Multicloud control plane.
 	CspResourceId string `json:"cspResourceId,omitempty"`
-	// CSP Specific Additional Properties, AzureSubnetId for Azure
+	// Properties specific to the cloud service provider. For example, AzureSubnetId for Azure.
 	CspAdditionalProperties map[string]string `json:"cspAdditionalProperties,omitempty"`
+	// Additional attributes specific to certain resource types, used to construct a URL for accessing the resource in the OCI console.
+	ResourceAdditionalProperties map[string]shared.JSONValue `json:"resourceAdditionalProperties,omitempty"`
 	// The date and time the subscription was updated, in the format defined by
 	// RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
 	TimeUpdated string `json:"timeUpdated,omitempty"`
-	// The current state of the multicloud resource.
+	// The current state of the Multicloud resource.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).

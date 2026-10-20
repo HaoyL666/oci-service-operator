@@ -39,9 +39,10 @@ func reviewedBatchContextRuntimeSemantics() *generatedruntime.Semantics {
 			MatchFields:        []string{"compartmentId", "lifecycleState", "displayName", "id", "opc-request-id"},
 		},
 		Mutation: generatedruntime.MutationSemantics{
-			Mutable:       []string{"displayName", "description", "freeformTags", "definedTags", "jobPriorityConfigurations", "entitlements"},
-			ForceNew:      []string{"compartmentId", "network", "fleets", "loggingConfiguration"},
-			ConflictsWith: map[string][]string{},
+			Mutable:                 []string{"displayName", "description", "freeformTags", "definedTags", "jobPriorityConfigurations", "entitlements"},
+			ForceNew:                []string{"compartmentId", "network", "fleets", "loggingConfiguration"},
+			ZeroValueNullEquivalent: []string{"loggingConfiguration"},
+			ConflictsWith:           map[string][]string{},
 		},
 		CreateFollowUp: generatedruntime.FollowUpSemantics{Strategy: "read-after-write"},
 		UpdateFollowUp: generatedruntime.FollowUpSemantics{Strategy: "read-after-write"},

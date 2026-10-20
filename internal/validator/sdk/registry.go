@@ -151,7 +151,7 @@ import (
 
 const (
 	modulePath    = "github.com/oracle/oci-go-sdk/v65"
-	moduleVersion = "v65.110.0"
+	moduleVersion = "v65.127.0"
 )
 
 var seedTargets = []Target{
@@ -554,6 +554,7 @@ var seedTargets = []Target{
 	newTarget("core", "UpdateVcnDetails", reflect.TypeOf(core.UpdateVcnDetails{})),
 	newTarget("core", "Drg", reflect.TypeOf(core.Drg{})),
 	newTarget("core", "Instance", reflect.TypeOf(core.Instance{})),
+	newTarget("core", "Instances", reflect.TypeOf(core.Instances{})),
 	newTarget("core", "InternetGateway", reflect.TypeOf(core.InternetGateway{})),
 	newTarget("core", "NatGateway", reflect.TypeOf(core.NatGateway{})),
 	newTarget("core", "NetworkSecurityGroup", reflect.TypeOf(core.NetworkSecurityGroup{})),

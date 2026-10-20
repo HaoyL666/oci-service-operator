@@ -71,6 +71,29 @@ spec:
                       description: ClusterPlacementGroupCapabilitiesItem defines nested
                         fields for ClusterPlacementGroup.Capabilities.Item.
                       properties:
+                        additionalDetails:
+                          description: ClusterPlacementGroupCapabilitiesItemAdditionalDetails
+                            defines nested fields for ClusterPlacementGroup.Capabilities.Item.AdditionalDetails.
+                          properties:
+                            count:
+                              description: The number of instances or size of the
+                                resource.
+                              type: integer
+                            jsonData:
+                              type: string
+                            memoryInGBs:
+                              description: The amount of memory (in GBs) needed in
+                                the instance.
+                              type: number
+                            nvmes:
+                              description: The number of NVMe drives to use for storage.
+                              type: integer
+                            ocpus:
+                              description: The number of OCPUs needed in the instance.
+                              type: number
+                            serviceType:
+                              type: string
+                          type: object
                         name:
                           description: The type of resource.
                           type: string
@@ -154,6 +177,29 @@ spec:
                       description: ClusterPlacementGroupCapabilitiesItem defines nested
                         fields for ClusterPlacementGroup.Capabilities.Item.
                       properties:
+                        additionalDetails:
+                          description: ClusterPlacementGroupCapabilitiesItemAdditionalDetails
+                            defines nested fields for ClusterPlacementGroup.Capabilities.Item.AdditionalDetails.
+                          properties:
+                            count:
+                              description: The number of instances or size of the
+                                resource.
+                              type: integer
+                            jsonData:
+                              type: string
+                            memoryInGBs:
+                              description: The amount of memory (in GBs) needed in
+                                the instance.
+                              type: number
+                            nvmes:
+                              description: The number of NVMe drives to use for storage.
+                              type: integer
+                            ocpus:
+                              description: The number of OCPUs needed in the instance.
+                              type: number
+                            serviceType:
+                              type: string
+                          type: object
                         name:
                           description: The type of resource.
                           type: string

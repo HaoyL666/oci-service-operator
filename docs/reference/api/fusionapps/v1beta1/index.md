@@ -41,6 +41,7 @@ FusionEnvironmentSpec defines the desired state of FusionEnvironment.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`additionalEgressRules`](#kind-fusionenvironment-spec-additionalegressrules) | Additional egress rules that should be applied to the environment. Some standard ports are open for general use; see Securing Network Access to a Fusion Applications Environment (https://docs.oracle.com/iaas/Content/fusion-applications/plan-environment.htm#internet-cache). If access to a non-standard port is required, however, they can be listed here. | `list[object]` | No | - | - |
 | `additionalLanguagePacks` | Language packs. | `list[string]` | No | - | - |
 | `compartmentId` | The unique identifier (OCID) of the compartment where the Fusion Environment is located. | `string` | Yes | - | - |
 | [`createFusionEnvironmentAdminUserDetails`](#kind-fusionenvironment-spec-createfusionenvironmentadminuserdetails) | FusionEnvironmentCreateFusionEnvironmentAdminUserDetails defines nested fields for FusionEnvironment.CreateFusionEnvironmentAdminUserDetails. | `object` | Yes | - | - |
@@ -49,11 +50,25 @@ FusionEnvironmentSpec defines the desired state of FusionEnvironment.
 | `dnsPrefix` | DNS prefix. | `string` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `fusionEnvironmentFamilyId` | The unique identifier (OCID) of the Fusion Environment Family that the Fusion Environment belongs to. | `string` | Yes | - | - |
-| `fusionEnvironmentType` | The type of environment. Valid values are Production, Test, or Development. | `string` | Yes | - | - |
-| `isIPv6DualStackEnabled` | Enable IPv4/IPv6 dual stack support for the environment. Setting to true will assign an IPv6 address to the environment in addition to an IPv4 address. Default value will be false if not set | `boolean` | No | - | - |
+| `fusionEnvironmentType` | The type of environment. Valid values are Production, Test, Development, or Demo. | `string` | Yes | - | - |
+| `isIPv6DualStackEnabled` | Enable IPv4/IPv6 dual stack support for the environment (where available). Setting to true will assign an IPv6 address to the environment in addition to an IPv4 address. The default value is false. | `boolean` | No | - | - |
 | `kmsKeyId` | byok kms keyId | `string` | No | - | - |
 | [`maintenancePolicy`](#kind-fusionenvironment-spec-maintenancepolicy) | FusionEnvironmentMaintenancePolicy defines nested fields for FusionEnvironment.MaintenancePolicy. | `object` | No | - | - |
 | [`rules`](#kind-fusionenvironment-spec-rules) | Rules. | `list[object]` | No | - | - |
+
+<a id="kind-fusionenvironment-spec-additionalegressrules"></a>
+#### Spec.additionalEgressRules[]
+
+[Back to FusionEnvironment spec](#kind-fusionenvironment-spec)
+
+FusionEnvironmentAdditionalEgressRule defines nested fields for FusionEnvironment.AdditionalEgressRule.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `description` | Rule description. | `string` | Yes | - | - |
+| `destinationCidr` | Specifies the destination CIDR block the port should be opened for. Must be IPv4 only, and cannot be part of any private range from RFC 1918 (https://datatracker.ietf.org/doc/html/rfc1918). | `string` | Yes | - | - |
+| `maxDestinationPort` | The maximum port number, which must not be less than the minimum port number. To specify a single port number, set both the min and max to the same value. | `integer` | Yes | - | - |
+| `minDestinationPort` | The minimum port number, which must not be greater than the maximum port number. | `integer` | Yes | - | - |
 
 <a id="kind-fusionenvironment-spec-createfusionenvironmentadminuserdetails"></a>
 #### Spec.createFusionEnvironmentAdminUserDetails
@@ -115,6 +130,7 @@ FusionEnvironmentStatus defines the observed state of FusionEnvironment.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`additionalEgressRules`](#kind-fusionenvironment-status-additionalegressrules) | Additional egress rules that should be applied to the environment. Some standard ports are open for general use; see [Securing Network Access to a Fusion Applications Environment][iaas/Content/fusion-applications/plan-environment.htm#internet-cache]. If access to a non-standard port is required, however, they can be listed here. | `list[object]` | No | - | - |
 | `additionalLanguagePacks` | Language packs | `list[string]` | No | - | - |
 | `appliedPatchBundles` | Patch bundle names | `list[string]` | No | - | - |
 | `compartmentId` | Compartment Identifier | `string` | No | - | - |
@@ -129,7 +145,7 @@ FusionEnvironmentStatus defines the observed state of FusionEnvironment.
 | `id` | Unique identifier that is immutable on creation | `string` | No | - | - |
 | `idcsDomainUrl` | The IDCS Domain URL | `string` | No | - | - |
 | `isBreakGlassEnabled` | If it's true, then the Break Glass feature is enabled | `boolean` | No | - | - |
-| `isIPv6DualStackEnabled` | Enable IPv4/IPv6 dual stack support for the environment. Setting to true will assign an IPv6 address to the environment in addition to an IPv4 address. | `boolean` | No | - | - |
+| `isIPv6DualStackEnabled` | Enable IPv4/IPv6 dual stack support for the environment (where available). Setting to true will assign an IPv6 address to the environment in addition to an IPv4 address. | `boolean` | No | - | - |
 | `isSuspended` | Environment suspended status | `boolean` | No | - | - |
 | `kmsKeyId` | BYOK key id | `string` | No | - | - |
 | `kmsKeyInfo` | BYOK key info Unknown nested fields are preserved. | `object (preserves unknown fields)` | No | - | - |
@@ -147,6 +163,20 @@ FusionEnvironmentStatus defines the observed state of FusionEnvironment.
 | `timeUpcomingMaintenance` | The next maintenance for this environment | `string` | No | - | - |
 | `timeUpdated` | The time the FusionEnvironment was updated. An RFC3339 formatted datetime string | `string` | No | - | - |
 | `version` | Version of Fusion Apps used by this environment | `string` | No | - | - |
+
+<a id="kind-fusionenvironment-status-additionalegressrules"></a>
+#### Status.additionalEgressRules[]
+
+[Back to FusionEnvironment status](#kind-fusionenvironment-status)
+
+FusionEnvironmentAdditionalEgressRule defines nested fields for FusionEnvironment.AdditionalEgressRule.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `description` | Rule description. | `string` | Yes | - | - |
+| `destinationCidr` | Specifies the destination CIDR block the port should be opened for. Must be IPv4 only, and cannot be part of any private range from RFC 1918 (https://datatracker.ietf.org/doc/html/rfc1918). | `string` | Yes | - | - |
+| `maxDestinationPort` | The maximum port number, which must not be less than the minimum port number. To specify a single port number, set both the min and max to the same value. | `integer` | Yes | - | - |
+| `minDestinationPort` | The minimum port number, which must not be greater than the maximum port number. | `integer` | Yes | - | - |
 
 <a id="kind-fusionenvironment-status-environmentrole"></a>
 #### Status.environmentRole

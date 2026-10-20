@@ -55,6 +55,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `name` | The user-friendly display name. This must be unique within the enclosing resource, and it's changeable. Avoid entering confidential information. | `string` | No |
 | `query` | The search query that is saved. | `string` | No |
 | [`status`](../../reference/api/logging/v1beta1/index.md#kind-logsavedsearch-status-status) | - | `object` | Yes |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No |
 | `timeCreated` | Time the resource was created. | `string` | No |
 | `timeLastModified` | Time the resource was last modified. | `string` | No |
 

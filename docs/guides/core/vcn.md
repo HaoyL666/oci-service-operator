@@ -71,6 +71,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `lifecycleState` | The VCN's current state. | `string` | No |
 | `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. Example: `{"Oracle-DataSecurity-ZPR": {"MaxEgressCount": {"value":"42","mode":"audit"}}}` | `map[string, map[string, string]]` | No |
 | [`status`](../../reference/api/core/v1beta1/index.md#kind-vcn-status-status) | - | `object` | Yes |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No |
 | `timeCreated` | The date and time the VCN was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No |
 | `vcnDomainName` | The VCN's domain name, which consists of the VCN's DNS label, and the `oraclevcn.com` domain. For more information, see DNS in Your Virtual Cloud Network (https://docs.oracle.com/iaas/Content/Network/Concepts/dns.htm). Example: `vcn1.oraclevcn.com` | `string` | No |
 

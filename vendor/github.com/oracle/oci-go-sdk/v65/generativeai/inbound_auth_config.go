@@ -18,13 +18,11 @@ import (
 	"strings"
 )
 
-// InboundAuthConfig The client-side inbound authentication configuration for the Hosted Application.
-// Defines the network access rules.
+// InboundAuthConfig The inbound authentication configuration for the Hosted Application.
 // When unspecified, the service applies the default inbound authentication configuration type.
 type InboundAuthConfig struct {
 
-	// Inbound authentication configuration type of network access
-	// (IDCS_AUTH_CONFIG).
+	// The inbound authentication configuration type for the Hosted Application.
 	InboundAuthConfigType InboundAuthConfigInboundAuthConfigTypeEnum `mandatory:"true" json:"inboundAuthConfigType"`
 
 	IdcsConfig *IdcsAuthConfig `mandatory:"false" json:"idcsConfig"`
@@ -54,15 +52,18 @@ type InboundAuthConfigInboundAuthConfigTypeEnum string
 
 // Set of constants representing the allowable values for InboundAuthConfigInboundAuthConfigTypeEnum
 const (
-	InboundAuthConfigInboundAuthConfigTypeIdcsAuthConfig InboundAuthConfigInboundAuthConfigTypeEnum = "IDCS_AUTH_CONFIG"
+	InboundAuthConfigInboundAuthConfigTypeAuthConfig        InboundAuthConfigInboundAuthConfigTypeEnum = "IDCS_AUTH_CONFIG"
+	InboundAuthConfigInboundAuthConfigTypeSessionAuthConfig InboundAuthConfigInboundAuthConfigTypeEnum = "IDCS_SESSION_AUTH_CONFIG"
 )
 
 var mappingInboundAuthConfigInboundAuthConfigTypeEnum = map[string]InboundAuthConfigInboundAuthConfigTypeEnum{
-	"IDCS_AUTH_CONFIG": InboundAuthConfigInboundAuthConfigTypeIdcsAuthConfig,
+	"IDCS_AUTH_CONFIG":         InboundAuthConfigInboundAuthConfigTypeAuthConfig,
+	"IDCS_SESSION_AUTH_CONFIG": InboundAuthConfigInboundAuthConfigTypeSessionAuthConfig,
 }
 
 var mappingInboundAuthConfigInboundAuthConfigTypeEnumLowerCase = map[string]InboundAuthConfigInboundAuthConfigTypeEnum{
-	"idcs_auth_config": InboundAuthConfigInboundAuthConfigTypeIdcsAuthConfig,
+	"idcs_auth_config":         InboundAuthConfigInboundAuthConfigTypeAuthConfig,
+	"idcs_session_auth_config": InboundAuthConfigInboundAuthConfigTypeSessionAuthConfig,
 }
 
 // GetInboundAuthConfigInboundAuthConfigTypeEnumValues Enumerates the set of values for InboundAuthConfigInboundAuthConfigTypeEnum
@@ -78,6 +79,7 @@ func GetInboundAuthConfigInboundAuthConfigTypeEnumValues() []InboundAuthConfigIn
 func GetInboundAuthConfigInboundAuthConfigTypeEnumStringValues() []string {
 	return []string{
 		"IDCS_AUTH_CONFIG",
+		"IDCS_SESSION_AUTH_CONFIG",
 	}
 }
 

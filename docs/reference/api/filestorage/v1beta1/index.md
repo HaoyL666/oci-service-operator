@@ -249,6 +249,7 @@ FileSystemStatus defines the observed state of FileSystem.
 | `cloneAttachStatus` | Specifies whether the file system is attached to its parent file system. | `string` | No | - | - |
 | `cloneCount` | Specifies the total number of children of a file system. | `integer` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the file system. | `string` | No | - | - |
+| `compartmentQuotaEnforcementState` | Displays the compartment-level quota enforcement state affecting this file system. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `displayName` | A user-friendly name. It does not have to be unique, and it is changeable. Avoid entering confidential information. Example: `My file system` | `string` | No | - | - |
 | `filesystemSnapshotPolicyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the associated file system snapshot policy, which controls the frequency of snapshot creation and retention period of the taken snapshots. | `string` | No | - | - |
@@ -408,12 +409,26 @@ FilesystemSnapshotPolicySchedule defines nested fields for FilesystemSnapshotPol
 | `dayOfMonth` | The day of the month to create a scheduled snapshot. If the day does not exist for the month, snapshot creation will be skipped. Used for MONTHLY and YEARLY snapshot schedules. If not set, the system chooses a value at creation time. | `integer` | No | - | - |
 | `dayOfWeek` | The day of the week to create a scheduled snapshot. Used for WEEKLY snapshot schedules. If not set, the system chooses a value at creation time. | `string` | No | - | - |
 | `hourOfDay` | The hour of the day to create a DAILY, WEEKLY, MONTHLY, or YEARLY snapshot. If not set, the system chooses a value at creation time. | `integer` | No | - | - |
+| [`lockDurationDetails`](#kind-filesystemsnapshotpolicy-spec-schedules-lockdurationdetails) | FilesystemSnapshotPolicyScheduleLockDurationDetails defines nested fields for FilesystemSnapshotPolicy.Schedule.LockDurationDetails. | `object` | No | - | - |
 | `month` | The month to create a scheduled snapshot. Used only for YEARLY snapshot schedules. If not set, the system chooses a value at creation time. | `string` | No | - | - |
 | `period` | The frequency of scheduled snapshots. | `string` | Yes | - | - |
 | `retentionDurationInSeconds` | The number of seconds to retain snapshots created with this schedule. Snapshot expiration time will not be set if this value is empty. | `integer (int64)` | No | - | - |
 | `schedulePrefix` | A name prefix to be applied to snapshots created by this schedule. Example: `compliance1` | `string` | No | - | - |
 | `timeScheduleStart` | The starting point used to begin the scheduling of the snapshots based upon recurrence string in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. If no `timeScheduleStart` is provided, the value will be set to the time when the schedule was created. | `string` | No | - | - |
 | `timeZone` | Time zone used for scheduling the snapshot. | `string` | Yes | - | - |
+
+<a id="kind-filesystemsnapshotpolicy-spec-schedules-lockdurationdetails"></a>
+##### Spec.schedules[].lockDurationDetails
+
+[Back to FilesystemSnapshotPolicy spec](#kind-filesystemsnapshotpolicy-spec)
+
+FilesystemSnapshotPolicyScheduleLockDurationDetails defines nested fields for FilesystemSnapshotPolicy.Schedule.LockDurationDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `coolOffDuration` | For snapshots in compliance mode, a cooling-off period (measured in days) begins. During this time, you can still edit or remove the lock. Once this period ends, the snapshot becomes immutable until the specified retention date expires, permanently preventing any deletion or modification. The cool off duration can be set for a minimum of 0 days and a maximum of 365. It defaults to 14 days if not set. | `integer` | No | - | - |
+| `lockDuration` | The retention period (measured in days) defines how long a snapshot remains locked, preventing user modifications or deletions. In governance mode this period can be adjusted, but in compliance mode it becomes permanent after a cool-off period. Snapshots can be locked for a minimum of 0 days and a maximum of 36,500 days. A value of 0 days stands for an indefinite retention period and it is used for a legal hold. | `integer` | Yes | - | - |
+| `lockMode` | Can be GOVERNANCE or COMPLIANCE. GOVERNANCE MODE: locks snapshots based on either a retention period or a legal hold. COMPLIANCE MODE: the customer can only remove the snapshot during its cooling-off period. Once that time ends, the snapshot becomes immutable; customers cannot delete or modify it until its set retention date passes. After the snapshot is locked, customers can only increase its retention period. | `string` | Yes | - | - |
 
 <a id="kind-filesystemsnapshotpolicy-status"></a>
 ### Status
@@ -462,12 +477,26 @@ FilesystemSnapshotPolicySchedule defines nested fields for FilesystemSnapshotPol
 | `dayOfMonth` | The day of the month to create a scheduled snapshot. If the day does not exist for the month, snapshot creation will be skipped. Used for MONTHLY and YEARLY snapshot schedules. If not set, the system chooses a value at creation time. | `integer` | No | - | - |
 | `dayOfWeek` | The day of the week to create a scheduled snapshot. Used for WEEKLY snapshot schedules. If not set, the system chooses a value at creation time. | `string` | No | - | - |
 | `hourOfDay` | The hour of the day to create a DAILY, WEEKLY, MONTHLY, or YEARLY snapshot. If not set, the system chooses a value at creation time. | `integer` | No | - | - |
+| [`lockDurationDetails`](#kind-filesystemsnapshotpolicy-status-schedules-lockdurationdetails) | FilesystemSnapshotPolicyScheduleLockDurationDetails defines nested fields for FilesystemSnapshotPolicy.Schedule.LockDurationDetails. | `object` | No | - | - |
 | `month` | The month to create a scheduled snapshot. Used only for YEARLY snapshot schedules. If not set, the system chooses a value at creation time. | `string` | No | - | - |
 | `period` | The frequency of scheduled snapshots. | `string` | Yes | - | - |
 | `retentionDurationInSeconds` | The number of seconds to retain snapshots created with this schedule. Snapshot expiration time will not be set if this value is empty. | `integer (int64)` | No | - | - |
 | `schedulePrefix` | A name prefix to be applied to snapshots created by this schedule. Example: `compliance1` | `string` | No | - | - |
 | `timeScheduleStart` | The starting point used to begin the scheduling of the snapshots based upon recurrence string in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. If no `timeScheduleStart` is provided, the value will be set to the time when the schedule was created. | `string` | No | - | - |
 | `timeZone` | Time zone used for scheduling the snapshot. | `string` | Yes | - | - |
+
+<a id="kind-filesystemsnapshotpolicy-status-schedules-lockdurationdetails"></a>
+##### Status.schedules[].lockDurationDetails
+
+[Back to FilesystemSnapshotPolicy status](#kind-filesystemsnapshotpolicy-status)
+
+FilesystemSnapshotPolicyScheduleLockDurationDetails defines nested fields for FilesystemSnapshotPolicy.Schedule.LockDurationDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `coolOffDuration` | For snapshots in compliance mode, a cooling-off period (measured in days) begins. During this time, you can still edit or remove the lock. Once this period ends, the snapshot becomes immutable until the specified retention date expires, permanently preventing any deletion or modification. The cool off duration can be set for a minimum of 0 days and a maximum of 365. It defaults to 14 days if not set. | `integer` | No | - | - |
+| `lockDuration` | The retention period (measured in days) defines how long a snapshot remains locked, preventing user modifications or deletions. In governance mode this period can be adjusted, but in compliance mode it becomes permanent after a cool-off period. Snapshots can be locked for a minimum of 0 days and a maximum of 36,500 days. A value of 0 days stands for an indefinite retention period and it is used for a legal hold. | `integer` | Yes | - | - |
+| `lockMode` | Can be GOVERNANCE or COMPLIANCE. GOVERNANCE MODE: locks snapshots based on either a retention period or a legal hold. COMPLIANCE MODE: the customer can only remove the snapshot during its cooling-off period. Once that time ends, the snapshot becomes immutable; customers cannot delete or modify it until its set retention date passes. After the snapshot is locked, customers can only increase its retention period. | `string` | Yes | - | - |
 
 <a id="kind-filesystemsnapshotpolicy-status-status"></a>
 #### Status.status
@@ -1187,8 +1216,22 @@ SnapshotSpec defines the desired state of Snapshot.
 | `expirationTime` | The time when this snapshot will be deleted. | `string` | No | - | - |
 | `fileSystemId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the file system to take a snapshot of. | `string` | Yes | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| [`lockDurationDetails`](#kind-snapshot-spec-lockdurationdetails) | SnapshotLockDurationDetails defines nested fields for Snapshot.LockDurationDetails. | `object` | No | - | - |
 | [`locks`](#kind-snapshot-spec-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
 | `name` | Name of the snapshot. This value is immutable. It must also be unique with respect to all other non-DELETED snapshots on the associated file system. Avoid entering confidential information. Example: `Sunday` | `string` | Yes | - | - |
+
+<a id="kind-snapshot-spec-lockdurationdetails"></a>
+#### Spec.lockDurationDetails
+
+[Back to Snapshot spec](#kind-snapshot-spec)
+
+SnapshotLockDurationDetails defines nested fields for Snapshot.LockDurationDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `coolOffDuration` | For snapshots in compliance mode, a cooling-off period (measured in days) begins. During this time, you can still edit or remove the lock. Once this period ends, the snapshot becomes immutable until the specified retention date expires, permanently preventing any deletion or modification. The cool off duration can be set for a minimum of 0 days and a maximum of 365. It defaults to 14 days if not set. | `integer` | No | - | - |
+| `lockDuration` | The retention period (measured in days) defines how long a snapshot remains locked, preventing user modifications or deletions. In governance mode this period can be adjusted, but in compliance mode it becomes permanent after a cool-off period. Snapshots can be locked for a minimum of 0 days and a maximum of 36,500 days. A value of 0 days stands for an indefinite retention period and it is used for a legal hold. | `integer` | Yes | - | - |
+| `lockMode` | Can be GOVERNANCE or COMPLIANCE. GOVERNANCE MODE: locks snapshots based on either a retention period or a legal hold. COMPLIANCE MODE: the customer can only remove the snapshot during its cooling-off period. Once that time ends, the snapshot becomes immutable; customers cannot delete or modify it until its set retention date passes. After the snapshot is locked, customers can only increase its retention period. | `string` | Yes | - | - |
 
 <a id="kind-snapshot-spec-locks"></a>
 #### Spec.locks[]
@@ -1212,6 +1255,7 @@ SnapshotStatus defines the observed state of Snapshot.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `exclusiveBytes` | Bytes referenced only by this snapshot; deducted from compartment usage immediately upon deletion. | `integer (int64)` | No | - | - |
 | `expirationTime` | The time when this snapshot will be deleted. | `string` | No | - | - |
 | `fileSystemId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the file system from which the snapshot was created. | `string` | No | - | - |
 | `filesystemSnapshotPolicyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the file system snapshot policy that created this snapshot. | `string` | No | - | - |
@@ -1220,6 +1264,7 @@ SnapshotStatus defines the observed state of Snapshot.
 | `isCloneSource` | Specifies whether the snapshot has been cloned. See Cloning a File System (https://docs.oracle.com/iaas/Content/File/Tasks/cloningFS.htm). | `boolean` | No | - | - |
 | `lifecycleDetails` | Additional information about the current `lifecycleState`. | `string` | No | - | - |
 | `lifecycleState` | The current state of the snapshot. | `string` | No | - | - |
+| [`lockDurationDetails`](#kind-snapshot-status-lockdurationdetails) | SnapshotLockDurationDetails defines nested fields for Snapshot.LockDurationDetails. | `object` | No | - | - |
 | [`locks`](#kind-snapshot-status-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
 | `name` | Name of the snapshot. This value is immutable. Avoid entering confidential information. Example: `Sunday` | `string` | No | - | - |
 | `provenanceId` | An OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) identifying the parent from which this snapshot was cloned. If this snapshot was not cloned, then the `provenanceId` is the same as the snapshot `id` value. If this snapshot was cloned, then the `provenanceId` value is the parent's `provenanceId`. See Cloning a File System (https://docs.oracle.com/iaas/Content/File/Tasks/cloningFS.htm). | `string` | No | - | - |
@@ -1228,6 +1273,20 @@ SnapshotStatus defines the observed state of Snapshot.
 | [`status`](#kind-snapshot-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. System tags are applied to resources by internal OCI services. | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the snapshot was created, expressed in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeLocked` | The date and time as per RFC 3339 (https://tools.ietf.org/html/rfc3339) when this snapshot was locked. It is a read-only property because the user should not be able to set it, it is set by our service. | `string` | No | - | - |
+
+<a id="kind-snapshot-status-lockdurationdetails"></a>
+#### Status.lockDurationDetails
+
+[Back to Snapshot status](#kind-snapshot-status)
+
+SnapshotLockDurationDetails defines nested fields for Snapshot.LockDurationDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `coolOffDuration` | For snapshots in compliance mode, a cooling-off period (measured in days) begins. During this time, you can still edit or remove the lock. Once this period ends, the snapshot becomes immutable until the specified retention date expires, permanently preventing any deletion or modification. The cool off duration can be set for a minimum of 0 days and a maximum of 365. It defaults to 14 days if not set. | `integer` | No | - | - |
+| `lockDuration` | The retention period (measured in days) defines how long a snapshot remains locked, preventing user modifications or deletions. In governance mode this period can be adjusted, but in compliance mode it becomes permanent after a cool-off period. Snapshots can be locked for a minimum of 0 days and a maximum of 36,500 days. A value of 0 days stands for an indefinite retention period and it is used for a legal hold. | `integer` | Yes | - | - |
+| `lockMode` | Can be GOVERNANCE or COMPLIANCE. GOVERNANCE MODE: locks snapshots based on either a retention period or a legal hold. COMPLIANCE MODE: the customer can only remove the snapshot during its cooling-off period. Once that time ends, the snapshot becomes immutable; customers cannot delete or modify it until its set retention date passes. After the snapshot is locked, customers can only increase its retention period. | `string` | Yes | - | - |
 
 <a id="kind-snapshot-status-locks"></a>
 #### Status.locks[]

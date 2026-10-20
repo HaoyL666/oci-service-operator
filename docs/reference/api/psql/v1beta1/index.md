@@ -44,7 +44,7 @@ DbSystemSpec defines the desired state of DbSystem.
 | [`adminUsername`](#kind-dbsystem-spec-adminusername) | The administrative username sourced from a Kubernetes Secret in the same namespace. The referenced Secret must contain a `username` key. If omitted, `spec.credentials.username` remains available for direct credential input. | `object` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the database system. | `string` | Yes | - | - |
 | `configId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the configuration associated with the database system. | `string` | No | - | - |
-| [`credentials`](#kind-dbsystem-spec-credentials) | DbSystemCredentials defines nested fields for DbSystem.Credentials. | `object` | Yes | - | - |
+| [`credentials`](#kind-dbsystem-spec-credentials) | DbSystemCredentials defines nested fields for DbSystem.Credentials. | `object` | No | - | - |
 | [`dbConfigurationParams`](#kind-dbsystem-spec-dbconfigurationparams) | DbSystemDbConfigurationParams defines nested fields for DbSystem.DbConfigurationParams. | `object` | No | - | - |
 | `dbVersion` | Version of database system software. | `string` | Yes | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
@@ -55,8 +55,11 @@ DbSystemSpec defines the desired state of DbSystem.
 | `instanceMemorySizeInGBs` | The total amount of memory available to each database instance node, in gigabytes. | `integer` | No | - | - |
 | `instanceOcpuCount` | The total number of OCPUs available to each database instance node. | `integer` | No | - | - |
 | [`instancesDetails`](#kind-dbsystem-spec-instancesdetails) | Details of database instances nodes to be created. This parameter is optional. If specified, its size must match `instanceCount`. | `list[object]` | No | - | - |
+| [`kerberosAuthDetails`](#kind-dbsystem-spec-kerberosauthdetails) | DbSystemKerberosAuthDetails defines nested fields for DbSystem.KerberosAuthDetails. | `object` | No | - | - |
 | [`managementPolicy`](#kind-dbsystem-spec-managementpolicy) | DbSystemManagementPolicy defines nested fields for DbSystem.ManagementPolicy. | `object` | No | - | - |
 | [`networkDetails`](#kind-dbsystem-spec-networkdetails) | DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails. | `object` | Yes | - | - |
+| [`odspInsightDetails`](#kind-dbsystem-spec-odspinsightdetails) | DbSystemOdspInsightDetails defines nested fields for DbSystem.OdspInsightDetails. | `object` | No | - | - |
+| [`replicationConfig`](#kind-dbsystem-spec-replicationconfig) | DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig. | `object` | No | - | - |
 | `shape` | The name of the shape for the database instance node. Use the /shapes API for accepted shapes. Example: `VM.Standard.E4.Flex` | `string` | Yes | - | - |
 | [`source`](#kind-dbsystem-spec-source) | DbSystemSource defines nested fields for DbSystem.Source. | `object` | No | - | - |
 | [`storageDetails`](#kind-dbsystem-spec-storagedetails) | DbSystemStorageDetails defines nested fields for DbSystem.StorageDetails. | `object` | Yes | - | - |
@@ -154,6 +157,46 @@ DbSystemInstancesDetail defines nested fields for DbSystem.InstancesDetail.
 | `displayName` | Display name of the database instance node. Avoid entering confidential information. | `string` | No | - | - |
 | `privateIp` | Private IP in customer subnet that will be assigned to the database instance node. This value is optional. If the IP is not provided, the IP will be chosen from the available IP addresses in the specified subnet. | `string` | No | - | - |
 
+<a id="kind-dbsystem-spec-kerberosauthdetails"></a>
+#### Spec.kerberosAuthDetails
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemKerberosAuthDetails defines nested fields for DbSystem.KerberosAuthDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`backupCredentials`](#kind-dbsystem-spec-kerberosauthdetails-backupcredentials) | Optional. List of Kerberos Credentials previously configured for the dbsystem. Currently supports only one entry. | `list[object]` | No | - | - |
+| [`credentials`](#kind-dbsystem-spec-kerberosauthdetails-credentials) | List of Kerberos Credentials to be configured for the dbsystem. Currently supports only one entry. | `list[object]` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+
+<a id="kind-dbsystem-spec-kerberosauthdetails-backupcredentials"></a>
+##### Spec.kerberosAuthDetails.backupCredentials[]
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemKerberosAuthDetailsBackupCredential defines nested fields for DbSystem.KerberosAuthDetails.BackupCredential.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `keytabSecretId` | The OCID of the secret where the Kerberos keytab file is stored as base64 text. | `string` | Yes | - | - |
+| `keytabSecretVersion` | The secret version of the stored Kerberos keytab file. | `integer (int64)` | Yes | - | - |
+| `realmName` | Kerberos realm name. https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string, but configuration and maintenance might then require more work. Use realm names that follow the standard Internet naming structure. | `string` | Yes | - | - |
+
+<a id="kind-dbsystem-spec-kerberosauthdetails-credentials"></a>
+##### Spec.kerberosAuthDetails.credentials[]
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemKerberosAuthDetailsCredential defines nested fields for DbSystem.KerberosAuthDetails.Credential.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `keytabSecretId` | The OCID of the secret where the Kerberos keytab file is stored as base64 text. | `string` | Yes | - | - |
+| `keytabSecretVersion` | The secret version of the stored Kerberos keytab file. | `integer (int64)` | Yes | - | - |
+| `realmName` | Kerberos realm name. https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string, but configuration and maintenance might then require more work. Use realm names that follow the standard Internet naming structure. | `string` | Yes | - | - |
+
 <a id="kind-dbsystem-spec-managementpolicy"></a>
 #### Spec.managementPolicy
 
@@ -165,6 +208,7 @@ DbSystemManagementPolicy defines nested fields for DbSystem.ManagementPolicy.
 | --- | --- | --- | --- | --- | --- |
 | [`backupPolicy`](#kind-dbsystem-spec-managementpolicy-backuppolicy) | DbSystemManagementPolicyBackupPolicy defines nested fields for DbSystem.ManagementPolicy.BackupPolicy. | `object` | No | - | - |
 | `maintenanceWindowStart` | The start of the maintenance window in UTC. This string is of the format: "{day-of-week} {time-of-day}". "{day-of-week}" is a case-insensitive string like "mon", "tue", &c. "{time-of-day}" is the "Time" portion of an RFC3339-formatted timestamp. Any second or sub-second time data will be truncated to zero. | `string` | No | - | - |
+| [`pitrPolicy`](#kind-dbsystem-spec-managementpolicy-pitrpolicy) | DbSystemManagementPolicyPitrPolicy defines nested fields for DbSystem.ManagementPolicy.PitrPolicy. | `object` | No | - | - |
 
 <a id="kind-dbsystem-spec-managementpolicy-backuppolicy"></a>
 ##### Spec.managementPolicy.backupPolicy
@@ -193,8 +237,22 @@ DbSystemManagementPolicyBackupPolicyCopyPolicy defines nested fields for DbSyste
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `compartmentId` | target compartment to place a new backup | `string` | Yes | - | - |
+| `kmsKeyIds` | List of key ids of the remote regions | `list[string]` | No | - | - |
 | `regions` | List of region names of the remote region | `list[string]` | No | - | - |
 | `retentionPeriod` | Retention period in days of the backup copy. | `integer` | No | - | - |
+
+<a id="kind-dbsystem-spec-managementpolicy-pitrpolicy"></a>
+##### Spec.managementPolicy.pitrPolicy
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemManagementPolicyPitrPolicy defines nested fields for DbSystem.ManagementPolicy.PitrPolicy.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+| `restoreDays` | The number of days the database system retains backups required for point-in-time recovery. | `integer` | No | - | - |
 
 <a id="kind-dbsystem-spec-networkdetails"></a>
 #### Spec.networkDetails
@@ -210,6 +268,43 @@ DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails.
 | `primaryDbEndpointPrivateIp` | Private IP in customer subnet. The value is optional. If the IP is not provided, the IP will be chosen from the available IP addresses from the specified subnet. | `string` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the customer subnet associated with the database system. | `string` | Yes | - | - |
 
+<a id="kind-dbsystem-spec-odspinsightdetails"></a>
+#### Spec.odspInsightDetails
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemOdspInsightDetails defines nested fields for DbSystem.OdspInsightDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+| [`odspInsightList`](#kind-dbsystem-spec-odspinsightdetails-odspinsightlist) | List of ODSP Insight and their configurations. | `list[object]` | No | - | - |
+
+<a id="kind-dbsystem-spec-odspinsightdetails-odspinsightlist"></a>
+##### Spec.odspInsightDetails.odspInsightList[]
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemOdspInsightDetailsOdspInsightList defines nested fields for DbSystem.OdspInsightDetails.OdspInsightList.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `insightType` | Type of Insight collected for the database system. | `string` | Yes | - | - |
+| `retentionPeriodInDays` | Retention period for Insight data, in days. Current supported value is 7 days. the system default is 7 days. | `integer` | No | - | - |
+
+<a id="kind-dbsystem-spec-replicationconfig"></a>
+#### Spec.replicationConfig
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `isRpoEnforced` | Specify if Recovery point objective (RPO) enforcement needs to be enabled on the database system. | `boolean` | No | - | - |
+| `rpoInSeconds` | Specifies the Recovery point objective (RPO) in seconds that will be enforced, if the `isRpoEnforced` flag is true. | `integer (int64)` | No | - | - |
+
 <a id="kind-dbsystem-spec-source"></a>
 #### Spec.source
 
@@ -220,9 +315,12 @@ DbSystemSource defines nested fields for DbSystem.Source.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `backupId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the database system backup. | `string` | No | - | - |
+| `dbSystemId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the source database system which will be used to perform point-in-time recovery. | `string` | No | - | - |
 | `isHavingRestoreConfigOverrides` | Deprecated. Don't use. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `primaryDbSystemId` | The [OCID] of the primary database system. | `string` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
+| `timeToRestore` | The target point-in-time of the source database system that will be restored, expressed in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. Point-in-time recovery can only performed in granularity of seconds. Example: `2016-08-25T21:10:29Z` | `string` | No | - | - |
 
 <a id="kind-dbsystem-spec-storagedetails"></a>
 #### Spec.storageDetails
@@ -237,6 +335,7 @@ DbSystemStorageDetails defines nested fields for DbSystem.StorageDetails.
 | `iops` | Guaranteed input/output storage requests per second (IOPS) available to the database system. | `integer (int64)` | No | - | - |
 | `isRegionallyDurable` | Specifies if the block volume used for the database system is regional or AD-local. If not specified, it will be set to false. If `isRegionallyDurable` is set to true, `availabilityDomain` should not be specified. If `isRegionallyDurable` is set to false, `availabilityDomain` must be specified. | `boolean` | Yes | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `kmsKeyId` | The OCID of the Vault service key to assign as the master encryption key for the database system. | `string` | No | - | - |
 | `systemType` | - | `string` | No | - | - |
 
 <a id="kind-dbsystem-status"></a>
@@ -261,14 +360,18 @@ DbSystemStatus defines the observed state of DbSystem.
 | `instanceMemorySizeInGBs` | The total amount of memory available to each database instance node, in gigabytes. | `integer` | No | - | - |
 | `instanceOcpuCount` | The total number of OCPUs available to each database instance node. | `integer` | No | - | - |
 | [`instances`](#kind-dbsystem-status-instances) | The list of instances, or nodes, in the database system. | `list[object]` | No | - | - |
+| [`kerberosAuthDetails`](#kind-dbsystem-status-kerberosauthdetails) | DbSystemKerberosAuthDetails defines nested fields for DbSystem.KerberosAuthDetails. | `object` | No | - | - |
 | `lifecycleDetails` | A message describing the current state in more detail. For example, can be used to provide actionable information for a resource in Failed state. | `string` | No | - | - |
 | `lifecycleState` | The current state of the database system. | `string` | No | - | - |
 | [`managementPolicy`](#kind-dbsystem-status-managementpolicy) | DbSystemManagementPolicy defines nested fields for DbSystem.ManagementPolicy. | `object` | No | - | - |
 | [`networkDetails`](#kind-dbsystem-status-networkdetails) | DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails. | `object` | No | - | - |
+| [`odspInsightDetails`](#kind-dbsystem-status-odspinsightdetails) | DbSystemOdspInsightDetails defines nested fields for DbSystem.OdspInsightDetails. | `object` | No | - | - |
+| [`replicationConfig`](#kind-dbsystem-status-replicationconfig) | DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig. | `object` | No | - | - |
 | `shape` | The name of the shape for the database instance. Example: `VM.Standard.E4.Flex` | `string` | No | - | - |
 | [`source`](#kind-dbsystem-status-source) | DbSystemSource defines nested fields for DbSystem.Source. | `object` | No | - | - |
 | [`status`](#kind-dbsystem-status-status) | - | `object` | Yes | - | - |
 | [`storageDetails`](#kind-dbsystem-status-storagedetails) | DbSystemStorageDetailsObservedState defines nested fields for DbSystem.StorageDetails. | `object` | No | - | - |
+| `systemRole` | Type of the database system. | `string` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `systemType` | Type of the database system. | `string` | No | - | - |
 | `timeCreated` | The date and time that the database system was created, expressed in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
@@ -332,6 +435,46 @@ DbSystemInstance defines nested fields for DbSystem.Instance.
 | `timeCreated` | The date and time that the database instance node was created, expressed in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `timeUpdated` | The date and time that the database instance node was updated, expressed in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 
+<a id="kind-dbsystem-status-kerberosauthdetails"></a>
+#### Status.kerberosAuthDetails
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemKerberosAuthDetails defines nested fields for DbSystem.KerberosAuthDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`backupCredentials`](#kind-dbsystem-status-kerberosauthdetails-backupcredentials) | Optional. List of Kerberos Credentials previously configured for the dbsystem. Currently supports only one entry. | `list[object]` | No | - | - |
+| [`credentials`](#kind-dbsystem-status-kerberosauthdetails-credentials) | List of Kerberos Credentials to be configured for the dbsystem. Currently supports only one entry. | `list[object]` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+
+<a id="kind-dbsystem-status-kerberosauthdetails-backupcredentials"></a>
+##### Status.kerberosAuthDetails.backupCredentials[]
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemKerberosAuthDetailsBackupCredential defines nested fields for DbSystem.KerberosAuthDetails.BackupCredential.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `keytabSecretId` | The OCID of the secret where the Kerberos keytab file is stored as base64 text. | `string` | Yes | - | - |
+| `keytabSecretVersion` | The secret version of the stored Kerberos keytab file. | `integer (int64)` | Yes | - | - |
+| `realmName` | Kerberos realm name. https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string, but configuration and maintenance might then require more work. Use realm names that follow the standard Internet naming structure. | `string` | Yes | - | - |
+
+<a id="kind-dbsystem-status-kerberosauthdetails-credentials"></a>
+##### Status.kerberosAuthDetails.credentials[]
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemKerberosAuthDetailsCredential defines nested fields for DbSystem.KerberosAuthDetails.Credential.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `keytabSecretId` | The OCID of the secret where the Kerberos keytab file is stored as base64 text. | `string` | Yes | - | - |
+| `keytabSecretVersion` | The secret version of the stored Kerberos keytab file. | `integer (int64)` | Yes | - | - |
+| `realmName` | Kerberos realm name. https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string, but configuration and maintenance might then require more work. Use realm names that follow the standard Internet naming structure. | `string` | Yes | - | - |
+
 <a id="kind-dbsystem-status-managementpolicy"></a>
 #### Status.managementPolicy
 
@@ -343,6 +486,7 @@ DbSystemManagementPolicy defines nested fields for DbSystem.ManagementPolicy.
 | --- | --- | --- | --- | --- | --- |
 | [`backupPolicy`](#kind-dbsystem-status-managementpolicy-backuppolicy) | DbSystemManagementPolicyBackupPolicy defines nested fields for DbSystem.ManagementPolicy.BackupPolicy. | `object` | No | - | - |
 | `maintenanceWindowStart` | The start of the maintenance window in UTC. This string is of the format: "{day-of-week} {time-of-day}". "{day-of-week}" is a case-insensitive string like "mon", "tue", &c. "{time-of-day}" is the "Time" portion of an RFC3339-formatted timestamp. Any second or sub-second time data will be truncated to zero. | `string` | No | - | - |
+| [`pitrPolicy`](#kind-dbsystem-status-managementpolicy-pitrpolicy) | DbSystemManagementPolicyPitrPolicy defines nested fields for DbSystem.ManagementPolicy.PitrPolicy. | `object` | No | - | - |
 
 <a id="kind-dbsystem-status-managementpolicy-backuppolicy"></a>
 ##### Status.managementPolicy.backupPolicy
@@ -371,8 +515,22 @@ DbSystemManagementPolicyBackupPolicyCopyPolicy defines nested fields for DbSyste
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `compartmentId` | target compartment to place a new backup | `string` | Yes | - | - |
+| `kmsKeyIds` | List of key ids of the remote regions | `list[string]` | No | - | - |
 | `regions` | List of region names of the remote region | `list[string]` | No | - | - |
 | `retentionPeriod` | Retention period in days of the backup copy. | `integer` | No | - | - |
+
+<a id="kind-dbsystem-status-managementpolicy-pitrpolicy"></a>
+##### Status.managementPolicy.pitrPolicy
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemManagementPolicyPitrPolicy defines nested fields for DbSystem.ManagementPolicy.PitrPolicy.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+| `restoreDays` | The number of days the database system retains backups required for point-in-time recovery. | `integer` | No | - | - |
 
 <a id="kind-dbsystem-status-networkdetails"></a>
 #### Status.networkDetails
@@ -388,6 +546,43 @@ DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails.
 | `primaryDbEndpointPrivateIp` | Private IP in customer subnet. The value is optional. If the IP is not provided, the IP will be chosen from the available IP addresses from the specified subnet. | `string` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the customer subnet associated with the database system. | `string` | Yes | - | - |
 
+<a id="kind-dbsystem-status-odspinsightdetails"></a>
+#### Status.odspInsightDetails
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemOdspInsightDetails defines nested fields for DbSystem.OdspInsightDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+| [`odspInsightList`](#kind-dbsystem-status-odspinsightdetails-odspinsightlist) | List of ODSP Insight and their configurations. | `list[object]` | No | - | - |
+
+<a id="kind-dbsystem-status-odspinsightdetails-odspinsightlist"></a>
+##### Status.odspInsightDetails.odspInsightList[]
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemOdspInsightDetailsOdspInsightList defines nested fields for DbSystem.OdspInsightDetails.OdspInsightList.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `insightType` | Type of Insight collected for the database system. | `string` | Yes | - | - |
+| `retentionPeriodInDays` | Retention period for Insight data, in days. Current supported value is 7 days. the system default is 7 days. | `integer` | No | - | - |
+
+<a id="kind-dbsystem-status-replicationconfig"></a>
+#### Status.replicationConfig
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `isRpoEnforced` | Specify if Recovery point objective (RPO) enforcement needs to be enabled on the database system. | `boolean` | No | - | - |
+| `rpoInSeconds` | Specifies the Recovery point objective (RPO) in seconds that will be enforced, if the `isRpoEnforced` flag is true. | `integer (int64)` | No | - | - |
+
 <a id="kind-dbsystem-status-source"></a>
 #### Status.source
 
@@ -398,9 +593,12 @@ DbSystemSource defines nested fields for DbSystem.Source.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `backupId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the database system backup. | `string` | No | - | - |
+| `dbSystemId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the source database system which will be used to perform point-in-time recovery. | `string` | No | - | - |
 | `isHavingRestoreConfigOverrides` | Deprecated. Don't use. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `primaryDbSystemId` | The [OCID] of the primary database system. | `string` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
+| `timeToRestore` | The target point-in-time of the source database system that will be restored, expressed in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. Point-in-time recovery can only performed in granularity of seconds. Example: `2016-08-25T21:10:29Z` | `string` | No | - | - |
 
 <a id="kind-dbsystem-status-status"></a>
 #### Status.status
@@ -474,4 +672,5 @@ DbSystemStorageDetailsObservedState defines nested fields for DbSystem.StorageDe
 | `iops` | Guaranteed input/output storage requests per second (IOPS) available to the database system. | `integer (int64)` | No | - | - |
 | `isRegionallyDurable` | Specifies if the block volume used for the database system is regional or AD-local. If not specified, it will be set to false. If `isRegionallyDurable` is set to true, `availabilityDomain` should not be specified. If `isRegionallyDurable` is set to false, `availabilityDomain` must be specified. | `boolean` | Yes | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `kmsKeyId` | The OCID of the Vault service key to assign as the master encryption key for the database system. | `string` | No | - | - |
 | `systemType` | - | `string` | No | - | - |

@@ -36,7 +36,7 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | [`adminUsername`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-adminusername) | The administrative username sourced from a Kubernetes Secret in the same namespace. The referenced Secret must contain a `username` key. If omitted, `spec.credentials.username` remains available for direct credential input. | `object` | No |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the database system. | `string` | Yes |
 | `configId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the configuration associated with the database system. | `string` | No |
-| [`credentials`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-credentials) | DbSystemCredentials defines nested fields for DbSystem.Credentials. | `object` | Yes |
+| [`credentials`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-credentials) | DbSystemCredentials defines nested fields for DbSystem.Credentials. | `object` | No |
 | [`dbConfigurationParams`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-dbconfigurationparams) | DbSystemDbConfigurationParams defines nested fields for DbSystem.DbConfigurationParams. | `object` | No |
 | `dbVersion` | Version of database system software. | `string` | Yes |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No |
@@ -47,8 +47,11 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | `instanceMemorySizeInGBs` | The total amount of memory available to each database instance node, in gigabytes. | `integer` | No |
 | `instanceOcpuCount` | The total number of OCPUs available to each database instance node. | `integer` | No |
 | [`instancesDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-instancesdetails) | Details of database instances nodes to be created. This parameter is optional. If specified, its size must match `instanceCount`. | `list[object]` | No |
+| [`kerberosAuthDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-kerberosauthdetails) | DbSystemKerberosAuthDetails defines nested fields for DbSystem.KerberosAuthDetails. | `object` | No |
 | [`managementPolicy`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-managementpolicy) | DbSystemManagementPolicy defines nested fields for DbSystem.ManagementPolicy. | `object` | No |
 | [`networkDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-networkdetails) | DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails. | `object` | Yes |
+| [`odspInsightDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-odspinsightdetails) | DbSystemOdspInsightDetails defines nested fields for DbSystem.OdspInsightDetails. | `object` | No |
+| [`replicationConfig`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-replicationconfig) | DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig. | `object` | No |
 | `shape` | The name of the shape for the database instance node. Use the /shapes API for accepted shapes. Example: `VM.Standard.E4.Flex` | `string` | Yes |
 | [`source`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-source) | DbSystemSource defines nested fields for DbSystem.Source. | `object` | No |
 | [`storageDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-spec-storagedetails) | DbSystemStorageDetails defines nested fields for DbSystem.StorageDetails. | `object` | Yes |
@@ -76,14 +79,18 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `instanceMemorySizeInGBs` | The total amount of memory available to each database instance node, in gigabytes. | `integer` | No |
 | `instanceOcpuCount` | The total number of OCPUs available to each database instance node. | `integer` | No |
 | [`instances`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-instances) | The list of instances, or nodes, in the database system. | `list[object]` | No |
+| [`kerberosAuthDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-kerberosauthdetails) | DbSystemKerberosAuthDetails defines nested fields for DbSystem.KerberosAuthDetails. | `object` | No |
 | `lifecycleDetails` | A message describing the current state in more detail. For example, can be used to provide actionable information for a resource in Failed state. | `string` | No |
 | `lifecycleState` | The current state of the database system. | `string` | No |
 | [`managementPolicy`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-managementpolicy) | DbSystemManagementPolicy defines nested fields for DbSystem.ManagementPolicy. | `object` | No |
 | [`networkDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-networkdetails) | DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails. | `object` | No |
+| [`odspInsightDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-odspinsightdetails) | DbSystemOdspInsightDetails defines nested fields for DbSystem.OdspInsightDetails. | `object` | No |
+| [`replicationConfig`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-replicationconfig) | DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig. | `object` | No |
 | `shape` | The name of the shape for the database instance. Example: `VM.Standard.E4.Flex` | `string` | No |
 | [`source`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-source) | DbSystemSource defines nested fields for DbSystem.Source. | `object` | No |
 | [`status`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-status) | - | `object` | Yes |
 | [`storageDetails`](../../reference/api/psql/v1beta1/index.md#kind-dbsystem-status-storagedetails) | DbSystemStorageDetailsObservedState defines nested fields for DbSystem.StorageDetails. | `object` | No |
+| `systemRole` | Type of the database system. | `string` | No |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No |
 | `systemType` | Type of the database system. | `string` | No |
 | `timeCreated` | The date and time that the database system was created, expressed in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format. Example: `2016-08-25T21:10:29.600Z` | `string` | No |

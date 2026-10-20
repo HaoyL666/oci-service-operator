@@ -17,6 +17,9 @@ type DigitalTwinInstanceSpec struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the IoT domain.
 	// +kubebuilder:validation:Required
 	IotDomainId string `json:"iotDomainId"`
+	// Connectivity type of the digital twin instance.
+	// +kubebuilder:validation:Optional
+	ConnectivityType string `json:"connectivityType,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource (like VaultSecret, ClientCertificate etc.,) used to authenticate the digital twin instance.
 	// +kubebuilder:validation:Optional
 	AuthId string `json:"authId,omitempty"`
@@ -40,6 +43,9 @@ type DigitalTwinInstanceSpec struct {
 	// The URI of the digital twin model specification.
 	// +kubebuilder:validation:Optional
 	DigitalTwinModelSpecUri string `json:"digitalTwinModelSpecUri,omitempty"`
+	// An array of unique ids (OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)) of the IoT digital twin instances with connectivityType equals to GATEWAY.
+	// +kubebuilder:validation:Optional
+	Gateways []string `json:"gateways,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -59,6 +65,8 @@ type DigitalTwinInstanceStatus struct {
 	Id string `json:"id,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the IoT domain.
 	IotDomainId string `json:"iotDomainId,omitempty"`
+	// Connectivity type of the digital twin instance.
+	ConnectivityType string `json:"connectivityType,omitempty"`
 	// A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information.
 	DisplayName string `json:"displayName,omitempty"`
 	// The current state of the digital twin instance.
@@ -80,6 +88,8 @@ type DigitalTwinInstanceStatus struct {
 	DigitalTwinModelSpecUri string `json:"digitalTwinModelSpecUri,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the digital twin adapter.
 	DigitalTwinAdapterId string `json:"digitalTwinAdapterId,omitempty"`
+	// An array of unique ids (OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)) of the IoT digital twin instances with connectivityType equals to GATEWAY.
+	Gateways []string `json:"gateways,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`

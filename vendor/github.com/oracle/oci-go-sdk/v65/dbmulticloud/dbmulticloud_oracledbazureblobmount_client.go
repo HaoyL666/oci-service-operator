@@ -26,7 +26,7 @@
 // <br>
 // <b>AWS</b>:<br>
 // <b>Oracle AWS Connector Resource:</b>&nbsp;&nbsp;The Oracle AWS Connector Resource is used to install the AWS Identity Connector on an Exadata VM cluster in Oracle Exadata Database Service on Dedicated Infrastructure (ExaDB-D).
-// <b>Google AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
+// <b>Oracle AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
 //
 
 package dbmulticloud
@@ -163,7 +163,7 @@ func (client OracleDBAzureBlobMountClient) changeOracleDbAzureBlobMountCompartme
 
 	var response ChangeOracleDbAzureBlobMountCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDBAzureBlobMount", "ChangeOracleDbAzureBlobMountCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -226,7 +226,7 @@ func (client OracleDBAzureBlobMountClient) createOracleDbAzureBlobMount(ctx cont
 
 	var response CreateOracleDbAzureBlobMountResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDBAzureBlobMount", "CreateOracleDbAzureBlobMount")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -284,7 +284,7 @@ func (client OracleDBAzureBlobMountClient) deleteOracleDbAzureBlobMount(ctx cont
 
 	var response DeleteOracleDbAzureBlobMountResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDBAzureBlobMount", "DeleteOracleDbAzureBlobMount")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -342,7 +342,7 @@ func (client OracleDBAzureBlobMountClient) getOracleDbAzureBlobMount(ctx context
 
 	var response GetOracleDbAzureBlobMountResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDBAzureBlobMount", "GetOracleDbAzureBlobMount")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -400,7 +400,7 @@ func (client OracleDBAzureBlobMountClient) listOracleDbAzureBlobMounts(ctx conte
 
 	var response ListOracleDbAzureBlobMountsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDBAzureBlobMount", "ListOracleDbAzureBlobMounts")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -458,7 +458,7 @@ func (client OracleDBAzureBlobMountClient) updateOracleDbAzureBlobMount(ctx cont
 
 	var response UpdateOracleDbAzureBlobMountResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDBAzureBlobMount", "UpdateOracleDbAzureBlobMount")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

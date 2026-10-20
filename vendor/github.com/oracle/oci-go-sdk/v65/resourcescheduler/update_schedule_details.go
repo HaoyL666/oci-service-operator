@@ -49,6 +49,10 @@ type UpdateScheduleDetails struct {
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeEnds *common.SDKTime `mandatory:"false" json:"timeEnds"`
 
+	// IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London').
+	// This determines the timezone context for evaluating the recurrence expression.
+	LocalTimeZone *string `mandatory:"false" json:"localTimeZone"`
+
 	// These are free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -94,6 +98,7 @@ func (m *UpdateScheduleDetails) UnmarshalJSON(data []byte) (e error) {
 		Resources         []Resource                              `json:"resources"`
 		TimeStarts        *common.SDKTime                         `json:"timeStarts"`
 		TimeEnds          *common.SDKTime                         `json:"timeEnds"`
+		LocalTimeZone     *string                                 `json:"localTimeZone"`
 		FreeformTags      map[string]string                       `json:"freeformTags"`
 		DefinedTags       map[string]map[string]interface{}       `json:"definedTags"`
 	}{}
@@ -131,6 +136,8 @@ func (m *UpdateScheduleDetails) UnmarshalJSON(data []byte) (e error) {
 
 	m.TimeEnds = model.TimeEnds
 
+	m.LocalTimeZone = model.LocalTimeZone
+
 	m.FreeformTags = model.FreeformTags
 
 	m.DefinedTags = model.DefinedTags
@@ -143,18 +150,21 @@ type UpdateScheduleDetailsActionEnum string
 
 // Set of constants representing the allowable values for UpdateScheduleDetailsActionEnum
 const (
-	UpdateScheduleDetailsActionStartResource UpdateScheduleDetailsActionEnum = "START_RESOURCE"
-	UpdateScheduleDetailsActionStopResource  UpdateScheduleDetailsActionEnum = "STOP_RESOURCE"
+	UpdateScheduleDetailsActionStartResource  UpdateScheduleDetailsActionEnum = "START_RESOURCE"
+	UpdateScheduleDetailsActionStopResource   UpdateScheduleDetailsActionEnum = "STOP_RESOURCE"
+	UpdateScheduleDetailsActionBackupResource UpdateScheduleDetailsActionEnum = "BACKUP_RESOURCE"
 )
 
 var mappingUpdateScheduleDetailsActionEnum = map[string]UpdateScheduleDetailsActionEnum{
-	"START_RESOURCE": UpdateScheduleDetailsActionStartResource,
-	"STOP_RESOURCE":  UpdateScheduleDetailsActionStopResource,
+	"START_RESOURCE":  UpdateScheduleDetailsActionStartResource,
+	"STOP_RESOURCE":   UpdateScheduleDetailsActionStopResource,
+	"BACKUP_RESOURCE": UpdateScheduleDetailsActionBackupResource,
 }
 
 var mappingUpdateScheduleDetailsActionEnumLowerCase = map[string]UpdateScheduleDetailsActionEnum{
-	"start_resource": UpdateScheduleDetailsActionStartResource,
-	"stop_resource":  UpdateScheduleDetailsActionStopResource,
+	"start_resource":  UpdateScheduleDetailsActionStartResource,
+	"stop_resource":   UpdateScheduleDetailsActionStopResource,
+	"backup_resource": UpdateScheduleDetailsActionBackupResource,
 }
 
 // GetUpdateScheduleDetailsActionEnumValues Enumerates the set of values for UpdateScheduleDetailsActionEnum
@@ -171,6 +181,7 @@ func GetUpdateScheduleDetailsActionEnumStringValues() []string {
 	return []string{
 		"START_RESOURCE",
 		"STOP_RESOURCE",
+		"BACKUP_RESOURCE",
 	}
 }
 

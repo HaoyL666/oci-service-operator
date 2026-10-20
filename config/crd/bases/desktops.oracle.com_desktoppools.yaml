@@ -216,6 +216,17 @@ spec:
                 description: DesktopPoolNetworkConfiguration defines nested fields
                   for DesktopPool.NetworkConfiguration.
                 properties:
+                  securityAttributes:
+                    additionalProperties:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    description: |-
+                      Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+                      Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                      (ZPR) policy to control access to ZPR-supported resources.
+                      Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
+                    type: object
                   subnetId:
                     description: |-
                       The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet in the customer VCN where the
@@ -249,6 +260,17 @@ spec:
                       The IPv4 address from the provided OCI subnet which needs to be assigned to the VNIC. If not provided, it will
                       be auto-assigned with an available IPv4 address from the subnet.
                     type: string
+                  securityAttributes:
+                    additionalProperties:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    description: |-
+                      Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+                      Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                      (ZPR) policy to control access to ZPR-supported resources.
+                      Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
+                    type: object
                   subnetId:
                     description: |-
                       The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet in the customer VCN where the
@@ -256,6 +278,17 @@ spec:
                     type: string
                 required:
                 - subnetId
+                type: object
+              securityAttributes:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+                  Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                  (ZPR) policy to control access to ZPR-supported resources.
+                  Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
                 type: object
               sessionLifecycleActions:
                 description: DesktopPoolSessionLifecycleActions defines nested fields
@@ -529,6 +562,17 @@ spec:
                 description: DesktopPoolNetworkConfiguration defines nested fields
                   for DesktopPool.NetworkConfiguration.
                 properties:
+                  securityAttributes:
+                    additionalProperties:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    description: |-
+                      Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+                      Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                      (ZPR) policy to control access to ZPR-supported resources.
+                      Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
+                    type: object
                   subnetId:
                     description: |-
                       The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet in the customer VCN where the
@@ -562,6 +606,17 @@ spec:
                       The IPv4 address from the provided OCI subnet which needs to be assigned to the VNIC. If not provided, it will
                       be auto-assigned with an available IPv4 address from the subnet.
                     type: string
+                  securityAttributes:
+                    additionalProperties:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    description: |-
+                      Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+                      Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                      (ZPR) policy to control access to ZPR-supported resources.
+                      Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
+                    type: object
                   subnetId:
                     description: |-
                       The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet in the customer VCN where the
@@ -569,6 +624,17 @@ spec:
                     type: string
                 required:
                 - subnetId
+                type: object
+              securityAttributes:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+                  Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                  (ZPR) policy to control access to ZPR-supported resources.
+                  Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
                 type: object
               sessionLifecycleActions:
                 description: DesktopPoolSessionLifecycleActions defines nested fields

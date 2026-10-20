@@ -56,6 +56,18 @@ type AssetSpec struct {
 	VmwareVm AssetVmwareVm `json:"vmwareVm,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	VmwareVCenter AssetVmwareVCenter `json:"vmwareVCenter,omitempty,omitzero"`
+	// The class name of the asset.
+	// +kubebuilder:validation:Optional
+	AssetClassName string `json:"assetClassName,omitempty"`
+	// The version of the asset class.
+	// +kubebuilder:validation:Optional
+	AssetClassVersion string `json:"assetClassVersion,omitempty"`
+	// The details of the asset.
+	// +kubebuilder:validation:Optional
+	AssetDetails map[string]shared.JSONValue `json:"assetDetails,omitempty"`
+	// Specifies if this is the Source or Destination point for migration - different assets may be discovered depending on setting.
+	// +kubebuilder:validation:Optional
+	EnvironmentType string `json:"environmentType,omitempty"`
 	// +kubebuilder:validation:Optional
 	AwsEc2 AssetAwsEc2 `json:"awsEc2,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
@@ -729,6 +741,8 @@ type AssetStatus struct {
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{orcl-cloud: {free-tier-retain: true}}`
 	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
+	// Specifies if this is the Source or Destination point for migration - different assets may be discovered depending on setting.
+	EnvironmentType string `json:"environmentType,omitempty"`
 	// Inventory ID to which an asset belongs to.
 	InventoryId string `json:"inventoryId,omitempty"`
 	// Asset OCID that is immutable on creation.
@@ -751,9 +765,15 @@ type AssetStatus struct {
 	AwsEc2                 AssetAwsEc2                 `json:"awsEc2,omitempty"`
 	AwsEc2Cost             AssetAwsEc2Cost             `json:"awsEc2Cost,omitempty"`
 	AttachedEbsVolumesCost AssetAttachedEbsVolumesCost `json:"attachedEbsVolumesCost,omitempty"`
-	VmwareVm               AssetVmwareVm               `json:"vmwareVm,omitempty"`
-	VmwareVCenter          AssetVmwareVCenter          `json:"vmwareVCenter,omitempty"`
-	AwsEbs                 AssetAwsEbs                 `json:"awsEbs,omitempty"`
+	// The class name of the asset.
+	AssetClassName string `json:"assetClassName,omitempty"`
+	// The version of the asset class.
+	AssetClassVersion string `json:"assetClassVersion,omitempty"`
+	// The details of the asset.
+	AssetDetails  map[string]shared.JSONValue `json:"assetDetails,omitempty"`
+	VmwareVm      AssetVmwareVm               `json:"vmwareVm,omitempty"`
+	VmwareVCenter AssetVmwareVCenter          `json:"vmwareVCenter,omitempty"`
+	AwsEbs        AssetAwsEbs                 `json:"awsEbs,omitempty"`
 }
 
 // +kubebuilder:object:root=true

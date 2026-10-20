@@ -49,6 +49,8 @@ type DomainGovernanceStatus struct {
 	Id string `json:"id,omitempty"`
 	// The OCID of the tenancy that owns this domain governance entity.
 	OwnerId string `json:"ownerId,omitempty"`
+	// The OCID of the tenancy that owns this domain governance entity.
+	CompartmentId string `json:"compartmentId,omitempty"`
 	// The OCID of the domain associated with this domain governance entity.
 	DomainId string `json:"domainId,omitempty"`
 	// Lifecycle state of the domain governance entity.

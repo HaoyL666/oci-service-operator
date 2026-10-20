@@ -52,6 +52,10 @@ type CreateScheduleDetails struct {
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeEnds *common.SDKTime `mandatory:"false" json:"timeEnds"`
 
+	// IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London').
+	// This determines the timezone context for evaluating the recurrence expression.
+	LocalTimeZone *string `mandatory:"false" json:"localTimeZone"`
+
 	// These are free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -94,6 +98,7 @@ func (m *CreateScheduleDetails) UnmarshalJSON(data []byte) (e error) {
 		Resources         []Resource                              `json:"resources"`
 		TimeStarts        *common.SDKTime                         `json:"timeStarts"`
 		TimeEnds          *common.SDKTime                         `json:"timeEnds"`
+		LocalTimeZone     *string                                 `json:"localTimeZone"`
 		FreeformTags      map[string]string                       `json:"freeformTags"`
 		DefinedTags       map[string]map[string]interface{}       `json:"definedTags"`
 		CompartmentId     *string                                 `json:"compartmentId"`
@@ -129,6 +134,8 @@ func (m *CreateScheduleDetails) UnmarshalJSON(data []byte) (e error) {
 
 	m.TimeEnds = model.TimeEnds
 
+	m.LocalTimeZone = model.LocalTimeZone
+
 	m.FreeformTags = model.FreeformTags
 
 	m.DefinedTags = model.DefinedTags
@@ -149,18 +156,21 @@ type CreateScheduleDetailsActionEnum string
 
 // Set of constants representing the allowable values for CreateScheduleDetailsActionEnum
 const (
-	CreateScheduleDetailsActionStartResource CreateScheduleDetailsActionEnum = "START_RESOURCE"
-	CreateScheduleDetailsActionStopResource  CreateScheduleDetailsActionEnum = "STOP_RESOURCE"
+	CreateScheduleDetailsActionStartResource  CreateScheduleDetailsActionEnum = "START_RESOURCE"
+	CreateScheduleDetailsActionStopResource   CreateScheduleDetailsActionEnum = "STOP_RESOURCE"
+	CreateScheduleDetailsActionBackupResource CreateScheduleDetailsActionEnum = "BACKUP_RESOURCE"
 )
 
 var mappingCreateScheduleDetailsActionEnum = map[string]CreateScheduleDetailsActionEnum{
-	"START_RESOURCE": CreateScheduleDetailsActionStartResource,
-	"STOP_RESOURCE":  CreateScheduleDetailsActionStopResource,
+	"START_RESOURCE":  CreateScheduleDetailsActionStartResource,
+	"STOP_RESOURCE":   CreateScheduleDetailsActionStopResource,
+	"BACKUP_RESOURCE": CreateScheduleDetailsActionBackupResource,
 }
 
 var mappingCreateScheduleDetailsActionEnumLowerCase = map[string]CreateScheduleDetailsActionEnum{
-	"start_resource": CreateScheduleDetailsActionStartResource,
-	"stop_resource":  CreateScheduleDetailsActionStopResource,
+	"start_resource":  CreateScheduleDetailsActionStartResource,
+	"stop_resource":   CreateScheduleDetailsActionStopResource,
+	"backup_resource": CreateScheduleDetailsActionBackupResource,
 }
 
 // GetCreateScheduleDetailsActionEnumValues Enumerates the set of values for CreateScheduleDetailsActionEnum
@@ -177,6 +187,7 @@ func GetCreateScheduleDetailsActionEnumStringValues() []string {
 	return []string{
 		"START_RESOURCE",
 		"STOP_RESOURCE",
+		"BACKUP_RESOURCE",
 	}
 }
 

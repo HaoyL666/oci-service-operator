@@ -79,6 +79,18 @@ type UpdateAutonomousDatabaseDetails struct {
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, isMTLSConnectionRequired, openMode, permissionLevel, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, scheduledOperations, dbToolsDetails, or isLocalDataGuardEnabled
 	IsFreeTier *bool `mandatory:"false" json:"isFreeTier"`
 
+	// The Autonomous Database Serverless instance's availability domain.
+	AvailabilityDomain *string `mandatory:"false" json:"availabilityDomain"`
+
+	// The date and time when the Autonomous Database availability domain is to be updated.
+	TimeScheduledAdUpdate *common.SDKTime `mandatory:"false" json:"timeScheduledAdUpdate"`
+
+	// True, if you want to disable Autonomous Database availability domain scheduled update.
+	IsDisableAdUpdateSchedule *bool `mandatory:"false" json:"isDisableAdUpdateSchedule"`
+
+	// True, if you want to schedule Autonomous Database availability domain update to the earliest available time.
+	IsScheduleAdUpdateToEarliest *bool `mandatory:"false" json:"isScheduleAdUpdateToEarliest"`
+
 	// The password must be between 12 and 30 characters long, and must contain at least 1 uppercase, 1 lowercase, and 1 numeric character. It cannot contain the double quote symbol (") or the username "admin", regardless of casing. It must be different from the last four passwords and it must not be a password used within the last 24 hours.
 	// This cannot be used in conjunction with with OCI vault secrets (secretId).
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, whitelistedIps, openMode, permissionLevel, dbWorkload, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, or isFreeTier.
@@ -111,6 +123,7 @@ type UpdateAutonomousDatabaseDetails struct {
 	// - APEX - indicates an Autonomous AI Database with the Oracle APEX AI Application Development workload type.
 	// - LH - indicates an Oracle Autonomous AI Lakehouse database
 	// **Note** Starting December 2026, DW will not be supported as a valid value for this parameter.
+	// When creating an Autonomous AI Database, if this parameter is not specified, the default value is `OLTP`.
 	//
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, isMTLSConnectionRequired, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
 	DbWorkload UpdateAutonomousDatabaseDetailsDbWorkloadEnum `mandatory:"false" json:"dbWorkload,omitempty"`
@@ -162,7 +175,7 @@ type UpdateAutonomousDatabaseDetails struct {
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, isMTLSConnectionRequired, openMode, permissionLevel, dbWorkload, dbVersion, isRefreshable, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
 	StandbyWhitelistedIps []string `mandatory:"false" json:"standbyWhitelistedIps"`
 
-	// Indicates whether auto scaling is enabled for the Autonomous AI Database CPU core count. Setting to `TRUE` enables auto scaling. Setting to `FALSE` disables auto scaling. The default value is `TRUE`. Auto scaling is only available for Autonomous AI Database Serverless instances (https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/).
+	// Indicates whether auto scaling is enabled for the Autonomous AI Database CPU core count. Setting to `TRUE` enables auto scaling. Setting to `FALSE` disables auto scaling. The default value is null. Auto scaling is only available for Autonomous AI Database Serverless instances (https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/).
 	IsAutoScalingEnabled *bool `mandatory:"false" json:"isAutoScalingEnabled"`
 
 	// Indicates if the Autonomous AI Database is a refreshable clone.
@@ -188,12 +201,14 @@ type UpdateAutonomousDatabaseDetails struct {
 
 	// The database OCID(/Content/General/Concepts/identifiers.htm) of the Disaster Recovery peer (source Primary) database, which is located in a different (remote) region from the current peer database.
 	// To create or delete a local (in-region) standby, see the `isDataGuardEnabled` parameter.
+	// When disconnecting a cross-region standby, specify the standby database OCID in this parameter together with `isDisconnectPeer=true`.
 	PeerDbId *string `mandatory:"false" json:"peerDbId"`
 
 	// A valid Oracle AI Database version for Autonomous AI Database.
 	// When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
 	// When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
 	// For new databases, it is recommended to use either 19c or 26ai.
+	// The default database version is the Oracle-recommended version. You can retrieve the default DB version by calling the ListAutonomousDbVersions operation.
 	// **Note** Starting December 2026, 23ai will not be supported as a valid value for this parameter.
 	DbVersion *string `mandatory:"false" json:"dbVersion"`
 
@@ -268,6 +283,11 @@ type UpdateAutonomousDatabaseDetails struct {
 	// The date until which Autonomous AI Database maintenance is temporarily paused.
 	TimeMaintenancePauseUntil *common.SDKTime `mandatory:"false" json:"timeMaintenancePauseUntil"`
 
+	ScheduledMaintenanceWindow *AutonomousDatabaseMaintenanceWindowSummary `mandatory:"false" json:"scheduledMaintenanceWindow"`
+
+	// The date and time at which operation to change Maintenance Window is scheduled to take place.
+	TimeScheduledMaintenanceWindowUpdate *common.SDKTime `mandatory:"false" json:"timeScheduledMaintenanceWindowUpdate"`
+
 	// True if the Autonomous AI Database is backup retention locked.
 	IsBackupRetentionLocked *bool `mandatory:"false" json:"isBackupRetentionLocked"`
 
@@ -305,8 +325,9 @@ type UpdateAutonomousDatabaseDetails struct {
 
 	EncryptionKey AutonomousDatabaseEncryptionKeyDetails `mandatory:"false" json:"encryptionKey"`
 
-	// If true, this will disconnect the Autonomous AI Database from its peer and the Autonomous AI Database can work permanently as a standalone database.
-	// To disconnect a cross region standby, please also provide the OCID of the standby database in the `peerDbId` parameter.
+	// If true, this disconnects the Autonomous AI Database from its peer. After the disconnect completes, the Autonomous AI Database works permanently as a standalone database.
+	// **Warning:** A disconnected standby is no longer part of the disaster recovery configuration. Operations and restrictions that apply to a connected standby do not apply in the same way after the database has been disconnected.
+	// To disconnect a cross region standby, also provide the OCID of the standby database in the `peerDbId` parameter.
 	IsDisconnectPeer *bool `mandatory:"false" json:"isDisconnectPeer"`
 
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a dedicated resource pool leader Autonomous AI Database in the same region, that is required when local Autonomous Data Guard is enabled for a dedicated resource pool member using the parameter `isLocalDataGuardEnabled`.
@@ -371,6 +392,10 @@ func (m *UpdateAutonomousDatabaseDetails) UnmarshalJSON(data []byte) (e error) {
 		DataStorageSizeInGBs                 *int                                                                 `json:"dataStorageSizeInGBs"`
 		DisplayName                          *string                                                              `json:"displayName"`
 		IsFreeTier                           *bool                                                                `json:"isFreeTier"`
+		AvailabilityDomain                   *string                                                              `json:"availabilityDomain"`
+		TimeScheduledAdUpdate                *common.SDKTime                                                      `json:"timeScheduledAdUpdate"`
+		IsDisableAdUpdateSchedule            *bool                                                                `json:"isDisableAdUpdateSchedule"`
+		IsScheduleAdUpdateToEarliest         *bool                                                                `json:"isScheduleAdUpdateToEarliest"`
 		AdminPassword                        *string                                                              `json:"adminPassword"`
 		DbName                               *string                                                              `json:"dbName"`
 		FreeformTags                         map[string]string                                                    `json:"freeformTags"`
@@ -406,6 +431,8 @@ func (m *UpdateAutonomousDatabaseDetails) UnmarshalJSON(data []byte) (e error) {
 		AutonomousMaintenanceScheduleType    UpdateAutonomousDatabaseDetailsAutonomousMaintenanceScheduleTypeEnum `json:"autonomousMaintenanceScheduleType"`
 		AutonomousDatabaseMaintenanceWindow  *AutonomousDatabaseMaintenanceWindowSummary                          `json:"autonomousDatabaseMaintenanceWindow"`
 		TimeMaintenancePauseUntil            *common.SDKTime                                                      `json:"timeMaintenancePauseUntil"`
+		ScheduledMaintenanceWindow           *AutonomousDatabaseMaintenanceWindowSummary                          `json:"scheduledMaintenanceWindow"`
+		TimeScheduledMaintenanceWindowUpdate *common.SDKTime                                                      `json:"timeScheduledMaintenanceWindowUpdate"`
 		IsBackupRetentionLocked              *bool                                                                `json:"isBackupRetentionLocked"`
 		TimeScheduledDbVersionUpgrade        *common.SDKTime                                                      `json:"timeScheduledDbVersionUpgrade"`
 		IsDisableDbVersionUpgradeSchedule    *bool                                                                `json:"isDisableDbVersionUpgradeSchedule"`
@@ -452,6 +479,14 @@ func (m *UpdateAutonomousDatabaseDetails) UnmarshalJSON(data []byte) (e error) {
 	m.DisplayName = model.DisplayName
 
 	m.IsFreeTier = model.IsFreeTier
+
+	m.AvailabilityDomain = model.AvailabilityDomain
+
+	m.TimeScheduledAdUpdate = model.TimeScheduledAdUpdate
+
+	m.IsDisableAdUpdateSchedule = model.IsDisableAdUpdateSchedule
+
+	m.IsScheduleAdUpdateToEarliest = model.IsScheduleAdUpdateToEarliest
 
 	m.AdminPassword = model.AdminPassword
 
@@ -522,6 +557,10 @@ func (m *UpdateAutonomousDatabaseDetails) UnmarshalJSON(data []byte) (e error) {
 	m.AutonomousDatabaseMaintenanceWindow = model.AutonomousDatabaseMaintenanceWindow
 
 	m.TimeMaintenancePauseUntil = model.TimeMaintenancePauseUntil
+
+	m.ScheduledMaintenanceWindow = model.ScheduledMaintenanceWindow
+
+	m.TimeScheduledMaintenanceWindowUpdate = model.TimeScheduledMaintenanceWindowUpdate
 
 	m.IsBackupRetentionLocked = model.IsBackupRetentionLocked
 

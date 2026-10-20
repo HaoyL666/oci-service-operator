@@ -38,10 +38,10 @@ group Lookup and bind
 alt tracked or explicit OCI identity already exists
 ServiceManager -> OCI: GetRefreshActivity
 else tracked identity is missing
-ServiceManager -> OCI: ListRefreshActivity(filters:\nsourceFusionEnvironmentId,\ntimeScheduledStart)
+ServiceManager -> OCI: ListRefreshActivity(filters:\ncompartment_id, state)
 alt reusable OCI resource is not found
 ServiceManager -> OCI: CreateRefreshActivity
-loop create pending ACCEPTED, IN_PROGRESS
+loop create pending PROVISIONING
 ServiceManager -> OCI: GetRefreshActivity
 end
 else reusable OCI resource already exists
@@ -63,33 +63,25 @@ ServiceManager --> BaseReconciler: release finalizer after delete completion
 end
 end
 else OCI state is retryable
-ServiceManager --> BaseReconciler: requeue while OCI remains in\nACCEPTED, IN_PROGRESS, UPDATING,\nDELETING
+ServiceManager --> BaseReconciler: requeue while OCI remains in\nPROVISIONING, UPDATING, DELETING
 else live state requires field-aware\ndrift evaluation
 group Drift handling
 note over ServiceManager,OCI
-Supported update surface:
-timeScheduledStart
+Supported update surface: display_name
 Reject before mutate: force-new fields
-sourceFusionEnvironmentId,
-isDataMaskingOpted, fusionEnvironmentId
-Lookup filters:
-sourceFusionEnvironmentId,
-timeScheduledStart
-Lookup matching: exact unique match on
-fields exposed by the scoped OCI list
-response
+compartment_id
+Lookup filters: compartment_id, state
 end note
 opt force-new or conflicting drift is detected
 ServiceManager --> BaseReconciler: reject before OCI mutation
 end
 opt supported mutable drift is detected
-ServiceManager -> OCI: Apply UpdateRefreshActivity only for\nmutable fields timeScheduledStart
+ServiceManager -> OCI: Apply UpdateRefreshActivity only for\nmutable fields display_name
 loop update pending UPDATING
 ServiceManager -> OCI: GetRefreshActivity
 end
 end
 ServiceManager -> OCI: run helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource
-ServiceManager -> OCI: apply follow-up strategy\ncreate=work-request-then-read;\nupdate=read-after-write;\ndelete=work-request-then-confirm-delete
 end
 ServiceManager --> BaseReconciler: status=required,\nfinalizer=retain-until-confirmed-delete
 end
@@ -116,31 +108,18 @@ archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
-provider states: create ACCEPTED, IN_PROGRESS;
-update UPDATING; delete DELETING
-follow-up: create=work-request-then-read;
-update=read-after-write;
-delete=work-request-then-confirm-delete
-supported drift: timeScheduledStart
+provider states: create PROVISIONING; update
+UPDATING; delete DELETING
+supported drift: display_name
 reject before mutate: force-new fields
-sourceFusionEnvironmentId, isDataMaskingOpted,
-fusionEnvironmentId
+compartment_id
 create-only fields: none
 list lookup: scaffold_fusionapps_refreshactivity
-filters sourceFusionEnvironmentId,
-timeScheduledStart; exact unique match on fields
-exposed by the scoped OCI list response
+filters compartment_id, state
 conflicts: none
 open gaps: none
-The vendored SDK exposes create, delete through
-service work requests; the runtime polls those
-requests and preserves the tracked resource
-identity before rereading OCI.
-Parent identifiers scope composite OCI request
-paths and remain replacement-only unless the SDK
-update details explicitly expose them.
-Create, get, list where available, update, and
-delete request shapes are exercised by the
-package-local typed OCI mock integration test.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 @enduml

@@ -40,7 +40,7 @@ type CreateBdsInstanceDetails struct {
 	Nodes []CreateNodeDetails `mandatory:"true" json:"nodes"`
 
 	// Base-64 encoded password for the cluster (and Cloudera Manager) admin user. Not required if the secretId is specified.
-	ClusterAdminPassword *string `mandatory:"false" json:"clusterAdminPassword"`
+	ClusterAdminPassword *string `mandatory:"false" json:"clusterAdminPassword" sensitive:"true"`
 
 	// The secretId for the clusterAdminPassword.
 	SecretId *string `mandatory:"false" json:"secretId"`
@@ -52,6 +52,9 @@ type CreateBdsInstanceDetails struct {
 
 	// Pre-authenticated URL of the script in Object Store that is downloaded and executed.
 	BootstrapScriptUrl *string `mandatory:"false" json:"bootstrapScriptUrl"`
+
+	// Optional BDS capacity reservation configurations to associate with the cluster during creation.
+	BdsCapacityReservationConfigurations []CreateBdsCapacityReservationConfigurationDetails `mandatory:"false" json:"bdsCapacityReservationConfigurations"`
 
 	// The user-defined kerberos realm name.
 	KerberosRealmName *string `mandatory:"false" json:"kerberosRealmName"`

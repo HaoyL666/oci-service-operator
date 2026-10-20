@@ -43,6 +43,7 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No |
 | `hostOcpuCount` | The OCPU count of the ESXi host. | `number` | No |
 | `hostShapeName` | The compute shape name of the ESXi host. ListSupportedHostShapes. | `string` | No |
+| `initialFaultDomainHostDistribution` | The initial fault domain host distribution mode for the ESXi host. | `string` | No |
 | `isVsanByolEnabled` | Indicates whether this host embedded VMware vSAN with BYOL Allocation. | `boolean` | No |
 | `nextCommitment` | The billing option to switch to after the existing billing cycle ends. If `nextCommitment` is null or empty, `currentCommitment` continues to the next billing cycle. ListSupportedCommitments. | `string` | No |
 | `vcfByolAllocationId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Byol Allocation for VCF (VMware Cloud Foundation) deployment. | `string` | No |
@@ -60,6 +61,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `clusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Cluster that the ESXi host belongs to. | `string` | No |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the Cluster. | `string` | No |
 | `computeAvailabilityDomain` | The availability domain of the ESXi host. | `string` | No |
+| `computeFaultDomain` | The fault domain of the ESXi host. | `string` | No |
 | `computeInstanceId` | In terms of implementation, an ESXi host is a Compute instance that is configured with the chosen bundle of VMware software. The `computeInstanceId` is the OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of that Compute instance. | `string` | No |
 | `currentCommitment` | The billing option currently used by the ESXi host. ListSupportedCommitments. | `string` | No |
 | [`datastoreAttachments`](../../reference/api/ocvp/v1beta1/index.md#kind-esxihost-status-datastoreattachments) | List of DatastoreAttachment objects containing information about attachment details | `list[object]` | No |
@@ -73,6 +75,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `hostOcpuCount` | The OCPU count of the ESXi host. | `number` | No |
 | `hostShapeName` | The compute shape name of the ESXi host. ListSupportedHostShapes. | `string` | No |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the ESXi host. | `string` | No |
+| `initialFaultDomainHostDistribution` | The initial fault domain host distribution mode for the ESXi host. | `string` | No |
 | `isBillingContinuationInProgress` | Indicates whether this host is in the progress of billing continuation. | `boolean` | No |
 | `isBillingSwappingInProgress` | Indicates whether this host is in the progress of swapping billing. | `boolean` | No |
 | `isVsanByolEnabled` | Indicates whether this host embedded VMware vSAN with BYOL Allocation. | `boolean` | No |

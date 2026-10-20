@@ -61,15 +61,16 @@ type BatchContextNetwork struct {
 
 // BatchContextFleetShape defines nested fields for BatchContext.Fleet.Shape.
 type BatchContextFleetShape struct {
-	// The name of the shape.
-	// +kubebuilder:validation:Required
-	ShapeName string `json:"shapeName"`
-	// Number of OCPUs required by the shape.
-	// +kubebuilder:validation:Required
-	Ocpus int `json:"ocpus"`
-	// Amount of memory in GBs required by the shape.
-	// +kubebuilder:validation:Required
-	MemoryInGBs int `json:"memoryInGBs"`
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	Type string `json:"type,omitempty"`
+	// The name of the fixed GPU fleet shape.
+	// +kubebuilder:validation:Optional
+	ShapeName string `json:"shapeName,omitempty"`
+	// Amount of disk space in GBs required for the shape.
+	// +kubebuilder:validation:Optional
+	DiskSizeInGBs int `json:"diskSizeInGBs,omitempty"`
 }
 
 // BatchContextFleet defines nested fields for BatchContext.Fleet.
@@ -78,12 +79,12 @@ type BatchContextFleet struct {
 	JsonData string `json:"jsonData,omitempty"`
 	// +kubebuilder:validation:Optional
 	Type string `json:"type,omitempty"`
-	// Name of the service managed fleet.
+	// Name of the service managed GPU fleet.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
 	// +kubebuilder:validation:Optional
 	Shape BatchContextFleetShape `json:"shape,omitempty,omitzero"`
-	// Maximum number of concurrent tasks for the service managed fleet.
+	// Maximum number of concurrent tasks for the service managed GPU fleet.
 	// +kubebuilder:validation:Optional
 	MaxConcurrentTasks int `json:"maxConcurrentTasks,omitempty"`
 }
@@ -116,6 +117,9 @@ type BatchContextLoggingConfiguration struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the log.
 	// +kubebuilder:validation:Optional
 	LogId string `json:"logId,omitempty"`
+	// A switch to enable or disable propagation of job and task events to the customer's logs in OCI logging service.
+	// +kubebuilder:validation:Optional
+	IsJobTaskEventsPropagationEnabled bool `json:"isJobTaskEventsPropagationEnabled,omitempty"`
 }
 
 // BatchContextNetworkVnic defines nested fields for BatchContext.Network.Vnic.
@@ -164,7 +168,7 @@ type BatchContextStatus struct {
 	// The date and time the batch context was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeUpdated string `json:"timeUpdated,omitempty"`
-	// A message that describes the current state in more detail. For example,   can be used to provide actionable information for a resource in the Failed state.
+	// A message that describes the current state in more detail. For example, can be used to provide actionable information for a resource in the Failed state.
 	LifecycleDetails     string                           `json:"lifecycleDetails,omitempty"`
 	LoggingConfiguration BatchContextLoggingConfiguration `json:"loggingConfiguration,omitempty"`
 }

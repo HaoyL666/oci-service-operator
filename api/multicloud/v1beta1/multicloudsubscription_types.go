@@ -19,32 +19,35 @@ type MulticloudSubscriptionSpec struct {
 // MulticloudSubscriptionStatus defines the observed state of MulticloudSubscription.
 type MulticloudSubscriptionStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// Subscription ID for OCI and Partner cloud in classic format.
+	// Subscription ID for OCI and partner cloud in classic format.
 	ClassicSubscriptionId string `json:"classicSubscriptionId,omitempty"`
 	// The partner cloud account ID.
 	PartnerCloudAccountIdentifier string `json:"partnerCloudAccountIdentifier,omitempty"`
-	// The date and time the subscription was created, in the format defined by
+	// The date and time that the subscription was created, in the format defined by
 	// RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
 	TimeCreated string `json:"timeCreated,omitempty"`
-	// URL to the subscription page https://{console-url}/org-mgmt/subscription/ocid1.organizationssubscription.oc1.iad.amaaaaaapf266qyaqohz27zvh45jzaielgwojo53bh24s7cy5q5g7fiknpxa?region=us-ashburn-1.
+	// URL to the subscription details page.
+	// Example: `https://{console-url}/org-mgmt/subscription/ocid1.organizationssubscription.oc1.iad.exampleuniqueid?region=us-ashburn-1`.
 	SubscriptionId string `json:"subscriptionId,omitempty"`
-	// The serviceName that externalLocation map object belongs to.
+	// The partner cloud tenant ID.
+	PartnerCloudTenantIdentifier string `json:"partnerCloudTenantIdentifier,omitempty"`
+	// The cloud service provider.
 	ServiceName string `json:"serviceName,omitempty"`
-	// The date and time for when the multicloud was created, in the format defined by
+	// The date and time that the Multicloud base compartment was created, in the format defined by
 	// RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
 	TimeLinkedDate string `json:"timeLinkedDate,omitempty"`
 	// Payment plan for the subscription.
 	PaymentPlan string `json:"paymentPlan,omitempty"`
 	// Total value for the subscription.
 	ActiveCommitment string `json:"activeCommitment,omitempty"`
-	// The date and time for when the subscription is finishing, in the format defined by
+	// The end date and time for the subscription, in the format defined by
 	// RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
 	TimeEndDate string `json:"timeEndDate,omitempty"`
 	// The current state of the subscription.
 	LifecycleState string `json:"lifecycleState,omitempty"`
-	// CSP Specific Additional Properties, AzureSubnetId for Azure
+	// Properties specific to the cloud service provider. For example, AzureSubnetId for Azure.
 	CspAdditionalProperties map[string]string `json:"cspAdditionalProperties,omitempty"`
-	// The date and time the subscription was updated, in the format defined by
+	// The date and time that the subscription was updated, in the format defined by
 	// RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
 	TimeUpdated string `json:"timeUpdated,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.

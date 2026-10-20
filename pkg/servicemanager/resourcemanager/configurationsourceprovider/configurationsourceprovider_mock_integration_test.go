@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"testing"
 
+	common "github.com/oracle/oci-go-sdk/v65/common"
 	sdksvc "github.com/oracle/oci-go-sdk/v65/resourcemanager"
 	apiv1beta1 "github.com/oracle/oci-service-operator/api/resourcemanager/v1beta1"
 	"github.com/oracle/oci-service-operator/internal/integration/ocimock"
@@ -23,10 +24,11 @@ func TestMockIntegrationConfigurationSourceProviderCRUD(t *testing.T) {
 {
   "metadata": {"name": "mock-configurationsourceprovider", "namespace": "default"},
   "spec": {
-  "accessToken": "mock-accesstoken",
+  "email": "owner@example.com",
+  "secretId": "<ocid:token>",
   "apiEndpoint": "mock-apiendpoint",
   "compartmentId": "<ocid:9>",
-  "configSourceProviderType": "GITLAB_ACCESS_TOKEN",
+  "configSourceProviderType": "BITBUCKET_CLOUD_ACCESS_TOKEN",
   "displayName": "mock-displayname-initial"
 }
 }
@@ -34,17 +36,20 @@ func TestMockIntegrationConfigurationSourceProviderCRUD(t *testing.T) {
 	resource := &resourceValue
 	ocimock.InitializeResource(resource, "mock-configurationsourceprovider")
 	resource.Status = apiv1beta1.ConfigurationSourceProviderStatus{}
-	createRequest := ocimock.MustJSONFixture[sdksvc.CreateGitlabAccessTokenConfigurationSourceProviderDetails](t, `{
-  "accessToken": "mock-accesstoken",
+	createRequest := ocimock.MustJSONFixture[sdksvc.CreateBitbucketCloudEmailApiTokenConfigurationSourceProviderDetails](t, `{
+  "email": "owner@example.com",
+  "secretId": "<ocid:token>",
   "apiEndpoint": "mock-apiendpoint",
   "compartmentId": "<ocid:9>",
   "displayName": "mock-displayname-initial"
 }`)
-	updateRequest := ocimock.MustJSONFixture[sdksvc.UpdateGitlabAccessTokenConfigurationSourceProviderDetails](t, `{
-  "displayName": "mock-displayname-updated"
+	updateRequest := ocimock.MustJSONFixture[sdksvc.UpdateBitbucketCloudEmailApiTokenConfigurationSourceProviderDetails](t, `{
+  "displayName": "mock-displayname-updated",
+  "email": "owner-updated@example.com"
 }`)
-	createdState := ocimock.MustOCIResponseFixture[sdksvc.GitlabAccessTokenConfigurationSourceProvider](t, `{
-  "accessToken": "mock-accesstoken",
+	createdState := ocimock.MustOCIResponseFixture[sdksvc.BitbucketCloudEmailApiTokenConfigurationSourceProvider](t, `{
+  "email": "owner@example.com",
+  "secretId": "<ocid:token>",
   "apiEndpoint": "mock-apiendpoint",
   "compartmentId": "<ocid:9>",
   "displayName": "mock-displayname-initial",
@@ -57,8 +62,11 @@ func TestMockIntegrationConfigurationSourceProviderCRUD(t *testing.T) {
   "timeCreated": "2026-01-02T03:04:05Z",
   "timeUpdated": "2026-01-03T03:04:05Z"
 }`)
-	updatedState := ocimock.MustOCIResponseFixture[sdksvc.GitlabAccessTokenConfigurationSourceProvider](t, `{
-  "accessToken": "mock-accesstoken",
+	createdState.IsMigrationRequired = common.Bool(false)
+
+	updatedState := ocimock.MustOCIResponseFixture[sdksvc.BitbucketCloudEmailApiTokenConfigurationSourceProvider](t, `{
+  "email": "owner-updated@example.com",
+  "secretId": "<ocid:token>",
   "apiEndpoint": "mock-apiendpoint",
   "compartmentId": "<ocid:9>",
   "displayName": "mock-displayname-updated",
@@ -71,6 +79,7 @@ func TestMockIntegrationConfigurationSourceProviderCRUD(t *testing.T) {
   "timeCreated": "2026-01-02T03:04:05Z",
   "timeUpdated": "2026-01-03T03:04:05Z"
 }`)
+	updatedState.IsMigrationRequired = common.Bool(false)
 
 	creatingState := createdState
 	creatingState.LifecycleState = "CREATING"
@@ -79,7 +88,7 @@ func TestMockIntegrationConfigurationSourceProviderCRUD(t *testing.T) {
 	deletingState := updatedState
 	deletingState.LifecycleState = "DELETING"
 
-	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[sdksvc.GitlabAccessTokenConfigurationSourceProvider, sdksvc.CreateGitlabAccessTokenConfigurationSourceProviderDetails, sdksvc.UpdateGitlabAccessTokenConfigurationSourceProviderDetails]{
+	responder, err := ocimock.NewExplicitCRUDResponder(ocimock.ExplicitCRUDOptions[sdksvc.BitbucketCloudEmailApiTokenConfigurationSourceProvider, sdksvc.CreateBitbucketCloudEmailApiTokenConfigurationSourceProviderDetails, sdksvc.UpdateBitbucketCloudEmailApiTokenConfigurationSourceProviderDetails]{
 		CollectionPath: "/20180917/configurationSourceProviders", ItemPath: "/20180917/configurationSourceProviders/<ocid:1>",
 		CreatePath: "/20180917/configurationSourceProviders", CreateMethod: http.MethodPost,
 		UpdatePath: "/20180917/configurationSourceProviders/<ocid:1>", UpdateMethod: http.MethodPut,
@@ -100,10 +109,10 @@ func TestMockIntegrationConfigurationSourceProviderCRUD(t *testing.T) {
 			if err := ocimock.ValidateRetryToken(request, resource); err != nil {
 				return err
 			}
-			return ocimock.ValidateDiscriminatedJSONRequestSubset(request, "configSourceProviderType", "GITLAB_ACCESS_TOKEN", createRequest)
+			return ocimock.ValidateDiscriminatedJSONRequestSubset(request, "configSourceProviderType", "BITBUCKET_CLOUD_ACCESS_TOKEN", createRequest)
 		},
 		ValidateUpdateRaw: func(request ocimock.Request) error {
-			return ocimock.ValidateDiscriminatedJSONRequestSubset(request, "configSourceProviderType", "GITLAB_ACCESS_TOKEN", updateRequest)
+			return ocimock.ValidateDiscriminatedJSONRequestSubset(request, "configSourceProviderType", "BITBUCKET_CLOUD_ACCESS_TOKEN", updateRequest)
 		},
 		AdditionalRoutes: []ocimock.Route{},
 	})
@@ -122,18 +131,19 @@ func TestMockIntegrationConfigurationSourceProviderCRUD(t *testing.T) {
 	err = ocimock.RunLifecycle(context.Background(), ocimock.LifecycleScenario[*apiv1beta1.ConfigurationSourceProvider]{
 		Resource: resource, Client: client, CreateContext: generatedruntime.WithSkipExistingBeforeCreate,
 		ValidateCreated: func(current *apiv1beta1.ConfigurationSourceProvider) error {
-			if current.Status.OsokStatus.Ocid == "" || current.Status.LifecycleState != "ACTIVE" || current.Status.DisplayName != "mock-displayname-initial" || current.Status.OsokStatus.Async.Current != nil {
+			if current.Status.OsokStatus.Ocid == "" || current.Status.LifecycleState != "ACTIVE" || current.Status.DisplayName != "mock-displayname-initial" || current.Status.Email != "owner@example.com" || current.Status.IsMigrationRequired || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("created ConfigurationSourceProvider status = %+v", current.Status)
 			}
 			return nil
 		},
 		Mutate: func(current *apiv1beta1.ConfigurationSourceProvider) {
 			ocimock.MustMergeJSONFixture(t, &current.Spec, `{
-  "displayName": "mock-displayname-updated"
+  "displayName": "mock-displayname-updated",
+  "email": "owner-updated@example.com"
 }`)
 		},
 		ValidateUpdated: func(current *apiv1beta1.ConfigurationSourceProvider) error {
-			if current.Status.DisplayName != "mock-displayname-updated" || current.Status.OsokStatus.Async.Current != nil {
+			if current.Status.DisplayName != "mock-displayname-updated" || current.Status.Email != "owner-updated@example.com" || current.Status.IsMigrationRequired || current.Status.OsokStatus.Async.Current != nil {
 				return fmt.Errorf("updated ConfigurationSourceProvider status = %+v", current.Status)
 			}
 			return nil

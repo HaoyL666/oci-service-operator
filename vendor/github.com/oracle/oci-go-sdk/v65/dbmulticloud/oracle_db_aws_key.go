@@ -26,7 +26,7 @@
 // <br>
 // <b>AWS</b>:<br>
 // <b>Oracle AWS Connector Resource:</b>&nbsp;&nbsp;The Oracle AWS Connector Resource is used to install the AWS Identity Connector on an Exadata VM cluster in Oracle Exadata Database Service on Dedicated Infrastructure (ExaDB-D).
-// <b>Google AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
+// <b>Oracle AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
 //
 
 package dbmulticloud
@@ -49,6 +49,15 @@ type OracleDbAwsKey struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB Connector resource.
 	OracleDbConnectorId *string `mandatory:"false" json:"oracleDbConnectorId"`
 
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB AWS Key Pool resource.
+	OracleDbAwsKeyPoolId *string `mandatory:"false" json:"oracleDbAwsKeyPoolId"`
+
+	// Indicates whether the Oracle AWS Key resource is currently in use.
+	IsOracleAwsKeyUsed *bool `mandatory:"false" json:"isOracleAwsKeyUsed"`
+
+	// The number of active references to the Oracle AWS Key resource.
+	RefCount *int `mandatory:"false" json:"refCount"`
+
 	// Oracle DB AWS Key Ring resource name.
 	DisplayName *string `mandatory:"false" json:"displayName"`
 
@@ -69,6 +78,8 @@ type OracleDbAwsKey struct {
 
 	// AWS Key resource's properties.
 	Properties map[string]string `mandatory:"false" json:"properties"`
+
+	ReplicationMetadata *ReplicationMetadata `mandatory:"false" json:"replicationMetadata"`
 
 	// The lifecycle state of the Oracle DB AWS Key resource.
 	LifecycleState OracleDbAwsKeyLifecycleStateEnum `mandatory:"false" json:"lifecycleState,omitempty"`

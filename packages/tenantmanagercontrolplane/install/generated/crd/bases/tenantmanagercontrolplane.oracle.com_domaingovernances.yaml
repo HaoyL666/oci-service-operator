@@ -99,6 +99,10 @@ spec:
           status:
             description: DomainGovernanceStatus defines the observed state of DomainGovernance.
             properties:
+              compartmentId:
+                description: The OCID of the tenancy that owns this domain governance
+                  entity.
+                type: string
               definedTags:
                 additionalProperties:
                   additionalProperties:

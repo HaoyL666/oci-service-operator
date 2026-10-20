@@ -103,7 +103,8 @@ spec:
                       type: object
                     type: array
                   deltaRefreshSchedule:
-                    description: Schedule for occurrences of Delta Refresh jobs
+                    description: Deprecated schedule for occurrences of Delta Refresh
+                      jobs. This value is not used by the service.
                     type: object
                     x-kubernetes-preserve-unknown-fields: true
                   enrichmentJobType:
@@ -115,9 +116,8 @@ spec:
                     type: string
                 type: object
               enrichmentJobType:
-                description: Enrichment job type. Currently supported Full Build (All
-                  supported objects in a given schema) and Partial Build (Selected
-                  tables and/or supported objects in a given schema).
+                description: Deprecated. Use EnrichmentJobConfiguration.enrichmentJobType
+                  instead.
                 type: string
               freeformTags:
                 additionalProperties:
@@ -133,7 +133,6 @@ spec:
             required:
             - compartmentId
             - enrichmentJobConfiguration
-            - enrichmentJobType
             - semanticStoreId
             type: object
           status:
@@ -186,7 +185,8 @@ spec:
                       type: object
                     type: array
                   deltaRefreshSchedule:
-                    description: Schedule for occurrences of Delta Refresh jobs
+                    description: Deprecated schedule for occurrences of Delta Refresh
+                      jobs. This value is not used by the service.
                     type: object
                     x-kubernetes-preserve-unknown-fields: true
                   enrichmentJobType:
@@ -198,9 +198,11 @@ spec:
                     type: string
                 type: object
               enrichmentJobType:
-                description: Enrichment job type. Currently supported Full Build (All
-                  supported objects in a given schema) and Partial Build (Selected
-                  tables and/or supported objects in a given schema).
+                description: Enrichment job type. Supported values are Full Build
+                  (all supported objects in a given schema), Partial Build (selected
+                  tables and/or supported objects in a given schema), and Delta Refresh
+                  (objects in a given schema that have changed since the previous
+                  enrichment job).
                 type: string
               freeformTags:
                 additionalProperties:
@@ -210,14 +212,18 @@ spec:
                   Example: `{"bar-key": "value"}`
                 type: object
               id:
-                description: Unique identifier that is immutable on creation.
+                description: The OCID of the Semantic Store job.
                 type: string
               lifecycleDetails:
                 description: A message describing the current state in more detail
                   that can provide actionable information.
                 type: string
               lifecycleState:
-                description: The lifecycleState of GenerateSqlJob.
+                description: The lifecycle state of the EnrichmentJob.
+                type: string
+              modelId:
+                description: The generative AI modelId used for Enrichment. You can
+                  use the ListModels API to list the available models. https://docs.oracle.com/en-us/iaas/api/#/en/generative-ai/20231130/ModelCollection/ListModels
                 type: string
               percentComplete:
                 description: The percentage of the enrichment job that has been completed.

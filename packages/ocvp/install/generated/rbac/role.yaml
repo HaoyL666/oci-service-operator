@@ -1,0 +1,45 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - ocvp.oracle.com
+  resources:
+  - clusters
+  - esxihosts
+  - sddcs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ocvp.oracle.com
+  resources:
+  - clusters/finalizers
+  - esxihosts/finalizers
+  - sddcs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - ocvp.oracle.com
+  resources:
+  - clusters/status
+  - esxihosts/status
+  - sddcs/status
+  verbs:
+  - get
+  - patch
+  - update

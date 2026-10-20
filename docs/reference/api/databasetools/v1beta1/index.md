@@ -41,6 +41,7 @@ DatabaseToolsConnectionSpec defines the desired state of DatabaseToolsConnection
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `advancedProperties` | The advanced connection properties key-value pair. | `map[string, string]` | No | - | - |
+| `authenticationType` | Specifies the authentication type used by the Database Tools service to authenticate with the database. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment containing the Database Tools connection. | `string` | Yes | - | - |
 | `connectionString` | The connection string used to connect to the PostgreSQL Server. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
@@ -52,7 +53,7 @@ DatabaseToolsConnectionSpec defines the desired state of DatabaseToolsConnection
 | `privateEndpointId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Tools private endpoint used to access the database in the customer VCN. | `string` | No | - | - |
 | [`proxyClient`](#kind-databasetoolsconnection-spec-proxyclient) | DatabaseToolsConnectionProxyClient defines nested fields for DatabaseToolsConnection.ProxyClient. | `object` | No | - | - |
 | [`relatedResource`](#kind-databasetoolsconnection-spec-relatedresource) | DatabaseToolsConnectionRelatedResource defines nested fields for DatabaseToolsConnection.RelatedResource. | `object` | No | - | - |
-| `runtimeIdentity` | Specifies the identity used by the Database Tools service to issue requests to other OCI services (e.g., Secrets in Vault). | `string` | No | - | - |
+| `runtimeIdentity` | Specifies the identity used when accessing OCI resources at runtime. AUTHENTICATED_PRINCIPAL to use the caller’s identity (On-Behalf-Of token), or RESOURCE_PRINCIPAL to use the connection’s resource principal (RPST). | `string` | No | - | - |
 | `runtimeSupport` | Specifies whether this connection is supported by the Database Tools Runtime. | `string` | No | - | - |
 | `type` | - | `string` | No | - | - |
 | `url` | The JDBC URL used to connect to the Generic JDBC database system. | `string` | No | - | - |
@@ -173,6 +174,7 @@ DatabaseToolsConnectionStatus defines the observed state of DatabaseToolsConnect
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `advancedProperties` | The advanced connection properties key-value pair (for example, `oracle.net.ssl_server_dn_match`). | `map[string, string]` | No | - | - |
+| `authenticationType` | Specifies the authentication type used to connect to the database. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment containing the Database Tools connection. | `string` | No | - | - |
 | `connectionString` | The connect descriptor or Easy Connect Naming method used to connect to the database. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
@@ -188,7 +190,7 @@ DatabaseToolsConnectionStatus defines the observed state of DatabaseToolsConnect
 | [`proxyClient`](#kind-databasetoolsconnection-status-proxyclient) | DatabaseToolsConnectionProxyClient defines nested fields for DatabaseToolsConnection.ProxyClient. | `object` | No | - | - |
 | [`relatedResource`](#kind-databasetoolsconnection-status-relatedresource) | DatabaseToolsConnectionRelatedResource defines nested fields for DatabaseToolsConnection.RelatedResource. | `object` | No | - | - |
 | `runtimeEndpoint` | Specifies the Database Tools Runtime endpoint. | `string` | No | - | - |
-| `runtimeIdentity` | Specifies the identity used by the Database Tools service to issue requests to other OCI services (e.g., Secrets in Vault). | `string` | No | - | - |
+| `runtimeIdentity` | Specifies the identity used when accessing OCI resources at runtime. AUTHENTICATED_PRINCIPAL to use the caller’s identity (On-Behalf-Of token), or RESOURCE_PRINCIPAL to use the connection’s resource principal (RPST). | `string` | No | - | - |
 | `runtimeSupport` | Specifies whether this connection is supported by the Database Tools Runtime. | `string` | No | - | - |
 | [`status`](#kind-databasetoolsconnection-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
@@ -196,7 +198,7 @@ DatabaseToolsConnectionStatus defines the observed state of DatabaseToolsConnect
 | `timeUpdated` | The time the Database Tools connection was updated. An RFC3339 formatted datetime string. | `string` | No | - | - |
 | `type` | - | `string` | No | - | - |
 | `url` | The JDBC URL used to connect to the Generic JDBC database system. | `string` | No | - | - |
-| `userName` | The database user name. | `string` | No | - | - |
+| `userName` | The database user name. When authenticationType is TOKEN, if provided, userName must be in square brackets (for example, [proxyClient]). | `string` | No | - | - |
 | [`userPassword`](#kind-databasetoolsconnection-status-userpassword) | DatabaseToolsConnectionUserPassword defines nested fields for DatabaseToolsConnection.UserPassword. | `object` | No | - | - |
 
 <a id="kind-databasetoolsconnection-status-keystores"></a>

@@ -63,7 +63,9 @@ DbSystemSpec defines the desired state of DbSystem.
 | `freeformTags` | Simple key-value pair applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `hostnameLabel` | The hostname for the primary endpoint of the DB System. Used for DNS. The value is the hostname portion of the primary private IP's fully qualified domain name (FQDN) (for example, "dbsystem-1" in FQDN "dbsystem-1.subnet123.vcn1.oraclevcn.com"). Must be unique across all VNICs in the subnet and comply with RFC 952 and RFC 1123. | `string` | No | - | - |
 | `ipAddress` | The IP address the DB System is configured to listen on. A private IP address of your choice to assign to the primary endpoint of the DB System. Must be an available IP address within the subnet's CIDR. If you don't specify a value, Oracle automatically assigns a private IP address from the subnet. This should be a "dotted-quad" style IPv4 address. | `string` | No | - | - |
+| [`ipv6AddressIpv6SubnetCidrPairDetails`](#kind-dbsystem-spec-ipv6addressipv6subnetcidrpairdetails) | DbSystemIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.Ipv6AddressIpv6SubnetCidrPairDetails. | `object` | No | - | - |
 | `isHighlyAvailable` | Specifies if the DB System is highly available. When creating a DB System with High Availability, three instances are created and placed according to your region- and subnet-type. The secondaries are placed automatically in the other two availability or fault domains. You can choose the preferred location of your primary instance, only. | `boolean` | No | - | - |
+| `isIpv6Enabled` | Whether to allocate an IPv6 address at DB system creation from an IPv6 enabled subnet. When provided you may optionally provide an IPv6 prefix (ipv6AddressIpv6SubnetCidrPairDetails) of your choice to assign the IPv6 address from. If ipv6AddressIpv6SubnetCidrPairDetails is not provided then an IPv6 prefix is chosen for you. | `boolean` | No | - | - |
 | [`maintenance`](#kind-dbsystem-spec-maintenance) | DbSystemMaintenance defines nested fields for DbSystem.Maintenance. | `object` | No | - | - |
 | `mysqlVersion` | The specific MySQL version identifier. | `string` | No | - | - |
 | `nsgIds` | Network Security Group OCIDs used for the VNIC attachment. | `list[string]` | No | - | - |
@@ -219,6 +221,18 @@ DbSystemEncryptData defines nested fields for DbSystem.EncryptData.
 | `keyGenerationType` | Select whether to use Oracle-managed key (SYSTEM) or your own key (BYOK). | `string` | Yes | - | - |
 | `keyId` | The OCID of the key to use. | `string` | No | - | - |
 
+<a id="kind-dbsystem-spec-ipv6addressipv6subnetcidrpairdetails"></a>
+#### Spec.ipv6AddressIpv6SubnetCidrPairDetails
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.Ipv6AddressIpv6SubnetCidrPairDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `ipv6Address` | An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix. | `string` | No | - | - |
+| `ipv6SubnetCidr` | The IPv6 prefix allocated to the subnet. | `string` | No | - | - |
+
 <a id="kind-dbsystem-spec-maintenance"></a>
 #### Spec.maintenance
 
@@ -259,6 +273,19 @@ DbSystemReadEndpoint defines nested fields for DbSystem.ReadEndpoint.
 | `isEnabled` | Specifies if the DB System read endpoint is enabled or not. | `boolean` | No | - | - |
 | `readEndpointHostnameLabel` | The hostname for the read endpoint of the DB System. Used for DNS. The value is the hostname portion of the primary private IP's fully qualified domain name (FQDN) (for example, "dbsystem-1" in FQDN "dbsystem-1.subnet123.vcn1.oraclevcn.com"). Must be unique across all VNICs in the subnet and comply with RFC 952 and RFC 1123. | `string` | No | - | - |
 | `readEndpointIpAddress` | The IP address the DB System read endpoint is configured to listen on. A private IP address of your choice to assign to the read endpoint of the DB System. Must be an available IP address within the subnet's CIDR. If you don't specify a value, Oracle automatically assigns a private IP address from the subnet. This should be a "dotted-quad" style IPv4 address. | `string` | No | - | - |
+| [`readEndpointIpv6AddressIpv6SubnetCidrPairDetails`](#kind-dbsystem-spec-readendpoint-readendpointipv6addressipv6subnetcidrpairdetails) | DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.ReadEndpoint.ReadEndpointIpv6AddressIpv6SubnetCidrPairDetails. | `object` | No | - | - |
+
+<a id="kind-dbsystem-spec-readendpoint-readendpointipv6addressipv6subnetcidrpairdetails"></a>
+##### Spec.readEndpoint.readEndpointIpv6AddressIpv6SubnetCidrPairDetails
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.ReadEndpoint.ReadEndpointIpv6AddressIpv6SubnetCidrPairDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `ipv6Address` | An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix. | `string` | No | - | - |
+| `ipv6SubnetCidr` | The IPv6 prefix allocated to the subnet. | `string` | No | - | - |
 
 <a id="kind-dbsystem-spec-rest"></a>
 #### Spec.rest
@@ -294,11 +321,41 @@ DbSystemSource defines nested fields for DbSystem.Source.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `backupId` | The OCID of the backup to be used as the source for the new DB System. | `string` | No | - | - |
-| `dbSystemId` | The OCID of the DB System from which a backup shall be selected to be restored when creating the new DB System. Use this together with recovery point to perform a point in time recovery operation. | `string` | No | - | - |
+| [`channel`](#kind-dbsystem-spec-source-channel) | DbSystemSourceChannel defines nested fields for DbSystem.Source.Channel. | `object` | No | - | - |
+| `dbSystemId` | The OCID of the DB system to be used as the source for the new DB System. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `recoveryPoint` | The date and time, as per RFC 3339, of the change up to which the new DB System shall be restored to, using a backup and logs from the original DB System. In case no point in time is specified, then this new DB System shall be restored up to the latest change recorded for the original DB System. | `string` | No | - | - |
+| `region` | The region identifier of the source region where the DB system exists, only if it is in a different region. If the source DB system is in the same region, then no region must be specified. For more information, please see Regions and Availability Domains (https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm). | `string` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
 | `sourceUrl` | The Pre-Authenticated Request (PAR) of a bucket/prefix or PAR of a @.manifest.json object from the Object Storage. Check Using Pre-Authenticated Requests (https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/usingpreauthenticatedrequests.htm) for information related to PAR creation. Please create PAR with "Permit object reads" access type and "Enable Object Listing" permission when using a bucket/prefix PAR. Please create PAR with "Permit object reads" access type when using a @.manifest.json object PAR. | `string` | No | - | - |
+
+<a id="kind-dbsystem-spec-source-channel"></a>
+##### Spec.source.channel
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemSourceChannel defines nested fields for DbSystem.Source.Channel.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `applierUsername` | The username for the replication applier of the created MySQL DB System. | `string` | No | - | - |
+| `sourcePassword` | The password for the replication user. The password must be between 8 and 32 characters long, and must contain at least 1 numeric character, 1 lowercase character, 1 uppercase character, and 1 special (nonalphanumeric) character. | `string` | Yes | - | - |
+| `sourceUsername` | The name of the replication user on the source DB system. The username has a maximum length of 96 characters. For more information, please see the MySQL documentation (https://dev.mysql.com/doc/en/change-replication-source-to.html) | `string` | Yes | - | - |
+| [`sslCaCertificate`](#kind-dbsystem-spec-source-channel-sslcacertificate) | DbSystemSourceChannelSslCaCertificate defines nested fields for DbSystem.Source.Channel.SslCaCertificate. | `object` | No | - | - |
+| `sslMode` | The SSL mode of the Channel. | `string` | Yes | - | - |
+
+<a id="kind-dbsystem-spec-source-channel-sslcacertificate"></a>
+###### Spec.source.channel.sslCaCertificate
+
+[Back to DbSystem spec](#kind-dbsystem-spec)
+
+DbSystemSourceChannelSslCaCertificate defines nested fields for DbSystem.Source.Channel.SslCaCertificate.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `certificateType` | - | `string` | No | - | - |
+| `contents` | The string containing the CA certificate in PEM format. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
 
 <a id="kind-dbsystem-spec-telemetryconfiguration"></a>
 #### Spec.telemetryConfiguration
@@ -372,8 +429,10 @@ DbSystemStatus defines the observed state of DbSystem.
 | `hostnameLabel` | The hostname for the primary endpoint of the DB System. Used for DNS. The value is the hostname portion of the primary private IP's fully qualified domain name (FQDN) (for example, "dbsystem-1" in FQDN "dbsystem-1.subnet123.vcn1.oraclevcn.com"). Must be unique across all VNICs in the subnet and comply with RFC 952 and RFC 1123. | `string` | No | - | - |
 | `id` | The OCID of the DB System. | `string` | No | - | - |
 | `ipAddress` | The IP address the DB System is configured to listen on. A private IP address of the primary endpoint of the DB System. Must be an available IP address within the subnet's CIDR. This will be a "dotted-quad" style IPv4 address. | `string` | No | - | - |
+| [`ipv6AddressIpv6SubnetCidrPairDetails`](#kind-dbsystem-status-ipv6addressipv6subnetcidrpairdetails) | DbSystemIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.Ipv6AddressIpv6SubnetCidrPairDetails. | `object` | No | - | - |
 | `isHeatWaveClusterAttached` | If the DB System has a HeatWave Cluster attached. | `boolean` | No | - | - |
 | `isHighlyAvailable` | Specifies if the DB System is highly available. | `boolean` | No | - | - |
+| `isIpv6Enabled` | Whether an IPv6 address has been allocated for the DB system when attached to an IPv6 enabled subnet. Default: False. | `boolean` | No | - | - |
 | `lifecycleDetails` | Additional information about the current lifecycleState. | `string` | No | - | - |
 | `lifecycleState` | The current state of the DB System. | `string` | No | - | - |
 | [`maintenance`](#kind-dbsystem-status-maintenance) | DbSystemMaintenanceObservedState defines nested fields for DbSystem.Maintenance. | `object` | No | - | - |
@@ -511,6 +570,7 @@ DbSystemChannelSource defines nested fields for DbSystem.Channel.Source.
 | [`anonymousTransactionsHandling`](#kind-dbsystem-status-channels-source-anonymoustransactionshandling) | DbSystemChannelSourceAnonymousTransactionsHandling defines nested fields for DbSystem.Channel.Source.AnonymousTransactionsHandling. | `object` | No | - | - |
 | `hostname` | The network address of the MySQL instance. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `mustUseIpv6OnDualStack` | Whether the connection of the channel will be requested using the IPv6 address of the dual stack DB system or not. Default: False. | `boolean` | No | - | - |
 | `port` | The port the source MySQL instance listens on. | `integer` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
 | [`sslCaCertificate`](#kind-dbsystem-status-channels-source-sslcacertificate) | DbSystemChannelSourceSslCaCertificate defines nested fields for DbSystem.Channel.Source.SslCaCertificate. | `object` | No | - | - |
@@ -673,6 +733,7 @@ DbSystemEndpoint defines nested fields for DbSystem.Endpoint.
 | --- | --- | --- | --- | --- | --- |
 | `hostname` | The network address of the DB System. | `string` | No | - | - |
 | `ipAddress` | The IP address the DB System is configured to listen on. | `string` | No | - | - |
+| `ipAddressVersion` | The internet protocol (IP) version of the IP address. | `string` | No | - | - |
 | `modes` | The access modes from the client that this endpoint supports. | `list[string]` | No | - | - |
 | `port` | The port the MySQL instance listens on. | `integer` | No | - | - |
 | `portX` | The network port where to connect to use this endpoint using the X protocol. | `integer` | No | - | - |
@@ -696,6 +757,18 @@ DbSystemHeatWaveCluster defines nested fields for DbSystem.HeatWaveCluster.
 | `shapeName` | The shape determines resources to allocate to the HeatWave nodes - CPU cores, memory. | `string` | No | - | - |
 | `timeCreated` | The date and time the HeatWave cluster was created, as described by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
 | `timeUpdated` | The time the HeatWave cluster was last updated, as described by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
+
+<a id="kind-dbsystem-status-ipv6addressipv6subnetcidrpairdetails"></a>
+#### Status.ipv6AddressIpv6SubnetCidrPairDetails
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.Ipv6AddressIpv6SubnetCidrPairDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `ipv6Address` | An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix. | `string` | No | - | - |
+| `ipv6SubnetCidr` | The IPv6 prefix allocated to the subnet. | `string` | No | - | - |
 
 <a id="kind-dbsystem-status-maintenance"></a>
 #### Status.maintenance
@@ -751,6 +824,19 @@ DbSystemReadEndpoint defines nested fields for DbSystem.ReadEndpoint.
 | `isEnabled` | Specifies if the DB System read endpoint is enabled or not. | `boolean` | No | - | - |
 | `readEndpointHostnameLabel` | The hostname for the read endpoint of the DB System. Used for DNS. The value is the hostname portion of the primary private IP's fully qualified domain name (FQDN) (for example, "dbsystem-1" in FQDN "dbsystem-1.subnet123.vcn1.oraclevcn.com"). Must be unique across all VNICs in the subnet and comply with RFC 952 and RFC 1123. | `string` | No | - | - |
 | `readEndpointIpAddress` | The IP address the DB System read endpoint is configured to listen on. A private IP address of your choice to assign to the read endpoint of the DB System. Must be an available IP address within the subnet's CIDR. If you don't specify a value, Oracle automatically assigns a private IP address from the subnet. This should be a "dotted-quad" style IPv4 address. | `string` | No | - | - |
+| [`readEndpointIpv6AddressIpv6SubnetCidrPairDetails`](#kind-dbsystem-status-readendpoint-readendpointipv6addressipv6subnetcidrpairdetails) | DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.ReadEndpoint.ReadEndpointIpv6AddressIpv6SubnetCidrPairDetails. | `object` | No | - | - |
+
+<a id="kind-dbsystem-status-readendpoint-readendpointipv6addressipv6subnetcidrpairdetails"></a>
+##### Status.readEndpoint.readEndpointIpv6AddressIpv6SubnetCidrPairDetails
+
+[Back to DbSystem status](#kind-dbsystem-status)
+
+DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.ReadEndpoint.ReadEndpointIpv6AddressIpv6SubnetCidrPairDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `ipv6Address` | An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix. | `string` | No | - | - |
+| `ipv6SubnetCidr` | The IPv6 prefix allocated to the subnet. | `string` | No | - | - |
 
 <a id="kind-dbsystem-status-rest"></a>
 #### Status.rest

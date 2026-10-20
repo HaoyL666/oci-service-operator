@@ -128,12 +128,16 @@ func makeSubscriptionResource() *selfv1beta1.Subscription {
 						{Currency: "USD", Rate: 42.5},
 					},
 				},
-				BillingDetails: selfv1beta1.SubscriptionDetailsBillingDetails{
-					Sku:            "gold-sku",
-					MetricType:     "OCPU_HOURS",
-					RateAllocation: 100,
-					Meters: []selfv1beta1.SubscriptionDetailsBillingDetailsMeter{
-						{Name: "meter-a", RateAllocation: 100},
+				BillingDetails: []selfv1beta1.SubscriptionDetailsBillingDetail{
+					{
+						PricingPlanKey: "gold-plan-key",
+						BillingModel:   "USAGE_BASED",
+						Sku:            "gold-sku",
+						MetricType:     "OCPU_HOURS",
+						RateAllocation: 100,
+						Meters: []selfv1beta1.SubscriptionDetailsBillingDetailMeter{
+							{Name: "meter-a", RateAllocation: 100},
+						},
 					},
 				},
 			},
@@ -162,17 +166,21 @@ func makeSDKSubscription(id string, lifecycleState selfsdk.LifecycleStateEnumEnu
 			PricingPlan: &selfsdk.PricingPlan{
 				PlanType:         selfsdk.PricingPlanPlanTypeFixed,
 				PlanName:         common.String("gold-plan"),
-				BillingFrequency: selfsdk.PricingPlanBillingFrequencyYearly,
+				BillingFrequency: selfsdk.BillingFrequencyYearly,
 				Rates: []selfsdk.PricingRate{
 					{Currency: common.String("USD"), Rate: common.Float32(42.5)},
 				},
 			},
-			BillingDetails: &selfsdk.BillingDetails{
-				Sku:            common.String("gold-sku"),
-				MetricType:     selfsdk.MetricTypeOcpuHours,
-				RateAllocation: common.Float32(100),
-				Meters: []selfsdk.Meter{
-					{Name: common.String("meter-a"), RateAllocation: common.Float32(100)},
+			BillingDetails: []selfsdk.BillingDetails{
+				{
+					PricingPlanKey: common.String("gold-plan-key"),
+					BillingModel:   selfsdk.BillingDetailsBillingModelUsageBased,
+					Sku:            common.String("gold-sku"),
+					MetricType:     selfsdk.MetricTypeOcpuHours,
+					RateAllocation: common.Float32(100),
+					Meters: []selfsdk.Meter{
+						{Name: common.String("meter-a"), RateAllocation: common.Float32(100)},
+					},
 				},
 			},
 		},

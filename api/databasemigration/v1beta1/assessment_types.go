@@ -67,6 +67,9 @@ type AssessmentSpec struct {
 	// More details can be found in the documentation.
 	// +kubebuilder:validation:Optional
 	BulkIncludeExcludeData string `json:"bulkIncludeExcludeData,omitempty"`
+	// Assessment migration scope.
+	// +kubebuilder:validation:Optional
+	MigrationScope string `json:"migrationScope,omitempty"`
 }
 
 // AssessmentSourceDatabaseConnection defines nested fields for Assessment.SourceDatabaseConnection.
@@ -177,6 +180,8 @@ type AssessmentStatus struct {
 	// An RFC3339 formatted datetime string such as `2016-08-25T21:10:29.600Z`.
 	TimeCreated         string `json:"timeCreated,omitempty"`
 	DatabaseCombination string `json:"databaseCombination,omitempty"`
+	// Assessment migration scope.
+	MigrationScope string `json:"migrationScope,omitempty"`
 	// True if CDB should be defined, false otherwise.
 	IsCdbSupported bool `json:"isCdbSupported,omitempty"`
 }

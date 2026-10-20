@@ -45,16 +45,16 @@ type ResourceAnchorCloudServiceProviderMetadataItem struct {
 // ResourceAnchorStatus defines the observed state of ResourceAnchor.
 type ResourceAnchorStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the ResourceAnchor.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource anchor.
 	Id string `json:"id,omitempty"`
 	// A user-friendly name. Does not have to be unique, and it's changeable.
 	DisplayName string `json:"displayName,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment.
 	CompartmentId string `json:"compartmentId,omitempty"`
-	// The date and time the ResourceAnchor was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+	// The date and time the resource anchor was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeCreated string `json:"timeCreated,omitempty"`
-	// The current state of the ResourceAnchor.
+	// The current state of the resource anchor.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
@@ -73,10 +73,10 @@ type ResourceAnchorStatus struct {
 	Region string `json:"region,omitempty"`
 	// The name assigned to the compartment during creation.
 	CompartmentName string `json:"compartmentName,omitempty"`
-	// The date and time the ResourceAnchor was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
+	// The date and time the resource anchor was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeUpdated string `json:"timeUpdated,omitempty"`
-	// A message that describes the current state of the ResourceAnchor in more detail. For example,
+	// A message that describes the current state of the resource anchor in more detail. For example,
 	// can be used to provide actionable information for a resource in the Failed state.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
 	// AUTO_BIND - when passed compartment will be created on-behalf of customer and bind to this resource anchor
@@ -91,14 +91,16 @@ type ResourceAnchorStatus struct {
 	// subscription type
 	SubscriptionType                 string                                         `json:"subscriptionType,omitempty"`
 	CloudServiceProviderMetadataItem ResourceAnchorCloudServiceProviderMetadataItem `json:"cloudServiceProviderMetadataItem,omitempty"`
-	// Partner Cloud Account Identifier of the Cloud Service Provider.
+	// Partner cloud account identifier of the cloud service provider.
 	PartnerCloudAccountIdentifier string `json:"partnerCloudAccountIdentifier,omitempty"`
-	// Resource Anchor Id in the Cloud Service Provider.
+	// Resource anchor ID in the cloud service provider.
 	CspResourceAnchorId string `json:"cspResourceAnchorId,omitempty"`
-	// Resource Anchor Name in the Cloud Service Provider.
+	// Resource anchor name in the cloud service provider.
 	CspResourceAnchorName string `json:"cspResourceAnchorName,omitempty"`
-	// CSP Specific Additional Properties, AzureSubnetId for Azure
+	// Cloud service provider-specific properties, such as AzureSubnetId for Azure.
 	CspAdditionalProperties map[string]string `json:"cspAdditionalProperties,omitempty"`
+	// URI for the cloud service provider's resource anchor.
+	ResourceAnchorUri string `json:"resourceAnchorUri,omitempty"`
 }
 
 // +kubebuilder:object:root=true

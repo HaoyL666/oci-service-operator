@@ -45,6 +45,7 @@ SubscriptionSpec defines the desired state of Subscription.
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `productId` | The unique identifier of the marketplace listing in Oracle Cloud Infrastructure. | `string` | Yes | - | - |
 | `realm` | The realm from where customer is buying the subscription. | `string` | No | - | - |
+| `reason` | Optional reason provided by the customer for the cancellation. | `string` | No | - | - |
 | `region` | The region from where customer is buying the subscription. | `string` | No | - | - |
 | `sellerId` | The OCID for the seller in SELF Service. | `string` | Yes | - | - |
 | `sourceType` | The type of seller in SELF Service. | `string` | No | - | - |
@@ -73,33 +74,35 @@ SubscriptionDetails defines nested fields for Subscription.SubscriptionDetails.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `amount` | Tha amount for the currency type. | `number` | No | - | - |
-| [`billingDetails`](#kind-subscription-spec-subscriptiondetails-billingdetails) | SubscriptionDetailsBillingDetails defines nested fields for Subscription.SubscriptionDetails.BillingDetails. | `object` | Yes | - | - |
+| [`billingDetails`](#kind-subscription-spec-subscriptiondetails-billingdetails) | Billing details associated with the subscription plan and its usage dimensions. | `list[object]` | Yes | - | - |
 | `currency` | The currency supported, in the format specified by ISO-4217 | `string` | No | - | - |
 | `isAutoRenew` | Whether subscription should be auto-renewed at the end of cycle. | `boolean` | No | - | - |
 | `partnerRegistrationUrl` | The activation link given by the partner. | `string` | Yes | - | - |
 | [`pricingPlan`](#kind-subscription-spec-subscriptiondetails-pricingplan) | SubscriptionDetailsPricingPlan defines nested fields for Subscription.SubscriptionDetails.PricingPlan. | `object` | Yes | - | - |
 
 <a id="kind-subscription-spec-subscriptiondetails-billingdetails"></a>
-##### Spec.subscriptionDetails.billingDetails
+##### Spec.subscriptionDetails.billingDetails[]
 
 [Back to Subscription spec](#kind-subscription-spec)
 
-SubscriptionDetailsBillingDetails defines nested fields for Subscription.SubscriptionDetails.BillingDetails.
+SubscriptionDetailsBillingDetail defines nested fields for Subscription.SubscriptionDetails.BillingDetail.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `billingModel` | The billing model this billing detail applies to. | `string` | Yes | - | - |
 | `hasGovSku` | Whether this sku is assign to gov product. | `boolean` | No | - | - |
 | [`meters`](#kind-subscription-spec-subscriptiondetails-billingdetails-meters) | The meters associated with sku. | `list[object]` | Yes | - | - |
 | `metricType` | The part's metric. | `string` | Yes | - | - |
+| `pricingPlanKey` | Unique key used to map this SKU to the pricing plan. | `string` | Yes | - | - |
 | `rateAllocation` | Tha rate of this sku meter. | `number` | Yes | - | - |
 | `sku` | Sku for service. | `string` | Yes | - | - |
 
 <a id="kind-subscription-spec-subscriptiondetails-billingdetails-meters"></a>
-###### Spec.subscriptionDetails.billingDetails.meters[]
+###### Spec.subscriptionDetails.billingDetails[].meters[]
 
 [Back to Subscription spec](#kind-subscription-spec)
 
-SubscriptionDetailsBillingDetailsMeter defines nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.
+SubscriptionDetailsBillingDetailMeter defines nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
@@ -108,11 +111,11 @@ SubscriptionDetailsBillingDetailsMeter defines nested fields for Subscription.Su
 | `rateAllocation` | Tha rate of this sku meter. | `number` | Yes | - | - |
 
 <a id="kind-subscription-spec-subscriptiondetails-billingdetails-meters-extendedmetadata"></a>
-###### Spec.subscriptionDetails.billingDetails.meters[].extendedMetadata[]
+###### Spec.subscriptionDetails.billingDetails[].meters[].extendedMetadata[]
 
 [Back to Subscription spec](#kind-subscription-spec)
 
-SubscriptionDetailsBillingDetailsMeterExtendedMetadata defines nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.ExtendedMetadata.
+SubscriptionDetailsBillingDetailMeterExtendedMetadata defines nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.ExtendedMetadata.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
@@ -128,12 +131,42 @@ SubscriptionDetailsPricingPlan defines nested fields for Subscription.Subscripti
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `billingFrequency` | Specifies the interval at which billing occurs for the subscription plan. | `string` | Yes | - | - |
+| `billingFrequency` | Specifies the interval at which billing occurs for the subscription plan or usage dimension. | `string` | Yes | - | - |
+| [`dimensions`](#kind-subscription-spec-subscriptiondetails-pricingplan-dimensions) | Metered usage dimensions associated with the pricing plan. | `list[object]` | No | - | - |
 | `planDescription` | A detailed explanation of the subscription plan. | `string` | No | - | - |
-| `planDuration` | Specifies the interval at which billing occurs for the subscription plan. | `string` | No | - | - |
+| `planDuration` | Specifies the duration of the subscription plan. | `string` | No | - | - |
 | `planName` | The name of the subscription plan used to identify the plan. | `string` | Yes | - | - |
 | `planType` | The type of the subscription plan. | `string` | Yes | - | - |
 | [`rates`](#kind-subscription-spec-subscriptiondetails-pricingplan-rates) | The pricing details of the subscription plan in various supported currencies. | `list[object]` | Yes | - | - |
+
+<a id="kind-subscription-spec-subscriptiondetails-pricingplan-dimensions"></a>
+###### Spec.subscriptionDetails.pricingPlan.dimensions[]
+
+[Back to Subscription spec](#kind-subscription-spec)
+
+SubscriptionDetailsPricingPlanDimension defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `dimensionBillingFrequency` | Specifies the interval at which the usage dimension is billed. | `string` | Yes | - | - |
+| `dimensionDescription` | A detailed explanation of the usage dimension. | `string` | Yes | - | - |
+| `dimensionKey` | The stable key used internally to map this usage dimension to billing details. | `string` | Yes | - | - |
+| `dimensionName` | The name of the usage dimension. | `string` | Yes | - | - |
+| `includedQuantity` | Quantity included in the base fee for hybrid plans. | `number` | No | - | - |
+| `metricType` | The metric type in which usage is measured. | `string` | Yes | - | - |
+| [`rates`](#kind-subscription-spec-subscriptiondetails-pricingplan-dimensions-rates) | Dimension-level rates in various supported currencies. | `list[object]` | Yes | - | - |
+
+<a id="kind-subscription-spec-subscriptiondetails-pricingplan-dimensions-rates"></a>
+###### Spec.subscriptionDetails.pricingPlan.dimensions[].rates[]
+
+[Back to Subscription spec](#kind-subscription-spec)
+
+SubscriptionDetailsPricingPlanDimensionRate defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.Rate.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `currency` | The currency supported, in the format specified by ISO-4217 | `string` | Yes | - | - |
+| `rate` | The amount charged for the plan in the specified currency. | `number` | Yes | - | - |
 
 <a id="kind-subscription-spec-subscriptiondetails-pricingplan-rates"></a>
 ###### Spec.subscriptionDetails.pricingPlan.rates[]
@@ -257,33 +290,35 @@ SubscriptionDetails defines nested fields for Subscription.SubscriptionDetails.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `amount` | Tha amount for the currency type. | `number` | No | - | - |
-| [`billingDetails`](#kind-subscription-status-subscriptiondetails-billingdetails) | SubscriptionDetailsBillingDetails defines nested fields for Subscription.SubscriptionDetails.BillingDetails. | `object` | Yes | - | - |
+| [`billingDetails`](#kind-subscription-status-subscriptiondetails-billingdetails) | Billing details associated with the subscription plan and its usage dimensions. | `list[object]` | Yes | - | - |
 | `currency` | The currency supported, in the format specified by ISO-4217 | `string` | No | - | - |
 | `isAutoRenew` | Whether subscription should be auto-renewed at the end of cycle. | `boolean` | No | - | - |
 | `partnerRegistrationUrl` | The activation link given by the partner. | `string` | Yes | - | - |
 | [`pricingPlan`](#kind-subscription-status-subscriptiondetails-pricingplan) | SubscriptionDetailsPricingPlan defines nested fields for Subscription.SubscriptionDetails.PricingPlan. | `object` | Yes | - | - |
 
 <a id="kind-subscription-status-subscriptiondetails-billingdetails"></a>
-##### Status.subscriptionDetails.billingDetails
+##### Status.subscriptionDetails.billingDetails[]
 
 [Back to Subscription status](#kind-subscription-status)
 
-SubscriptionDetailsBillingDetails defines nested fields for Subscription.SubscriptionDetails.BillingDetails.
+SubscriptionDetailsBillingDetail defines nested fields for Subscription.SubscriptionDetails.BillingDetail.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `billingModel` | The billing model this billing detail applies to. | `string` | Yes | - | - |
 | `hasGovSku` | Whether this sku is assign to gov product. | `boolean` | No | - | - |
 | [`meters`](#kind-subscription-status-subscriptiondetails-billingdetails-meters) | The meters associated with sku. | `list[object]` | Yes | - | - |
 | `metricType` | The part's metric. | `string` | Yes | - | - |
+| `pricingPlanKey` | Unique key used to map this SKU to the pricing plan. | `string` | Yes | - | - |
 | `rateAllocation` | Tha rate of this sku meter. | `number` | Yes | - | - |
 | `sku` | Sku for service. | `string` | Yes | - | - |
 
 <a id="kind-subscription-status-subscriptiondetails-billingdetails-meters"></a>
-###### Status.subscriptionDetails.billingDetails.meters[]
+###### Status.subscriptionDetails.billingDetails[].meters[]
 
 [Back to Subscription status](#kind-subscription-status)
 
-SubscriptionDetailsBillingDetailsMeter defines nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.
+SubscriptionDetailsBillingDetailMeter defines nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
@@ -292,11 +327,11 @@ SubscriptionDetailsBillingDetailsMeter defines nested fields for Subscription.Su
 | `rateAllocation` | Tha rate of this sku meter. | `number` | Yes | - | - |
 
 <a id="kind-subscription-status-subscriptiondetails-billingdetails-meters-extendedmetadata"></a>
-###### Status.subscriptionDetails.billingDetails.meters[].extendedMetadata[]
+###### Status.subscriptionDetails.billingDetails[].meters[].extendedMetadata[]
 
 [Back to Subscription status](#kind-subscription-status)
 
-SubscriptionDetailsBillingDetailsMeterExtendedMetadata defines nested fields for Subscription.SubscriptionDetails.BillingDetails.Meter.ExtendedMetadata.
+SubscriptionDetailsBillingDetailMeterExtendedMetadata defines nested fields for Subscription.SubscriptionDetails.BillingDetail.Meter.ExtendedMetadata.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
@@ -312,12 +347,42 @@ SubscriptionDetailsPricingPlan defines nested fields for Subscription.Subscripti
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `billingFrequency` | Specifies the interval at which billing occurs for the subscription plan. | `string` | Yes | - | - |
+| `billingFrequency` | Specifies the interval at which billing occurs for the subscription plan or usage dimension. | `string` | Yes | - | - |
+| [`dimensions`](#kind-subscription-status-subscriptiondetails-pricingplan-dimensions) | Metered usage dimensions associated with the pricing plan. | `list[object]` | No | - | - |
 | `planDescription` | A detailed explanation of the subscription plan. | `string` | No | - | - |
-| `planDuration` | Specifies the interval at which billing occurs for the subscription plan. | `string` | No | - | - |
+| `planDuration` | Specifies the duration of the subscription plan. | `string` | No | - | - |
 | `planName` | The name of the subscription plan used to identify the plan. | `string` | Yes | - | - |
 | `planType` | The type of the subscription plan. | `string` | Yes | - | - |
 | [`rates`](#kind-subscription-status-subscriptiondetails-pricingplan-rates) | The pricing details of the subscription plan in various supported currencies. | `list[object]` | Yes | - | - |
+
+<a id="kind-subscription-status-subscriptiondetails-pricingplan-dimensions"></a>
+###### Status.subscriptionDetails.pricingPlan.dimensions[]
+
+[Back to Subscription status](#kind-subscription-status)
+
+SubscriptionDetailsPricingPlanDimension defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `dimensionBillingFrequency` | Specifies the interval at which the usage dimension is billed. | `string` | Yes | - | - |
+| `dimensionDescription` | A detailed explanation of the usage dimension. | `string` | Yes | - | - |
+| `dimensionKey` | The stable key used internally to map this usage dimension to billing details. | `string` | Yes | - | - |
+| `dimensionName` | The name of the usage dimension. | `string` | Yes | - | - |
+| `includedQuantity` | Quantity included in the base fee for hybrid plans. | `number` | No | - | - |
+| `metricType` | The metric type in which usage is measured. | `string` | Yes | - | - |
+| [`rates`](#kind-subscription-status-subscriptiondetails-pricingplan-dimensions-rates) | Dimension-level rates in various supported currencies. | `list[object]` | Yes | - | - |
+
+<a id="kind-subscription-status-subscriptiondetails-pricingplan-dimensions-rates"></a>
+###### Status.subscriptionDetails.pricingPlan.dimensions[].rates[]
+
+[Back to Subscription status](#kind-subscription-status)
+
+SubscriptionDetailsPricingPlanDimensionRate defines nested fields for Subscription.SubscriptionDetails.PricingPlan.Dimension.Rate.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `currency` | The currency supported, in the format specified by ISO-4217 | `string` | Yes | - | - |
+| `rate` | The amount charged for the plan in the specified currency. | `number` | Yes | - | - |
 
 <a id="kind-subscription-status-subscriptiondetails-pricingplan-rates"></a>
 ###### Status.subscriptionDetails.pricingPlan.rates[]

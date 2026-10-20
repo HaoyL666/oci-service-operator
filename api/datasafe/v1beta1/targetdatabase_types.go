@@ -286,6 +286,8 @@ type TargetDatabaseStatus struct {
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
 	// The date and time of the target database update in Data Safe.
 	TimeUpdated string `json:"timeUpdated,omitempty"`
+	// List of enabled features based on granted ORA_DSCS_* roles in target database
+	Features []string `json:"features,omitempty"`
 	// The OCIDs of associated resources like database, Data Safe private endpoint, etc.
 	PeerTargetDatabases []TargetDatabasePeerTargetDatabase `json:"peerTargetDatabases,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)

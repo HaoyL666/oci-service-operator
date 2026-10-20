@@ -55,6 +55,7 @@ DesktopPoolSpec defines the desired state of DesktopPool.
 | [`networkConfiguration`](#kind-desktoppool-spec-networkconfiguration) | DesktopPoolNetworkConfiguration defines nested fields for DesktopPool.NetworkConfiguration. | `object` | Yes | - | - |
 | `nsgIds` | A list of network security groups for the private access. | `list[string]` | No | - | - |
 | [`privateAccessDetails`](#kind-desktoppool-spec-privateaccessdetails) | DesktopPoolPrivateAccessDetails defines nested fields for DesktopPool.PrivateAccessDetails. | `object` | No | - | - |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource. Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}` | `map[string, map[string, string]]` | No | - | - |
 | [`sessionLifecycleActions`](#kind-desktoppool-spec-sessionlifecycleactions) | DesktopPoolSessionLifecycleActions defines nested fields for DesktopPool.SessionLifecycleActions. | `object` | No | - | - |
 | [`shapeConfig`](#kind-desktoppool-spec-shapeconfig) | DesktopPoolShapeConfig defines nested fields for DesktopPool.ShapeConfig. | `object` | No | - | - |
 | `shapeName` | The shape of the desktop pool. | `string` | Yes | - | - |
@@ -141,6 +142,7 @@ DesktopPoolNetworkConfiguration defines nested fields for DesktopPool.NetworkCon
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource. Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet in the customer VCN where the connectivity will be established. | `string` | Yes | - | - |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the customer VCN. | `string` | Yes | - | - |
 
@@ -155,6 +157,7 @@ DesktopPoolPrivateAccessDetails defines nested fields for DesktopPool.PrivateAcc
 | --- | --- | --- | --- | --- | --- |
 | `nsgIds` | A list of network security groups for the private access. | `list[string]` | No | - | - |
 | `privateIp` | The IPv4 address from the provided OCI subnet which needs to be assigned to the VNIC. If not provided, it will be auto-assigned with an available IPv4 address from the subnet. | `string` | No | - | - |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource. Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet in the customer VCN where the connectivity will be established. | `string` | Yes | - | - |
 
 <a id="kind-desktoppool-spec-sessionlifecycleactions"></a>
@@ -233,6 +236,7 @@ DesktopPoolStatus defines the observed state of DesktopPool.
 | [`networkConfiguration`](#kind-desktoppool-status-networkconfiguration) | DesktopPoolNetworkConfiguration defines nested fields for DesktopPool.NetworkConfiguration. | `object` | No | - | - |
 | `nsgIds` | A list of network security groups for the network. | `list[string]` | No | - | - |
 | [`privateAccessDetails`](#kind-desktoppool-status-privateaccessdetails) | DesktopPoolPrivateAccessDetails defines nested fields for DesktopPool.PrivateAccessDetails. | `object` | No | - | - |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource. Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}` | `map[string, map[string, string]]` | No | - | - |
 | [`sessionLifecycleActions`](#kind-desktoppool-status-sessionlifecycleactions) | DesktopPoolSessionLifecycleActions defines nested fields for DesktopPool.SessionLifecycleActions. | `object` | No | - | - |
 | [`shapeConfig`](#kind-desktoppool-status-shapeconfig) | DesktopPoolShapeConfig defines nested fields for DesktopPool.ShapeConfig. | `object` | No | - | - |
 | `shapeName` | The shape of the desktop pool. | `string` | No | - | - |
@@ -321,6 +325,7 @@ DesktopPoolNetworkConfiguration defines nested fields for DesktopPool.NetworkCon
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource. Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet in the customer VCN where the connectivity will be established. | `string` | Yes | - | - |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the customer VCN. | `string` | Yes | - | - |
 
@@ -335,6 +340,7 @@ DesktopPoolPrivateAccessDetails defines nested fields for DesktopPool.PrivateAcc
 | --- | --- | --- | --- | --- | --- |
 | `nsgIds` | A list of network security groups for the private access. | `list[string]` | No | - | - |
 | `privateIp` | The IPv4 address from the provided OCI subnet which needs to be assigned to the VNIC. If not provided, it will be auto-assigned with an available IPv4 address from the subnet. | `string` | No | - | - |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource. Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet in the customer VCN where the connectivity will be established. | `string` | Yes | - | - |
 
 <a id="kind-desktoppool-status-sessionlifecycleactions"></a>

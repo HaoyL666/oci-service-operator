@@ -86,6 +86,10 @@ spec:
                 description: Indicates whether this is an "Always Free" resource.
                   The default value is false.
                 type: boolean
+              logGroupId:
+                description: The OCID of the Log Analytics log group to which the
+                  data uploaded to this APM domain will be mapped to.
+                type: string
             required:
             - compartmentId
             - displayName
@@ -131,6 +135,10 @@ spec:
                 type: boolean
               lifecycleState:
                 description: The current lifecycle state of the APM domain.
+                type: string
+              logGroupId:
+                description: The OCID of the Log Analytics log group to which the
+                  data uploaded to this APM domain will be mapped to.
                 type: string
               status:
                 properties:

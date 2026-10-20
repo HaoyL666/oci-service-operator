@@ -26,7 +26,7 @@
 // <br>
 // <b>AWS</b>:<br>
 // <b>Oracle AWS Connector Resource:</b>&nbsp;&nbsp;The Oracle AWS Connector Resource is used to install the AWS Identity Connector on an Exadata VM cluster in Oracle Exadata Database Service on Dedicated Infrastructure (ExaDB-D).
-// <b>Google AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
+// <b>Oracle AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
 //
 
 package dbmulticloud
@@ -163,7 +163,7 @@ func (client MultiCloudResourceDiscoveryClient) changeMultiCloudResourceDiscover
 
 	var response ChangeMultiCloudResourceDiscoveryCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "multiCloudResourceDiscovery", "ChangeMultiCloudResourceDiscoveryCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -226,7 +226,7 @@ func (client MultiCloudResourceDiscoveryClient) createMultiCloudResourceDiscover
 
 	var response CreateMultiCloudResourceDiscoveryResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "multiCloudResourceDiscovery", "CreateMultiCloudResourceDiscovery")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -284,7 +284,7 @@ func (client MultiCloudResourceDiscoveryClient) deleteMultiCloudResourceDiscover
 
 	var response DeleteMultiCloudResourceDiscoveryResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "multiCloudResourceDiscovery", "DeleteMultiCloudResourceDiscovery")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -342,7 +342,7 @@ func (client MultiCloudResourceDiscoveryClient) getMultiCloudResourceDiscovery(c
 
 	var response GetMultiCloudResourceDiscoveryResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "multiCloudResourceDiscovery", "GetMultiCloudResourceDiscovery")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -400,7 +400,7 @@ func (client MultiCloudResourceDiscoveryClient) listMultiCloudResourceDiscoverie
 
 	var response ListMultiCloudResourceDiscoveriesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "multiCloudResourceDiscovery", "ListMultiCloudResourceDiscoveries")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -458,7 +458,7 @@ func (client MultiCloudResourceDiscoveryClient) updateMultiCloudResourceDiscover
 
 	var response UpdateMultiCloudResourceDiscoveryResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "multiCloudResourceDiscovery", "UpdateMultiCloudResourceDiscovery")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

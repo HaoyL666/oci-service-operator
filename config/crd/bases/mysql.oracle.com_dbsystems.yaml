@@ -322,6 +322,18 @@ spec:
                   Oracle automatically assigns a private IP address from the subnet. This should be a
                   "dotted-quad" style IPv4 address.
                 type: string
+              ipv6AddressIpv6SubnetCidrPairDetails:
+                description: DbSystemIpv6AddressIpv6SubnetCidrPairDetails defines
+                  nested fields for DbSystem.Ipv6AddressIpv6SubnetCidrPairDetails.
+                properties:
+                  ipv6Address:
+                    description: An IPv6 address of your choice. Must be an available
+                      IPv6 address within the subnet's prefix.
+                    type: string
+                  ipv6SubnetCidr:
+                    description: The IPv6 prefix allocated to the subnet.
+                    type: string
+                type: object
               isHighlyAvailable:
                 description: |-
                   Specifies if the DB System is highly available.
@@ -330,6 +342,14 @@ spec:
                   subnet-type. The secondaries are placed automatically in the other
                   two availability or fault domains.  You can choose the preferred
                   location of your primary instance, only.
+                type: boolean
+              isIpv6Enabled:
+                description: |-
+                  Whether to allocate an IPv6 address at DB system creation from an
+                  IPv6 enabled subnet. When provided you may optionally
+                  provide an IPv6 prefix (ipv6AddressIpv6SubnetCidrPairDetails) of your
+                  choice to assign the IPv6 address from. If ipv6AddressIpv6SubnetCidrPairDetails
+                  is not provided then an IPv6 prefix is chosen for you.
                 type: boolean
               maintenance:
                 description: DbSystemMaintenance defines nested fields for DbSystem.Maintenance.
@@ -435,6 +455,18 @@ spec:
                       Oracle automatically assigns a private IP address from the subnet. This should be a
                       "dotted-quad" style IPv4 address.
                     type: string
+                  readEndpointIpv6AddressIpv6SubnetCidrPairDetails:
+                    description: DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails
+                      defines nested fields for DbSystem.ReadEndpoint.ReadEndpointIpv6AddressIpv6SubnetCidrPairDetails.
+                    properties:
+                      ipv6Address:
+                        description: An IPv6 address of your choice. Must be an available
+                          IPv6 address within the subnet's prefix.
+                        type: string
+                      ipv6SubnetCidr:
+                        description: The IPv6 prefix allocated to the subnet.
+                        type: string
+                    type: object
                 type: object
               rest:
                 description: DbSystemRest defines nested fields for DbSystem.Rest.
@@ -487,11 +519,50 @@ spec:
                     description: The OCID of the backup to be used as the source for
                       the new DB System.
                     type: string
+                  channel:
+                    description: DbSystemSourceChannel defines nested fields for DbSystem.Source.Channel.
+                    properties:
+                      applierUsername:
+                        description: The username for the replication applier of the
+                          created MySQL DB System.
+                        type: string
+                      sourcePassword:
+                        description: |-
+                          The password for the replication user. The password must be
+                          between 8 and 32 characters long, and must contain at least 1
+                          numeric character, 1 lowercase character, 1 uppercase character,
+                          and 1 special (nonalphanumeric) character.
+                        type: string
+                      sourceUsername:
+                        description: |-
+                          The name of the replication user on the source DB system.
+                          The username has a maximum length of 96 characters. For more information,
+                          please see the MySQL documentation (https://dev.mysql.com/doc/en/change-replication-source-to.html)
+                        type: string
+                      sslCaCertificate:
+                        description: DbSystemSourceChannelSslCaCertificate defines
+                          nested fields for DbSystem.Source.Channel.SslCaCertificate.
+                        properties:
+                          certificateType:
+                            type: string
+                          contents:
+                            description: The string containing the CA certificate
+                              in PEM format.
+                            type: string
+                          jsonData:
+                            type: string
+                        type: object
+                      sslMode:
+                        description: The SSL mode of the Channel.
+                        type: string
+                    required:
+                    - sourcePassword
+                    - sourceUsername
+                    - sslMode
+                    type: object
                   dbSystemId:
-                    description: |-
-                      The OCID of the DB System from which a backup shall be selected to be
-                      restored when creating the new DB System. Use this together with
-                      recovery point to perform a point in time recovery operation.
+                    description: The OCID of the DB system to be used as the source
+                      for the new DB System.
                     type: string
                   jsonData:
                     type: string
@@ -502,6 +573,12 @@ spec:
                       original DB System. In case no point in time is specified, then this
                       new DB System shall be restored up to the latest change recorded for
                       the original DB System.
+                    type: string
+                  region:
+                    description: |-
+                      The region identifier of the source region where the DB system exists, only if it is in a different region.
+                      If the source DB system is in the same region, then no region must be specified.
+                      For more information, please see Regions and Availability Domains (https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm).
                     type: string
                   sourceType:
                     type: string
@@ -766,6 +843,11 @@ spec:
                           type: string
                         jsonData:
                           type: string
+                        mustUseIpv6OnDualStack:
+                          description: |-
+                            Whether the connection of the channel will be requested using the IPv6 address of
+                            the dual stack DB system or not. Default: False.
+                          type: boolean
                         port:
                           description: The port the source MySQL instance listens
                             on.
@@ -1052,6 +1134,9 @@ spec:
                       description: The IP address the DB System is configured to listen
                         on.
                       type: string
+                    ipAddressVersion:
+                      description: The internet protocol (IP) version of the IP address.
+                      type: string
                     modes:
                       description: The access modes from the client that this endpoint
                         supports.
@@ -1146,11 +1231,28 @@ spec:
                   available IP address within the subnet's CIDR. This will be a
                   "dotted-quad" style IPv4 address.
                 type: string
+              ipv6AddressIpv6SubnetCidrPairDetails:
+                description: DbSystemIpv6AddressIpv6SubnetCidrPairDetails defines
+                  nested fields for DbSystem.Ipv6AddressIpv6SubnetCidrPairDetails.
+                properties:
+                  ipv6Address:
+                    description: An IPv6 address of your choice. Must be an available
+                      IPv6 address within the subnet's prefix.
+                    type: string
+                  ipv6SubnetCidr:
+                    description: The IPv6 prefix allocated to the subnet.
+                    type: string
+                type: object
               isHeatWaveClusterAttached:
                 description: If the DB System has a HeatWave Cluster attached.
                 type: boolean
               isHighlyAvailable:
                 description: Specifies if the DB System is highly available.
+                type: boolean
+              isIpv6Enabled:
+                description: |-
+                  Whether an IPv6 address has been allocated for the DB system when attached
+                  to an IPv6 enabled subnet. Default: False.
                 type: boolean
               lifecycleDetails:
                 description: Additional information about the current lifecycleState.
@@ -1191,7 +1293,7 @@ spec:
                   maintenanceScheduleType:
                     description: |-
                       The maintenance schedule type of the DB system.
-                      EARLY:   Maintenance schedule follows a cycle where upgrades are performed when versions become deprecated.
+                      EARLY: Maintenance schedule follows a cycle where upgrades are performed when versions become deprecated.
                       REGULAR: Maintenance schedule follows the normal cycle where upgrades are performed when versions become unavailable.
                     type: string
                   targetVersion:
@@ -1283,6 +1385,18 @@ spec:
                       Oracle automatically assigns a private IP address from the subnet. This should be a
                       "dotted-quad" style IPv4 address.
                     type: string
+                  readEndpointIpv6AddressIpv6SubnetCidrPairDetails:
+                    description: DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails
+                      defines nested fields for DbSystem.ReadEndpoint.ReadEndpointIpv6AddressIpv6SubnetCidrPairDetails.
+                    properties:
+                      ipv6Address:
+                        description: An IPv6 address of your choice. Must be an available
+                          IPv6 address within the subnet's prefix.
+                        type: string
+                      ipv6SubnetCidr:
+                        description: The IPv6 prefix allocated to the subnet.
+                        type: string
+                    type: object
                 type: object
               rest:
                 description: DbSystemRest defines nested fields for DbSystem.Rest.

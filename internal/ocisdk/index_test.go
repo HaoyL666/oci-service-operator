@@ -646,8 +646,8 @@ func TestPackageResourceOperations(t *testing.T) {
 				if create.RequestType != "GenerateEnrichmentJobRequest" {
 					t.Fatalf("EnrichmentJob create request type = %q, want GenerateEnrichmentJobRequest", create.RequestType)
 				}
-				if create.ClientType != "GenerateEnrichmentJobClient" {
-					t.Fatalf("EnrichmentJob create client type = %q, want GenerateEnrichmentJobClient", create.ClientType)
+				if create.ClientType != "EnrichmentJobClient" {
+					t.Fatalf("EnrichmentJob create client type = %q, want EnrichmentJobClient", create.ClientType)
 				}
 				get := operations["Get"]
 				if get.MethodName != "GetEnrichmentJob" {
@@ -664,8 +664,8 @@ func TestPackageResourceOperations(t *testing.T) {
 				if deleteOp.RequestType != "CancelEnrichmentJobRequest" {
 					t.Fatalf("EnrichmentJob delete request type = %q, want CancelEnrichmentJobRequest", deleteOp.RequestType)
 				}
-				if deleteOp.ClientType != "CancelEnrichmentJobClient" {
-					t.Fatalf("EnrichmentJob delete client type = %q, want CancelEnrichmentJobClient", deleteOp.ClientType)
+				if deleteOp.ClientType != "EnrichmentJobClient" {
+					t.Fatalf("EnrichmentJob delete client type = %q, want EnrichmentJobClient", deleteOp.ClientType)
 				}
 				if _, ok := operations["Update"]; ok {
 					t.Fatal("EnrichmentJob runtime metadata should not invent an Update operation")

@@ -14,9 +14,6 @@ import (
 
 // EnrichmentJobSpec defines the desired state of EnrichmentJob.
 type EnrichmentJobSpec struct {
-	// Enrichment job type. Currently supported Full Build (All supported objects in a given schema) and Partial Build (Selected tables and/or supported objects in a given schema).
-	// +kubebuilder:validation:Required
-	EnrichmentJobType string `json:"enrichmentJobType"`
 	// +kubebuilder:validation:Required
 	EnrichmentJobConfiguration EnrichmentJobConfiguration `json:"enrichmentJobConfiguration"`
 	// An optional description of the EnrichmentJob.
@@ -25,6 +22,9 @@ type EnrichmentJobSpec struct {
 	// A user-friendly display name. It does not have to be unique and can be modified. Avoid entering confidential information.
 	// +kubebuilder:validation:Optional
 	DisplayName string `json:"displayName,omitempty"`
+	// Deprecated. Use EnrichmentJobConfiguration.enrichmentJobType instead.
+	// +kubebuilder:validation:Optional
+	EnrichmentJobType string `json:"enrichmentJobType,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// +kubebuilder:validation:Optional
@@ -63,7 +63,7 @@ type EnrichmentJobConfiguration struct {
 	// Name of the DB Schema to be enriched
 	// +kubebuilder:validation:Optional
 	SchemaName string `json:"schemaName,omitempty"`
-	// Schedule for occurrences of Delta Refresh jobs
+	// Deprecated schedule for occurrences of Delta Refresh jobs. This value is not used by the service.
 	// +kubebuilder:validation:Optional
 	DeltaRefreshSchedule shared.JSONValue `json:"deltaRefreshSchedule,omitempty"`
 	// Collection of the DatabaseObjects to be enriched for the given schema.
@@ -74,18 +74,20 @@ type EnrichmentJobConfiguration struct {
 // EnrichmentJobStatus defines the observed state of EnrichmentJob.
 type EnrichmentJobStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// Unique identifier that is immutable on creation.
+	// The OCID of the Semantic Store job.
 	Id string `json:"id,omitempty"`
 	// Owning SemanticStore OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for an EnrichmentJob.
 	SemanticStoreId string `json:"semanticStoreId,omitempty"`
-	// Enrichment job type. Currently supported Full Build (All supported objects in a given schema) and Partial Build (Selected tables and/or supported objects in a given schema).
+	// Enrichment job type. Supported values are Full Build (all supported objects in a given schema), Partial Build (selected tables and/or supported objects in a given schema), and Delta Refresh (objects in a given schema that have changed since the previous enrichment job).
 	EnrichmentJobType          string                     `json:"enrichmentJobType,omitempty"`
 	EnrichmentJobConfiguration EnrichmentJobConfiguration `json:"enrichmentJobConfiguration,omitempty"`
+	// The generative AI modelId used for Enrichment. You can use the ListModels API to list the available models. https://docs.oracle.com/en-us/iaas/api/#/en/generative-ai/20231130/ModelCollection/ListModels
+	ModelId string `json:"modelId,omitempty"`
 	// The date and time that the enrichment job was accepted in the format of an RFC3339 datetime string.
 	TimeAccepted string `json:"timeAccepted,omitempty"`
 	// A message describing the current state in more detail that can provide actionable information.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
-	// The lifecycleState of GenerateSqlJob.
+	// The lifecycle state of the EnrichmentJob.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// An optional description of the EnrichmentJob.
 	Description string `json:"description,omitempty"`

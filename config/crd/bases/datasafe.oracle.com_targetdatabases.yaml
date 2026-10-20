@@ -384,6 +384,12 @@ spec:
               displayName:
                 description: The display name of the target database in Data Safe.
                 type: string
+              features:
+                description: List of enabled features based on granted ORA_DSCS_*
+                  roles in target database
+                items:
+                  type: string
+                type: array
               freeformTags:
                 additionalProperties:
                   type: string

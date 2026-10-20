@@ -32,6 +32,8 @@ type ConnectionAssignmentStatus struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the connection being
 	// referenced.
 	ConnectionId string `json:"connectionId,omitempty"`
+	// The connection type.
+	ConnectionType string `json:"connectionType,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the deployment being referenced.
 	DeploymentId string `json:"deploymentId,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment being referenced.

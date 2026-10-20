@@ -33,8 +33,8 @@ type ListDeploymentsRequest struct {
 	// Return the deployments to which the specified connectionId may be assigned.
 	AssignableConnectionId *string `mandatory:"false" contributesTo:"query" name:"assignableConnectionId"`
 
-	// A filter to return only the resources that match the 'lifecycleState' given.
-	LifecycleState ListDeploymentsLifecycleStateEnum `mandatory:"false" contributesTo:"query" name:"lifecycleState" omitEmpty:"true"`
+	// A filter to return only the deployments having the 'lifecycleState' given.
+	LifecycleState DeploymentLifecycleStateEnum `mandatory:"false" contributesTo:"query" name:"lifecycleState" omitEmpty:"true"`
 
 	// A filter to return only the resources that match the 'lifecycleSubState' given.
 	LifecycleSubState ListDeploymentsLifecycleSubStateEnum `mandatory:"false" contributesTo:"query" name:"lifecycleSubState" omitEmpty:"true"`
@@ -105,8 +105,8 @@ func (request ListDeploymentsRequest) ValidateEnumValue() (bool, error) {
 	if _, ok := GetMappingListDeploymentsSupportedConnectionTypeEnum(string(request.SupportedConnectionType)); !ok && request.SupportedConnectionType != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for SupportedConnectionType: %s. Supported values are: %s.", request.SupportedConnectionType, strings.Join(GetListDeploymentsSupportedConnectionTypeEnumStringValues(), ",")))
 	}
-	if _, ok := GetMappingListDeploymentsLifecycleStateEnum(string(request.LifecycleState)); !ok && request.LifecycleState != "" {
-		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for LifecycleState: %s. Supported values are: %s.", request.LifecycleState, strings.Join(GetListDeploymentsLifecycleStateEnumStringValues(), ",")))
+	if _, ok := GetMappingDeploymentLifecycleStateEnum(string(request.LifecycleState)); !ok && request.LifecycleState != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for LifecycleState: %s. Supported values are: %s.", request.LifecycleState, strings.Join(GetDeploymentLifecycleStateEnumStringValues(), ",")))
 	}
 	if _, ok := GetMappingListDeploymentsLifecycleSubStateEnum(string(request.LifecycleSubState)); !ok && request.LifecycleSubState != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for LifecycleSubState: %s. Supported values are: %s.", request.LifecycleSubState, strings.Join(GetListDeploymentsLifecycleSubStateEnumStringValues(), ",")))
@@ -187,6 +187,7 @@ const (
 	ListDeploymentsSupportedConnectionTypeGooglePubsub          ListDeploymentsSupportedConnectionTypeEnum = "GOOGLE_PUBSUB"
 	ListDeploymentsSupportedConnectionTypeMicrosoftFabric       ListDeploymentsSupportedConnectionTypeEnum = "MICROSOFT_FABRIC"
 	ListDeploymentsSupportedConnectionTypeIceberg               ListDeploymentsSupportedConnectionTypeEnum = "ICEBERG"
+	ListDeploymentsSupportedConnectionTypeAiModel               ListDeploymentsSupportedConnectionTypeEnum = "AI_MODEL"
 )
 
 var mappingListDeploymentsSupportedConnectionTypeEnum = map[string]ListDeploymentsSupportedConnectionTypeEnum{
@@ -219,6 +220,7 @@ var mappingListDeploymentsSupportedConnectionTypeEnum = map[string]ListDeploymen
 	"GOOGLE_PUBSUB":           ListDeploymentsSupportedConnectionTypeGooglePubsub,
 	"MICROSOFT_FABRIC":        ListDeploymentsSupportedConnectionTypeMicrosoftFabric,
 	"ICEBERG":                 ListDeploymentsSupportedConnectionTypeIceberg,
+	"AI_MODEL":                ListDeploymentsSupportedConnectionTypeAiModel,
 }
 
 var mappingListDeploymentsSupportedConnectionTypeEnumLowerCase = map[string]ListDeploymentsSupportedConnectionTypeEnum{
@@ -251,6 +253,7 @@ var mappingListDeploymentsSupportedConnectionTypeEnumLowerCase = map[string]List
 	"google_pubsub":           ListDeploymentsSupportedConnectionTypeGooglePubsub,
 	"microsoft_fabric":        ListDeploymentsSupportedConnectionTypeMicrosoftFabric,
 	"iceberg":                 ListDeploymentsSupportedConnectionTypeIceberg,
+	"ai_model":                ListDeploymentsSupportedConnectionTypeAiModel,
 }
 
 // GetListDeploymentsSupportedConnectionTypeEnumValues Enumerates the set of values for ListDeploymentsSupportedConnectionTypeEnum
@@ -294,98 +297,13 @@ func GetListDeploymentsSupportedConnectionTypeEnumStringValues() []string {
 		"GOOGLE_PUBSUB",
 		"MICROSOFT_FABRIC",
 		"ICEBERG",
+		"AI_MODEL",
 	}
 }
 
 // GetMappingListDeploymentsSupportedConnectionTypeEnum performs case Insensitive comparison on enum value and return the desired enum
 func GetMappingListDeploymentsSupportedConnectionTypeEnum(val string) (ListDeploymentsSupportedConnectionTypeEnum, bool) {
 	enum, ok := mappingListDeploymentsSupportedConnectionTypeEnumLowerCase[strings.ToLower(val)]
-	return enum, ok
-}
-
-// ListDeploymentsLifecycleStateEnum Enum with underlying type: string
-type ListDeploymentsLifecycleStateEnum string
-
-// Set of constants representing the allowable values for ListDeploymentsLifecycleStateEnum
-const (
-	ListDeploymentsLifecycleStateCreating       ListDeploymentsLifecycleStateEnum = "CREATING"
-	ListDeploymentsLifecycleStateUpdating       ListDeploymentsLifecycleStateEnum = "UPDATING"
-	ListDeploymentsLifecycleStateActive         ListDeploymentsLifecycleStateEnum = "ACTIVE"
-	ListDeploymentsLifecycleStateInactive       ListDeploymentsLifecycleStateEnum = "INACTIVE"
-	ListDeploymentsLifecycleStateDeleting       ListDeploymentsLifecycleStateEnum = "DELETING"
-	ListDeploymentsLifecycleStateDeleted        ListDeploymentsLifecycleStateEnum = "DELETED"
-	ListDeploymentsLifecycleStateFailed         ListDeploymentsLifecycleStateEnum = "FAILED"
-	ListDeploymentsLifecycleStateNeedsAttention ListDeploymentsLifecycleStateEnum = "NEEDS_ATTENTION"
-	ListDeploymentsLifecycleStateInProgress     ListDeploymentsLifecycleStateEnum = "IN_PROGRESS"
-	ListDeploymentsLifecycleStateCanceling      ListDeploymentsLifecycleStateEnum = "CANCELING"
-	ListDeploymentsLifecycleStateCanceled       ListDeploymentsLifecycleStateEnum = "CANCELED"
-	ListDeploymentsLifecycleStateSucceeded      ListDeploymentsLifecycleStateEnum = "SUCCEEDED"
-	ListDeploymentsLifecycleStateWaiting        ListDeploymentsLifecycleStateEnum = "WAITING"
-)
-
-var mappingListDeploymentsLifecycleStateEnum = map[string]ListDeploymentsLifecycleStateEnum{
-	"CREATING":        ListDeploymentsLifecycleStateCreating,
-	"UPDATING":        ListDeploymentsLifecycleStateUpdating,
-	"ACTIVE":          ListDeploymentsLifecycleStateActive,
-	"INACTIVE":        ListDeploymentsLifecycleStateInactive,
-	"DELETING":        ListDeploymentsLifecycleStateDeleting,
-	"DELETED":         ListDeploymentsLifecycleStateDeleted,
-	"FAILED":          ListDeploymentsLifecycleStateFailed,
-	"NEEDS_ATTENTION": ListDeploymentsLifecycleStateNeedsAttention,
-	"IN_PROGRESS":     ListDeploymentsLifecycleStateInProgress,
-	"CANCELING":       ListDeploymentsLifecycleStateCanceling,
-	"CANCELED":        ListDeploymentsLifecycleStateCanceled,
-	"SUCCEEDED":       ListDeploymentsLifecycleStateSucceeded,
-	"WAITING":         ListDeploymentsLifecycleStateWaiting,
-}
-
-var mappingListDeploymentsLifecycleStateEnumLowerCase = map[string]ListDeploymentsLifecycleStateEnum{
-	"creating":        ListDeploymentsLifecycleStateCreating,
-	"updating":        ListDeploymentsLifecycleStateUpdating,
-	"active":          ListDeploymentsLifecycleStateActive,
-	"inactive":        ListDeploymentsLifecycleStateInactive,
-	"deleting":        ListDeploymentsLifecycleStateDeleting,
-	"deleted":         ListDeploymentsLifecycleStateDeleted,
-	"failed":          ListDeploymentsLifecycleStateFailed,
-	"needs_attention": ListDeploymentsLifecycleStateNeedsAttention,
-	"in_progress":     ListDeploymentsLifecycleStateInProgress,
-	"canceling":       ListDeploymentsLifecycleStateCanceling,
-	"canceled":        ListDeploymentsLifecycleStateCanceled,
-	"succeeded":       ListDeploymentsLifecycleStateSucceeded,
-	"waiting":         ListDeploymentsLifecycleStateWaiting,
-}
-
-// GetListDeploymentsLifecycleStateEnumValues Enumerates the set of values for ListDeploymentsLifecycleStateEnum
-func GetListDeploymentsLifecycleStateEnumValues() []ListDeploymentsLifecycleStateEnum {
-	values := make([]ListDeploymentsLifecycleStateEnum, 0)
-	for _, v := range mappingListDeploymentsLifecycleStateEnum {
-		values = append(values, v)
-	}
-	return values
-}
-
-// GetListDeploymentsLifecycleStateEnumStringValues Enumerates the set of values in String for ListDeploymentsLifecycleStateEnum
-func GetListDeploymentsLifecycleStateEnumStringValues() []string {
-	return []string{
-		"CREATING",
-		"UPDATING",
-		"ACTIVE",
-		"INACTIVE",
-		"DELETING",
-		"DELETED",
-		"FAILED",
-		"NEEDS_ATTENTION",
-		"IN_PROGRESS",
-		"CANCELING",
-		"CANCELED",
-		"SUCCEEDED",
-		"WAITING",
-	}
-}
-
-// GetMappingListDeploymentsLifecycleStateEnum performs case Insensitive comparison on enum value and return the desired enum
-func GetMappingListDeploymentsLifecycleStateEnum(val string) (ListDeploymentsLifecycleStateEnum, bool) {
-	enum, ok := mappingListDeploymentsLifecycleStateEnumLowerCase[strings.ToLower(val)]
 	return enum, ok
 }
 
@@ -470,6 +388,8 @@ const (
 	ListDeploymentsDeploymentTypeDatabaseDb2i               ListDeploymentsDeploymentTypeEnum = "DATABASE_DB2I"
 	ListDeploymentsDeploymentTypeGgsa                       ListDeploymentsDeploymentTypeEnum = "GGSA"
 	ListDeploymentsDeploymentTypeDataTransforms             ListDeploymentsDeploymentTypeEnum = "DATA_TRANSFORMS"
+	ListDeploymentsDeploymentTypeVeridataServer             ListDeploymentsDeploymentTypeEnum = "VERIDATA_SERVER"
+	ListDeploymentsDeploymentTypeVeridataAgent              ListDeploymentsDeploymentTypeEnum = "VERIDATA_AGENT"
 )
 
 var mappingListDeploymentsDeploymentTypeEnum = map[string]ListDeploymentsDeploymentTypeEnum{
@@ -483,6 +403,8 @@ var mappingListDeploymentsDeploymentTypeEnum = map[string]ListDeploymentsDeploym
 	"DATABASE_DB2I":                ListDeploymentsDeploymentTypeDatabaseDb2i,
 	"GGSA":                         ListDeploymentsDeploymentTypeGgsa,
 	"DATA_TRANSFORMS":              ListDeploymentsDeploymentTypeDataTransforms,
+	"VERIDATA_SERVER":              ListDeploymentsDeploymentTypeVeridataServer,
+	"VERIDATA_AGENT":               ListDeploymentsDeploymentTypeVeridataAgent,
 }
 
 var mappingListDeploymentsDeploymentTypeEnumLowerCase = map[string]ListDeploymentsDeploymentTypeEnum{
@@ -496,6 +418,8 @@ var mappingListDeploymentsDeploymentTypeEnumLowerCase = map[string]ListDeploymen
 	"database_db2i":                ListDeploymentsDeploymentTypeDatabaseDb2i,
 	"ggsa":                         ListDeploymentsDeploymentTypeGgsa,
 	"data_transforms":              ListDeploymentsDeploymentTypeDataTransforms,
+	"veridata_server":              ListDeploymentsDeploymentTypeVeridataServer,
+	"veridata_agent":               ListDeploymentsDeploymentTypeVeridataAgent,
 }
 
 // GetListDeploymentsDeploymentTypeEnumValues Enumerates the set of values for ListDeploymentsDeploymentTypeEnum
@@ -520,6 +444,8 @@ func GetListDeploymentsDeploymentTypeEnumStringValues() []string {
 		"DATABASE_DB2I",
 		"GGSA",
 		"DATA_TRANSFORMS",
+		"VERIDATA_SERVER",
+		"VERIDATA_AGENT",
 	}
 }
 

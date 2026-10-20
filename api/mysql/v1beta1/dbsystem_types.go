@@ -100,6 +100,15 @@ type DbSystemSpec struct {
 	// "dotted-quad" style IPv4 address.
 	// +kubebuilder:validation:Optional
 	IpAddress string `json:"ipAddress,omitempty"`
+	// Whether to allocate an IPv6 address at DB system creation from an
+	// IPv6 enabled subnet. When provided you may optionally
+	// provide an IPv6 prefix (ipv6AddressIpv6SubnetCidrPairDetails) of your
+	// choice to assign the IPv6 address from. If ipv6AddressIpv6SubnetCidrPairDetails
+	// is not provided then an IPv6 prefix is chosen for you.
+	// +kubebuilder:validation:Optional
+	IsIpv6Enabled bool `json:"isIpv6Enabled,omitempty"`
+	// +kubebuilder:validation:Optional
+	Ipv6AddressIpv6SubnetCidrPairDetails DbSystemIpv6AddressIpv6SubnetCidrPairDetails `json:"ipv6AddressIpv6SubnetCidrPairDetails,omitempty,omitzero"`
 	// The port for primary endpoint of the DB System to listen on.
 	// +kubebuilder:validation:Optional
 	Port int `json:"port,omitempty"`
@@ -196,6 +205,16 @@ type DbSystemDataStorage struct {
 	MaxStorageSizeInGBs int `json:"maxStorageSizeInGBs,omitempty"`
 }
 
+// DbSystemIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.Ipv6AddressIpv6SubnetCidrPairDetails.
+type DbSystemIpv6AddressIpv6SubnetCidrPairDetails struct {
+	// The IPv6 prefix allocated to the subnet.
+	// +kubebuilder:validation:Optional
+	Ipv6SubnetCidr string `json:"ipv6SubnetCidr,omitempty"`
+	// An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix.
+	// +kubebuilder:validation:Optional
+	Ipv6Address string `json:"ipv6Address,omitempty"`
+}
+
 // DbSystemBackupPolicyCopyPolicy defines nested fields for DbSystem.BackupPolicy.CopyPolicy.
 type DbSystemBackupPolicyCopyPolicy struct {
 	// The destination region name to which the DB system backup will be copied.
@@ -250,12 +269,56 @@ type DbSystemBackupPolicy struct {
 	PitrPolicy DbSystemBackupPolicyPitrPolicy `json:"pitrPolicy,omitempty,omitzero"`
 }
 
+// DbSystemSourceChannelSslCaCertificate defines nested fields for DbSystem.Source.Channel.SslCaCertificate.
+type DbSystemSourceChannelSslCaCertificate struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	CertificateType string `json:"certificateType,omitempty"`
+	// The string containing the CA certificate in PEM format.
+	// +kubebuilder:validation:Optional
+	Contents string `json:"contents,omitempty"`
+}
+
+// DbSystemSourceChannel defines nested fields for DbSystem.Source.Channel.
+type DbSystemSourceChannel struct {
+	// The name of the replication user on the source DB system.
+	// The username has a maximum length of 96 characters. For more information,
+	// please see the MySQL documentation (https://dev.mysql.com/doc/en/change-replication-source-to.html)
+	// +kubebuilder:validation:Required
+	SourceUsername string `json:"sourceUsername"`
+	// The password for the replication user. The password must be
+	// between 8 and 32 characters long, and must contain at least 1
+	// numeric character, 1 lowercase character, 1 uppercase character,
+	// and 1 special (nonalphanumeric) character.
+	// +kubebuilder:validation:Required
+	SourcePassword string `json:"sourcePassword"`
+	// The SSL mode of the Channel.
+	// +kubebuilder:validation:Required
+	SslMode string `json:"sslMode"`
+	// +kubebuilder:validation:Optional
+	SslCaCertificate DbSystemSourceChannelSslCaCertificate `json:"sslCaCertificate,omitempty,omitzero"`
+	// The username for the replication applier of the created MySQL DB System.
+	// +kubebuilder:validation:Optional
+	ApplierUsername string `json:"applierUsername,omitempty"`
+}
+
 // DbSystemSource defines nested fields for DbSystem.Source.
 type DbSystemSource struct {
 	// +kubebuilder:validation:Optional
 	JsonData string `json:"jsonData,omitempty"`
 	// +kubebuilder:validation:Optional
 	SourceType string `json:"sourceType,omitempty"`
+	// The OCID of the DB system to be used as the source for the new DB System.
+	// +kubebuilder:validation:Optional
+	DbSystemId string `json:"dbSystemId,omitempty"`
+	// The region identifier of the source region where the DB system exists, only if it is in a different region.
+	// If the source DB system is in the same region, then no region must be specified.
+	// For more information, please see Regions and Availability Domains (https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm).
+	// +kubebuilder:validation:Optional
+	Region string `json:"region,omitempty"`
+	// +kubebuilder:validation:Optional
+	Channel DbSystemSourceChannel `json:"channel,omitempty,omitzero"`
 	// The OCID of the backup to be used as the source for the new DB System.
 	// +kubebuilder:validation:Optional
 	BackupId string `json:"backupId,omitempty"`
@@ -266,11 +329,6 @@ type DbSystemSource struct {
 	// Please create PAR with "Permit object reads" access type when using a @.manifest.json object PAR.
 	// +kubebuilder:validation:Optional
 	SourceUrl string `json:"sourceUrl,omitempty"`
-	// The OCID of the DB System from which a backup shall be selected to be
-	// restored when creating the new DB System. Use this together with
-	// recovery point to perform a point in time recovery operation.
-	// +kubebuilder:validation:Optional
-	DbSystemId string `json:"dbSystemId,omitempty"`
 	// The date and time, as per RFC 3339, of the change up to which the
 	// new DB System shall be restored to, using a backup and logs from the
 	// original DB System. In case no point in time is specified, then this
@@ -369,6 +427,16 @@ type DbSystemCustomerContact struct {
 	Email string `json:"email"`
 }
 
+// DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails defines nested fields for DbSystem.ReadEndpoint.ReadEndpointIpv6AddressIpv6SubnetCidrPairDetails.
+type DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails struct {
+	// The IPv6 prefix allocated to the subnet.
+	// +kubebuilder:validation:Optional
+	Ipv6SubnetCidr string `json:"ipv6SubnetCidr,omitempty"`
+	// An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix.
+	// +kubebuilder:validation:Optional
+	Ipv6Address string `json:"ipv6Address,omitempty"`
+}
+
 // DbSystemReadEndpoint defines nested fields for DbSystem.ReadEndpoint.
 type DbSystemReadEndpoint struct {
 	// Specifies if the DB System read endpoint is enabled or not.
@@ -381,6 +449,8 @@ type DbSystemReadEndpoint struct {
 	// "dotted-quad" style IPv4 address.
 	// +kubebuilder:validation:Optional
 	ReadEndpointIpAddress string `json:"readEndpointIpAddress,omitempty"`
+	// +kubebuilder:validation:Optional
+	ReadEndpointIpv6AddressIpv6SubnetCidrPairDetails DbSystemReadEndpointReadEndpointIpv6AddressIpv6SubnetCidrPairDetails `json:"readEndpointIpv6AddressIpv6SubnetCidrPairDetails,omitempty,omitzero"`
 	// The hostname for the read endpoint of the DB System. Used for DNS.
 	// The value is the hostname portion of the primary private IP's fully qualified domain name (FQDN)
 	// (for example, "dbsystem-1" in FQDN "dbsystem-1.subnet123.vcn1.oraclevcn.com").
@@ -470,7 +540,7 @@ type DbSystemMaintenanceObservedState struct {
 	// FOLLOW:            Follows the track of the current MySQL version.
 	VersionTrackPreference string `json:"versionTrackPreference,omitempty"`
 	// The maintenance schedule type of the DB system.
-	// EARLY:   Maintenance schedule follows a cycle where upgrades are performed when versions become deprecated.
+	// EARLY: Maintenance schedule follows a cycle where upgrades are performed when versions become deprecated.
 	// REGULAR: Maintenance schedule follows the normal cycle where upgrades are performed when versions become unavailable.
 	MaintenanceScheduleType string `json:"maintenanceScheduleType,omitempty"`
 	// The time the scheduled maintenance is expected to start,
@@ -588,6 +658,8 @@ type DbSystemEndpoint struct {
 	PortX int `json:"portX,omitempty"`
 	// The network address of the DB System.
 	Hostname string `json:"hostname,omitempty"`
+	// The internet protocol (IP) version of the IP address.
+	IpAddressVersion string `json:"ipAddressVersion,omitempty"`
 	// The access modes from the client that this endpoint supports.
 	Modes []string `json:"modes,omitempty"`
 	// The state of the endpoints, as far as it can seen from the DB System.
@@ -642,6 +714,9 @@ type DbSystemChannelSource struct {
 	Username                      string                                             `json:"username,omitempty"`
 	SslCaCertificate              DbSystemChannelSourceSslCaCertificate              `json:"sslCaCertificate,omitempty"`
 	AnonymousTransactionsHandling DbSystemChannelSourceAnonymousTransactionsHandling `json:"anonymousTransactionsHandling,omitempty"`
+	// Whether the connection of the channel will be requested using the IPv6 address of
+	// the dual stack DB system or not. Default: False.
+	MustUseIpv6OnDualStack bool `json:"mustUseIpv6OnDualStack,omitempty"`
 	// The SSL mode of the Channel.
 	SslMode string `json:"sslMode,omitempty"`
 }
@@ -806,6 +881,10 @@ type DbSystemStatus struct {
 	// available IP address within the subnet's CIDR. This will be a
 	// "dotted-quad" style IPv4 address.
 	IpAddress string `json:"ipAddress,omitempty"`
+	// Whether an IPv6 address has been allocated for the DB system when attached
+	// to an IPv6 enabled subnet. Default: False.
+	IsIpv6Enabled                        bool                                         `json:"isIpv6Enabled,omitempty"`
+	Ipv6AddressIpv6SubnetCidrPairDetails DbSystemIpv6AddressIpv6SubnetCidrPairDetails `json:"ipv6AddressIpv6SubnetCidrPairDetails,omitempty"`
 	// The port for primary endpoint of the DB System to listen on.
 	Port int `json:"port,omitempty"`
 	// The network port on which X Plugin listens for TCP/IP connections. This is the X Plugin equivalent of port.

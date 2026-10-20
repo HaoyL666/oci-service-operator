@@ -97,6 +97,7 @@ AgentPluginList defines nested fields for Agent.PluginList.
 | `lifecycleState` | The current state of the plugin. | `string` | No | - | - |
 | `name` | Plugin identifier, which can be renamed. | `string` | No | - | - |
 | `pluginVersion` | Plugin version. | `string` | No | - | - |
+| `systemTags` | The system tags associated with this resource, if any. The system tags are set by Oracle cloud infrastructure services. Each key is predefined and scoped to namespaces. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{orcl-cloud: {free-tier-retain: true}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The time when the plugin was created. An RFC3339 formatted datetime string. | `string` | No | - | - |
 | `timeUpdated` | The time when the plugin was updated. An RFC3339 formatted datetime string. | `string` | No | - | - |
 
@@ -292,6 +293,9 @@ AssetSpec defines the desired state of Asset.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `assetClassName` | The class name of the asset. | `string` | No | - | - |
+| `assetClassVersion` | The version of the asset class. | `string` | No | - | - |
+| `assetDetails` | The details of the asset. | `map[string, object (preserves unknown fields)]` | No | - | - |
 | `assetSourceIds` | List of asset source OCID. | `list[string]` | No | - | - |
 | `assetType` | - | `string` | No | - | - |
 | [`attachedEbsVolumesCost`](#kind-asset-spec-attachedebsvolumescost) | AssetAttachedEbsVolumesCost defines nested fields for Asset.AttachedEbsVolumesCost. | `object` | No | - | - |
@@ -302,6 +306,7 @@ AssetSpec defines the desired state of Asset.
 | [`compute`](#kind-asset-spec-compute) | AssetCompute defines nested fields for Asset.Compute. | `object` | No | - | - |
 | `definedTags` | The defined tags associated with this resource, if any. Each key is predefined and scoped to namespaces. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `displayName` | Asset display name. | `string` | No | - | - |
+| `environmentType` | Specifies if this is the Source or Destination point for migration - different assets may be discovered depending on setting. | `string` | No | - | - |
 | `externalAssetKey` | The key of the asset from the external environment. | `string` | Yes | - | - |
 | `freeformTags` | The freeform tags associated with this resource, if any. Each tag is a simple key-value pair with no predefined name, type, or namespace/scope. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `inventoryId` | Inventory ID to which an asset belongs. | `string` | Yes | - | - |
@@ -769,6 +774,9 @@ AssetStatus defines the observed state of Asset.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `assetClassName` | The class name of the asset. | `string` | No | - | - |
+| `assetClassVersion` | The version of the asset class. | `string` | No | - | - |
+| `assetDetails` | The details of the asset. | `map[string, object (preserves unknown fields)]` | No | - | - |
 | `assetSourceIds` | List of asset source OCID. | `list[string]` | No | - | - |
 | `assetType` | - | `string` | No | - | - |
 | [`attachedEbsVolumesCost`](#kind-asset-status-attachedebsvolumescost) | AssetAttachedEbsVolumesCost defines nested fields for Asset.AttachedEbsVolumesCost. | `object` | No | - | - |
@@ -779,6 +787,7 @@ AssetStatus defines the observed state of Asset.
 | [`compute`](#kind-asset-status-compute) | AssetCompute defines nested fields for Asset.Compute. | `object` | No | - | - |
 | `definedTags` | The defined tags associated with this resource, if any. Each key is predefined and scoped to namespaces. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `displayName` | Asset display name. | `string` | No | - | - |
+| `environmentType` | Specifies if this is the Source or Destination point for migration - different assets may be discovered depending on setting. | `string` | No | - | - |
 | `externalAssetKey` | The key of the asset from the external environment. | `string` | No | - | - |
 | `freeformTags` | The freeform tags associated with this resource, if any. Each tag is a simple key-value pair with no predefined name, type, or namespace/scope. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | Asset OCID that is immutable on creation. | `string` | No | - | - |
@@ -1333,10 +1342,12 @@ AssetSourceSpec defines the desired state of AssetSource.
 | `discoveryScheduleId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the discovery schedule that is going to be attached to the created asset. | `string` | No | - | - |
 | `displayName` | A user-friendly name for the asset source. Does not have to be unique, and it's mutable. Avoid entering confidential information. The name is generated by the service if it is not explicitly provided. | `string` | No | - | - |
 | `environmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the environment. | `string` | Yes | - | - |
+| `environmentType` | Specifies if this is the Source or Destination point for migration - different assets may be discovered depending on setting. | `string` | No | - | - |
 | `freeformTags` | The freeform tags associated with this resource, if any. Each tag is a simple key-value pair with no predefined name, type, or namespace/scope. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `inventoryId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the inventory that will contain created assets. | `string` | Yes | - | - |
 | `isCostInformationCollected` | Flag indicating whether cost data collection is enabled for assets, originating from this asset source. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `olvmEndpoint` | Endpoint for OLVM asset discovery and replication in the form of ```https://<host>:<port>``` | `string` | No | - | - |
 | [`replicationCredentials`](#kind-assetsource-spec-replicationcredentials) | AssetSourceReplicationCredentials defines nested fields for AssetSource.ReplicationCredentials. | `object` | No | - | - |
 | `systemTags` | The system tags associated with this resource, if any. The system tags are set by Oracle cloud infrastructure services. Each key is predefined and scoped to namespaces. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{orcl-cloud: {free-tier-retain: true}}` | `map[string, map[string, string]]` | No | - | - |
 | `type` | - | `string` | No | - | - |
@@ -1384,6 +1395,7 @@ AssetSourceStatus defines the observed state of AssetSource.
 | `discoveryScheduleId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of an attached discovery schedule. | `string` | No | - | - |
 | `displayName` | A user-friendly name for the asset source. Does not have to be unique, and it's mutable. Avoid entering confidential information. | `string` | No | - | - |
 | `environmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the environment. | `string` | No | - | - |
+| `environmentType` | Specifies if this is the Source or Destination point for migration - different assets may be discovered depending on setting. | `string` | No | - | - |
 | `freeformTags` | The freeform tags associated with this resource, if any. Each tag is a simple key-value pair with no predefined name, type, or namespace/scope. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource. | `string` | No | - | - |
 | `inventoryId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the inventory that will contain created assets. | `string` | No | - | - |
@@ -1391,6 +1403,7 @@ AssetSourceStatus defines the observed state of AssetSource.
 | `jsonData` | - | `string` | No | - | - |
 | `lifecycleDetails` | The detailed state of the asset source. | `string` | No | - | - |
 | `lifecycleState` | The current state of the asset source. | `string` | No | - | - |
+| `olvmEndpoint` | Endpoint for OLVM asset discovery and replication in the form of ```https://<host>:<port>``` | `string` | No | - | - |
 | [`replicationCredentials`](#kind-assetsource-status-replicationcredentials) | AssetSourceReplicationCredentials defines nested fields for AssetSource.ReplicationCredentials. | `object` | No | - | - |
 | [`status`](#kind-assetsource-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | The system tags associated with this resource, if any. The system tags are set by Oracle cloud infrastructure services. Each key is predefined and scoped to namespaces. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{orcl-cloud: {free-tier-retain: true}}` | `map[string, map[string, string]]` | No | - | - |

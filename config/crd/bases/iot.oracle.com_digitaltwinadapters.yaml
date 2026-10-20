@@ -97,6 +97,16 @@ spec:
                     description: DigitalTwinAdapterInboundEnvelopeEnvelopeMapping
                       defines nested fields for DigitalTwinAdapter.InboundEnvelope.EnvelopeMapping.
                     properties:
+                      contentRoot:
+                        description: JSON Path string to override the context root
+                          before delegating to the adapter of the target digital twin
+                          instance.
+                        type: string
+                      target:
+                        description: Optional. JQ expression to map the target resource,
+                          which is externalKey of digital twin instance, the incoming
+                          data belongs to.
+                        type: string
                       timeObserved:
                         description: |-
                           JQ expression to extract the observation timestamp from the payload. If not specified,
@@ -139,6 +149,10 @@ spec:
                         A boolean expression used to determine whether the following transformation
                         should be processed for the incoming payload. This expression is typically based
                         on fields defined at the inbound Envelope and is evaluated before applying the `payloadMapping`.
+                      type: string
+                    contentRoot:
+                      description: JSON Path string to override the context root before
+                        delegating to the adapter of the target digital twin instance.
                       type: string
                     description:
                       description: Meaningful write up about the inbound route.
@@ -188,6 +202,11 @@ spec:
                         jsonData:
                           type: string
                       type: object
+                    target:
+                      description: Optional. JQ expression to map the target resource,
+                        which is externalKey of digital twin instance, the incoming
+                        data belongs to.
+                      type: string
                   required:
                   - condition
                   type: object
@@ -246,6 +265,16 @@ spec:
                     description: DigitalTwinAdapterInboundEnvelopeEnvelopeMapping
                       defines nested fields for DigitalTwinAdapter.InboundEnvelope.EnvelopeMapping.
                     properties:
+                      contentRoot:
+                        description: JSON Path string to override the context root
+                          before delegating to the adapter of the target digital twin
+                          instance.
+                        type: string
+                      target:
+                        description: Optional. JQ expression to map the target resource,
+                          which is externalKey of digital twin instance, the incoming
+                          data belongs to.
+                        type: string
                       timeObserved:
                         description: |-
                           JQ expression to extract the observation timestamp from the payload. If not specified,
@@ -288,6 +317,10 @@ spec:
                         A boolean expression used to determine whether the following transformation
                         should be processed for the incoming payload. This expression is typically based
                         on fields defined at the inbound Envelope and is evaluated before applying the `payloadMapping`.
+                      type: string
+                    contentRoot:
+                      description: JSON Path string to override the context root before
+                        delegating to the adapter of the target digital twin instance.
                       type: string
                     description:
                       description: Meaningful write up about the inbound route.
@@ -337,6 +370,11 @@ spec:
                         jsonData:
                           type: string
                       type: object
+                    target:
+                      description: Optional. JQ expression to map the target resource,
+                        which is externalKey of digital twin instance, the incoming
+                        data belongs to.
+                      type: string
                   required:
                   - condition
                   type: object

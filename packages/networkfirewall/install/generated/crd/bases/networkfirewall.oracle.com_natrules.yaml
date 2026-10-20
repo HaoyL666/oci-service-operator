@@ -65,8 +65,8 @@ spec:
                 description: NatRuleCondition defines nested fields for NatRule.Condition.
                 properties:
                   destinationAddress:
-                    description: An array of IP address list names to be evaluated
-                      against the traffic destination address.
+                    description: An array of address list names to be evaluated against
+                      the traffic destination address.
                     items:
                       type: string
                     type: array
@@ -75,8 +75,8 @@ spec:
                       protocol and protocol-specific parameters.
                     type: string
                   sourceAddress:
-                    description: An array of IP address list names to be evaluated
-                      against the traffic source address.
+                    description: An array of address list names to be evaluated against
+                      the traffic source address.
                     items:
                       type: string
                     type: array
@@ -89,6 +89,10 @@ spec:
                 type: string
               name:
                 description: Name for the NAT rule, must be unique within the policy.
+                type: string
+              networkFirewallPolicyId:
+                description: The OCID of the Network Firewall policy that owns this
+                  resource.
                 type: string
               position:
                 description: NatRulePosition defines nested fields for NatRule.Position.
@@ -104,6 +108,7 @@ spec:
                 type: string
             required:
             - name
+            - networkFirewallPolicyId
             type: object
           status:
             description: NatRuleStatus defines the observed state of NatRule.
@@ -117,8 +122,8 @@ spec:
                 description: NatRuleCondition defines nested fields for NatRule.Condition.
                 properties:
                   destinationAddress:
-                    description: An array of IP address list names to be evaluated
-                      against the traffic destination address.
+                    description: An array of address list names to be evaluated against
+                      the traffic destination address.
                     items:
                       type: string
                     type: array
@@ -127,8 +132,8 @@ spec:
                       protocol and protocol-specific parameters.
                     type: string
                   sourceAddress:
-                    description: An array of IP address list names to be evaluated
-                      against the traffic source address.
+                    description: An array of address list names to be evaluated against
+                      the traffic source address.
                     items:
                       type: string
                     type: array

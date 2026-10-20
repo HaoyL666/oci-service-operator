@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "dbmulticloud",
+    "apiVersion": "dbmulticloud.oracle.com/v1beta1",
+    "kind": "MultiCloudResourceDiscovery",
+    "formalSlug": "multicloudresourcediscovery",
+    "providerResource": "oci_dbmulticloud_multi_cloud_resource_discovery",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "compartmentId",
+      "definedTags",
+      "displayName",
+      "freeformTags",
+      "oracleDbConnectorId",
+      "resourceType"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "resourcesFilter",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      }
+    ]
+  }
+}

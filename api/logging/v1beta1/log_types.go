@@ -53,13 +53,13 @@ type LogConfigurationSource struct {
 	// Service generating log.
 	// +kubebuilder:validation:Optional
 	Service string `json:"service,omitempty"`
-	// The unique identifier of the resource emitting the log.
+	// The unique identifier of the resource emitting the log. The resource can be updated, and the resource value can vary depending on the OCI service to which the resource belongs to.
 	// +kubebuilder:validation:Optional
 	Resource string `json:"resource,omitempty"`
 	// Log object category.
 	// +kubebuilder:validation:Optional
 	Category string `json:"category,omitempty"`
-	// Log category parameters are stored here.
+	// Log category parameters are stored here. The resource for a service log can't be updated.
 	// +kubebuilder:validation:Optional
 	Parameters map[string]string `json:"parameters,omitempty"`
 }
@@ -107,8 +107,11 @@ type LogStatus struct {
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no
 	// predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
-	FreeformTags  map[string]string `json:"freeformTags,omitempty"`
-	Configuration LogConfiguration  `json:"configuration,omitempty"`
+	FreeformTags map[string]string `json:"freeformTags,omitempty"`
+	// Usage of system tag keys. These predefined keys are scoped to namespaces.
+	// Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
+	SystemTags    map[string]shared.MapValue `json:"systemTags,omitempty"`
+	Configuration LogConfiguration           `json:"configuration,omitempty"`
 	// Time the resource was created.
 	TimeCreated string `json:"timeCreated,omitempty"`
 	// Time the resource was last modified.

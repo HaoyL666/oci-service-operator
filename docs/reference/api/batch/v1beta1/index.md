@@ -62,8 +62,8 @@ BatchContextFleet defines nested fields for BatchContext.Fleet.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `jsonData` | - | `string` | No | - | - |
-| `maxConcurrentTasks` | Maximum number of concurrent tasks for the service managed fleet. | `integer` | No | - | - |
-| `name` | Name of the service managed fleet. | `string` | No | - | - |
+| `maxConcurrentTasks` | Maximum number of concurrent tasks for the service managed GPU fleet. | `integer` | No | - | - |
+| `name` | Name of the service managed GPU fleet. | `string` | No | - | - |
 | [`shape`](#kind-batchcontext-spec-fleets-shape) | BatchContextFleetShape defines nested fields for BatchContext.Fleet.Shape. | `object` | No | - | - |
 | `type` | - | `string` | No | - | - |
 
@@ -76,9 +76,10 @@ BatchContextFleetShape defines nested fields for BatchContext.Fleet.Shape.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `memoryInGBs` | Amount of memory in GBs required by the shape. | `integer` | Yes | - | - |
-| `ocpus` | Number of OCPUs required by the shape. | `integer` | Yes | - | - |
-| `shapeName` | The name of the shape. | `string` | Yes | - | - |
+| `diskSizeInGBs` | Amount of disk space in GBs required for the shape. | `integer` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `shapeName` | The name of the fixed GPU fleet shape. | `string` | No | - | - |
+| `type` | - | `string` | No | - | - |
 
 <a id="kind-batchcontext-spec-jobpriorityconfigurations"></a>
 #### Spec.jobPriorityConfigurations[]
@@ -103,6 +104,7 @@ BatchContextLoggingConfiguration defines nested fields for BatchContext.LoggingC
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `isJobTaskEventsPropagationEnabled` | A switch to enable or disable propagation of job and task events to the customer's logs in OCI logging service. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `logGroupId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the log group. | `string` | No | - | - |
 | `logId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the log. | `string` | No | - | - |
@@ -155,8 +157,8 @@ BatchContextFleet defines nested fields for BatchContext.Fleet.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `jsonData` | - | `string` | No | - | - |
-| `maxConcurrentTasks` | Maximum number of concurrent tasks for the service managed fleet. | `integer` | No | - | - |
-| `name` | Name of the service managed fleet. | `string` | No | - | - |
+| `maxConcurrentTasks` | Maximum number of concurrent tasks for the service managed GPU fleet. | `integer` | No | - | - |
+| `name` | Name of the service managed GPU fleet. | `string` | No | - | - |
 | [`shape`](#kind-batchcontext-status-fleets-shape) | BatchContextFleetShape defines nested fields for BatchContext.Fleet.Shape. | `object` | No | - | - |
 | `type` | - | `string` | No | - | - |
 
@@ -169,9 +171,10 @@ BatchContextFleetShape defines nested fields for BatchContext.Fleet.Shape.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `memoryInGBs` | Amount of memory in GBs required by the shape. | `integer` | Yes | - | - |
-| `ocpus` | Number of OCPUs required by the shape. | `integer` | Yes | - | - |
-| `shapeName` | The name of the shape. | `string` | Yes | - | - |
+| `diskSizeInGBs` | Amount of disk space in GBs required for the shape. | `integer` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `shapeName` | The name of the fixed GPU fleet shape. | `string` | No | - | - |
+| `type` | - | `string` | No | - | - |
 
 <a id="kind-batchcontext-status-jobpriorityconfigurations"></a>
 #### Status.jobPriorityConfigurations[]
@@ -196,6 +199,7 @@ BatchContextLoggingConfiguration defines nested fields for BatchContext.LoggingC
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `isJobTaskEventsPropagationEnabled` | A switch to enable or disable propagation of job and task events to the customer's logs in OCI logging service. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `logGroupId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the log group. | `string` | No | - | - |
 | `logId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the log. | `string` | No | - | - |
@@ -566,9 +570,25 @@ BatchTaskProfileSpec defines the desired state of BatchTaskProfile.
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | The batch task profile description. | `string` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. If not specified or provided as null or empty string, it be generated as "<resourceType><timeCreated>", where timeCreated corresponds with the resource creation time in ISO 8601 basic format, i.e. omitting separating punctuation, at second-level precision and no UTC offset. Example: batchtaskprofile20250914115623. | `string` | No | - | - |
+| [`extendedInformation`](#kind-batchtaskprofile-spec-extendedinformation) | BatchTaskProfileExtendedInformation defines nested fields for BatchTaskProfile.ExtendedInformation. | `object` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
-| `minMemoryInGBs` | The minimum required memory. | `integer` | Yes | - | - |
-| `minOcpus` | The minimum required OCPUs. | `integer` | Yes | - | - |
+| `minDiskSizeInGBs` | The minimum required size of disk space in GBs. | `integer` | No | - | - |
+| `minMemoryInGBs` | The minimum required memory. | `integer` | No | - | - |
+| `minOcpus` | The minimum required OCPUs. | `integer` | No | - | - |
+
+<a id="kind-batchtaskprofile-spec-extendedinformation"></a>
+#### Spec.extendedInformation
+
+[Back to BatchTaskProfile spec](#kind-batchtaskprofile-spec)
+
+BatchTaskProfileExtendedInformation defines nested fields for BatchTaskProfile.ExtendedInformation.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `architecture` | Type of CPU architecture. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `shapeName` | A name of the GPU shape. | `string` | No | - | - |
+| `type` | - | `string` | No | - | - |
 
 <a id="kind-batchtaskprofile-status"></a>
 ### Status
@@ -581,15 +601,31 @@ BatchTaskProfileStatus defines the observed state of BatchTaskProfile.
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | The batch task profile description. | `string` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. | `string` | No | - | - |
+| [`extendedInformation`](#kind-batchtaskprofile-status-extendedinformation) | BatchTaskProfileExtendedInformation defines nested fields for BatchTaskProfile.ExtendedInformation. | `object` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the batch task profile. | `string` | No | - | - |
 | `lifecycleState` | The current state of the batch task profile. | `string` | No | - | - |
+| `minDiskSizeInGBs` | The minimum required size of disk space in GBs. | `integer` | No | - | - |
 | `minMemoryInGBs` | The minimum required memory. | `integer` | No | - | - |
 | `minOcpus` | The minimum required OCPUs. | `integer` | No | - | - |
 | [`status`](#kind-batchtaskprofile-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The date and time the batch task profile was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `timeUpdated` | The date and time the batch task profile was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+
+<a id="kind-batchtaskprofile-status-extendedinformation"></a>
+#### Status.extendedInformation
+
+[Back to BatchTaskProfile status](#kind-batchtaskprofile-status)
+
+BatchTaskProfileExtendedInformation defines nested fields for BatchTaskProfile.ExtendedInformation.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `architecture` | Type of CPU architecture. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `shapeName` | A name of the GPU shape. | `string` | No | - | - |
+| `type` | - | `string` | No | - | - |
 
 <a id="kind-batchtaskprofile-status-status"></a>
 #### Status.status

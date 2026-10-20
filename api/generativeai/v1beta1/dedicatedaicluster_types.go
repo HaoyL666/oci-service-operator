@@ -26,7 +26,7 @@ type DedicatedAiClusterSpec struct {
 	// The number of dedicated units in this AI cluster.
 	// +kubebuilder:validation:Required
 	UnitCount int `json:"unitCount"`
-	// The shape of dedicated unit in this AI cluster. The underlying hardware configuration is hidden from customers.
+	// The shape of dedicated unit in this AI cluster.
 	// Allowed values are:
 	// - LARGE_COHERE
 	// - LARGE_COHERE_V2
@@ -61,6 +61,8 @@ type DedicatedAiClusterSpec struct {
 	// - H100_X2
 	// - H100_X4
 	// - H100_X8
+	// - H100_X16
+	// - H100_X32
 	// - H200_X1
 	// - H200_X2
 	// - H200_X4
@@ -70,7 +72,12 @@ type DedicatedAiClusterSpec struct {
 	// - A100_40G_X1, A100_40G_X2, A100_40G_X4, A100_40G_X8
 	// - A100_80G_X1, A100_80G_X2, A100_80G_X4, A100_80G_X8
 	// - H100_X1, H100_X2, H100_X4, H100_X8
+	// - H100_X16, H100_X32
 	// - H200_X1, H200_X2, H200_X4, H200_X8
+	// - B200_X16, B200_X32
+	// - B300_X1, B300_X2, B300_X4, B300_X8, B300_X16, B300_X32
+	// - L40S_X1, L40S_X2, L40S_X4, L40S_X8, L40S_X16, L40S_X32
+	// - MI300X_X1, MI300X_X2, MI300X_X4, MI300X_X8, MI300X_X16, MI300X_X32
 	// - OAI_A10_X2
 	// - OAI_H100_X1
 	// - OAI_H100_X2
@@ -79,6 +86,38 @@ type DedicatedAiClusterSpec struct {
 	// - OAI_A100_80G_X2
 	// - OAI_A100_40G_X1
 	// - OAI_A100_40G_X4
+	// - B200_X1
+	// - B200_X2
+	// - B200_X4
+	// - B200_X8
+	// - OAI_B200_X1
+	// - OAI_B200_X2
+	// - OAI_B200_X4
+	// - OAI_B200_X8
+	// - SB_B200_X1
+	// - B200_X16
+	// - B200_X32
+	// - B300_X1
+	// - B300_X2
+	// - B300_X4
+	// - B300_X8
+	// - B300_X16
+	// - B300_X32
+	// - L40S_X1
+	// - L40S_X2
+	// - L40S_X4
+	// - L40S_X8
+	// - L40S_X16
+	// - L40S_X32
+	// - MI300X_X1
+	// - MI300X_X2
+	// - MI300X_X4
+	// - MI300X_X8
+	// - MI300X_X16
+	// - MI300X_X32
+	// - COHERE_B300_X1
+	// - META_B300_X1
+	// - OAI_B300_X1
 	// +kubebuilder:validation:Required
 	UnitShape string `json:"unitShape"`
 	// A user-friendly name. Does not have to be unique, and it's changeable.
@@ -124,7 +163,7 @@ type DedicatedAiClusterStatus struct {
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// The number of dedicated units in this AI cluster.
 	UnitCount int `json:"unitCount,omitempty"`
-	// The shape of dedicated unit in this AI cluster. The underlying hardware configuration is hidden from customers.
+	// The shape of dedicated unit in this AI cluster.
 	UnitShape string `json:"unitShape,omitempty"`
 	// A user-friendly name. Does not have to be unique, and it's changeable.
 	DisplayName string `json:"displayName,omitempty"`

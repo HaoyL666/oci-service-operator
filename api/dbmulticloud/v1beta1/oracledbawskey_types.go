@@ -23,6 +23,9 @@ type OracleDbAwsKeySpec struct {
 	// Oracle DB AWS Key resource name.
 	// +kubebuilder:validation:Required
 	DisplayName string `json:"displayName"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB AWS Key Pool resource.
+	// +kubebuilder:validation:Optional
+	OracleDbAwsKeyPoolId string `json:"oracleDbAwsKeyPoolId,omitempty"`
 	// Amazon resource name of AWS Key.
 	// +kubebuilder:validation:Optional
 	AwsKeyArn string `json:"awsKeyArn,omitempty"`
@@ -53,6 +56,24 @@ type OracleDbAwsKeySpec struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 }
 
+// OracleDbAwsKeyReplicationMetadataReplicationDetail defines nested fields for OracleDbAwsKey.ReplicationMetadata.ReplicationDetail.
+type OracleDbAwsKeyReplicationMetadataReplicationDetail struct {
+	// The lifecycle state of the Oracle DB Azure Vault resource.
+	ReplicationState string `json:"replicationState,omitempty"`
+	// The target region, where resource is replicated.
+	TargetRegion string `json:"targetRegion,omitempty"`
+	// Time when the Replication was created in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z'
+	TimeCreated string `json:"timeCreated,omitempty"`
+	// Time when the Replication was last modified, expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z'
+	TimeUpdated string `json:"timeUpdated,omitempty"`
+}
+
+// OracleDbAwsKeyReplicationMetadata defines nested fields for OracleDbAwsKey.ReplicationMetadata.
+type OracleDbAwsKeyReplicationMetadata struct {
+	// List of all regions and their respective resource ID.
+	ReplicationDetails []OracleDbAwsKeyReplicationMetadataReplicationDetail `json:"replicationDetails,omitempty"`
+}
+
 // OracleDbAwsKeyStatus defines the observed state of OracleDbAwsKey.
 type OracleDbAwsKeyStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
@@ -62,6 +83,12 @@ type OracleDbAwsKeyStatus struct {
 	CompartmentId string `json:"compartmentId,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB Connector resource.
 	OracleDbConnectorId string `json:"oracleDbConnectorId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Oracle DB AWS Key Pool resource.
+	OracleDbAwsKeyPoolId string `json:"oracleDbAwsKeyPoolId,omitempty"`
+	// Indicates whether the Oracle AWS Key resource is currently in use.
+	IsOracleAwsKeyUsed bool `json:"isOracleAwsKeyUsed,omitempty"`
+	// The number of active references to the Oracle AWS Key resource.
+	RefCount int `json:"refCount,omitempty"`
 	// Oracle DB AWS Key Ring resource name.
 	DisplayName string `json:"displayName,omitempty"`
 	// Amazon resource name of AWS Key.
@@ -75,7 +102,8 @@ type OracleDbAwsKeyStatus struct {
 	// AWS Key resource location.
 	Location string `json:"location,omitempty"`
 	// AWS Key resource's properties.
-	Properties map[string]string `json:"properties,omitempty"`
+	Properties          map[string]string                 `json:"properties,omitempty"`
+	ReplicationMetadata OracleDbAwsKeyReplicationMetadata `json:"replicationMetadata,omitempty"`
 	// The lifecycle state of the Oracle DB AWS Key resource.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Description of the current lifecycle state in more detail.

@@ -82,6 +82,10 @@ spec:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment to create the ResourceAnalyticsInstance in.
                 type: string
+              computeCount:
+                description: The compute amount (CPUs) available to the Autonomous
+                  Database.
+                type: integer
               definedTags:
                 additionalProperties:
                   additionalProperties:

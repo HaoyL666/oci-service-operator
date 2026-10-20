@@ -88,6 +88,11 @@ spec:
                   For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
+              localTimeZone:
+                description: |-
+                  IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London').
+                  This determines the timezone context for evaluating the recurrence expression.
+                type: string
               recurrenceDetails:
                 description: |-
                   This is the frequency of recurrence of a schedule. The frequency field can either conform to RFC-5545 formatting
@@ -262,6 +267,11 @@ spec:
                 type: string
               lifecycleState:
                 description: This is the current state of a schedule.
+                type: string
+              localTimeZone:
+                description: |-
+                  IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London').
+                  This determines the timezone context for evaluating the recurrence expression.
                 type: string
               recurrenceDetails:
                 description: |-

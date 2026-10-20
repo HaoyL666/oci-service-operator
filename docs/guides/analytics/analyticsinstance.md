@@ -32,22 +32,22 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 
 | Field | Description | Type | Required |
 | --- | --- | --- | --- |
-| `adminUser` | user name of the authorized user. | `string` | No |
+| `adminUser` | The Analytics instance administrator user. This must be the user name (not OCID) of a user in the nominated identity domain. For example: john.smith@example.com. | `string` | No |
 | [`capacity`](../../reference/api/analytics/v1beta1/index.md#kind-analyticsinstance-spec-capacity) | AnalyticsInstanceCapacity defines nested fields for AnalyticsInstance.Capacity. | `object` | Yes |
 | `compartmentId` | The OCID of the compartment. | `string` | Yes |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No |
 | `description` | Optional description. | `string` | No |
-| `domainId` | domain id for which the user is authorized. | `string` | No |
+| `domainId` | The OCID of the identity domain to use for the new Analytics instance. For example: ocid1.domain.oc1..ocid1.domain.oc1..aaaaaa111111bbbbbb222222cccccc333333dddddd444444eeeeee5555. | `string` | No |
 | `emailNotification` | Email address receiving notifications. | `string` | No |
 | `featureBundle` | The feature set of an Analytics instance. | `string` | No |
-| `featureSet` | Analytics feature set. | `string` | Yes |
+| `featureSet` | The feature set. Either `SELF_SERVICE_ANALYTICS` (Professional Edition) or `ENTERPRISE_ANALYTICS` (Enterprise Edition). | `string` | Yes |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No |
 | `idcsAccessToken` | IDCS access token identifying a stripe and service administrator user. | `string` | No |
-| `kmsKeyId` | OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates Oracle managed default encryption. | `string` | No |
+| `kmsKeyId` | OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates that the default Oracle-managed encryption is used. | `string` | No |
 | `licenseType` | The license used for the service. | `string` | Yes |
-| `name` | The name of the Analytics instance. This name must be unique in the tenancy and cannot be changed. | `string` | Yes |
+| `name` | The name of the Analytics instance. This name must be unique in the tenancy and can't be changed. The name must start with a letter and can contain only letters, numbers and dash (-). | `string` | Yes |
 | [`networkEndpointDetails`](../../reference/api/analytics/v1beta1/index.md#kind-analyticsinstance-spec-networkendpointdetails) | AnalyticsInstanceNetworkEndpointDetails defines nested fields for AnalyticsInstance.NetworkEndpointDetails. | `object` | No |
-| `updateChannel` | Analytics instance update channel. | `string` | No |
+| `updateChannel` | The Analytics instance update cycle. | `string` | No |
 
 
 ## Status Fields
@@ -63,21 +63,22 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `domainId` | Identity domain OCID. | `string` | No |
 | `emailNotification` | Email address receiving notifications. | `string` | No |
 | `featureBundle` | The feature set of an Analytics instance. | `string` | No |
-| `featureSet` | Analytics feature set. | `string` | No |
+| `featureSet` | The feature set. Either `SELF_SERVICE_ANALYTICS` (Professional Edition) or `ENTERPRISE_ANALYTICS` (Enterprise Edition). | `string` | No |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No |
 | `id` | The resource OCID. | `string` | No |
-| `kmsKeyId` | OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates Oracle managed default encryption. | `string` | No |
+| `kmsKeyId` | OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates that the default Oracle-managed encryption is used. | `string` | No |
 | `licenseType` | The license used for the service. | `string` | No |
-| `lifecycleState` | The current state of an instance. | `string` | No |
-| `name` | The name of the Analytics instance. This name must be unique in the tenancy and cannot be changed. | `string` | No |
+| `lifecycleState` | The current state of the Analytics instance. | `string` | No |
+| `name` | The name of the Analytics instance. This name must be unique in the tenancy and can't be changed. The name must start with a letter and can contain only letters, numbers and dash (-). | `string` | No |
 | [`networkEndpointDetails`](../../reference/api/analytics/v1beta1/index.md#kind-analyticsinstance-status-networkendpointdetails) | AnalyticsInstanceNetworkEndpointDetails defines nested fields for AnalyticsInstance.NetworkEndpointDetails. | `object` | No |
 | [`privateAccessChannels`](../../reference/api/analytics/v1beta1/index.md#kind-analyticsinstance-status-privateaccesschannels) | Map of PrivateAccessChannel unique identifier key as KEY and PrivateAccessChannel Object as VALUE. | `map[string, object]` | No |
-| `serviceUrl` | URL of the Analytics service. | `string` | No |
+| [`resourceGroups`](../../reference/api/analytics/v1beta1/index.md#kind-analyticsinstance-status-resourcegroups) | List of resource groups for this Analytics instance. The resource group id must be unique within the instance. | `list[object]` | No |
+| `serviceUrl` | URL of the Analytics instance. | `string` | No |
 | [`status`](../../reference/api/analytics/v1beta1/index.md#kind-analyticsinstance-status-status) | - | `object` | Yes |
 | `systemTags` | System tags for this resource. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"key": "value"}}` | `map[string, map[string, string]]` | No |
-| `timeCreated` | The date and time the instance was created, in the format defined by RFC3339. Example: `2016-08-25T21:10:29.600Z` | `string` | No |
-| `timeUpdated` | The date and time the instance was last updated (in the format defined by RFC3339). This timestamp represents updates made through this API. External events do not influence it. | `string` | No |
-| `updateChannel` | Analytics instance update channel. | `string` | No |
+| `timeCreated` | The date and time the Analytics instance was created, in the format defined by RFC3339. Example: `2016-08-25T21:10:29.600Z` | `string` | No |
+| `timeUpdated` | The date and time the Analytics instance was last updated (in the format defined by RFC3339). This timestamp represents updates made through this API. External events don't affect it. | `string` | No |
+| `updateChannel` | The Analytics instance update cycle. | `string` | No |
 | [`vanityUrlDetails`](../../reference/api/analytics/v1beta1/index.md#kind-analyticsinstance-status-vanityurldetails) | Map of VanityUrl unique identifier key as KEY and VanityUrl Object as VALUE. | `map[string, object]` | No |
 
 

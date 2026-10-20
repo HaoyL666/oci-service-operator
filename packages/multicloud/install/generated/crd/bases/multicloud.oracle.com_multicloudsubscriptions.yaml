@@ -61,14 +61,14 @@ spec:
                 description: Total value for the subscription.
                 type: string
               classicSubscriptionId:
-                description: Subscription ID for OCI and Partner cloud in classic
+                description: Subscription ID for OCI and partner cloud in classic
                   format.
                 type: string
               cspAdditionalProperties:
                 additionalProperties:
                   type: string
-                description: CSP Specific Additional Properties, AzureSubnetId for
-                  Azure
+                description: Properties specific to the cloud service provider. For
+                  example, AzureSubnetId for Azure.
                 type: object
               definedTags:
                 additionalProperties:
@@ -94,12 +94,14 @@ spec:
               partnerCloudAccountIdentifier:
                 description: The partner cloud account ID.
                 type: string
+              partnerCloudTenantIdentifier:
+                description: The partner cloud tenant ID.
+                type: string
               paymentPlan:
                 description: Payment plan for the subscription.
                 type: string
               serviceName:
-                description: The serviceName that externalLocation map object belongs
-                  to.
+                description: The cloud service provider.
                 type: string
               status:
                 properties:
@@ -202,7 +204,9 @@ spec:
                     type: string
                 type: object
               subscriptionId:
-                description: URL to the subscription page https://{console-url}/org-mgmt/subscription/ocid1.organizationssubscription.oc1.iad.amaaaaaapf266qyaqohz27zvh45jzaielgwojo53bh24s7cy5q5g7fiknpxa?region=us-ashburn-1.
+                description: |-
+                  URL to the subscription details page.
+                  Example: `https://{console-url}/org-mgmt/subscription/ocid1.organizationssubscription.oc1.iad.exampleuniqueid?region=us-ashburn-1`.
                 type: string
               systemTags:
                 additionalProperties:
@@ -215,22 +219,22 @@ spec:
                 type: object
               timeCreated:
                 description: |-
-                  The date and time the subscription was created, in the format defined by
+                  The date and time that the subscription was created, in the format defined by
                   RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
                 type: string
               timeEndDate:
                 description: |-
-                  The date and time for when the subscription is finishing, in the format defined by
+                  The end date and time for the subscription, in the format defined by
                   RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
                 type: string
               timeLinkedDate:
                 description: |-
-                  The date and time for when the multicloud was created, in the format defined by
+                  The date and time that the Multicloud base compartment was created, in the format defined by
                   RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
                 type: string
               timeUpdated:
                 description: |-
-                  The date and time the subscription was updated, in the format defined by
+                  The date and time that the subscription was updated, in the format defined by
                   RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
                 type: string
             required:

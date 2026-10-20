@@ -61,6 +61,8 @@ type ContainerInstanceSpec struct {
 	// Example: `{"foo-namespace": {"bar-key": "value"}}`.
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
+	// +kubebuilder:validation:Optional
+	SecurityContext ContainerInstanceSecurityContext `json:"securityContext,omitempty,omitzero"`
 }
 
 // ContainerInstanceShapeConfig defines nested fields for ContainerInstance.ShapeConfig.
@@ -290,6 +292,57 @@ type ContainerInstanceVnic struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 }
 
+// ContainerInstanceVolumeMountTarget defines nested fields for ContainerInstance.Volume.MountTarget.
+type ContainerInstanceVolumeMountTarget struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	OciFssMountTargetType string `json:"ociFssMountTargetType,omitempty"`
+	// The OCID of the OCI File Storage Service (FSS) Mount Target.
+	// +kubebuilder:validation:Optional
+	Id string `json:"id,omitempty"`
+}
+
+// ContainerInstanceVolumeExport defines nested fields for ContainerInstance.Volume.Export.
+type ContainerInstanceVolumeExport struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	OciFssExportType string `json:"ociFssExportType,omitempty"`
+	// The OCID of the OCI File Storage Service (FSS) Export.
+	// +kubebuilder:validation:Optional
+	Id string `json:"id,omitempty"`
+}
+
+// ContainerInstanceVolumeSecurity defines nested fields for ContainerInstance.Volume.Security.
+type ContainerInstanceVolumeSecurity struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// Determines whether in-transit encryption needs to be enables.
+	// Check https://docs.oracle.com/en-us/iaas/Content/File/Tasks/intransitencryption.htm#Using_Intransit_Encryption for more details.
+	// +kubebuilder:validation:Optional
+	IsEncryptedInTransit bool `json:"isEncryptedInTransit,omitempty"`
+	// +kubebuilder:validation:Optional
+	Auth string `json:"auth,omitempty"`
+}
+
+// ContainerInstanceVolumeMountCommandMountOption defines nested fields for ContainerInstance.Volume.MountCommand.MountOption.
+type ContainerInstanceVolumeMountCommandMountOption struct {
+	// A generic (https://man7.org/linux/man-pages/man8/mount.8.html) or nfs (https://man7.org/linux/man-pages/man5/nfs.5.html) mount option.
+	// +kubebuilder:validation:Required
+	Option string `json:"option"`
+	// The value of the mount option.
+	// +kubebuilder:validation:Optional
+	Value string `json:"value,omitempty"`
+}
+
+// ContainerInstanceVolumeMountCommand defines nested fields for ContainerInstance.Volume.MountCommand.
+type ContainerInstanceVolumeMountCommand struct {
+	// List of mount options to be used in the mount command. The order of this array will be maintained while preparing the mount command.
+	// +kubebuilder:validation:Optional
+	MountOptions []ContainerInstanceVolumeMountCommandMountOption `json:"mountOptions,omitempty"`
+}
+
 // ContainerInstanceVolumeConfig defines nested fields for ContainerInstance.Volume.Config.
 type ContainerInstanceVolumeConfig struct {
 	// The name of the file. The fileName should be unique across the volume.
@@ -312,6 +365,18 @@ type ContainerInstanceVolume struct {
 	Name string `json:"name"`
 	// +kubebuilder:validation:Optional
 	VolumeType string `json:"volumeType,omitempty"`
+	// +kubebuilder:validation:Optional
+	MountTarget ContainerInstanceVolumeMountTarget `json:"mountTarget,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	Export ContainerInstanceVolumeExport `json:"export,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	Security ContainerInstanceVolumeSecurity `json:"security,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	MountCommand ContainerInstanceVolumeMountCommand `json:"mountCommand,omitempty,omitzero"`
+	// Specifies the network interface to be used for the OCI File Storage Service (FSS) volume.
+	// This is a required parameter when a Container Instance is attached to more than one subnets.
+	// +kubebuilder:validation:Optional
+	SubnetId string `json:"subnetId,omitempty"`
 	// Contains key value pairs which can be mounted as individual files inside the container. The value needs to be base64 encoded. It is decoded to plain text before the mount.
 	// +kubebuilder:validation:Optional
 	Configs []ContainerInstanceVolumeConfig `json:"configs,omitempty"`
@@ -356,6 +421,20 @@ type ContainerInstanceImagePullSecret struct {
 	Password string `json:"password,omitempty"`
 }
 
+// ContainerInstanceSecurityContext defines nested fields for ContainerInstance.SecurityContext.
+type ContainerInstanceSecurityContext struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	SecurityContextType string `json:"securityContextType,omitempty"`
+	// A special supplemental group that applies to all containers in the container instance. Some volume types allow the container instance to change ownership of the volume. The owning GID will be the fsGroup, the setgid bit will be set (new files will be owned by the fsGroup), and the permission bits are OR'd with rw-rw----. If unset, the container instance will not modify the ownership and permissions of volumes.
+	// +kubebuilder:validation:Optional
+	FsGroup int `json:"fsGroup,omitempty"`
+	// Defines behavior of changing ownership and permission of the volume before being exposed inside the containers. This only applies to volumes which support fsGroup ownership and permissions, and will have no effect on ephemeral volumes. ON_ROOT_MISMATCH only changes permissions and ownership if the permission and ownership of the root directory does not match the expected permissions and ownership of the volume. This can improve container instance start times. ALWAYS  changes permission and ownership of the volume when it is mounted. If unset, ALWAYS is used.
+	// +kubebuilder:validation:Optional
+	FsGroupChangePolicy string `json:"fsGroupChangePolicy,omitempty"`
+}
+
 // ContainerInstanceContainerObservedState defines nested fields for ContainerInstance.Container.
 type ContainerInstanceContainerObservedState struct {
 	// The OCID of the container.
@@ -393,7 +472,14 @@ type ContainerInstanceVolumeObservedState struct {
 	// The volume type of the empty directory, can be either File Storage or Memory.
 	BackingStore string `json:"backingStore,omitempty"`
 	// Contains string key value pairs which can be mounted as individual files inside the container. The value needs to be base64 encoded. It is decoded to plain text before the mount.
-	Configs []ContainerInstanceVolumeConfig `json:"configs,omitempty"`
+	Configs      []ContainerInstanceVolumeConfig     `json:"configs,omitempty"`
+	MountTarget  ContainerInstanceVolumeMountTarget  `json:"mountTarget,omitempty"`
+	Export       ContainerInstanceVolumeExport       `json:"export,omitempty"`
+	Security     ContainerInstanceVolumeSecurity     `json:"security,omitempty"`
+	MountCommand ContainerInstanceVolumeMountCommand `json:"mountCommand,omitempty"`
+	// Specifies the network interface to be used for the OCI File Storage Service (FSS) volume.
+	// This is a required parameter when a Container Instance is attached to more than one subnets.
+	SubnetId string `json:"subnetId,omitempty"`
 }
 
 // ContainerInstanceImagePullSecretObservedState defines nested fields for ContainerInstance.ImagePullSecret.
@@ -432,6 +518,8 @@ type ContainerInstanceStatus struct {
 	Vnics []ContainerInstanceVnicObservedState `json:"vnics,omitempty"`
 	// The container restart policy is applied for all containers in container instance.
 	ContainerRestartPolicy string `json:"containerRestartPolicy,omitempty"`
+	// TenantId id of the container instance.
+	TenantId string `json:"tenantId,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
@@ -458,6 +546,7 @@ type ContainerInstanceStatus struct {
 	GracefulShutdownTimeoutInSeconds int64 `json:"gracefulShutdownTimeoutInSeconds,omitempty"`
 	// The image pulls secrets so you can access private registry to pull container images.
 	ImagePullSecrets []ContainerInstanceImagePullSecretObservedState `json:"imagePullSecrets,omitempty"`
+	SecurityContext  ContainerInstanceSecurityContext                `json:"securityContext,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -94,6 +94,10 @@ spec:
               location:
                 description: AWS Key resource Location.
                 type: string
+              oracleDbAwsKeyPoolId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the Oracle DB AWS Key Pool resource.
+                type: string
               oracleDbConnectorId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the Oracle DB Connector resource.
@@ -153,6 +157,10 @@ spec:
                 description: The Oracle AWS Key resource is enabled or disabled at
                   AWS.
                 type: boolean
+              isOracleAwsKeyUsed:
+                description: Indicates whether the Oracle AWS Key resource is currently
+                  in use.
+                type: boolean
               lifecycleState:
                 description: The lifecycle state of the Oracle DB AWS Key resource.
                 type: string
@@ -162,6 +170,10 @@ spec:
               location:
                 description: AWS Key resource location.
                 type: string
+              oracleDbAwsKeyPoolId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the Oracle DB AWS Key Pool resource.
+                type: string
               oracleDbConnectorId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the Oracle DB Connector resource.
@@ -170,6 +182,41 @@ spec:
                 additionalProperties:
                   type: string
                 description: AWS Key resource's properties.
+                type: object
+              refCount:
+                description: The number of active references to the Oracle AWS Key
+                  resource.
+                type: integer
+              replicationMetadata:
+                description: OracleDbAwsKeyReplicationMetadata defines nested fields
+                  for OracleDbAwsKey.ReplicationMetadata.
+                properties:
+                  replicationDetails:
+                    description: List of all regions and their respective resource
+                      ID.
+                    items:
+                      description: OracleDbAwsKeyReplicationMetadataReplicationDetail
+                        defines nested fields for OracleDbAwsKey.ReplicationMetadata.ReplicationDetail.
+                      properties:
+                        replicationState:
+                          description: The lifecycle state of the Oracle DB Azure
+                            Vault resource.
+                          type: string
+                        targetRegion:
+                          description: The target region, where resource is replicated.
+                          type: string
+                        timeCreated:
+                          description: Time when the Replication was created in RFC
+                            3339 (https://tools.ietf.org/html/rfc3339) timestamp format,
+                            e.g. '2020-05-23T21:10:29.600Z'
+                          type: string
+                        timeUpdated:
+                          description: Time when the Replication was last modified,
+                            expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339)
+                            timestamp format, e.g. '2020-05-23T21:10:29.600Z'
+                          type: string
+                      type: object
+                    type: array
                 type: object
               status:
                 properties:

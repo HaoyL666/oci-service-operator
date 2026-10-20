@@ -73,7 +73,6 @@ spec:
                   resource.
                 type: string
             required:
-            - apps
             - name
             - networkFirewallPolicyId
             type: object

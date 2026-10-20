@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "cloudmigrations",
+    "apiVersion": "cloudmigrations.oracle.com/v1beta1",
+    "kind": "TargetAsset",
+    "formalSlug": "targetasset",
+    "providerResource": "oci_cloud_migrations_target_asset",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "blockVolumesPerformance",
+      "isExcludedFromExecution",
+      "msLicense",
+      "preferredShapeType",
+      "type",
+      "userSpec.agentConfig.areAllPluginsDisabled",
+      "userSpec.agentConfig.isManagementDisabled",
+      "userSpec.agentConfig.isMonitoringDisabled",
+      "userSpec.agentConfig.pluginsConfig.desiredState",
+      "userSpec.agentConfig.pluginsConfig.name",
+      "userSpec.availabilityDomain",
+      "userSpec.capacityReservationId",
+      "userSpec.compartmentId",
+      "userSpec.createVnicDetails.assignPrivateDnsRecord",
+      "userSpec.createVnicDetails.assignPublicIp",
+      "userSpec.createVnicDetails.definedTags",
+      "userSpec.createVnicDetails.displayName",
+      "userSpec.createVnicDetails.freeformTags",
+      "userSpec.createVnicDetails.hostnameLabel",
+      "userSpec.createVnicDetails.nsgIds",
+      "userSpec.createVnicDetails.privateIp",
+      "userSpec.createVnicDetails.skipSourceDestCheck",
+      "userSpec.createVnicDetails.subnetId",
+      "userSpec.createVnicDetails.vlanId",
+      "userSpec.dedicatedVmHostId",
+      "userSpec.definedTags",
+      "userSpec.displayName",
+      "userSpec.faultDomain",
+      "userSpec.freeformTags",
+      "userSpec.hostnameLabel",
+      "userSpec.instanceOptions.areLegacyImdsEndpointsDisabled",
+      "userSpec.ipxeScript",
+      "userSpec.isPvEncryptionInTransitEnabled",
+      "userSpec.preemptibleInstanceConfig.preemptionAction.preserveBootVolume",
+      "userSpec.preemptibleInstanceConfig.preemptionAction.type",
+      "userSpec.shape",
+      "userSpec.shapeConfig.baselineOcpuUtilization",
+      "userSpec.shapeConfig.memoryInGbs",
+      "userSpec.shapeConfig.ocpus",
+      "userSpec.sourceDetails.bootVolumeId",
+      "userSpec.sourceDetails.bootVolumeSizeInGbs",
+      "userSpec.sourceDetails.bootVolumeVpusPerGb",
+      "userSpec.sourceDetails.imageId",
+      "userSpec.sourceDetails.kmsKeyId"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "migrationPlanId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "userSpec.sourceDetails.sourceType",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
+      }
+    ]
+  }
+}

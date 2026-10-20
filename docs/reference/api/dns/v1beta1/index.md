@@ -600,7 +600,7 @@ ZoneSpec defines the desired state of Zone.
 | `jsonData` | - | `string` | No | - | - |
 | `migrationSource` | - | `string` | No | - | - |
 | `name` | The name of the zone. Global zone names must be unique across all other zones within the realm. Private zone names must be unique within their view. Unicode characters will be converted into punycode, see RFC 3492 (https://tools.ietf.org/html/rfc3492). | `string` | Yes | - | - |
-| `resolutionMode` | The resolution mode of a zone defines behavior related to how query responses can be handled. | `string` | No | - | - |
+| `resolutionMode` | The resolution mode of a zone defines behavior related to how query responses can be handled. See Private DNS Zone Transparency (https://docs.oracle.com/iaas/Content/DNS/Tasks/privatedns.htm#use-cases__resolution) for more information. | `string` | No | - | - |
 | `scope` | The scope of the zone. | `string` | No | - | - |
 | `viewId` | This value will be null for zones in the global DNS. | `string` | No | - | - |
 | `zoneType` | The type of the zone. Must be either `PRIMARY` or `SECONDARY`. `SECONDARY` is only supported for GLOBAL zones. | `string` | No | - | - |
@@ -671,7 +671,7 @@ ZoneStatus defines the observed state of Zone.
 | `lifecycleState` | The current state of the zone resource. | `string` | No | - | - |
 | `name` | The name of the zone. | `string` | No | - | - |
 | [`nameservers`](#kind-zone-status-nameservers) | The authoritative nameservers for the zone. | `list[object]` | No | - | - |
-| `resolutionMode` | The resolution mode of a zone defines behavior related to how query responses can be handled. | `string` | No | - | - |
+| `resolutionMode` | The resolution mode of a zone defines behavior related to how query responses can be handled. See Private DNS Zone Transparency (https://docs.oracle.com/iaas/Content/DNS/Tasks/privatedns.htm#use-cases__resolution) for more information. | `string` | No | - | - |
 | `scope` | The scope of the zone. | `string` | No | - | - |
 | `self` | The canonical absolute URL of the resource. | `string` | No | - | - |
 | `serial` | The current serial of the zone. As seen in the zone's SOA record. | `integer (int64)` | No | - | - |

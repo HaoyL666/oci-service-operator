@@ -124,9 +124,6 @@ type SubnetSpec struct {
 // SubnetStatus defines the observed state of Subnet.
 type SubnetStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
-	// The subnet's CIDR block.
-	// Example: `10.0.1.0/24`
-	CidrBlock string `json:"cidrBlock,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment containing the subnet.
 	CompartmentId string `json:"compartmentId,omitempty"`
 	// The subnet's Oracle ID (OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)).
@@ -137,9 +134,6 @@ type SubnetStatus struct {
 	RouteTableId string `json:"routeTableId,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the VCN the subnet is in.
 	VcnId string `json:"vcnId,omitempty"`
-	// The IP address of the virtual router.
-	// Example: `10.0.14.1`
-	VirtualRouterIp string `json:"virtualRouterIp,omitempty"`
 	// The MAC address of the virtual router.
 	// Example: `00:00:00:00:00:01`
 	VirtualRouterMac string `json:"virtualRouterMac,omitempty"`
@@ -147,6 +141,9 @@ type SubnetStatus struct {
 	// instead of an AD-specific subnet. Oracle recommends creating regional subnets.
 	// Example: `Uocm:PHX-AD-1`
 	AvailabilityDomain string `json:"availabilityDomain,omitempty"`
+	// The subnet's CIDR block.
+	// Example: `10.0.1.0/24`
+	CidrBlock string `json:"cidrBlock,omitempty"`
 	// The list of all IPv4 CIDR blocks for the subnet that meets the following criteria:
 	// - Ipv4 CIDR blocks must be valid.
 	// - Multiple Ipv4 CIDR blocks must not overlap each other or the on-premises network CIDR block.
@@ -217,9 +214,15 @@ type SubnetStatus struct {
 	// DNS in Your Virtual Cloud Network (https://docs.oracle.com/iaas/Content/Network/Concepts/dns.htm).
 	// Example: `subnet123.vcn1.oraclevcn.com`
 	SubnetDomainName string `json:"subnetDomainName,omitempty"`
+	// Usage of system tag keys. These predefined keys are scoped to namespaces.
+	// Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }`
+	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 	// The date and time the subnet was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeCreated string `json:"timeCreated,omitempty"`
+	// The IP address of the virtual router.
+	// Example: `10.0.14.1`
+	VirtualRouterIp string `json:"virtualRouterIp,omitempty"`
 }
 
 // +kubebuilder:object:root=true

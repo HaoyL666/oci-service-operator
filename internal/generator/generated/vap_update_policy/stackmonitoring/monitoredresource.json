@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "stackmonitoring",
+    "apiVersion": "stackmonitoring.oracle.com/v1beta1",
+    "kind": "MonitoredResource",
+    "formalSlug": "monitoredresource",
+    "providerResource": "oci_stack_monitoring_monitored_resource",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "additionalAliases.credential.name",
+      "additionalAliases.credential.service",
+      "additionalAliases.credential.source",
+      "additionalAliases.name",
+      "additionalAliases.source",
+      "additionalCredentials.credentialType",
+      "additionalCredentials.description",
+      "additionalCredentials.keyId",
+      "additionalCredentials.name",
+      "additionalCredentials.properties.name",
+      "additionalCredentials.properties.value",
+      "additionalCredentials.source",
+      "additionalCredentials.type",
+      "aliases.credential.name",
+      "aliases.credential.service",
+      "aliases.credential.source",
+      "aliases.name",
+      "aliases.source",
+      "compartmentId",
+      "credentials.credentialType",
+      "credentials.description",
+      "credentials.keyId",
+      "credentials.name",
+      "credentials.properties.name",
+      "credentials.properties.value",
+      "credentials.source",
+      "credentials.type",
+      "databaseConnectionDetails.connectorId",
+      "databaseConnectionDetails.dbId",
+      "databaseConnectionDetails.dbUniqueName",
+      "databaseConnectionDetails.port",
+      "databaseConnectionDetails.protocol",
+      "databaseConnectionDetails.serviceName",
+      "databaseConnectionDetails.sslSecretId",
+      "definedTags",
+      "displayName",
+      "freeformTags",
+      "hostName",
+      "license",
+      "properties.name",
+      "properties.value",
+      "resourceTimeZone"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "externalId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "externalResourceId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "managementAgentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "name",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "type",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      }
+    ]
+  }
+}

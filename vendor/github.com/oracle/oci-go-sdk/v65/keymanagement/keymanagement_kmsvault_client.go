@@ -142,7 +142,7 @@ func (client KmsVaultClient) backupVault(ctx context.Context, request common.OCI
 
 	var response BackupVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "BackupVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -211,7 +211,7 @@ func (client KmsVaultClient) cancelVaultDeletion(ctx context.Context, request co
 
 	var response CancelVaultDeletionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "CancelVaultDeletion")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -279,7 +279,7 @@ func (client KmsVaultClient) changeVaultCompartment(ctx context.Context, request
 
 	var response ChangeVaultCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "ChangeVaultCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -348,7 +348,7 @@ func (client KmsVaultClient) createVault(ctx context.Context, request common.OCI
 
 	var response CreateVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "CreateVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -417,7 +417,7 @@ func (client KmsVaultClient) createVaultReplica(ctx context.Context, request com
 
 	var response CreateVaultReplicaResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "CreateVaultReplica")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -483,7 +483,7 @@ func (client KmsVaultClient) deleteVaultReplica(ctx context.Context, request com
 
 	var response DeleteVaultReplicaResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "DeleteVaultReplica")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -544,7 +544,7 @@ func (client KmsVaultClient) getVault(ctx context.Context, request common.OCIReq
 
 	var response GetVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "GetVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -601,7 +601,7 @@ func (client KmsVaultClient) getVaultUsage(ctx context.Context, request common.O
 
 	var response GetVaultUsageResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "GetVaultUsage")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -667,7 +667,7 @@ func (client KmsVaultClient) listVaultReplicas(ctx context.Context, request comm
 
 	var response ListVaultReplicasResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "ListVaultReplicas")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -728,7 +728,7 @@ func (client KmsVaultClient) listVaults(ctx context.Context, request common.OCIR
 
 	var response ListVaultsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "ListVaults")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -792,7 +792,7 @@ func (client KmsVaultClient) restoreVaultFromFile(ctx context.Context, request c
 
 	var response RestoreVaultFromFileResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "RestoreVaultFromFile")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -856,7 +856,7 @@ func (client KmsVaultClient) restoreVaultFromObjectStore(ctx context.Context, re
 
 	var response RestoreVaultFromObjectStoreResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "RestoreVaultFromObjectStore")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -926,12 +926,69 @@ func (client KmsVaultClient) scheduleVaultDeletion(ctx context.Context, request 
 
 	var response ScheduleVaultDeletionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "ScheduleVaultDeletion")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/key/release/Vault/ScheduleVaultDeletion"
 		err = common.PostProcessServiceError(err, "KmsVault", "ScheduleVaultDeletion", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateRegisteredVaultForMtls Update fleet ids for the registered mTLS vault.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/keymanagement/UpdateRegisteredVaultForMtls.go.html to see an example of how to use UpdateRegisteredVaultForMtls API.
+func (client KmsVaultClient) UpdateRegisteredVaultForMtls(ctx context.Context, request UpdateRegisteredVaultForMtlsRequest) (response UpdateRegisteredVaultForMtlsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateRegisteredVaultForMtls, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateRegisteredVaultForMtlsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateRegisteredVaultForMtlsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateRegisteredVaultForMtlsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateRegisteredVaultForMtlsResponse")
+	}
+	return
+}
+
+// updateRegisteredVaultForMtls implements the OCIOperation interface (enables retrying operations)
+func (client KmsVaultClient) updateRegisteredVaultForMtls(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/20180608/vaults/{vaultId}/updateRegisteredVaultForMtls", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateRegisteredVaultForMtlsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "UpdateRegisteredVaultForMtls")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/key/release/UpdateRegisteredVaultForMtlsDetails/UpdateRegisteredVaultForMtls"
+		err = common.PostProcessServiceError(err, "KmsVault", "UpdateRegisteredVaultForMtls", apiReferenceLink)
 		return response, err
 	}
 
@@ -989,7 +1046,7 @@ func (client KmsVaultClient) updateVault(ctx context.Context, request common.OCI
 
 	var response UpdateVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "kmsVault", "UpdateVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

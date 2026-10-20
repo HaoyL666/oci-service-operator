@@ -44,6 +44,7 @@ ScheduleSpec defines the desired state of Schedule.
 | `description` | This is the description of the schedule. | `string` | No | - | - |
 | `displayName` | This is a user-friendly name for the schedule. It does not have to be unique, and it's changeable. | `string` | No | - | - |
 | `freeformTags` | These are free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `localTimeZone` | IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London'). This determines the timezone context for evaluating the recurrence expression. | `string` | No | - | - |
 | `recurrenceDetails` | This is the frequency of recurrence of a schedule. The frequency field can either conform to RFC-5545 formatting or UNIX cron formatting for recurrences, based on the value specified by the recurrenceType field. | `string` | Yes | - | - |
 | `recurrenceType` | Type of recurrence of a schedule | `string` | Yes | - | - |
 | [`resourceFilters`](#kind-schedule-spec-resourcefilters) | This is a list of resources filters. The schedule will be applied to resources matching all of them. | `list[object]` | No | - | - |
@@ -108,6 +109,7 @@ ScheduleStatus defines the observed state of Schedule.
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the schedule | `string` | No | - | - |
 | `lastRunStatus` | This is the status of the last work request. | `string` | No | - | - |
 | `lifecycleState` | This is the current state of a schedule. | `string` | No | - | - |
+| `localTimeZone` | IANA timezone identifier (e.g., 'America/New_York', 'UTC', 'Europe/London'). This determines the timezone context for evaluating the recurrence expression. | `string` | No | - | - |
 | `recurrenceDetails` | This is the frequency of recurrence of a schedule. The frequency field can either conform to RFC-5545 formatting or UNIX cron formatting for recurrences, based on the value specified by the recurrenceType field. | `string` | No | - | - |
 | `recurrenceType` | Type of recurrence of a schedule | `string` | No | - | - |
 | [`resourceFilters`](#kind-schedule-status-resourcefilters) | This is a list of resources filters. The schedule will be applied to resources matching all of them. | `list[object]` | No | - | - |

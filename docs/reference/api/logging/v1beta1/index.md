@@ -87,8 +87,8 @@ LogConfigurationSource defines nested fields for Log.Configuration.Source.
 | --- | --- | --- | --- | --- | --- |
 | `category` | Log object category. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
-| `parameters` | Log category parameters are stored here. | `map[string, string]` | No | - | - |
-| `resource` | The unique identifier of the resource emitting the log. | `string` | No | - | - |
+| `parameters` | Log category parameters are stored here. The resource for a service log can't be updated. | `map[string, string]` | No | - | - |
+| `resource` | The unique identifier of the resource emitting the log. The resource can be updated, and the resource value can vary depending on the OCI service to which the resource belongs to. | `string` | No | - | - |
 | `service` | Service generating log. | `string` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
 
@@ -111,6 +111,7 @@ LogStatus defines the observed state of Log.
 | `logType` | The logType that the log object is for, whether custom or service. | `string` | No | - | - |
 | `retentionDuration` | Log retention duration in 30-day increments (30, 60, 90 and so on until 180). | `integer` | No | - | - |
 | [`status`](#kind-log-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `tenancyId` | The OCID of the tenancy. | `string` | No | - | - |
 | `timeCreated` | Time the resource was created. | `string` | No | - | - |
 | `timeLastModified` | Time the resource was last modified. | `string` | No | - | - |
@@ -150,8 +151,8 @@ LogConfigurationSource defines nested fields for Log.Configuration.Source.
 | --- | --- | --- | --- | --- | --- |
 | `category` | Log object category. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
-| `parameters` | Log category parameters are stored here. | `map[string, string]` | No | - | - |
-| `resource` | The unique identifier of the resource emitting the log. | `string` | No | - | - |
+| `parameters` | Log category parameters are stored here. The resource for a service log can't be updated. | `map[string, string]` | No | - | - |
+| `resource` | The unique identifier of the resource emitting the log. The resource can be updated, and the resource value can vary depending on the OCI service to which the resource belongs to. | `string` | No | - | - |
 | `service` | Service generating log. | `string` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
 
@@ -253,6 +254,7 @@ LogGroupStatus defines the observed state of LogGroup.
 | `id` | The OCID of the resource. | `string` | No | - | - |
 | `lifecycleState` | The log group object state. | `string` | No | - | - |
 | [`status`](#kind-loggroup-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | Time the resource was created. | `string` | No | - | - |
 | `timeLastModified` | Time the resource was last modified. | `string` | No | - | - |
 
@@ -356,6 +358,7 @@ LogSavedSearchStatus defines the observed state of LogSavedSearch.
 | `name` | The user-friendly display name. This must be unique within the enclosing resource, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
 | `query` | The search query that is saved. | `string` | No | - | - |
 | [`status`](#kind-logsavedsearch-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | Time the resource was created. | `string` | No | - | - |
 | `timeLastModified` | Time the resource was last modified. | `string` | No | - | - |
 
@@ -936,6 +939,7 @@ UnifiedAgentConfigurationStatus defines the observed state of UnifiedAgentConfig
 | `lifecycleState` | The pipeline state. | `string` | No | - | - |
 | [`serviceConfiguration`](#kind-unifiedagentconfiguration-status-serviceconfiguration) | UnifiedAgentConfigurationServiceConfiguration defines nested fields for UnifiedAgentConfiguration.ServiceConfiguration. | `object` | No | - | - |
 | [`status`](#kind-unifiedagentconfiguration-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | Time the resource was created. | `string` | No | - | - |
 | `timeLastModified` | Time the resource was last modified. | `string` | No | - | - |
 

@@ -162,6 +162,8 @@ type FileSystemStatus struct {
 	QuotaEnforcementState string `json:"quotaEnforcementState,omitempty"`
 	// Specifies the total number of replications for which this file system is a source.
 	ReplicationSourceCount int `json:"replicationSourceCount,omitempty"`
+	// Displays the compartment-level quota enforcement state affecting this file system.
+	CompartmentQuotaEnforcementState string `json:"compartmentQuotaEnforcementState,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -33,6 +33,9 @@ type DecryptionRuleSpec struct {
 	// The name of a mapped secret. Its `type` must match that of the specified decryption profile.
 	// +kubebuilder:validation:Optional
 	Secret string `json:"secret,omitempty"`
+	// An array of mapped secrets.
+	// +kubebuilder:validation:Optional
+	Secrets []string `json:"secrets,omitempty"`
 	// +kubebuilder:validation:Optional
 	Position DecryptionRulePosition `json:"position,omitempty,omitzero"`
 	// The OCID of the Network Firewall policy that owns this resource.
@@ -42,10 +45,10 @@ type DecryptionRuleSpec struct {
 
 // DecryptionRuleCondition defines nested fields for DecryptionRule.Condition.
 type DecryptionRuleCondition struct {
-	// An array of IP address list names to be evaluated against the traffic source address.
+	// An array of address list names to be evaluated against the traffic source address.
 	// +kubebuilder:validation:Optional
 	SourceAddress []string `json:"sourceAddress,omitempty"`
-	// An array of IP address list names to be evaluated against the traffic destination address.
+	// An array of address list names to be evaluated against the traffic destination address.
 	// +kubebuilder:validation:Optional
 	DestinationAddress []string `json:"destinationAddress,omitempty"`
 }
@@ -73,8 +76,10 @@ type DecryptionRuleStatus struct {
 	// OCID of the Network Firewall Policy this decryption rule belongs to.
 	ParentResourceId string `json:"parentResourceId,omitempty"`
 	// The name of the decryption profile to use.
-	DecryptionProfile string                 `json:"decryptionProfile,omitempty"`
-	Position          DecryptionRulePosition `json:"position,omitempty"`
+	DecryptionProfile string `json:"decryptionProfile,omitempty"`
+	// An array of mapped secrets.
+	Secrets  []string               `json:"secrets,omitempty"`
+	Position DecryptionRulePosition `json:"position,omitempty"`
 	// The description of the decryption rule. This field can be used to add additional info.
 	Description string `json:"description,omitempty"`
 	// The priority order in which this rule should be evaluated.

@@ -86,7 +86,7 @@ type DataSourceDetails struct {
 	// Description text for the query
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
-	// Interval in minutes which query is run periodically.
+	// Interval in seconds which query is run periodically.
 	// +kubebuilder:validation:Optional
 	IntervalInSeconds int `json:"intervalInSeconds,omitempty"`
 	// Target information in which scheduled query will be run
@@ -98,7 +98,7 @@ type DataSourceDetails struct {
 	// Interval in minutes that query is run periodically.
 	// +kubebuilder:validation:Optional
 	IntervalInMinutes int `json:"intervalInMinutes,omitempty"`
-	// The integer value that must be exceeded, fall below or equal to (depending on the operator), for the query result to trigger an event
+	// DEPRECATED - The integer value that must be exceeded, fall below or equal to (depending on the operator), for the query result to trigger an event
 	// +kubebuilder:validation:Optional
 	Threshold int `json:"threshold,omitempty"`
 	// +kubebuilder:validation:Optional
@@ -108,7 +108,7 @@ type DataSourceDetails struct {
 	AdditionalEntitiesCount int `json:"additionalEntitiesCount,omitempty"`
 	// +kubebuilder:validation:Optional
 	LoggingQueryDetails DataSourceDetailsLoggingQueryDetails `json:"loggingQueryDetails,omitempty,omitzero"`
-	// Operator used in data source
+	// DEPRECATED - Operator used in data source
 	// +kubebuilder:validation:Optional
 	Operator string `json:"operator,omitempty"`
 	// Type of logging query for data source (Sighting/Insight)

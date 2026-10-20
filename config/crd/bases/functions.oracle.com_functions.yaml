@@ -117,18 +117,6 @@ spec:
                   For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
-              image:
-                description: |-
-                  The qualified name of the Docker image to use in the function, including the image tag.
-                  The image should be in the OCI Registry that is in the same region as the function itself.
-                  Example: `phx.ocir.io/ten/functions/function:0.0.1`
-                type: string
-              imageDigest:
-                description: |-
-                  The image digest for the version of the image that will be pulled when invoking this function.
-                  If no value is specified, the digest currently associated with the image in the OCI Registry will be used.
-                  Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7`
-                type: string
               memoryInMBs:
                 description: Maximum usable memory for the function (MiB).
                 format: int64
@@ -149,6 +137,51 @@ spec:
               sourceDetails:
                 description: FunctionSourceDetails defines nested fields for Function.SourceDetails.
                 properties:
+                  archiveSourceDetails:
+                    description: FunctionSourceDetailsArchiveSourceDetails defines
+                      nested fields for Function.SourceDetails.ArchiveSourceDetails.
+                    properties:
+                      archiveFile:
+                        description: The base64-encoded archive file of the function
+                          code. The archive file must contain all the files for the
+                          function. Please refer to functions documentation for maximum
+                          allowed size and supported archive formats.
+                        type: string
+                      archiveSourceType:
+                        type: string
+                      bucketName:
+                        description: The name of the Object Storage bucket.
+                        type: string
+                      jsonData:
+                        type: string
+                      namespace:
+                        description: The Object Storage namespace.
+                        type: string
+                      objectName:
+                        description: The name of the Object Storage object.
+                        type: string
+                      objectVersionId:
+                        description: VersionId used to identify a particular version
+                          of the object. If not specified, the latest version of the
+                          object is used.
+                        type: string
+                    type: object
+                  handler:
+                    description: The function handler that is executed when the function
+                      is invoked. The value of this field depends on the runtime used
+                    type: string
+                  image:
+                    description: |-
+                      The qualified name of the Docker image to use in the function, including the image tag.
+                      The image should be in the OCI Registry that is in the same region as the function itself.
+                      Example: `phx.ocir.io/ten/functions/function:0.0.1`
+                    type: string
+                  imageDigest:
+                    description: |-
+                      The image digest for the version of the image that will be pulled when invoking this function.
+                      If no value is specified, the digest currently associated with the image in the OCI Registry will be used.
+                      Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7`
+                    type: string
                   jsonData:
                     type: string
                   pbfListingId:
@@ -156,6 +189,23 @@ spec:
                       The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the PbfListing this
                       function is sourced from.
                     type: string
+                  runtimeConfig:
+                    description: FunctionSourceDetailsRuntimeConfig defines nested
+                      fields for Function.SourceDetails.RuntimeConfig.
+                    properties:
+                      functionsRuntimeName:
+                        description: The name of the FunctionsRuntime this function
+                          is to be associated with.
+                        type: string
+                      functionsRuntimeVersionId:
+                        description: The OCID of the FunctionsRuntimeVersion to use
+                          for the Function in manual mode.
+                        type: string
+                      jsonData:
+                        type: string
+                      runtimeConfigType:
+                        type: string
+                    type: object
                   sourceType:
                     type: string
                 type: object
@@ -197,6 +247,7 @@ spec:
             - applicationId
             - displayName
             - memoryInMBs
+            - sourceDetails
             type: object
           status:
             description: FunctionStatus defines the observed state of Function.
@@ -270,18 +321,6 @@ spec:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the function.
                 type: string
-              image:
-                description: |-
-                  The qualified name of the Docker image to use in the function, including the image tag.
-                  The image should be in the OCI Registry that is in the same region as the function itself.
-                  Example: `phx.ocir.io/ten/functions/function:0.0.1`
-                type: string
-              imageDigest:
-                description: |-
-                  The image digest for the version of the image that will be pulled when invoking this function.
-                  If no value is specified, the digest currently associated with the image in the OCI Registry will be used.
-                  Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7`
-                type: string
               invokeEndpoint:
                 description: The base https invoke URL to set on a client in order
                   to invoke a function. This URL will never change over the lifetime
@@ -315,6 +354,51 @@ spec:
               sourceDetails:
                 description: FunctionSourceDetails defines nested fields for Function.SourceDetails.
                 properties:
+                  archiveSourceDetails:
+                    description: FunctionSourceDetailsArchiveSourceDetails defines
+                      nested fields for Function.SourceDetails.ArchiveSourceDetails.
+                    properties:
+                      archiveFile:
+                        description: The base64-encoded archive file of the function
+                          code. The archive file must contain all the files for the
+                          function. Please refer to functions documentation for maximum
+                          allowed size and supported archive formats.
+                        type: string
+                      archiveSourceType:
+                        type: string
+                      bucketName:
+                        description: The name of the Object Storage bucket.
+                        type: string
+                      jsonData:
+                        type: string
+                      namespace:
+                        description: The Object Storage namespace.
+                        type: string
+                      objectName:
+                        description: The name of the Object Storage object.
+                        type: string
+                      objectVersionId:
+                        description: VersionId used to identify a particular version
+                          of the object. If not specified, the latest version of the
+                          object is used.
+                        type: string
+                    type: object
+                  handler:
+                    description: The function handler that is executed when the function
+                      is invoked. The value of this field depends on the runtime used
+                    type: string
+                  image:
+                    description: |-
+                      The qualified name of the Docker image to use in the function, including the image tag.
+                      The image should be in the OCI Registry that is in the same region as the function itself.
+                      Example: `phx.ocir.io/ten/functions/function:0.0.1`
+                    type: string
+                  imageDigest:
+                    description: |-
+                      The image digest for the version of the image that will be pulled when invoking this function.
+                      If no value is specified, the digest currently associated with the image in the OCI Registry will be used.
+                      Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7`
+                    type: string
                   jsonData:
                     type: string
                   pbfListingId:
@@ -322,6 +406,23 @@ spec:
                       The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the PbfListing this
                       function is sourced from.
                     type: string
+                  runtimeConfig:
+                    description: FunctionSourceDetailsRuntimeConfig defines nested
+                      fields for Function.SourceDetails.RuntimeConfig.
+                    properties:
+                      functionsRuntimeName:
+                        description: The name of the FunctionsRuntime this function
+                          is to be associated with.
+                        type: string
+                      functionsRuntimeVersionId:
+                        description: The OCID of the FunctionsRuntimeVersion to use
+                          for the Function in manual mode.
+                        type: string
+                      jsonData:
+                        type: string
+                      runtimeConfigType:
+                        type: string
+                    type: object
                   sourceType:
                     type: string
                 type: object

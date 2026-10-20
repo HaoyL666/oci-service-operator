@@ -136,7 +136,7 @@ func (client AiDataPlatformClient) cancelWorkRequest(ctx context.Context, reques
 
 	var response CancelWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "CancelWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -195,7 +195,7 @@ func (client AiDataPlatformClient) changeAiDataPlatformCompartment(ctx context.C
 
 	var response ChangeAiDataPlatformCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "ChangeAiDataPlatformCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -258,7 +258,7 @@ func (client AiDataPlatformClient) createAiDataPlatform(ctx context.Context, req
 
 	var response CreateAiDataPlatformResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "CreateAiDataPlatform")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -316,12 +316,75 @@ func (client AiDataPlatformClient) deleteAiDataPlatform(ctx context.Context, req
 
 	var response DeleteAiDataPlatformResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "DeleteAiDataPlatform")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/AiDataPlatform/DeleteAiDataPlatform"
 		err = common.PostProcessServiceError(err, "AiDataPlatform", "DeleteAiDataPlatform", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// EnableAiFeature The AiDataPlatform will be enabled with AI features
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/aidataplatform/EnableAiFeature.go.html to see an example of how to use EnableAiFeature API.
+// A default retry strategy applies to this operation EnableAiFeature()
+func (client AiDataPlatformClient) EnableAiFeature(ctx context.Context, request EnableAiFeatureRequest) (response EnableAiFeatureResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.enableAiFeature, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = EnableAiFeatureResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = EnableAiFeatureResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(EnableAiFeatureResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into EnableAiFeatureResponse")
+	}
+	return
+}
+
+// enableAiFeature implements the OCIOperation interface (enables retrying operations)
+func (client AiDataPlatformClient) enableAiFeature(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/aiDataPlatforms/{aiDataPlatformId}/actions/enableAiFeature", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response EnableAiFeatureResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "EnableAiFeature")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/ai-data-platform/20240831/AiDataPlatform/EnableAiFeature"
+		err = common.PostProcessServiceError(err, "AiDataPlatform", "EnableAiFeature", apiReferenceLink)
 		return response, err
 	}
 
@@ -374,7 +437,7 @@ func (client AiDataPlatformClient) getAiDataPlatform(ctx context.Context, reques
 
 	var response GetAiDataPlatformResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "GetAiDataPlatform")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -432,7 +495,7 @@ func (client AiDataPlatformClient) getWorkRequest(ctx context.Context, request c
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -490,7 +553,7 @@ func (client AiDataPlatformClient) listAiDataPlatforms(ctx context.Context, requ
 
 	var response ListAiDataPlatformsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "ListAiDataPlatforms")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -548,7 +611,7 @@ func (client AiDataPlatformClient) listWorkRequestErrors(ctx context.Context, re
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -606,7 +669,7 @@ func (client AiDataPlatformClient) listWorkRequestLogs(ctx context.Context, requ
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -664,7 +727,7 @@ func (client AiDataPlatformClient) listWorkRequests(ctx context.Context, request
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -722,7 +785,7 @@ func (client AiDataPlatformClient) updateAiDataPlatform(ctx context.Context, req
 
 	var response UpdateAiDataPlatformResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "aiDataPlatform", "UpdateAiDataPlatform")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

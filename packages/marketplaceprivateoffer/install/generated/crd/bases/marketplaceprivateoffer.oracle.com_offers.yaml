@@ -69,13 +69,13 @@ spec:
                         nested fields for Offer.BuyerInformation.AdditionalContact.
                       properties:
                         email:
-                          description: The email of the contact
+                          description: The email of the contact.
                           type: string
                         firstName:
-                          description: The first name of the contact
+                          description: The first name of the contact.
                           type: string
                         lastName:
-                          description: The last name of the contact
+                          description: The last name of the contact.
                           type: string
                       type: object
                     type: array
@@ -91,13 +91,13 @@ spec:
                       fields for Offer.BuyerInformation.PrimaryContact.
                     properties:
                       email:
-                        description: The email of the contact
+                        description: The email of the contact.
                         type: string
                       firstName:
-                        description: The first name of the contact
+                        description: The first name of the contact.
                         type: string
                       lastName:
-                        description: The last name of the contact
+                        description: The last name of the contact.
                         type: string
                     type: object
                 type: object
@@ -107,10 +107,10 @@ spec:
                   description: OfferCustomField defines nested fields for Offer.CustomField.
                   properties:
                     key:
-                      description: the key of the custom field
+                      description: The key of the custom field.
                       type: string
                     value:
-                      description: the value of the custom field
+                      description: The value of the custom field.
                       type: string
                   type: object
                 type: array
@@ -143,19 +143,27 @@ spec:
               internalNotes:
                 description: Internal notes of the Offer
                 type: string
+              offerQuoteIds:
+                description: A list of associated offer quotes.
+                items:
+                  type: string
+                type: array
+              offerType:
+                description: The type of the offer.
+                type: string
               pricing:
                 description: OfferPricing defines nested fields for Offer.Pricing.
                 properties:
                   billingCycle:
                     description: The frequency at which the customer is billed for
-                      the Offer
+                      the offer.
                     type: string
                   currencyType:
                     description: The currency supported for a given Offer, in the
-                      format specified by ISO-4217
+                      format specified by ISO-4217.
                     type: string
                   totalAmount:
-                    description: The total amount an Offer costs
+                    description: The total amount an offer costs.
                     format: int64
                     type: integer
                 type: object
@@ -166,19 +174,19 @@ spec:
                   properties:
                     quantity:
                       description: The quantity of a resources associated with the
-                        bundle
+                        bundle.
                       format: int64
                       type: integer
                     resourceIds:
-                      description: the ids of the resources in the Offer
+                      description: The IDs of the resources in the offer.
                       items:
                         type: string
                       type: array
                     type:
-                      description: The type of resources in the bundle
+                      description: The type of resources in the bundle.
                       type: string
                     unitOfMeasurement:
-                      description: The unit of measurement for the resource bundle
+                      description: The unit of measurement for the resource bundle.
                       type: string
                   type: object
                 type: array
@@ -195,13 +203,13 @@ spec:
                         nested fields for Offer.SellerInformation.AdditionalContact.
                       properties:
                         email:
-                          description: The email of the contact
+                          description: The email of the contact.
                           type: string
                         firstName:
-                          description: The first name of the contact
+                          description: The first name of the contact.
                           type: string
                         lastName:
-                          description: The last name of the contact
+                          description: The last name of the contact.
                           type: string
                       type: object
                     type: array
@@ -210,13 +218,13 @@ spec:
                       fields for Offer.SellerInformation.PrimaryContact.
                     properties:
                       email:
-                        description: The email of the contact
+                        description: The email of the contact.
                         type: string
                       firstName:
-                        description: The first name of the contact
+                        description: The first name of the contact.
                         type: string
                       lastName:
-                        description: The last name of the contact
+                        description: The last name of the contact.
                         type: string
                     type: object
                 type: object
@@ -248,13 +256,13 @@ spec:
                         nested fields for Offer.BuyerInformation.AdditionalContact.
                       properties:
                         email:
-                          description: The email of the contact
+                          description: The email of the contact.
                           type: string
                         firstName:
-                          description: The first name of the contact
+                          description: The first name of the contact.
                           type: string
                         lastName:
-                          description: The last name of the contact
+                          description: The last name of the contact.
                           type: string
                       type: object
                     type: array
@@ -270,13 +278,13 @@ spec:
                       fields for Offer.BuyerInformation.PrimaryContact.
                     properties:
                       email:
-                        description: The email of the contact
+                        description: The email of the contact.
                         type: string
                       firstName:
-                        description: The first name of the contact
+                        description: The first name of the contact.
                         type: string
                       lastName:
-                        description: The last name of the contact
+                        description: The last name of the contact.
                         type: string
                     type: object
                 type: object
@@ -321,19 +329,22 @@ spec:
                 description: A substate for lifeCycleStatus to give a more human readable
                   version of the offer
                 type: string
+              offerType:
+                description: The type of the offer.
+                type: string
               pricing:
                 description: OfferPricing defines nested fields for Offer.Pricing.
                 properties:
                   billingCycle:
                     description: The frequency at which the customer is billed for
-                      the Offer
+                      the offer.
                     type: string
                   currencyType:
                     description: The currency supported for a given Offer, in the
-                      format specified by ISO-4217
+                      format specified by ISO-4217.
                     type: string
                   totalAmount:
-                    description: The total amount an Offer costs
+                    description: The total amount an offer costs.
                     format: int64
                     type: integer
                 type: object
@@ -443,19 +454,19 @@ spec:
                   properties:
                     quantity:
                       description: The quantity of a resources associated with the
-                        bundle
+                        bundle.
                       format: int64
                       type: integer
                     resourceIds:
-                      description: the ids of the resources in the Offer
+                      description: The IDs of the resources in the offer.
                       items:
                         type: string
                       type: array
                     type:
-                      description: The type of resources in the bundle
+                      description: The type of resources in the bundle.
                       type: string
                     unitOfMeasurement:
-                      description: The unit of measurement for the resource bundle
+                      description: The unit of measurement for the resource bundle.
                       type: string
                   type: object
                 type: array
@@ -472,13 +483,13 @@ spec:
                         nested fields for Offer.SellerInformation.AdditionalContact.
                       properties:
                         email:
-                          description: The email of the contact
+                          description: The email of the contact.
                           type: string
                         firstName:
-                          description: The first name of the contact
+                          description: The first name of the contact.
                           type: string
                         lastName:
-                          description: The last name of the contact
+                          description: The last name of the contact.
                           type: string
                       type: object
                     type: array
@@ -487,13 +498,13 @@ spec:
                       fields for Offer.SellerInformation.PrimaryContact.
                     properties:
                       email:
-                        description: The email of the contact
+                        description: The email of the contact.
                         type: string
                       firstName:
-                        description: The first name of the contact
+                        description: The first name of the contact.
                         type: string
                       lastName:
-                        description: The last name of the contact
+                        description: The last name of the contact.
                         type: string
                     type: object
                 type: object
@@ -596,6 +607,15 @@ spec:
                   updatedAt:
                     format: date-time
                     type: string
+                type: object
+              systemTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  System tags for this resource. Each key is predefined and scoped to a namespace.
+                  Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
                 type: object
               timeAcceptBy:
                 description: The time the Offer must be accepted by the Buyer before

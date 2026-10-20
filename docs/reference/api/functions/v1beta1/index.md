@@ -47,6 +47,7 @@ ApplicationSpec defines the desired state of Application.
 | `displayName` | The display name of the application. The display name must be unique within the compartment containing the application. Avoid entering confidential information. | `string` | Yes | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | [`imagePolicyConfig`](#kind-application-spec-imagepolicyconfig) | ApplicationImagePolicyConfig defines nested fields for Application.ImagePolicyConfig. | `object` | No | - | - |
+| [`logging`](#kind-application-spec-logging) | ApplicationLogging defines nested fields for Application.Logging. | `object` | No | - | - |
 | `networkSecurityGroupIds` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)s of the Network Security Groups to add the application to. | `list[string]` | No | - | - |
 | `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `shape` | Valid values are `GENERIC_X86`, `GENERIC_ARM` and `GENERIC_X86_ARM`. Default is `GENERIC_X86`. Setting this to `GENERIC_X86`, will run the functions in the application on X86 processor architecture. Setting this to `GENERIC_ARM`, will run the functions in the application on ARM processor architecture. When set to `GENERIC_X86_ARM`, functions in the application are run on either X86 or ARM processor architecture. Accepted values are: `GENERIC_X86`, `GENERIC_ARM`, `GENERIC_X86_ARM` | `string` | No | - | - |
@@ -77,6 +78,17 @@ ApplicationImagePolicyConfigKeyDetail defines nested fields for Application.Imag
 | --- | --- | --- | --- | --- | --- |
 | `kmsKeyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)s of the KMS key that will be used to verify the image signature. | `string` | Yes | - | - |
 
+<a id="kind-application-spec-logging"></a>
+#### Spec.logging
+
+[Back to Application spec](#kind-application-spec)
+
+ApplicationLogging defines nested fields for Application.Logging.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `lineFormat` | Specify the format of log lines emitted by functions in this application. | `string` | No | - | - |
+
 <a id="kind-application-spec-traceconfig"></a>
 #### Spec.traceConfig
 
@@ -104,6 +116,7 @@ ApplicationStatus defines the observed state of Application.
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the application. | `string` | No | - | - |
 | [`imagePolicyConfig`](#kind-application-status-imagepolicyconfig) | ApplicationImagePolicyConfig defines nested fields for Application.ImagePolicyConfig. | `object` | No | - | - |
 | `lifecycleState` | The current state of the application. | `string` | No | - | - |
+| [`logging`](#kind-application-status-logging) | ApplicationLogging defines nested fields for Application.Logging. | `object` | No | - | - |
 | `networkSecurityGroupIds` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)s of the Network Security Groups to add the application to. | `list[string]` | No | - | - |
 | `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `shape` | Valid values are `GENERIC_X86`, `GENERIC_ARM` and `GENERIC_X86_ARM`. Default is `GENERIC_X86`. Setting this to `GENERIC_X86`, will run the functions in the application on X86 processor architecture. Setting this to `GENERIC_ARM`, will run the functions in the application on ARM processor architecture. When set to `GENERIC_X86_ARM`, functions in the application are run on either X86 or ARM processor architecture. Accepted values are: `GENERIC_X86`, `GENERIC_ARM`, `GENERIC_X86_ARM` | `string` | No | - | - |
@@ -136,6 +149,17 @@ ApplicationImagePolicyConfigKeyDetail defines nested fields for Application.Imag
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `kmsKeyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)s of the KMS key that will be used to verify the image signature. | `string` | Yes | - | - |
+
+<a id="kind-application-status-logging"></a>
+#### Status.logging
+
+[Back to Application status](#kind-application-status)
+
+ApplicationLogging defines nested fields for Application.Logging.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `lineFormat` | Specify the format of log lines emitted by functions in this application. | `string` | No | - | - |
 
 <a id="kind-application-status-status"></a>
 #### Status.status
@@ -233,11 +257,9 @@ FunctionSpec defines the desired state of Function.
 | `displayName` | The display name of the function. The display name must be unique within the application containing the function. Avoid entering confidential information. | `string` | Yes | - | - |
 | [`failureDestination`](#kind-function-spec-failuredestination) | FunctionFailureDestination defines nested fields for Function.FailureDestination. | `object` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
-| `image` | The qualified name of the Docker image to use in the function, including the image tag. The image should be in the OCI Registry that is in the same region as the function itself. Example: `phx.ocir.io/ten/functions/function:0.0.1` | `string` | No | - | - |
-| `imageDigest` | The image digest for the version of the image that will be pulled when invoking this function. If no value is specified, the digest currently associated with the image in the OCI Registry will be used. Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7` | `string` | No | - | - |
 | `memoryInMBs` | Maximum usable memory for the function (MiB). | `integer (int64)` | Yes | - | - |
 | [`provisionedConcurrencyConfig`](#kind-function-spec-provisionedconcurrencyconfig) | FunctionProvisionedConcurrencyConfig defines nested fields for Function.ProvisionedConcurrencyConfig. | `object` | No | - | - |
-| [`sourceDetails`](#kind-function-spec-sourcedetails) | FunctionSourceDetails defines nested fields for Function.SourceDetails. | `object` | No | - | - |
+| [`sourceDetails`](#kind-function-spec-sourcedetails) | FunctionSourceDetails defines nested fields for Function.SourceDetails. | `object` | Yes | - | - |
 | [`successDestination`](#kind-function-spec-successdestination) | FunctionSuccessDestination defines nested fields for Function.SuccessDestination. | `object` | No | - | - |
 | `timeoutInSeconds` | Timeout for executions of the function. Value in seconds. | `integer` | No | - | - |
 | [`traceConfig`](#kind-function-spec-traceconfig) | FunctionTraceConfig defines nested fields for Function.TraceConfig. | `object` | No | - | - |
@@ -280,9 +302,45 @@ FunctionSourceDetails defines nested fields for Function.SourceDetails.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`archiveSourceDetails`](#kind-function-spec-sourcedetails-archivesourcedetails) | FunctionSourceDetailsArchiveSourceDetails defines nested fields for Function.SourceDetails.ArchiveSourceDetails. | `object` | No | - | - |
+| `handler` | The function handler that is executed when the function is invoked. The value of this field depends on the runtime used | `string` | No | - | - |
+| `image` | The qualified name of the Docker image to use in the function, including the image tag. The image should be in the OCI Registry that is in the same region as the function itself. Example: `phx.ocir.io/ten/functions/function:0.0.1` | `string` | No | - | - |
+| `imageDigest` | The image digest for the version of the image that will be pulled when invoking this function. If no value is specified, the digest currently associated with the image in the OCI Registry will be used. Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7` | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `pbfListingId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the PbfListing this function is sourced from. | `string` | No | - | - |
+| [`runtimeConfig`](#kind-function-spec-sourcedetails-runtimeconfig) | FunctionSourceDetailsRuntimeConfig defines nested fields for Function.SourceDetails.RuntimeConfig. | `object` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
+
+<a id="kind-function-spec-sourcedetails-archivesourcedetails"></a>
+##### Spec.sourceDetails.archiveSourceDetails
+
+[Back to Function spec](#kind-function-spec)
+
+FunctionSourceDetailsArchiveSourceDetails defines nested fields for Function.SourceDetails.ArchiveSourceDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `archiveFile` | The base64-encoded archive file of the function code. The archive file must contain all the files for the function. Please refer to functions documentation for maximum allowed size and supported archive formats. | `string` | No | - | - |
+| `archiveSourceType` | - | `string` | No | - | - |
+| `bucketName` | The name of the Object Storage bucket. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `namespace` | The Object Storage namespace. | `string` | No | - | - |
+| `objectName` | The name of the Object Storage object. | `string` | No | - | - |
+| `objectVersionId` | VersionId used to identify a particular version of the object. If not specified, the latest version of the object is used. | `string` | No | - | - |
+
+<a id="kind-function-spec-sourcedetails-runtimeconfig"></a>
+##### Spec.sourceDetails.runtimeConfig
+
+[Back to Function spec](#kind-function-spec)
+
+FunctionSourceDetailsRuntimeConfig defines nested fields for Function.SourceDetails.RuntimeConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `functionsRuntimeName` | The name of the FunctionsRuntime this function is to be associated with. | `string` | No | - | - |
+| `functionsRuntimeVersionId` | The OCID of the FunctionsRuntimeVersion to use for the Function in manual mode. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `runtimeConfigType` | - | `string` | No | - | - |
 
 <a id="kind-function-spec-successdestination"></a>
 #### Spec.successDestination
@@ -327,8 +385,6 @@ FunctionStatus defines the observed state of Function.
 | [`failureDestination`](#kind-function-status-failuredestination) | FunctionFailureDestination defines nested fields for Function.FailureDestination. | `object` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the function. | `string` | No | - | - |
-| `image` | The qualified name of the Docker image to use in the function, including the image tag. The image should be in the OCI Registry that is in the same region as the function itself. Example: `phx.ocir.io/ten/functions/function:0.0.1` | `string` | No | - | - |
-| `imageDigest` | The image digest for the version of the image that will be pulled when invoking this function. If no value is specified, the digest currently associated with the image in the OCI Registry will be used. Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7` | `string` | No | - | - |
 | `invokeEndpoint` | The base https invoke URL to set on a client in order to invoke a function. This URL will never change over the lifetime of the function and can be cached. | `string` | No | - | - |
 | `lifecycleState` | The current state of the function. | `string` | No | - | - |
 | `memoryInMBs` | Maximum usable memory for the function (MiB). | `integer (int64)` | No | - | - |
@@ -380,9 +436,45 @@ FunctionSourceDetails defines nested fields for Function.SourceDetails.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`archiveSourceDetails`](#kind-function-status-sourcedetails-archivesourcedetails) | FunctionSourceDetailsArchiveSourceDetails defines nested fields for Function.SourceDetails.ArchiveSourceDetails. | `object` | No | - | - |
+| `handler` | The function handler that is executed when the function is invoked. The value of this field depends on the runtime used | `string` | No | - | - |
+| `image` | The qualified name of the Docker image to use in the function, including the image tag. The image should be in the OCI Registry that is in the same region as the function itself. Example: `phx.ocir.io/ten/functions/function:0.0.1` | `string` | No | - | - |
+| `imageDigest` | The image digest for the version of the image that will be pulled when invoking this function. If no value is specified, the digest currently associated with the image in the OCI Registry will be used. Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7` | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `pbfListingId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the PbfListing this function is sourced from. | `string` | No | - | - |
+| [`runtimeConfig`](#kind-function-status-sourcedetails-runtimeconfig) | FunctionSourceDetailsRuntimeConfig defines nested fields for Function.SourceDetails.RuntimeConfig. | `object` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
+
+<a id="kind-function-status-sourcedetails-archivesourcedetails"></a>
+##### Status.sourceDetails.archiveSourceDetails
+
+[Back to Function status](#kind-function-status)
+
+FunctionSourceDetailsArchiveSourceDetails defines nested fields for Function.SourceDetails.ArchiveSourceDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `archiveFile` | The base64-encoded archive file of the function code. The archive file must contain all the files for the function. Please refer to functions documentation for maximum allowed size and supported archive formats. | `string` | No | - | - |
+| `archiveSourceType` | - | `string` | No | - | - |
+| `bucketName` | The name of the Object Storage bucket. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `namespace` | The Object Storage namespace. | `string` | No | - | - |
+| `objectName` | The name of the Object Storage object. | `string` | No | - | - |
+| `objectVersionId` | VersionId used to identify a particular version of the object. If not specified, the latest version of the object is used. | `string` | No | - | - |
+
+<a id="kind-function-status-sourcedetails-runtimeconfig"></a>
+##### Status.sourceDetails.runtimeConfig
+
+[Back to Function status](#kind-function-status)
+
+FunctionSourceDetailsRuntimeConfig defines nested fields for Function.SourceDetails.RuntimeConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `functionsRuntimeName` | The name of the FunctionsRuntime this function is to be associated with. | `string` | No | - | - |
+| `functionsRuntimeVersionId` | The OCID of the FunctionsRuntimeVersion to use for the Function in manual mode. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `runtimeConfigType` | - | `string` | No | - | - |
 
 <a id="kind-function-status-status"></a>
 #### Status.status

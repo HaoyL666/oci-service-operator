@@ -151,6 +151,9 @@ spec:
               longDescription:
                 description: A long description for the listing revision.
                 type: string
+              partnerRegistrationUrl:
+                description: The url provided by partner for the registration of subscription.
+                type: string
               pricingPlans:
                 description: List of Pricing Plans provider by publisher.
                 items:
@@ -160,21 +163,88 @@ spec:
                     billingFrequency:
                       description: The plan billing frequency.
                       type: string
+                    dimensions:
+                      description: The usage dimensions that define included usage
+                        and overage billing for this plan.
+                      items:
+                        description: ListingRevisionPricingPlanDimension defines nested
+                          fields for ListingRevision.PricingPlan.Dimension.
+                        properties:
+                          additionalDetails:
+                            additionalProperties:
+                              type: string
+                            description: Additional metadata key/value pairs for the
+                              dimension.
+                            type: object
+                          dimensionBillingFrequency:
+                            description: Billing frequency used for the dimension.
+                            type: string
+                          dimensionDescription:
+                            description: The dimension description.
+                            type: string
+                          dimensionKey:
+                            description: Server-generated unique identifier for the
+                              usage dimension. If omitted in the request, it is generated
+                              automatically.
+                            type: string
+                          dimensionName:
+                            description: The dimension name.
+                            type: string
+                          includedQuantity:
+                            description: Included quantity before overage rates apply.
+                            type: number
+                          metricType:
+                            description: The metric type used to measure usage for
+                              the dimension.
+                            type: string
+                          rates:
+                            description: List of pricing rates provider by publisher
+                              for the dimension.
+                            items:
+                              description: ListingRevisionPricingPlanDimensionRate
+                                defines nested fields for ListingRevision.PricingPlan.Dimension.Rate.
+                              properties:
+                                billingCurrency:
+                                  description: The currency supported, in the format
+                                    specified by ISO-4217
+                                  type: string
+                                rate:
+                                  description: Tha amount for the currency type.
+                                  type: number
+                              required:
+                              - billingCurrency
+                              - rate
+                              type: object
+                            type: array
+                        required:
+                        - dimensionBillingFrequency
+                        - dimensionDescription
+                        - dimensionName
+                        - metricType
+                        - rates
+                        type: object
+                      type: array
                     extendedMetadata:
                       additionalProperties:
                         type: string
-                      description: Additional metadata key/value pairs for the metering
+                      description: Additional metadata key/value pairs for the hybrid
                         pricing.
                       type: object
                     jsonData:
                       type: string
                     name:
-                      description: The listing's pricing plan name.
+                      description: The plan name.
                       type: string
                     planDescription:
                       description: The plan description.
                       type: string
+                    planDuration:
+                      description: The plan duration.
+                      type: string
                     planType:
+                      type: string
+                    pricingPlanKey:
+                      description: Unique identifier of the pricing plan.
                       type: string
                     rates:
                       description: List of pricing rates provider by publisher.
@@ -319,6 +389,9 @@ spec:
               tagline:
                 description: The tagline for the listing revision.
                 type: string
+              termId:
+                description: The unique id of the term attached to the listing.
+                type: string
               trainedProfessionals:
                 description: Number of trained professional per product
                 items:
@@ -381,6 +454,19 @@ spec:
               availabilityAndPricingPolicy:
                 description: Listing availability and Pricing Policy statement.
                 type: string
+              banner:
+                description: ListingRevisionBanner defines nested fields for ListingRevision.Banner.
+                properties:
+                  contentUrl:
+                    description: The content URL of the uploaded data.
+                    type: string
+                  mimeType:
+                    description: The MIME type of the uploaded data.
+                    type: string
+                  name:
+                    description: The name of uploaded banner.
+                    type: string
+                type: object
               compartmentId:
                 description: The unique identifier for the compartment.
                 type: string
@@ -501,6 +587,9 @@ spec:
                 type: string
               packageType:
                 description: The listing's package type. Populated from the listing.
+                type: string
+              partnerRegistrationUrl:
+                description: The url provided by partner for the registration of subscription.
                 type: string
               pricingPlans:
                 description: Pricing details for lead gen listing
@@ -743,6 +832,9 @@ spec:
                 type: object
               tagline:
                 description: The tagline of the listing revision.
+                type: string
+              termId:
+                description: The unique id of the term attached to the listing.
                 type: string
               timeCreated:
                 description: The time the listing revision was created. An RFC3339

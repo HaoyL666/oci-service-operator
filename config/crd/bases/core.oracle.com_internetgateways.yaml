@@ -244,6 +244,15 @@ spec:
                     format: date-time
                     type: string
                 type: object
+              systemTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Usage of system tag keys. These predefined keys are scoped to namespaces.
+                  Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }`
+                type: object
               timeCreated:
                 description: |-
                   The date and time the internet gateway was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339).

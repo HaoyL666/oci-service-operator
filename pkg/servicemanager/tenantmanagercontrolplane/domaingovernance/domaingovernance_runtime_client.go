@@ -42,6 +42,7 @@ type domainGovernanceRuntimeClient struct {
 type domainGovernanceProjectedStatus struct {
 	Id                  string                     `json:"id,omitempty"`
 	OwnerId             string                     `json:"ownerId,omitempty"`
+	CompartmentId       string                     `json:"compartmentId,omitempty"`
 	DomainId            string                     `json:"domainId,omitempty"`
 	LifecycleState      string                     `json:"lifecycleState,omitempty"`
 	OnsTopicId          string                     `json:"onsTopicId,omitempty"`
@@ -469,6 +470,7 @@ func projectDomainGovernanceStatus(resource *tenantmanagercontrolplanev1beta1.Do
 
 	resource.Status.Id = projected.Id
 	resource.Status.OwnerId = projected.OwnerId
+	resource.Status.CompartmentId = projected.CompartmentId
 	resource.Status.DomainId = projected.DomainId
 	resource.Status.LifecycleState = projected.LifecycleState
 	resource.Status.OnsTopicId = projected.OnsTopicId
@@ -538,6 +540,7 @@ func domainGovernanceProjectedStatusFromDomainGovernance(
 	return domainGovernanceProjectedStatus{
 		Id:                  strings.TrimSpace(stringPtrValue(source.Id)),
 		OwnerId:             strings.TrimSpace(stringPtrValue(source.OwnerId)),
+		CompartmentId:       strings.TrimSpace(stringPtrValue(source.CompartmentId)),
 		DomainId:            strings.TrimSpace(stringPtrValue(source.DomainId)),
 		LifecycleState:      string(source.LifecycleState),
 		OnsTopicId:          strings.TrimSpace(stringPtrValue(source.OnsTopicId)),
@@ -558,6 +561,7 @@ func domainGovernanceProjectedStatusFromSummary(
 	return domainGovernanceProjectedStatus{
 		Id:                  strings.TrimSpace(stringPtrValue(source.Id)),
 		OwnerId:             strings.TrimSpace(stringPtrValue(source.OwnerId)),
+		CompartmentId:       strings.TrimSpace(stringPtrValue(source.CompartmentId)),
 		DomainId:            strings.TrimSpace(stringPtrValue(source.DomainId)),
 		LifecycleState:      string(source.LifecycleState),
 		OnsTopicId:          strings.TrimSpace(stringPtrValue(source.OnsTopicId)),

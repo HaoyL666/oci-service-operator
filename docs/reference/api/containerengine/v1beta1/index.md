@@ -77,6 +77,7 @@ The network configuration for access to the Cluster control plane.
 | --- | --- | --- | --- | --- | --- |
 | `isPublicIpEnabled` | Whether the cluster should be assigned a public IP address. Defaults to false. If set to true on a private subnet, the cluster provisioning will fail. | `boolean` | No | - | - |
 | `nsgIds` | A list of the OCIDs of the network security groups (NSGs) to apply to the cluster endpoint. For more information about NSGs, see NetworkSecurityGroup. | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The OCID of the regional subnet in which to place the Cluster endpoint. | `string` | No | - | - |
 
 <a id="kind-cluster-spec-imagepolicyconfig"></a>
@@ -278,6 +279,7 @@ The network configuration for access to the Cluster control plane.
 | --- | --- | --- | --- | --- | --- |
 | `isPublicIpEnabled` | Whether the cluster should be assigned a public IP address. Defaults to false. If set to true on a private subnet, the cluster provisioning will fail. | `boolean` | No | - | - |
 | `nsgIds` | A list of the OCIDs of the network security groups (NSGs) to apply to the cluster endpoint. For more information about NSGs, see NetworkSecurityGroup. | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The OCID of the regional subnet in which to place the Cluster endpoint. | `string` | No | - | - |
 
 <a id="kind-cluster-status-endpoints"></a>
@@ -545,6 +547,7 @@ NodePoolSpec defines the desired state of NodePool.
 | [`initialNodeLabels`](#kind-nodepool-spec-initialnodelabels) | A list of key/value pairs to add to nodes after they join the Kubernetes cluster. | `list[object]` | No | - | - |
 | `kubernetesVersion` | The version of Kubernetes to install on the nodes in the node pool. | `string` | No | - | - |
 | `name` | The name of the node pool. Avoid entering confidential information. | `string` | Yes | - | - |
+| `networkLaunchType` | Emulation type for the physical network interface card (NIC) for nodes | `string` | No | - | - |
 | [`nodeConfigDetails`](#kind-nodepool-spec-nodeconfigdetails) | The configuration of nodes in the node pool. Exactly one of the subnetIds or nodeConfigDetails properties must be specified. | `object` | No | - | - |
 | [`nodeEvictionNodePoolSettings`](#kind-nodepool-spec-nodeevictionnodepoolsettings) | NodePoolNodeEvictionNodePoolSettings defines nested fields for NodePool.NodeEvictionNodePoolSettings. | `object` | No | - | - |
 | `nodeImageName` | Deprecated. Use `nodeSourceDetails` instead. If you specify values for both, this value is ignored. The name of the image running on the nodes in the node pool. | `string` | No | - | - |
@@ -553,7 +556,9 @@ NodePoolSpec defines the desired state of NodePool.
 | `nodeShape` | The name of the node shape of the nodes in the node pool. | `string` | Yes | - | - |
 | [`nodeShapeConfig`](#kind-nodepool-spec-nodeshapeconfig) | Specify the configuration of the shape to launch nodes in the node pool. | `object` | No | - | - |
 | [`nodeSourceDetails`](#kind-nodepool-spec-nodesourcedetails) | Specify the source to use to launch nodes in the node pool. Currently, image is the only supported source. | `object` | No | - | - |
+| [`primaryVnic`](#kind-nodepool-spec-primaryvnic) | NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic. | `object` | No | - | - |
 | `quantityPerSubnet` | Optional, default to 1. The number of nodes to create in each subnet specified in subnetIds property. When used, subnetIds is required. This property is deprecated, use nodeConfigDetails instead. | `integer` | No | - | - |
+| [`secondaryVnics`](#kind-nodepool-spec-secondaryvnics) | A list of secondary vnics to attach to nodes | `list[object]` | No | - | - |
 | `sshPublicKey` | The SSH public key on each node in the node pool on launch. | `string` | No | - | - |
 | `subnetIds` | The OCIDs of the subnets in which to place nodes for this node pool. When used, quantityPerSubnet can be provided. This property is deprecated, use nodeConfigDetails. Exactly one of the subnetIds or nodeConfigDetails properties must be specified. | `list[string]` | No | - | - |
 
@@ -578,6 +583,7 @@ The configuration of nodes in the node pool. Exactly one of the subnetIds or nod
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `computeClusterId` | The OCID of the Compute Cluster to be associated with the worker node instance. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `isPvEncryptionInTransitEnabled` | Whether to enable in-transit encryption for the data volume's paravirtualized attachment. This field applies to both block volumes and boot volumes. The default value is false. | `boolean` | No | - | - |
@@ -614,6 +620,7 @@ NodePoolNodeConfigDetailsPlacementConfig defines nested fields for NodePool.Node
 | `availabilityDomain` | The availability domain in which to place nodes. Example: `Uocm:PHX-AD-1` | `string` | Yes | - | - |
 | `capacityReservationId` | The OCID of the compute capacity reservation in which to place the compute instance. | `string` | No | - | - |
 | `faultDomains` | A list of fault domains in which to place nodes. | `list[string]` | No | - | - |
+| `hostGroupId` | The OCID of the Host Group to be associated with the worker node instance. | `string` | No | - | - |
 | [`preemptibleNodeConfig`](#kind-nodepool-spec-nodeconfigdetails-placementconfigs-preemptiblenodeconfig) | NodePoolNodeConfigDetailsPlacementConfigPreemptibleNodeConfig defines nested fields for NodePool.NodeConfigDetails.PlacementConfig.PreemptibleNodeConfig. | `object` | No | - | - |
 | `subnetId` | The OCID of the subnet in which to place nodes. | `string` | Yes | - | - |
 
@@ -694,6 +701,64 @@ Specify the source to use to launch nodes in the node pool. Currently, image is 
 | `jsonData` | - | `string` | No | - | - |
 | `sourceType` | - | `string` | No | - | - |
 
+<a id="kind-nodepool-spec-primaryvnic"></a>
+#### Spec.primaryVnic
+
+[Back to NodePool spec](#kind-nodepool-spec)
+
+NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. | `map[string, map[string, string]]` | No | - | - |
+
+<a id="kind-nodepool-spec-secondaryvnics"></a>
+#### Spec.secondaryVnics[]
+
+[Back to NodePool spec](#kind-nodepool-spec)
+
+NodePoolSecondaryVnic defines nested fields for NodePool.SecondaryVnic.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`createVnicDetails`](#kind-nodepool-spec-secondaryvnics-createvnicdetails) | NodePoolSecondaryVnicCreateVnicDetails defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails. | `object` | Yes | - | - |
+| `displayName` | Display name for vnic attachment | `string` | No | - | - |
+| `nicIndex` | Which physical network interface card (NIC) the VNIC will use | `integer` | No | - | - |
+
+<a id="kind-nodepool-spec-secondaryvnics-createvnicdetails"></a>
+##### Spec.secondaryVnics[].createVnicDetails
+
+[Back to NodePool spec](#kind-nodepool-spec)
+
+NodePoolSecondaryVnicCreateVnicDetails defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `applicationResources` | The application resource that corresponds to this secondary vnic. Used to map pods to this specific vnic for scheduling | `list[string]` | No | - | - |
+| `assignIpv6Ip` | Whether to allocate an IPv6 address at instance and VNIC creation from an IPv6 enabled subnet | `boolean` | No | - | - |
+| `assignPublicIp` | Whether the VNIC should be assigned a public IP address | `boolean` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `displayName` | Display name for secondary vnic | `string` | No | - | - |
+| `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `ipCount` | The number of ip addresses to attach to secondary vnic | `integer` | No | - | - |
+| [`ipv6AddressIpv6SubnetCidrPairDetails`](#kind-nodepool-spec-secondaryvnics-createvnicdetails-ipv6addressipv6subnetcidrpairdetails) | A list of IPv6 prefixes from which the VNIC should be assigned an IPv6 address. You can provide only the prefix and OCI selects an available address from the range. You can optionally choose to leave the prefix range empty and instead provide the specific IPv6 address that should be used from within that range. | `list[object]` | No | - | - |
+| `nsgIds` | A list of the OCIDs of the network security groups (NSGs) to add the VNIC to | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. | `map[string, map[string, string]]` | No | - | - |
+| `skipSourceDestCheck` | Whether the source/destination check is disabled on the VNIC | `boolean` | No | - | - |
+| `subnetId` | the ocid of the subnet to create the vnic in | `string` | Yes | - | - |
+
+<a id="kind-nodepool-spec-secondaryvnics-createvnicdetails-ipv6addressipv6subnetcidrpairdetails"></a>
+###### Spec.secondaryVnics[].createVnicDetails.ipv6AddressIpv6SubnetCidrPairDetails[]
+
+[Back to NodePool spec](#kind-nodepool-spec)
+
+NodePoolSecondaryVnicCreateVnicDetailsIpv6AddressIpv6SubnetCidrPairDetail defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails.Ipv6AddressIpv6SubnetCidrPairDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `ipv6Address` | An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix | `string` | No | - | - |
+| `ipv6SubnetCidr` | The IPv6 prefix allocated to the subnet | `string` | No | - | - |
+
 <a id="kind-nodepool-status"></a>
 ### Status
 
@@ -711,6 +776,7 @@ NodePoolStatus defines the observed state of NodePool.
 | `lifecycleDetails` | Details about the state of the nodepool. | `string` | No | - | - |
 | `lifecycleState` | The state of the nodepool. For more information, see Monitoring Clusters (https://docs.oracle.com/iaas/Content/ContEng/Tasks/contengmonitoringclusters.htm) | `string` | No | - | - |
 | `name` | The name of the node pool. | `string` | No | - | - |
+| `networkLaunchType` | Emulation type for the physical network interface card (NIC) for nodes | `string` | No | - | - |
 | [`nodeConfigDetails`](#kind-nodepool-status-nodeconfigdetails) | The configuration of nodes in the node pool. | `object` | No | - | - |
 | [`nodeEvictionNodePoolSettings`](#kind-nodepool-status-nodeevictionnodepoolsettings) | NodePoolNodeEvictionNodePoolSettings defines nested fields for NodePool.NodeEvictionNodePoolSettings. | `object` | No | - | - |
 | `nodeImageId` | Deprecated. see `nodeSource`. The OCID of the image running on the nodes in the node pool. | `string` | No | - | - |
@@ -722,7 +788,9 @@ NodePoolStatus defines the observed state of NodePool.
 | [`nodeSource`](#kind-nodepool-status-nodesource) | Deprecated. see `nodeSourceDetails`. Source running on the nodes in the node pool. | `object` | No | - | - |
 | [`nodeSourceDetails`](#kind-nodepool-status-nodesourcedetails) | Source running on the nodes in the node pool. | `object` | No | - | - |
 | [`nodes`](#kind-nodepool-status-nodes) | The nodes in the node pool. | `list[object]` | No | - | - |
+| [`primaryVnic`](#kind-nodepool-status-primaryvnic) | NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic. | `object` | No | - | - |
 | `quantityPerSubnet` | The number of nodes in each subnet. | `integer` | No | - | - |
+| [`secondaryVnics`](#kind-nodepool-status-secondaryvnics) | A list of secondary vnics to attach to nodes | `list[object]` | No | - | - |
 | `sshPublicKey` | The SSH public key on each node in the node pool on launch. | `string` | No | - | - |
 | [`status`](#kind-nodepool-status-status) | - | `object` | Yes | - | - |
 | `subnetIds` | The OCIDs of the subnets in which to place nodes for this node pool. | `list[string]` | No | - | - |
@@ -749,6 +817,7 @@ The configuration of nodes in the node pool.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `computeClusterId` | The OCID of the Compute Cluster to be associated with the worker node instance. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `isPvEncryptionInTransitEnabled` | Whether to enable in-transit encryption for the data volume's paravirtualized attachment. This field applies to both block volumes and boot volumes. The default value is false. | `boolean` | No | - | - |
@@ -785,6 +854,7 @@ NodePoolNodeConfigDetailsPlacementConfig defines nested fields for NodePool.Node
 | `availabilityDomain` | The availability domain in which to place nodes. Example: `Uocm:PHX-AD-1` | `string` | Yes | - | - |
 | `capacityReservationId` | The OCID of the compute capacity reservation in which to place the compute instance. | `string` | No | - | - |
 | `faultDomains` | A list of fault domains in which to place nodes. | `list[string]` | No | - | - |
+| `hostGroupId` | The OCID of the Host Group to be associated with the worker node instance. | `string` | No | - | - |
 | [`preemptibleNodeConfig`](#kind-nodepool-status-nodeconfigdetails-placementconfigs-preemptiblenodeconfig) | NodePoolNodeConfigDetailsPlacementConfigPreemptibleNodeConfig defines nested fields for NodePool.NodeConfigDetails.PlacementConfig.PreemptibleNodeConfig. | `object` | No | - | - |
 | `subnetId` | The OCID of the subnet in which to place nodes. | `string` | Yes | - | - |
 
@@ -917,6 +987,64 @@ An error that may be associated with the node.
 | `message` | A human-readable error string of the upstream error. | `string` | No | - | - |
 | `opc-request-id` | Unique Oracle-assigned identifier for the upstream request. If you need to contact Oracle about a particular upstream request, please provide the request ID. | `string` | No | - | - |
 | `status` | The status of the HTTP response encountered in the upstream error. | `string` | No | - | - |
+
+<a id="kind-nodepool-status-primaryvnic"></a>
+#### Status.primaryVnic
+
+[Back to NodePool status](#kind-nodepool-status)
+
+NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. | `map[string, map[string, string]]` | No | - | - |
+
+<a id="kind-nodepool-status-secondaryvnics"></a>
+#### Status.secondaryVnics[]
+
+[Back to NodePool status](#kind-nodepool-status)
+
+NodePoolSecondaryVnic defines nested fields for NodePool.SecondaryVnic.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`createVnicDetails`](#kind-nodepool-status-secondaryvnics-createvnicdetails) | NodePoolSecondaryVnicCreateVnicDetails defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails. | `object` | Yes | - | - |
+| `displayName` | Display name for vnic attachment | `string` | No | - | - |
+| `nicIndex` | Which physical network interface card (NIC) the VNIC will use | `integer` | No | - | - |
+
+<a id="kind-nodepool-status-secondaryvnics-createvnicdetails"></a>
+##### Status.secondaryVnics[].createVnicDetails
+
+[Back to NodePool status](#kind-nodepool-status)
+
+NodePoolSecondaryVnicCreateVnicDetails defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `applicationResources` | The application resource that corresponds to this secondary vnic. Used to map pods to this specific vnic for scheduling | `list[string]` | No | - | - |
+| `assignIpv6Ip` | Whether to allocate an IPv6 address at instance and VNIC creation from an IPv6 enabled subnet | `boolean` | No | - | - |
+| `assignPublicIp` | Whether the VNIC should be assigned a public IP address | `boolean` | No | - | - |
+| `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
+| `displayName` | Display name for secondary vnic | `string` | No | - | - |
+| `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `ipCount` | The number of ip addresses to attach to secondary vnic | `integer` | No | - | - |
+| [`ipv6AddressIpv6SubnetCidrPairDetails`](#kind-nodepool-status-secondaryvnics-createvnicdetails-ipv6addressipv6subnetcidrpairdetails) | A list of IPv6 prefixes from which the VNIC should be assigned an IPv6 address. You can provide only the prefix and OCI selects an available address from the range. You can optionally choose to leave the prefix range empty and instead provide the specific IPv6 address that should be used from within that range. | `list[object]` | No | - | - |
+| `nsgIds` | A list of the OCIDs of the network security groups (NSGs) to add the VNIC to | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm) (ZPR) policy to control access to ZPR-supported resources. | `map[string, map[string, string]]` | No | - | - |
+| `skipSourceDestCheck` | Whether the source/destination check is disabled on the VNIC | `boolean` | No | - | - |
+| `subnetId` | the ocid of the subnet to create the vnic in | `string` | Yes | - | - |
+
+<a id="kind-nodepool-status-secondaryvnics-createvnicdetails-ipv6addressipv6subnetcidrpairdetails"></a>
+###### Status.secondaryVnics[].createVnicDetails.ipv6AddressIpv6SubnetCidrPairDetails[]
+
+[Back to NodePool status](#kind-nodepool-status)
+
+NodePoolSecondaryVnicCreateVnicDetailsIpv6AddressIpv6SubnetCidrPairDetail defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails.Ipv6AddressIpv6SubnetCidrPairDetail.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `ipv6Address` | An IPv6 address of your choice. Must be an available IPv6 address within the subnet's prefix | `string` | No | - | - |
+| `ipv6SubnetCidr` | The IPv6 prefix allocated to the subnet | `string` | No | - | - |
 
 <a id="kind-nodepool-status-status"></a>
 #### Status.status

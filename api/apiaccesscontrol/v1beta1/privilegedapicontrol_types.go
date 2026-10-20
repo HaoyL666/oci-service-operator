@@ -17,7 +17,7 @@ type PrivilegedApiControlSpec struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment to create the PrivilegedApiControl in.
 	// +kubebuilder:validation:Required
 	CompartmentId string `json:"compartmentId"`
-	// The OCID of the OCI Notification topic to publish messages related to this Delegation Control.
+	// The OCID of the OCI Notification topic to publish messages related to this Privileged Api Control.
 	// +kubebuilder:validation:Required
 	NotificationTopicId string `json:"notificationTopicId"`
 	// List of user IAM group ids who can approve an privilegedApi request associated with a resource governed by this operator control.
@@ -29,15 +29,18 @@ type PrivilegedApiControlSpec struct {
 	// resourceType for which the PrivilegedApiControl is applicable
 	// +kubebuilder:validation:Required
 	ResourceType string `json:"resourceType"`
-	// contains Resource details
-	// +kubebuilder:validation:Required
-	Resources []string `json:"resources"`
 	// Name of the privilegedApi control It has to be unique.
 	// +kubebuilder:validation:Optional
 	DisplayName string `json:"displayName,omitempty"`
 	// Description of the privilegedApi control.
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
+	// List of Group containing the levels at which the users belonging to the group can authorize.
+	// +kubebuilder:validation:Optional
+	ApproverGroupLevelList []PrivilegedApiControlApproverGroupLevelList `json:"approverGroupLevelList,omitempty"`
+	// contains Resource details
+	// +kubebuilder:validation:Optional
+	Resources []string `json:"resources,omitempty"`
 	// Number of approvers required to approve an privilegedApi request.
 	// +kubebuilder:validation:Optional
 	NumberOfApprovers int `json:"numberOfApprovers,omitempty"`
@@ -64,6 +67,16 @@ type PrivilegedApiControlPrivilegedOperationList struct {
 	// list of attributes belonging to the above api which needs to be protected.
 	// +kubebuilder:validation:Optional
 	AttributeNames []string `json:"attributeNames,omitempty"`
+}
+
+// PrivilegedApiControlApproverGroupLevelList defines nested fields for PrivilegedApiControl.ApproverGroupLevelList.
+type PrivilegedApiControlApproverGroupLevelList struct {
+	// id of the group.
+	// +kubebuilder:validation:Required
+	GroupId []string `json:"groupId"`
+	// level of the group.
+	// +kubebuilder:validation:Required
+	GroupLevel int `json:"groupLevel"`
 }
 
 // PrivilegedApiControlStatus defines the observed state of PrivilegedApiControl.
@@ -96,6 +109,8 @@ type PrivilegedApiControlStatus struct {
 	NotificationTopicId string `json:"notificationTopicId,omitempty"`
 	// List of IAM user group ids who can approve an privilegedApi request associated with a target resource under the governance of this operator control.
 	ApproverGroupIdList []string `json:"approverGroupIdList,omitempty"`
+	// List of Group containing the levels at which the users belonging to the group can authorize.
+	ApproverGroupLevelList []PrivilegedApiControlApproverGroupLevelList `json:"approverGroupLevelList,omitempty"`
 	// resourceType for which the PrivilegedApiControl is applicable
 	ResourceType string `json:"resourceType,omitempty"`
 	// contains Resource details

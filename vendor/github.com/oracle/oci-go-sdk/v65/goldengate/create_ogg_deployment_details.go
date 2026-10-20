@@ -19,8 +19,9 @@ import (
 type CreateOggDeploymentDetails struct {
 
 	// The name given to the GoldenGate service deployment.
-	// The name must be 1 to 32 characters long, must contain only alphanumeric characters and must start with a letter.
-	DeploymentName *string `mandatory:"true" json:"deploymentName"`
+	// The name must contain only alphanumeric characters and must start with a letter.
+	// For standby deployment the deployment name is inherited from primary.
+	DeploymentName *string `mandatory:"false" json:"deploymentName"`
 
 	// The type of credential store for OGG.
 	CredentialStore CredentialStoreEnum `mandatory:"false" json:"credentialStore,omitempty"`
@@ -38,13 +39,16 @@ type CreateOggDeploymentDetails struct {
 	// The password must be 8 to 30 characters long and must contain at least 1 uppercase, 1 lowercase, 1 numeric,
 	// and 1 special character. Special characters such as '$', '^', or '?' are not allowed.
 	// This field will be deprecated and replaced by "passwordSecretId".
-	AdminPassword *string `mandatory:"false" json:"adminPassword"`
+	AdminPassword *string `mandatory:"false" json:"adminPassword" sensitive:"true"`
 
 	// The base64 encoded content of the PEM file containing the SSL certificate.
 	Certificate *string `mandatory:"false" json:"certificate"`
 
 	// The base64 encoded content of the PEM file containing the private key.
-	Key *string `mandatory:"false" json:"key"`
+	Key *string `mandatory:"false" json:"key" sensitive:"true"`
+
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the deployment ssl private key is stored in PEM format.
+	KeySecretId *string `mandatory:"false" json:"keySecretId"`
 
 	// Version of OGG
 	OggVersion *string `mandatory:"false" json:"oggVersion"`

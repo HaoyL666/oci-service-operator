@@ -108,6 +108,21 @@ type CreateOpensearchClusterDetails struct {
 	// The amount of storage in GB, to configure per node for the cluster's search nodes.
 	SearchNodeStorageGB *int `mandatory:"false" json:"searchNodeStorageGB"`
 
+	// The number of coordinator nodes configured for the cluster.
+	CoordinatorNodeCount *int `mandatory:"false" json:"coordinatorNodeCount"`
+
+	// The instance type for the cluster's coordinator nodes.
+	CoordinatorNodeHostType CoordinatorNodeHostTypeEnum `mandatory:"false" json:"coordinatorNodeHostType,omitempty"`
+
+	// The node shape for the cluster's coordinator nodes.
+	CoordinatorNodeHostShape *string `mandatory:"false" json:"coordinatorNodeHostShape"`
+
+	// The number of OCPUs configured for the cluster's coordinator nodes.
+	CoordinatorNodeHostOcpuCount *int `mandatory:"false" json:"coordinatorNodeHostOcpuCount"`
+
+	// The amount of memory in GB, for the cluster's coordinator nodes.
+	CoordinatorNodeHostMemoryGB *int `mandatory:"false" json:"coordinatorNodeHostMemoryGB"`
+
 	// The number of ML nodes configured for the cluster.
 	MlNodeCount *int `mandatory:"false" json:"mlNodeCount"`
 
@@ -135,6 +150,8 @@ type CreateOpensearchClusterDetails struct {
 	// The password hash of the master user that are used to manage security config
 	SecurityMasterUserPasswordHash *string `mandatory:"false" json:"securityMasterUserPasswordHash"`
 
+	SecurityMasterUserAuthDetails *SecurityUserAuthenticationDetails `mandatory:"false" json:"securityMasterUserAuthDetails"`
+
 	SecuritySamlConfig *SecuritySamlConfig `mandatory:"false" json:"securitySamlConfig"`
 
 	BackupPolicy *BackupPolicy `mandatory:"false" json:"backupPolicy"`
@@ -155,6 +172,8 @@ type CreateOpensearchClusterDetails struct {
 	LoadBalancerConfig *LoadBalancerConfig `mandatory:"false" json:"loadBalancerConfig"`
 
 	CertificateConfig *CertificateConfig `mandatory:"false" json:"certificateConfig"`
+
+	RemoteReindexTrustConfig *RemoteReindexTrustConfig `mandatory:"false" json:"remoteReindexTrustConfig"`
 
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
@@ -192,6 +211,9 @@ func (m CreateOpensearchClusterDetails) ValidateEnumValue() (bool, error) {
 
 	if _, ok := GetMappingSearchNodeHostTypeEnum(string(m.SearchNodeHostType)); !ok && m.SearchNodeHostType != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for SearchNodeHostType: %s. Supported values are: %s.", m.SearchNodeHostType, strings.Join(GetSearchNodeHostTypeEnumStringValues(), ",")))
+	}
+	if _, ok := GetMappingCoordinatorNodeHostTypeEnum(string(m.CoordinatorNodeHostType)); !ok && m.CoordinatorNodeHostType != "" {
+		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for CoordinatorNodeHostType: %s. Supported values are: %s.", m.CoordinatorNodeHostType, strings.Join(GetCoordinatorNodeHostTypeEnumStringValues(), ",")))
 	}
 	if _, ok := GetMappingMlNodeHostTypeEnum(string(m.MlNodeHostType)); !ok && m.MlNodeHostType != "" {
 		errMessage = append(errMessage, fmt.Sprintf("unsupported enum value for MlNodeHostType: %s. Supported values are: %s.", m.MlNodeHostType, strings.Join(GetMlNodeHostTypeEnumStringValues(), ",")))

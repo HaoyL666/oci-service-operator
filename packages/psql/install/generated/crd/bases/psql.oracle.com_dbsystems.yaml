@@ -191,6 +191,79 @@ spec:
                       type: string
                   type: object
                 type: array
+              kerberosAuthDetails:
+                description: DbSystemKerberosAuthDetails defines nested fields for
+                  DbSystem.KerberosAuthDetails.
+                properties:
+                  backupCredentials:
+                    description: Optional. List of Kerberos Credentials previously
+                      configured for the dbsystem. Currently supports only one entry.
+                    items:
+                      description: DbSystemKerberosAuthDetailsBackupCredential defines
+                        nested fields for DbSystem.KerberosAuthDetails.BackupCredential.
+                      properties:
+                        keytabSecretId:
+                          description: The OCID of the secret where the Kerberos keytab
+                            file is stored as base64 text.
+                          type: string
+                        keytabSecretVersion:
+                          description: The secret version of the stored Kerberos keytab
+                            file.
+                          format: int64
+                          type: integer
+                        realmName:
+                          description: |-
+                            Kerberos realm name.
+                            https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html
+                            Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name
+                            except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos
+                            service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string,
+                            but configuration and maintenance might then require more work. Use realm names that follow the standard
+                            Internet naming structure.
+                          type: string
+                      required:
+                      - keytabSecretId
+                      - keytabSecretVersion
+                      - realmName
+                      type: object
+                    type: array
+                  credentials:
+                    description: List of Kerberos Credentials to be configured for
+                      the dbsystem. Currently supports only one entry.
+                    items:
+                      description: DbSystemKerberosAuthDetailsCredential defines nested
+                        fields for DbSystem.KerberosAuthDetails.Credential.
+                      properties:
+                        keytabSecretId:
+                          description: The OCID of the secret where the Kerberos keytab
+                            file is stored as base64 text.
+                          type: string
+                        keytabSecretVersion:
+                          description: The secret version of the stored Kerberos keytab
+                            file.
+                          format: int64
+                          type: integer
+                        realmName:
+                          description: |-
+                            Kerberos realm name.
+                            https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html
+                            Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name
+                            except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos
+                            service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string,
+                            but configuration and maintenance might then require more work. Use realm names that follow the standard
+                            Internet naming structure.
+                          type: string
+                      required:
+                      - keytabSecretId
+                      - keytabSecretVersion
+                      - realmName
+                      type: object
+                    type: array
+                  jsonData:
+                    type: string
+                  kind:
+                    type: string
+                type: object
               managementPolicy:
                 description: DbSystemManagementPolicy defines nested fields for DbSystem.ManagementPolicy.
                 properties:
@@ -208,6 +281,11 @@ spec:
                           compartmentId:
                             description: target compartment to place a new backup
                             type: string
+                          kmsKeyIds:
+                            description: List of key ids of the remote regions
+                            items:
+                              type: string
+                            type: array
                           regions:
                             description: List of region names of the remote region
                             items:
@@ -247,6 +325,19 @@ spec:
                       "{day-of-week}" is a case-insensitive string like "mon", "tue", &c.
                       "{time-of-day}" is the "Time" portion of an RFC3339-formatted timestamp. Any second or sub-second time data will be truncated to zero.
                     type: string
+                  pitrPolicy:
+                    description: DbSystemManagementPolicyPitrPolicy defines nested
+                      fields for DbSystem.ManagementPolicy.PitrPolicy.
+                    properties:
+                      jsonData:
+                        type: string
+                      kind:
+                        type: string
+                      restoreDays:
+                        description: The number of days the database system retains
+                          backups required for point-in-time recovery.
+                        type: integer
+                    type: object
                 type: object
               networkDetails:
                 description: DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails.
@@ -273,6 +364,49 @@ spec:
                 required:
                 - subnetId
                 type: object
+              odspInsightDetails:
+                description: DbSystemOdspInsightDetails defines nested fields for
+                  DbSystem.OdspInsightDetails.
+                properties:
+                  jsonData:
+                    type: string
+                  kind:
+                    type: string
+                  odspInsightList:
+                    description: List of ODSP Insight and their configurations.
+                    items:
+                      description: DbSystemOdspInsightDetailsOdspInsightList defines
+                        nested fields for DbSystem.OdspInsightDetails.OdspInsightList.
+                      properties:
+                        insightType:
+                          description: Type of Insight collected for the database
+                            system.
+                          type: string
+                        retentionPeriodInDays:
+                          description: Retention period for Insight data, in days.
+                            Current supported value is 7 days. the system default
+                            is 7 days.
+                          type: integer
+                      required:
+                      - insightType
+                      type: object
+                    type: array
+                type: object
+              replicationConfig:
+                description: DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig.
+                properties:
+                  isRpoEnforced:
+                    description: |-
+                      Specify if Recovery point objective (RPO) enforcement needs to be enabled on the database
+                      system.
+                    type: boolean
+                  rpoInSeconds:
+                    description: |-
+                      Specifies the Recovery point objective (RPO) in seconds that will be enforced, if the
+                      `isRpoEnforced` flag is true.
+                    format: int64
+                    type: integer
+                type: object
               shape:
                 description: |-
                   The name of the shape for the database instance node. Use the /shapes API for accepted shapes.
@@ -285,12 +419,27 @@ spec:
                     description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                       of the database system backup.
                     type: string
+                  dbSystemId:
+                    description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                      of the source database system which will be used to perform
+                      point-in-time recovery.
+                    type: string
                   isHavingRestoreConfigOverrides:
                     description: Deprecated. Don't use.
                     type: boolean
                   jsonData:
                     type: string
+                  primaryDbSystemId:
+                    description: The [OCID] of the primary database system.
+                    type: string
                   sourceType:
+                    type: string
+                  timeToRestore:
+                    description: |-
+                      The target point-in-time of the source database system that will be restored, expressed in
+                      RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format.
+                      Point-in-time recovery can only performed in granularity of seconds.
+                      Example: `2016-08-25T21:10:29Z`
                     type: string
                 type: object
               storageDetails:
@@ -316,6 +465,10 @@ spec:
                     type: boolean
                   jsonData:
                     type: string
+                  kmsKeyId:
+                    description: The OCID of the Vault service key to assign as the
+                      master encryption key for the database system.
+                    type: string
                   systemType:
                     type: string
                 required:
@@ -326,7 +479,6 @@ spec:
                 type: string
             required:
             - compartmentId
-            - credentials
             - dbVersion
             - displayName
             - networkDetails
@@ -450,6 +602,79 @@ spec:
                       type: string
                   type: object
                 type: array
+              kerberosAuthDetails:
+                description: DbSystemKerberosAuthDetails defines nested fields for
+                  DbSystem.KerberosAuthDetails.
+                properties:
+                  backupCredentials:
+                    description: Optional. List of Kerberos Credentials previously
+                      configured for the dbsystem. Currently supports only one entry.
+                    items:
+                      description: DbSystemKerberosAuthDetailsBackupCredential defines
+                        nested fields for DbSystem.KerberosAuthDetails.BackupCredential.
+                      properties:
+                        keytabSecretId:
+                          description: The OCID of the secret where the Kerberos keytab
+                            file is stored as base64 text.
+                          type: string
+                        keytabSecretVersion:
+                          description: The secret version of the stored Kerberos keytab
+                            file.
+                          format: int64
+                          type: integer
+                        realmName:
+                          description: |-
+                            Kerberos realm name.
+                            https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html
+                            Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name
+                            except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos
+                            service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string,
+                            but configuration and maintenance might then require more work. Use realm names that follow the standard
+                            Internet naming structure.
+                          type: string
+                      required:
+                      - keytabSecretId
+                      - keytabSecretVersion
+                      - realmName
+                      type: object
+                    type: array
+                  credentials:
+                    description: List of Kerberos Credentials to be configured for
+                      the dbsystem. Currently supports only one entry.
+                    items:
+                      description: DbSystemKerberosAuthDetailsCredential defines nested
+                        fields for DbSystem.KerberosAuthDetails.Credential.
+                      properties:
+                        keytabSecretId:
+                          description: The OCID of the secret where the Kerberos keytab
+                            file is stored as base64 text.
+                          type: string
+                        keytabSecretVersion:
+                          description: The secret version of the stored Kerberos keytab
+                            file.
+                          format: int64
+                          type: integer
+                        realmName:
+                          description: |-
+                            Kerberos realm name.
+                            https://docs.oracle.com/cd/E36784_01/html/E37126/kplanning-27.html
+                            Realm names can consist of any ASCII string. Usually, the realm name is the same as your DNS domain name
+                            except that the realm name is in uppercase. This convention helps differentiate problems with the Kerberos
+                            service from problems with the DNS namespace, while keeping a name that is familiar. You can use any string,
+                            but configuration and maintenance might then require more work. Use realm names that follow the standard
+                            Internet naming structure.
+                          type: string
+                      required:
+                      - keytabSecretId
+                      - keytabSecretVersion
+                      - realmName
+                      type: object
+                    type: array
+                  jsonData:
+                    type: string
+                  kind:
+                    type: string
+                type: object
               lifecycleDetails:
                 description: A message describing the current state in more detail.
                   For example, can be used to provide actionable information for a
@@ -475,6 +700,11 @@ spec:
                           compartmentId:
                             description: target compartment to place a new backup
                             type: string
+                          kmsKeyIds:
+                            description: List of key ids of the remote regions
+                            items:
+                              type: string
+                            type: array
                           regions:
                             description: List of region names of the remote region
                             items:
@@ -514,6 +744,19 @@ spec:
                       "{day-of-week}" is a case-insensitive string like "mon", "tue", &c.
                       "{time-of-day}" is the "Time" portion of an RFC3339-formatted timestamp. Any second or sub-second time data will be truncated to zero.
                     type: string
+                  pitrPolicy:
+                    description: DbSystemManagementPolicyPitrPolicy defines nested
+                      fields for DbSystem.ManagementPolicy.PitrPolicy.
+                    properties:
+                      jsonData:
+                        type: string
+                      kind:
+                        type: string
+                      restoreDays:
+                        description: The number of days the database system retains
+                          backups required for point-in-time recovery.
+                        type: integer
+                    type: object
                 type: object
               networkDetails:
                 description: DbSystemNetworkDetails defines nested fields for DbSystem.NetworkDetails.
@@ -540,6 +783,49 @@ spec:
                 required:
                 - subnetId
                 type: object
+              odspInsightDetails:
+                description: DbSystemOdspInsightDetails defines nested fields for
+                  DbSystem.OdspInsightDetails.
+                properties:
+                  jsonData:
+                    type: string
+                  kind:
+                    type: string
+                  odspInsightList:
+                    description: List of ODSP Insight and their configurations.
+                    items:
+                      description: DbSystemOdspInsightDetailsOdspInsightList defines
+                        nested fields for DbSystem.OdspInsightDetails.OdspInsightList.
+                      properties:
+                        insightType:
+                          description: Type of Insight collected for the database
+                            system.
+                          type: string
+                        retentionPeriodInDays:
+                          description: Retention period for Insight data, in days.
+                            Current supported value is 7 days. the system default
+                            is 7 days.
+                          type: integer
+                      required:
+                      - insightType
+                      type: object
+                    type: array
+                type: object
+              replicationConfig:
+                description: DbSystemReplicationConfig defines nested fields for DbSystem.ReplicationConfig.
+                properties:
+                  isRpoEnforced:
+                    description: |-
+                      Specify if Recovery point objective (RPO) enforcement needs to be enabled on the database
+                      system.
+                    type: boolean
+                  rpoInSeconds:
+                    description: |-
+                      Specifies the Recovery point objective (RPO) in seconds that will be enforced, if the
+                      `isRpoEnforced` flag is true.
+                    format: int64
+                    type: integer
+                type: object
               shape:
                 description: |-
                   The name of the shape for the database instance.
@@ -552,12 +838,27 @@ spec:
                     description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                       of the database system backup.
                     type: string
+                  dbSystemId:
+                    description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                      of the source database system which will be used to perform
+                      point-in-time recovery.
+                    type: string
                   isHavingRestoreConfigOverrides:
                     description: Deprecated. Don't use.
                     type: boolean
                   jsonData:
                     type: string
+                  primaryDbSystemId:
+                    description: The [OCID] of the primary database system.
+                    type: string
                   sourceType:
+                    type: string
+                  timeToRestore:
+                    description: |-
+                      The target point-in-time of the source database system that will be restored, expressed in
+                      RFC 3339 (https://tools.ietf.org/rfc/rfc3339) timestamp format.
+                      Point-in-time recovery can only performed in granularity of seconds.
+                      Example: `2016-08-25T21:10:29Z`
                     type: string
                 type: object
               status:
@@ -684,11 +985,18 @@ spec:
                     type: boolean
                   jsonData:
                     type: string
+                  kmsKeyId:
+                    description: The OCID of the Vault service key to assign as the
+                      master encryption key for the database system.
+                    type: string
                   systemType:
                     type: string
                 required:
                 - isRegionallyDurable
                 type: object
+              systemRole:
+                description: Type of the database system.
+                type: string
               systemTags:
                 additionalProperties:
                   additionalProperties:

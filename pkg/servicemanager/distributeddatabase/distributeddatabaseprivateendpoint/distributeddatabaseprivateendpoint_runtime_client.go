@@ -89,12 +89,6 @@ func buildDistributedDatabasePrivateEndpointUpdateBody(
 		updateNeeded = true
 	}
 
-	desiredNsgIDs := desiredDistributedDatabasePrivateEndpointNsgIDsForUpdate(resource.Spec.NsgIds, current.NsgIds)
-	if !reflect.DeepEqual(current.NsgIds, desiredNsgIDs) {
-		updateDetails.NsgIds = desiredNsgIDs
-		updateNeeded = true
-	}
-
 	desiredFreeformTags := desiredDistributedDatabasePrivateEndpointFreeformTagsForUpdate(resource.Spec.FreeformTags, current.FreeformTags)
 	if !reflect.DeepEqual(current.FreeformTags, desiredFreeformTags) {
 		updateDetails.FreeformTags = desiredFreeformTags
@@ -159,22 +153,20 @@ func distributedDatabasePrivateEndpointFromSummary(
 	summary distributeddatabasesdk.DistributedDatabasePrivateEndpointSummary,
 ) distributeddatabasesdk.DistributedDatabasePrivateEndpoint {
 	return distributeddatabasesdk.DistributedDatabasePrivateEndpoint{
-		Id:                                     summary.Id,
-		CompartmentId:                          summary.CompartmentId,
-		SubnetId:                               summary.SubnetId,
-		VcnId:                                  summary.VcnId,
-		DisplayName:                            summary.DisplayName,
-		TimeCreated:                            summary.TimeCreated,
-		TimeUpdated:                            summary.TimeUpdated,
-		LifecycleState:                         summary.LifecycleState,
-		Description:                            summary.Description,
-		NsgIds:                                 summary.NsgIds,
-		LifecycleDetails:                       summary.LifecycleDetails,
-		FreeformTags:                           summary.FreeformTags,
-		DefinedTags:                            summary.DefinedTags,
-		SystemTags:                             summary.SystemTags,
-		GloballyDistributedDatabases:           nil,
-		GloballyDistributedAutonomousDatabases: nil,
+		Id:               summary.Id,
+		CompartmentId:    summary.CompartmentId,
+		SubnetId:         summary.SubnetId,
+		VcnId:            summary.VcnId,
+		DisplayName:      summary.DisplayName,
+		TimeCreated:      summary.TimeCreated,
+		TimeUpdated:      summary.TimeUpdated,
+		LifecycleState:   summary.LifecycleState,
+		Description:      summary.Description,
+		VcnNsgIds:        append([]distributeddatabasesdk.VcnNsgIdsDetails(nil), summary.VcnNsgIds...),
+		LifecycleDetails: summary.LifecycleDetails,
+		FreeformTags:     summary.FreeformTags,
+		DefinedTags:      summary.DefinedTags,
+		SystemTags:       summary.SystemTags,
 	}
 }
 

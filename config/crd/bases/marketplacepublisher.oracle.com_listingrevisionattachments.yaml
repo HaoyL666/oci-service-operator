@@ -91,6 +91,10 @@ spec:
                   Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
                   Example: `{"bar-key": "value"}`
                 type: object
+              isOracleUsersOnly:
+                description: Identifies whether the attachment is for Internal Oracle
+                  Users or external users as well.
+                type: boolean
               jsonData:
                 type: string
               listingRevisionId:
@@ -103,6 +107,12 @@ spec:
                 type: array
               serviceName:
                 description: Name of the service
+                type: string
+              sourceType:
+                description: The specified attachment type is Internal or External.
+                type: string
+              sourceUrl:
+                description: The document URL of the listing revision attachment.
                 type: string
               templateCode:
                 description: Type of review support document
@@ -119,6 +129,9 @@ spec:
                 properties:
                   contentUrl:
                     description: The URL of the video.
+                    type: string
+                  sourceType:
+                    description: The specified attachment type is Internal or External.
                     type: string
                 required:
                 - contentUrl
@@ -191,6 +204,11 @@ spec:
                 type: array
               serviceName:
                 description: Name of the service
+                type: string
+              sourceType:
+                description: Possible values for the publisher listing revision attachments.
+                  The source type informs whether the type of attachment for the listing
+                  revision is external or internal.
                 type: string
               status:
                 properties:

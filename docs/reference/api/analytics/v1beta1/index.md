@@ -40,22 +40,22 @@ AnalyticsInstanceSpec defines the desired state of AnalyticsInstance.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `adminUser` | user name of the authorized user. | `string` | No | - | - |
+| `adminUser` | The Analytics instance administrator user. This must be the user name (not OCID) of a user in the nominated identity domain. For example: john.smith@example.com. | `string` | No | - | - |
 | [`capacity`](#kind-analyticsinstance-spec-capacity) | AnalyticsInstanceCapacity defines nested fields for AnalyticsInstance.Capacity. | `object` | Yes | - | - |
 | `compartmentId` | The OCID of the compartment. | `string` | Yes | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | Optional description. | `string` | No | - | - |
-| `domainId` | domain id for which the user is authorized. | `string` | No | - | - |
+| `domainId` | The OCID of the identity domain to use for the new Analytics instance. For example: ocid1.domain.oc1..ocid1.domain.oc1..aaaaaa111111bbbbbb222222cccccc333333dddddd444444eeeeee5555. | `string` | No | - | - |
 | `emailNotification` | Email address receiving notifications. | `string` | No | - | - |
 | `featureBundle` | The feature set of an Analytics instance. | `string` | No | - | - |
-| `featureSet` | Analytics feature set. | `string` | Yes | - | - |
+| `featureSet` | The feature set. Either `SELF_SERVICE_ANALYTICS` (Professional Edition) or `ENTERPRISE_ANALYTICS` (Enterprise Edition). | `string` | Yes | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `idcsAccessToken` | IDCS access token identifying a stripe and service administrator user. | `string` | No | - | - |
-| `kmsKeyId` | OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates Oracle managed default encryption. | `string` | No | - | - |
+| `kmsKeyId` | OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates that the default Oracle-managed encryption is used. | `string` | No | - | - |
 | `licenseType` | The license used for the service. | `string` | Yes | - | - |
-| `name` | The name of the Analytics instance. This name must be unique in the tenancy and cannot be changed. | `string` | Yes | - | - |
+| `name` | The name of the Analytics instance. This name must be unique in the tenancy and can't be changed. The name must start with a letter and can contain only letters, numbers and dash (-). | `string` | Yes | - | - |
 | [`networkEndpointDetails`](#kind-analyticsinstance-spec-networkendpointdetails) | AnalyticsInstanceNetworkEndpointDetails defines nested fields for AnalyticsInstance.NetworkEndpointDetails. | `object` | No | - | - |
-| `updateChannel` | Analytics instance update channel. | `string` | No | - | - |
+| `updateChannel` | The Analytics instance update cycle. | `string` | No | - | - |
 
 <a id="kind-analyticsinstance-spec-capacity"></a>
 #### Spec.capacity
@@ -67,7 +67,7 @@ AnalyticsInstanceCapacity defines nested fields for AnalyticsInstance.Capacity.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `capacityType` | The capacity model to use. Accepted values are: OLPU_COUNT, USER_COUNT | `string` | Yes | - | - |
-| `capacityValue` | The capacity value selected, either the number of OCPUs (OLPU_COUNT) or the number of users (USER_COUNT). This parameter affects the number of OCPUs, amount of memory, and other resources allocated to the instance. | `integer` | Yes | - | - |
+| `capacityValue` | The capacity value selected, either the number of OCPUs (OLPU_COUNT) or the number of users (USER_COUNT). This parameter affects the number of OCPUs, amount of memory, and other resources allocated to the Analytics instance. | `integer` | Yes | - | - |
 
 <a id="kind-analyticsinstance-spec-networkendpointdetails"></a>
 #### Spec.networkEndpointDetails
@@ -80,11 +80,11 @@ AnalyticsInstanceNetworkEndpointDetails defines nested fields for AnalyticsInsta
 | --- | --- | --- | --- | --- | --- |
 | `jsonData` | - | `string` | No | - | - |
 | `networkEndpointType` | - | `string` | No | - | - |
-| `networkSecurityGroupIds` | Network Security Group OCIDs for an Analytics instance. | `list[string]` | No | - | - |
+| `networkSecurityGroupIds` | Network Security Group OCIDs for the Analytics instance. | `list[string]` | No | - | - |
 | `subnetId` | The subnet OCID for the private endpoint. | `string` | No | - | - |
 | `vcnId` | The VCN OCID for the private endpoint. | `string` | No | - | - |
 | `whitelistedIps` | Source IP addresses or IP address ranges in ingress rules. | `list[string]` | No | - | - |
-| `whitelistedServices` | Oracle Cloud Services that are allowed to access this Analytics instance. | `list[string]` | No | - | - |
+| `whitelistedServices` | Oracle Cloud services that are allowed to access this Analytics instance. | `list[string]` | No | - | - |
 | [`whitelistedVcns`](#kind-analyticsinstance-spec-networkendpointdetails-whitelistedvcns) | Virtual Cloud Networks allowed to access this network endpoint. | `list[object]` | No | - | - |
 
 <a id="kind-analyticsinstance-spec-networkendpointdetails-whitelistedvcns"></a>
@@ -113,21 +113,22 @@ AnalyticsInstanceStatus defines the observed state of AnalyticsInstance.
 | `domainId` | Identity domain OCID. | `string` | No | - | - |
 | `emailNotification` | Email address receiving notifications. | `string` | No | - | - |
 | `featureBundle` | The feature set of an Analytics instance. | `string` | No | - | - |
-| `featureSet` | Analytics feature set. | `string` | No | - | - |
+| `featureSet` | The feature set. Either `SELF_SERVICE_ANALYTICS` (Professional Edition) or `ENTERPRISE_ANALYTICS` (Enterprise Edition). | `string` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The resource OCID. | `string` | No | - | - |
-| `kmsKeyId` | OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates Oracle managed default encryption. | `string` | No | - | - |
+| `kmsKeyId` | OCID of the OCI Vault Key encrypting the customer data stored in this Analytics instance. A null value indicates that the default Oracle-managed encryption is used. | `string` | No | - | - |
 | `licenseType` | The license used for the service. | `string` | No | - | - |
-| `lifecycleState` | The current state of an instance. | `string` | No | - | - |
-| `name` | The name of the Analytics instance. This name must be unique in the tenancy and cannot be changed. | `string` | No | - | - |
+| `lifecycleState` | The current state of the Analytics instance. | `string` | No | - | - |
+| `name` | The name of the Analytics instance. This name must be unique in the tenancy and can't be changed. The name must start with a letter and can contain only letters, numbers and dash (-). | `string` | No | - | - |
 | [`networkEndpointDetails`](#kind-analyticsinstance-status-networkendpointdetails) | AnalyticsInstanceNetworkEndpointDetails defines nested fields for AnalyticsInstance.NetworkEndpointDetails. | `object` | No | - | - |
 | [`privateAccessChannels`](#kind-analyticsinstance-status-privateaccesschannels) | Map of PrivateAccessChannel unique identifier key as KEY and PrivateAccessChannel Object as VALUE. | `map[string, object]` | No | - | - |
-| `serviceUrl` | URL of the Analytics service. | `string` | No | - | - |
+| [`resourceGroups`](#kind-analyticsinstance-status-resourcegroups) | List of resource groups for this Analytics instance. The resource group id must be unique within the instance. | `list[object]` | No | - | - |
+| `serviceUrl` | URL of the Analytics instance. | `string` | No | - | - |
 | [`status`](#kind-analyticsinstance-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
-| `timeCreated` | The date and time the instance was created, in the format defined by RFC3339. Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
-| `timeUpdated` | The date and time the instance was last updated (in the format defined by RFC3339). This timestamp represents updates made through this API. External events do not influence it. | `string` | No | - | - |
-| `updateChannel` | Analytics instance update channel. | `string` | No | - | - |
+| `timeCreated` | The date and time the Analytics instance was created, in the format defined by RFC3339. Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeUpdated` | The date and time the Analytics instance was last updated (in the format defined by RFC3339). This timestamp represents updates made through this API. External events don't affect it. | `string` | No | - | - |
+| `updateChannel` | The Analytics instance update cycle. | `string` | No | - | - |
 | [`vanityUrlDetails`](#kind-analyticsinstance-status-vanityurldetails) | Map of VanityUrl unique identifier key as KEY and VanityUrl Object as VALUE. | `map[string, object]` | No | - | - |
 
 <a id="kind-analyticsinstance-status-capacity"></a>
@@ -140,7 +141,7 @@ AnalyticsInstanceCapacity defines nested fields for AnalyticsInstance.Capacity.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `capacityType` | The capacity model to use. Accepted values are: OLPU_COUNT, USER_COUNT | `string` | Yes | - | - |
-| `capacityValue` | The capacity value selected, either the number of OCPUs (OLPU_COUNT) or the number of users (USER_COUNT). This parameter affects the number of OCPUs, amount of memory, and other resources allocated to the instance. | `integer` | Yes | - | - |
+| `capacityValue` | The capacity value selected, either the number of OCPUs (OLPU_COUNT) or the number of users (USER_COUNT). This parameter affects the number of OCPUs, amount of memory, and other resources allocated to the Analytics instance. | `integer` | Yes | - | - |
 
 <a id="kind-analyticsinstance-status-networkendpointdetails"></a>
 #### Status.networkEndpointDetails
@@ -153,11 +154,11 @@ AnalyticsInstanceNetworkEndpointDetails defines nested fields for AnalyticsInsta
 | --- | --- | --- | --- | --- | --- |
 | `jsonData` | - | `string` | No | - | - |
 | `networkEndpointType` | - | `string` | No | - | - |
-| `networkSecurityGroupIds` | Network Security Group OCIDs for an Analytics instance. | `list[string]` | No | - | - |
+| `networkSecurityGroupIds` | Network Security Group OCIDs for the Analytics instance. | `list[string]` | No | - | - |
 | `subnetId` | The subnet OCID for the private endpoint. | `string` | No | - | - |
 | `vcnId` | The VCN OCID for the private endpoint. | `string` | No | - | - |
 | `whitelistedIps` | Source IP addresses or IP address ranges in ingress rules. | `list[string]` | No | - | - |
-| `whitelistedServices` | Oracle Cloud Services that are allowed to access this Analytics instance. | `list[string]` | No | - | - |
+| `whitelistedServices` | Oracle Cloud services that are allowed to access this Analytics instance. | `list[string]` | No | - | - |
 | [`whitelistedVcns`](#kind-analyticsinstance-status-networkendpointdetails-whitelistedvcns) | Virtual Cloud Networks allowed to access this network endpoint. | `list[object]` | No | - | - |
 
 <a id="kind-analyticsinstance-status-networkendpointdetails-whitelistedvcns"></a>
@@ -181,15 +182,15 @@ AnalyticsInstancePrivateAccessChannels defines nested fields for AnalyticsInstan
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `displayName` | Display Name of the Private Access Channel. | `string` | No | - | - |
-| `egressSourceIpAddresses` | The list of IP addresses from the customer subnet connected to private access channel, used as a source Ip by Private Access Channel for network traffic from the AnalyticsInstance to Private Sources. | `list[string]` | No | - | - |
-| `ipAddress` | IP Address of the Private Access channel. | `string` | No | - | - |
-| `key` | Private Access Channel unique identifier key. | `string` | No | - | - |
-| `networkSecurityGroupIds` | Network Security Group OCIDs for an Analytics instance. | `list[string]` | No | - | - |
-| [`privateSourceDnsZones`](#kind-analyticsinstance-status-privateaccesschannels-privatesourcednszones) | List of Private Source DNS zones registered with Private Access Channel, where datasource hostnames from these dns zones / domains will be resolved in the peered VCN for access from Analytics Instance. Min of 1 is required and Max of 30 Private Source DNS zones can be registered. | `list[object]` | No | - | - |
-| [`privateSourceScanHosts`](#kind-analyticsinstance-status-privateaccesschannels-privatesourcescanhosts) | List of Private Source DB SCAN hosts registered with Private Access Channel for access from Analytics Instance. | `list[object]` | No | - | - |
-| `subnetId` | OCID of the customer subnet connected to private access channel. | `string` | No | - | - |
-| `vcnId` | OCID of the customer VCN peered with private access channel. | `string` | No | - | - |
+| `displayName` | Display name of the private access channel. | `string` | No | - | - |
+| `egressSourceIpAddresses` | List of IP addresses from the customer subnet connected to the private access channel, used as a source IP by the private access channel for network traffic from the Analytics instance to the private sources. | `list[string]` | No | - | - |
+| `ipAddress` | IP address of the private access channel. | `string` | No | - | - |
+| `key` | Private access channel unique identifier key. | `string` | No | - | - |
+| `networkSecurityGroupIds` | Network Security Group OCIDs for the Analytics instance. | `list[string]` | No | - | - |
+| [`privateSourceDnsZones`](#kind-analyticsinstance-status-privateaccesschannels-privatesourcednszones) | List of private source DNS zones registered with the private access channel. The datasource hostnames from these DNS zones / domains will be resolved in the peered VCN for access from the Analytics instance. Minimum 1 private source is required. Maximum 30 private source DNS zones can be registered. | `list[object]` | No | - | - |
+| [`privateSourceScanHosts`](#kind-analyticsinstance-status-privateaccesschannels-privatesourcescanhosts) | List of private source database SCAN hosts registered with the private access channel for access from the Analytics instance. | `list[object]` | No | - | - |
+| `subnetId` | OCID of the customer subnet connected to the private access channel. | `string` | No | - | - |
+| `vcnId` | OCID of the customer VCN peered with the private access channel. | `string` | No | - | - |
 
 <a id="kind-analyticsinstance-status-privateaccesschannels-privatesourcednszones"></a>
 ##### Status.privateAccessChannels{}.privateSourceDnsZones[]
@@ -200,8 +201,8 @@ AnalyticsInstancePrivateAccessChannelsPrivateSourceDnsZone defines nested fields
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `description` | Description of private source dns zone. | `string` | No | - | - |
-| `dnsZone` | Private Source DNS Zone. Ex: example-vcn.oraclevcn.com, corp.example.com. | `string` | No | - | - |
+| `description` | Description of the private source DNS zone. | `string` | No | - | - |
+| `dnsZone` | Private source DNS zone. For example: example-vcn.oraclevcn.com, corp.example.com. | `string` | No | - | - |
 
 <a id="kind-analyticsinstance-status-privateaccesschannels-privatesourcescanhosts"></a>
 ##### Status.privateAccessChannels{}.privateSourceScanHosts[]
@@ -212,9 +213,24 @@ AnalyticsInstancePrivateAccessChannelsPrivateSourceScanHost defines nested field
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `description` | Description of private source scan host zone. | `string` | No | - | - |
-| `scanHostname` | Private Source Scan hostname. Ex: db01-scan.corp.example.com, prd-db01-scan.mycompany.com. | `string` | No | - | - |
-| `scanPort` | Private Source Scan host port. This is the source port where SCAN protocol will get connected (e.g. 1521). | `integer` | No | - | - |
+| `description` | Description of private source SCAN host zone. | `string` | No | - | - |
+| `scanHostname` | Private source SCAN hostname. For example: db01-scan.corp.example.com, prd-db01-scan.mycompany.com. | `string` | No | - | - |
+| `scanPort` | Private source SCAN host port. This is the source port where the SCAN protocol connects (for example, 1521). | `integer` | No | - | - |
+
+<a id="kind-analyticsinstance-status-resourcegroups"></a>
+#### Status.resourceGroups[]
+
+[Back to AnalyticsInstance status](#kind-analyticsinstance-status)
+
+AnalyticsInstanceResourceGroup defines nested fields for AnalyticsInstance.ResourceGroup.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `capacity` | The capacity (in OCPU's) to be allocated for this resource. | `integer` | No | - | - |
+| `description` | Optional description of the resource group | `string` | No | - | - |
+| `displayName` | Meaningful name of resource group for end user | `string` | No | - | - |
+| `id` | Unique identifier and name of resource group. Must be unique within the instance | `string` | No | - | - |
+| `resourceName` | Meaningful name of resource group for end user | `string` | No | - | - |
 
 <a id="kind-analyticsinstance-status-status"></a>
 #### Status.status
@@ -284,8 +300,8 @@ AnalyticsInstanceVanityUrlDetails defines nested fields for AnalyticsInstance.Va
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `description` | Description of the vanity url. | `string` | No | - | - |
-| `hosts` | List of fully qualified hostnames supported by this vanity URL definition (max of 3). | `list[string]` | No | - | - |
-| `key` | The vanity url unique identifier key. | `string` | No | - | - |
+| `description` | Description of the vanity URL. | `string` | No | - | - |
+| `hosts` | List of fully-qualified hostnames supported by this vanity URL definition (maximum of 3). | `list[string]` | No | - | - |
+| `key` | The vanity URL unique identifier key. | `string` | No | - | - |
 | `publicCertificate` | PEM certificate for HTTPS connections. | `string` | No | - | - |
-| `urls` | List of urls supported by this vanity URL definition (max of 3). | `list[string]` | No | - | - |
+| `urls` | List of URLs supported by this vanity URL definition (maximum of 3). | `list[string]` | No | - | - |

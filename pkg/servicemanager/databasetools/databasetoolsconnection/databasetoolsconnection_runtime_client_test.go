@@ -264,10 +264,11 @@ func makeOracleSDKConnection(
 			EntityType: databasetoolssdk.RelatedResourceEntityTypeDatabase,
 			Identifier: common.String("ocid1.database.oc1..oracle"),
 		},
-		UserName:          common.String("admin-user"),
-		UserPassword:      databasetoolssdk.DatabaseToolsUserPasswordSecretId{SecretId: common.String("ocid1.secret.oc1..oracle-password")},
-		PrivateEndpointId: common.String("ocid1.databasetoolsprivateendpoint.oc1..oracle"),
-		ProxyClient:       proxyClient,
+		UserName:           common.String("admin-user"),
+		UserPassword:       databasetoolssdk.DatabaseToolsUserPasswordSecretId{SecretId: common.String("ocid1.secret.oc1..oracle-password")},
+		PrivateEndpointId:  common.String("ocid1.databasetoolsprivateendpoint.oc1..oracle"),
+		ProxyClient:        proxyClient,
+		AuthenticationType: databasetoolssdk.AuthenticationTypePassword,
 		AdvancedProperties: map[string]string{
 			"oracle.net.ssl_server_dn_match": "true",
 		},
@@ -559,6 +560,9 @@ func TestDatabaseToolsConnectionServiceClientCreateOrUpdateUpdatesOracleConnecti
 
 	if resource.Status.ConnectionString != resource.Spec.ConnectionString {
 		t.Fatalf("status.connectionString = %q, want %q", resource.Status.ConnectionString, resource.Spec.ConnectionString)
+		if resource.Status.AuthenticationType != "PASSWORD" {
+			t.Fatalf("status.authenticationType = %q, want PASSWORD", resource.Status.AuthenticationType)
+		}
 	}
 	if resource.Status.OsokStatus.OpcRequestID != "opc-update-1" {
 		t.Fatalf("status.opcRequestId = %q, want %q", resource.Status.OsokStatus.OpcRequestID, "opc-update-1")

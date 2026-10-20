@@ -1,0 +1,72 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - oda.oracle.com
+  resources:
+  - authenticationproviders
+  - channels
+  - digitalassistants
+  - importedpackages
+  - odainstanceattachments
+  - odainstances
+  - odaprivateendpointattachments
+  - odaprivateendpoints
+  - odaprivateendpointscanproxies
+  - skillparameters
+  - skills
+  - translators
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - oda.oracle.com
+  resources:
+  - authenticationproviders/finalizers
+  - channels/finalizers
+  - digitalassistants/finalizers
+  - importedpackages/finalizers
+  - odainstanceattachments/finalizers
+  - odainstances/finalizers
+  - odaprivateendpointattachments/finalizers
+  - odaprivateendpoints/finalizers
+  - odaprivateendpointscanproxies/finalizers
+  - skillparameters/finalizers
+  - skills/finalizers
+  - translators/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - oda.oracle.com
+  resources:
+  - authenticationproviders/status
+  - channels/status
+  - digitalassistants/status
+  - importedpackages/status
+  - odainstanceattachments/status
+  - odainstances/status
+  - odaprivateendpointattachments/status
+  - odaprivateendpoints/status
+  - odaprivateendpointscanproxies/status
+  - skillparameters/status
+  - skills/status
+  - translators/status
+  verbs:
+  - get
+  - patch
+  - update

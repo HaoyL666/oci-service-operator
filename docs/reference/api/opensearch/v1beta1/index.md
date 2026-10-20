@@ -43,6 +43,11 @@ OpensearchClusterSpec defines the desired state of OpensearchCluster.
 | [`backupPolicy`](#kind-opensearchcluster-spec-backuppolicy) | OpensearchClusterBackupPolicy defines nested fields for OpensearchCluster.BackupPolicy. | `object` | No | - | - |
 | [`certificateConfig`](#kind-opensearchcluster-spec-certificateconfig) | OpensearchClusterCertificateConfig defines nested fields for OpensearchCluster.CertificateConfig. | `object` | No | - | - |
 | `compartmentId` | The OCID of the compartment to create the cluster in. | `string` | Yes | - | - |
+| `coordinatorNodeCount` | The number of coordinator nodes configured for the cluster. | `integer` | No | - | - |
+| `coordinatorNodeHostMemoryGB` | The amount of memory in GB, for the cluster's coordinator nodes. | `integer` | No | - | - |
+| `coordinatorNodeHostOcpuCount` | The number of OCPUs configured for the cluster's coordinator nodes. | `integer` | No | - | - |
+| `coordinatorNodeHostShape` | The node shape for the cluster's coordinator nodes. | `string` | No | - | - |
+| `coordinatorNodeHostType` | The instance type for the cluster's coordinator nodes. | `string` | No | - | - |
 | `dataNodeCount` | The number of data nodes to configure for the cluster. | `integer` | Yes | - | - |
 | `dataNodeHostBareMetalShape` | The bare metal shape for the cluster's data nodes. | `string` | No | - | - |
 | `dataNodeHostMemoryGB` | The amount of memory in GB, to configure per node for the cluster's data nodes. | `integer` | Yes | - | - |
@@ -74,6 +79,7 @@ OpensearchClusterSpec defines the desired state of OpensearchCluster.
 | `opendashboardNodeHostOcpuCount` | The number of OCPUs to configure for the cluster's OpenSearch Dashboard nodes. | `integer` | Yes | - | - |
 | `opendashboardNodeHostShape` | The node shape for the cluster's OpenSearch Dashboard nodes. | `string` | No | - | - |
 | [`outboundClusterConfig`](#kind-opensearchcluster-spec-outboundclusterconfig) | OpensearchClusterOutboundClusterConfig defines nested fields for OpensearchCluster.OutboundClusterConfig. | `object` | No | - | - |
+| [`remoteReindexTrustConfig`](#kind-opensearchcluster-spec-remotereindextrustconfig) | OpensearchClusterRemoteReindexTrustConfig defines nested fields for OpensearchCluster.RemoteReindexTrustConfig. | `object` | No | - | - |
 | `reverseConnectionEndpointCustomerIps` | The customer IP addresses of the endpoint in customer VCN | `list[string]` | No | - | - |
 | `searchNodeCount` | The number of search nodes configured for the cluster. | `integer` | No | - | - |
 | `searchNodeHostMemoryGB` | The amount of memory in GB, for the cluster's search nodes. | `integer` | No | - | - |
@@ -82,6 +88,7 @@ OpensearchClusterSpec defines the desired state of OpensearchCluster.
 | `searchNodeHostType` | The instance type for the cluster's search nodes. | `string` | No | - | - |
 | `searchNodeStorageGB` | The amount of storage in GB, to configure per node for the cluster's search nodes. | `integer` | No | - | - |
 | `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
+| [`securityMasterUserAuthDetails`](#kind-opensearchcluster-spec-securitymasteruserauthdetails) | OpensearchClusterSecurityMasterUserAuthDetails defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails. | `object` | No | - | - |
 | `securityMasterUserName` | The name of the master user that are used to manage security config | `string` | No | - | - |
 | `securityMasterUserPasswordHash` | The password hash of the master user that are used to manage security config | `string` | No | - | - |
 | `securityMode` | The security mode of the cluster. | `string` | No | - | - |
@@ -171,6 +178,67 @@ OpensearchClusterOutboundClusterConfigOutboundCluster defines nested fields for 
 | `pingSchedule` | Sets the time interval between regular application-level ping messages that are sent to try and keep outbound cluster connections alive. If set to -1, application-level ping messages to this outbound cluster are not sent. If unset, application-level ping messages are sent according to the global transport.ping_schedule setting, which defaults to -1 meaning that pings are not sent. | `string` | No | - | - |
 | `seedClusterId` | OCID of the Outbound cluster | `string` | Yes | - | - |
 
+<a id="kind-opensearchcluster-spec-remotereindextrustconfig"></a>
+#### Spec.remoteReindexTrustConfig
+
+[Back to OpensearchCluster spec](#kind-opensearchcluster-spec)
+
+OpensearchClusterRemoteReindexTrustConfig defines nested fields for OpensearchCluster.RemoteReindexTrustConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`remoteSources`](#kind-opensearchcluster-spec-remotereindextrustconfig-remotesources) | Remote cluster sources to trust for reindexing. | `list[object]` | Yes | - | - |
+
+<a id="kind-opensearchcluster-spec-remotereindextrustconfig-remotesources"></a>
+##### Spec.remoteReindexTrustConfig.remoteSources[]
+
+[Back to OpensearchCluster spec](#kind-opensearchcluster-spec)
+
+OpensearchClusterRemoteReindexTrustConfigRemoteSource defines nested fields for OpensearchCluster.RemoteReindexTrustConfig.RemoteSource.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `certificateId` | OCID of the certificate or CA chain used to verify the remote cluster's HTTPS certificate. | `string` | Yes | - | - |
+| `endpoint` | HTTPS endpoint of the remote Elasticsearch or OpenSearch cluster. The hostname and port are used to allow remote reindexing. Use a DNS hostname, rather than an IP address, when endpointResolutionIp is specified. | `string` | Yes | - | - |
+| `endpointResolutionIp` | Optional IP address to which the endpoint hostname is resolved from within the OpenSearch cluster. The original hostname remains in the connection URL and is used for TLS verification. | `string` | No | - | - |
+
+<a id="kind-opensearchcluster-spec-securitymasteruserauthdetails"></a>
+#### Spec.securityMasterUserAuthDetails
+
+[Back to OpensearchCluster spec](#kind-opensearchcluster-spec)
+
+OpensearchClusterSecurityMasterUserAuthDetails defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`userDetails`](#kind-opensearchcluster-spec-securitymasteruserauthdetails-userdetails) | OpensearchClusterSecurityMasterUserAuthDetailsUserDetails defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails.UserDetails. | `object` | Yes | - | - |
+
+<a id="kind-opensearchcluster-spec-securitymasteruserauthdetails-userdetails"></a>
+##### Spec.securityMasterUserAuthDetails.userDetails
+
+[Back to OpensearchCluster spec](#kind-opensearchcluster-spec)
+
+OpensearchClusterSecurityMasterUserAuthDetailsUserDetails defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails.UserDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`passwordDetails`](#kind-opensearchcluster-spec-securitymasteruserauthdetails-userdetails-passworddetails) | OpensearchClusterSecurityMasterUserAuthDetailsUserDetailsPasswordDetails defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails.UserDetails.PasswordDetails. | `object` | Yes | - | - |
+| `username` | The name of the master user that is used to manage security config. | `string` | Yes | - | - |
+
+<a id="kind-opensearchcluster-spec-securitymasteruserauthdetails-userdetails-passworddetails"></a>
+###### Spec.securityMasterUserAuthDetails.userDetails.passwordDetails
+
+[Back to OpensearchCluster spec](#kind-opensearchcluster-spec)
+
+OpensearchClusterSecurityMasterUserAuthDetailsUserDetailsPasswordDetails defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails.UserDetails.PasswordDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `plainPassword` | The plaintext password for the master user. | `string` | No | - | - |
+| `sourceType` | - | `string` | No | - | - |
+| `vaultSecretId` | The OCID of a Vault secret containing the plaintext master-user password. | `string` | No | - | - |
+
 <a id="kind-opensearchcluster-spec-securitysamlconfig"></a>
 #### Spec.securitySamlConfig
 
@@ -199,6 +267,11 @@ OpensearchClusterStatus defines the observed state of OpensearchCluster.
 | [`backupPolicy`](#kind-opensearchcluster-status-backuppolicy) | OpensearchClusterBackupPolicy defines nested fields for OpensearchCluster.BackupPolicy. | `object` | No | - | - |
 | [`certificateConfig`](#kind-opensearchcluster-status-certificateconfig) | OpensearchClusterCertificateConfig defines nested fields for OpensearchCluster.CertificateConfig. | `object` | No | - | - |
 | `compartmentId` | The OCID of the compartment where the cluster is located. | `string` | No | - | - |
+| `coordinatorNodeCount` | The number of coordinator nodes configured for the cluster. | `integer` | No | - | - |
+| `coordinatorNodeHostMemoryGB` | The amount of memory in GB, for the cluster's coordinator nodes. | `integer` | No | - | - |
+| `coordinatorNodeHostOcpuCount` | The number of OCPUs configured for the cluster's coordinator nodes. | `integer` | No | - | - |
+| `coordinatorNodeHostShape` | The node shape for the cluster's coordinator nodes. | `string` | No | - | - |
+| `coordinatorNodeHostType` | The instance type for the cluster's coordinator nodes. | `string` | No | - | - |
 | `dataNodeCount` | The number of data nodes configured for the cluster. | `integer` | No | - | - |
 | `dataNodeHostBareMetalShape` | The bare metal shape for the cluster's data nodes. | `string` | No | - | - |
 | `dataNodeHostMemoryGB` | The amount of memory in GB, for the cluster's data nodes. | `integer` | No | - | - |
@@ -238,6 +311,7 @@ OpensearchClusterStatus defines the observed state of OpensearchCluster.
 | `opensearchFqdn` | The fully qualified domain name (FQDN) for the cluster's API endpoint. | `string` | No | - | - |
 | `opensearchPrivateIp` | The cluster's private IP address. | `string` | No | - | - |
 | [`outboundClusterConfig`](#kind-opensearchcluster-status-outboundclusterconfig) | OpensearchClusterOutboundClusterConfig defines nested fields for OpensearchCluster.OutboundClusterConfig. | `object` | No | - | - |
+| [`remoteReindexTrustConfig`](#kind-opensearchcluster-status-remotereindextrustconfig) | OpensearchClusterRemoteReindexTrustConfig defines nested fields for OpensearchCluster.RemoteReindexTrustConfig. | `object` | No | - | - |
 | `reverseConnectionEndpointCustomerIps` | The customer IP addresses of the endpoint in customer VCN | `list[string]` | No | - | - |
 | [`reverseConnectionEndpoints`](#kind-opensearchcluster-status-reverseconnectionendpoints) | The list of reverse connection endpoints. | `list[object]` | No | - | - |
 | `searchNodeCount` | The number of search nodes configured for the cluster. | `integer` | No | - | - |
@@ -340,6 +414,30 @@ OpensearchClusterOutboundClusterConfigOutboundCluster defines nested fields for 
 | `mode` | Mode for the cross cluster connection | `string` | No | - | - |
 | `pingSchedule` | Sets the time interval between regular application-level ping messages that are sent to try and keep outbound cluster connections alive. If set to -1, application-level ping messages to this outbound cluster are not sent. If unset, application-level ping messages are sent according to the global transport.ping_schedule setting, which defaults to -1 meaning that pings are not sent. | `string` | No | - | - |
 | `seedClusterId` | OCID of the Outbound cluster | `string` | Yes | - | - |
+
+<a id="kind-opensearchcluster-status-remotereindextrustconfig"></a>
+#### Status.remoteReindexTrustConfig
+
+[Back to OpensearchCluster status](#kind-opensearchcluster-status)
+
+OpensearchClusterRemoteReindexTrustConfig defines nested fields for OpensearchCluster.RemoteReindexTrustConfig.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`remoteSources`](#kind-opensearchcluster-status-remotereindextrustconfig-remotesources) | Remote cluster sources to trust for reindexing. | `list[object]` | Yes | - | - |
+
+<a id="kind-opensearchcluster-status-remotereindextrustconfig-remotesources"></a>
+##### Status.remoteReindexTrustConfig.remoteSources[]
+
+[Back to OpensearchCluster status](#kind-opensearchcluster-status)
+
+OpensearchClusterRemoteReindexTrustConfigRemoteSource defines nested fields for OpensearchCluster.RemoteReindexTrustConfig.RemoteSource.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `certificateId` | OCID of the certificate or CA chain used to verify the remote cluster's HTTPS certificate. | `string` | Yes | - | - |
+| `endpoint` | HTTPS endpoint of the remote Elasticsearch or OpenSearch cluster. The hostname and port are used to allow remote reindexing. Use a DNS hostname, rather than an IP address, when endpointResolutionIp is specified. | `string` | Yes | - | - |
+| `endpointResolutionIp` | Optional IP address to which the endpoint hostname is resolved from within the OpenSearch cluster. The original hostname remains in the connection URL and is used for TLS verification. | `string` | No | - | - |
 
 <a id="kind-opensearchcluster-status-reverseconnectionendpoints"></a>
 #### Status.reverseConnectionEndpoints[]

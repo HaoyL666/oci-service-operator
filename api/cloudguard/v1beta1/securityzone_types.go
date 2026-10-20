@@ -26,6 +26,9 @@ type SecurityZoneSpec struct {
 	// The security zone's description
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
+	// Indicates if upon deletion of the security zone the comparment should inherit parent security zone
+	// +kubebuilder:validation:Optional
+	IsInheritanceAfterDeleteEnabled bool `json:"isInheritanceAfterDeleteEnabled,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// Avoid entering confidential information.
@@ -62,6 +65,8 @@ type SecurityZoneStatus struct {
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// A message describing the current state in more detail. For example, this can be used to provide actionable information for a zone in the `Failed` state.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
+	// Indicates if upon deletion of the security zone the comparment should inherit parent security zone
+	IsInheritanceAfterDeleteEnabled bool `json:"isInheritanceAfterDeleteEnabled,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
 	// Example: `{"bar-key": "value"}`
 	// Avoid entering confidential information.

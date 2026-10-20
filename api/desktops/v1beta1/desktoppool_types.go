@@ -87,6 +87,12 @@ type DesktopPoolSpec struct {
 	NsgIds []string `json:"nsgIds,omitempty"`
 	// +kubebuilder:validation:Optional
 	PrivateAccessDetails DesktopPoolPrivateAccessDetails `json:"privateAccessDetails,omitempty,omitzero"`
+	// Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+	// Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+	// (ZPR) policy to control access to ZPR-supported resources.
+	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
+	// +kubebuilder:validation:Optional
+	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
 	// The size in GBs of the boot volume for the desktop pool.
 	// +kubebuilder:validation:Optional
 	BootVolumeSizeInGBs int `json:"bootVolumeSizeInGBs,omitempty"`
@@ -181,6 +187,12 @@ type DesktopPoolNetworkConfiguration struct {
 	// connectivity will be established.
 	// +kubebuilder:validation:Required
 	SubnetId string `json:"subnetId"`
+	// Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+	// Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+	// (ZPR) policy to control access to ZPR-supported resources.
+	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
+	// +kubebuilder:validation:Optional
+	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
 }
 
 // DesktopPoolShapeConfig defines nested fields for DesktopPool.ShapeConfig.
@@ -247,6 +259,12 @@ type DesktopPoolPrivateAccessDetails struct {
 	// be auto-assigned with an available IPv4 address from the subnet.
 	// +kubebuilder:validation:Optional
 	PrivateIp string `json:"privateIp,omitempty"`
+	// Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+	// Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+	// (ZPR) policy to control access to ZPR-supported resources.
+	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
+	// +kubebuilder:validation:Optional
+	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
 }
 
 // DesktopPoolStatus defines the observed state of DesktopPool.
@@ -303,6 +321,11 @@ type DesktopPoolStatus struct {
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
+	// Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) for this resource.
+	// Each attribute can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+	// (ZPR) policy to control access to ZPR-supported resources.
+	// Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "audit"}}}`
+	SecurityAttributes map[string]shared.MapValue `json:"securityAttributes,omitempty"`
 	// A list of network security groups for the network.
 	NsgIds               []string                        `json:"nsgIds,omitempty"`
 	PrivateAccessDetails DesktopPoolPrivateAccessDetails `json:"privateAccessDetails,omitempty"`

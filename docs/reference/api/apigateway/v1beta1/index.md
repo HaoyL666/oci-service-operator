@@ -1037,6 +1037,7 @@ ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationValidationFailureP
 | [`clientDetails`](#kind-apigatewaydeployment-spec-specification-requestpolicies-authentication-validationfailurepolicy-clientdetails) | ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationValidationFailurePolicyClientDetails defines nested fields for ApiGatewayDeployment.Specification.RequestPolicies.Authentication.ValidationFailurePolicy.ClientDetails. | `object` | No | - | - |
 | `fallbackRedirectPath` | The path to be used as fallback after OAuth2. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `loginPath` | The path (relative to the deployment) where the Identity Provider will redirect the user after authentication. This path must match a route in the specification that uses the OAUTH2_LOGIN_BACKEND. | `string` | No | - | - |
 | `logoutPath` | The path to be used as logout. | `string` | No | - | - |
 | `maxExpiryDurationInHours` | The duration for which the OAuth2 success token should be cached before it is fetched again. | `integer` | No | - | - |
 | `responseCode` | HTTP response code, can include context variables. | `string` | No | - | - |
@@ -1381,6 +1382,7 @@ ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthenticat
 | [`clientDetails`](#kind-apigatewaydeployment-spec-specification-requestpolicies-dynamicauthentication-authenticationservers-authenticationserverdetail-validationfailurepolicy-clientdetails) | ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthenticationServerAuthenticationServerDetailValidationFailurePolicyClientDetails defines nested fields for ApiGatewayDeployment.Specification.RequestPolicies.DynamicAuthentication.AuthenticationServer.AuthenticationServerDetail.ValidationFailurePolicy.ClientDetails. | `object` | No | - | - |
 | `fallbackRedirectPath` | The path to be used as fallback after OAuth2. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `loginPath` | The path (relative to the deployment) where the Identity Provider will redirect the user after authentication. This path must match a route in the specification that uses the OAUTH2_LOGIN_BACKEND. | `string` | No | - | - |
 | `logoutPath` | The path to be used as logout. | `string` | No | - | - |
 | `maxExpiryDurationInHours` | The duration for which the OAuth2 success token should be cached before it is fetched again. | `integer` | No | - | - |
 | `responseCode` | HTTP response code, can include context variables. | `string` | No | - | - |
@@ -2387,6 +2389,7 @@ ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationValidationFailureP
 | [`clientDetails`](#kind-apigatewaydeployment-status-specification-requestpolicies-authentication-validationfailurepolicy-clientdetails) | ApiGatewayDeploymentSpecificationRequestPoliciesAuthenticationValidationFailurePolicyClientDetails defines nested fields for ApiGatewayDeployment.Specification.RequestPolicies.Authentication.ValidationFailurePolicy.ClientDetails. | `object` | No | - | - |
 | `fallbackRedirectPath` | The path to be used as fallback after OAuth2. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `loginPath` | The path (relative to the deployment) where the Identity Provider will redirect the user after authentication. This path must match a route in the specification that uses the OAUTH2_LOGIN_BACKEND. | `string` | No | - | - |
 | `logoutPath` | The path to be used as logout. | `string` | No | - | - |
 | `maxExpiryDurationInHours` | The duration for which the OAuth2 success token should be cached before it is fetched again. | `integer` | No | - | - |
 | `responseCode` | HTTP response code, can include context variables. | `string` | No | - | - |
@@ -2731,6 +2734,7 @@ ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthenticat
 | [`clientDetails`](#kind-apigatewaydeployment-status-specification-requestpolicies-dynamicauthentication-authenticationservers-authenticationserverdetail-validationfailurepolicy-clientdetails) | ApiGatewayDeploymentSpecificationRequestPoliciesDynamicAuthenticationAuthenticationServerAuthenticationServerDetailValidationFailurePolicyClientDetails defines nested fields for ApiGatewayDeployment.Specification.RequestPolicies.DynamicAuthentication.AuthenticationServer.AuthenticationServerDetail.ValidationFailurePolicy.ClientDetails. | `object` | No | - | - |
 | `fallbackRedirectPath` | The path to be used as fallback after OAuth2. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `loginPath` | The path (relative to the deployment) where the Identity Provider will redirect the user after authentication. This path must match a route in the specification that uses the OAUTH2_LOGIN_BACKEND. | `string` | No | - | - |
 | `logoutPath` | The path to be used as logout. | `string` | No | - | - |
 | `maxExpiryDurationInHours` | The duration for which the OAuth2 success token should be cached before it is fetched again. | `integer` | No | - | - |
 | `responseCode` | HTTP response code, can include context variables. | `string` | No | - | - |

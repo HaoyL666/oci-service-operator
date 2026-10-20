@@ -113,6 +113,11 @@ type ReportDefinition struct {
 	// Details about the current state of the report definition in Data Safe.
 	LifecycleDetails *string `mandatory:"false" json:"lifecycleDetails"`
 
+	// Indicates if the reports being generated should be paginated.
+	// If set to true, multiple reports can be generated and the details of next and previous report are present in Report.
+	// Values can either be 'true' or 'false'.
+	IsSchedulePaginationEnabled *bool `mandatory:"false" json:"isSchedulePaginationEnabled"`
+
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)
 	// Example: `{"Department": "Finance"}`
 	FreeformTags map[string]string `mandatory:"false" json:"freeformTags"`
@@ -163,6 +168,7 @@ const (
 	ReportDefinitionCategorySummary            ReportDefinitionCategoryEnum = "SUMMARY"
 	ReportDefinitionCategoryActivityAuditing   ReportDefinitionCategoryEnum = "ACTIVITY_AUDITING"
 	ReportDefinitionCategorySecurityAssessment ReportDefinitionCategoryEnum = "SECURITY_ASSESSMENT"
+	ReportDefinitionCategoryCryptoAssessment   ReportDefinitionCategoryEnum = "CRYPTO_ASSESSMENT"
 	ReportDefinitionCategoryFirewallViolations ReportDefinitionCategoryEnum = "FIREWALL_VIOLATIONS"
 	ReportDefinitionCategoryAllowedSql         ReportDefinitionCategoryEnum = "ALLOWED_SQL"
 )
@@ -172,6 +178,7 @@ var mappingReportDefinitionCategoryEnum = map[string]ReportDefinitionCategoryEnu
 	"SUMMARY":             ReportDefinitionCategorySummary,
 	"ACTIVITY_AUDITING":   ReportDefinitionCategoryActivityAuditing,
 	"SECURITY_ASSESSMENT": ReportDefinitionCategorySecurityAssessment,
+	"CRYPTO_ASSESSMENT":   ReportDefinitionCategoryCryptoAssessment,
 	"FIREWALL_VIOLATIONS": ReportDefinitionCategoryFirewallViolations,
 	"ALLOWED_SQL":         ReportDefinitionCategoryAllowedSql,
 }
@@ -181,6 +188,7 @@ var mappingReportDefinitionCategoryEnumLowerCase = map[string]ReportDefinitionCa
 	"summary":             ReportDefinitionCategorySummary,
 	"activity_auditing":   ReportDefinitionCategoryActivityAuditing,
 	"security_assessment": ReportDefinitionCategorySecurityAssessment,
+	"crypto_assessment":   ReportDefinitionCategoryCryptoAssessment,
 	"firewall_violations": ReportDefinitionCategoryFirewallViolations,
 	"allowed_sql":         ReportDefinitionCategoryAllowedSql,
 }
@@ -201,6 +209,7 @@ func GetReportDefinitionCategoryEnumStringValues() []string {
 		"SUMMARY",
 		"ACTIVITY_AUDITING",
 		"SECURITY_ASSESSMENT",
+		"CRYPTO_ASSESSMENT",
 		"FIREWALL_VIOLATIONS",
 		"ALLOWED_SQL",
 	}

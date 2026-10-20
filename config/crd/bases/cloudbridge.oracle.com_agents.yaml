@@ -197,6 +197,16 @@ spec:
                     pluginVersion:
                       description: Plugin version.
                       type: string
+                    systemTags:
+                      additionalProperties:
+                        additionalProperties:
+                          type: string
+                        type: object
+                      description: |-
+                        The system tags associated with this resource, if any. The system tags are set by Oracle cloud infrastructure services. Each key is predefined and scoped to namespaces.
+                        For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                        Example: `{orcl-cloud: {free-tier-retain: true}}`
+                      type: object
                     timeCreated:
                       description: The time when the plugin was created. An RFC3339
                         formatted datetime string.

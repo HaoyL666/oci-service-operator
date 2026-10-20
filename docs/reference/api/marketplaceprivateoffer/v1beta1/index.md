@@ -58,8 +58,10 @@ AttachmentStatus defines the observed state of Attachment.
 | `lifecycleState` | The current state of the Offer. | `string` | No | - | - |
 | `mimeType` | The MIME type of the uploaded data. | `string` | No | - | - |
 | `offerId` | Unique identifier of the associated offer that is immutable on creation | `string` | No | - | - |
+| `offerType` | The type of the offer. | `string` | No | - | - |
 | `sellerCompartmentId` | OCID of the seller's tenancy (root compartment). | `string` | No | - | - |
 | [`status`](#kind-attachment-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeCreated` | The time the the Offer was created. An RFC3339 formatted datetime string | `string` | No | - | - |
 | `type` | The type of offer attachment. | `string` | No | - | - |
 
@@ -149,6 +151,8 @@ OfferSpec defines the desired state of Offer.
 | `duration` | Duration the Offer will be active after its start date. An ISO8601 extended formatted string. | `string` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `internalNotes` | Internal notes of the Offer | `string` | No | - | - |
+| `offerQuoteIds` | A list of associated offer quotes. | `list[string]` | No | - | - |
+| `offerType` | The type of the offer. | `string` | No | - | - |
 | [`pricing`](#kind-offer-spec-pricing) | OfferPricing defines nested fields for Offer.Pricing. | `object` | No | - | - |
 | [`resourceBundles`](#kind-offer-spec-resourcebundles) | A list of Resource Bundles associated with an Offer. | `list[object]` | No | - | - |
 | `sellerCompartmentId` | Compartment Identifier of the seller | `string` | Yes | - | - |
@@ -179,9 +183,9 @@ OfferBuyerInformationAdditionalContact defines nested fields for Offer.BuyerInfo
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `email` | The email of the contact | `string` | No | - | - |
-| `firstName` | The first name of the contact | `string` | No | - | - |
-| `lastName` | The last name of the contact | `string` | No | - | - |
+| `email` | The email of the contact. | `string` | No | - | - |
+| `firstName` | The first name of the contact. | `string` | No | - | - |
+| `lastName` | The last name of the contact. | `string` | No | - | - |
 
 <a id="kind-offer-spec-buyerinformation-primarycontact"></a>
 ##### Spec.buyerInformation.primaryContact
@@ -192,9 +196,9 @@ OfferBuyerInformationPrimaryContact defines nested fields for Offer.BuyerInforma
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `email` | The email of the contact | `string` | No | - | - |
-| `firstName` | The first name of the contact | `string` | No | - | - |
-| `lastName` | The last name of the contact | `string` | No | - | - |
+| `email` | The email of the contact. | `string` | No | - | - |
+| `firstName` | The first name of the contact. | `string` | No | - | - |
+| `lastName` | The last name of the contact. | `string` | No | - | - |
 
 <a id="kind-offer-spec-customfields"></a>
 #### Spec.customFields[]
@@ -205,8 +209,8 @@ OfferCustomField defines nested fields for Offer.CustomField.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `key` | the key of the custom field | `string` | No | - | - |
-| `value` | the value of the custom field | `string` | No | - | - |
+| `key` | The key of the custom field. | `string` | No | - | - |
+| `value` | The value of the custom field. | `string` | No | - | - |
 
 <a id="kind-offer-spec-pricing"></a>
 #### Spec.pricing
@@ -217,9 +221,9 @@ OfferPricing defines nested fields for Offer.Pricing.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `billingCycle` | The frequency at which the customer is billed for the Offer | `string` | No | - | - |
-| `currencyType` | The currency supported for a given Offer, in the format specified by ISO-4217 | `string` | No | - | - |
-| `totalAmount` | The total amount an Offer costs | `integer (int64)` | No | - | - |
+| `billingCycle` | The frequency at which the customer is billed for the offer. | `string` | No | - | - |
+| `currencyType` | The currency supported for a given Offer, in the format specified by ISO-4217. | `string` | No | - | - |
+| `totalAmount` | The total amount an offer costs. | `integer (int64)` | No | - | - |
 
 <a id="kind-offer-spec-resourcebundles"></a>
 #### Spec.resourceBundles[]
@@ -230,10 +234,10 @@ OfferResourceBundle defines nested fields for Offer.ResourceBundle.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `quantity` | The quantity of a resources associated with the bundle | `integer (int64)` | No | - | - |
-| `resourceIds` | the ids of the resources in the Offer | `list[string]` | No | - | - |
-| `type` | The type of resources in the bundle | `string` | No | - | - |
-| `unitOfMeasurement` | The unit of measurement for the resource bundle | `string` | No | - | - |
+| `quantity` | The quantity of a resources associated with the bundle. | `integer (int64)` | No | - | - |
+| `resourceIds` | The IDs of the resources in the offer. | `list[string]` | No | - | - |
+| `type` | The type of resources in the bundle. | `string` | No | - | - |
+| `unitOfMeasurement` | The unit of measurement for the resource bundle. | `string` | No | - | - |
 
 <a id="kind-offer-spec-sellerinformation"></a>
 #### Spec.sellerInformation
@@ -256,9 +260,9 @@ OfferSellerInformationAdditionalContact defines nested fields for Offer.SellerIn
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `email` | The email of the contact | `string` | No | - | - |
-| `firstName` | The first name of the contact | `string` | No | - | - |
-| `lastName` | The last name of the contact | `string` | No | - | - |
+| `email` | The email of the contact. | `string` | No | - | - |
+| `firstName` | The first name of the contact. | `string` | No | - | - |
+| `lastName` | The last name of the contact. | `string` | No | - | - |
 
 <a id="kind-offer-spec-sellerinformation-primarycontact"></a>
 ##### Spec.sellerInformation.primaryContact
@@ -269,9 +273,9 @@ OfferSellerInformationPrimaryContact defines nested fields for Offer.SellerInfor
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `email` | The email of the contact | `string` | No | - | - |
-| `firstName` | The first name of the contact | `string` | No | - | - |
-| `lastName` | The last name of the contact | `string` | No | - | - |
+| `email` | The email of the contact. | `string` | No | - | - |
+| `firstName` | The first name of the contact. | `string` | No | - | - |
+| `lastName` | The last name of the contact. | `string` | No | - | - |
 
 <a id="kind-offer-status"></a>
 ### Status
@@ -291,12 +295,14 @@ OfferStatus defines the observed state of Offer.
 | `lifecycleDetails` | A message describing the current state in more detail. For example, can be used to provide actionable information for a resource in Failed state. | `string` | No | - | - |
 | `lifecycleState` | The current state of the Offer. | `string` | No | - | - |
 | `offerStatus` | A substate for lifeCycleStatus to give a more human readable version of the offer | `string` | No | - | - |
+| `offerType` | The type of the offer. | `string` | No | - | - |
 | [`pricing`](#kind-offer-status-pricing) | OfferPricing defines nested fields for Offer.Pricing. | `object` | No | - | - |
 | [`publisherSummary`](#kind-offer-status-publishersummary) | OfferPublisherSummary defines nested fields for Offer.PublisherSummary. | `object` | No | - | - |
 | [`resourceBundles`](#kind-offer-status-resourcebundles) | A list of Resource Bundles associated with an Offer. | `list[object]` | No | - | - |
 | `sellerCompartmentId` | OCID of the seller's tenancy (root compartment). | `string` | No | - | - |
 | [`sellerInformation`](#kind-offer-status-sellerinformation) | OfferSellerInformation defines nested fields for Offer.SellerInformation. | `object` | No | - | - |
 | [`status`](#kind-offer-status-status) | - | `object` | Yes | - | - |
+| `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `timeAcceptBy` | The time the Offer must be accepted by the Buyer before the Offer becomes invalid. An RFC3339 formatted datetime string | `string` | No | - | - |
 | `timeAccepted` | The time the Offer was accepted by the Buyer of the Offer. An RFC3339 formatted datetime string | `string` | No | - | - |
 | `timeCreated` | The time the the Offer was created. An RFC3339 formatted datetime string | `string` | No | - | - |
@@ -327,9 +333,9 @@ OfferBuyerInformationAdditionalContact defines nested fields for Offer.BuyerInfo
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `email` | The email of the contact | `string` | No | - | - |
-| `firstName` | The first name of the contact | `string` | No | - | - |
-| `lastName` | The last name of the contact | `string` | No | - | - |
+| `email` | The email of the contact. | `string` | No | - | - |
+| `firstName` | The first name of the contact. | `string` | No | - | - |
+| `lastName` | The last name of the contact. | `string` | No | - | - |
 
 <a id="kind-offer-status-buyerinformation-primarycontact"></a>
 ##### Status.buyerInformation.primaryContact
@@ -340,9 +346,9 @@ OfferBuyerInformationPrimaryContact defines nested fields for Offer.BuyerInforma
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `email` | The email of the contact | `string` | No | - | - |
-| `firstName` | The first name of the contact | `string` | No | - | - |
-| `lastName` | The last name of the contact | `string` | No | - | - |
+| `email` | The email of the contact. | `string` | No | - | - |
+| `firstName` | The first name of the contact. | `string` | No | - | - |
+| `lastName` | The last name of the contact. | `string` | No | - | - |
 
 <a id="kind-offer-status-pricing"></a>
 #### Status.pricing
@@ -353,9 +359,9 @@ OfferPricing defines nested fields for Offer.Pricing.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `billingCycle` | The frequency at which the customer is billed for the Offer | `string` | No | - | - |
-| `currencyType` | The currency supported for a given Offer, in the format specified by ISO-4217 | `string` | No | - | - |
-| `totalAmount` | The total amount an Offer costs | `integer (int64)` | No | - | - |
+| `billingCycle` | The frequency at which the customer is billed for the offer. | `string` | No | - | - |
+| `currencyType` | The currency supported for a given Offer, in the format specified by ISO-4217. | `string` | No | - | - |
+| `totalAmount` | The total amount an offer costs. | `integer (int64)` | No | - | - |
 
 <a id="kind-offer-status-publishersummary"></a>
 #### Status.publisherSummary
@@ -410,10 +416,10 @@ OfferResourceBundle defines nested fields for Offer.ResourceBundle.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `quantity` | The quantity of a resources associated with the bundle | `integer (int64)` | No | - | - |
-| `resourceIds` | the ids of the resources in the Offer | `list[string]` | No | - | - |
-| `type` | The type of resources in the bundle | `string` | No | - | - |
-| `unitOfMeasurement` | The unit of measurement for the resource bundle | `string` | No | - | - |
+| `quantity` | The quantity of a resources associated with the bundle. | `integer (int64)` | No | - | - |
+| `resourceIds` | The IDs of the resources in the offer. | `list[string]` | No | - | - |
+| `type` | The type of resources in the bundle. | `string` | No | - | - |
+| `unitOfMeasurement` | The unit of measurement for the resource bundle. | `string` | No | - | - |
 
 <a id="kind-offer-status-sellerinformation"></a>
 #### Status.sellerInformation
@@ -436,9 +442,9 @@ OfferSellerInformationAdditionalContact defines nested fields for Offer.SellerIn
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `email` | The email of the contact | `string` | No | - | - |
-| `firstName` | The first name of the contact | `string` | No | - | - |
-| `lastName` | The last name of the contact | `string` | No | - | - |
+| `email` | The email of the contact. | `string` | No | - | - |
+| `firstName` | The first name of the contact. | `string` | No | - | - |
+| `lastName` | The last name of the contact. | `string` | No | - | - |
 
 <a id="kind-offer-status-sellerinformation-primarycontact"></a>
 ##### Status.sellerInformation.primaryContact
@@ -449,9 +455,9 @@ OfferSellerInformationPrimaryContact defines nested fields for Offer.SellerInfor
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `email` | The email of the contact | `string` | No | - | - |
-| `firstName` | The first name of the contact | `string` | No | - | - |
-| `lastName` | The last name of the contact | `string` | No | - | - |
+| `email` | The email of the contact. | `string` | No | - | - |
+| `firstName` | The first name of the contact. | `string` | No | - | - |
+| `lastName` | The last name of the contact. | `string` | No | - | - |
 
 <a id="kind-offer-status-status"></a>
 #### Status.status

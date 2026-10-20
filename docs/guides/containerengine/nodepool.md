@@ -39,6 +39,7 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | [`initialNodeLabels`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-spec-initialnodelabels) | A list of key/value pairs to add to nodes after they join the Kubernetes cluster. | `list[object]` | No |
 | `kubernetesVersion` | The version of Kubernetes to install on the nodes in the node pool. | `string` | No |
 | `name` | The name of the node pool. Avoid entering confidential information. | `string` | Yes |
+| `networkLaunchType` | Emulation type for the physical network interface card (NIC) for nodes | `string` | No |
 | [`nodeConfigDetails`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-spec-nodeconfigdetails) | The configuration of nodes in the node pool. Exactly one of the subnetIds or nodeConfigDetails properties must be specified. | `object` | No |
 | [`nodeEvictionNodePoolSettings`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-spec-nodeevictionnodepoolsettings) | NodePoolNodeEvictionNodePoolSettings defines nested fields for NodePool.NodeEvictionNodePoolSettings. | `object` | No |
 | `nodeImageName` | Deprecated. Use `nodeSourceDetails` instead. If you specify values for both, this value is ignored. The name of the image running on the nodes in the node pool. | `string` | No |
@@ -47,7 +48,9 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | `nodeShape` | The name of the node shape of the nodes in the node pool. | `string` | Yes |
 | [`nodeShapeConfig`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-spec-nodeshapeconfig) | Specify the configuration of the shape to launch nodes in the node pool. | `object` | No |
 | [`nodeSourceDetails`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-spec-nodesourcedetails) | Specify the source to use to launch nodes in the node pool. Currently, image is the only supported source. | `object` | No |
+| [`primaryVnic`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-spec-primaryvnic) | NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic. | `object` | No |
 | `quantityPerSubnet` | Optional, default to 1. The number of nodes to create in each subnet specified in subnetIds property. When used, subnetIds is required. This property is deprecated, use nodeConfigDetails instead. | `integer` | No |
+| [`secondaryVnics`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-spec-secondaryvnics) | A list of secondary vnics to attach to nodes | `list[object]` | No |
 | `sshPublicKey` | The SSH public key on each node in the node pool on launch. | `string` | No |
 | `subnetIds` | The OCIDs of the subnets in which to place nodes for this node pool. When used, quantityPerSubnet can be provided. This property is deprecated, use nodeConfigDetails. Exactly one of the subnetIds or nodeConfigDetails properties must be specified. | `list[string]` | No |
 
@@ -68,6 +71,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `lifecycleDetails` | Details about the state of the nodepool. | `string` | No |
 | `lifecycleState` | The state of the nodepool. For more information, see Monitoring Clusters (https://docs.oracle.com/iaas/Content/ContEng/Tasks/contengmonitoringclusters.htm) | `string` | No |
 | `name` | The name of the node pool. | `string` | No |
+| `networkLaunchType` | Emulation type for the physical network interface card (NIC) for nodes | `string` | No |
 | [`nodeConfigDetails`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-status-nodeconfigdetails) | The configuration of nodes in the node pool. | `object` | No |
 | [`nodeEvictionNodePoolSettings`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-status-nodeevictionnodepoolsettings) | NodePoolNodeEvictionNodePoolSettings defines nested fields for NodePool.NodeEvictionNodePoolSettings. | `object` | No |
 | `nodeImageId` | Deprecated. see `nodeSource`. The OCID of the image running on the nodes in the node pool. | `string` | No |
@@ -79,7 +83,9 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | [`nodeSource`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-status-nodesource) | Deprecated. see `nodeSourceDetails`. Source running on the nodes in the node pool. | `object` | No |
 | [`nodeSourceDetails`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-status-nodesourcedetails) | Source running on the nodes in the node pool. | `object` | No |
 | [`nodes`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-status-nodes) | The nodes in the node pool. | `list[object]` | No |
+| [`primaryVnic`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-status-primaryvnic) | NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic. | `object` | No |
 | `quantityPerSubnet` | The number of nodes in each subnet. | `integer` | No |
+| [`secondaryVnics`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-status-secondaryvnics) | A list of secondary vnics to attach to nodes | `list[object]` | No |
 | `sshPublicKey` | The SSH public key on each node in the node pool on launch. | `string` | No |
 | [`status`](../../reference/api/containerengine/v1beta1/index.md#kind-nodepool-status-status) | - | `object` | Yes |
 | `subnetIds` | The OCIDs of the subnets in which to place nodes for this node pool. | `list[string]` | No |

@@ -57,19 +57,20 @@ spec:
             description: MulticloudResourceStatus defines the observed state of MulticloudResource.
             properties:
               compartmentId:
-                description: Compartment Id of the resource.
+                description: Id of the compartment associated with the resource.
                 type: string
               compartmentName:
-                description: Compartment name associated the resource.
+                description: Name of the compartment associated with the resource.
                 type: string
               cspAdditionalProperties:
                 additionalProperties:
                   type: string
-                description: CSP Specific Additional Properties, AzureSubnetId for
-                  Azure
+                description: Properties specific to the cloud service provider. For
+                  example, AzureSubnetId for Azure.
                 type: object
               cspResourceId:
-                description: Resource Id that comes from the Multi Cloud Control Plane
+                description: The resource Id that comes from the Multicloud control
+                  plane.
                 type: string
               definedTags:
                 additionalProperties:
@@ -90,24 +91,33 @@ spec:
                   Example: `{"Department": "Finance"}`
                 type: object
               lifecycleState:
-                description: The current state of the multicloud resource.
+                description: The current state of the Multicloud resource.
                 type: string
               networkAnchorId:
-                description: OCID of the Network Anchor
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the network anchor associated with the resource.
                 type: string
               networkAnchorName:
-                description: Name of the network anchor associated to the resource.
+                description: Name of the network anchor associated with the resource.
                 type: string
+              resourceAdditionalProperties:
+                additionalProperties:
+                  description: JSONValue preserves arbitrary JSON values inside generated
+                    CRD fields.
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                description: Additional attributes specific to certain resource types,
+                  used to construct a URL for accessing the resource in the OCI console.
+                type: object
               resourceDisplayName:
-                description: Endpoint used to retrieve displayName and lifeCycleState
-                  of the resource.
+                description: Endpoint used to retrieve the resource's display name
+                  and lifecycle state.
                 type: string
               resourceId:
                 description: The Id of the multicloud resource.
                 type: string
               resourceType:
-                description: What resource it refers to. Eg. VMCluster, ExaInfra,
-                  etc.
+                description: Type of resource, such as `VMCluster` or `ExaInfra`,
                 type: string
               status:
                 properties:
@@ -229,10 +239,12 @@ spec:
                   RFC 3339 (https://tools.ietf.org/rfc/rfc3339).
                 type: string
               vcnId:
-                description: Id of the Virtual Cloud Network associated to the resource.
+                description: Id of the virtual cloud network (VCN) associated with
+                  the resource.
                 type: string
               vcnName:
-                description: Resource Anchor name.
+                description: Name of the virtual cloud network (VCN) associated with
+                  the resource.
                 type: string
             required:
             - status

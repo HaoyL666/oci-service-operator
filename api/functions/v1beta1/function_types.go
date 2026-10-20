@@ -20,21 +20,11 @@ type FunctionSpec struct {
 	// The OCID of the application this function belongs to.
 	// +kubebuilder:validation:Required
 	ApplicationId string `json:"applicationId"`
+	// +kubebuilder:validation:Required
+	SourceDetails FunctionSourceDetails `json:"sourceDetails"`
 	// Maximum usable memory for the function (MiB).
 	// +kubebuilder:validation:Required
 	MemoryInMBs int64 `json:"memoryInMBs"`
-	// The qualified name of the Docker image to use in the function, including the image tag.
-	// The image should be in the OCI Registry that is in the same region as the function itself.
-	// Example: `phx.ocir.io/ten/functions/function:0.0.1`
-	// +kubebuilder:validation:Optional
-	Image string `json:"image,omitempty"`
-	// The image digest for the version of the image that will be pulled when invoking this function.
-	// If no value is specified, the digest currently associated with the image in the OCI Registry will be used.
-	// Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7`
-	// +kubebuilder:validation:Optional
-	ImageDigest string `json:"imageDigest,omitempty"`
-	// +kubebuilder:validation:Optional
-	SourceDetails FunctionSourceDetails `json:"sourceDetails,omitempty,omitzero"`
 	// Function configuration. These values are passed on to the function as environment variables, this overrides application configuration values.
 	// Keys must be ASCII strings consisting solely of letters, digits, and the '_' (underscore) character, and must not begin with a digit. Values should be limited to printable unicode characters.
 	// Example: `{"MY_FUNCTION_CONFIG": "ConfVal"}`
@@ -66,6 +56,43 @@ type FunctionSpec struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 }
 
+// FunctionSourceDetailsArchiveSourceDetails defines nested fields for Function.SourceDetails.ArchiveSourceDetails.
+type FunctionSourceDetailsArchiveSourceDetails struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	ArchiveSourceType string `json:"archiveSourceType,omitempty"`
+	// The base64-encoded archive file of the function code. The archive file must contain all the files for the function. Please refer to functions documentation for maximum allowed size and supported archive formats.
+	// +kubebuilder:validation:Optional
+	ArchiveFile string `json:"archiveFile,omitempty"`
+	// The name of the Object Storage bucket.
+	// +kubebuilder:validation:Optional
+	BucketName string `json:"bucketName,omitempty"`
+	// The Object Storage namespace.
+	// +kubebuilder:validation:Optional
+	Namespace string `json:"namespace,omitempty"`
+	// The name of the Object Storage object.
+	// +kubebuilder:validation:Optional
+	ObjectName string `json:"objectName,omitempty"`
+	// VersionId used to identify a particular version of the object. If not specified, the latest version of the object is used.
+	// +kubebuilder:validation:Optional
+	ObjectVersionId string `json:"objectVersionId,omitempty"`
+}
+
+// FunctionSourceDetailsRuntimeConfig defines nested fields for Function.SourceDetails.RuntimeConfig.
+type FunctionSourceDetailsRuntimeConfig struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	RuntimeConfigType string `json:"runtimeConfigType,omitempty"`
+	// The name of the FunctionsRuntime this function is to be associated with.
+	// +kubebuilder:validation:Optional
+	FunctionsRuntimeName string `json:"functionsRuntimeName,omitempty"`
+	// The OCID of the FunctionsRuntimeVersion to use for the Function in manual mode.
+	// +kubebuilder:validation:Optional
+	FunctionsRuntimeVersionId string `json:"functionsRuntimeVersionId,omitempty"`
+}
+
 // FunctionSourceDetails defines nested fields for Function.SourceDetails.
 type FunctionSourceDetails struct {
 	// +kubebuilder:validation:Optional
@@ -76,6 +103,23 @@ type FunctionSourceDetails struct {
 	// function is sourced from.
 	// +kubebuilder:validation:Optional
 	PbfListingId string `json:"pbfListingId,omitempty"`
+	// +kubebuilder:validation:Optional
+	ArchiveSourceDetails FunctionSourceDetailsArchiveSourceDetails `json:"archiveSourceDetails,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	RuntimeConfig FunctionSourceDetailsRuntimeConfig `json:"runtimeConfig,omitempty,omitzero"`
+	// The function handler that is executed when the function is invoked. The value of this field depends on the runtime used
+	// +kubebuilder:validation:Optional
+	Handler string `json:"handler,omitempty"`
+	// The qualified name of the Docker image to use in the function, including the image tag.
+	// The image should be in the OCI Registry that is in the same region as the function itself.
+	// Example: `phx.ocir.io/ten/functions/function:0.0.1`
+	// +kubebuilder:validation:Optional
+	Image string `json:"image,omitempty"`
+	// The image digest for the version of the image that will be pulled when invoking this function.
+	// If no value is specified, the digest currently associated with the image in the OCI Registry will be used.
+	// Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7`
+	// +kubebuilder:validation:Optional
+	ImageDigest string `json:"imageDigest,omitempty"`
 }
 
 // FunctionProvisionedConcurrencyConfig defines nested fields for Function.ProvisionedConcurrencyConfig.
@@ -140,7 +184,8 @@ type FunctionTraceConfig struct {
 type FunctionStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the function.
-	Id string `json:"id,omitempty"`
+	Id            string                `json:"id,omitempty"`
+	SourceDetails FunctionSourceDetails `json:"sourceDetails,omitempty"`
 	// The display name of the function. The display name is unique within the application containing the function.
 	DisplayName string `json:"displayName,omitempty"`
 	// The current state of the function.
@@ -149,15 +194,6 @@ type FunctionStatus struct {
 	ApplicationId string `json:"applicationId,omitempty"`
 	// The OCID of the compartment that contains the function.
 	CompartmentId string `json:"compartmentId,omitempty"`
-	// The qualified name of the Docker image to use in the function, including the image tag.
-	// The image should be in the OCI Registry that is in the same region as the function itself.
-	// Example: `phx.ocir.io/ten/functions/function:0.0.1`
-	Image string `json:"image,omitempty"`
-	// The image digest for the version of the image that will be pulled when invoking this function.
-	// If no value is specified, the digest currently associated with the image in the OCI Registry will be used.
-	// Example: `sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7`
-	ImageDigest   string                `json:"imageDigest,omitempty"`
-	SourceDetails FunctionSourceDetails `json:"sourceDetails,omitempty"`
 	// The processor shape (`GENERIC_X86`/`GENERIC_ARM`) on which to run functions in the application, extracted from the image manifest.
 	Shape string `json:"shape,omitempty"`
 	// Maximum usable memory for the function (MiB).

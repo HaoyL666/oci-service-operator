@@ -139,6 +139,7 @@ ResourceAnalyticsInstanceSpec defines the desired state of ResourceAnalyticsInst
 | --- | --- | --- | --- | --- | --- |
 | [`adwAdminPassword`](#kind-resourceanalyticsinstance-spec-adwadminpassword) | ResourceAnalyticsInstanceAdwAdminPassword defines nested fields for ResourceAnalyticsInstance.AdwAdminPassword. | `object` | Yes | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment to create the ResourceAnalyticsInstance in. | `string` | Yes | - | - |
+| `computeCount` | The compute amount (CPUs) available to the Autonomous Database. | `integer` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | A description of the ResourceAnalyticsInstance instance. | `string` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
@@ -272,17 +273,49 @@ TenancyAttachmentStatus defines the observed state of TenancyAttachment.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `dataPopulationStatus` | The overall status of the data population from the tenancy. | `string` | No | - | - |
 | `description` | A description of the tenancy. | `string` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the TenancyAttachment. | `string` | No | - | - |
 | `isReportingTenancy` | Whether the tenancy is the tenancy used when creating Resource Analytics Instance. | `boolean` | No | - | - |
 | `lifecycleDetails` | A message that describes the current state of the TenancyAttachment in more detail. For example, can be used to provide actionable information for a resource in the Failed state. | `string` | No | - | - |
 | `lifecycleState` | The current state of the TenancyAttachment. | `string` | No | - | - |
+| [`monitoredRegions`](#kind-tenancyattachment-status-monitoredregions) | List of monitored regions with their data population status. | `list[object]` | No | - | - |
 | `resourceAnalyticsInstanceId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the ResourceAnalyticsInstance associated with this TenancyAttachment. | `string` | No | - | - |
 | [`status`](#kind-tenancyattachment-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
 | `tenancyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the tenancy associated with this TenancyAttachment. | `string` | No | - | - |
 | `timeCreated` | The date and time the TenancyAttachment was created, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeDataPopulationEnded` | The date and time the data population tasks completed, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeDataPopulationStarted` | The date and time the data population tasks started, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
 | `timeUpdated` | The date and time the TenancyAttachment was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+
+<a id="kind-tenancyattachment-status-monitoredregions"></a>
+#### Status.monitoredRegions[]
+
+[Back to TenancyAttachment status](#kind-tenancyattachment-status)
+
+TenancyAttachmentMonitoredRegion defines nested fields for TenancyAttachment.MonitoredRegion.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`dataPopulation`](#kind-tenancyattachment-status-monitoredregions-datapopulation) | TenancyAttachmentMonitoredRegionDataPopulation defines nested fields for TenancyAttachment.MonitoredRegion.DataPopulation. | `object` | No | - | - |
+| `regionId` | The Region Identifier (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm) of the monitored region. E.g. us-ashburn-1 | `string` | No | - | - |
+
+<a id="kind-tenancyattachment-status-monitoredregions-datapopulation"></a>
+##### Status.monitoredRegions[].dataPopulation
+
+[Back to TenancyAttachment status](#kind-tenancyattachment-status)
+
+TenancyAttachmentMonitoredRegionDataPopulation defines nested fields for TenancyAttachment.MonitoredRegion.DataPopulation.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `inProgressCount` | The number of data population tasks currently in progress. | `integer` | No | - | - |
+| `status` | The overall status of the data population from the monitored region of the tenancy. | `string` | No | - | - |
+| `succeededCount` | The number of data population tasks that have succeeded. | `integer` | No | - | - |
+| `timeEnded` | The date and time the data population task completed, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `timeStarted` | The date and time the data population task was started, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No | - | - |
+| `totalCount` | The total number of data population tasks. | `integer` | No | - | - |
 
 <a id="kind-tenancyattachment-status-status"></a>
 #### Status.status

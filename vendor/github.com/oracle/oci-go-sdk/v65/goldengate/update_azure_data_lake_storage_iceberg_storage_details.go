@@ -28,6 +28,13 @@ type UpdateAzureDataLakeStorageIcebergStorageDetails struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the account key is stored.
 	AccountKeySecretId *string `mandatory:"false" json:"accountKeySecretId"`
 
+	// Azure storage account key. This property is required when 'authenticationType' is set to 'SHARED_KEY'.
+	// e.g.: pa3WbhVATzj56xD4DH1VjOUhApRGEGHvOo58eQJVWIzX+j8j4CUVFcTjpIqDSRaSa1Wo2LbWY5at+AStEgLOIQ==
+	// Deprecated: This field is deprecated and replaced by "accountKeySecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	AccountKey *string `mandatory:"false" json:"accountKey" sensitive:"true"`
+
 	// The Azure Blob Storage endpoint where Iceberg data is stored.
 	// e.g.: 'https://my-azure-storage-account.blob.core.windows.net'
 	Endpoint *string `mandatory:"false" json:"endpoint"`

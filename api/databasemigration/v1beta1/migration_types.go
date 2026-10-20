@@ -71,6 +71,8 @@ type MigrationSpec struct {
 	HubDetails MigrationHubDetails `json:"hubDetails,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	GgsDetails MigrationGgsDetails `json:"ggsDetails,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	MigrationSettings MigrationSettings `json:"migrationSettings,omitempty,omitzero"`
 	// List of Migration Parameter objects.
 	// +kubebuilder:validation:Optional
 	AdvancedParameters []MigrationAdvancedParameter `json:"advancedParameters,omitempty"`
@@ -104,9 +106,6 @@ type MigrationDataTransferMediumDetails struct {
 
 // MigrationInitialLoadSettings defines nested fields for Migration.InitialLoadSettings.
 type MigrationInitialLoadSettings struct {
-	// MySql Job Mode
-	// +kubebuilder:validation:Required
-	JobMode string `json:"jobMode"`
 	// Enable (true) or disable (false) consistent data dumps by locking the instance for backup during the dump.
 	// +kubebuilder:validation:Optional
 	IsConsistent bool `json:"isConsistent,omitempty"`
@@ -126,6 +125,9 @@ type MigrationInitialLoadSettings struct {
 	// The action taken in the event of errors related to GRANT or REVOKE errors.
 	// +kubebuilder:validation:Optional
 	HandleGrantErrors string `json:"handleGrantErrors,omitempty"`
+	// MySql Job Mode
+	// +kubebuilder:validation:Optional
+	JobMode string `json:"jobMode,omitempty"`
 }
 
 // MigrationAdvisorSettings defines nested fields for Migration.AdvisorSettings.
@@ -235,6 +237,357 @@ type MigrationGgsDetails struct {
 	AcceptableLag int `json:"acceptableLag,omitempty"`
 }
 
+// MigrationSettingsDataTransferMediumDetailsObjectStorageBucket defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.ObjectStorageBucket.
+type MigrationSettingsDataTransferMediumDetailsObjectStorageBucket struct {
+	// Namespace name of the object store bucket.
+	// +kubebuilder:validation:Required
+	NamespaceName string `json:"namespaceName"`
+	// Bucket name.
+	// +kubebuilder:validation:Required
+	BucketName string `json:"bucketName"`
+}
+
+// MigrationSettingsDataTransferMediumDetailsSource defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Source.
+type MigrationSettingsDataTransferMediumDetailsSource struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// Directory path to OCI SSL wallet location on Db server node.
+	// +kubebuilder:validation:Optional
+	WalletLocation string `json:"walletLocation,omitempty"`
+	// +kubebuilder:validation:Optional
+	Kind string `json:"kind,omitempty"`
+	// Path to the OCI CLI installation in the node.
+	// +kubebuilder:validation:Optional
+	OciHome string `json:"ociHome,omitempty"`
+}
+
+// MigrationSettingsDataTransferMediumDetailsTarget defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Target.
+type MigrationSettingsDataTransferMediumDetailsTarget struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// Directory path to OCI SSL wallet location on Db server node.
+	// +kubebuilder:validation:Optional
+	WalletLocation string `json:"walletLocation,omitempty"`
+	// +kubebuilder:validation:Optional
+	Kind string `json:"kind,omitempty"`
+	// Path to the OCI CLI installation in the node.
+	// +kubebuilder:validation:Optional
+	OciHome string `json:"ociHome,omitempty"`
+}
+
+// MigrationSettingsDataTransferMediumDetails defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.
+type MigrationSettingsDataTransferMediumDetails struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	Type string `json:"type,omitempty"`
+	// +kubebuilder:validation:Optional
+	ObjectStorageBucket MigrationSettingsDataTransferMediumDetailsObjectStorageBucket `json:"objectStorageBucket,omitempty,omitzero"`
+	// Name of database link from OCI database to on-premise database. ODMS will create link,
+	// if the link does not already exist.
+	// +kubebuilder:validation:Optional
+	Name string `json:"name,omitempty"`
+	// +kubebuilder:validation:Optional
+	Source MigrationSettingsDataTransferMediumDetailsSource `json:"source,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	Target MigrationSettingsDataTransferMediumDetailsTarget `json:"target,omitempty,omitzero"`
+	// OCID of the shared storage mount target
+	// +kubebuilder:validation:Optional
+	SharedStorageMountTargetId string `json:"sharedStorageMountTargetId,omitempty"`
+	// AWS region code where the S3 bucket is located.
+	// Region code should match the documented available regions:
+	// https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
+	// +kubebuilder:validation:Optional
+	Region string `json:"region,omitempty"`
+	// AWS access key credentials identifier
+	// Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
+	// +kubebuilder:validation:Optional
+	AccessKeyId string `json:"accessKeyId,omitempty"`
+	// AWS secret access key credentials
+	// Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
+	// +kubebuilder:validation:Optional
+	SecretAccessKey string `json:"secretAccessKey,omitempty"`
+}
+
+// MigrationSettingsInitialLoadSettingsDataPumpParameters defines nested fields for Migration.MigrationSettings.InitialLoadSettings.DataPumpParameters.
+type MigrationSettingsInitialLoadSettingsDataPumpParameters struct {
+	// Set to false to force Data Pump worker process to run on one instance.
+	// +kubebuilder:validation:Optional
+	IsCluster bool `json:"isCluster,omitempty"`
+	// Estimate size of dumps that will be generated.
+	// +kubebuilder:validation:Optional
+	Estimate string `json:"estimate,omitempty"`
+	// IMPORT: Specifies the action to be performed when data is loaded into a preexisting table.
+	// +kubebuilder:validation:Optional
+	TableExistsAction string `json:"tableExistsAction,omitempty"`
+	// Exclude paratemers for Export and Import.
+	// +kubebuilder:validation:Optional
+	ExcludeParameters []string `json:"excludeParameters,omitempty"`
+	// Maximum number of worker processes that can be used for a Data Pump Import job.
+	// For an Autonomous Database, ODMS will automatically query its CPU core count and set this property.
+	// +kubebuilder:validation:Optional
+	ImportParallelismDegree int `json:"importParallelismDegree,omitempty"`
+	// Maximum number of worker processes that can be used for a Data Pump Export job.
+	// +kubebuilder:validation:Optional
+	ExportParallelismDegree int `json:"exportParallelismDegree,omitempty"`
+}
+
+// MigrationSettingsInitialLoadSettingsTablespaceDetails defines nested fields for Migration.MigrationSettings.InitialLoadSettings.TablespaceDetails.
+type MigrationSettingsInitialLoadSettingsTablespaceDetails struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	TargetType string `json:"targetType,omitempty"`
+	// True to auto-create tablespace in the target Database.
+	// +kubebuilder:validation:Optional
+	IsAutoCreate bool `json:"isAutoCreate,omitempty"`
+	// True set tablespace to big file.
+	// +kubebuilder:validation:Optional
+	IsBigFile bool `json:"isBigFile,omitempty"`
+	// Size of extend in MB. Can only be specified if 'isBigFile' property is set to true.
+	// +kubebuilder:validation:Optional
+	ExtendSizeInMBs int `json:"extendSizeInMBs,omitempty"`
+	// Size of Oracle database blocks in KB.
+	// +kubebuilder:validation:Optional
+	BlockSizeInKBs string `json:"blockSizeInKBs,omitempty"`
+	// Name of tablespace at target to which the source database tablespace need to be remapped.
+	// +kubebuilder:validation:Optional
+	RemapTarget string `json:"remapTarget,omitempty"`
+}
+
+// MigrationSettingsInitialLoadSettingsExportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ExportDirectoryObject.
+type MigrationSettingsInitialLoadSettingsExportDirectoryObject struct {
+	// Name of directory object in database
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Absolute path of directory on database server
+	// +kubebuilder:validation:Optional
+	Path string `json:"path,omitempty"`
+}
+
+// MigrationSettingsInitialLoadSettingsImportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ImportDirectoryObject.
+type MigrationSettingsInitialLoadSettingsImportDirectoryObject struct {
+	// Name of directory object in database
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Absolute path of directory on database server
+	// +kubebuilder:validation:Optional
+	Path string `json:"path,omitempty"`
+}
+
+// MigrationSettingsInitialLoadSettingsMetadataRemap defines nested fields for Migration.MigrationSettings.InitialLoadSettings.MetadataRemap.
+type MigrationSettingsInitialLoadSettingsMetadataRemap struct {
+	// Type of remap. Refer to METADATA_REMAP Procedure  (https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_DATAPUMP.html#GUID-0FC32790-91E6-4781-87A3-229DE024CB3D)
+	// +kubebuilder:validation:Required
+	Type string `json:"type"`
+	// Specifies the value which needs to be reset.
+	// +kubebuilder:validation:Required
+	OldValue string `json:"oldValue"`
+	// Specifies the new value that oldValue should be translated into.
+	// +kubebuilder:validation:Required
+	NewValue string `json:"newValue"`
+}
+
+// MigrationSettingsInitialLoadSettings defines nested fields for Migration.MigrationSettings.InitialLoadSettings.
+type MigrationSettingsInitialLoadSettings struct {
+	// +kubebuilder:validation:Optional
+	DataPumpParameters MigrationSettingsInitialLoadSettingsDataPumpParameters `json:"dataPumpParameters,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	TablespaceDetails MigrationSettingsInitialLoadSettingsTablespaceDetails `json:"tablespaceDetails,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	ExportDirectoryObject MigrationSettingsInitialLoadSettingsExportDirectoryObject `json:"exportDirectoryObject,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	ImportDirectoryObject MigrationSettingsInitialLoadSettingsImportDirectoryObject `json:"importDirectoryObject,omitempty,omitzero"`
+	// Oracle Job Mode
+	// +kubebuilder:validation:Optional
+	JobMode string `json:"jobMode,omitempty"`
+	// Defines remapping to be applied to objects as they are processed.
+	// +kubebuilder:validation:Optional
+	MetadataRemaps []MigrationSettingsInitialLoadSettingsMetadataRemap `json:"metadataRemaps,omitempty"`
+}
+
+// MigrationSettingsAdvisorSettings defines nested fields for Migration.MigrationSettings.AdvisorSettings.
+type MigrationSettingsAdvisorSettings struct {
+	// True to skip the Pre-Migration Advisor execution. Default is false.
+	// +kubebuilder:validation:Optional
+	IsSkipAdvisor bool `json:"isSkipAdvisor,omitempty"`
+	// True to not interrupt migration execution due to Pre-Migration Advisor errors. Default is false.
+	// +kubebuilder:validation:Optional
+	IsIgnoreErrors bool `json:"isIgnoreErrors,omitempty"`
+}
+
+// MigrationSettingsAdvancedParameter defines nested fields for Migration.MigrationSettings.AdvancedParameter.
+type MigrationSettingsAdvancedParameter struct {
+	// Parameter name.
+	// +kubebuilder:validation:Required
+	Name string `json:"name"`
+	// Parameter data type.
+	// +kubebuilder:validation:Required
+	DataType string `json:"dataType"`
+	// If a STRING data type then the value should be an array of characters,
+	// if a INTEGER data type then the value should be an integer value,
+	// if a FLOAT data type then the value should be an float value,
+	// if a BOOLEAN data type then the value should be TRUE or FALSE.
+	// +kubebuilder:validation:Required
+	Value string `json:"value"`
+}
+
+// MigrationSettingsExcludeObject defines nested fields for Migration.MigrationSettings.ExcludeObject.
+type MigrationSettingsExcludeObject struct {
+	// Owner of the object (regular expression is allowed)
+	// +kubebuilder:validation:Required
+	Owner string `json:"owner"`
+	// Name of the object (regular expression is allowed)
+	// +kubebuilder:validation:Required
+	ObjectName string `json:"objectName"`
+	// Type of object to exclude.
+	// If not specified, matching owners and object names of type TABLE would be excluded.
+	// +kubebuilder:validation:Optional
+	Type string `json:"type,omitempty"`
+	// Whether an excluded table should be omitted from replication. Only valid for database objects
+	// that have are of type TABLE and object status EXCLUDE.
+	// +kubebuilder:validation:Optional
+	IsOmitExcludedTableFromReplication bool `json:"isOmitExcludedTableFromReplication,omitempty"`
+}
+
+// MigrationSettingsIncludeObject defines nested fields for Migration.MigrationSettings.IncludeObject.
+type MigrationSettingsIncludeObject struct {
+	// Owner of the object (regular expression is allowed)
+	// +kubebuilder:validation:Required
+	Owner string `json:"owner"`
+	// Name of the object (regular expression is allowed)
+	// +kubebuilder:validation:Required
+	ObjectName string `json:"objectName"`
+	// Type of object to exclude.
+	// If not specified, matching owners and object names of type TABLE would be excluded.
+	// +kubebuilder:validation:Optional
+	Type string `json:"type,omitempty"`
+	// Whether an excluded table should be omitted from replication. Only valid for database objects
+	// that have are of type TABLE and object status EXCLUDE.
+	// +kubebuilder:validation:Optional
+	IsOmitExcludedTableFromReplication bool `json:"isOmitExcludedTableFromReplication,omitempty"`
+}
+
+// MigrationSettingsHubDetailsRestAdminCredentials defines nested fields for Migration.MigrationSettings.HubDetails.RestAdminCredentials.
+type MigrationSettingsHubDetailsRestAdminCredentials struct {
+	// Administrator username
+	// +kubebuilder:validation:Required
+	Username string `json:"username"`
+	// Administrator password
+	// +kubebuilder:validation:Required
+	Password string `json:"password"`
+}
+
+// MigrationSettingsHubDetailsExtract defines nested fields for Migration.MigrationSettings.HubDetails.Extract.
+type MigrationSettingsHubDetailsExtract struct {
+	// Extract performance.
+	// +kubebuilder:validation:Optional
+	PerformanceProfile string `json:"performanceProfile,omitempty"`
+	// Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running.
+	// If not specified, Extract will not generate a warning on long-running transactions.
+	// +kubebuilder:validation:Optional
+	LongTransDuration int `json:"longTransDuration,omitempty"`
+}
+
+// MigrationSettingsHubDetailsReplicat defines nested fields for Migration.MigrationSettings.HubDetails.Replicat.
+type MigrationSettingsHubDetailsReplicat struct {
+	// Replicat performance.
+	// +kubebuilder:validation:Optional
+	PerformanceProfile string `json:"performanceProfile,omitempty"`
+}
+
+// MigrationSettingsHubDetails defines nested fields for Migration.MigrationSettings.HubDetails.
+type MigrationSettingsHubDetails struct {
+	// +kubebuilder:validation:Required
+	RestAdminCredentials MigrationSettingsHubDetailsRestAdminCredentials `json:"restAdminCredentials"`
+	// Endpoint URL.
+	// +kubebuilder:validation:Required
+	Url string `json:"url"`
+	// The OCID of the resource being referenced.
+	// +kubebuilder:validation:Required
+	VaultId string `json:"vaultId"`
+	// The OCID of the resource being referenced.
+	// +kubebuilder:validation:Required
+	KeyId string `json:"keyId"`
+	// The OCID of the resource being referenced.
+	// +kubebuilder:validation:Optional
+	ComputeId string `json:"computeId,omitempty"`
+	// +kubebuilder:validation:Optional
+	Extract MigrationSettingsHubDetailsExtract `json:"extract,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	Replicat MigrationSettingsHubDetailsReplicat `json:"replicat,omitempty,omitzero"`
+	// ODMS will monitor GoldenGate end-to-end latency until the lag time is lower than the specified value in seconds.
+	// +kubebuilder:validation:Optional
+	AcceptableLag int `json:"acceptableLag,omitempty"`
+}
+
+// MigrationSettingsGgsDetailsExtract defines nested fields for Migration.MigrationSettings.GgsDetails.Extract.
+type MigrationSettingsGgsDetailsExtract struct {
+	// Extract performance.
+	// +kubebuilder:validation:Optional
+	PerformanceProfile string `json:"performanceProfile,omitempty"`
+	// Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running.
+	// If not specified, Extract will not generate a warning on long-running transactions.
+	// +kubebuilder:validation:Optional
+	LongTransDuration int `json:"longTransDuration,omitempty"`
+}
+
+// MigrationSettingsGgsDetailsReplicat defines nested fields for Migration.MigrationSettings.GgsDetails.Replicat.
+type MigrationSettingsGgsDetailsReplicat struct {
+	// Replicat performance.
+	// +kubebuilder:validation:Optional
+	PerformanceProfile string `json:"performanceProfile,omitempty"`
+}
+
+// MigrationSettingsGgsDetails defines nested fields for Migration.MigrationSettings.GgsDetails.
+type MigrationSettingsGgsDetails struct {
+	// +kubebuilder:validation:Optional
+	Extract MigrationSettingsGgsDetailsExtract `json:"extract,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	Replicat MigrationSettingsGgsDetailsReplicat `json:"replicat,omitempty,omitzero"`
+	// ODMS will monitor GoldenGate end-to-end latency until the lag time is lower than the specified value in seconds.
+	// +kubebuilder:validation:Optional
+	AcceptableLag int `json:"acceptableLag,omitempty"`
+}
+
+// MigrationSettings defines nested fields for Migration.MigrationSettings.
+type MigrationSettings struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	MigrationMethod string `json:"migrationMethod,omitempty"`
+	// +kubebuilder:validation:Optional
+	DataTransferMediumDetails MigrationSettingsDataTransferMediumDetails `json:"dataTransferMediumDetails,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	InitialLoadSettings MigrationSettingsInitialLoadSettings `json:"initialLoadSettings,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	AdvisorSettings MigrationSettingsAdvisorSettings `json:"advisorSettings,omitempty,omitzero"`
+	// List of Migration Parameter objects.
+	// +kubebuilder:validation:Optional
+	AdvancedParameters []MigrationSettingsAdvancedParameter `json:"advancedParameters,omitempty"`
+	// Database objects to exclude from migration, cannot be specified alongside 'includeObjects'
+	// +kubebuilder:validation:Optional
+	ExcludeObjects []MigrationSettingsExcludeObject `json:"excludeObjects,omitempty"`
+	// Database objects to include from migration, cannot be specified alongside 'excludeObjects'
+	// +kubebuilder:validation:Optional
+	IncludeObjects []MigrationSettingsIncludeObject `json:"includeObjects,omitempty"`
+	// Specifies the database objects to be excluded from the migration in bulk.
+	// The definition accepts input in a CSV format, newline separated for each entry.
+	// More details can be found in the documentation.
+	// +kubebuilder:validation:Optional
+	BulkIncludeExcludeData string `json:"bulkIncludeExcludeData,omitempty"`
+	// +kubebuilder:validation:Optional
+	HubDetails MigrationSettingsHubDetails `json:"hubDetails,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	GgsDetails MigrationSettingsGgsDetails `json:"ggsDetails,omitempty,omitzero"`
+	// The OCID of the resource being referenced.
+	// +kubebuilder:validation:Optional
+	SourceContainerDatabaseConnectionId string `json:"sourceContainerDatabaseConnectionId,omitempty"`
+	// The OCID of the resource being referenced.
+	// +kubebuilder:validation:Optional
+	SourceStandbyDatabaseConnectionId string `json:"sourceStandbyDatabaseConnectionId,omitempty"`
+}
+
 // MigrationAdvancedParameter defines nested fields for Migration.AdvancedParameter.
 type MigrationAdvancedParameter struct {
 	// Parameter name.
@@ -249,6 +602,54 @@ type MigrationAdvancedParameter struct {
 	// if a BOOLEAN data type then the value should be TRUE or FALSE.
 	// +kubebuilder:validation:Required
 	Value string `json:"value"`
+}
+
+// MigrationSettingsHubDetailsRestAdminCredentialsObservedState defines nested fields for Migration.MigrationSettings.HubDetails.RestAdminCredentials.
+type MigrationSettingsHubDetailsRestAdminCredentialsObservedState struct {
+	// Administrator username
+	Username string `json:"username,omitempty"`
+}
+
+// MigrationSettingsHubDetailsObservedState defines nested fields for Migration.MigrationSettings.HubDetails.
+type MigrationSettingsHubDetailsObservedState struct {
+	RestAdminCredentials MigrationSettingsHubDetailsRestAdminCredentialsObservedState `json:"restAdminCredentials,omitempty"`
+	// Endpoint URL.
+	Url string `json:"url,omitempty"`
+	// The OCID of the resource being referenced.
+	VaultId string `json:"vaultId,omitempty"`
+	// The OCID of the resource being referenced.
+	KeyId string `json:"keyId,omitempty"`
+	// The OCID of the resource being referenced.
+	ComputeId string                              `json:"computeId,omitempty"`
+	Extract   MigrationSettingsHubDetailsExtract  `json:"extract,omitempty"`
+	Replicat  MigrationSettingsHubDetailsReplicat `json:"replicat,omitempty"`
+	// ODMS will monitor GoldenGate end-to-end latency until the lag time is lower than the specified value in seconds.
+	AcceptableLag int `json:"acceptableLag,omitempty"`
+}
+
+// MigrationSettingsGgsDetailsGgsDeployment defines nested fields for Migration.MigrationSettings.GgsDetails.GgsDeployment.
+type MigrationSettingsGgsDetailsGgsDeployment struct {
+	// The OCID of the resource being referenced.
+	DeploymentId string `json:"deploymentId,omitempty"`
+	// The OCID of the resource being referenced.
+	GgsAdminCredentialsSecretId string `json:"ggsAdminCredentialsSecretId,omitempty"`
+}
+
+// MigrationSettingsObservedState defines nested fields for Migration.MigrationSettings.
+type MigrationSettingsObservedState struct {
+	JsonData                  string                                     `json:"jsonData,omitempty"`
+	MigrationMethod           string                                     `json:"migrationMethod,omitempty"`
+	DataTransferMediumDetails MigrationSettingsDataTransferMediumDetails `json:"dataTransferMediumDetails,omitempty"`
+	InitialLoadSettings       MigrationSettingsInitialLoadSettings       `json:"initialLoadSettings,omitempty"`
+	AdvisorSettings           MigrationSettingsAdvisorSettings           `json:"advisorSettings,omitempty"`
+	HubDetails                MigrationSettingsHubDetailsObservedState   `json:"hubDetails,omitempty"`
+	GgsDetails                MigrationSettingsGgsDetails                `json:"ggsDetails,omitempty"`
+	// The OCID of the resource being referenced.
+	SourceContainerDatabaseConnectionId string `json:"sourceContainerDatabaseConnectionId,omitempty"`
+	// The OCID of the resource being referenced.
+	SourceStandbyDatabaseConnectionId string `json:"sourceStandbyDatabaseConnectionId,omitempty"`
+	// List of Migration Parameter objects.
+	AdvancedParameters []MigrationSettingsAdvancedParameter `json:"advancedParameters,omitempty"`
 }
 
 // MigrationDataTransferMediumDetailsSource defines nested fields for Migration.DataTransferMediumDetails.Source.
@@ -372,6 +773,16 @@ type MigrationGgsDetailsExtract struct {
 	LongTransDuration int `json:"longTransDuration,omitempty"`
 }
 
+// MigrationSettingsStatus defines nested fields for Migration.MigrationSettings.
+type MigrationSettingsStatus struct {
+	JsonData        string `json:"jsonData,omitempty"`
+	MigrationMethod string `json:"migrationMethod,omitempty"`
+	// The OCID of the resource being referenced.
+	SourceContainerDatabaseConnectionId string `json:"sourceContainerDatabaseConnectionId,omitempty"`
+	// The OCID of the resource being referenced.
+	SourceStandbyDatabaseConnectionId string `json:"sourceStandbyDatabaseConnectionId,omitempty"`
+}
+
 // MigrationStatus defines the observed state of Migration.
 type MigrationStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
@@ -420,6 +831,7 @@ type MigrationStatus struct {
 	// The current state of the Migration resource.
 	LifecycleState            string                             `json:"lifecycleState,omitempty"`
 	DatabaseCombination       string                             `json:"databaseCombination,omitempty"`
+	MigrationSettings         MigrationSettingsObservedState     `json:"migrationSettings,omitempty"`
 	DataTransferMediumDetails MigrationDataTransferMediumDetails `json:"dataTransferMediumDetails,omitempty"`
 	InitialLoadSettings       MigrationInitialLoadSettings       `json:"initialLoadSettings,omitempty"`
 	AdvisorSettings           MigrationAdvisorSettings           `json:"advisorSettings,omitempty"`

@@ -315,6 +315,8 @@ type IntegrationInstanceStatus struct {
 	DataRetentionPeriod string `json:"dataRetentionPeriod,omitempty"`
 	// OCID of LogAnalytics LogGroup, enabled for given integration instance
 	LogGroupId string `json:"logGroupId,omitempty"`
+	// OCID of LogAnalytics LogGroup, enabled for given Process Automation attached to integration instance.
+	ProcessAutomationLogGroupId string `json:"processAutomationLogGroupId,omitempty"`
 }
 
 // +kubebuilder:object:root=true

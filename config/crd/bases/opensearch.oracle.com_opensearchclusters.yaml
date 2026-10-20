@@ -95,6 +95,23 @@ spec:
               compartmentId:
                 description: The OCID of the compartment to create the cluster in.
                 type: string
+              coordinatorNodeCount:
+                description: The number of coordinator nodes configured for the cluster.
+                type: integer
+              coordinatorNodeHostMemoryGB:
+                description: The amount of memory in GB, for the cluster's coordinator
+                  nodes.
+                type: integer
+              coordinatorNodeHostOcpuCount:
+                description: The number of OCPUs configured for the cluster's coordinator
+                  nodes.
+                type: integer
+              coordinatorNodeHostShape:
+                description: The node shape for the cluster's coordinator nodes.
+                type: string
+              coordinatorNodeHostType:
+                description: The instance type for the cluster's coordinator nodes.
+                type: string
               dataNodeCount:
                 description: The number of data nodes to configure for the cluster.
                 type: integer
@@ -281,6 +298,40 @@ spec:
                 - isEnabled
                 - outboundClusters
                 type: object
+              remoteReindexTrustConfig:
+                description: OpensearchClusterRemoteReindexTrustConfig defines nested
+                  fields for OpensearchCluster.RemoteReindexTrustConfig.
+                properties:
+                  remoteSources:
+                    description: Remote cluster sources to trust for reindexing.
+                    items:
+                      description: OpensearchClusterRemoteReindexTrustConfigRemoteSource
+                        defines nested fields for OpensearchCluster.RemoteReindexTrustConfig.RemoteSource.
+                      properties:
+                        certificateId:
+                          description: OCID of the certificate or CA chain used to
+                            verify the remote cluster's HTTPS certificate.
+                          type: string
+                        endpoint:
+                          description: HTTPS endpoint of the remote Elasticsearch
+                            or OpenSearch cluster. The hostname and port are used
+                            to allow remote reindexing. Use a DNS hostname, rather
+                            than an IP address, when endpointResolutionIp is specified.
+                          type: string
+                        endpointResolutionIp:
+                          description: Optional IP address to which the endpoint hostname
+                            is resolved from within the OpenSearch cluster. The original
+                            hostname remains in the connection URL and is used for
+                            TLS verification.
+                          type: string
+                      required:
+                      - certificateId
+                      - endpoint
+                      type: object
+                    type: array
+                required:
+                - remoteSources
+                type: object
               reverseConnectionEndpointCustomerIps:
                 description: The customer IP addresses of the endpoint in customer
                   VCN
@@ -317,6 +368,41 @@ spec:
                   Security attributes for this resource. Each key is predefined and scoped to a namespace.
                   For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
+                type: object
+              securityMasterUserAuthDetails:
+                description: OpensearchClusterSecurityMasterUserAuthDetails defines
+                  nested fields for OpensearchCluster.SecurityMasterUserAuthDetails.
+                properties:
+                  userDetails:
+                    description: OpensearchClusterSecurityMasterUserAuthDetailsUserDetails
+                      defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails.UserDetails.
+                    properties:
+                      passwordDetails:
+                        description: OpensearchClusterSecurityMasterUserAuthDetailsUserDetailsPasswordDetails
+                          defines nested fields for OpensearchCluster.SecurityMasterUserAuthDetails.UserDetails.PasswordDetails.
+                        properties:
+                          jsonData:
+                            type: string
+                          plainPassword:
+                            description: The plaintext password for the master user.
+                            type: string
+                          sourceType:
+                            type: string
+                          vaultSecretId:
+                            description: The OCID of a Vault secret containing the
+                              plaintext master-user password.
+                            type: string
+                        type: object
+                      username:
+                        description: The name of the master user that is used to manage
+                          security config.
+                        type: string
+                    required:
+                    - passwordDetails
+                    - username
+                    type: object
+                required:
+                - userDetails
                 type: object
               securityMasterUserName:
                 description: The name of the master user that are used to manage security
@@ -456,6 +542,23 @@ spec:
                 type: object
               compartmentId:
                 description: The OCID of the compartment where the cluster is located.
+                type: string
+              coordinatorNodeCount:
+                description: The number of coordinator nodes configured for the cluster.
+                type: integer
+              coordinatorNodeHostMemoryGB:
+                description: The amount of memory in GB, for the cluster's coordinator
+                  nodes.
+                type: integer
+              coordinatorNodeHostOcpuCount:
+                description: The number of OCPUs configured for the cluster's coordinator
+                  nodes.
+                type: integer
+              coordinatorNodeHostShape:
+                description: The node shape for the cluster's coordinator nodes.
+                type: string
+              coordinatorNodeHostType:
+                description: The instance type for the cluster's coordinator nodes.
                 type: string
               dataNodeCount:
                 description: The number of data nodes configured for the cluster.
@@ -668,6 +771,40 @@ spec:
                 required:
                 - isEnabled
                 - outboundClusters
+                type: object
+              remoteReindexTrustConfig:
+                description: OpensearchClusterRemoteReindexTrustConfig defines nested
+                  fields for OpensearchCluster.RemoteReindexTrustConfig.
+                properties:
+                  remoteSources:
+                    description: Remote cluster sources to trust for reindexing.
+                    items:
+                      description: OpensearchClusterRemoteReindexTrustConfigRemoteSource
+                        defines nested fields for OpensearchCluster.RemoteReindexTrustConfig.RemoteSource.
+                      properties:
+                        certificateId:
+                          description: OCID of the certificate or CA chain used to
+                            verify the remote cluster's HTTPS certificate.
+                          type: string
+                        endpoint:
+                          description: HTTPS endpoint of the remote Elasticsearch
+                            or OpenSearch cluster. The hostname and port are used
+                            to allow remote reindexing. Use a DNS hostname, rather
+                            than an IP address, when endpointResolutionIp is specified.
+                          type: string
+                        endpointResolutionIp:
+                          description: Optional IP address to which the endpoint hostname
+                            is resolved from within the OpenSearch cluster. The original
+                            hostname remains in the connection URL and is used for
+                            TLS verification.
+                          type: string
+                      required:
+                      - certificateId
+                      - endpoint
+                      type: object
+                    type: array
+                required:
+                - remoteSources
                 type: object
               reverseConnectionEndpointCustomerIps:
                 description: The customer IP addresses of the endpoint in customer

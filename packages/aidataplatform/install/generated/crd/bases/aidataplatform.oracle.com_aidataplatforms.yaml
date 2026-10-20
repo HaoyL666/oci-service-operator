@@ -88,6 +88,9 @@ spec:
                   For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
+              isEnableAiFeature:
+                description: The flag to enable/disable AiFeatures for the instance.
+                type: boolean
               systemTags:
                 additionalProperties:
                   additionalProperties:
@@ -97,6 +100,18 @@ spec:
                   System tags for this resource. Each key is predefined and scoped to a namespace.
                   Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
                 type: object
+              vectorDbAdminCred:
+                description: The Vector DB Lakehouse 26ai ADMIN user password.
+                type: string
+              vectorDbAdminSecretId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the OCI Vault secret holding the vector db Lakehouse 26ai Admin
+                  user password.
+                type: string
+              vectorDbId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
+                  of the vector db Lakehouse 26ai.
+                type: string
             required:
             - compartmentId
             type: object
@@ -105,6 +120,9 @@ spec:
             properties:
               aiDataPlatformType:
                 description: The AiDataPlatform type.
+                type: string
+              aiFeatureStatus:
+                description: The current aiFeatureStatus of the AiDataPlatform.
                 type: string
               aliasKey:
                 description: The alias Id of the AiDataPlatform which is the short

@@ -78,6 +78,21 @@ spec:
                   A user-friendly name. Does not have to be unique, and it's changeable.
                   If not specified or provided as null or empty string, it be generated as "<resourceType><timeCreated>", where timeCreated corresponds with the resource creation time in ISO 8601 basic format, i.e. omitting separating punctuation, at second-level precision and no UTC offset. Example: batchtaskprofile20250914115623.
                 type: string
+              extendedInformation:
+                description: BatchTaskProfileExtendedInformation defines nested fields
+                  for BatchTaskProfile.ExtendedInformation.
+                properties:
+                  architecture:
+                    description: Type of CPU architecture.
+                    type: string
+                  jsonData:
+                    type: string
+                  shapeName:
+                    description: A name of the GPU shape.
+                    type: string
+                  type:
+                    type: string
+                type: object
               freeformTags:
                 additionalProperties:
                   type: string
@@ -86,6 +101,9 @@ spec:
                   For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
+              minDiskSizeInGBs:
+                description: The minimum required size of disk space in GBs.
+                type: integer
               minMemoryInGBs:
                 description: The minimum required memory.
                 type: integer
@@ -94,8 +112,6 @@ spec:
                 type: integer
             required:
             - compartmentId
-            - minMemoryInGBs
-            - minOcpus
             type: object
           status:
             description: BatchTaskProfileStatus defines the observed state of BatchTaskProfile.
@@ -121,6 +137,21 @@ spec:
                 description: A user-friendly name. Does not have to be unique, and
                   it's changeable.
                 type: string
+              extendedInformation:
+                description: BatchTaskProfileExtendedInformation defines nested fields
+                  for BatchTaskProfile.ExtendedInformation.
+                properties:
+                  architecture:
+                    description: Type of CPU architecture.
+                    type: string
+                  jsonData:
+                    type: string
+                  shapeName:
+                    description: A name of the GPU shape.
+                    type: string
+                  type:
+                    type: string
+                type: object
               freeformTags:
                 additionalProperties:
                   type: string
@@ -136,6 +167,9 @@ spec:
               lifecycleState:
                 description: The current state of the batch task profile.
                 type: string
+              minDiskSizeInGBs:
+                description: The minimum required size of disk space in GBs.
+                type: integer
               minMemoryInGBs:
                 description: The minimum required memory.
                 type: integer

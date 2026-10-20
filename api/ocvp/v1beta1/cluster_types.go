@@ -80,6 +80,9 @@ type ClusterSpec struct {
 	// ListSupportedVmwareSoftwareVersions.
 	// +kubebuilder:validation:Optional
 	EsxiSoftwareVersion string `json:"esxiSoftwareVersion,omitempty"`
+	// The initial fault domain host distribution mode for the Cluster.
+	// +kubebuilder:validation:Optional
+	InitialFaultDomainHostDistribution string `json:"initialFaultDomainHostDistribution,omitempty"`
 	// +kubebuilder:validation:Optional
 	ClusterByolAllocationDetails ClusterByolAllocationDetails `json:"clusterByolAllocationDetails,omitempty,omitzero"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation.
@@ -351,8 +354,10 @@ type ClusterStatus struct {
 	// Datastores used for the Cluster.
 	Datastores []ClusterDatastore `json:"datastores,omitempty"`
 	// A list of datastore clusters.
-	DatastoreClusterIds          []string                     `json:"datastoreClusterIds,omitempty"`
-	ClusterByolAllocationDetails ClusterByolAllocationDetails `json:"clusterByolAllocationDetails,omitempty"`
+	DatastoreClusterIds []string `json:"datastoreClusterIds,omitempty"`
+	// The initial fault domain host distribution mode for the Cluster.
+	InitialFaultDomainHostDistribution string                       `json:"initialFaultDomainHostDistribution,omitempty"`
+	ClusterByolAllocationDetails       ClusterByolAllocationDetails `json:"clusterByolAllocationDetails,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation.
 	InitialVcfByolAllocationId string `json:"initialVcfByolAllocationId,omitempty"`
 	// Usage of system tag keys. These predefined keys are scoped to namespaces.
