@@ -61,6 +61,12 @@ type TargetDatabaseGroupMatchingCriteriaInclude struct {
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
+	// Map of freeform tag filters. Each key maps to an array of strings. Target database matches the key if it's tag value equals any of the values in the array.
+	// +kubebuilder:validation:Optional
+	FreeformTagsIn map[string]shared.JSONValue `json:"freeformTagsIn,omitempty"`
+	// Map of system tag filters. Target database matches when for each specified namespace.key and the tag value equals any of the values in the array.
+	// +kubebuilder:validation:Optional
+	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 }
 
 // TargetDatabaseGroupMatchingCriteriaExclude defines nested fields for TargetDatabaseGroup.MatchingCriteria.Exclude.

@@ -147,18 +147,18 @@ func convertAdditionalPolymorphicInterfaceValue(payload []byte, targetType refle
 		return interfaceValue(targetType, body, err)
 	case resourceManagerConfigurationSourceCreateType:
 		body, err := convertDiscriminatedInterface[resourcemanagersdk.CreateConfigurationSourceProviderDetails](payload, "Resource Manager configuration source provider", "configSourceProviderType", map[string]reflect.Type{
-			"GITLAB_ACCESS_TOKEN":                  reflect.TypeOf(resourcemanagersdk.CreateGitlabAccessTokenConfigurationSourceProviderDetails{}),
-			"BITBUCKET_CLOUD_USERNAME_APPPASSWORD": reflect.TypeOf(resourcemanagersdk.CreateBitbucketCloudUsernameAppPasswordConfigurationSourceProviderDetails{}),
-			"GITHUB_ACCESS_TOKEN":                  reflect.TypeOf(resourcemanagersdk.CreateGithubAccessTokenConfigurationSourceProviderDetails{}),
-			"BITBUCKET_SERVER_ACCESS_TOKEN":        reflect.TypeOf(resourcemanagersdk.CreateBitbucketServerAccessTokenConfigurationSourceProviderDetails{}),
+			"GITLAB_ACCESS_TOKEN":           reflect.TypeOf(resourcemanagersdk.CreateGitlabAccessTokenConfigurationSourceProviderDetails{}),
+			"BITBUCKET_CLOUD_ACCESS_TOKEN":  reflect.TypeOf(resourcemanagersdk.CreateBitbucketCloudEmailApiTokenConfigurationSourceProviderDetails{}),
+			"GITHUB_ACCESS_TOKEN":           reflect.TypeOf(resourcemanagersdk.CreateGithubAccessTokenConfigurationSourceProviderDetails{}),
+			"BITBUCKET_SERVER_ACCESS_TOKEN": reflect.TypeOf(resourcemanagersdk.CreateBitbucketServerAccessTokenConfigurationSourceProviderDetails{}),
 		})
 		return interfaceValue(targetType, body, err)
 	case resourceManagerConfigurationSourceUpdateType:
 		body, err := convertDiscriminatedInterface[resourcemanagersdk.UpdateConfigurationSourceProviderDetails](payload, "Resource Manager configuration source provider", "configSourceProviderType", map[string]reflect.Type{
-			"BITBUCKET_CLOUD_USERNAME_APPPASSWORD": reflect.TypeOf(resourcemanagersdk.UpdateBitbucketCloudUsernameAppPasswordConfigurationSourceProviderDetails{}),
-			"BITBUCKET_SERVER_ACCESS_TOKEN":        reflect.TypeOf(resourcemanagersdk.UpdateBitbucketServerAccessTokenConfigurationSourceProviderDetails{}),
-			"GITLAB_ACCESS_TOKEN":                  reflect.TypeOf(resourcemanagersdk.UpdateGitlabAccessTokenConfigurationSourceProviderDetails{}),
-			"GITHUB_ACCESS_TOKEN":                  reflect.TypeOf(resourcemanagersdk.UpdateGithubAccessTokenConfigurationSourceProviderDetails{}),
+			"BITBUCKET_CLOUD_ACCESS_TOKEN":  reflect.TypeOf(resourcemanagersdk.UpdateBitbucketCloudEmailApiTokenConfigurationSourceProviderDetails{}),
+			"BITBUCKET_SERVER_ACCESS_TOKEN": reflect.TypeOf(resourcemanagersdk.UpdateBitbucketServerAccessTokenConfigurationSourceProviderDetails{}),
+			"GITLAB_ACCESS_TOKEN":           reflect.TypeOf(resourcemanagersdk.UpdateGitlabAccessTokenConfigurationSourceProviderDetails{}),
+			"GITHUB_ACCESS_TOKEN":           reflect.TypeOf(resourcemanagersdk.UpdateGithubAccessTokenConfigurationSourceProviderDetails{}),
 		})
 		return interfaceValue(targetType, body, err)
 	default:

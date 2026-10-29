@@ -90,6 +90,16 @@ spec:
                 items:
                   type: string
                 type: array
+              securityAttributes:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Security attributes for this resource. Each key is predefined and scoped to a namespace.
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                  Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
+                type: object
               subnetId:
                 description: Deprecated. One of the subnets associated with the Recovery
                   Service subnet.
@@ -156,6 +166,16 @@ spec:
                 items:
                   type: string
                 type: array
+              securityAttributes:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Security attributes for this resource. Each key is predefined and scoped to a namespace.
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                  Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}`
+                type: object
               status:
                 properties:
                   async:

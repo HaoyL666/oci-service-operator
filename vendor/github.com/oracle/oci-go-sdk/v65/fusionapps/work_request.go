@@ -99,12 +99,16 @@ const (
 	WorkRequestOperationTypeRefreshFusionEnvironment                 WorkRequestOperationTypeEnum = "REFRESH_FUSION_ENVIRONMENT"
 	WorkRequestOperationTypeExecuteColdPatch                         WorkRequestOperationTypeEnum = "EXECUTE_COLD_PATCH"
 	WorkRequestOperationTypeDataMaskFusionEnvironment                WorkRequestOperationTypeEnum = "DATA_MASK_FUSION_ENVIRONMENT"
+	WorkRequestOperationTypeEnableVanityDomain                       WorkRequestOperationTypeEnum = "ENABLE_VANITY_DOMAIN"
+	WorkRequestOperationTypeDeleteVanityDomain                       WorkRequestOperationTypeEnum = "DELETE_VANITY_DOMAIN"
 	WorkRequestOperationTypeInitiateExtract                          WorkRequestOperationTypeEnum = "INITIATE_EXTRACT"
 	WorkRequestOperationTypeSubscriptionSuspend                      WorkRequestOperationTypeEnum = "SUBSCRIPTION_SUSPEND"
 	WorkRequestOperationTypeSubscriptionExpire                       WorkRequestOperationTypeEnum = "SUBSCRIPTION_EXPIRE"
 	WorkRequestOperationTypeSubscriptionUpdate                       WorkRequestOperationTypeEnum = "SUBSCRIPTION_UPDATE"
 	WorkRequestOperationTypeSubscriptionResume                       WorkRequestOperationTypeEnum = "SUBSCRIPTION_RESUME"
 	WorkRequestOperationTypeSubscriptionTerminate                    WorkRequestOperationTypeEnum = "SUBSCRIPTION_TERMINATE"
+	WorkRequestOperationTypeConfigureEmailSubdomain                  WorkRequestOperationTypeEnum = "CONFIGURE_EMAIL_SUBDOMAIN"
+	WorkRequestOperationTypeConfigureMicrosite                       WorkRequestOperationTypeEnum = "CONFIGURE_MICROSITE"
 )
 
 var mappingWorkRequestOperationTypeEnum = map[string]WorkRequestOperationTypeEnum{
@@ -129,12 +133,16 @@ var mappingWorkRequestOperationTypeEnum = map[string]WorkRequestOperationTypeEnu
 	"REFRESH_FUSION_ENVIRONMENT":                   WorkRequestOperationTypeRefreshFusionEnvironment,
 	"EXECUTE_COLD_PATCH":                           WorkRequestOperationTypeExecuteColdPatch,
 	"DATA_MASK_FUSION_ENVIRONMENT":                 WorkRequestOperationTypeDataMaskFusionEnvironment,
+	"ENABLE_VANITY_DOMAIN":                         WorkRequestOperationTypeEnableVanityDomain,
+	"DELETE_VANITY_DOMAIN":                         WorkRequestOperationTypeDeleteVanityDomain,
 	"INITIATE_EXTRACT":                             WorkRequestOperationTypeInitiateExtract,
 	"SUBSCRIPTION_SUSPEND":                         WorkRequestOperationTypeSubscriptionSuspend,
 	"SUBSCRIPTION_EXPIRE":                          WorkRequestOperationTypeSubscriptionExpire,
 	"SUBSCRIPTION_UPDATE":                          WorkRequestOperationTypeSubscriptionUpdate,
 	"SUBSCRIPTION_RESUME":                          WorkRequestOperationTypeSubscriptionResume,
 	"SUBSCRIPTION_TERMINATE":                       WorkRequestOperationTypeSubscriptionTerminate,
+	"CONFIGURE_EMAIL_SUBDOMAIN":                    WorkRequestOperationTypeConfigureEmailSubdomain,
+	"CONFIGURE_MICROSITE":                          WorkRequestOperationTypeConfigureMicrosite,
 }
 
 var mappingWorkRequestOperationTypeEnumLowerCase = map[string]WorkRequestOperationTypeEnum{
@@ -159,12 +167,16 @@ var mappingWorkRequestOperationTypeEnumLowerCase = map[string]WorkRequestOperati
 	"refresh_fusion_environment":                   WorkRequestOperationTypeRefreshFusionEnvironment,
 	"execute_cold_patch":                           WorkRequestOperationTypeExecuteColdPatch,
 	"data_mask_fusion_environment":                 WorkRequestOperationTypeDataMaskFusionEnvironment,
+	"enable_vanity_domain":                         WorkRequestOperationTypeEnableVanityDomain,
+	"delete_vanity_domain":                         WorkRequestOperationTypeDeleteVanityDomain,
 	"initiate_extract":                             WorkRequestOperationTypeInitiateExtract,
 	"subscription_suspend":                         WorkRequestOperationTypeSubscriptionSuspend,
 	"subscription_expire":                          WorkRequestOperationTypeSubscriptionExpire,
 	"subscription_update":                          WorkRequestOperationTypeSubscriptionUpdate,
 	"subscription_resume":                          WorkRequestOperationTypeSubscriptionResume,
 	"subscription_terminate":                       WorkRequestOperationTypeSubscriptionTerminate,
+	"configure_email_subdomain":                    WorkRequestOperationTypeConfigureEmailSubdomain,
+	"configure_microsite":                          WorkRequestOperationTypeConfigureMicrosite,
 }
 
 // GetWorkRequestOperationTypeEnumValues Enumerates the set of values for WorkRequestOperationTypeEnum
@@ -200,12 +212,16 @@ func GetWorkRequestOperationTypeEnumStringValues() []string {
 		"REFRESH_FUSION_ENVIRONMENT",
 		"EXECUTE_COLD_PATCH",
 		"DATA_MASK_FUSION_ENVIRONMENT",
+		"ENABLE_VANITY_DOMAIN",
+		"DELETE_VANITY_DOMAIN",
 		"INITIATE_EXTRACT",
 		"SUBSCRIPTION_SUSPEND",
 		"SUBSCRIPTION_EXPIRE",
 		"SUBSCRIPTION_UPDATE",
 		"SUBSCRIPTION_RESUME",
 		"SUBSCRIPTION_TERMINATE",
+		"CONFIGURE_EMAIL_SUBDOMAIN",
+		"CONFIGURE_MICROSITE",
 	}
 }
 

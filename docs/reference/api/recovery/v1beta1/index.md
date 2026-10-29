@@ -74,6 +74,7 @@ ProtectedDatabaseStatus defines the observed state of ProtectedDatabase.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `backupCloudLocation` | Indicates the cloud service environment where the protected database is provisioned. For example, Oracle Cloud or Microsoft Azure. | `string` | No | - | - |
 | `changeRate` | The percentage of data changes that exist in the database between successive incremental backups. | `number` | No | - | - |
 | `compartmentId` | The OCID of the compartment that contains the protected database. | `string` | No | - | - |
 | `compressionRatio` | The compression ratio of the protected database. The compression ratio represents the ratio of compressed block size to expanded block size. | `number` | No | - | - |
@@ -321,6 +322,7 @@ RecoveryServiceSubnetSpec defines the desired state of RecoveryServiceSubnet.
 | `displayName` | A user-provided name for the recovery service subnet. The 'displayName' does not have to be unique, and it can be modified. Avoid entering confidential information. | `string` | Yes | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `nsgIds` | A list of network security group (NSG) OCIDs that are associated with the Recovery Service subnet. You can specify a maximum of 5 unique OCIDs, which implies that you can associate a maximum of 5 NSGs to each Recovery Service subnet. Specify an empty array if you want to remove all the associated NSGs from a Recovery Service subnet. See NetworkSecurityGroup for more information. | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | Deprecated. One of the subnets associated with the Recovery Service subnet. | `string` | No | - | - |
 | `subnets` | A list of OCIDs of the subnets associated with the Recovery Service subnet. | `list[string]` | No | - | - |
 | `vcnId` | The OCID of the virtual cloud network (VCN) that contains the recovery service subnet. You can create a single recovery service subnet per VCN. | `string` | Yes | - | - |
@@ -340,6 +342,7 @@ RecoveryServiceSubnetStatus defines the observed state of RecoveryServiceSubnet.
 | `lifecycleDetails` | Detailed description about the current lifecycle state of the recovery service subnet. For example, it can be used to provide actionable information for a resource in a Failed state | `string` | No | - | - |
 | `lifecycleState` | The current state of the recovery service subnet. | `string` | No | - | - |
 | `nsgIds` | A list of network security group (NSG) OCIDs that are associated with the Recovery Service subnet. You can specify a maximum of 5 unique OCIDs, which implies that you can associate a maximum of 5 NSGs to each Recovery Service subnet. Specify an empty array if you want to remove all the associated NSGs from a Recovery Service subnet. See NetworkSecurityGroup for more information. | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | [`status`](#kind-recoveryservicesubnet-status-status) | - | `object` | Yes | - | - |
 | `subnetId` | Deprecated. One of the subnets associated with the Recovery Service subnet. | `string` | No | - | - |
 | `subnets` | A list of OCIDs of all the subnets associated with the Recovery Service subnet. | `list[string]` | No | - | - |

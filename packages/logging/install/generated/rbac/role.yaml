@@ -1,0 +1,48 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - logging.oracle.com
+  resources:
+  - loggroups
+  - logs
+  - logsavedsearches
+  - unifiedagentconfigurations
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - logging.oracle.com
+  resources:
+  - loggroups/finalizers
+  - logs/finalizers
+  - logsavedsearches/finalizers
+  - unifiedagentconfigurations/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - logging.oracle.com
+  resources:
+  - loggroups/status
+  - logs/status
+  - logsavedsearches/status
+  - unifiedagentconfigurations/status
+  verbs:
+  - get
+  - patch
+  - update

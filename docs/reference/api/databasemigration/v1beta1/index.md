@@ -54,6 +54,7 @@ AssessmentSpec defines the desired state of Assessment.
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags. Example: {"Department": "Finance"} | `map[string, string]` | No | - | - |
 | [`includeObjects`](#kind-assessment-spec-includeobjects) | Database objects to include from migration, cannot be specified alongside 'excludeObjects' | `list[object]` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `migrationScope` | Assessment migration scope. | `string` | No | - | - |
 | `networkSpeedMegabitPerSecond` | A network speed in Megabits per second. | `string` | Yes | - | - |
 | [`sourceDatabaseConnection`](#kind-assessment-spec-sourcedatabaseconnection) | AssessmentSourceDatabaseConnection defines nested fields for Assessment.SourceDatabaseConnection. | `object` | Yes | - | - |
 | [`targetDatabaseConnection`](#kind-assessment-spec-targetdatabaseconnection) | AssessmentTargetDatabaseConnection defines nested fields for Assessment.TargetDatabaseConnection. | `object` | Yes | - | - |
@@ -135,6 +136,7 @@ AssessmentStatus defines the observed state of Assessment.
 | `jsonData` | - | `string` | No | - | - |
 | `lifecycleState` | The current state of the Assessment resource. | `string` | No | - | - |
 | `migrationId` | The OCID of the resource being referenced. | `string` | No | - | - |
+| `migrationScope` | Assessment migration scope. | `string` | No | - | - |
 | `networkSpeedMegabitPerSecond` | A network speed in Megabits per second. | `string` | No | - | - |
 | [`sourceDatabaseConnection`](#kind-assessment-status-sourcedatabaseconnection) | AssessmentSourceDatabaseConnection defines nested fields for Assessment.SourceDatabaseConnection. | `object` | No | - | - |
 | [`status`](#kind-assessment-status-status) | - | `object` | Yes | - | - |
@@ -454,6 +456,7 @@ MigrationSpec defines the desired state of Migration.
 | [`includeObjects`](#kind-migration-spec-includeobjects) | Database objects to include from migration, cannot be specified alongside 'excludeObjects' | `list[object]` | No | - | - |
 | [`initialLoadSettings`](#kind-migration-spec-initialloadsettings) | MigrationInitialLoadSettings defines nested fields for Migration.InitialLoadSettings. | `object` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| [`migrationSettings`](#kind-migration-spec-migrationsettings) | MigrationSettings defines nested fields for Migration.MigrationSettings. | `object` | No | - | - |
 | `sourceContainerDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
 | `sourceDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
 | `sourceStandbyDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
@@ -626,8 +629,319 @@ MigrationInitialLoadSettings defines nested fields for Migration.InitialLoadSett
 | `isConsistent` | Enable (true) or disable (false) consistent data dumps by locking the instance for backup during the dump. | `boolean` | No | - | - |
 | `isIgnoreExistingObjects` | Import the dump even if it contains objects that already exist in the target schema in the MySQL instance. | `boolean` | No | - | - |
 | `isTzUtc` | Include a statement at the start of the dump to set the time zone to UTC. | `boolean` | No | - | - |
-| `jobMode` | MySql Job Mode | `string` | Yes | - | - |
+| `jobMode` | MySql Job Mode | `string` | No | - | - |
 | `primaryKeyCompatibility` | Primary key compatibility option | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings"></a>
+#### Spec.migrationSettings
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettings defines nested fields for Migration.MigrationSettings.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`advancedParameters`](#kind-migration-spec-migrationsettings-advancedparameters) | List of Migration Parameter objects. | `list[object]` | No | - | - |
+| [`advisorSettings`](#kind-migration-spec-migrationsettings-advisorsettings) | MigrationSettingsAdvisorSettings defines nested fields for Migration.MigrationSettings.AdvisorSettings. | `object` | No | - | - |
+| `bulkIncludeExcludeData` | Specifies the database objects to be excluded from the migration in bulk. The definition accepts input in a CSV format, newline separated for each entry. More details can be found in the documentation. | `string` | No | - | - |
+| [`dataTransferMediumDetails`](#kind-migration-spec-migrationsettings-datatransfermediumdetails) | MigrationSettingsDataTransferMediumDetails defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails. | `object` | No | - | - |
+| [`excludeObjects`](#kind-migration-spec-migrationsettings-excludeobjects) | Database objects to exclude from migration, cannot be specified alongside 'includeObjects' | `list[object]` | No | - | - |
+| [`ggsDetails`](#kind-migration-spec-migrationsettings-ggsdetails) | MigrationSettingsGgsDetails defines nested fields for Migration.MigrationSettings.GgsDetails. | `object` | No | - | - |
+| [`hubDetails`](#kind-migration-spec-migrationsettings-hubdetails) | MigrationSettingsHubDetails defines nested fields for Migration.MigrationSettings.HubDetails. | `object` | No | - | - |
+| [`includeObjects`](#kind-migration-spec-migrationsettings-includeobjects) | Database objects to include from migration, cannot be specified alongside 'excludeObjects' | `list[object]` | No | - | - |
+| [`initialLoadSettings`](#kind-migration-spec-migrationsettings-initialloadsettings) | MigrationSettingsInitialLoadSettings defines nested fields for Migration.MigrationSettings.InitialLoadSettings. | `object` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `migrationMethod` | - | `string` | No | - | - |
+| `sourceContainerDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
+| `sourceStandbyDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-advancedparameters"></a>
+##### Spec.migrationSettings.advancedParameters[]
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsAdvancedParameter defines nested fields for Migration.MigrationSettings.AdvancedParameter.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `dataType` | Parameter data type. | `string` | Yes | - | - |
+| `name` | Parameter name. | `string` | Yes | - | - |
+| `value` | If a STRING data type then the value should be an array of characters, if a INTEGER data type then the value should be an integer value, if a FLOAT data type then the value should be an float value, if a BOOLEAN data type then the value should be TRUE or FALSE. | `string` | Yes | - | - |
+
+<a id="kind-migration-spec-migrationsettings-advisorsettings"></a>
+##### Spec.migrationSettings.advisorSettings
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsAdvisorSettings defines nested fields for Migration.MigrationSettings.AdvisorSettings.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `isIgnoreErrors` | True to not interrupt migration execution due to Pre-Migration Advisor errors. Default is false. | `boolean` | No | - | - |
+| `isSkipAdvisor` | True to skip the Pre-Migration Advisor execution. Default is false. | `boolean` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-datatransfermediumdetails"></a>
+##### Spec.migrationSettings.dataTransferMediumDetails
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsDataTransferMediumDetails defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `accessKeyId` | AWS access key credentials identifier Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `name` | Name of database link from OCI database to on-premise database. ODMS will create link, if the link does not already exist. | `string` | No | - | - |
+| [`objectStorageBucket`](#kind-migration-spec-migrationsettings-datatransfermediumdetails-objectstoragebucket) | MigrationSettingsDataTransferMediumDetailsObjectStorageBucket defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.ObjectStorageBucket. | `object` | No | - | - |
+| `region` | AWS region code where the S3 bucket is located. Region code should match the documented available regions: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions | `string` | No | - | - |
+| `secretAccessKey` | AWS secret access key credentials Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys | `string` | No | - | - |
+| `sharedStorageMountTargetId` | OCID of the shared storage mount target | `string` | No | - | - |
+| [`source`](#kind-migration-spec-migrationsettings-datatransfermediumdetails-source) | MigrationSettingsDataTransferMediumDetailsSource defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Source. | `object` | No | - | - |
+| [`target`](#kind-migration-spec-migrationsettings-datatransfermediumdetails-target) | MigrationSettingsDataTransferMediumDetailsTarget defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Target. | `object` | No | - | - |
+| `type` | - | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-datatransfermediumdetails-objectstoragebucket"></a>
+###### Spec.migrationSettings.dataTransferMediumDetails.objectStorageBucket
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsDataTransferMediumDetailsObjectStorageBucket defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.ObjectStorageBucket.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucketName` | Bucket name. | `string` | Yes | - | - |
+| `namespaceName` | Namespace name of the object store bucket. | `string` | Yes | - | - |
+
+<a id="kind-migration-spec-migrationsettings-datatransfermediumdetails-source"></a>
+###### Spec.migrationSettings.dataTransferMediumDetails.source
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsDataTransferMediumDetailsSource defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Source.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+| `ociHome` | Path to the OCI CLI installation in the node. | `string` | No | - | - |
+| `walletLocation` | Directory path to OCI SSL wallet location on Db server node. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-datatransfermediumdetails-target"></a>
+###### Spec.migrationSettings.dataTransferMediumDetails.target
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsDataTransferMediumDetailsTarget defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Target.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+| `ociHome` | Path to the OCI CLI installation in the node. | `string` | No | - | - |
+| `walletLocation` | Directory path to OCI SSL wallet location on Db server node. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-excludeobjects"></a>
+##### Spec.migrationSettings.excludeObjects[]
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsExcludeObject defines nested fields for Migration.MigrationSettings.ExcludeObject.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `isOmitExcludedTableFromReplication` | Whether an excluded table should be omitted from replication. Only valid for database objects that have are of type TABLE and object status EXCLUDE. | `boolean` | No | - | - |
+| `objectName` | Name of the object (regular expression is allowed) | `string` | Yes | - | - |
+| `owner` | Owner of the object (regular expression is allowed) | `string` | Yes | - | - |
+| `type` | Type of object to exclude. If not specified, matching owners and object names of type TABLE would be excluded. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-ggsdetails"></a>
+##### Spec.migrationSettings.ggsDetails
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsGgsDetails defines nested fields for Migration.MigrationSettings.GgsDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `acceptableLag` | ODMS will monitor GoldenGate end-to-end latency until the lag time is lower than the specified value in seconds. | `integer` | No | - | - |
+| [`extract`](#kind-migration-spec-migrationsettings-ggsdetails-extract) | MigrationSettingsGgsDetailsExtract defines nested fields for Migration.MigrationSettings.GgsDetails.Extract. | `object` | No | - | - |
+| [`replicat`](#kind-migration-spec-migrationsettings-ggsdetails-replicat) | MigrationSettingsGgsDetailsReplicat defines nested fields for Migration.MigrationSettings.GgsDetails.Replicat. | `object` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-ggsdetails-extract"></a>
+###### Spec.migrationSettings.ggsDetails.extract
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsGgsDetailsExtract defines nested fields for Migration.MigrationSettings.GgsDetails.Extract.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `longTransDuration` | Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running. If not specified, Extract will not generate a warning on long-running transactions. | `integer` | No | - | - |
+| `performanceProfile` | Extract performance. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-ggsdetails-replicat"></a>
+###### Spec.migrationSettings.ggsDetails.replicat
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsGgsDetailsReplicat defines nested fields for Migration.MigrationSettings.GgsDetails.Replicat.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `performanceProfile` | Replicat performance. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-hubdetails"></a>
+##### Spec.migrationSettings.hubDetails
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsHubDetails defines nested fields for Migration.MigrationSettings.HubDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `acceptableLag` | ODMS will monitor GoldenGate end-to-end latency until the lag time is lower than the specified value in seconds. | `integer` | No | - | - |
+| `computeId` | The OCID of the resource being referenced. | `string` | No | - | - |
+| [`extract`](#kind-migration-spec-migrationsettings-hubdetails-extract) | MigrationSettingsHubDetailsExtract defines nested fields for Migration.MigrationSettings.HubDetails.Extract. | `object` | No | - | - |
+| `keyId` | The OCID of the resource being referenced. | `string` | Yes | - | - |
+| [`replicat`](#kind-migration-spec-migrationsettings-hubdetails-replicat) | MigrationSettingsHubDetailsReplicat defines nested fields for Migration.MigrationSettings.HubDetails.Replicat. | `object` | No | - | - |
+| [`restAdminCredentials`](#kind-migration-spec-migrationsettings-hubdetails-restadmincredentials) | MigrationSettingsHubDetailsRestAdminCredentials defines nested fields for Migration.MigrationSettings.HubDetails.RestAdminCredentials. | `object` | Yes | - | - |
+| `url` | Endpoint URL. | `string` | Yes | - | - |
+| `vaultId` | The OCID of the resource being referenced. | `string` | Yes | - | - |
+
+<a id="kind-migration-spec-migrationsettings-hubdetails-extract"></a>
+###### Spec.migrationSettings.hubDetails.extract
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsHubDetailsExtract defines nested fields for Migration.MigrationSettings.HubDetails.Extract.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `longTransDuration` | Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running. If not specified, Extract will not generate a warning on long-running transactions. | `integer` | No | - | - |
+| `performanceProfile` | Extract performance. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-hubdetails-replicat"></a>
+###### Spec.migrationSettings.hubDetails.replicat
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsHubDetailsReplicat defines nested fields for Migration.MigrationSettings.HubDetails.Replicat.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `performanceProfile` | Replicat performance. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-hubdetails-restadmincredentials"></a>
+###### Spec.migrationSettings.hubDetails.restAdminCredentials
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsHubDetailsRestAdminCredentials defines nested fields for Migration.MigrationSettings.HubDetails.RestAdminCredentials.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `password` | Administrator password | `string` | Yes | - | - |
+| `username` | Administrator username | `string` | Yes | - | - |
+
+<a id="kind-migration-spec-migrationsettings-includeobjects"></a>
+##### Spec.migrationSettings.includeObjects[]
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsIncludeObject defines nested fields for Migration.MigrationSettings.IncludeObject.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `isOmitExcludedTableFromReplication` | Whether an excluded table should be omitted from replication. Only valid for database objects that have are of type TABLE and object status EXCLUDE. | `boolean` | No | - | - |
+| `objectName` | Name of the object (regular expression is allowed) | `string` | Yes | - | - |
+| `owner` | Owner of the object (regular expression is allowed) | `string` | Yes | - | - |
+| `type` | Type of object to exclude. If not specified, matching owners and object names of type TABLE would be excluded. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-initialloadsettings"></a>
+##### Spec.migrationSettings.initialLoadSettings
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsInitialLoadSettings defines nested fields for Migration.MigrationSettings.InitialLoadSettings.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`dataPumpParameters`](#kind-migration-spec-migrationsettings-initialloadsettings-datapumpparameters) | MigrationSettingsInitialLoadSettingsDataPumpParameters defines nested fields for Migration.MigrationSettings.InitialLoadSettings.DataPumpParameters. | `object` | No | - | - |
+| [`exportDirectoryObject`](#kind-migration-spec-migrationsettings-initialloadsettings-exportdirectoryobject) | MigrationSettingsInitialLoadSettingsExportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ExportDirectoryObject. | `object` | No | - | - |
+| [`importDirectoryObject`](#kind-migration-spec-migrationsettings-initialloadsettings-importdirectoryobject) | MigrationSettingsInitialLoadSettingsImportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ImportDirectoryObject. | `object` | No | - | - |
+| `jobMode` | Oracle Job Mode | `string` | No | - | - |
+| [`metadataRemaps`](#kind-migration-spec-migrationsettings-initialloadsettings-metadataremaps) | Defines remapping to be applied to objects as they are processed. | `list[object]` | No | - | - |
+| [`tablespaceDetails`](#kind-migration-spec-migrationsettings-initialloadsettings-tablespacedetails) | MigrationSettingsInitialLoadSettingsTablespaceDetails defines nested fields for Migration.MigrationSettings.InitialLoadSettings.TablespaceDetails. | `object` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-initialloadsettings-datapumpparameters"></a>
+###### Spec.migrationSettings.initialLoadSettings.dataPumpParameters
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsInitialLoadSettingsDataPumpParameters defines nested fields for Migration.MigrationSettings.InitialLoadSettings.DataPumpParameters.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `estimate` | Estimate size of dumps that will be generated. | `string` | No | - | - |
+| `excludeParameters` | Exclude paratemers for Export and Import. | `list[string]` | No | - | - |
+| `exportParallelismDegree` | Maximum number of worker processes that can be used for a Data Pump Export job. | `integer` | No | - | - |
+| `importParallelismDegree` | Maximum number of worker processes that can be used for a Data Pump Import job. For an Autonomous Database, ODMS will automatically query its CPU core count and set this property. | `integer` | No | - | - |
+| `isCluster` | Set to false to force Data Pump worker process to run on one instance. | `boolean` | No | - | - |
+| `tableExistsAction` | IMPORT: Specifies the action to be performed when data is loaded into a preexisting table. | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-initialloadsettings-exportdirectoryobject"></a>
+###### Spec.migrationSettings.initialLoadSettings.exportDirectoryObject
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsInitialLoadSettingsExportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ExportDirectoryObject.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `name` | Name of directory object in database | `string` | Yes | - | - |
+| `path` | Absolute path of directory on database server | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-initialloadsettings-importdirectoryobject"></a>
+###### Spec.migrationSettings.initialLoadSettings.importDirectoryObject
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsInitialLoadSettingsImportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ImportDirectoryObject.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `name` | Name of directory object in database | `string` | Yes | - | - |
+| `path` | Absolute path of directory on database server | `string` | No | - | - |
+
+<a id="kind-migration-spec-migrationsettings-initialloadsettings-metadataremaps"></a>
+###### Spec.migrationSettings.initialLoadSettings.metadataRemaps[]
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsInitialLoadSettingsMetadataRemap defines nested fields for Migration.MigrationSettings.InitialLoadSettings.MetadataRemap.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `newValue` | Specifies the new value that oldValue should be translated into. | `string` | Yes | - | - |
+| `oldValue` | Specifies the value which needs to be reset. | `string` | Yes | - | - |
+| `type` | Type of remap. Refer to METADATA_REMAP Procedure (https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_DATAPUMP.html#GUID-0FC32790-91E6-4781-87A3-229DE024CB3D) | `string` | Yes | - | - |
+
+<a id="kind-migration-spec-migrationsettings-initialloadsettings-tablespacedetails"></a>
+###### Spec.migrationSettings.initialLoadSettings.tablespaceDetails
+
+[Back to Migration spec](#kind-migration-spec)
+
+MigrationSettingsInitialLoadSettingsTablespaceDetails defines nested fields for Migration.MigrationSettings.InitialLoadSettings.TablespaceDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `blockSizeInKBs` | Size of Oracle database blocks in KB. | `string` | No | - | - |
+| `extendSizeInMBs` | Size of extend in MB. Can only be specified if 'isBigFile' property is set to true. | `integer` | No | - | - |
+| `isAutoCreate` | True to auto-create tablespace in the target Database. | `boolean` | No | - | - |
+| `isBigFile` | True set tablespace to big file. | `boolean` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `remapTarget` | Name of tablespace at target to which the source database tablespace need to be remapped. | `string` | No | - | - |
+| `targetType` | - | `string` | No | - | - |
 
 <a id="kind-migration-status"></a>
 ### Status
@@ -654,6 +968,7 @@ MigrationStatus defines the observed state of Migration.
 | `jsonData` | - | `string` | No | - | - |
 | `lifecycleDetails` | Additional status related to the execution and current state of the Migration. | `string` | No | - | - |
 | `lifecycleState` | The current state of the Migration resource. | `string` | No | - | - |
+| [`migrationSettings`](#kind-migration-status-migrationsettings) | MigrationSettingsObservedState defines nested fields for Migration.MigrationSettings. | `object` | No | - | - |
 | `sourceContainerDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
 | `sourceDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
 | `sourceStandbyDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
@@ -805,8 +1120,287 @@ MigrationInitialLoadSettings defines nested fields for Migration.InitialLoadSett
 | `isConsistent` | Enable (true) or disable (false) consistent data dumps by locking the instance for backup during the dump. | `boolean` | No | - | - |
 | `isIgnoreExistingObjects` | Import the dump even if it contains objects that already exist in the target schema in the MySQL instance. | `boolean` | No | - | - |
 | `isTzUtc` | Include a statement at the start of the dump to set the time zone to UTC. | `boolean` | No | - | - |
-| `jobMode` | MySql Job Mode | `string` | Yes | - | - |
+| `jobMode` | MySql Job Mode | `string` | No | - | - |
 | `primaryKeyCompatibility` | Primary key compatibility option | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings"></a>
+#### Status.migrationSettings
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsObservedState defines nested fields for Migration.MigrationSettings.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`advancedParameters`](#kind-migration-status-migrationsettings-advancedparameters) | List of Migration Parameter objects. | `list[object]` | No | - | - |
+| [`advisorSettings`](#kind-migration-status-migrationsettings-advisorsettings) | MigrationSettingsAdvisorSettings defines nested fields for Migration.MigrationSettings.AdvisorSettings. | `object` | No | - | - |
+| [`dataTransferMediumDetails`](#kind-migration-status-migrationsettings-datatransfermediumdetails) | MigrationSettingsDataTransferMediumDetails defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails. | `object` | No | - | - |
+| [`ggsDetails`](#kind-migration-status-migrationsettings-ggsdetails) | MigrationSettingsGgsDetails defines nested fields for Migration.MigrationSettings.GgsDetails. | `object` | No | - | - |
+| [`hubDetails`](#kind-migration-status-migrationsettings-hubdetails) | MigrationSettingsHubDetailsObservedState defines nested fields for Migration.MigrationSettings.HubDetails. | `object` | No | - | - |
+| [`initialLoadSettings`](#kind-migration-status-migrationsettings-initialloadsettings) | MigrationSettingsInitialLoadSettings defines nested fields for Migration.MigrationSettings.InitialLoadSettings. | `object` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `migrationMethod` | - | `string` | No | - | - |
+| `sourceContainerDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
+| `sourceStandbyDatabaseConnectionId` | The OCID of the resource being referenced. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-advancedparameters"></a>
+##### Status.migrationSettings.advancedParameters[]
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsAdvancedParameter defines nested fields for Migration.MigrationSettings.AdvancedParameter.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `dataType` | Parameter data type. | `string` | Yes | - | - |
+| `name` | Parameter name. | `string` | Yes | - | - |
+| `value` | If a STRING data type then the value should be an array of characters, if a INTEGER data type then the value should be an integer value, if a FLOAT data type then the value should be an float value, if a BOOLEAN data type then the value should be TRUE or FALSE. | `string` | Yes | - | - |
+
+<a id="kind-migration-status-migrationsettings-advisorsettings"></a>
+##### Status.migrationSettings.advisorSettings
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsAdvisorSettings defines nested fields for Migration.MigrationSettings.AdvisorSettings.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `isIgnoreErrors` | True to not interrupt migration execution due to Pre-Migration Advisor errors. Default is false. | `boolean` | No | - | - |
+| `isSkipAdvisor` | True to skip the Pre-Migration Advisor execution. Default is false. | `boolean` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-datatransfermediumdetails"></a>
+##### Status.migrationSettings.dataTransferMediumDetails
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsDataTransferMediumDetails defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `accessKeyId` | AWS access key credentials identifier Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `name` | Name of database link from OCI database to on-premise database. ODMS will create link, if the link does not already exist. | `string` | No | - | - |
+| [`objectStorageBucket`](#kind-migration-status-migrationsettings-datatransfermediumdetails-objectstoragebucket) | MigrationSettingsDataTransferMediumDetailsObjectStorageBucket defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.ObjectStorageBucket. | `object` | No | - | - |
+| `region` | AWS region code where the S3 bucket is located. Region code should match the documented available regions: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions | `string` | No | - | - |
+| `secretAccessKey` | AWS secret access key credentials Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys | `string` | No | - | - |
+| `sharedStorageMountTargetId` | OCID of the shared storage mount target | `string` | No | - | - |
+| [`source`](#kind-migration-status-migrationsettings-datatransfermediumdetails-source) | MigrationSettingsDataTransferMediumDetailsSource defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Source. | `object` | No | - | - |
+| [`target`](#kind-migration-status-migrationsettings-datatransfermediumdetails-target) | MigrationSettingsDataTransferMediumDetailsTarget defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Target. | `object` | No | - | - |
+| `type` | - | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-datatransfermediumdetails-objectstoragebucket"></a>
+###### Status.migrationSettings.dataTransferMediumDetails.objectStorageBucket
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsDataTransferMediumDetailsObjectStorageBucket defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.ObjectStorageBucket.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bucketName` | Bucket name. | `string` | Yes | - | - |
+| `namespaceName` | Namespace name of the object store bucket. | `string` | Yes | - | - |
+
+<a id="kind-migration-status-migrationsettings-datatransfermediumdetails-source"></a>
+###### Status.migrationSettings.dataTransferMediumDetails.source
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsDataTransferMediumDetailsSource defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Source.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+| `ociHome` | Path to the OCI CLI installation in the node. | `string` | No | - | - |
+| `walletLocation` | Directory path to OCI SSL wallet location on Db server node. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-datatransfermediumdetails-target"></a>
+###### Status.migrationSettings.dataTransferMediumDetails.target
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsDataTransferMediumDetailsTarget defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Target.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `jsonData` | - | `string` | No | - | - |
+| `kind` | - | `string` | No | - | - |
+| `ociHome` | Path to the OCI CLI installation in the node. | `string` | No | - | - |
+| `walletLocation` | Directory path to OCI SSL wallet location on Db server node. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-ggsdetails"></a>
+##### Status.migrationSettings.ggsDetails
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsGgsDetails defines nested fields for Migration.MigrationSettings.GgsDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `acceptableLag` | ODMS will monitor GoldenGate end-to-end latency until the lag time is lower than the specified value in seconds. | `integer` | No | - | - |
+| [`extract`](#kind-migration-status-migrationsettings-ggsdetails-extract) | MigrationSettingsGgsDetailsExtract defines nested fields for Migration.MigrationSettings.GgsDetails.Extract. | `object` | No | - | - |
+| [`replicat`](#kind-migration-status-migrationsettings-ggsdetails-replicat) | MigrationSettingsGgsDetailsReplicat defines nested fields for Migration.MigrationSettings.GgsDetails.Replicat. | `object` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-ggsdetails-extract"></a>
+###### Status.migrationSettings.ggsDetails.extract
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsGgsDetailsExtract defines nested fields for Migration.MigrationSettings.GgsDetails.Extract.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `longTransDuration` | Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running. If not specified, Extract will not generate a warning on long-running transactions. | `integer` | No | - | - |
+| `performanceProfile` | Extract performance. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-ggsdetails-replicat"></a>
+###### Status.migrationSettings.ggsDetails.replicat
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsGgsDetailsReplicat defines nested fields for Migration.MigrationSettings.GgsDetails.Replicat.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `performanceProfile` | Replicat performance. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-hubdetails"></a>
+##### Status.migrationSettings.hubDetails
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsHubDetailsObservedState defines nested fields for Migration.MigrationSettings.HubDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `acceptableLag` | ODMS will monitor GoldenGate end-to-end latency until the lag time is lower than the specified value in seconds. | `integer` | No | - | - |
+| `computeId` | The OCID of the resource being referenced. | `string` | No | - | - |
+| [`extract`](#kind-migration-status-migrationsettings-hubdetails-extract) | MigrationSettingsHubDetailsExtract defines nested fields for Migration.MigrationSettings.HubDetails.Extract. | `object` | No | - | - |
+| `keyId` | The OCID of the resource being referenced. | `string` | No | - | - |
+| [`replicat`](#kind-migration-status-migrationsettings-hubdetails-replicat) | MigrationSettingsHubDetailsReplicat defines nested fields for Migration.MigrationSettings.HubDetails.Replicat. | `object` | No | - | - |
+| [`restAdminCredentials`](#kind-migration-status-migrationsettings-hubdetails-restadmincredentials) | MigrationSettingsHubDetailsRestAdminCredentialsObservedState defines nested fields for Migration.MigrationSettings.HubDetails.RestAdminCredentials. | `object` | No | - | - |
+| `url` | Endpoint URL. | `string` | No | - | - |
+| `vaultId` | The OCID of the resource being referenced. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-hubdetails-extract"></a>
+###### Status.migrationSettings.hubDetails.extract
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsHubDetailsExtract defines nested fields for Migration.MigrationSettings.HubDetails.Extract.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `longTransDuration` | Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running. If not specified, Extract will not generate a warning on long-running transactions. | `integer` | No | - | - |
+| `performanceProfile` | Extract performance. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-hubdetails-replicat"></a>
+###### Status.migrationSettings.hubDetails.replicat
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsHubDetailsReplicat defines nested fields for Migration.MigrationSettings.HubDetails.Replicat.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `performanceProfile` | Replicat performance. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-hubdetails-restadmincredentials"></a>
+###### Status.migrationSettings.hubDetails.restAdminCredentials
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsHubDetailsRestAdminCredentialsObservedState defines nested fields for Migration.MigrationSettings.HubDetails.RestAdminCredentials.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `username` | Administrator username | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-initialloadsettings"></a>
+##### Status.migrationSettings.initialLoadSettings
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsInitialLoadSettings defines nested fields for Migration.MigrationSettings.InitialLoadSettings.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`dataPumpParameters`](#kind-migration-status-migrationsettings-initialloadsettings-datapumpparameters) | MigrationSettingsInitialLoadSettingsDataPumpParameters defines nested fields for Migration.MigrationSettings.InitialLoadSettings.DataPumpParameters. | `object` | No | - | - |
+| [`exportDirectoryObject`](#kind-migration-status-migrationsettings-initialloadsettings-exportdirectoryobject) | MigrationSettingsInitialLoadSettingsExportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ExportDirectoryObject. | `object` | No | - | - |
+| [`importDirectoryObject`](#kind-migration-status-migrationsettings-initialloadsettings-importdirectoryobject) | MigrationSettingsInitialLoadSettingsImportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ImportDirectoryObject. | `object` | No | - | - |
+| `jobMode` | Oracle Job Mode | `string` | No | - | - |
+| [`metadataRemaps`](#kind-migration-status-migrationsettings-initialloadsettings-metadataremaps) | Defines remapping to be applied to objects as they are processed. | `list[object]` | No | - | - |
+| [`tablespaceDetails`](#kind-migration-status-migrationsettings-initialloadsettings-tablespacedetails) | MigrationSettingsInitialLoadSettingsTablespaceDetails defines nested fields for Migration.MigrationSettings.InitialLoadSettings.TablespaceDetails. | `object` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-initialloadsettings-datapumpparameters"></a>
+###### Status.migrationSettings.initialLoadSettings.dataPumpParameters
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsInitialLoadSettingsDataPumpParameters defines nested fields for Migration.MigrationSettings.InitialLoadSettings.DataPumpParameters.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `estimate` | Estimate size of dumps that will be generated. | `string` | No | - | - |
+| `excludeParameters` | Exclude paratemers for Export and Import. | `list[string]` | No | - | - |
+| `exportParallelismDegree` | Maximum number of worker processes that can be used for a Data Pump Export job. | `integer` | No | - | - |
+| `importParallelismDegree` | Maximum number of worker processes that can be used for a Data Pump Import job. For an Autonomous Database, ODMS will automatically query its CPU core count and set this property. | `integer` | No | - | - |
+| `isCluster` | Set to false to force Data Pump worker process to run on one instance. | `boolean` | No | - | - |
+| `tableExistsAction` | IMPORT: Specifies the action to be performed when data is loaded into a preexisting table. | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-initialloadsettings-exportdirectoryobject"></a>
+###### Status.migrationSettings.initialLoadSettings.exportDirectoryObject
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsInitialLoadSettingsExportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ExportDirectoryObject.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `name` | Name of directory object in database | `string` | Yes | - | - |
+| `path` | Absolute path of directory on database server | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-initialloadsettings-importdirectoryobject"></a>
+###### Status.migrationSettings.initialLoadSettings.importDirectoryObject
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsInitialLoadSettingsImportDirectoryObject defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ImportDirectoryObject.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `name` | Name of directory object in database | `string` | Yes | - | - |
+| `path` | Absolute path of directory on database server | `string` | No | - | - |
+
+<a id="kind-migration-status-migrationsettings-initialloadsettings-metadataremaps"></a>
+###### Status.migrationSettings.initialLoadSettings.metadataRemaps[]
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsInitialLoadSettingsMetadataRemap defines nested fields for Migration.MigrationSettings.InitialLoadSettings.MetadataRemap.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `newValue` | Specifies the new value that oldValue should be translated into. | `string` | Yes | - | - |
+| `oldValue` | Specifies the value which needs to be reset. | `string` | Yes | - | - |
+| `type` | Type of remap. Refer to METADATA_REMAP Procedure (https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_DATAPUMP.html#GUID-0FC32790-91E6-4781-87A3-229DE024CB3D) | `string` | Yes | - | - |
+
+<a id="kind-migration-status-migrationsettings-initialloadsettings-tablespacedetails"></a>
+###### Status.migrationSettings.initialLoadSettings.tablespaceDetails
+
+[Back to Migration status](#kind-migration-status)
+
+MigrationSettingsInitialLoadSettingsTablespaceDetails defines nested fields for Migration.MigrationSettings.InitialLoadSettings.TablespaceDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `blockSizeInKBs` | Size of Oracle database blocks in KB. | `string` | No | - | - |
+| `extendSizeInMBs` | Size of extend in MB. Can only be specified if 'isBigFile' property is set to true. | `integer` | No | - | - |
+| `isAutoCreate` | True to auto-create tablespace in the target Database. | `boolean` | No | - | - |
+| `isBigFile` | True set tablespace to big file. | `boolean` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `remapTarget` | Name of tablespace at target to which the source database tablespace need to be remapped. | `string` | No | - | - |
+| `targetType` | - | `string` | No | - | - |
 
 <a id="kind-migration-status-status"></a>
 #### Status.status

@@ -51,6 +51,7 @@ ContainerInstanceSpec defines the desired state of ContainerInstance.
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `gracefulShutdownTimeoutInSeconds` | The amount of time that processes in a container have to gracefully end when the container must be stopped. For example, when you delete a container instance. After the timeout is reached, the processes are sent a signal to be deleted. | `integer (int64)` | No | - | - |
 | [`imagePullSecrets`](#kind-containerinstance-spec-imagepullsecrets) | The image pulls secrets so you can access private registry to pull container images. | `list[object]` | No | - | - |
+| [`securityContext`](#kind-containerinstance-spec-securitycontext) | ContainerInstanceSecurityContext defines nested fields for ContainerInstance.SecurityContext. | `object` | No | - | - |
 | `shape` | The shape of the container instance. The shape determines the resources available to the container instance. | `string` | Yes | - | - |
 | [`shapeConfig`](#kind-containerinstance-spec-shapeconfig) | ContainerInstanceShapeConfig defines nested fields for ContainerInstance.ShapeConfig. | `object` | Yes | - | - |
 | [`vnics`](#kind-containerinstance-spec-vnics) | The networks available to containers on this container instance. | `list[object]` | Yes | - | - |
@@ -198,6 +199,20 @@ ContainerInstanceImagePullSecret defines nested fields for ContainerInstance.Ima
 | `secretType` | - | `string` | No | - | - |
 | `username` | The username which should be used with the registry for authentication. The value is expected in base64 format. | `string` | No | - | - |
 
+<a id="kind-containerinstance-spec-securitycontext"></a>
+#### Spec.securityContext
+
+[Back to ContainerInstance spec](#kind-containerinstance-spec)
+
+ContainerInstanceSecurityContext defines nested fields for ContainerInstance.SecurityContext.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `fsGroup` | A special supplemental group that applies to all containers in the container instance. Some volume types allow the container instance to change ownership of the volume. The owning GID will be the fsGroup, the setgid bit will be set (new files will be owned by the fsGroup), and the permission bits are OR'd with rw-rw----. If unset, the container instance will not modify the ownership and permissions of volumes. | `integer` | No | - | - |
+| `fsGroupChangePolicy` | Defines behavior of changing ownership and permission of the volume before being exposed inside the containers. This only applies to volumes which support fsGroup ownership and permissions, and will have no effect on ephemeral volumes. ON_ROOT_MISMATCH only changes permissions and ownership if the permission and ownership of the root directory does not match the expected permissions and ownership of the volume. This can improve container instance start times. ALWAYS changes permission and ownership of the volume when it is mounted. If unset, ALWAYS is used. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `securityContextType` | - | `string` | No | - | - |
+
 <a id="kind-containerinstance-spec-shapeconfig"></a>
 #### Spec.shapeConfig
 
@@ -240,8 +255,13 @@ ContainerInstanceVolume defines nested fields for ContainerInstance.Volume.
 | --- | --- | --- | --- | --- | --- |
 | `backingStore` | The volume type of the empty directory, can be either File Storage or Memory. | `string` | No | - | - |
 | [`configs`](#kind-containerinstance-spec-volumes-configs) | Contains key value pairs which can be mounted as individual files inside the container. The value needs to be base64 encoded. It is decoded to plain text before the mount. | `list[object]` | No | - | - |
+| [`export`](#kind-containerinstance-spec-volumes-export) | ContainerInstanceVolumeExport defines nested fields for ContainerInstance.Volume.Export. | `object` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| [`mountCommand`](#kind-containerinstance-spec-volumes-mountcommand) | ContainerInstanceVolumeMountCommand defines nested fields for ContainerInstance.Volume.MountCommand. | `object` | No | - | - |
+| [`mountTarget`](#kind-containerinstance-spec-volumes-mounttarget) | ContainerInstanceVolumeMountTarget defines nested fields for ContainerInstance.Volume.MountTarget. | `object` | No | - | - |
 | `name` | The name of the volume. This must be unique within a single container instance. | `string` | Yes | - | - |
+| [`security`](#kind-containerinstance-spec-volumes-security) | ContainerInstanceVolumeSecurity defines nested fields for ContainerInstance.Volume.Security. | `object` | No | - | - |
+| `subnetId` | Specifies the network interface to be used for the OCI File Storage Service (FSS) volume. This is a required parameter when a Container Instance is attached to more than one subnets. | `string` | No | - | - |
 | `volumeType` | - | `string` | No | - | - |
 
 <a id="kind-containerinstance-spec-volumes-configs"></a>
@@ -256,6 +276,68 @@ ContainerInstanceVolumeConfig defines nested fields for ContainerInstance.Volume
 | `data` | The base64 encoded contents of the file. The contents are decoded to plain text before mounted as a file to a container inside container instance. | `string` | Yes | - | - |
 | `fileName` | The name of the file. The fileName should be unique across the volume. | `string` | Yes | - | - |
 | `path` | (Optional) Relative path for this file inside the volume mount directory. By default, the file is presented at the root of the volume mount path. | `string` | No | - | - |
+
+<a id="kind-containerinstance-spec-volumes-export"></a>
+##### Spec.volumes[].export
+
+[Back to ContainerInstance spec](#kind-containerinstance-spec)
+
+ContainerInstanceVolumeExport defines nested fields for ContainerInstance.Volume.Export.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `id` | The OCID of the OCI File Storage Service (FSS) Export. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `ociFssExportType` | - | `string` | No | - | - |
+
+<a id="kind-containerinstance-spec-volumes-mountcommand"></a>
+##### Spec.volumes[].mountCommand
+
+[Back to ContainerInstance spec](#kind-containerinstance-spec)
+
+ContainerInstanceVolumeMountCommand defines nested fields for ContainerInstance.Volume.MountCommand.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`mountOptions`](#kind-containerinstance-spec-volumes-mountcommand-mountoptions) | List of mount options to be used in the mount command. The order of this array will be maintained while preparing the mount command. | `list[object]` | No | - | - |
+
+<a id="kind-containerinstance-spec-volumes-mountcommand-mountoptions"></a>
+###### Spec.volumes[].mountCommand.mountOptions[]
+
+[Back to ContainerInstance spec](#kind-containerinstance-spec)
+
+ContainerInstanceVolumeMountCommandMountOption defines nested fields for ContainerInstance.Volume.MountCommand.MountOption.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `option` | A generic (https://man7.org/linux/man-pages/man8/mount.8.html) or nfs (https://man7.org/linux/man-pages/man5/nfs.5.html) mount option. | `string` | Yes | - | - |
+| `value` | The value of the mount option. | `string` | No | - | - |
+
+<a id="kind-containerinstance-spec-volumes-mounttarget"></a>
+##### Spec.volumes[].mountTarget
+
+[Back to ContainerInstance spec](#kind-containerinstance-spec)
+
+ContainerInstanceVolumeMountTarget defines nested fields for ContainerInstance.Volume.MountTarget.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `id` | The OCID of the OCI File Storage Service (FSS) Mount Target. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `ociFssMountTargetType` | - | `string` | No | - | - |
+
+<a id="kind-containerinstance-spec-volumes-security"></a>
+##### Spec.volumes[].security
+
+[Back to ContainerInstance spec](#kind-containerinstance-spec)
+
+ContainerInstanceVolumeSecurity defines nested fields for ContainerInstance.Volume.Security.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `auth` | - | `string` | No | - | - |
+| `isEncryptedInTransit` | Determines whether in-transit encryption needs to be enables. Check https://docs.oracle.com/en-us/iaas/Content/File/Tasks/intransitencryption.htm#Using_Intransit_Encryption for more details. | `boolean` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
 
 <a id="kind-containerinstance-status"></a>
 ### Status
@@ -279,10 +361,12 @@ ContainerInstanceStatus defines the observed state of ContainerInstance.
 | [`imagePullSecrets`](#kind-containerinstance-status-imagepullsecrets) | The image pulls secrets so you can access private registry to pull container images. | `list[object]` | No | - | - |
 | `lifecycleDetails` | A message that describes the current state of the container in more detail. Can be used to provide actionable information. | `string` | No | - | - |
 | `lifecycleState` | The current state of the container instance. | `string` | No | - | - |
+| [`securityContext`](#kind-containerinstance-status-securitycontext) | ContainerInstanceSecurityContext defines nested fields for ContainerInstance.SecurityContext. | `object` | No | - | - |
 | `shape` | The shape of the container instance. The shape determines the number of OCPUs, amount of memory, and other resources that are allocated to a container instance. | `string` | No | - | - |
 | [`shapeConfig`](#kind-containerinstance-status-shapeconfig) | ContainerInstanceShapeConfigObservedState defines nested fields for ContainerInstance.ShapeConfig. | `object` | No | - | - |
 | [`status`](#kind-containerinstance-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`. | `map[string, map[string, string]]` | No | - | - |
+| `tenantId` | TenantId id of the container instance. | `string` | No | - | - |
 | `timeCreated` | The time the container instance was created, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
 | `timeUpdated` | The time the container instance was updated, in the format defined by RFC 3339 (https://tools.ietf.org/rfc/rfc3339). | `string` | No | - | - |
 | [`vnics`](#kind-containerinstance-status-vnics) | The virtual networks available to the containers in the container instance. | `list[object]` | No | - | - |
@@ -327,6 +411,20 @@ ContainerInstanceImagePullSecretObservedState defines nested fields for Containe
 | `registryEndpoint` | The registry endpoint of the container image. | `string` | No | - | - |
 | `secretId` | The OCID of the secret for registry credentials. | `string` | No | - | - |
 | `secretType` | - | `string` | No | - | - |
+
+<a id="kind-containerinstance-status-securitycontext"></a>
+#### Status.securityContext
+
+[Back to ContainerInstance status](#kind-containerinstance-status)
+
+ContainerInstanceSecurityContext defines nested fields for ContainerInstance.SecurityContext.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `fsGroup` | A special supplemental group that applies to all containers in the container instance. Some volume types allow the container instance to change ownership of the volume. The owning GID will be the fsGroup, the setgid bit will be set (new files will be owned by the fsGroup), and the permission bits are OR'd with rw-rw----. If unset, the container instance will not modify the ownership and permissions of volumes. | `integer` | No | - | - |
+| `fsGroupChangePolicy` | Defines behavior of changing ownership and permission of the volume before being exposed inside the containers. This only applies to volumes which support fsGroup ownership and permissions, and will have no effect on ephemeral volumes. ON_ROOT_MISMATCH only changes permissions and ownership if the permission and ownership of the root directory does not match the expected permissions and ownership of the volume. This can improve container instance start times. ALWAYS changes permission and ownership of the volume when it is mounted. If unset, ALWAYS is used. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `securityContextType` | - | `string` | No | - | - |
 
 <a id="kind-containerinstance-status-shapeconfig"></a>
 #### Status.shapeConfig
@@ -423,8 +521,13 @@ ContainerInstanceVolumeObservedState defines nested fields for ContainerInstance
 | --- | --- | --- | --- | --- | --- |
 | `backingStore` | The volume type of the empty directory, can be either File Storage or Memory. | `string` | No | - | - |
 | [`configs`](#kind-containerinstance-status-volumes-configs) | Contains string key value pairs which can be mounted as individual files inside the container. The value needs to be base64 encoded. It is decoded to plain text before the mount. | `list[object]` | No | - | - |
+| [`export`](#kind-containerinstance-status-volumes-export) | ContainerInstanceVolumeExport defines nested fields for ContainerInstance.Volume.Export. | `object` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| [`mountCommand`](#kind-containerinstance-status-volumes-mountcommand) | ContainerInstanceVolumeMountCommand defines nested fields for ContainerInstance.Volume.MountCommand. | `object` | No | - | - |
+| [`mountTarget`](#kind-containerinstance-status-volumes-mounttarget) | ContainerInstanceVolumeMountTarget defines nested fields for ContainerInstance.Volume.MountTarget. | `object` | No | - | - |
 | `name` | The name of the volume. This must be unique within a single container instance. | `string` | No | - | - |
+| [`security`](#kind-containerinstance-status-volumes-security) | ContainerInstanceVolumeSecurity defines nested fields for ContainerInstance.Volume.Security. | `object` | No | - | - |
+| `subnetId` | Specifies the network interface to be used for the OCI File Storage Service (FSS) volume. This is a required parameter when a Container Instance is attached to more than one subnets. | `string` | No | - | - |
 | `volumeType` | - | `string` | No | - | - |
 
 <a id="kind-containerinstance-status-volumes-configs"></a>
@@ -439,3 +542,65 @@ ContainerInstanceVolumeConfig defines nested fields for ContainerInstance.Volume
 | `data` | The base64 encoded contents of the file. The contents are decoded to plain text before mounted as a file to a container inside container instance. | `string` | Yes | - | - |
 | `fileName` | The name of the file. The fileName should be unique across the volume. | `string` | Yes | - | - |
 | `path` | (Optional) Relative path for this file inside the volume mount directory. By default, the file is presented at the root of the volume mount path. | `string` | No | - | - |
+
+<a id="kind-containerinstance-status-volumes-export"></a>
+##### Status.volumes[].export
+
+[Back to ContainerInstance status](#kind-containerinstance-status)
+
+ContainerInstanceVolumeExport defines nested fields for ContainerInstance.Volume.Export.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `id` | The OCID of the OCI File Storage Service (FSS) Export. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `ociFssExportType` | - | `string` | No | - | - |
+
+<a id="kind-containerinstance-status-volumes-mountcommand"></a>
+##### Status.volumes[].mountCommand
+
+[Back to ContainerInstance status](#kind-containerinstance-status)
+
+ContainerInstanceVolumeMountCommand defines nested fields for ContainerInstance.Volume.MountCommand.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| [`mountOptions`](#kind-containerinstance-status-volumes-mountcommand-mountoptions) | List of mount options to be used in the mount command. The order of this array will be maintained while preparing the mount command. | `list[object]` | No | - | - |
+
+<a id="kind-containerinstance-status-volumes-mountcommand-mountoptions"></a>
+###### Status.volumes[].mountCommand.mountOptions[]
+
+[Back to ContainerInstance status](#kind-containerinstance-status)
+
+ContainerInstanceVolumeMountCommandMountOption defines nested fields for ContainerInstance.Volume.MountCommand.MountOption.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `option` | A generic (https://man7.org/linux/man-pages/man8/mount.8.html) or nfs (https://man7.org/linux/man-pages/man5/nfs.5.html) mount option. | `string` | Yes | - | - |
+| `value` | The value of the mount option. | `string` | No | - | - |
+
+<a id="kind-containerinstance-status-volumes-mounttarget"></a>
+##### Status.volumes[].mountTarget
+
+[Back to ContainerInstance status](#kind-containerinstance-status)
+
+ContainerInstanceVolumeMountTarget defines nested fields for ContainerInstance.Volume.MountTarget.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `id` | The OCID of the OCI File Storage Service (FSS) Mount Target. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `ociFssMountTargetType` | - | `string` | No | - | - |
+
+<a id="kind-containerinstance-status-volumes-security"></a>
+##### Status.volumes[].security
+
+[Back to ContainerInstance status](#kind-containerinstance-status)
+
+ContainerInstanceVolumeSecurity defines nested fields for ContainerInstance.Volume.Security.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `auth` | - | `string` | No | - | - |
+| `isEncryptedInTransit` | Determines whether in-transit encryption needs to be enables. Check https://docs.oracle.com/en-us/iaas/Content/File/Tasks/intransitencryption.htm#Using_Intransit_Encryption for more details. | `boolean` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |

@@ -1,0 +1,54 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - iot.oracle.com
+  resources:
+  - digitaltwinadapters
+  - digitaltwininstances
+  - digitaltwinmodels
+  - digitaltwinrelationships
+  - iotdomaingroups
+  - iotdomains
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - iot.oracle.com
+  resources:
+  - digitaltwinadapters/finalizers
+  - digitaltwininstances/finalizers
+  - digitaltwinmodels/finalizers
+  - digitaltwinrelationships/finalizers
+  - iotdomaingroups/finalizers
+  - iotdomains/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - iot.oracle.com
+  resources:
+  - digitaltwinadapters/status
+  - digitaltwininstances/status
+  - digitaltwinmodels/status
+  - digitaltwinrelationships/status
+  - iotdomaingroups/status
+  - iotdomains/status
+  verbs:
+  - get
+  - patch
+  - update

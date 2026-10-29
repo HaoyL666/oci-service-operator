@@ -35,6 +35,9 @@ type ResourceAnalyticsInstanceSpec struct {
 	// Example: `["ocid...", "ocid..."]`
 	// +kubebuilder:validation:Optional
 	NsgIds []string `json:"nsgIds,omitempty"`
+	// The compute amount (CPUs) available to the Autonomous Database.
+	// +kubebuilder:validation:Optional
+	ComputeCount int `json:"computeCount,omitempty"`
 	// The Oracle license model that applies to the ADW instance.
 	// +kubebuilder:validation:Optional
 	LicenseModel string `json:"licenseModel,omitempty"`

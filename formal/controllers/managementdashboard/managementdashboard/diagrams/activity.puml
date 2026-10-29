@@ -102,10 +102,8 @@ scaffold_managementdashboard_managementdashboard
 filters compartment_id, state
 conflicts: none
 open gaps: none
-The pinned Terraform provider has no
-corresponding resource implementation.
-The credential-free evidence mock still
-exercises the production service manager and
-real OCI SDK through the full CRUD lifecycle.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 @enduml

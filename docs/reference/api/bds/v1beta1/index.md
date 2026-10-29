@@ -40,6 +40,7 @@ BdsInstanceSpec defines the desired state of BdsInstance.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`bdsCapacityReservationConfigurations`](#kind-bdsinstance-spec-bdscapacityreservationconfigurations) | Optional BDS capacity reservation configurations to associate with the cluster during creation. | `list[object]` | No | - | - |
 | [`bdsClusterVersionSummary`](#kind-bdsinstance-spec-bdsclusterversionsummary) | BdsInstanceBdsClusterVersionSummary defines nested fields for BdsInstance.BdsClusterVersionSummary. | `object` | No | - | - |
 | `bootstrapScriptUrl` | Pre-authenticated URL of the script in Object Store that is downloaded and executed. | `string` | No | - | - |
 | `clusterAdminPassword` | Base-64 encoded password for the cluster (and Cloudera Manager) admin user. Not required if the secretId is specified. | `string` | No | - | - |
@@ -59,6 +60,18 @@ BdsInstanceSpec defines the desired state of BdsInstance.
 | [`nodes`](#kind-bdsinstance-spec-nodes) | The list of nodes in the Big Data Service cluster. | `list[object]` | Yes | - | - |
 | `secretId` | The secretId for the clusterAdminPassword. | `string` | No | - | - |
 
+<a id="kind-bdsinstance-spec-bdscapacityreservationconfigurations"></a>
+#### Spec.bdsCapacityReservationConfigurations[]
+
+[Back to BdsInstance spec](#kind-bdsinstance-spec)
+
+BdsInstanceBdsCapacityReservationConfiguration defines nested fields for BdsInstance.BdsCapacityReservationConfiguration.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bdsCapacityReservationId` | The OCID of the BDS capacity reservation to associate with the BDS cluster. | `string` | Yes | - | - |
+| `displayName` | A user-friendly name for the BDS capacity reservation configuration. | `string` | Yes | - | - |
+
 <a id="kind-bdsinstance-spec-bdsclusterversionsummary"></a>
 #### Spec.bdsClusterVersionSummary
 
@@ -68,7 +81,7 @@ BdsInstanceBdsClusterVersionSummary defines nested fields for BdsInstance.BdsClu
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `bdsVersion` | BDS version to be used for cluster creation | `string` | Yes | - | - |
+| `bdsVersion` | BDS version to be used for cluster creation | `string` | No | - | - |
 | `odhVersion` | ODH version to be used for cluster creation | `string` | No | - | - |
 
 <a id="kind-bdsinstance-spec-networkconfig"></a>
@@ -118,6 +131,7 @@ BdsInstanceStatus defines the observed state of BdsInstance.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`bdsCapacityReservationConfigurations`](#kind-bdsinstance-status-bdscapacityreservationconfigurations) | The list of BDS capacity reservation configurations associated with the cluster. | `list[object]` | No | - | - |
 | [`bdsClusterVersionSummary`](#kind-bdsinstance-status-bdsclusterversionsummary) | BdsInstanceBdsClusterVersionSummary defines nested fields for BdsInstance.BdsClusterVersionSummary. | `object` | No | - | - |
 | `bootstrapScriptUrl` | pre-authenticated URL of the bootstrap script in Object Store that can be downloaded and executed. | `string` | No | - | - |
 | [`cloudSqlDetails`](#kind-bdsinstance-status-cloudsqldetails) | BdsInstanceCloudSqlDetails defines nested fields for BdsInstance.CloudSqlDetails. | `object` | No | - | - |
@@ -147,6 +161,18 @@ BdsInstanceStatus defines the observed state of BdsInstance.
 | `timeEarliestCertificateExpiration` | The earliest time of certificate expiration date across the certificates of all current nodes under this cluster. | `string` | No | - | - |
 | `timeUpdated` | The time the cluster was updated, shown as an RFC 3339 formatted datetime string. | `string` | No | - | - |
 
+<a id="kind-bdsinstance-status-bdscapacityreservationconfigurations"></a>
+#### Status.bdsCapacityReservationConfigurations[]
+
+[Back to BdsInstance status](#kind-bdsinstance-status)
+
+BdsInstanceBdsCapacityReservationConfiguration defines nested fields for BdsInstance.BdsCapacityReservationConfiguration.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `bdsCapacityReservationId` | The OCID of the BDS capacity reservation to associate with the BDS cluster. | `string` | Yes | - | - |
+| `displayName` | A user-friendly name for the BDS capacity reservation configuration. | `string` | Yes | - | - |
+
 <a id="kind-bdsinstance-status-bdsclusterversionsummary"></a>
 #### Status.bdsClusterVersionSummary
 
@@ -156,7 +182,7 @@ BdsInstanceBdsClusterVersionSummary defines nested fields for BdsInstance.BdsClu
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `bdsVersion` | BDS version to be used for cluster creation | `string` | Yes | - | - |
+| `bdsVersion` | BDS version to be used for cluster creation | `string` | No | - | - |
 | `odhVersion` | ODH version to be used for cluster creation | `string` | No | - | - |
 
 <a id="kind-bdsinstance-status-cloudsqldetails"></a>

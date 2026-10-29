@@ -52,6 +52,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security group. | `string` | No |
 | `lifecycleState` | The network security group's current state. | `string` | No |
 | [`status`](../../reference/api/core/v1beta1/index.md#kind-networksecuritygroup-status-status) | - | `object` | Yes |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }` | `map[string, map[string, string]]` | No |
 | `timeCreated` | The date and time the network security group was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). Example: `2016-08-25T21:10:29.600Z` | `string` | No |
 | `vcnId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security group's VCN. | `string` | No |
 

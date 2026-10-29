@@ -17,12 +17,6 @@ type BatchTaskProfileSpec struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment.
 	// +kubebuilder:validation:Required
 	CompartmentId string `json:"compartmentId"`
-	// The minimum required OCPUs.
-	// +kubebuilder:validation:Required
-	MinOcpus int `json:"minOcpus"`
-	// The minimum required memory.
-	// +kubebuilder:validation:Required
-	MinMemoryInGBs int `json:"minMemoryInGBs"`
 	// A user-friendly name. Does not have to be unique, and it's changeable.
 	// If not specified or provided as null or empty string, it be generated as "<resourceType><timeCreated>", where timeCreated corresponds with the resource creation time in ISO 8601 basic format, i.e. omitting separating punctuation, at second-level precision and no UTC offset. Example: batchtaskprofile20250914115623.
 	// +kubebuilder:validation:Optional
@@ -30,6 +24,17 @@ type BatchTaskProfileSpec struct {
 	// The batch task profile description.
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
+	// The minimum required OCPUs.
+	// +kubebuilder:validation:Optional
+	MinOcpus int `json:"minOcpus,omitempty"`
+	// The minimum required memory.
+	// +kubebuilder:validation:Optional
+	MinMemoryInGBs int `json:"minMemoryInGBs,omitempty"`
+	// The minimum required size of disk space in GBs.
+	// +kubebuilder:validation:Optional
+	MinDiskSizeInGBs int `json:"minDiskSizeInGBs,omitempty"`
+	// +kubebuilder:validation:Optional
+	ExtendedInformation BatchTaskProfileExtendedInformation `json:"extendedInformation,omitempty,omitzero"`
 	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Operations": {"CostCenter": "42"}}`
@@ -40,6 +45,20 @@ type BatchTaskProfileSpec struct {
 	// Example: `{"Department": "Finance"}`
 	// +kubebuilder:validation:Optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
+}
+
+// BatchTaskProfileExtendedInformation defines nested fields for BatchTaskProfile.ExtendedInformation.
+type BatchTaskProfileExtendedInformation struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	Type string `json:"type,omitempty"`
+	// A name of the GPU shape.
+	// +kubebuilder:validation:Optional
+	ShapeName string `json:"shapeName,omitempty"`
+	// Type of CPU architecture.
+	// +kubebuilder:validation:Optional
+	Architecture string `json:"architecture,omitempty"`
 }
 
 // BatchTaskProfileStatus defines the observed state of BatchTaskProfile.
@@ -73,6 +92,9 @@ type BatchTaskProfileStatus struct {
 	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 	// The batch task profile description.
 	Description string `json:"description,omitempty"`
+	// The minimum required size of disk space in GBs.
+	MinDiskSizeInGBs    int                                 `json:"minDiskSizeInGBs,omitempty"`
+	ExtendedInformation BatchTaskProfileExtendedInformation `json:"extendedInformation,omitempty"`
 	// The date and time the batch task profile was updated, in the format defined by RFC 3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeUpdated string `json:"timeUpdated,omitempty"`

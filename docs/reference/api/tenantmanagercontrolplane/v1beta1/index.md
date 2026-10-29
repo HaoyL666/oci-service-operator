@@ -164,6 +164,7 @@ DomainGovernanceStatus defines the observed state of DomainGovernance.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `compartmentId` | The OCID of the tenancy that owns this domain governance entity. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
 | `domainId` | The OCID of the domain associated with this domain governance entity. | `string` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |

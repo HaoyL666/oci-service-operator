@@ -370,6 +370,7 @@ ManagementStationSpec defines the desired state of ManagementStation.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `archType` | The architecture type. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the management station. | `string` | Yes | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | User-specified description of the management station. Avoid entering confidential information. | `string` | No | - | - |
@@ -378,6 +379,7 @@ ManagementStationSpec defines the desired state of ManagementStation.
 | `hostname` | Hostname of the management station. | `string` | Yes | - | - |
 | `isAutoConfigEnabled` | When enabled, the station setup script automatically runs to configure the firewall and SELinux settings on the station. | `boolean` | No | - | - |
 | [`mirror`](#kind-managementstation-spec-mirror) | ManagementStationMirror defines nested fields for ManagementStation.Mirror. | `object` | Yes | - | - |
+| `osFamily` | The operating system family. | `string` | No | - | - |
 | [`proxy`](#kind-managementstation-spec-proxy) | ManagementStationProxy defines nested fields for ManagementStation.Proxy. | `object` | Yes | - | - |
 
 <a id="kind-managementstation-spec-mirror"></a>
@@ -416,6 +418,7 @@ ManagementStationStatus defines the observed state of ManagementStation.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| `archType` | The architecture type. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the management station. | `string` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | User-specified description for the management station. | `string` | No | - | - |
@@ -437,6 +440,7 @@ ManagementStationStatus defines the observed state of ManagementStation.
 | `mirrorStorageSize` | Total mirror storage size in bytes. | `integer (int64)` | No | - | - |
 | [`mirrorSyncStatus`](#kind-managementstation-status-mirrorsyncstatus) | ManagementStationMirrorSyncStatus defines nested fields for ManagementStation.MirrorSyncStatus. | `object` | No | - | - |
 | `mirrorUniquePackageCount` | The total number of unique packages within the mirrored software sources on the station. Each package is counted only once, regardless of how many versions it has. | `integer` | No | - | - |
+| `osFamily` | The operating system family. | `string` | No | - | - |
 | `overallPercentage` | A decimal number representing the progress of the current mirror sync. | `integer` | No | - | - |
 | `overallState` | Current state of the mirror sync for the management station. | `string` | No | - | - |
 | [`peerManagementStations`](#kind-managementstation-status-peermanagementstations) | A list of other management stations that are behind the same load balancer within a high availability configuration. Stations are identified as peers if they have the same hostname and compartment. | `list[object]` | No | - | - |
@@ -597,13 +601,13 @@ ProfileSpec defines the desired state of Profile.
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment that contains the registration profile. | `string` | Yes | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | User-specified description of the registration profile. | `string` | No | - | - |
-| `displayName` | A user-friendly name. Does not have to be unique and you can change the name later. Avoid entering confidential information. | `string` | Yes | - | - |
+| `displayName` | A user-friendly name. Must be unique and you can change the name later. Avoid entering confidential information. | `string` | Yes | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `isDefaultProfile` | Indicates if the profile is set as the default. There is exactly one default profile for a specified architecture, OS family, registration type, and vendor. When registering an instance with the corresonding characteristics, the default profile is used, unless another profile is specified. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `lifecycleStageId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the lifecycle stage that the instance will be associated with. | `string` | No | - | - |
 | `managedInstanceGroupId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the managed instance group that the instance will join after registration. | `string` | No | - | - |
-| `managementStationId` | description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the management station to associate with an instance once registered. This is required when creating a profile for non-OCI instances. | `string` | No | - | - |
+| `managementStationId` | description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the management station to associate with an instance once registered. This is used when creating a profile for non-OCI instances. | `string` | No | - | - |
 | `osFamily` | The operating system family. | `string` | No | - | - |
 | `profileType` | - | `string` | No | - | - |
 | `registrationType` | The type of instance to register. | `string` | No | - | - |
@@ -775,16 +779,17 @@ ScheduledJobSpec defines the desired state of ScheduledJob.
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | User-specified description of the scheduled job. Avoid entering confidential information. | `string` | No | - | - |
 | `displayName` | User-friendly name for the scheduled job. Does not have to be unique and you can change the name later. Avoid entering confidential information. | `string` | No | - | - |
+| `dynamicSetIds` | The dynamic set OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target. therefore this parameter is mutually exclusive with managedInstanceIds, managedInstanceGroupIds, lifecycleStageIds, managedCompartmentIds. | `list[string]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `isManagedByAutonomousLinux` | Indicates whether this scheduled job is managed by the Autonomous Linux service. | `boolean` | No | - | - |
 | `isSubcompartmentIncluded` | Indicates whether to apply the scheduled job to all compartments in the tenancy when managedCompartmentIds specifies the tenancy OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) (root compartment). | `boolean` | No | - | - |
-| `lifecycleStageIds` | The lifecycle stage OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceIds, or managedInstanceGroupIds, or managedCompartmentIds. | `list[string]` | No | - | - |
+| `lifecycleStageIds` | The lifecycle stage OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceIds, or managedInstanceGroupIds, or managedCompartmentIds, or dynamicSetIds. | `list[string]` | No | - | - |
 | `locations` | The list of locations this scheduled job should operate on for a job targeting on compartments. (Empty list means apply to all locations). This can only be set when managedCompartmentIds is not empty. | `list[string]` | No | - | - |
-| `managedCompartmentIds` | The compartment OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. To apply the job to all compartments in the tenancy, set this to the tenancy OCID (root compartment) and set isSubcompartmentIncluded to true. A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceIds, or managedInstanceGroupIds, or lifecycleStageIds. | `list[string]` | No | - | - |
-| `managedInstanceGroupIds` | The managed instance group OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceIds, or managedCompartmentIds, or lifecycleStageIds. | `list[string]` | No | - | - |
-| `managedInstanceIds` | The managed instance OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceGroupIds, or managedCompartmentIds, or lifecycleStageIds. | `list[string]` | No | - | - |
+| `managedCompartmentIds` | The compartment OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. To apply the job to all compartments in the tenancy, set this to the tenancy OCID (root compartment) and set isSubcompartmentIncluded to true. A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceIds, or managedInstanceGroupIds, or lifecycleStageIds, or dynamicSetIds. | `list[string]` | No | - | - |
+| `managedInstanceGroupIds` | The managed instance group OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceIds, or managedCompartmentIds, or lifecycleStageIds, or dynamicSetIds. | `list[string]` | No | - | - |
+| `managedInstanceIds` | The managed instance OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore you must supply either this or managedInstanceGroupIds, or managedCompartmentIds, or lifecycleStageIds, or dynamicSetIds. | `list[string]` | No | - | - |
 | [`operations`](#kind-scheduledjob-spec-operations) | The list of operations this scheduled job needs to perform. A scheduled job supports only one operation type, unless it is one of the following: * UPDATE_PACKAGES * UPDATE_ALL * UPDATE_SECURITY * UPDATE_BUGFIX * UPDATE_ENHANCEMENT * UPDATE_OTHER * UPDATE_KSPLICE_USERSPACE * UPDATE_KSPLICE_KERNEL | `list[object]` | Yes | - | - |
-| `recurringRule` | The frequency schedule for a recurring scheduled job. | `string` | No | - | - |
+| `recurringRule` | The frequency schedule for a recurring scheduled job in the RFC5535 (https://www.rfc-editor.org/rfc/rfc5535) format. Note: Currently, only FREQ/INTERVAL/BYMONTHDAY/BYDAY/BYSETPOS/BYMONTH/BYHOUR/BYMINUTE/BYSECOND rules are supported. In FREQ, only YEARLY, MONTHLY, WEEKLY, DAILY", HOURLY are supported. | `string` | No | - | - |
 | `retryIntervals` | The amount of time in minutes to wait until retrying the scheduled job. If set, the service will automatically retry a failed scheduled job after the interval. For example, you could set the interval to [2,5,10]. If the initial execution of the job fails, the service waits 2 minutes and then retries. If that fails, the service waits 5 minutes and then retries. If that fails, the service waits 10 minutes and then retries. | `list[integer]` | No | - | - |
 | `scheduleType` | The type of scheduling frequency for the scheduled job. | `string` | Yes | - | - |
 | `timeNextExecution` | The desired time of the next execution of this scheduled job (in RFC 3339 (https://tools.ietf.org/rfc/rfc3339) format). | `string` | Yes | - | - |
@@ -799,13 +804,31 @@ ScheduledJobOperation defines nested fields for ScheduledJob.Operation.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`installSnapDetails`](#kind-scheduledjob-spec-operations-installsnapdetails) | ScheduledJobOperationInstallSnapDetails defines nested fields for ScheduledJob.Operation.InstallSnapDetails. | `object` | No | - | - |
 | [`manageModuleStreamsDetails`](#kind-scheduledjob-spec-operations-managemodulestreamsdetails) | ScheduledJobOperationManageModuleStreamsDetails defines nested fields for ScheduledJob.Operation.ManageModuleStreamsDetails. | `object` | No | - | - |
 | `operationType` | The type of operation this scheduled job performs. | `string` | Yes | - | - |
 | `packageNames` | The names of the target packages. This parameter only applies when the scheduled job is for installing, updating, or removing packages. | `list[string]` | No | - | - |
 | `rebootTimeoutInMins` | The number of minutes the service waits for the reboot to complete. If the instance doesn't reboot within the timeout, the service marks the reboot job as failed. | `integer` | No | - | - |
+| [`removeSnapDetails`](#kind-scheduledjob-spec-operations-removesnapdetails) | ScheduledJobOperationRemoveSnapDetails defines nested fields for ScheduledJob.Operation.RemoveSnapDetails. | `object` | No | - | - |
 | `softwareSourceIds` | The software source OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm). This parameter only applies when the scheduled job is for attaching or detaching software sources. | `list[string]` | No | - | - |
 | [`switchModuleStreamsDetails`](#kind-scheduledjob-spec-operations-switchmodulestreamsdetails) | ScheduledJobOperationSwitchModuleStreamsDetails defines nested fields for ScheduledJob.Operation.SwitchModuleStreamsDetails. | `object` | No | - | - |
+| [`switchSnapChannelDetails`](#kind-scheduledjob-spec-operations-switchsnapchanneldetails) | ScheduledJobOperationSwitchSnapChannelDetails defines nested fields for ScheduledJob.Operation.SwitchSnapChannelDetails. | `object` | No | - | - |
 | `windowsUpdateNames` | Unique identifier for the Windows update. This parameter only applies if the scheduled job is for installing Windows updates. Note that this is not an OCID, but is a unique identifier assigned by Microsoft. For example: '6981d463-cd91-4a26-b7c4-ea4ded9183ed'. | `list[string]` | No | - | - |
+
+<a id="kind-scheduledjob-spec-operations-installsnapdetails"></a>
+##### Spec.operations[].installSnapDetails
+
+[Back to ScheduledJob spec](#kind-scheduledjob-spec)
+
+ScheduledJobOperationInstallSnapDetails defines nested fields for ScheduledJob.Operation.InstallSnapDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `channel` | The snap channel to install from (e.g. stable, 1.2/edge, beta, candidate, or a custom channel). | `string` | No | - | - |
+| `isSigned` | If false, allows installing snaps not signed by the Snap Store. E.g., snaps from local file. Use with caution. | `boolean` | No | - | - |
+| `mode` | The confinement mode for the snap. | `string` | No | - | - |
+| `name` | The name of the snap to install. | `string` | Yes | - | - |
+| `revision` | The snap revision to install. | `string` | No | - | - |
 
 <a id="kind-scheduledjob-spec-operations-managemodulestreamsdetails"></a>
 ##### Spec.operations[].manageModuleStreamsDetails
@@ -875,6 +898,18 @@ ScheduledJobOperationManageModuleStreamsDetailsRemove defines nested fields for 
 | `softwareSourceId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the software source that contains the module stream. | `string` | No | - | - |
 | `streamName` | The name of a stream of the specified module. | `string` | Yes | - | - |
 
+<a id="kind-scheduledjob-spec-operations-removesnapdetails"></a>
+##### Spec.operations[].removeSnapDetails
+
+[Back to ScheduledJob spec](#kind-scheduledjob-spec)
+
+ScheduledJobOperationRemoveSnapDetails defines nested fields for ScheduledJob.Operation.RemoveSnapDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `name` | The name of the snap to remove. | `string` | Yes | - | - |
+| `revision` | The revision to remove. Note: This option cannot be used when removing multiple snaps. | `string` | No | - | - |
+
 <a id="kind-scheduledjob-spec-operations-switchmodulestreamsdetails"></a>
 ##### Spec.operations[].switchModuleStreamsDetails
 
@@ -888,6 +923,18 @@ ScheduledJobOperationSwitchModuleStreamsDetails defines nested fields for Schedu
 | `softwareSourceId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the software source that contains the module stream. | `string` | No | - | - |
 | `streamName` | The name of a stream of the specified module. | `string` | Yes | - | - |
 
+<a id="kind-scheduledjob-spec-operations-switchsnapchanneldetails"></a>
+##### Spec.operations[].switchSnapChannelDetails
+
+[Back to ScheduledJob spec](#kind-scheduledjob-spec)
+
+ScheduledJobOperationSwitchSnapChannelDetails defines nested fields for ScheduledJob.Operation.SwitchSnapChannelDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `channel` | The channel to switch to (e.g. stable, edge, beta, candidate, or a custom channel). | `string` | No | - | - |
+| `name` | The name of the snap. | `string` | Yes | - | - |
+
 <a id="kind-scheduledjob-status"></a>
 ### Status
 
@@ -899,19 +946,20 @@ ScheduledJobStatus defines the observed state of ScheduledJob.
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | User-specified description for the scheduled job. | `string` | No | - | - |
 | `displayName` | User-friendly name for the scheduled job. | `string` | No | - | - |
+| `dynamicSetIds` | The dynamic set OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target. therefore this parameter is mutually exclusive with managedInstanceIds, managedInstanceGroupIds, and managedCompartmentIds. | `list[string]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the scheduled job. | `string` | No | - | - |
 | `isManagedByAutonomousLinux` | Indicates whether this scheduled job is managed by the Autonomous Linux service. | `boolean` | No | - | - |
 | `isRestricted` | Indicates if the schedule job has restricted update and deletion capabilities. For restricted scheduled jobs, you can update only the timeNextExecution, recurringRule, and tags. | `boolean` | No | - | - |
 | `isSubcompartmentIncluded` | Indicates whether to apply the scheduled job to all compartments in the tenancy when managedCompartmentIds specifies the tenancy OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) (root compartment). | `boolean` | No | - | - |
-| `lifecycleStageIds` | The lifecycle stage OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore this parameter is mutually exclusive with managedInstanceIds, managedInstanceGroupIds, and managedCompartmentIds. | `list[string]` | No | - | - |
+| `lifecycleStageIds` | The lifecycle stage OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore this parameter is mutually exclusive with managedInstanceIds, managedInstanceGroupIds, managedCompartmentIds, and dynamicSetIds. | `list[string]` | No | - | - |
 | `lifecycleState` | The current state of the scheduled job. | `string` | No | - | - |
 | `locations` | The list of locations this scheduled job should operate on for a job targeting on compartments. (Empty list means apply to all locations). This can only be set when managedCompartmentIds is not empty. | `list[string]` | No | - | - |
 | `managedCompartmentIds` | The compartment OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore this parameter is mutually exclusive with managedInstanceIds, managedInstanceGroupIds, and lifecycleStageIds. | `list[string]` | No | - | - |
 | `managedInstanceGroupIds` | The managed instance group OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore this parameter is mutually exclusive with managedInstanceIds, managedCompartmentIds, and lifecycleStageIds. | `list[string]` | No | - | - |
 | `managedInstanceIds` | The managed instance OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that this scheduled job operates on. A scheduled job can only operate on one type of target, therefore this parameter is mutually exclusive with managedInstanceGroupIds, managedCompartmentIds, and lifecycleStageIds. | `list[string]` | No | - | - |
 | [`operations`](#kind-scheduledjob-status-operations) | The list of operations this scheduled job needs to perform. A scheduled job supports only one operation type, unless it is one of the following: * UPDATE_PACKAGES * UPDATE_ALL * UPDATE_SECURITY * UPDATE_BUGFIX * UPDATE_ENHANCEMENT * UPDATE_OTHER * UPDATE_KSPLICE_USERSPACE * UPDATE_KSPLICE_KERNEL | `list[object]` | No | - | - |
-| `recurringRule` | The frequency schedule for a recurring scheduled job. | `string` | No | - | - |
+| `recurringRule` | The frequency schedule for a recurring scheduled job in the RFC5535 (https://www.rfc-editor.org/rfc/rfc5535) format. Currently, only FREQ/INTERVAL/BYMONTHDAY/BYDAY/BYSETPOS/BYMONTH/BYHOUR/BYMINUTE/BYSECOND rules are supported. In FREQ, only YEARLY, MONTHLY, WEEKLY, DAILY", HOURLY are supported. | `string` | No | - | - |
 | `retryIntervals` | The amount of time in minutes to wait until retrying the scheduled job. If set, the service will automatically retry a failed scheduled job after the interval. For example, you could set the interval to [2,5,10]. If the initial execution of the job fails, the service waits 2 minutes and then retries. If that fails, the service waits 5 minutes and then retries. If that fails, the service waits 10 minutes and then retries. | `list[integer]` | No | - | - |
 | `scheduleType` | The type of scheduling frequency for the job. | `string` | No | - | - |
 | [`status`](#kind-scheduledjob-status-status) | - | `object` | Yes | - | - |
@@ -932,13 +980,31 @@ ScheduledJobOperation defines nested fields for ScheduledJob.Operation.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`installSnapDetails`](#kind-scheduledjob-status-operations-installsnapdetails) | ScheduledJobOperationInstallSnapDetails defines nested fields for ScheduledJob.Operation.InstallSnapDetails. | `object` | No | - | - |
 | [`manageModuleStreamsDetails`](#kind-scheduledjob-status-operations-managemodulestreamsdetails) | ScheduledJobOperationManageModuleStreamsDetails defines nested fields for ScheduledJob.Operation.ManageModuleStreamsDetails. | `object` | No | - | - |
 | `operationType` | The type of operation this scheduled job performs. | `string` | Yes | - | - |
 | `packageNames` | The names of the target packages. This parameter only applies when the scheduled job is for installing, updating, or removing packages. | `list[string]` | No | - | - |
 | `rebootTimeoutInMins` | The number of minutes the service waits for the reboot to complete. If the instance doesn't reboot within the timeout, the service marks the reboot job as failed. | `integer` | No | - | - |
+| [`removeSnapDetails`](#kind-scheduledjob-status-operations-removesnapdetails) | ScheduledJobOperationRemoveSnapDetails defines nested fields for ScheduledJob.Operation.RemoveSnapDetails. | `object` | No | - | - |
 | `softwareSourceIds` | The software source OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm). This parameter only applies when the scheduled job is for attaching or detaching software sources. | `list[string]` | No | - | - |
 | [`switchModuleStreamsDetails`](#kind-scheduledjob-status-operations-switchmodulestreamsdetails) | ScheduledJobOperationSwitchModuleStreamsDetails defines nested fields for ScheduledJob.Operation.SwitchModuleStreamsDetails. | `object` | No | - | - |
+| [`switchSnapChannelDetails`](#kind-scheduledjob-status-operations-switchsnapchanneldetails) | ScheduledJobOperationSwitchSnapChannelDetails defines nested fields for ScheduledJob.Operation.SwitchSnapChannelDetails. | `object` | No | - | - |
 | `windowsUpdateNames` | Unique identifier for the Windows update. This parameter only applies if the scheduled job is for installing Windows updates. Note that this is not an OCID, but is a unique identifier assigned by Microsoft. For example: '6981d463-cd91-4a26-b7c4-ea4ded9183ed'. | `list[string]` | No | - | - |
+
+<a id="kind-scheduledjob-status-operations-installsnapdetails"></a>
+##### Status.operations[].installSnapDetails
+
+[Back to ScheduledJob status](#kind-scheduledjob-status)
+
+ScheduledJobOperationInstallSnapDetails defines nested fields for ScheduledJob.Operation.InstallSnapDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `channel` | The snap channel to install from (e.g. stable, 1.2/edge, beta, candidate, or a custom channel). | `string` | No | - | - |
+| `isSigned` | If false, allows installing snaps not signed by the Snap Store. E.g., snaps from local file. Use with caution. | `boolean` | No | - | - |
+| `mode` | The confinement mode for the snap. | `string` | No | - | - |
+| `name` | The name of the snap to install. | `string` | Yes | - | - |
+| `revision` | The snap revision to install. | `string` | No | - | - |
 
 <a id="kind-scheduledjob-status-operations-managemodulestreamsdetails"></a>
 ##### Status.operations[].manageModuleStreamsDetails
@@ -1008,6 +1074,18 @@ ScheduledJobOperationManageModuleStreamsDetailsRemove defines nested fields for 
 | `softwareSourceId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the software source that contains the module stream. | `string` | No | - | - |
 | `streamName` | The name of a stream of the specified module. | `string` | Yes | - | - |
 
+<a id="kind-scheduledjob-status-operations-removesnapdetails"></a>
+##### Status.operations[].removeSnapDetails
+
+[Back to ScheduledJob status](#kind-scheduledjob-status)
+
+ScheduledJobOperationRemoveSnapDetails defines nested fields for ScheduledJob.Operation.RemoveSnapDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `name` | The name of the snap to remove. | `string` | Yes | - | - |
+| `revision` | The revision to remove. Note: This option cannot be used when removing multiple snaps. | `string` | No | - | - |
+
 <a id="kind-scheduledjob-status-operations-switchmodulestreamsdetails"></a>
 ##### Status.operations[].switchModuleStreamsDetails
 
@@ -1020,6 +1098,18 @@ ScheduledJobOperationSwitchModuleStreamsDetails defines nested fields for Schedu
 | `moduleName` | The name of a module. | `string` | Yes | - | - |
 | `softwareSourceId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the software source that contains the module stream. | `string` | No | - | - |
 | `streamName` | The name of a stream of the specified module. | `string` | Yes | - | - |
+
+<a id="kind-scheduledjob-status-operations-switchsnapchanneldetails"></a>
+##### Status.operations[].switchSnapChannelDetails
+
+[Back to ScheduledJob status](#kind-scheduledjob-status)
+
+ScheduledJobOperationSwitchSnapChannelDetails defines nested fields for ScheduledJob.Operation.SwitchSnapChannelDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `channel` | The channel to switch to (e.g. stable, edge, beta, candidate, or a custom channel). | `string` | No | - | - |
+| `name` | The name of the snap. | `string` | Yes | - | - |
 
 <a id="kind-scheduledjob-status-status"></a>
 #### Status.status
@@ -1115,6 +1205,7 @@ SoftwareSourceSpec defines the desired state of SoftwareSource.
 | `isMirrorSyncAllowed` | Whether this software source can be synced to a management station | `boolean` | No | - | - |
 | `isSslVerifyEnabled` | Whether SSL validation needs to be turned on | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
+| `originDisplayName` | The display name of the software source to be replicated | `string` | No | - | - |
 | `originSoftwareSourceId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the vendor software source in the root compartment that is being replicated. | `string` | No | - | - |
 | `osFamily` | The OS family for the private software source. | `string` | No | - | - |
 | `packages` | A property used for compatibility only. It doesn't provide a complete list of packages. See AddPackagesToSoftwareSourceDetails for providing the list of packages used to create the software source when isCreatedFromPackageList is set to true. | `list[string]` | No | - | - |

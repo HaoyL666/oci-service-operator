@@ -49,6 +49,13 @@ type enrichmentJobIdentity struct {
 	DisplayName     string
 }
 
+type EnrichmentJobSDKClients struct {
+	generateEnrichmentJobClient generativeaidatasdk.EnrichmentJobClient
+	getEnrichmentJobClient      generativeaidatasdk.EnrichmentJobClient
+	listEnrichmentJobsClient    generativeaidatasdk.EnrichmentJobClient
+	cancelEnrichmentJobClient   generativeaidatasdk.EnrichmentJobClient
+}
+
 var _ EnrichmentJobServiceClient = (*enrichmentJobRuntimeClient)(nil)
 
 func (c EnrichmentJobSDKClients) GenerateEnrichmentJob(
@@ -90,7 +97,16 @@ func newEnrichmentJobSDKClient(manager *EnrichmentJobServiceManager) (enrichment
 	if manager == nil {
 		return nil, fmt.Errorf("EnrichmentJob service manager is nil")
 	}
-	return newEnrichmentJobSDKClients(manager)
+	client, err := generativeaidatasdk.NewEnrichmentJobClientWithConfigurationProvider(manager.Provider)
+	if err != nil {
+		return nil, err
+	}
+	return EnrichmentJobSDKClients{
+		generateEnrichmentJobClient: client,
+		getEnrichmentJobClient:      client,
+		listEnrichmentJobsClient:    client,
+		cancelEnrichmentJobClient:   client,
+	}, nil
 }
 
 func applyEnrichmentJobRuntimeHooks(

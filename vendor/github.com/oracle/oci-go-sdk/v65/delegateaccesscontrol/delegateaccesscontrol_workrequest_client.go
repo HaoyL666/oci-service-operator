@@ -4,8 +4,8 @@
 
 // Oracle Delegate Access Control API
 //
-// Oracle Delegate Access Control allows ExaCC and ExaCS customers to delegate management of their Exadata resources operators outside their tenancies.
-// With Delegate Access Control, Support Providers can deliver managed services using comprehensive and robust tooling built on the OCI platform.
+// Oracle Delegate Access Control allows customers of Oracle Exadata Database Service on Cloud@Customer (ExaDB-C@C), Oracle Exadata Database Service on Dedicated Infrastructure (ExaDB-D), and Oracle Exadata Database Service on Exascale Infrastructure (ExaDB-XS) to delegate management of their Exadata resources operators outside their tenancies.
+// With Delegate Access Control, Service Providers can deliver managed services using comprehensive and robust tooling built on the OCI platform.
 // Customers maintain control over who has access to the delegated resources in their tenancy and what actions can be taken.
 // Enterprises managing resources across multiple tenants can use Delegate Access Control to streamline management tasks.
 // Using logging service, customers can view a near real-time audit report of all actions performed by a Service Provider operator.
@@ -140,7 +140,7 @@ func (client WorkRequestClient) getWorkRequest(ctx context.Context, request comm
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "workRequest", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -198,7 +198,7 @@ func (client WorkRequestClient) listWorkRequestErrors(ctx context.Context, reque
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "workRequest", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -256,7 +256,7 @@ func (client WorkRequestClient) listWorkRequestLogs(ctx context.Context, request
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "workRequest", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -314,7 +314,7 @@ func (client WorkRequestClient) listWorkRequests(ctx context.Context, request co
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "workRequest", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

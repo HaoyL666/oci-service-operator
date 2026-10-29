@@ -252,6 +252,7 @@ type AutonomousDatabaseSummary struct {
 	// When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
 	// When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
 	// For new databases, it is recommended to use either 19c or 26ai.
+	// The default database version is the Oracle-recommended version. You can retrieve the default DB version by calling the ListAutonomousDbVersions operation.
 	// **Note** Starting December 2026, 23ai will not be supported as a valid value for this parameter.
 	DbVersion *string `mandatory:"false" json:"dbVersion"`
 
@@ -265,6 +266,7 @@ type AutonomousDatabaseSummary struct {
 	// - APEX - indicates an Autonomous AI Database with the Oracle APEX AI Application Development workload type.
 	// - LH - indicates an Oracle Autonomous AI Lakehouse database
 	// **Note** Starting December 2026, DW will not be supported as a valid value for this parameter.
+	// When creating an Autonomous AI Database, if this parameter is not specified, the default value is `OLTP`.
 	//
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, isMTLSConnectionRequired, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
 	DbWorkload AutonomousDatabaseSummaryDbWorkloadEnum `mandatory:"false" json:"dbWorkload,omitempty"`
@@ -312,7 +314,7 @@ type AutonomousDatabaseSummary struct {
 	// Information about Oracle APEX AI Application Development.
 	ApexDetails *AutonomousDatabaseApex `mandatory:"false" json:"apexDetails"`
 
-	// Indicates if auto scaling is enabled for the Autonomous AI Database CPU core count. The default value is `TRUE`.
+	// Indicates if auto scaling is enabled for the Autonomous AI Database CPU core count. The default value is `FALSE`.
 	IsAutoScalingEnabled *bool `mandatory:"false" json:"isAutoScalingEnabled"`
 
 	// Status of the Data Safe registration for this Autonomous AI Database.
@@ -459,6 +461,11 @@ type AutonomousDatabaseSummary struct {
 	// The date until which Autonomous AI Database maintenance is temporarily paused.
 	TimeMaintenancePauseUntil *common.SDKTime `mandatory:"false" json:"timeMaintenancePauseUntil"`
 
+	ScheduledMaintenanceWindow *AutonomousDatabaseMaintenanceWindowSummary `mandatory:"false" json:"scheduledMaintenanceWindow"`
+
+	// The date and time at which operation to change Maintenance Window is scheduled to take place.
+	TimeScheduledMaintenanceWindowUpdate *common.SDKTime `mandatory:"false" json:"timeScheduledMaintenanceWindowUpdate"`
+
 	// The list of scheduled operations. Consists of values such as dayOfWeek, scheduledStartTime, scheduledStopTime.
 	// This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, whitelistedIps, isMTLSConnectionRequired, openMode, permissionLevel, dbWorkload, privateEndpointLabel, nsgIds, dbVersion, isRefreshable, dbName, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier.
 	ScheduledOperations []ScheduledOperationDetails `mandatory:"false" json:"scheduledOperations"`
@@ -495,6 +502,9 @@ type AutonomousDatabaseSummary struct {
 
 	RemoteDisasterRecoveryConfiguration *DisasterRecoveryConfiguration `mandatory:"false" json:"remoteDisasterRecoveryConfiguration"`
 
+	// List of access types for an Autonomous AI Database.
+	AccessTypes []string `mandatory:"false" json:"accessTypes"`
+
 	// Enabling SHARED server architecture enables a database server to allow many client processes to share very few server processes, thereby increasing the number of supported users.
 	NetServicesArchitecture AutonomousDatabaseSummaryNetServicesArchitectureEnum `mandatory:"false" json:"netServicesArchitecture,omitempty"`
 
@@ -503,6 +513,18 @@ type AutonomousDatabaseSummary struct {
 
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the cluster placement group of the Autonomous Serverless Database.
 	ClusterPlacementGroupId *string `mandatory:"false" json:"clusterPlacementGroupId"`
+
+	// The Availability Domain which is planned for Scheduled Update
+	AdScheduledForUpdate *string `mandatory:"false" json:"adScheduledForUpdate"`
+
+	// The earliest date and time to which you can schedule an Autonomous Database availability domain update.
+	TimeEarliestAvailableAdUpdate *common.SDKTime `mandatory:"false" json:"timeEarliestAvailableAdUpdate"`
+
+	// The latest date and time to which you can schedule an Autonomous Database availability domain update.
+	TimeLatestAvailableAdUpdate *common.SDKTime `mandatory:"false" json:"timeLatestAvailableAdUpdate"`
+
+	// The date and time to which the Autonomous Database availability domain update is scheduled.
+	TimeScheduledAdUpdate *common.SDKTime `mandatory:"false" json:"timeScheduledAdUpdate"`
 
 	// A list of the source Autonomous AI Database's table space number(s) used to create this partial clone from the backup.
 	CloneTableSpaceList []int `mandatory:"false" json:"cloneTableSpaceList"`
@@ -712,6 +734,8 @@ func (m *AutonomousDatabaseSummary) UnmarshalJSON(data []byte) (e error) {
 		AutonomousMaintenanceScheduleType       AutonomousDatabaseSummaryAutonomousMaintenanceScheduleTypeEnum `json:"autonomousMaintenanceScheduleType"`
 		AutonomousDatabaseMaintenanceWindow     *AutonomousDatabaseMaintenanceWindowSummary                    `json:"autonomousDatabaseMaintenanceWindow"`
 		TimeMaintenancePauseUntil               *common.SDKTime                                                `json:"timeMaintenancePauseUntil"`
+		ScheduledMaintenanceWindow              *AutonomousDatabaseMaintenanceWindowSummary                    `json:"scheduledMaintenanceWindow"`
+		TimeScheduledMaintenanceWindowUpdate    *common.SDKTime                                                `json:"timeScheduledMaintenanceWindowUpdate"`
 		ScheduledOperations                     []ScheduledOperationDetails                                    `json:"scheduledOperations"`
 		IsAutoScalingForStorageEnabled          *bool                                                          `json:"isAutoScalingForStorageEnabled"`
 		AllocatedStorageSizeInTBs               *float64                                                       `json:"allocatedStorageSizeInTBs"`
@@ -723,9 +747,14 @@ func (m *AutonomousDatabaseSummary) UnmarshalJSON(data []byte) (e error) {
 		DisasterRecoveryRegionType              AutonomousDatabaseSummaryDisasterRecoveryRegionTypeEnum        `json:"disasterRecoveryRegionType"`
 		TimeDisasterRecoveryRoleChanged         *common.SDKTime                                                `json:"timeDisasterRecoveryRoleChanged"`
 		RemoteDisasterRecoveryConfiguration     *DisasterRecoveryConfiguration                                 `json:"remoteDisasterRecoveryConfiguration"`
+		AccessTypes                             []string                                                       `json:"accessTypes"`
 		NetServicesArchitecture                 AutonomousDatabaseSummaryNetServicesArchitectureEnum           `json:"netServicesArchitecture"`
 		AvailabilityDomain                      *string                                                        `json:"availabilityDomain"`
 		ClusterPlacementGroupId                 *string                                                        `json:"clusterPlacementGroupId"`
+		AdScheduledForUpdate                    *string                                                        `json:"adScheduledForUpdate"`
+		TimeEarliestAvailableAdUpdate           *common.SDKTime                                                `json:"timeEarliestAvailableAdUpdate"`
+		TimeLatestAvailableAdUpdate             *common.SDKTime                                                `json:"timeLatestAvailableAdUpdate"`
+		TimeScheduledAdUpdate                   *common.SDKTime                                                `json:"timeScheduledAdUpdate"`
 		CloneTableSpaceList                     []int                                                          `json:"cloneTableSpaceList"`
 		CloneType                               AutonomousDatabaseSummaryCloneTypeEnum                         `json:"cloneType"`
 		AdditionalAttributes                    map[string]string                                              `json:"additionalAttributes"`
@@ -988,6 +1017,10 @@ func (m *AutonomousDatabaseSummary) UnmarshalJSON(data []byte) (e error) {
 
 	m.TimeMaintenancePauseUntil = model.TimeMaintenancePauseUntil
 
+	m.ScheduledMaintenanceWindow = model.ScheduledMaintenanceWindow
+
+	m.TimeScheduledMaintenanceWindowUpdate = model.TimeScheduledMaintenanceWindowUpdate
+
 	m.ScheduledOperations = make([]ScheduledOperationDetails, len(model.ScheduledOperations))
 	copy(m.ScheduledOperations, model.ScheduledOperations)
 	m.IsAutoScalingForStorageEnabled = model.IsAutoScalingForStorageEnabled
@@ -1010,11 +1043,21 @@ func (m *AutonomousDatabaseSummary) UnmarshalJSON(data []byte) (e error) {
 
 	m.RemoteDisasterRecoveryConfiguration = model.RemoteDisasterRecoveryConfiguration
 
+	m.AccessTypes = make([]string, len(model.AccessTypes))
+	copy(m.AccessTypes, model.AccessTypes)
 	m.NetServicesArchitecture = model.NetServicesArchitecture
 
 	m.AvailabilityDomain = model.AvailabilityDomain
 
 	m.ClusterPlacementGroupId = model.ClusterPlacementGroupId
+
+	m.AdScheduledForUpdate = model.AdScheduledForUpdate
+
+	m.TimeEarliestAvailableAdUpdate = model.TimeEarliestAvailableAdUpdate
+
+	m.TimeLatestAvailableAdUpdate = model.TimeLatestAvailableAdUpdate
+
+	m.TimeScheduledAdUpdate = model.TimeScheduledAdUpdate
 
 	m.CloneTableSpaceList = make([]int, len(model.CloneTableSpaceList))
 	copy(m.CloneTableSpaceList, model.CloneTableSpaceList)
@@ -1906,16 +1949,19 @@ type AutonomousDatabaseSummaryNetServicesArchitectureEnum string
 const (
 	AutonomousDatabaseSummaryNetServicesArchitectureDedicated AutonomousDatabaseSummaryNetServicesArchitectureEnum = "DEDICATED"
 	AutonomousDatabaseSummaryNetServicesArchitectureShared    AutonomousDatabaseSummaryNetServicesArchitectureEnum = "SHARED"
+	AutonomousDatabaseSummaryNetServicesArchitectureDrcp      AutonomousDatabaseSummaryNetServicesArchitectureEnum = "DRCP"
 )
 
 var mappingAutonomousDatabaseSummaryNetServicesArchitectureEnum = map[string]AutonomousDatabaseSummaryNetServicesArchitectureEnum{
 	"DEDICATED": AutonomousDatabaseSummaryNetServicesArchitectureDedicated,
 	"SHARED":    AutonomousDatabaseSummaryNetServicesArchitectureShared,
+	"DRCP":      AutonomousDatabaseSummaryNetServicesArchitectureDrcp,
 }
 
 var mappingAutonomousDatabaseSummaryNetServicesArchitectureEnumLowerCase = map[string]AutonomousDatabaseSummaryNetServicesArchitectureEnum{
 	"dedicated": AutonomousDatabaseSummaryNetServicesArchitectureDedicated,
 	"shared":    AutonomousDatabaseSummaryNetServicesArchitectureShared,
+	"drcp":      AutonomousDatabaseSummaryNetServicesArchitectureDrcp,
 }
 
 // GetAutonomousDatabaseSummaryNetServicesArchitectureEnumValues Enumerates the set of values for AutonomousDatabaseSummaryNetServicesArchitectureEnum
@@ -1932,6 +1978,7 @@ func GetAutonomousDatabaseSummaryNetServicesArchitectureEnumStringValues() []str
 	return []string{
 		"DEDICATED",
 		"SHARED",
+		"DRCP",
 	}
 }
 

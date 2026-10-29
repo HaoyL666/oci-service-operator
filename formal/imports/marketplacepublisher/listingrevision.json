@@ -120,6 +120,6 @@
     ]
   },
   "notes": [
-    "The pinned provider does not expose this resource; the row remains scaffolded from OSOK runtime and SDK evidence."
+    "Scaffold placeholder for marketplacepublisher/listingrevision; replace imported facts before promoting this row beyond scaffold."
   ]
 }

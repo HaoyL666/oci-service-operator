@@ -27,6 +27,8 @@ type SnapshotSpec struct {
 	// The time when this snapshot will be deleted.
 	// +kubebuilder:validation:Optional
 	ExpirationTime string `json:"expirationTime,omitempty"`
+	// +kubebuilder:validation:Optional
+	LockDurationDetails SnapshotLockDurationDetails `json:"lockDurationDetails,omitempty,omitzero"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair
 	//  with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
@@ -41,6 +43,32 @@ type SnapshotSpec struct {
 	// Locks associated with this resource.
 	// +kubebuilder:validation:Optional
 	Locks []SnapshotLock `json:"locks,omitempty"`
+}
+
+// SnapshotLockDurationDetails defines nested fields for Snapshot.LockDurationDetails.
+type SnapshotLockDurationDetails struct {
+	// The retention period (measured in days) defines how long a snapshot remains locked,
+	// preventing user modifications or deletions. In governance mode this period can be adjusted,
+	// but in compliance mode it becomes permanent after a cool-off period.
+	// Snapshots can be locked for a minimum of 0 days and a maximum of 36,500 days.
+	// A value of 0 days stands for an indefinite retention period and it is used for a legal hold.
+	// +kubebuilder:validation:Required
+	LockDuration int `json:"lockDuration"`
+	// Can be GOVERNANCE or COMPLIANCE.
+	// GOVERNANCE MODE: locks snapshots based on either a retention period or a legal hold.
+	// COMPLIANCE MODE: the customer can only remove the snapshot during its cooling-off period.
+	// Once that time ends, the snapshot becomes immutable; customers cannot delete or modify it
+	// until its set retention date passes. After the snapshot is locked, customers can only
+	// increase its retention period.
+	// +kubebuilder:validation:Required
+	LockMode string `json:"lockMode"`
+	// For snapshots in compliance mode, a cooling-off period (measured in days) begins.
+	// During this time, you can still edit or remove the lock. Once this period ends,
+	// the snapshot becomes immutable until the specified retention date expires, permanently
+	// preventing any deletion or modification. The cool off duration can be set for a minimum of
+	// 0 days and a maximum of 365. It defaults to 14 days if not set.
+	// +kubebuilder:validation:Optional
+	CoolOffDuration int `json:"coolOffDuration,omitempty"`
 }
 
 // SnapshotLock defines nested fields for Snapshot.Lock.
@@ -100,7 +128,11 @@ type SnapshotStatus struct {
 	// Additional information about the current `lifecycleState`.
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
 	// Locks associated with this resource.
-	Locks []SnapshotLock `json:"locks,omitempty"`
+	Locks               []SnapshotLock              `json:"locks,omitempty"`
+	LockDurationDetails SnapshotLockDurationDetails `json:"lockDurationDetails,omitempty"`
+	// The date and time as per RFC 3339 (https://tools.ietf.org/html/rfc3339) when this snapshot was locked.
+	// It is a read-only property because the user should not be able to set it, it is set by our service.
+	TimeLocked string `json:"timeLocked,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair
 	//  with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
@@ -117,6 +149,8 @@ type SnapshotStatus struct {
 	ExpirationTime string `json:"expirationTime,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the file system snapshot policy that created this snapshot.
 	FilesystemSnapshotPolicyId string `json:"filesystemSnapshotPolicyId,omitempty"`
+	// Bytes referenced only by this snapshot; deducted from compartment usage immediately upon deletion.
+	ExclusiveBytes int64 `json:"exclusiveBytes,omitempty"`
 }
 
 // +kubebuilder:object:root=true

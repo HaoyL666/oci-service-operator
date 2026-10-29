@@ -43,7 +43,7 @@ EnrichmentJobSpec defines the desired state of EnrichmentJob.
 | `description` | An optional description of the EnrichmentJob. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. It does not have to be unique and can be modified. Avoid entering confidential information. | `string` | No | - | - |
 | [`enrichmentJobConfiguration`](#kind-enrichmentjob-spec-enrichmentjobconfiguration) | EnrichmentJobConfiguration defines nested fields for EnrichmentJob.EnrichmentJobConfiguration. | `object` | Yes | - | - |
-| `enrichmentJobType` | Enrichment job type. Currently supported Full Build (All supported objects in a given schema) and Partial Build (Selected tables and/or supported objects in a given schema). | `string` | Yes | - | - |
+| `enrichmentJobType` | Deprecated. Use EnrichmentJobConfiguration.enrichmentJobType instead. | `string` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `semanticStoreId` | The OCID of the semantic store that scopes GenerateEnrichmentJob, GetEnrichmentJob, and CancelEnrichmentJob. | `string` | Yes | - | - |
 
@@ -57,7 +57,7 @@ EnrichmentJobConfiguration defines nested fields for EnrichmentJob.EnrichmentJob
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | [`databaseObjects`](#kind-enrichmentjob-spec-enrichmentjobconfiguration-databaseobjects) | Collection of the DatabaseObjects to be enriched for the given schema. | `list[object]` | No | - | - |
-| `deltaRefreshSchedule` | Schedule for occurrences of Delta Refresh jobs Unknown nested fields are preserved. | `object (preserves unknown fields)` | No | - | - |
+| `deltaRefreshSchedule` | Deprecated schedule for occurrences of Delta Refresh jobs. This value is not used by the service. Unknown nested fields are preserved. | `object (preserves unknown fields)` | No | - | - |
 | `enrichmentJobType` | - | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `schemaName` | Name of the DB Schema to be enriched | `string` | No | - | - |
@@ -87,11 +87,12 @@ EnrichmentJobStatus defines the observed state of EnrichmentJob.
 | `description` | An optional description of the EnrichmentJob. | `string` | No | - | - |
 | `displayName` | A user-friendly display name. It does not have to be unique and can be modified. Avoid entering confidential information. | `string` | No | - | - |
 | [`enrichmentJobConfiguration`](#kind-enrichmentjob-status-enrichmentjobconfiguration) | EnrichmentJobConfiguration defines nested fields for EnrichmentJob.EnrichmentJobConfiguration. | `object` | No | - | - |
-| `enrichmentJobType` | Enrichment job type. Currently supported Full Build (All supported objects in a given schema) and Partial Build (Selected tables and/or supported objects in a given schema). | `string` | No | - | - |
+| `enrichmentJobType` | Enrichment job type. Supported values are Full Build (all supported objects in a given schema), Partial Build (selected tables and/or supported objects in a given schema), and Delta Refresh (objects in a given schema that have changed since the previous enrichment job). | `string` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
-| `id` | Unique identifier that is immutable on creation. | `string` | No | - | - |
+| `id` | The OCID of the Semantic Store job. | `string` | No | - | - |
 | `lifecycleDetails` | A message describing the current state in more detail that can provide actionable information. | `string` | No | - | - |
-| `lifecycleState` | The lifecycleState of GenerateSqlJob. | `string` | No | - | - |
+| `lifecycleState` | The lifecycle state of the EnrichmentJob. | `string` | No | - | - |
+| `modelId` | The generative AI modelId used for Enrichment. You can use the ListModels API to list the available models. https://docs.oracle.com/en-us/iaas/api/#/en/generative-ai/20231130/ModelCollection/ListModels | `string` | No | - | - |
 | `percentComplete` | The percentage of the enrichment job that has been completed. | `number` | No | - | - |
 | `semanticStoreId` | Owning SemanticStore OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) for an EnrichmentJob. | `string` | No | - | - |
 | [`status`](#kind-enrichmentjob-status-status) | - | `object` | Yes | - | - |
@@ -110,7 +111,7 @@ EnrichmentJobConfiguration defines nested fields for EnrichmentJob.EnrichmentJob
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | [`databaseObjects`](#kind-enrichmentjob-status-enrichmentjobconfiguration-databaseobjects) | Collection of the DatabaseObjects to be enriched for the given schema. | `list[object]` | No | - | - |
-| `deltaRefreshSchedule` | Schedule for occurrences of Delta Refresh jobs Unknown nested fields are preserved. | `object (preserves unknown fields)` | No | - | - |
+| `deltaRefreshSchedule` | Deprecated schedule for occurrences of Delta Refresh jobs. This value is not used by the service. Unknown nested fields are preserved. | `object (preserves unknown fields)` | No | - | - |
 | `enrichmentJobType` | - | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `schemaName` | Name of the DB Schema to be enriched | `string` | No | - | - |

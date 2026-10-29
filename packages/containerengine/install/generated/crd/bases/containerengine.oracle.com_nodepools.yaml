@@ -69,7 +69,7 @@ spec:
                   type: object
                 description: |-
                   Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                  For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Operations": {"CostCenter": "42"}}`
                 type: object
               freeformTags:
@@ -77,7 +77,7 @@ spec:
                   type: string
                 description: |-
                   Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                  For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
               initialNodeLabels:
@@ -103,11 +103,19 @@ spec:
                 description: The name of the node pool. Avoid entering confidential
                   information.
                 type: string
+              networkLaunchType:
+                description: Emulation type for the physical network interface card
+                  (NIC) for nodes
+                type: string
               nodeConfigDetails:
                 description: |-
                   The configuration of nodes in the node pool. Exactly one of the
                   subnetIds or nodeConfigDetails properties must be specified.
                 properties:
+                  computeClusterId:
+                    description: The OCID of the Compute Cluster to be associated
+                      with the worker node instance.
+                    type: string
                   definedTags:
                     additionalProperties:
                       additionalProperties:
@@ -115,7 +123,7 @@ spec:
                       type: object
                     description: |-
                       Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                      For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                      For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                       Example: `{"Operations": {"CostCenter": "42"}}`
                     type: object
                   freeformTags:
@@ -123,7 +131,7 @@ spec:
                       type: string
                     description: |-
                       Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                      For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                      For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                       Example: `{"Department": "Finance"}`
                     type: object
                   isPvEncryptionInTransitEnabled:
@@ -195,6 +203,10 @@ spec:
                           items:
                             type: string
                           type: array
+                        hostGroupId:
+                          description: The OCID of the Host Group to be associated
+                            with the worker node instance.
+                          type: string
                         preemptibleNodeConfig:
                           description: NodePoolNodeConfigDetailsPlacementConfigPreemptibleNodeConfig
                             defines nested fields for NodePool.NodeConfigDetails.PlacementConfig.PreemptibleNodeConfig.
@@ -241,6 +253,10 @@ spec:
                       Duration after which OKE will give up eviction of the pods on the node. PT0M will indicate you want to delete the node without cordon and drain.
                       Default PT60M, Min PT0M, Max: PT60M. Format ISO 8601 e.g PT30M
                     type: string
+                  isForceActionAfterGraceDuration:
+                    description: If the node action should be performed if not all
+                      the pods can be evicted in the grace period
+                    type: boolean
                   isForceDeleteAfterGraceDuration:
                     description: If the underlying compute instance should be deleted
                       if you cannot evict all the pods in grace period
@@ -261,9 +277,15 @@ spec:
               nodePoolCyclingDetails:
                 description: NodePoolCyclingDetails defines nested fields for NodePool.NodePoolCyclingDetails.
                 properties:
+                  cycleModes:
+                    description: An ordered list of cycle modes that should be performed
+                      on the OKE nodes.
+                    items:
+                      type: string
+                    type: array
                   isNodeCyclingEnabled:
-                    description: If nodes in the nodepool will be cycled to have new
-                      changes.
+                    description: If cycling operation should be performed on the nodes
+                      in the node pool.
                     type: boolean
                   maximumSurge:
                     description: |-
@@ -292,7 +314,7 @@ spec:
                   ocpus:
                     description: |-
                       The total number of OCPUs available to each node in the node pool.
-                      See here (https://docs.cloud.oracle.com/en-us/iaas/api/#/en/iaas/20160918/Shape/) for details.
+                      See here (https://docs.oracle.com/iaas/en-us/iaas/api/#/en/iaas/20160918/Shape/) for details.
                     type: number
                 type: object
               nodeSourceDetails:
@@ -301,7 +323,7 @@ spec:
                 properties:
                   bootVolumeSizeInGBs:
                     description: The size of the boot volume in GBs. Minimum value
-                      is 50 GB. See here (https://docs.cloud.oracle.com/en-us/iaas/Content/Block/Concepts/bootvolumes.htm)
+                      is 50 GB. See here (https://docs.oracle.com/iaas/en-us/iaas/Content/Block/Concepts/bootvolumes.htm)
                       for max custom boot volume sizing and OS-specific requirements.
                     format: int64
                     type: integer
@@ -313,11 +335,130 @@ spec:
                   sourceType:
                     type: string
                 type: object
+              primaryVnic:
+                description: NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic.
+                properties:
+                  securityAttributes:
+                    additionalProperties:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    description: |-
+                      Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels
+                              for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                              (ZPR) policy to control access to ZPR-supported resources.
+                    type: object
+                type: object
               quantityPerSubnet:
                 description: |-
                   Optional, default to 1. The number of nodes to create in each subnet specified in subnetIds property.
                   When used, subnetIds is required. This property is deprecated, use nodeConfigDetails instead.
                 type: integer
+              secondaryVnics:
+                description: A list of secondary vnics to attach to nodes
+                items:
+                  description: NodePoolSecondaryVnic defines nested fields for NodePool.SecondaryVnic.
+                  properties:
+                    createVnicDetails:
+                      description: NodePoolSecondaryVnicCreateVnicDetails defines
+                        nested fields for NodePool.SecondaryVnic.CreateVnicDetails.
+                      properties:
+                        applicationResources:
+                          description: The application resource that corresponds to
+                            this secondary vnic. Used to map pods to this specific
+                            vnic for scheduling
+                          items:
+                            type: string
+                          type: array
+                        assignIpv6Ip:
+                          description: Whether to allocate an IPv6 address at instance
+                            and VNIC creation from an IPv6 enabled subnet
+                          type: boolean
+                        assignPublicIp:
+                          description: Whether the VNIC should be assigned a public
+                            IP address
+                          type: boolean
+                        definedTags:
+                          additionalProperties:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          description: |-
+                            Defined tags for this resource. Each key is predefined and scoped to a namespace.
+                            For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                            Example: `{"Operations": {"CostCenter": "42"}}`
+                          type: object
+                        displayName:
+                          description: Display name for secondary vnic
+                          type: string
+                        freeformTags:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
+                            For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                            Example: `{"Department": "Finance"}`
+                          type: object
+                        ipCount:
+                          description: The number of ip addresses to attach to secondary
+                            vnic
+                          type: integer
+                        ipv6AddressIpv6SubnetCidrPairDetails:
+                          description: |-
+                            A list of IPv6 prefixes from which the VNIC should be assigned an IPv6 address. You can provide only the prefix
+                            and OCI selects an available address from the range. You can optionally choose to leave the prefix range empty
+                            and instead provide the specific IPv6 address that should be used from within that range.
+                          items:
+                            description: NodePoolSecondaryVnicCreateVnicDetailsIpv6AddressIpv6SubnetCidrPairDetail
+                              defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails.Ipv6AddressIpv6SubnetCidrPairDetail.
+                            properties:
+                              ipv6Address:
+                                description: An IPv6 address of your choice. Must
+                                  be an available IPv6 address within the subnet's
+                                  prefix
+                                type: string
+                              ipv6SubnetCidr:
+                                description: The IPv6 prefix allocated to the subnet
+                                type: string
+                            type: object
+                          type: array
+                        nsgIds:
+                          description: A list of the OCIDs of the network security
+                            groups (NSGs) to add the VNIC to
+                          items:
+                            type: string
+                          type: array
+                        securityAttributes:
+                          additionalProperties:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          description: |-
+                            Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels
+                                    for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                                    (ZPR) policy to control access to ZPR-supported resources.
+                          type: object
+                        skipSourceDestCheck:
+                          description: Whether the source/destination check is disabled
+                            on the VNIC
+                          type: boolean
+                        subnetId:
+                          description: the ocid of the subnet to create the vnic in
+                          type: string
+                      required:
+                      - subnetId
+                      type: object
+                    displayName:
+                      description: Display name for vnic attachment
+                      type: string
+                    nicIndex:
+                      description: Which physical network interface card (NIC) the
+                        VNIC will use
+                      type: integer
+                  required:
+                  - createVnicDetails
+                  type: object
+                type: array
               sshPublicKey:
                 description: The SSH public key on each node in the node pool on launch.
                 type: string
@@ -351,7 +492,7 @@ spec:
                   type: object
                 description: |-
                   Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                  For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Operations": {"CostCenter": "42"}}`
                 type: object
               freeformTags:
@@ -359,7 +500,7 @@ spec:
                   type: string
                 description: |-
                   Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                  For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                  For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
               id:
@@ -388,14 +529,23 @@ spec:
                 description: Details about the state of the nodepool.
                 type: string
               lifecycleState:
-                description: The state of the nodepool.
+                description: The state of the nodepool. For more information, see
+                  Monitoring Clusters (https://docs.oracle.com/iaas/Content/ContEng/Tasks/contengmonitoringclusters.htm)
                 type: string
               name:
                 description: The name of the node pool.
                 type: string
+              networkLaunchType:
+                description: Emulation type for the physical network interface card
+                  (NIC) for nodes
+                type: string
               nodeConfigDetails:
                 description: The configuration of nodes in the node pool.
                 properties:
+                  computeClusterId:
+                    description: The OCID of the Compute Cluster to be associated
+                      with the worker node instance.
+                    type: string
                   definedTags:
                     additionalProperties:
                       additionalProperties:
@@ -403,7 +553,7 @@ spec:
                       type: object
                     description: |-
                       Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                      For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                      For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                       Example: `{"Operations": {"CostCenter": "42"}}`
                     type: object
                   freeformTags:
@@ -411,7 +561,7 @@ spec:
                       type: string
                     description: |-
                       Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                      For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                      For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                       Example: `{"Department": "Finance"}`
                     type: object
                   isPvEncryptionInTransitEnabled:
@@ -483,6 +633,10 @@ spec:
                           items:
                             type: string
                           type: array
+                        hostGroupId:
+                          description: The OCID of the Host Group to be associated
+                            with the worker node instance.
+                          type: string
                         preemptibleNodeConfig:
                           description: NodePoolNodeConfigDetailsPlacementConfigPreemptibleNodeConfig
                             defines nested fields for NodePool.NodeConfigDetails.PlacementConfig.PreemptibleNodeConfig.
@@ -529,6 +683,10 @@ spec:
                       Duration after which OKE will give up eviction of the pods on the node. PT0M will indicate you want to delete the node without cordon and drain.
                       Default PT60M, Min PT0M, Max: PT60M. Format ISO 8601 e.g PT30M
                     type: string
+                  isForceActionAfterGraceDuration:
+                    description: If the node action should be performed if not all
+                      the pods can be evicted in the grace period
+                    type: boolean
                   isForceDeleteAfterGraceDuration:
                     description: If the underlying compute instance should be deleted
                       if you cannot evict all the pods in grace period
@@ -551,9 +709,15 @@ spec:
               nodePoolCyclingDetails:
                 description: NodePoolCyclingDetails defines nested fields for NodePool.NodePoolCyclingDetails.
                 properties:
+                  cycleModes:
+                    description: An ordered list of cycle modes that should be performed
+                      on the OKE nodes.
+                    items:
+                      type: string
+                    type: array
                   isNodeCyclingEnabled:
-                    description: If nodes in the nodepool will be cycled to have new
-                      changes.
+                    description: If cycling operation should be performed on the nodes
+                      in the node pool.
                     type: boolean
                   maximumSurge:
                     description: |-
@@ -581,7 +745,7 @@ spec:
                   ocpus:
                     description: |-
                       The total number of OCPUs available to each node in the node pool.
-                      See here (https://docs.cloud.oracle.com/en-us/iaas/api/#/en/iaas/20160918/Shape/) for details.
+                      See here (https://docs.oracle.com/iaas/en-us/iaas/api/#/en/iaas/20160918/Shape/) for details.
                     type: number
                 type: object
               nodeSource:
@@ -605,7 +769,7 @@ spec:
                 properties:
                   bootVolumeSizeInGBs:
                     description: The size of the boot volume in GBs. Minimum value
-                      is 50 GB. See here (https://docs.cloud.oracle.com/en-us/iaas/Content/Block/Concepts/bootvolumes.htm)
+                      is 50 GB. See here (https://docs.oracle.com/iaas/en-us/iaas/Content/Block/Concepts/bootvolumes.htm)
                       for max custom boot volume sizing and OS-specific requirements.
                     format: int64
                     type: integer
@@ -633,7 +797,7 @@ spec:
                         type: object
                       description: |-
                         Defined tags for this resource. Each key is predefined and scoped to a namespace.
-                        For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                        For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                         Example: `{"Operations": {"CostCenter": "42"}}`
                       type: object
                     faultDomain:
@@ -644,7 +808,7 @@ spec:
                         type: string
                       description: |-
                         Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
-                        For more information, see Resource Tags (https://docs.cloud.oracle.com/Content/General/Concepts/resourcetags.htm).
+                        For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                         Example: `{"Department": "Finance"}`
                       type: object
                     id:
@@ -657,7 +821,8 @@ spec:
                       description: Details about the state of the node.
                       type: string
                     lifecycleState:
-                      description: The state of the node.
+                      description: The state of the node. For more information, see
+                        Monitoring Clusters (https://docs.oracle.com/iaas/Content/ContEng/Tasks/contengmonitoringclusters.htm)
                       type: string
                     name:
                       description: The name of the node.
@@ -668,7 +833,7 @@ spec:
                         code:
                           description: A short error code that defines the upstream
                             error, meant for programmatic parsing. See API Errors
-                            (https://docs.cloud.oracle.com/Content/API/References/apierrors.htm).
+                            (https://docs.oracle.com/iaas/Content/API/References/apierrors.htm).
                           type: string
                         message:
                           description: A human-readable error string of the upstream
@@ -707,14 +872,184 @@ spec:
                       type: object
                   type: object
                 type: array
+              primaryVnic:
+                description: NodePoolPrimaryVnic defines nested fields for NodePool.PrimaryVnic.
+                properties:
+                  securityAttributes:
+                    additionalProperties:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    description: |-
+                      Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels
+                              for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                              (ZPR) policy to control access to ZPR-supported resources.
+                    type: object
+                type: object
               quantityPerSubnet:
                 description: The number of nodes in each subnet.
                 type: integer
+              secondaryVnics:
+                description: A list of secondary vnics to attach to nodes
+                items:
+                  description: NodePoolSecondaryVnic defines nested fields for NodePool.SecondaryVnic.
+                  properties:
+                    createVnicDetails:
+                      description: NodePoolSecondaryVnicCreateVnicDetails defines
+                        nested fields for NodePool.SecondaryVnic.CreateVnicDetails.
+                      properties:
+                        applicationResources:
+                          description: The application resource that corresponds to
+                            this secondary vnic. Used to map pods to this specific
+                            vnic for scheduling
+                          items:
+                            type: string
+                          type: array
+                        assignIpv6Ip:
+                          description: Whether to allocate an IPv6 address at instance
+                            and VNIC creation from an IPv6 enabled subnet
+                          type: boolean
+                        assignPublicIp:
+                          description: Whether the VNIC should be assigned a public
+                            IP address
+                          type: boolean
+                        definedTags:
+                          additionalProperties:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          description: |-
+                            Defined tags for this resource. Each key is predefined and scoped to a namespace.
+                            For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                            Example: `{"Operations": {"CostCenter": "42"}}`
+                          type: object
+                        displayName:
+                          description: Display name for secondary vnic
+                          type: string
+                        freeformTags:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
+                            For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
+                            Example: `{"Department": "Finance"}`
+                          type: object
+                        ipCount:
+                          description: The number of ip addresses to attach to secondary
+                            vnic
+                          type: integer
+                        ipv6AddressIpv6SubnetCidrPairDetails:
+                          description: |-
+                            A list of IPv6 prefixes from which the VNIC should be assigned an IPv6 address. You can provide only the prefix
+                            and OCI selects an available address from the range. You can optionally choose to leave the prefix range empty
+                            and instead provide the specific IPv6 address that should be used from within that range.
+                          items:
+                            description: NodePoolSecondaryVnicCreateVnicDetailsIpv6AddressIpv6SubnetCidrPairDetail
+                              defines nested fields for NodePool.SecondaryVnic.CreateVnicDetails.Ipv6AddressIpv6SubnetCidrPairDetail.
+                            properties:
+                              ipv6Address:
+                                description: An IPv6 address of your choice. Must
+                                  be an available IPv6 address within the subnet's
+                                  prefix
+                                type: string
+                              ipv6SubnetCidr:
+                                description: The IPv6 prefix allocated to the subnet
+                                type: string
+                            type: object
+                          type: array
+                        nsgIds:
+                          description: A list of the OCIDs of the network security
+                            groups (NSGs) to add the VNIC to
+                          items:
+                            type: string
+                          type: array
+                        securityAttributes:
+                          additionalProperties:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          description: |-
+                            Security attributes (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/zpr-artifacts.htm#security-attributes) are labels
+                                    for a resource that can be referenced in a Zero Trust Packet Routing (https://docs.oracle.com/iaas/Content/zero-trust-packet-routing/overview.htm)
+                                    (ZPR) policy to control access to ZPR-supported resources.
+                          type: object
+                        skipSourceDestCheck:
+                          description: Whether the source/destination check is disabled
+                            on the VNIC
+                          type: boolean
+                        subnetId:
+                          description: the ocid of the subnet to create the vnic in
+                          type: string
+                      required:
+                      - subnetId
+                      type: object
+                    displayName:
+                      description: Display name for vnic attachment
+                      type: string
+                    nicIndex:
+                      description: Which physical network interface card (NIC) the
+                        VNIC will use
+                      type: integer
+                  required:
+                  - createVnicDetails
+                  type: object
+                type: array
               sshPublicKey:
                 description: The SSH public key on each node in the node pool on launch.
                 type: string
               status:
                 properties:
+                  async:
+                    description: |-
+                      Async is the canonical controller-owned async contract. Resource-local
+                      legacy work-request fields may remain as compatibility mirrors while
+                      follow-on migrations land, but new async state should project here first.
+                    properties:
+                      current:
+                        properties:
+                          message:
+                            type: string
+                          normalizedClass:
+                            enum:
+                            - pending
+                            - succeeded
+                            - failed
+                            - canceled
+                            - attention
+                            - unknown
+                            type: string
+                          percentComplete:
+                            maximum: 100
+                            minimum: 0
+                            type: number
+                          phase:
+                            enum:
+                            - create
+                            - update
+                            - delete
+                            type: string
+                          rawOperationType:
+                            type: string
+                          rawStatus:
+                            type: string
+                          source:
+                            enum:
+                            - none
+                            - lifecycle
+                            - workrequest
+                            type: string
+                          updatedAt:
+                            format: date-time
+                            type: string
+                          workRequestId:
+                            type: string
+                        required:
+                        - normalizedClass
+                        - phase
+                        - source
+                        - updatedAt
+                        type: object
+                    type: object
                   conditions:
                     items:
                       properties:
@@ -745,6 +1080,13 @@ spec:
                   ocid:
                     maxLength: 255
                     minLength: 1
+                    type: string
+                  opcRequestId:
+                    description: |-
+                      OpcRequestID is the latest non-empty OCI request ID from a mutating OCI
+                      response or surfaced OCI service error that materially contributed to the
+                      current shared status projection. Headerless follow-up observations keep
+                      the last non-empty value intact.
                     type: string
                   reason:
                     type: string

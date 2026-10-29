@@ -56,7 +56,6 @@ func TestMockIntegrationBatchContextCRUD(t *testing.T) {
   "jobPriorityConfigurations": [],
   "key": "<ocid:2>",
   "lifecycleState": "ACTIVE",
-  "loggingConfiguration": {},
   "network": {
     "subnetId": "<ocid:required>"
   },
@@ -71,7 +70,6 @@ func TestMockIntegrationBatchContextCRUD(t *testing.T) {
   "jobPriorityConfigurations": [],
   "key": "<ocid:2>",
   "lifecycleState": "ACTIVE",
-  "loggingConfiguration": {},
   "network": {
     "subnetId": "<ocid:required>"
   },

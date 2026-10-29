@@ -68,6 +68,9 @@ type SoftwareSourceSpec struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the vendor software source in the root compartment that is being replicated.
 	// +kubebuilder:validation:Optional
 	OriginSoftwareSourceId string `json:"originSoftwareSourceId,omitempty"`
+	// The display name of the software source to be replicated
+	// +kubebuilder:validation:Optional
+	OriginDisplayName string `json:"originDisplayName,omitempty"`
 	// URL for the private software source.
 	// +kubebuilder:validation:Optional
 	Url string `json:"url,omitempty"`

@@ -51,6 +51,8 @@ type ListingRevisionNoteStatus struct {
 	// timestamp format.
 	// Example: `2022-09-24T21:10:29.600Z`
 	TimeUpdated string `json:"timeUpdated,omitempty"`
+	// Email address of the administrator who created the note, if available.
+	AdminEmail string `json:"adminEmail,omitempty"`
 	// The current state of the listing revision note.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.

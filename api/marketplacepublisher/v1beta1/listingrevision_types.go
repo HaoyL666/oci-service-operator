@@ -75,6 +75,12 @@ type ListingRevisionSpec struct {
 	// List of Pricing Plans provider by publisher.
 	// +kubebuilder:validation:Optional
 	PricingPlans []ListingRevisionPricingPlan `json:"pricingPlans,omitempty"`
+	// The url provided by partner for the registration of subscription.
+	// +kubebuilder:validation:Optional
+	PartnerRegistrationUrl string `json:"partnerRegistrationUrl,omitempty"`
+	// The unique id of the term attached to the listing.
+	// +kubebuilder:validation:Optional
+	TermId string `json:"termId,omitempty"`
 	// Custom link to the listing
 	// +kubebuilder:validation:Optional
 	VanityUrl string `json:"vanityUrl,omitempty"`
@@ -87,6 +93,12 @@ type ListingRevisionSpec struct {
 	// Is this listing rover exportable
 	// +kubebuilder:validation:Optional
 	IsRoverExportable bool `json:"isRoverExportable,omitempty"`
+	// Url to demo of the listing
+	// +kubebuilder:validation:Optional
+	DemoUrl string `json:"demoUrl,omitempty"`
+	// Url to training resources of the listing
+	// +kubebuilder:validation:Optional
+	SelfPacedTrainingUrl string `json:"selfPacedTrainingUrl,omitempty"`
 	// The pricing model for the listing revision.
 	// +kubebuilder:validation:Optional
 	PricingType string `json:"pricingType,omitempty"`
@@ -105,12 +117,6 @@ type ListingRevisionSpec struct {
 	// Support details based on geographic location
 	// +kubebuilder:validation:Optional
 	GeoLocations []ListingRevisionGeoLocation `json:"geoLocations,omitempty"`
-	// Url to demo of the listing
-	// +kubebuilder:validation:Optional
-	DemoUrl string `json:"demoUrl,omitempty"`
-	// Url to training resources of the listing
-	// +kubebuilder:validation:Optional
-	SelfPacedTrainingUrl string `json:"selfPacedTrainingUrl,omitempty"`
 	// +kubebuilder:validation:Optional
 	DownloadInfo ListingRevisionDownloadInfo `json:"downloadInfo,omitempty,omitzero"`
 }
@@ -207,6 +213,44 @@ type ListingRevisionPricingPlanRate struct {
 	Rate float32 `json:"rate"`
 }
 
+// ListingRevisionPricingPlanDimensionRate defines nested fields for ListingRevision.PricingPlan.Dimension.Rate.
+type ListingRevisionPricingPlanDimensionRate struct {
+	// The currency supported, in the format specified by ISO-4217
+	// +kubebuilder:validation:Required
+	BillingCurrency string `json:"billingCurrency"`
+	// Tha amount for the currency type.
+	// +kubebuilder:validation:Required
+	Rate float32 `json:"rate"`
+}
+
+// ListingRevisionPricingPlanDimension defines nested fields for ListingRevision.PricingPlan.Dimension.
+type ListingRevisionPricingPlanDimension struct {
+	// The dimension name.
+	// +kubebuilder:validation:Required
+	DimensionName string `json:"dimensionName"`
+	// The dimension description.
+	// +kubebuilder:validation:Required
+	DimensionDescription string `json:"dimensionDescription"`
+	// The metric type used to measure usage for the dimension.
+	// +kubebuilder:validation:Required
+	MetricType string `json:"metricType"`
+	// Billing frequency used for the dimension.
+	// +kubebuilder:validation:Required
+	DimensionBillingFrequency string `json:"dimensionBillingFrequency"`
+	// List of pricing rates provider by publisher for the dimension.
+	// +kubebuilder:validation:Required
+	Rates []ListingRevisionPricingPlanDimensionRate `json:"rates"`
+	// Server-generated unique identifier for the usage dimension. If omitted in the request, it is generated automatically.
+	// +kubebuilder:validation:Optional
+	DimensionKey string `json:"dimensionKey,omitempty"`
+	// Included quantity before overage rates apply.
+	// +kubebuilder:validation:Optional
+	IncludedQuantity float32 `json:"includedQuantity,omitempty"`
+	// Additional metadata key/value pairs for the dimension.
+	// +kubebuilder:validation:Optional
+	AdditionalDetails map[string]string `json:"additionalDetails,omitempty"`
+}
+
 // ListingRevisionPricingPlan defines nested fields for ListingRevision.PricingPlan.
 type ListingRevisionPricingPlan struct {
 	// +kubebuilder:validation:Optional
@@ -216,18 +260,27 @@ type ListingRevisionPricingPlan struct {
 	Rates []ListingRevisionPricingPlanRate `json:"rates"`
 	// +kubebuilder:validation:Optional
 	PlanType string `json:"planType,omitempty"`
-	// Additional metadata key/value pairs for the metering pricing.
-	// +kubebuilder:validation:Optional
-	ExtendedMetadata map[string]string `json:"extendedMetadata,omitempty"`
-	// The listing's pricing plan name.
+	// The plan name.
 	// +kubebuilder:validation:Optional
 	Name string `json:"name,omitempty"`
 	// The plan description.
 	// +kubebuilder:validation:Optional
 	PlanDescription string `json:"planDescription,omitempty"`
+	// The usage dimensions that define included usage and overage billing for this plan.
+	// +kubebuilder:validation:Optional
+	Dimensions []ListingRevisionPricingPlanDimension `json:"dimensions,omitempty"`
+	// Unique identifier of the pricing plan.
+	// +kubebuilder:validation:Optional
+	PricingPlanKey string `json:"pricingPlanKey,omitempty"`
+	// Additional metadata key/value pairs for the hybrid pricing.
+	// +kubebuilder:validation:Optional
+	ExtendedMetadata map[string]string `json:"extendedMetadata,omitempty"`
 	// The plan billing frequency.
 	// +kubebuilder:validation:Optional
 	BillingFrequency string `json:"billingFrequency,omitempty"`
+	// The plan duration.
+	// +kubebuilder:validation:Optional
+	PlanDuration string `json:"planDuration,omitempty"`
 }
 
 // ListingRevisionTrainedProfessional defines nested fields for ListingRevision.TrainedProfessional.
@@ -268,6 +321,16 @@ type ListingRevisionIcon struct {
 	MimeType string `json:"mimeType,omitempty"`
 }
 
+// ListingRevisionBanner defines nested fields for ListingRevision.Banner.
+type ListingRevisionBanner struct {
+	// The content URL of the uploaded data.
+	ContentUrl string `json:"contentUrl,omitempty"`
+	// The MIME type of the uploaded data.
+	MimeType string `json:"mimeType,omitempty"`
+	// The name of uploaded banner.
+	Name string `json:"name,omitempty"`
+}
+
 // ListingRevisionStatus defines the observed state of ListingRevision.
 type ListingRevisionStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
@@ -294,6 +357,7 @@ type ListingRevisionStatus struct {
 	// Links to support resources for the listing revision.
 	SupportLinks []ListingRevisionSupportLink `json:"supportLinks,omitempty"`
 	Icon         ListingRevisionIcon          `json:"icon,omitempty"`
+	Banner       ListingRevisionBanner        `json:"banner,omitempty"`
 	// Status notes for the listing revision.
 	StatusNotes string `json:"statusNotes,omitempty"`
 	// The listing's package type. Populated from the listing.
@@ -355,6 +419,10 @@ type ListingRevisionStatus struct {
 	PricingPlans string `json:"pricingPlans,omitempty"`
 	// The pricing model for the listing revision.
 	PricingType string `json:"pricingType,omitempty"`
+	// The url provided by partner for the registration of subscription.
+	PartnerRegistrationUrl string `json:"partnerRegistrationUrl,omitempty"`
+	// The unique id of the term attached to the listing.
+	TermId string `json:"termId,omitempty"`
 	// Listing availability and Pricing Policy statement.
 	AvailabilityAndPricingPolicy string `json:"availabilityAndPricingPolicy,omitempty"`
 	// Allowed tenancies provided when a listing revision is published as private.

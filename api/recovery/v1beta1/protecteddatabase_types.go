@@ -155,6 +155,8 @@ type ProtectedDatabaseStatus struct {
 	// A message describing the current health of the protected database.
 	HealthDetails string                   `json:"healthDetails,omitempty"`
 	Metrics       ProtectedDatabaseMetrics `json:"metrics,omitempty"`
+	// Indicates the cloud service environment where the protected database is provisioned. For example, Oracle Cloud or Microsoft Azure.
+	BackupCloudLocation string `json:"backupCloudLocation,omitempty"`
 	// The OCID of the cloud service subscription to which the protected database is linked.
 	SubscriptionId string `json:"subscriptionId,omitempty"`
 	// Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.

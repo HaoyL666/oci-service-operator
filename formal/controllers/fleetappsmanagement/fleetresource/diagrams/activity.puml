@@ -27,7 +27,7 @@ partition "Observe and Bind" {
 if ("Tracked or explicit OCI identity present?") then (yes)
 :Get the current OCI resource via\nGetFleetResource;
 else (no)
-:Resolve an existing OCI resource through\nListFleetResource using filters resourceId;
+:Resolve an existing OCI resource through\nListFleetResource using filters\ncompartment_id, state;
 :Create the OCI resource via\nCreateFleetResource when no reusable match is\nfound;
 :Persist the resolved or created OCI identity\ninto status;
 endif
@@ -55,18 +55,17 @@ stop
 endif
 }
 partition "Ready and Drift Handling" {
-:Compare live OCI state against the\nrepo-authored mutation surface;
+:Compare live OCI state against the imported\nfield surface;
 if ("Force-new or conflicting drift detected?") then (yes)
-:Reject drift before OCI mutation for force-new\nfields resourceId, resourceRegion,\nresourceType, fleetId;
+:Reject drift before OCI mutation for force-new\nfields compartment_id;
 stop
 endif
 if ("Supported mutable drift detected?") then (yes)
-:Apply UpdateFleetResource only for mutable\nfields tenancyId, compartmentId;
+:Apply UpdateFleetResource only for mutable\nfields display_name;
 else (no)
 :Skip the no-op mutation path;
 endif
 :Run provider helper hooks\ncreate=tfresource.CreateResource,\ntfresource.WaitForWorkRequestWithErrorHandling\nentity=template action=CREATED;\nupdate=tfresource.UpdateResource;\ndelete=tfresource.DeleteResource when the\nmatching field-driven path executes;
-:Apply explicit follow-up semantics\ncreate=work-request-then-read;\nupdate=work-request-then-read;\ndelete=work-request-then-confirm-delete;
 :Return success for the ACTIVE success state;
 :Project required status and finalizer policy\nretain-until-confirmed-delete;
 :Requeue on provisioning, updating, terminating;
@@ -94,29 +93,17 @@ retain-until-confirmed-delete
 requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-follow-up: create=work-request-then-read;
-update=work-request-then-read;
-delete=work-request-then-confirm-delete
-supported drift: tenancyId, compartmentId
+supported drift: display_name
 reject before mutate: force-new fields
-resourceId, resourceRegion, resourceType,
-fleetId
+compartment_id
 create-only fields: none
 list lookup:
 scaffold_fleetappsmanagement_fleetresource
-filters resourceId; exact unique match on fields
-exposed by the scoped OCI list response
+filters compartment_id, state
 conflicts: none
 open gaps: none
-The vendored SDK exposes create, update, delete
-through service work requests; the runtime polls
-those requests and preserves the tracked
-resource identity before rereading OCI.
-Parent identifiers scope composite OCI request
-paths and remain replacement-only unless the SDK
-update details explicitly expose them.
-Create, get, list where available, update, and
-delete request shapes are exercised by the
-package-local typed OCI mock integration test.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 @enduml

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "cloudguard",
+    "apiVersion": "cloudguard.oracle.com/v1beta1",
+    "kind": "DataSource",
+    "formalSlug": "datasource",
+    "providerResource": "oci_cloud_guard_data_source",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "dataSourceDetails",
+      "definedTags",
+      "displayName",
+      "freeformTags"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "compartmentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "dataSourceFeedProvider",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "status",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
+      }
+    ]
+  }
+}

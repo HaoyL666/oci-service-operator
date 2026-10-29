@@ -142,7 +142,7 @@ func (client FusionApplicationsClient) changeFusionEnvironmentCompartment(ctx co
 
 	var response ChangeFusionEnvironmentCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ChangeFusionEnvironmentCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -206,7 +206,7 @@ func (client FusionApplicationsClient) changeFusionEnvironmentFamilyCompartment(
 
 	var response ChangeFusionEnvironmentFamilyCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ChangeFusionEnvironmentFamilyCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -269,12 +269,75 @@ func (client FusionApplicationsClient) createDataMaskingActivity(ctx context.Con
 
 	var response CreateDataMaskingActivityResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateDataMaskingActivity")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/DataMaskingActivity/CreateDataMaskingActivity"
 		err = common.PostProcessServiceError(err, "FusionApplications", "CreateDataMaskingActivity", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateEmailSubdomain Creates an email Subdomain for a brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/CreateEmailSubdomain.go.html to see an example of how to use CreateEmailSubdomain API.
+// A default retry strategy applies to this operation CreateEmailSubdomain()
+func (client FusionApplicationsClient) CreateEmailSubdomain(ctx context.Context, request CreateEmailSubdomainRequest) (response CreateEmailSubdomainResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createEmailSubdomain, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateEmailSubdomainResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateEmailSubdomainResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateEmailSubdomainResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateEmailSubdomainResponse")
+	}
+	return
+}
+
+// createEmailSubdomain implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) createEmailSubdomain(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateEmailSubdomainResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateEmailSubdomain")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/CreateEmailSubdomain"
+		err = common.PostProcessServiceError(err, "FusionApplications", "CreateEmailSubdomain", apiReferenceLink)
 		return response, err
 	}
 
@@ -332,7 +395,7 @@ func (client FusionApplicationsClient) createFusionEnvironment(ctx context.Conte
 
 	var response CreateFusionEnvironmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateFusionEnvironment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -395,7 +458,7 @@ func (client FusionApplicationsClient) createFusionEnvironmentAdminUser(ctx cont
 
 	var response CreateFusionEnvironmentAdminUserResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateFusionEnvironmentAdminUser")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -458,12 +521,138 @@ func (client FusionApplicationsClient) createFusionEnvironmentFamily(ctx context
 
 	var response CreateFusionEnvironmentFamilyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateFusionEnvironmentFamily")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/FusionEnvironmentFamily/CreateFusionEnvironmentFamily"
 		err = common.PostProcessServiceError(err, "FusionApplications", "CreateFusionEnvironmentFamily", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateMarketingBrand Creates a marketing brand for fusion environment
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/CreateMarketingBrand.go.html to see an example of how to use CreateMarketingBrand API.
+// A default retry strategy applies to this operation CreateMarketingBrand()
+func (client FusionApplicationsClient) CreateMarketingBrand(ctx context.Context, request CreateMarketingBrandRequest) (response CreateMarketingBrandResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createMarketingBrand, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateMarketingBrandResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateMarketingBrandResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateMarketingBrandResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateMarketingBrandResponse")
+	}
+	return
+}
+
+// createMarketingBrand implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) createMarketingBrand(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateMarketingBrandResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateMarketingBrand")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/MarketingBrand/CreateMarketingBrand"
+		err = common.PostProcessServiceError(err, "FusionApplications", "CreateMarketingBrand", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateMicrosite Creates a microsite for brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/CreateMicrosite.go.html to see an example of how to use CreateMicrosite API.
+// A default retry strategy applies to this operation CreateMicrosite()
+func (client FusionApplicationsClient) CreateMicrosite(ctx context.Context, request CreateMicrositeRequest) (response CreateMicrositeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createMicrosite, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateMicrositeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateMicrositeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateMicrositeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateMicrositeResponse")
+	}
+	return
+}
+
+// createMicrosite implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) createMicrosite(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/microsites", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateMicrositeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateMicrosite")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/Microsite/CreateMicrosite"
+		err = common.PostProcessServiceError(err, "FusionApplications", "CreateMicrosite", apiReferenceLink)
 		return response, err
 	}
 
@@ -521,7 +710,7 @@ func (client FusionApplicationsClient) createRefreshActivity(ctx context.Context
 
 	var response CreateRefreshActivityResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateRefreshActivity")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -584,12 +773,196 @@ func (client FusionApplicationsClient) createServiceAttachment(ctx context.Conte
 
 	var response CreateServiceAttachmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateServiceAttachment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/ServiceAttachment/CreateServiceAttachment"
 		err = common.PostProcessServiceError(err, "FusionApplications", "CreateServiceAttachment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateVanityDomain Create a VanityDomain
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/CreateVanityDomain.go.html to see an example of how to use CreateVanityDomain API.
+// A default retry strategy applies to this operation CreateVanityDomain()
+func (client FusionApplicationsClient) CreateVanityDomain(ctx context.Context, request CreateVanityDomainRequest) (response CreateVanityDomainResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createVanityDomain, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateVanityDomainResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateVanityDomainResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateVanityDomainResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateVanityDomainResponse")
+	}
+	return
+}
+
+// createVanityDomain implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) createVanityDomain(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomains", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateVanityDomainResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateVanityDomain")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := ""
+		err = common.PostProcessServiceError(err, "FusionApplications", "CreateVanityDomain", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateVanityDomainActivity Create a VanityDomainActivity
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/CreateVanityDomainActivity.go.html to see an example of how to use CreateVanityDomainActivity API.
+// A default retry strategy applies to this operation CreateVanityDomainActivity()
+func (client FusionApplicationsClient) CreateVanityDomainActivity(ctx context.Context, request CreateVanityDomainActivityRequest) (response CreateVanityDomainActivityResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createVanityDomainActivity, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateVanityDomainActivityResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateVanityDomainActivityResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateVanityDomainActivityResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateVanityDomainActivityResponse")
+	}
+	return
+}
+
+// createVanityDomainActivity implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) createVanityDomainActivity(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomainActivities", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateVanityDomainActivityResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "CreateVanityDomainActivity")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomainActivity/CreateVanityDomainActivity"
+		err = common.PostProcessServiceError(err, "FusionApplications", "CreateVanityDomainActivity", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteEmailSubdomain Delete an email subdomain for a brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/DeleteEmailSubdomain.go.html to see an example of how to use DeleteEmailSubdomain API.
+// A default retry strategy applies to this operation DeleteEmailSubdomain()
+func (client FusionApplicationsClient) DeleteEmailSubdomain(ctx context.Context, request DeleteEmailSubdomainRequest) (response DeleteEmailSubdomainResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteEmailSubdomain, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteEmailSubdomainResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteEmailSubdomainResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteEmailSubdomainResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteEmailSubdomainResponse")
+	}
+	return
+}
+
+// deleteEmailSubdomain implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) deleteEmailSubdomain(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteEmailSubdomainResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteEmailSubdomain")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/DeleteEmailSubdomain"
+		err = common.PostProcessServiceError(err, "FusionApplications", "DeleteEmailSubdomain", apiReferenceLink)
 		return response, err
 	}
 
@@ -642,7 +1015,7 @@ func (client FusionApplicationsClient) deleteFusionEnvironment(ctx context.Conte
 
 	var response DeleteFusionEnvironmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteFusionEnvironment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -700,7 +1073,7 @@ func (client FusionApplicationsClient) deleteFusionEnvironmentAdminUser(ctx cont
 
 	var response DeleteFusionEnvironmentAdminUserResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteFusionEnvironmentAdminUser")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -758,12 +1131,128 @@ func (client FusionApplicationsClient) deleteFusionEnvironmentFamily(ctx context
 
 	var response DeleteFusionEnvironmentFamilyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteFusionEnvironmentFamily")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/FusionEnvironmentFamily/DeleteFusionEnvironmentFamily"
 		err = common.PostProcessServiceError(err, "FusionApplications", "DeleteFusionEnvironmentFamily", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteMarketingBrand Deletes a Marketing brand for fusion Environment
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/DeleteMarketingBrand.go.html to see an example of how to use DeleteMarketingBrand API.
+// A default retry strategy applies to this operation DeleteMarketingBrand()
+func (client FusionApplicationsClient) DeleteMarketingBrand(ctx context.Context, request DeleteMarketingBrandRequest) (response DeleteMarketingBrandResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteMarketingBrand, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteMarketingBrandResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteMarketingBrandResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteMarketingBrandResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteMarketingBrandResponse")
+	}
+	return
+}
+
+// deleteMarketingBrand implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) deleteMarketingBrand(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteMarketingBrandResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteMarketingBrand")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/MarketingBrand/DeleteMarketingBrand"
+		err = common.PostProcessServiceError(err, "FusionApplications", "DeleteMarketingBrand", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteMicrosite Delete microsite for a brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/DeleteMicrosite.go.html to see an example of how to use DeleteMicrosite API.
+// A default retry strategy applies to this operation DeleteMicrosite()
+func (client FusionApplicationsClient) DeleteMicrosite(ctx context.Context, request DeleteMicrositeRequest) (response DeleteMicrositeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteMicrosite, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteMicrositeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteMicrositeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteMicrositeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteMicrositeResponse")
+	}
+	return
+}
+
+// deleteMicrosite implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) deleteMicrosite(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/microsites/{micrositeId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteMicrositeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteMicrosite")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/Microsite/DeleteMicrosite"
+		err = common.PostProcessServiceError(err, "FusionApplications", "DeleteMicrosite", apiReferenceLink)
 		return response, err
 	}
 
@@ -816,7 +1305,7 @@ func (client FusionApplicationsClient) deleteRefreshActivity(ctx context.Context
 
 	var response DeleteRefreshActivityResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteRefreshActivity")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -874,12 +1363,70 @@ func (client FusionApplicationsClient) deleteServiceAttachment(ctx context.Conte
 
 	var response DeleteServiceAttachmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteServiceAttachment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/ServiceAttachment/DeleteServiceAttachment"
 		err = common.PostProcessServiceError(err, "FusionApplications", "DeleteServiceAttachment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteVanityDomainActivity Deletes a VanityDomainActivity
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/DeleteVanityDomainActivity.go.html to see an example of how to use DeleteVanityDomainActivity API.
+// A default retry strategy applies to this operation DeleteVanityDomainActivity()
+func (client FusionApplicationsClient) DeleteVanityDomainActivity(ctx context.Context, request DeleteVanityDomainActivityRequest) (response DeleteVanityDomainActivityResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteVanityDomainActivity, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteVanityDomainActivityResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteVanityDomainActivityResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteVanityDomainActivityResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteVanityDomainActivityResponse")
+	}
+	return
+}
+
+// deleteVanityDomainActivity implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) deleteVanityDomainActivity(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomainActivities/{vanityDomainActivityId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteVanityDomainActivityResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "DeleteVanityDomainActivity")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomainActivity/DeleteVanityDomainActivity"
+		err = common.PostProcessServiceError(err, "FusionApplications", "DeleteVanityDomainActivity", apiReferenceLink)
 		return response, err
 	}
 
@@ -932,7 +1479,7 @@ func (client FusionApplicationsClient) generateExtractDetails(ctx context.Contex
 
 	var response GenerateExtractDetailsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GenerateExtractDetails")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -990,12 +1537,186 @@ func (client FusionApplicationsClient) getDataMaskingActivity(ctx context.Contex
 
 	var response GetDataMaskingActivityResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetDataMaskingActivity")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/DataMaskingActivity/GetDataMaskingActivity"
 		err = common.PostProcessServiceError(err, "FusionApplications", "GetDataMaskingActivity", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetEmailSubdomain Gets an email subdomain for the brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/GetEmailSubdomain.go.html to see an example of how to use GetEmailSubdomain API.
+// A default retry strategy applies to this operation GetEmailSubdomain()
+func (client FusionApplicationsClient) GetEmailSubdomain(ctx context.Context, request GetEmailSubdomainRequest) (response GetEmailSubdomainResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getEmailSubdomain, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetEmailSubdomainResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetEmailSubdomainResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetEmailSubdomainResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetEmailSubdomainResponse")
+	}
+	return
+}
+
+// getEmailSubdomain implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) getEmailSubdomain(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetEmailSubdomainResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetEmailSubdomain")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/GetEmailSubdomain"
+		err = common.PostProcessServiceError(err, "FusionApplications", "GetEmailSubdomain", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetEmailSubdomainCsr Gets a CSR for email subdomain for a brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/GetEmailSubdomainCsr.go.html to see an example of how to use GetEmailSubdomainCsr API.
+// A default retry strategy applies to this operation GetEmailSubdomainCsr()
+func (client FusionApplicationsClient) GetEmailSubdomainCsr(ctx context.Context, request GetEmailSubdomainCsrRequest) (response GetEmailSubdomainCsrResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getEmailSubdomainCsr, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetEmailSubdomainCsrResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetEmailSubdomainCsrResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetEmailSubdomainCsrResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetEmailSubdomainCsrResponse")
+	}
+	return
+}
+
+// getEmailSubdomainCsr implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) getEmailSubdomainCsr(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}/csr", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetEmailSubdomainCsrResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetEmailSubdomainCsr")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/GetEmailSubdomainCsr"
+		err = common.PostProcessServiceError(err, "FusionApplications", "GetEmailSubdomainCsr", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetEmailSubdomainDnsConfig Get all DNS records for emailSubdomain
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/GetEmailSubdomainDnsConfig.go.html to see an example of how to use GetEmailSubdomainDnsConfig API.
+// A default retry strategy applies to this operation GetEmailSubdomainDnsConfig()
+func (client FusionApplicationsClient) GetEmailSubdomainDnsConfig(ctx context.Context, request GetEmailSubdomainDnsConfigRequest) (response GetEmailSubdomainDnsConfigResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getEmailSubdomainDnsConfig, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetEmailSubdomainDnsConfigResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetEmailSubdomainDnsConfigResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetEmailSubdomainDnsConfigResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetEmailSubdomainDnsConfigResponse")
+	}
+	return
+}
+
+// getEmailSubdomainDnsConfig implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) getEmailSubdomainDnsConfig(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}/dnsConfig", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetEmailSubdomainDnsConfigResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetEmailSubdomainDnsConfig")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/GetEmailSubdomainDnsConfig"
+		err = common.PostProcessServiceError(err, "FusionApplications", "GetEmailSubdomainDnsConfig", apiReferenceLink)
 		return response, err
 	}
 
@@ -1048,7 +1769,7 @@ func (client FusionApplicationsClient) getFusionEnvironment(ctx context.Context,
 
 	var response GetFusionEnvironmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetFusionEnvironment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1106,7 +1827,7 @@ func (client FusionApplicationsClient) getFusionEnvironmentFamily(ctx context.Co
 
 	var response GetFusionEnvironmentFamilyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetFusionEnvironmentFamily")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1164,7 +1885,7 @@ func (client FusionApplicationsClient) getFusionEnvironmentFamilyLimitsAndUsage(
 
 	var response GetFusionEnvironmentFamilyLimitsAndUsageResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetFusionEnvironmentFamilyLimitsAndUsage")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1222,7 +1943,7 @@ func (client FusionApplicationsClient) getFusionEnvironmentFamilySubscriptionDet
 
 	var response GetFusionEnvironmentFamilySubscriptionDetailResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetFusionEnvironmentFamilySubscriptionDetail")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1280,12 +2001,186 @@ func (client FusionApplicationsClient) getFusionEnvironmentStatus(ctx context.Co
 
 	var response GetFusionEnvironmentStatusResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetFusionEnvironmentStatus")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/FusionEnvironmentStatus/GetFusionEnvironmentStatus"
 		err = common.PostProcessServiceError(err, "FusionApplications", "GetFusionEnvironmentStatus", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetMarketingBrand Gets a Marketing Brand by identifier
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/GetMarketingBrand.go.html to see an example of how to use GetMarketingBrand API.
+// A default retry strategy applies to this operation GetMarketingBrand()
+func (client FusionApplicationsClient) GetMarketingBrand(ctx context.Context, request GetMarketingBrandRequest) (response GetMarketingBrandResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getMarketingBrand, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetMarketingBrandResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetMarketingBrandResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetMarketingBrandResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetMarketingBrandResponse")
+	}
+	return
+}
+
+// getMarketingBrand implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) getMarketingBrand(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetMarketingBrandResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetMarketingBrand")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/MarketingBrand/GetMarketingBrand"
+		err = common.PostProcessServiceError(err, "FusionApplications", "GetMarketingBrand", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetMicrosite Get the microsite for the brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/GetMicrosite.go.html to see an example of how to use GetMicrosite API.
+// A default retry strategy applies to this operation GetMicrosite()
+func (client FusionApplicationsClient) GetMicrosite(ctx context.Context, request GetMicrositeRequest) (response GetMicrositeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getMicrosite, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetMicrositeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetMicrositeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetMicrositeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetMicrositeResponse")
+	}
+	return
+}
+
+// getMicrosite implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) getMicrosite(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/microsites/{micrositeId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetMicrositeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetMicrosite")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/Microsite/GetMicrosite"
+		err = common.PostProcessServiceError(err, "FusionApplications", "GetMicrosite", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetMicrositeDnsConfig Get DNS records for microsite
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/GetMicrositeDnsConfig.go.html to see an example of how to use GetMicrositeDnsConfig API.
+// A default retry strategy applies to this operation GetMicrositeDnsConfig()
+func (client FusionApplicationsClient) GetMicrositeDnsConfig(ctx context.Context, request GetMicrositeDnsConfigRequest) (response GetMicrositeDnsConfigResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getMicrositeDnsConfig, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetMicrositeDnsConfigResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetMicrositeDnsConfigResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetMicrositeDnsConfigResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetMicrositeDnsConfigResponse")
+	}
+	return
+}
+
+// getMicrositeDnsConfig implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) getMicrositeDnsConfig(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/microsites/{micrositeId}/dnsConfig", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetMicrositeDnsConfigResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetMicrositeDnsConfig")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/Microsite/GetMicrositeDnsConfig"
+		err = common.PostProcessServiceError(err, "FusionApplications", "GetMicrositeDnsConfig", apiReferenceLink)
 		return response, err
 	}
 
@@ -1338,7 +2233,7 @@ func (client FusionApplicationsClient) getRefreshActivity(ctx context.Context, r
 
 	var response GetRefreshActivityResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetRefreshActivity")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1396,7 +2291,7 @@ func (client FusionApplicationsClient) getScheduledActivity(ctx context.Context,
 
 	var response GetScheduledActivityResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetScheduledActivity")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1454,12 +2349,128 @@ func (client FusionApplicationsClient) getServiceAttachment(ctx context.Context,
 
 	var response GetServiceAttachmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetServiceAttachment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/ServiceAttachment/GetServiceAttachment"
 		err = common.PostProcessServiceError(err, "FusionApplications", "GetServiceAttachment", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetVanityDomain Gets a VanityDomain
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/GetVanityDomain.go.html to see an example of how to use GetVanityDomain API.
+// A default retry strategy applies to this operation GetVanityDomain()
+func (client FusionApplicationsClient) GetVanityDomain(ctx context.Context, request GetVanityDomainRequest) (response GetVanityDomainResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getVanityDomain, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetVanityDomainResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetVanityDomainResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetVanityDomainResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetVanityDomainResponse")
+	}
+	return
+}
+
+// getVanityDomain implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) getVanityDomain(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomains/{vanityDomainId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetVanityDomainResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetVanityDomain")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomain/GetVanityDomain"
+		err = common.PostProcessServiceError(err, "FusionApplications", "GetVanityDomain", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetVanityDomainActivity Gets a VanityDomainActivity
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/GetVanityDomainActivity.go.html to see an example of how to use GetVanityDomainActivity API.
+// A default retry strategy applies to this operation GetVanityDomainActivity()
+func (client FusionApplicationsClient) GetVanityDomainActivity(ctx context.Context, request GetVanityDomainActivityRequest) (response GetVanityDomainActivityResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getVanityDomainActivity, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetVanityDomainActivityResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetVanityDomainActivityResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetVanityDomainActivityResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetVanityDomainActivityResponse")
+	}
+	return
+}
+
+// getVanityDomainActivity implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) getVanityDomainActivity(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomainActivities/{vanityDomainActivityId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetVanityDomainActivityResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetVanityDomainActivity")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomainActivity/GetVanityDomainActivity"
+		err = common.PostProcessServiceError(err, "FusionApplications", "GetVanityDomainActivity", apiReferenceLink)
 		return response, err
 	}
 
@@ -1512,7 +2523,7 @@ func (client FusionApplicationsClient) getWorkRequest(ctx context.Context, reque
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1570,7 +2581,7 @@ func (client FusionApplicationsClient) initiateExtract(ctx context.Context, requ
 
 	var response InitiateExtractResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "InitiateExtract")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1628,7 +2639,7 @@ func (client FusionApplicationsClient) listAdminUsers(ctx context.Context, reque
 
 	var response ListAdminUsersResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListAdminUsers")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1686,12 +2697,70 @@ func (client FusionApplicationsClient) listDataMaskingActivities(ctx context.Con
 
 	var response ListDataMaskingActivitiesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListDataMaskingActivities")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/DataMaskingActivity/ListDataMaskingActivities"
 		err = common.PostProcessServiceError(err, "FusionApplications", "ListDataMaskingActivities", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListEmailSubdomains Returns a list of email subdomains for a brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/ListEmailSubdomains.go.html to see an example of how to use ListEmailSubdomains API.
+// A default retry strategy applies to this operation ListEmailSubdomains()
+func (client FusionApplicationsClient) ListEmailSubdomains(ctx context.Context, request ListEmailSubdomainsRequest) (response ListEmailSubdomainsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listEmailSubdomains, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListEmailSubdomainsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListEmailSubdomainsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListEmailSubdomainsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListEmailSubdomainsResponse")
+	}
+	return
+}
+
+// listEmailSubdomains implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) listEmailSubdomains(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListEmailSubdomainsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListEmailSubdomains")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/ListEmailSubdomains"
+		err = common.PostProcessServiceError(err, "FusionApplications", "ListEmailSubdomains", apiReferenceLink)
 		return response, err
 	}
 
@@ -1744,7 +2813,7 @@ func (client FusionApplicationsClient) listFusionEnvironmentFamilies(ctx context
 
 	var response ListFusionEnvironmentFamiliesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListFusionEnvironmentFamilies")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1802,12 +2871,128 @@ func (client FusionApplicationsClient) listFusionEnvironments(ctx context.Contex
 
 	var response ListFusionEnvironmentsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListFusionEnvironments")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/FusionEnvironment/ListFusionEnvironments"
 		err = common.PostProcessServiceError(err, "FusionApplications", "ListFusionEnvironments", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListMarketingBrands Returns a list of marketing brands
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/ListMarketingBrands.go.html to see an example of how to use ListMarketingBrands API.
+// A default retry strategy applies to this operation ListMarketingBrands()
+func (client FusionApplicationsClient) ListMarketingBrands(ctx context.Context, request ListMarketingBrandsRequest) (response ListMarketingBrandsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listMarketingBrands, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListMarketingBrandsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListMarketingBrandsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListMarketingBrandsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListMarketingBrandsResponse")
+	}
+	return
+}
+
+// listMarketingBrands implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) listMarketingBrands(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListMarketingBrandsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListMarketingBrands")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/MarketingBrand/ListMarketingBrands"
+		err = common.PostProcessServiceError(err, "FusionApplications", "ListMarketingBrands", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListMicrosites Returns a list of microsites
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/ListMicrosites.go.html to see an example of how to use ListMicrosites API.
+// A default retry strategy applies to this operation ListMicrosites()
+func (client FusionApplicationsClient) ListMicrosites(ctx context.Context, request ListMicrositesRequest) (response ListMicrositesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listMicrosites, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListMicrositesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListMicrositesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListMicrositesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListMicrositesResponse")
+	}
+	return
+}
+
+// listMicrosites implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) listMicrosites(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/microsites", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListMicrositesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListMicrosites")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/Microsite/ListMicrosites"
+		err = common.PostProcessServiceError(err, "FusionApplications", "ListMicrosites", apiReferenceLink)
 		return response, err
 	}
 
@@ -1860,7 +3045,7 @@ func (client FusionApplicationsClient) listRefreshActivities(ctx context.Context
 
 	var response ListRefreshActivitiesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListRefreshActivities")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1918,7 +3103,7 @@ func (client FusionApplicationsClient) listScheduledActivities(ctx context.Conte
 
 	var response ListScheduledActivitiesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListScheduledActivities")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1976,7 +3161,7 @@ func (client FusionApplicationsClient) listServiceAttachments(ctx context.Contex
 
 	var response ListServiceAttachmentsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListServiceAttachments")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2034,12 +3219,70 @@ func (client FusionApplicationsClient) listTimeAvailableForRefreshes(ctx context
 
 	var response ListTimeAvailableForRefreshesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListTimeAvailableForRefreshes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/TimeAvailableForRefresh/ListTimeAvailableForRefreshes"
 		err = common.PostProcessServiceError(err, "FusionApplications", "ListTimeAvailableForRefreshes", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListVanityDomains Lists all VanityDomains.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/ListVanityDomains.go.html to see an example of how to use ListVanityDomains API.
+// A default retry strategy applies to this operation ListVanityDomains()
+func (client FusionApplicationsClient) ListVanityDomains(ctx context.Context, request ListVanityDomainsRequest) (response ListVanityDomainsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listVanityDomains, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListVanityDomainsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListVanityDomainsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListVanityDomainsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListVanityDomainsResponse")
+	}
+	return
+}
+
+// listVanityDomains implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) listVanityDomains(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomains", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListVanityDomainsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListVanityDomains")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomain/ListVanityDomains"
+		err = common.PostProcessServiceError(err, "FusionApplications", "ListVanityDomains", apiReferenceLink)
 		return response, err
 	}
 
@@ -2092,7 +3335,7 @@ func (client FusionApplicationsClient) listWorkRequestErrors(ctx context.Context
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2150,7 +3393,7 @@ func (client FusionApplicationsClient) listWorkRequestLogs(ctx context.Context, 
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2208,12 +3451,70 @@ func (client FusionApplicationsClient) listWorkRequests(ctx context.Context, req
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/WorkRequest/ListWorkRequests"
 		err = common.PostProcessServiceError(err, "FusionApplications", "ListWorkRequests", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// RequestEmailSubdomainCsr Request Email Subdomain CSR
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/RequestEmailSubdomainCsr.go.html to see an example of how to use RequestEmailSubdomainCsr API.
+// A default retry strategy applies to this operation RequestEmailSubdomainCsr()
+func (client FusionApplicationsClient) RequestEmailSubdomainCsr(ctx context.Context, request RequestEmailSubdomainCsrRequest) (response RequestEmailSubdomainCsrResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.requestEmailSubdomainCsr, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = RequestEmailSubdomainCsrResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = RequestEmailSubdomainCsrResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(RequestEmailSubdomainCsrResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into RequestEmailSubdomainCsrResponse")
+	}
+	return
+}
+
+// requestEmailSubdomainCsr implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) requestEmailSubdomainCsr(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}/actions/requestEmailSubdomainCsr", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response RequestEmailSubdomainCsrResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "RequestEmailSubdomainCsr")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/RequestEmailSubdomainCsr"
+		err = common.PostProcessServiceError(err, "FusionApplications", "RequestEmailSubdomainCsr", apiReferenceLink)
 		return response, err
 	}
 
@@ -2271,12 +3572,128 @@ func (client FusionApplicationsClient) resetFusionEnvironmentPassword(ctx contex
 
 	var response ResetFusionEnvironmentPasswordResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ResetFusionEnvironmentPassword")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/FusionEnvironment/ResetFusionEnvironmentPassword"
 		err = common.PostProcessServiceError(err, "FusionApplications", "ResetFusionEnvironmentPassword", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// SubmitVanityDomainValidation Submit Vanity Domain Validation
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/SubmitVanityDomainValidation.go.html to see an example of how to use SubmitVanityDomainValidation API.
+// A default retry strategy applies to this operation SubmitVanityDomainValidation()
+func (client FusionApplicationsClient) SubmitVanityDomainValidation(ctx context.Context, request SubmitVanityDomainValidationRequest) (response SubmitVanityDomainValidationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.submitVanityDomainValidation, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = SubmitVanityDomainValidationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = SubmitVanityDomainValidationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(SubmitVanityDomainValidationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into SubmitVanityDomainValidationResponse")
+	}
+	return
+}
+
+// submitVanityDomainValidation implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) submitVanityDomainValidation(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomains/{vanityDomainId}/actions/submitValidation", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response SubmitVanityDomainValidationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "SubmitVanityDomainValidation")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomain/SubmitVanityDomainValidation"
+		err = common.PostProcessServiceError(err, "FusionApplications", "SubmitVanityDomainValidation", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateEmailSubdomain Updates an email subdomain
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/UpdateEmailSubdomain.go.html to see an example of how to use UpdateEmailSubdomain API.
+// A default retry strategy applies to this operation UpdateEmailSubdomain()
+func (client FusionApplicationsClient) UpdateEmailSubdomain(ctx context.Context, request UpdateEmailSubdomainRequest) (response UpdateEmailSubdomainResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateEmailSubdomain, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateEmailSubdomainResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateEmailSubdomainResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateEmailSubdomainResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateEmailSubdomainResponse")
+	}
+	return
+}
+
+// updateEmailSubdomain implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) updateEmailSubdomain(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateEmailSubdomainResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UpdateEmailSubdomain")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/UpdateEmailSubdomain"
+		err = common.PostProcessServiceError(err, "FusionApplications", "UpdateEmailSubdomain", apiReferenceLink)
 		return response, err
 	}
 
@@ -2329,7 +3746,7 @@ func (client FusionApplicationsClient) updateFusionEnvironment(ctx context.Conte
 
 	var response UpdateFusionEnvironmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UpdateFusionEnvironment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2387,12 +3804,128 @@ func (client FusionApplicationsClient) updateFusionEnvironmentFamily(ctx context
 
 	var response UpdateFusionEnvironmentFamilyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UpdateFusionEnvironmentFamily")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/FusionEnvironmentFamily/UpdateFusionEnvironmentFamily"
 		err = common.PostProcessServiceError(err, "FusionApplications", "UpdateFusionEnvironmentFamily", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateMarketingBrand Updates a Marketing Brand
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/UpdateMarketingBrand.go.html to see an example of how to use UpdateMarketingBrand API.
+// A default retry strategy applies to this operation UpdateMarketingBrand()
+func (client FusionApplicationsClient) UpdateMarketingBrand(ctx context.Context, request UpdateMarketingBrandRequest) (response UpdateMarketingBrandResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateMarketingBrand, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateMarketingBrandResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateMarketingBrandResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateMarketingBrandResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateMarketingBrandResponse")
+	}
+	return
+}
+
+// updateMarketingBrand implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) updateMarketingBrand(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateMarketingBrandResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UpdateMarketingBrand")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/MarketingBrand/UpdateMarketingBrand"
+		err = common.PostProcessServiceError(err, "FusionApplications", "UpdateMarketingBrand", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateMicrosite Updates an microsite
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/UpdateMicrosite.go.html to see an example of how to use UpdateMicrosite API.
+// A default retry strategy applies to this operation UpdateMicrosite()
+func (client FusionApplicationsClient) UpdateMicrosite(ctx context.Context, request UpdateMicrositeRequest) (response UpdateMicrositeResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateMicrosite, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateMicrositeResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateMicrositeResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateMicrositeResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateMicrositeResponse")
+	}
+	return
+}
+
+// updateMicrosite implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) updateMicrosite(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/microsites/{micrositeId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateMicrositeResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UpdateMicrosite")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/Microsite/UpdateMicrosite"
+		err = common.PostProcessServiceError(err, "FusionApplications", "UpdateMicrosite", apiReferenceLink)
 		return response, err
 	}
 
@@ -2445,12 +3978,418 @@ func (client FusionApplicationsClient) updateRefreshActivity(ctx context.Context
 
 	var response UpdateRefreshActivityResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UpdateRefreshActivity")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/UpdateRefreshActivityDetails/UpdateRefreshActivity"
 		err = common.PostProcessServiceError(err, "FusionApplications", "UpdateRefreshActivity", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateVanityDomain Updates a VanityDomain
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/UpdateVanityDomain.go.html to see an example of how to use UpdateVanityDomain API.
+// A default retry strategy applies to this operation UpdateVanityDomain()
+func (client FusionApplicationsClient) UpdateVanityDomain(ctx context.Context, request UpdateVanityDomainRequest) (response UpdateVanityDomainResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateVanityDomain, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateVanityDomainResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateVanityDomainResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateVanityDomainResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateVanityDomainResponse")
+	}
+	return
+}
+
+// updateVanityDomain implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) updateVanityDomain(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomains/{vanityDomainId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateVanityDomainResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UpdateVanityDomain")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomain/UpdateVanityDomain"
+		err = common.PostProcessServiceError(err, "FusionApplications", "UpdateVanityDomain", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateVanityDomainActivity Updates a VanityDomainActivity
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/UpdateVanityDomainActivity.go.html to see an example of how to use UpdateVanityDomainActivity API.
+// A default retry strategy applies to this operation UpdateVanityDomainActivity()
+func (client FusionApplicationsClient) UpdateVanityDomainActivity(ctx context.Context, request UpdateVanityDomainActivityRequest) (response UpdateVanityDomainActivityResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.updateVanityDomainActivity, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateVanityDomainActivityResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateVanityDomainActivityResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateVanityDomainActivityResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateVanityDomainActivityResponse")
+	}
+	return
+}
+
+// updateVanityDomainActivity implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) updateVanityDomainActivity(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomainActivities/{vanityDomainActivityId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateVanityDomainActivityResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UpdateVanityDomainActivity")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomainActivity/UpdateVanityDomainActivity"
+		err = common.PostProcessServiceError(err, "FusionApplications", "UpdateVanityDomainActivity", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UploadEmailSubdomainCertificate upload certificate for emailSubdomain
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/UploadEmailSubdomainCertificate.go.html to see an example of how to use UploadEmailSubdomainCertificate API.
+// A default retry strategy applies to this operation UploadEmailSubdomainCertificate()
+func (client FusionApplicationsClient) UploadEmailSubdomainCertificate(ctx context.Context, request UploadEmailSubdomainCertificateRequest) (response UploadEmailSubdomainCertificateResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.uploadEmailSubdomainCertificate, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UploadEmailSubdomainCertificateResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UploadEmailSubdomainCertificateResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UploadEmailSubdomainCertificateResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UploadEmailSubdomainCertificateResponse")
+	}
+	return
+}
+
+// uploadEmailSubdomainCertificate implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) uploadEmailSubdomainCertificate(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}/actions/uploadEmailSubdomainCertificate", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UploadEmailSubdomainCertificateResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UploadEmailSubdomainCertificate")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/UploadEmailSubdomainCertificate"
+		err = common.PostProcessServiceError(err, "FusionApplications", "UploadEmailSubdomainCertificate", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UploadVanityDomainCertificate Upload Vanity Domain certificate
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/UploadVanityDomainCertificate.go.html to see an example of how to use UploadVanityDomainCertificate API.
+// A default retry strategy applies to this operation UploadVanityDomainCertificate()
+func (client FusionApplicationsClient) UploadVanityDomainCertificate(ctx context.Context, request UploadVanityDomainCertificateRequest) (response UploadVanityDomainCertificateResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.uploadVanityDomainCertificate, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UploadVanityDomainCertificateResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UploadVanityDomainCertificateResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UploadVanityDomainCertificateResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UploadVanityDomainCertificateResponse")
+	}
+	return
+}
+
+// uploadVanityDomainCertificate implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) uploadVanityDomainCertificate(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/vanityDomains/{vanityDomainId}/actions/uploadCertificate", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UploadVanityDomainCertificateResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "UploadVanityDomainCertificate")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/VanityDomain/UploadVanityDomainCertificate"
+		err = common.PostProcessServiceError(err, "FusionApplications", "UploadVanityDomainCertificate", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ValidateAndConfigureEmailSubdomainCertificate Validate and configure certificate for emailSubdomain
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/ValidateAndConfigureEmailSubdomainCertificate.go.html to see an example of how to use ValidateAndConfigureEmailSubdomainCertificate API.
+// A default retry strategy applies to this operation ValidateAndConfigureEmailSubdomainCertificate()
+func (client FusionApplicationsClient) ValidateAndConfigureEmailSubdomainCertificate(ctx context.Context, request ValidateAndConfigureEmailSubdomainCertificateRequest) (response ValidateAndConfigureEmailSubdomainCertificateResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.validateAndConfigureEmailSubdomainCertificate, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ValidateAndConfigureEmailSubdomainCertificateResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ValidateAndConfigureEmailSubdomainCertificateResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ValidateAndConfigureEmailSubdomainCertificateResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ValidateAndConfigureEmailSubdomainCertificateResponse")
+	}
+	return
+}
+
+// validateAndConfigureEmailSubdomainCertificate implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) validateAndConfigureEmailSubdomainCertificate(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}/actions/validateAndConfigureCertificate", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ValidateAndConfigureEmailSubdomainCertificateResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ValidateAndConfigureEmailSubdomainCertificate")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/ValidateAndConfigureEmailSubdomainCertificate"
+		err = common.PostProcessServiceError(err, "FusionApplications", "ValidateAndConfigureEmailSubdomainCertificate", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ValidateAndConfigureEmailSubdomainDns Validate and configure DNS records for emailSubdomain
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/ValidateAndConfigureEmailSubdomainDns.go.html to see an example of how to use ValidateAndConfigureEmailSubdomainDns API.
+// A default retry strategy applies to this operation ValidateAndConfigureEmailSubdomainDns()
+func (client FusionApplicationsClient) ValidateAndConfigureEmailSubdomainDns(ctx context.Context, request ValidateAndConfigureEmailSubdomainDnsRequest) (response ValidateAndConfigureEmailSubdomainDnsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.validateAndConfigureEmailSubdomainDns, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ValidateAndConfigureEmailSubdomainDnsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ValidateAndConfigureEmailSubdomainDnsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ValidateAndConfigureEmailSubdomainDnsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ValidateAndConfigureEmailSubdomainDnsResponse")
+	}
+	return
+}
+
+// validateAndConfigureEmailSubdomainDns implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) validateAndConfigureEmailSubdomainDns(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/emailSubdomains/{emailSubdomainId}/actions/validateAndConfigureDns", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ValidateAndConfigureEmailSubdomainDnsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ValidateAndConfigureEmailSubdomainDns")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/EmailSubdomain/ValidateAndConfigureEmailSubdomainDns"
+		err = common.PostProcessServiceError(err, "FusionApplications", "ValidateAndConfigureEmailSubdomainDns", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ValidateAndConfigureMicrositeDns Validate and configure DNS records for microsite
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/fusionapps/ValidateAndConfigureMicrositeDns.go.html to see an example of how to use ValidateAndConfigureMicrositeDns API.
+// A default retry strategy applies to this operation ValidateAndConfigureMicrositeDns()
+func (client FusionApplicationsClient) ValidateAndConfigureMicrositeDns(ctx context.Context, request ValidateAndConfigureMicrositeDnsRequest) (response ValidateAndConfigureMicrositeDnsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.validateAndConfigureMicrositeDns, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ValidateAndConfigureMicrositeDnsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ValidateAndConfigureMicrositeDnsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ValidateAndConfigureMicrositeDnsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ValidateAndConfigureMicrositeDnsResponse")
+	}
+	return
+}
+
+// validateAndConfigureMicrositeDns implements the OCIOperation interface (enables retrying operations)
+func (client FusionApplicationsClient) validateAndConfigureMicrositeDns(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/fusionEnvironments/{fusionEnvironmentId}/marketingBrands/{marketingBrandId}/microsites/{micrositeId}/actions/validateAndConfigureDns", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ValidateAndConfigureMicrositeDnsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "ValidateAndConfigureMicrositeDns")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/fusion-applications/20211201/Microsite/ValidateAndConfigureMicrositeDns"
+		err = common.PostProcessServiceError(err, "FusionApplications", "ValidateAndConfigureMicrositeDns", apiReferenceLink)
 		return response, err
 	}
 
@@ -2503,7 +4442,7 @@ func (client FusionApplicationsClient) verifyServiceAttachment(ctx context.Conte
 
 	var response VerifyServiceAttachmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "fusionApplications", "VerifyServiceAttachment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

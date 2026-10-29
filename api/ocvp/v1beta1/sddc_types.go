@@ -262,6 +262,9 @@ type SddcInitialConfigurationInitialClusterConfiguration struct {
 	// A list of datastore clusters.
 	// +kubebuilder:validation:Optional
 	DatastoreClusterIds []string `json:"datastoreClusterIds,omitempty"`
+	// Initial Fault Domain Host distribution mode for the Cluster.
+	// +kubebuilder:validation:Optional
+	InitialFaultDomainHostDistribution string `json:"initialFaultDomainHostDistribution,omitempty"`
 	// +kubebuilder:validation:Optional
 	ClusterByolAllocationDetails SddcInitialConfigurationInitialClusterConfigurationClusterByolAllocationDetails `json:"clusterByolAllocationDetails,omitempty,omitzero"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation.

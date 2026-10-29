@@ -53,7 +53,7 @@ type ZoneSpec struct {
 	// The scope of the zone.
 	// +kubebuilder:validation:Optional
 	Scope string `json:"scope,omitempty"`
-	// The resolution mode of a zone defines behavior related to how query responses can be handled.
+	// The resolution mode of a zone defines behavior related to how query responses can be handled. See Private DNS Zone Transparency (https://docs.oracle.com/iaas/Content/DNS/Tasks/privatedns.htm#use-cases__resolution) for more information.
 	// +kubebuilder:validation:Optional
 	ResolutionMode string `json:"resolutionMode,omitempty"`
 	// The state of DNSSEC on the zone.
@@ -308,7 +308,7 @@ type ZoneStatus struct {
 	//
 	// **Example:** `{"Operations": {"CostCenter": "42"}}`
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
-	// The resolution mode of a zone defines behavior related to how query responses can be handled.
+	// The resolution mode of a zone defines behavior related to how query responses can be handled. See Private DNS Zone Transparency (https://docs.oracle.com/iaas/Content/DNS/Tasks/privatedns.htm#use-cases__resolution) for more information.
 	ResolutionMode string `json:"resolutionMode,omitempty"`
 	// The state of DNSSEC on the zone.
 	// For DNSSEC to function, every parent zone in the DNS tree up to the top-level domain (or an independent

@@ -63,6 +63,13 @@ spec:
                   `InfrequentAccess` are transitioned automatically between the 'Standard' and 'InfrequentAccess'
                   tiers based on the access pattern of the objects.
                 type: string
+              bucketScope:
+                description: |-
+                  The bucket scope determines weather the bucket name must be unique within the tenancy and region (essentially the namespace) or across all tenancies in the region. The bucket scope also determines if the bucket supports S3 virtual-hosted style URL's or not.
+                  Allowed values:
+                  NAMESPACE: Only supports path-style bucket access, bucket name only needs to be unique within the tenancy and region.
+                  REGION: Supports both path-style and virtual-hosted URL style access, bucket name needs to be unique across all tenancies in the region.
+                type: string
               compartmentId:
                 description: The ID of the compartment in which to create the bucket.
                 type: string
@@ -84,6 +91,12 @@ spec:
                   For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
                   Example: `{"Department": "Finance"}`
                 type: object
+              isBucketKeyEnabled:
+                description: |-
+                  Specifies whether Object Storage should use intermediate cached Bucket Encryption Keys with server-side
+                  encryption using KMS (SSE-KMS) for new objects in the bucket. This reduces calls to OCI Vault Key Management
+                  Service (KMS). Existing objects are not affected.
+                type: boolean
               kmsKeyId:
                 description: |-
                   The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a master encryption key used to call the Key
@@ -157,6 +170,13 @@ spec:
                   For auto tiering `InfrequentAccess`, objects are transitioned automatically between the 'Standard'
                   and 'InfrequentAccess' tiers based on the access pattern of the objects.
                 type: string
+              bucketScope:
+                description: |-
+                  The bucket scope determines weather the bucket name must be unique within the tenancy and region (essentially the namespace) or across all tenancies in the region. The bucket scope also determines if the bucket supports S3 virtual-hosted style URL's or not.
+                  Allowed values:
+                  NAMESPACE: Only supports path-style bucket access, bucket name only needs to be unique within the tenancy and region.
+                  REGION: Supports both path-style and virtual-hosted URL style access, bucket name needs to be unique across all tenancies in the region.
+                type: string
               compartmentId:
                 description: The compartment ID in which the bucket is authorized.
                 type: string
@@ -189,6 +209,12 @@ spec:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the bucket.
                 type: string
+              isBucketKeyEnabled:
+                description: |-
+                  Specifies whether Object Storage should use intermediate cached Bucket Encryption Keys with server-side
+                  encryption using KMS (SSE-KMS) for new objects in the bucket. This reduces calls to OCI Vault Key Management
+                  Service (KMS). Existing objects are not affected.
+                type: boolean
               isReadOnly:
                 description: |-
                   Whether or not this bucket is read only. By default, `isReadOnly` is set to `false`. This will

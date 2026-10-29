@@ -47,6 +47,7 @@ OperatorControlSpec defines the desired state of OperatorControl.
 | `emailIdList` | List of emailId. | `list[string]` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. | `map[string, string]` | No | - | - |
 | `isFullyPreApproved` | Whether all the operator actions have been pre-approved. If yes, all access requests associated with a resource governed by this operator control will be auto-approved. | `boolean` | Yes | - | - |
+| `notificationTopicId` | The OCID of the OCI Notification topic to publish messages related to this operator control. | `string` | No | - | - |
 | `numberOfApprovers` | Number of approvers required to approve an access request. | `integer` | No | - | - |
 | `operatorControlName` | Name of the operator control. | `string` | Yes | - | - |
 | `preApprovedOpActionList` | List of pre-approved operator actions. Access requests associated with a resource governed by this operator control will be auto-approved if the access request only contain operator actions in the pre-approved list. | `list[string]` | No | - | - |
@@ -73,6 +74,7 @@ OperatorControlStatus defines the observed state of OperatorControl.
 | `isFullyPreApproved` | Whether all the operator actions have been pre-approved. If yes, all access requests associated with a resource governed by this operator control will be auto-approved. | `boolean` | No | - | - |
 | `lastModifiedInfo` | Description associated with the latest modification of the operator control. | `string` | No | - | - |
 | `lifecycleState` | The current lifecycle state of the operator control. | `string` | No | - | - |
+| `notificationTopicId` | The OCID of the OCI Notification topic to publish messages related to this operator control. | `string` | No | - | - |
 | `numberOfApprovers` | Number of approvers required to approve an access request. | `integer` | No | - | - |
 | `operatorControlName` | Name of the operator control. The name must be unique. | `string` | No | - | - |
 | `preApprovedOpActionList` | List of pre-approved operator actions. Access requests associated with a resource governed by this operator control will be automatically approved if the access request only contain operator actions in the pre-approved list. | `list[string]` | No | - | - |

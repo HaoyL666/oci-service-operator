@@ -668,6 +668,7 @@ DataSafePrivateEndpointSpec defines the desired state of DataSafePrivateEndpoint
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `nsgIds` | The OCIDs of the network security groups that the private endpoint belongs to. | `list[string]` | No | - | - |
 | `privateEndpointIp` | The private IP address of the private endpoint. | `string` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The OCID of the subnet. | `string` | Yes | - | - |
 | `vcnId` | The OCID of the VCN. | `string` | Yes | - | - |
 
@@ -689,6 +690,7 @@ DataSafePrivateEndpointStatus defines the observed state of DataSafePrivateEndpo
 | `nsgIds` | The OCIDs of the network security groups that the private endpoint belongs to. | `list[string]` | No | - | - |
 | `privateEndpointId` | The OCID of the underlying private endpoint. | `string` | No | - | - |
 | `privateEndpointIp` | The private IP address of the private endpoint. | `string` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | [`status`](#kind-datasafeprivateendpoint-status-status) | - | `object` | Yes | - | - |
 | `subnetId` | The OCID of the subnet. | `string` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
@@ -1985,6 +1987,7 @@ ReportDefinitionStatus defines the observed state of ReportDefinition.
 | `displayOrder` | Specifies how the report definitions are ordered in the display. | `integer` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID of the report definition. | `string` | No | - | - |
+| `isSchedulePaginationEnabled` | Indicates if the reports being generated should be paginated. If set to true, multiple reports can be generated and the details of next and previous report are present in Report. Values can either be 'true' or 'false'. | `boolean` | No | - | - |
 | `isSeeded` | Signifies whether the definition is seeded or user defined. Values can either be 'true' or 'false'. | `boolean` | No | - | - |
 | `lifecycleDetails` | Details about the current state of the report definition in Data Safe. | `string` | No | - | - |
 | `lifecycleState` | The current state of the report. | `string` | No | - | - |
@@ -3643,7 +3646,8 @@ TargetAlertPolicyAssociationSpec defines the desired state of TargetAlertPolicyA
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `isEnabled` | Indicates if the target-alert policy association is enabled or disabled by user. | `boolean` | Yes | - | - |
 | `policyId` | The OCID of the alert policy. | `string` | Yes | - | - |
-| `targetId` | The OCID of the target. | `string` | Yes | - | - |
+| `targetId` | The OCID of the target or target database group. | `string` | Yes | - | - |
+| `targetType` | The resource type that is represented by the alert policy association. Default is considered as TARGET_DATABASE. | `string` | No | - | - |
 
 <a id="kind-targetalertpolicyassociation-status"></a>
 ### Status
@@ -3664,7 +3668,8 @@ TargetAlertPolicyAssociationStatus defines the observed state of TargetAlertPoli
 | `policyId` | The OCID of the alert policy. | `string` | No | - | - |
 | [`status`](#kind-targetalertpolicyassociation-status-status) | - | `object` | Yes | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |
-| `targetId` | The OCID of the target on which alert policy is to be applied. | `string` | No | - | - |
+| `targetId` | The OCID of the target or target database group on which alert policy is to be applied. | `string` | No | - | - |
+| `targetType` | The resource type that is represented by the target alert policy association. | `string` | No | - | - |
 | `timeCreated` | Creation date and time of the alert policy, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). | `string` | No | - | - |
 | `timeUpdated` | Last date and time the alert policy was updated, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339). | `string` | No | - | - |
 
@@ -3885,6 +3890,7 @@ TargetDatabaseStatus defines the observed state of TargetDatabase.
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | The description of the target database in Data Safe. | `string` | No | - | - |
 | `displayName` | The display name of the target database in Data Safe. | `string` | No | - | - |
+| `features` | List of enabled features based on granted ORA_DSCS_* roles in target database | `list[string]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID of the Data Safe target database. | `string` | No | - | - |
 | `infrastructureType` | The infrastructure type the database is running on. | `string` | No | - | - |
@@ -4134,6 +4140,8 @@ TargetDatabaseGroupMatchingCriteriaInclude defines nested fields for TargetDatab
 | [`compartments`](#kind-targetdatabasegroup-spec-matchingcriteria-include-compartments) | List of compartment objects, each containing the OCID of the compartment and a boolean value that indicates whether the target databases in the compartments and sub-compartments should also be included in the target database group. | `list[object]` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `freeformTagsIn` | Map of freeform tag filters. Each key maps to an array of strings. Target database matches the key if it's tag value equals any of the values in the array. | `map[string, object (preserves unknown fields)]` | No | - | - |
+| `systemTags` | Map of system tag filters. Target database matches when for each specified namespace.key and the tag value equals any of the values in the array. | `map[string, map[string, string]]` | No | - | - |
 | `targetDatabaseIds` | The list of target database OCIDs to be included in the target database group. | `list[string]` | No | - | - |
 
 <a id="kind-targetdatabasegroup-spec-matchingcriteria-include-compartments"></a>
@@ -4206,6 +4214,8 @@ TargetDatabaseGroupMatchingCriteriaInclude defines nested fields for TargetDatab
 | [`compartments`](#kind-targetdatabasegroup-status-matchingcriteria-include-compartments) | List of compartment objects, each containing the OCID of the compartment and a boolean value that indicates whether the target databases in the compartments and sub-compartments should also be included in the target database group. | `list[object]` | No | - | - |
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm) Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
+| `freeformTagsIn` | Map of freeform tag filters. Each key maps to an array of strings. Target database matches the key if it's tag value equals any of the values in the array. | `map[string, object (preserves unknown fields)]` | No | - | - |
+| `systemTags` | Map of system tag filters. Target database matches when for each specified namespace.key and the tag value equals any of the values in the array. | `map[string, map[string, string]]` | No | - | - |
 | `targetDatabaseIds` | The list of target database OCIDs to be included in the target database group. | `list[string]` | No | - | - |
 
 <a id="kind-targetdatabasegroup-status-matchingcriteria-include-compartments"></a>

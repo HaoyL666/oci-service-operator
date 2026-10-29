@@ -32,6 +32,7 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 
 | Field | Description | Type | Required |
 | --- | --- | --- | --- |
+| [`bdsCapacityReservationConfigurations`](../../reference/api/bds/v1beta1/index.md#kind-bdsinstance-spec-bdscapacityreservationconfigurations) | Optional BDS capacity reservation configurations to associate with the cluster during creation. | `list[object]` | No |
 | [`bdsClusterVersionSummary`](../../reference/api/bds/v1beta1/index.md#kind-bdsinstance-spec-bdsclusterversionsummary) | BdsInstanceBdsClusterVersionSummary defines nested fields for BdsInstance.BdsClusterVersionSummary. | `object` | No |
 | `bootstrapScriptUrl` | Pre-authenticated URL of the script in Object Store that is downloaded and executed. | `string` | No |
 | `clusterAdminPassword` | Base-64 encoded password for the cluster (and Cloudera Manager) admin user. Not required if the secretId is specified. | `string` | No |
@@ -58,6 +59,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 
 | Field | Description | Type | Required |
 | --- | --- | --- | --- |
+| [`bdsCapacityReservationConfigurations`](../../reference/api/bds/v1beta1/index.md#kind-bdsinstance-status-bdscapacityreservationconfigurations) | The list of BDS capacity reservation configurations associated with the cluster. | `list[object]` | No |
 | [`bdsClusterVersionSummary`](../../reference/api/bds/v1beta1/index.md#kind-bdsinstance-status-bdsclusterversionsummary) | BdsInstanceBdsClusterVersionSummary defines nested fields for BdsInstance.BdsClusterVersionSummary. | `object` | No |
 | `bootstrapScriptUrl` | pre-authenticated URL of the bootstrap script in Object Store that can be downloaded and executed. | `string` | No |
 | [`cloudSqlDetails`](../../reference/api/bds/v1beta1/index.md#kind-bdsinstance-status-cloudsqldetails) | BdsInstanceCloudSqlDetails defines nested fields for BdsInstance.CloudSqlDetails. | `object` | No |

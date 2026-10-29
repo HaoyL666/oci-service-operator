@@ -69,6 +69,7 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
   "compartmentId": "<ocid:1>",
   "lifecycleState": "ACTIVE",
   "systemType": "OCI_OPTIMIZED_STORAGE",
+  "systemRole": "PRIMARY_DB_SYSTEM",
   "dbVersion": "14",
   "shape": "VM.Standard.E4.Flex",
   "instanceOcpuCount": 2,
@@ -122,6 +123,7 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
   "compartmentId": "<ocid:1>",
   "lifecycleState": "ACTIVE",
   "systemType": "OCI_OPTIMIZED_STORAGE",
+  "systemRole": "PRIMARY_DB_SYSTEM",
   "dbVersion": "14",
   "shape": "VM.Standard.E4.Flex",
   "instanceOcpuCount": 2,
@@ -226,6 +228,7 @@ func TestMockIntegrationDbSystemLifecycleCRUD(t *testing.T) {
 				string(current.Status.OsokStatus.Ocid) != "<ocid:3>" ||
 				current.Status.LifecycleState != "ACTIVE" ||
 				current.Status.CompartmentId != current.Spec.CompartmentId ||
+				current.Status.SystemRole != "PRIMARY_DB_SYSTEM" ||
 				current.Status.DbVersion != current.Spec.DbVersion ||
 				current.Status.DisplayName != current.Spec.DisplayName ||
 				current.Status.NetworkDetails.SubnetId != current.Spec.NetworkDetails.SubnetId ||

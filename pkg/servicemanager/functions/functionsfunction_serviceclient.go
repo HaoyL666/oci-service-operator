@@ -130,6 +130,8 @@ func buildFunctionUpdateDetails(
 		return ocifunctions.UpdateFunctionDetails{}, false, fmt.Errorf("build Functions Function update details: %w", err)
 	}
 
+	// SourceDetails is create-only. Drift is rejected above, so it must never be sent on an update.
+	details.SourceDetails = nil
 	normalizeFunctionUpdateDetailsForExisting(&details, existing)
 	updateNeeded := trimUnchangedFunctionsDetails(&details, existing)
 	return details, updateNeeded, nil
@@ -233,7 +235,12 @@ func (m *FunctionsFunctionServiceManager) UpdateFunction(
 		return nil, false, err
 	}
 	servicemanager.RecordResponseOpcRequestID(&resource.Status.OsokStatus, response)
-	return &response.Function, true, nil
+	updated, err := m.GetFunction(ctx, functionID, nil)
+	if err != nil {
+		servicemanager.RecordErrorOpcRequestID(&resource.Status.OsokStatus, err)
+		return nil, false, err
+	}
+	return updated, true, nil
 }
 
 func (m *FunctionsFunctionServiceManager) DeleteFunction(ctx context.Context, resource *functionsv1beta1.Function, functionID shared.OCID) error {

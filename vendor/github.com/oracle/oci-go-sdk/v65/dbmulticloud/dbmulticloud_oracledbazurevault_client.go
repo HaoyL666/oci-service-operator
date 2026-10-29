@@ -26,7 +26,7 @@
 // <br>
 // <b>AWS</b>:<br>
 // <b>Oracle AWS Connector Resource:</b>&nbsp;&nbsp;The Oracle AWS Connector Resource is used to install the AWS Identity Connector on an Exadata VM cluster in Oracle Exadata Database Service on Dedicated Infrastructure (ExaDB-D).
-// <b>Google AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
+// <b>Oracle AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
 //
 
 package dbmulticloud
@@ -163,7 +163,7 @@ func (client OracleDbAzureVaultClient) changeOracleDbAzureVaultCompartment(ctx c
 
 	var response ChangeOracleDbAzureVaultCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVault", "ChangeOracleDbAzureVaultCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -226,7 +226,7 @@ func (client OracleDbAzureVaultClient) createOracleDbAzureVault(ctx context.Cont
 
 	var response CreateOracleDbAzureVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVault", "CreateOracleDbAzureVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -284,7 +284,7 @@ func (client OracleDbAzureVaultClient) deleteOracleDbAzureVault(ctx context.Cont
 
 	var response DeleteOracleDbAzureVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVault", "DeleteOracleDbAzureVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -342,7 +342,7 @@ func (client OracleDbAzureVaultClient) getOracleDbAzureVault(ctx context.Context
 
 	var response GetOracleDbAzureVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVault", "GetOracleDbAzureVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -400,7 +400,7 @@ func (client OracleDbAzureVaultClient) listOracleDbAzureVaults(ctx context.Conte
 
 	var response ListOracleDbAzureVaultsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVault", "ListOracleDbAzureVaults")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -463,12 +463,75 @@ func (client OracleDbAzureVaultClient) refreshOracleDbAzureVault(ctx context.Con
 
 	var response RefreshOracleDbAzureVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVault", "RefreshOracleDbAzureVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-multicloud-integrations/20240501/OracleDbAzureVault/RefreshOracleDbAzureVault"
 		err = common.PostProcessServiceError(err, "OracleDbAzureVault", "RefreshOracleDbAzureVault", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ReplicateOracleDbAzureVault Replicate the Oracle DB Azure Vault resource to target region.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/dbmulticloud/ReplicateOracleDbAzureVault.go.html to see an example of how to use ReplicateOracleDbAzureVault API.
+// A default retry strategy applies to this operation ReplicateOracleDbAzureVault()
+func (client OracleDbAzureVaultClient) ReplicateOracleDbAzureVault(ctx context.Context, request ReplicateOracleDbAzureVaultRequest) (response ReplicateOracleDbAzureVaultResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.replicateOracleDbAzureVault, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ReplicateOracleDbAzureVaultResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ReplicateOracleDbAzureVaultResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ReplicateOracleDbAzureVaultResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ReplicateOracleDbAzureVaultResponse")
+	}
+	return
+}
+
+// replicateOracleDbAzureVault implements the OCIOperation interface (enables retrying operations)
+func (client OracleDbAzureVaultClient) replicateOracleDbAzureVault(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/oracleDbAzureVault/{oracleDbAzureVaultId}/actions/replicate", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ReplicateOracleDbAzureVaultResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVault", "ReplicateOracleDbAzureVault")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database-multicloud-integrations/20240501/OracleDbAzureVault/ReplicateOracleDbAzureVault"
+		err = common.PostProcessServiceError(err, "OracleDbAzureVault", "ReplicateOracleDbAzureVault", apiReferenceLink)
 		return response, err
 	}
 
@@ -521,7 +584,7 @@ func (client OracleDbAzureVaultClient) updateOracleDbAzureVault(ctx context.Cont
 
 	var response UpdateOracleDbAzureVaultResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "oracleDbAzureVault", "UpdateOracleDbAzureVault")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

@@ -1784,6 +1784,9 @@ var targets = []Target{
 				APISurface: "status",
 			},
 			{
+				SDKStruct: "core.Instances",
+			},
+			{
 				SDKStruct:  "core.InstanceSummary",
 				APISurface: "status",
 			},

@@ -47,6 +47,24 @@ type OracleDbGcpKeyRingSpec struct {
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
 }
 
+// OracleDbGcpKeyRingReplicationMetadataReplicationDetail defines nested fields for OracleDbGcpKeyRing.ReplicationMetadata.ReplicationDetail.
+type OracleDbGcpKeyRingReplicationMetadataReplicationDetail struct {
+	// The lifecycle state of the Oracle DB Azure Vault resource.
+	ReplicationState string `json:"replicationState,omitempty"`
+	// The target region, where resource is replicated.
+	TargetRegion string `json:"targetRegion,omitempty"`
+	// Time when the Replication was created in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z'
+	TimeCreated string `json:"timeCreated,omitempty"`
+	// Time when the Replication was last modified, expressed in RFC 3339 (https://tools.ietf.org/html/rfc3339) timestamp format, e.g. '2020-05-23T21:10:29.600Z'
+	TimeUpdated string `json:"timeUpdated,omitempty"`
+}
+
+// OracleDbGcpKeyRingReplicationMetadata defines nested fields for OracleDbGcpKeyRing.ReplicationMetadata.
+type OracleDbGcpKeyRingReplicationMetadata struct {
+	// List of all regions and their respective resource ID.
+	ReplicationDetails []OracleDbGcpKeyRingReplicationMetadataReplicationDetail `json:"replicationDetails,omitempty"`
+}
+
 // OracleDbGcpKeyRingStatus defines the observed state of OracleDbGcpKeyRing.
 type OracleDbGcpKeyRingStatus struct {
 	OsokStatus shared.OSOKStatus `json:"status"`
@@ -65,7 +83,8 @@ type OracleDbGcpKeyRingStatus struct {
 	// Location of the GCP Key Ring resource.
 	Location string `json:"location,omitempty"`
 	// Oracle DB GCP Key Ring resource's properties.
-	Properties map[string]string `json:"properties,omitempty"`
+	Properties          map[string]string                     `json:"properties,omitempty"`
+	ReplicationMetadata OracleDbGcpKeyRingReplicationMetadata `json:"replicationMetadata,omitempty"`
 	// The lifecycle state of the Oracle DB GCP Key Ring resource.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 	// Description of the current lifecycle state in more detail.

@@ -31,13 +31,24 @@ type ConnectionSpec struct {
 	// Locks associated with this resource.
 	// +kubebuilder:validation:Optional
 	Locks []ConnectionLock `json:"locks,omitempty"`
-	// Refers to the customer's vault OCID.
-	// If provided, it references a vault where GoldenGate can manage secrets. Customers must add policies to permit GoldenGate
-	// to manage secrets contained within this vault.
+	// References the OCI Vault that contains the customer-managed encryption key identified by `keyId`.
+	// Deprecated: This field is deprecated for GoldenGate connections. Sensitive attributes should be provided using the
+	// corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text
+	// attributes encrypted with `vaultId` and `keyId`. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// This field is applicable only when `doesUseSecretIds` is set to `false`.
+	// If `vaultId` is provided, `keyId` must also be provided.
 	// +kubebuilder:validation:Optional
 	VaultId string `json:"vaultId,omitempty"`
-	// Refers to the customer's master key OCID.
-	// If provided, it references a key to manage secrets. Customers must add policies to permit GoldenGate to use this key.
+	// References the OCI Vault key in the OCI Vault identified by `vaultId`.
+	// Deprecated: This field is deprecated for GoldenGate connections. Sensitive attributes should be provided using the
+	// corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text
+	// attributes encrypted with `vaultId` and `keyId`. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// The GoldenGate service uses this key to encrypt sensitive information (for example, `password`) that is provided in plain-text connection attributes through the API.
+	// This field is applicable only when `doesUseSecretIds` is set to `false`. If both `vaultId` and `keyId` are provided,
+	// the GoldenGate service uses the specified customer-managed key to encrypt the sensitive data.
+	// If neither `vaultId` nor `keyId` is provided, the GoldenGate service uses Oracle-managed encryption keys.
 	// +kubebuilder:validation:Optional
 	KeyId string `json:"keyId,omitempty"`
 	// An array of Network Security Group OCIDs used to define network access for either Deployments or Connections.
@@ -47,12 +58,26 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	SubnetId string `json:"subnetId,omitempty"`
 	// Controls the network traffic direction to the target:
-	// SHARED_SERVICE_ENDPOINT: Traffic flows through the Goldengate Service's network to public hosts. Cannot be used for private targets.
 	// SHARED_DEPLOYMENT_ENDPOINT: Network traffic flows from the assigned deployment's private endpoint through the deployment's subnet.
 	// DEDICATED_ENDPOINT: A dedicated private endpoint is created in the target VCN subnet for the connection. The subnetId is required when DEDICATED_ENDPOINT networking is selected.
+	// SHARED_SERVICE_ENDPOINT: Traffic flows through the Goldengate Service's network to public hosts. Cannot be used for private targets.
+	// Deprecated: SHARED_SERVICE_ENDPOINT is deprecated. Use another supported routingMethod value, or update existing connections to use a supported routing method.
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	RoutingMethod string `json:"routingMethod,omitempty"`
 	// Indicates that sensitive attributes are provided via Secrets.
+	// Deprecated: This field is deprecated. Sensitive attributes should be provided using the corresponding Secret OCID
+	// attributes of the connection (for example, `passwordSecretId`) instead of plain-text attributes. This change follows
+	// the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// When set to `true`, all sensitive information must be provided as OCI Vault secrets using the corresponding
+	// `*SecretId` attributes of the connection (for example, `passwordSecretId`). Plain-text sensitive attributes (for example, `password`) must not be used.
+	// This ensures that sensitive information remains stored and managed in the customer's OCI Vault rather than by the GoldenGate service.
+	// When set to false, sensitive information must be provided in the corresponding plain-text attributes (for example, `password`) rather than in secret OCID attributes.
+	// In this mode, the sensitive information is stored by the GoldenGate service. If `vaultId` and `keyId` are not specified,
+	// the GoldenGate service uses Oracle-managed encryption keys to encrypt the stored data.
+	// If `vaultId` and `keyId` are provided, the specified customer-managed key is used.
 	// +kubebuilder:validation:Optional
 	DoesUseSecretIds bool `json:"doesUseSecretIds,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
@@ -92,7 +117,9 @@ type ConnectionSpec struct {
 	Port int `json:"port,omitempty"`
 	// The password Oracle GoldenGate uses to connect the associated system of the given technology.
 	// It must conform to the specific security requirements including length, case sensitivity, and so on.
-	// Deprecated: This field is deprecated and replaced by "passwordSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "passwordSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	Password string `json:"password,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the password is stored.
@@ -120,22 +147,15 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	SslCert string `json:"sslCert,omitempty"`
 	// The base64 encoded private key of the PostgreSQL server. The supported file formats are .pem and .crt.
-	// Deprecated: This field is deprecated and replaced by "sslKeySecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "sslKeySecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	SslKey string `json:"sslKey,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the private key of the PostgreSQL server. The supported file formats are .pem and .crt.
 	// Note: When provided, 'sslKey' field must not be provided.
 	// +kubebuilder:validation:Optional
 	SslKeySecretId string `json:"sslKeySecretId,omitempty"`
-	// Deprecated: this field will be removed in future versions. Either specify the private IP in the connectionString or host
-	// field, or make sure the host name is resolvable in the target VCN.
-	// The private IP address of the connection's endpoint in the customer's VCN, typically a
-	// database endpoint or a big data endpoint (e.g. Kafka bootstrap server).
-	// In case the privateIp is provided, the subnetId must also be provided.
-	// In case the privateIp (and the subnetId) is not provided it is assumed the datasource is publicly accessible.
-	// In case the connection is accessible only privately, the lack of privateIp will result in not being able to access the connection.
-	// +kubebuilder:validation:Optional
-	PrivateIp string `json:"privateIp,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the database system being referenced.
 	// +kubebuilder:validation:Optional
 	DbSystemId string `json:"dbSystemId,omitempty"`
@@ -153,7 +173,9 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	Url string `json:"url,omitempty"`
 	// The base64 encoded content of the TrustStore file.
-	// Deprecated: This field is deprecated and replaced by "trustStoreSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "trustStoreSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	TrustStore string `json:"trustStore,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the TrustStore file.
@@ -161,7 +183,9 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	TrustStoreSecretId string `json:"trustStoreSecretId,omitempty"`
 	// The TrustStore password.
-	// Deprecated: This field is deprecated and replaced by "trustStorePasswordSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "trustStorePasswordSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	TrustStorePassword string `json:"trustStorePassword,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the kafka Ssl TrustStore password is stored.
@@ -169,7 +193,9 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	TrustStorePasswordSecretId string `json:"trustStorePasswordSecretId,omitempty"`
 	// The base64 encoded content of the KeyStore file.
-	// Deprecated: This field is deprecated and replaced by "keyStoreSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "keyStoreSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	KeyStore string `json:"keyStore,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the KeyStore file.
@@ -177,7 +203,9 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	KeyStoreSecretId string `json:"keyStoreSecretId,omitempty"`
 	// The KeyStore password.
-	// Deprecated: This field is deprecated and replaced by "keyStorePasswordSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "keyStorePasswordSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	KeyStorePassword string `json:"keyStorePassword,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the kafka Ssl KeyStore password is stored.
@@ -186,7 +214,9 @@ type ConnectionSpec struct {
 	KeyStorePasswordSecretId string `json:"keyStorePasswordSecretId,omitempty"`
 	// The password for the cert inside the KeyStore.
 	// In case it differs from the KeyStore password, it should be provided.
-	// Deprecated: This field is deprecated and replaced by "sslKeyPasswordSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "sslKeyPasswordSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	SslKeyPassword string `json:"sslKeyPassword,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password for the cert inside the KeyStore.
@@ -201,10 +231,13 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	ShouldValidateServerCertificate bool `json:"shouldValidateServerCertificate,omitempty"`
 	// Access key ID to access the Amazon Kinesis.
+	// Note: Despite the "Id" suffix, this value is not an OCI OCID.
 	// +kubebuilder:validation:Optional
 	AccessKeyId string `json:"accessKeyId,omitempty"`
 	// Secret access key to access the Amazon Kinesis.
-	// Deprecated: This field is deprecated and replaced by "secretAccessKeySecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "secretAccessKeySecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	SecretAccessKey string `json:"secretAccessKey,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the secret access key is stored.
@@ -226,7 +259,9 @@ type ConnectionSpec struct {
 	AccountName string `json:"accountName,omitempty"`
 	// Azure storage account key. This property is required when 'authenticationType' is set to 'SHARED_KEY'.
 	// e.g.: pa3WbhVATzj56xD4DH1VjOUhApRGEGHvOo58eQJVWIzX+j8j4CUVFcTjpIqDSRaSa1Wo2LbWY5at+AStEgLOIQ==
-	// Deprecated: This field is deprecated and replaced by "accountKeySecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "accountKeySecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	AccountKey string `json:"accountKey,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the account key is stored.
@@ -236,7 +271,9 @@ type ConnectionSpec struct {
 	// Credential that uses a shared access signature (SAS) to authenticate to an Azure Service. This property is
 	// required when 'authenticationType' is set to 'SHARED_ACCESS_SIGNATURE'.
 	// e.g.: ?sv=2020-06-08&ss=bfqt&srt=sco&sp=rwdlacupyx&se=2020-09-10T20:27:28Z&st=2022-08-05T12:27:28Z&spr=https&sig=C1IgHsiLBmTSStYkXXGLTP8it0xBrArcgCqOsZbXwIQ%3D
-	// Deprecated: This field is deprecated and replaced by "sasTokenSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "sasTokenSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	SasToken string `json:"sasToken,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the sas token is stored.
@@ -253,7 +290,9 @@ type ConnectionSpec struct {
 	ClientId string `json:"clientId,omitempty"`
 	// Azure client secret (aka application password) for authentication. This property is required when 'authenticationType' is set to 'AZURE_ACTIVE_DIRECTORY'.
 	// e.g.: dO29Q~F5-VwnA.lZdd11xFF_t5NAXCaGwDl9NbT1
-	// Deprecated: This field is deprecated and replaced by "clientSecretSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "clientSecretSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	ClientSecret string `json:"clientSecret,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the client secret is stored.
@@ -269,7 +308,9 @@ type ConnectionSpec struct {
 	AzureAuthorityHost string `json:"azureAuthorityHost,omitempty"`
 	// The base64 encoded content of the service account key file containing
 	// the credentials required to use Google PubSub.
-	// Deprecated: This field is deprecated and replaced by "serviceAccountKeyFileSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "serviceAccountKeyFileSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	ServiceAccountKeyFile string `json:"serviceAccountKeyFile,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the content of the service account key file is stored,
@@ -291,7 +332,9 @@ type ConnectionSpec struct {
 	UserId string `json:"userId,omitempty"`
 	// The base64 encoded content of the private key file (PEM file) corresponding to the API key of the fingerprint.
 	// See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm
-	// Deprecated: This field is deprecated and replaced by "privateKeyFileSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "privateKeyFileSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	PrivateKeyFile string `json:"privateKeyFile,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the private key file (PEM file) corresponding to the API key of the fingerprint.
@@ -300,7 +343,9 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	PrivateKeyFileSecretId string `json:"privateKeyFileSecretId,omitempty"`
 	// The passphrase of the private key.
-	// Deprecated: This field is deprecated and replaced by "privateKeyPassphraseSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "privateKeyPassphraseSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	PrivateKeyPassphrase string `json:"privateKeyPassphrase,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the passphrase of the private key.
@@ -368,7 +413,9 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	JndiSecurityPrincipal string `json:"jndiSecurityPrincipal,omitempty"`
 	// The password associated to the principal.
-	// Deprecated: This field is deprecated and replaced by "jndiSecurityCredentialsSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "jndiSecurityCredentialsSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	JndiSecurityCredentials string `json:"jndiSecurityCredentials,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the security credentials are stored associated to the principal.
@@ -396,7 +443,9 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	TlsCaFile string `json:"tlsCaFile,omitempty"`
 	// Client Certificate - The base64 encoded content of a .pem file, containing the client public key (for 2-way SSL).
-	// Deprecated: This field is deprecated and replaced by "tlsCertificateKeyFileSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "tlsCertificateKeyFileSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	TlsCertificateKeyFile string `json:"tlsCertificateKeyFile,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the certificate key file of the mtls connection.
@@ -405,7 +454,9 @@ type ConnectionSpec struct {
 	// +kubebuilder:validation:Optional
 	TlsCertificateKeyFileSecretId string `json:"tlsCertificateKeyFileSecretId,omitempty"`
 	// Client Certificate key file password.
-	// Deprecated: This field is deprecated and replaced by "tlsCertificateKeyFilePasswordSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "tlsCertificateKeyFilePasswordSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	TlsCertificateKeyFilePassword string `json:"tlsCertificateKeyFilePassword,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password of the tls certificate key file.
@@ -417,7 +468,9 @@ type ConnectionSpec struct {
 	StorageCredentialName string `json:"storageCredentialName,omitempty"`
 	// The base64 encoded keystore file created at the client containing the server certificate / CA root certificate.
 	// This property is not supported for IBM Db2 for i, as client TLS mode is not available.
-	// Deprecated: This field is deprecated and replaced by "sslClientKeystoredbSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "sslClientKeystoredbSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	SslClientKeystoredb string `json:"sslClientKeystoredb,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the keystore file stored,
@@ -428,7 +481,9 @@ type ConnectionSpec struct {
 	SslClientKeystoredbSecretId string `json:"sslClientKeystoredbSecretId,omitempty"`
 	// The base64 encoded keystash file which contains the encrypted password to the key database file.
 	// This property is not supported for IBM Db2 for i, as client TLS mode is not available.
-	// Deprecated: This field is deprecated and replaced by "sslClientKeystashSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "sslClientKeystashSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	SslClientKeystash string `json:"sslClientKeystash,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the keystash file is stored,
@@ -445,13 +500,26 @@ type ConnectionSpec struct {
 	// Eg.: '6152b2dfbff200f973c5074a5b91d06ab3b472c07c09a1ea57bb7fd406cdce9c'
 	// +kubebuilder:validation:Optional
 	Fingerprint string `json:"fingerprint,omitempty"`
+	// AI model identifier.
+	// +kubebuilder:validation:Optional
+	ModelKey string `json:"modelKey,omitempty"`
+	// Maximum number of input characters supported by this AI model connection.
+	// +kubebuilder:validation:Optional
+	MaxInputChars int `json:"maxInputChars,omitempty"`
+	// +kubebuilder:validation:Optional
+	AuthDetails ConnectionAuthDetails `json:"authDetails,omitempty,omitzero"`
+	// AI Provider type used by the AI Model Connection.
+	// +kubebuilder:validation:Optional
+	ProviderType string `json:"providerType,omitempty"`
 	// +kubebuilder:validation:Optional
 	Catalog ConnectionCatalog `json:"catalog,omitempty,omitzero"`
 	// +kubebuilder:validation:Optional
 	Storage ConnectionStorage `json:"storage,omitempty,omitzero"`
 	// The wallet contents Oracle GoldenGate uses to make connections to a database.
 	// This attribute is expected to be base64 encoded.
-	// Deprecated: This field is deprecated and replaced by "walletSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "walletSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	Wallet string `json:"wallet,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the wallet file is stored.
@@ -463,15 +531,23 @@ type ConnectionSpec struct {
 	// when a databaseId is provided. The default value is MTLS.
 	// +kubebuilder:validation:Optional
 	AuthenticationMode string `json:"authenticationMode,omitempty"`
-	// The mode of the database connection session to be established by the data client.
-	// 'REDIRECT' - for a RAC database, 'DIRECT' - for a non-RAC database.
-	// Connection to a RAC database involves a redirection received from the SCAN listeners
-	// to the database node to connect to. By default the mode would be DIRECT.
+	// Specifies the session mode for the database connection.
+	// Use REDIRECT only for RAC databases with SCAN listeners that return IP addresses.
+	// For RAC databases with SCAN listeners that return FQDNs, and for all other Oracle database technologies, use DIRECT.
+	// In RAC deployments, SCAN listeners redirects a connection to a specific database node, identified by either IP address or FQDN.
+	// It is recommended to configure RAC with FQDN-based SCAN listeners.
+	// The default is DIRECT, except when databaseId is provided and the discovered database relies on the SCAN listener.
+	// In this case, the default is REDIRECT.
+	// Deprecated: Defaulting to the REDIRECT session mode will be removed after April 21, 2027.
 	// +kubebuilder:validation:Optional
 	SessionMode string `json:"sessionMode,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the deployment being referenced.
 	// +kubebuilder:validation:Optional
 	DeploymentId string `json:"deploymentId,omitempty"`
+	// This property is not available when creating connections. For existing deprecated connections having this value set, the value cannot be updated; set it to empty.
+	// For deprecated connections created with this field in the past, either the private IP had to be specified in the connectionString or host field, or the host name had to be resolvable in the target VCN.
+	// +kubebuilder:validation:Optional
+	PrivateIp string `json:"privateIp,omitempty"`
 }
 
 // ConnectionLock defines nested fields for Connection.Lock.
@@ -503,15 +579,42 @@ type ConnectionBootstrapServer struct {
 	// The port of an endpoint usually specified for a connection.
 	// +kubebuilder:validation:Optional
 	Port int `json:"port,omitempty"`
-	// Deprecated: this field will be removed in future versions. Either specify the private IP in the connectionString or host
-	// field, or make sure the host name is resolvable in the target VCN.
-	// The private IP address of the connection's endpoint in the customer's VCN, typically a
-	// database endpoint or a big data endpoint (e.g. Kafka bootstrap server).
-	// In case the privateIp is provided, the subnetId must also be provided.
-	// In case the privateIp (and the subnetId) is not provided it is assumed the datasource is publicly accessible.
-	// In case the connection is accessible only privately, the lack of privateIp will result in not being able to access the connection.
+}
+
+// ConnectionAuthDetails defines nested fields for Connection.AuthDetails.
+type ConnectionAuthDetails struct {
 	// +kubebuilder:validation:Optional
-	PrivateIp string `json:"privateIp,omitempty"`
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	AuthType string `json:"authType,omitempty"`
+	// Base URL of the AI model endpoint.
+	// If not specified, the default base URL for the selected AI provider will be used.
+	// +kubebuilder:validation:Optional
+	BaseUrl string `json:"baseUrl,omitempty"`
+	// API key for the AI model connection.
+	// Deprecated: This field is deprecated and replaced by "apiKeySecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// +kubebuilder:validation:Optional
+	ApiKey string `json:"apiKey,omitempty"`
+	// API key secret OCID for the AI model connection.
+	// +kubebuilder:validation:Optional
+	ApiKeySecretId string `json:"apiKeySecretId,omitempty"`
+	// OCI Generative AI key fingerprint.
+	// +kubebuilder:validation:Optional
+	KeyFingerprint string `json:"keyFingerprint,omitempty"`
+	// The name of the region. e.g.: us-ashburn-1
+	// If the region is not provided, backend will default to the default region.
+	// +kubebuilder:validation:Optional
+	Region string `json:"region,omitempty"`
+	// OCI Generative AI tenancy OCID. If this value is not provided, or is updated to an empty
+	// value, it defaults to the tenancy OCID of the user who is executing the operation.
+	// +kubebuilder:validation:Optional
+	TenancyId string `json:"tenancyId,omitempty"`
+	// OCI Generative AI user OCID. If this value is not provided, or is updated to an empty
+	// value, it defaults to the OCID of the user who is executing the operation.
+	// +kubebuilder:validation:Optional
+	UserId string `json:"userId,omitempty"`
 }
 
 // ConnectionCatalog defines nested fields for Connection.Catalog.
@@ -530,12 +633,15 @@ type ConnectionCatalog struct {
 	// The OAuth client ID used for authentication.
 	// +kubebuilder:validation:Optional
 	ClientId string `json:"clientId,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password Oracle GoldenGate uses to connect to Snowflake platform.
-	// +kubebuilder:validation:Optional
-	ClientSecretSecretId string `json:"clientSecretSecretId,omitempty"`
 	// The Snowflake role used to access Polaris.
 	// +kubebuilder:validation:Optional
 	PrincipalRole string `json:"principalRole,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password Oracle GoldenGate uses to connect to Polaris.
+	// +kubebuilder:validation:Optional
+	ClientSecretSecretId string `json:"clientSecretSecretId,omitempty"`
+	// Client secret required to connect to Polaris.
+	// +kubebuilder:validation:Optional
+	ClientSecret string `json:"clientSecret,omitempty"`
 	// The AWS Glue Catalog ID where Iceberg tables are registered.
 	// +kubebuilder:validation:Optional
 	GlueId string `json:"glueId,omitempty"`
@@ -544,6 +650,9 @@ type ConnectionCatalog struct {
 	// See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm
 	// +kubebuilder:validation:Optional
 	PropertiesSecretId string `json:"propertiesSecretId,omitempty"`
+	// The base64 encoded content of the configuration file containing additional properties for the REST catalog.
+	// +kubebuilder:validation:Optional
+	Properties string `json:"properties,omitempty"`
 	// The active branch of the Nessie catalog from which Iceberg reads and writes table metadata.
 	// +kubebuilder:validation:Optional
 	Branch string `json:"branch,omitempty"`
@@ -564,6 +673,13 @@ type ConnectionStorage struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the account key is stored.
 	// +kubebuilder:validation:Optional
 	AccountKeySecretId string `json:"accountKeySecretId,omitempty"`
+	// Azure storage account key. This property is required when 'authenticationType' is set to 'SHARED_KEY'.
+	// e.g.: pa3WbhVATzj56xD4DH1VjOUhApRGEGHvOo58eQJVWIzX+j8j4CUVFcTjpIqDSRaSa1Wo2LbWY5at+AStEgLOIQ==
+	// Deprecated: This field is deprecated and replaced by "accountKeySecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// +kubebuilder:validation:Optional
+	AccountKey string `json:"accountKey,omitempty"`
 	// The Azure Blob Storage endpoint where Iceberg data is stored.
 	// e.g.: 'https://my-azure-storage-account.blob.core.windows.net'
 	// +kubebuilder:validation:Optional
@@ -578,16 +694,30 @@ type ConnectionStorage struct {
 	// which contains the credentials required to use Google Cloud Storage.
 	// +kubebuilder:validation:Optional
 	ServiceAccountKeyFileSecretId string `json:"serviceAccountKeyFileSecretId,omitempty"`
+	// The base64 encoded content of the service account key file containing
+	// the credentials required to use Google Cloud Storage.
+	// Deprecated: This field is deprecated and replaced by "serviceAccountKeyFileSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// +kubebuilder:validation:Optional
+	ServiceAccountKeyFile string `json:"serviceAccountKeyFile,omitempty"`
 	// Access key ID to access the Amazon S3 bucket.
+	// Note: Despite the "Id" suffix, this value is not an OCI OCID.
 	// +kubebuilder:validation:Optional
 	AccessKeyId string `json:"accessKeyId,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the Secret Access Key is stored.
-	// +kubebuilder:validation:Optional
-	SecretAccessKeySecretId string `json:"secretAccessKeySecretId,omitempty"`
 	// The AMAZON region where the S3 bucket is hosted.
 	// e.g.: 'us-east-2'
 	// +kubebuilder:validation:Optional
 	Region string `json:"region,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the Secret Access Key is stored.
+	// +kubebuilder:validation:Optional
+	SecretAccessKeySecretId string `json:"secretAccessKeySecretId,omitempty"`
+	// Secret access key to access the Amazon S3 bucket.
+	// Deprecated: This field is deprecated and replaced by "secretAccessKeySecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// +kubebuilder:validation:Optional
+	SecretAccessKey string `json:"secretAccessKey,omitempty"`
 	// The scheme of the storage.
 	// +kubebuilder:validation:Optional
 	SchemeType string `json:"schemeType,omitempty"`
@@ -622,12 +752,23 @@ type ConnectionStatus struct {
 	LifecycleDetails string `json:"lifecycleDetails,omitempty"`
 	// Locks associated with this resource.
 	Locks []ConnectionLock `json:"locks,omitempty"`
-	// Refers to the customer's vault OCID.
-	// If provided, it references a vault where GoldenGate can manage secrets. Customers must add policies to permit GoldenGate
-	// to manage secrets contained within this vault.
+	// References the OCI Vault that contains the customer-managed encryption key identified by `keyId`.
+	// Deprecated: This field is deprecated for GoldenGate connections. Sensitive attributes should be provided using the
+	// corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text
+	// attributes encrypted with `vaultId` and `keyId`. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// This field is applicable only when `doesUseSecretIds` is set to `false`.
+	// If `vaultId` is provided, `keyId` must also be provided.
 	VaultId string `json:"vaultId,omitempty"`
-	// Refers to the customer's master key OCID.
-	// If provided, it references a key to manage secrets. Customers must add policies to permit GoldenGate to use this key.
+	// References the OCI Vault key in the OCI Vault identified by `vaultId`.
+	// Deprecated: This field is deprecated for GoldenGate connections. Sensitive attributes should be provided using the
+	// corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text
+	// attributes encrypted with `vaultId` and `keyId`. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// The GoldenGate service uses this key to encrypt sensitive information (for example, `password`) that is provided in plain-text connection attributes through the API.
+	// This field is applicable only when `doesUseSecretIds` is set to `false`. If both `vaultId` and `keyId` are provided,
+	// the GoldenGate service uses the specified customer-managed key to encrypt the sensitive data.
+	// If neither `vaultId` nor `keyId` is provided, the GoldenGate service uses Oracle-managed encryption keys.
 	KeyId string `json:"keyId,omitempty"`
 	// List of ingress IP addresses from where the GoldenGate deployment connects to this connection's privateIp.
 	// Customers may optionally set up ingress security rules to restrict traffic from these IP addresses.
@@ -637,11 +778,25 @@ type ConnectionStatus struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the target subnet of the dedicated connection.
 	SubnetId string `json:"subnetId,omitempty"`
 	// Controls the network traffic direction to the target:
-	// SHARED_SERVICE_ENDPOINT: Traffic flows through the Goldengate Service's network to public hosts. Cannot be used for private targets.
 	// SHARED_DEPLOYMENT_ENDPOINT: Network traffic flows from the assigned deployment's private endpoint through the deployment's subnet.
 	// DEDICATED_ENDPOINT: A dedicated private endpoint is created in the target VCN subnet for the connection. The subnetId is required when DEDICATED_ENDPOINT networking is selected.
+	// SHARED_SERVICE_ENDPOINT: Traffic flows through the Goldengate Service's network to public hosts. Cannot be used for private targets.
+	// Deprecated: SHARED_SERVICE_ENDPOINT is deprecated. Use another supported routingMethod value, or update existing connections to use a supported routing method.
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	RoutingMethod string `json:"routingMethod,omitempty"`
 	// Indicates that sensitive attributes are provided via Secrets.
+	// Deprecated: This field is deprecated. Sensitive attributes should be provided using the corresponding Secret OCID
+	// attributes of the connection (for example, `passwordSecretId`) instead of plain-text attributes. This change follows
+	// the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
+	// When set to `true`, all sensitive information must be provided as OCI Vault secrets using the corresponding
+	// `*SecretId` attributes of the connection (for example, `passwordSecretId`). Plain-text sensitive attributes (for example, `password`) must not be used.
+	// This ensures that sensitive information remains stored and managed in the customer's OCI Vault rather than by the GoldenGate service.
+	// When set to false, sensitive information must be provided in the corresponding plain-text attributes (for example, `password`) rather than in secret OCID attributes.
+	// In this mode, the sensitive information is stored by the GoldenGate service. If `vaultId` and `keyId` are not specified,
+	// the GoldenGate service uses Oracle-managed encryption keys to encrypt the stored data.
+	// If `vaultId` and `keyId` are provided, the specified customer-managed key is used.
 	DoesUseSecretIds bool `json:"doesUseSecretIds,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
 	SubscriptionId string `json:"subscriptionId,omitempty"`
@@ -727,13 +882,8 @@ type ConnectionStatus struct {
 	// An array of name-value pair attribute entries.
 	// Used as additional parameters in connection string.
 	AdditionalAttributes []ConnectionAdditionalAttribute `json:"additionalAttributes,omitempty"`
-	// Deprecated: this field will be removed in future versions. Either specify the private IP in the connectionString or host
-	// field, or make sure the host name is resolvable in the target VCN.
-	// The private IP address of the connection's endpoint in the customer's VCN, typically a
-	// database endpoint or a big data endpoint (e.g. Kafka bootstrap server).
-	// In case the privateIp is provided, the subnetId must also be provided.
-	// In case the privateIp (and the subnetId) is not provided it is assumed the datasource is publicly accessible.
-	// In case the connection is accessible only privately, the lack of privateIp will result in not being able to access the connection.
+	// This property is not available when creating connections. For existing deprecated connections having this value set, the value cannot be updated; set it to empty.
+	// For deprecated connections created with this field in the past, either the private IP had to be specified in the connectionString or host field, or the host name had to be resolvable in the target VCN.
 	PrivateIp string `json:"privateIp,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the database system being referenced.
 	DbSystemId string `json:"dbSystemId,omitempty"`
@@ -778,8 +928,15 @@ type ConnectionStatus struct {
 	// Connection URL.
 	// e.g.: 'jdbc:redshift://aws-redshift-instance.aaaaaaaaaaaa.us-east-2.redshift.amazonaws.com:5439/mydb'
 	ConnectionUrl string `json:"connectionUrl,omitempty"`
+	// AI model identifier.
+	ModelKey string `json:"modelKey,omitempty"`
+	// Maximum number of input characters supported by this AI model connection.
+	MaxInputChars int                   `json:"maxInputChars,omitempty"`
+	AuthDetails   ConnectionAuthDetails `json:"authDetails,omitempty"`
+	// AI Provider type used by the AI Model Connection.
+	ProviderType string `json:"providerType,omitempty"`
 	// Access key ID to access the Amazon S3 bucket.
-	// e.g.: "this-is-not-the-secret"
+	// Note: Despite the "Id" suffix, this value is not an OCI OCID.
 	AccessKeyId string `json:"accessKeyId,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the Secret Access Key is stored.
 	// Note: When provided, 'secretAccessKey' field must not be provided.
@@ -876,10 +1033,14 @@ type ConnectionStatus struct {
 	// Authentication mode. It can be provided at creation of Oracle Autonomous Database Serverless connections,
 	// when a databaseId is provided. The default value is MTLS.
 	AuthenticationMode string `json:"authenticationMode,omitempty"`
-	// The mode of the database connection session to be established by the data client.
-	// 'REDIRECT' - for a RAC database, 'DIRECT' - for a non-RAC database.
-	// Connection to a RAC database involves a redirection received from the SCAN listeners
-	// to the database node to connect to. By default the mode would be DIRECT.
+	// Specifies the session mode for the database connection.
+	// Use REDIRECT only for RAC databases with SCAN listeners that return IP addresses.
+	// For RAC databases with SCAN listeners that return FQDNs, and for all other Oracle database technologies, use DIRECT.
+	// In RAC deployments, SCAN listeners redirects a connection to a specific database node, identified by either IP address or FQDN.
+	// It is recommended to configure RAC with FQDN-based SCAN listeners.
+	// The default is DIRECT, except when databaseId is provided and the discovered database relies on the SCAN listener.
+	// In this case, the default is REDIRECT.
+	// Deprecated: Defaulting to the REDIRECT session mode will be removed after April 21, 2027.
 	SessionMode string `json:"sessionMode,omitempty"`
 	// Sets the Azure storage account name.
 	AccountName string `json:"accountName,omitempty"`

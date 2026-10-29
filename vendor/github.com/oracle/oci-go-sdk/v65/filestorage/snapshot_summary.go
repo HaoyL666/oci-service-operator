@@ -41,6 +41,8 @@ type SnapshotSummary struct {
 	// Locks associated with this resource.
 	Locks []ResourceLock `mandatory:"false" json:"locks"`
 
+	LockDurationDetails *LockDurationDetails `mandatory:"false" json:"lockDurationDetails"`
+
 	// Specifies the generation type of the snapshot.
 	SnapshotType SnapshotSummarySnapshotTypeEnum `mandatory:"false" json:"snapshotType,omitempty"`
 
@@ -84,6 +86,9 @@ type SnapshotSummary struct {
 	// System tags for this resource.
 	// System tags are applied to resources by internal OCI services.
 	SystemTags map[string]map[string]interface{} `mandatory:"false" json:"systemTags"`
+
+	// Bytes referenced only by this snapshot; deducted from compartment usage immediately upon deletion.
+	ExclusiveBytes *int64 `mandatory:"false" json:"exclusiveBytes"`
 }
 
 func (m SnapshotSummary) String() string {

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "fleetappsmanagement",
+    "apiVersion": "fleetappsmanagement.oracle.com/v1beta1",
+    "kind": "Onboarding",
+    "formalSlug": "onboarding",
+    "providerResource": "oci_fleet_apps_management_onboarding",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": null,
+    "denyRules": [
+      {
+        "fieldPath": "compartmentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "definedTags",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "freeformTags",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "isCostTrackingTagEnabled",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "unknown",
+        "detail": "Argument Reference documents the field but does not include an explicit update cue."
+      },
+      {
+        "fieldPath": "isFamsTagEnabled",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "replacementRequired",
+        "detail": "Argument Reference says changing this field requires replacement."
+      }
+    ]
+  }
+}

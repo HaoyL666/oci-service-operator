@@ -8,4 +8,6 @@ gaps: []
 
 # Logic Gaps
 
-The pinned Terraform provider registers DigitalTwinRelationship, but `formal-import` cannot resolve its CRUD type. The checked-in runtime lifecycle and vendored OCI SDK remain authoritative until importer support is added.
+This scaffold row tracks the published DigitalTwinRelationship API shape for iot. Replace this
+placeholder with repo-authored semantics and explicit stop conditions before
+adding formalSpec or promoting runtime ownership.

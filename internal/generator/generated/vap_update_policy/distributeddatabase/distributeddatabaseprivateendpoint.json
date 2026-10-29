@@ -21,8 +21,7 @@
       "definedTags",
       "description",
       "displayName",
-      "freeformTags",
-      "nsgIds"
+      "freeformTags"
     ],
     "denyRules": [
       {
@@ -31,6 +30,13 @@
         "mergeCase": "replacementRequired",
         "docsEvidenceState": "notDocumented",
         "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "nsgIds",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
       },
       {
         "fieldPath": "subnetId",

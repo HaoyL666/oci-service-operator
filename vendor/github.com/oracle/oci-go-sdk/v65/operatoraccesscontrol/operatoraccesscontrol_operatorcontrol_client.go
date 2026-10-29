@@ -2,11 +2,10 @@
 // This software is dual-licensed to you under the Universal Permissive License (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl or Apache License 2.0 as shown at http://www.apache.org/licenses/LICENSE-2.0. You may choose either license.
 // Code generated. DO NOT EDIT.
 
-// OperatorAccessControl API
+// Operator Access Control API
 //
 // Operator Access Control enables you to control the time duration and the actions an Oracle operator can perform on your Exadata Cloud@Customer infrastructure.
 // Using logging service, you can view a near real-time audit report of all actions performed by an Oracle operator.
-// Use the table of contents and search tool to explore the OperatorAccessControl API.
 //
 
 package operatoraccesscontrol
@@ -143,11 +142,11 @@ func (client OperatorControlClient) changeOperatorControlCompartment(ctx context
 
 	var response ChangeOperatorControlCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "operatorControl", "ChangeOperatorControlCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/OperatorControl/ChangeOperatorControlCompartment"
 		err = common.PostProcessServiceError(err, "OperatorControl", "ChangeOperatorControlCompartment", apiReferenceLink)
 		return response, err
 	}
@@ -206,11 +205,11 @@ func (client OperatorControlClient) createOperatorControl(ctx context.Context, r
 
 	var response CreateOperatorControlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "operatorControl", "CreateOperatorControl")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/OperatorControl/CreateOperatorControl"
 		err = common.PostProcessServiceError(err, "OperatorControl", "CreateOperatorControl", apiReferenceLink)
 		return response, err
 	}
@@ -268,11 +267,11 @@ func (client OperatorControlClient) deleteOperatorControl(ctx context.Context, r
 
 	var response DeleteOperatorControlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "operatorControl", "DeleteOperatorControl")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/OperatorControl/DeleteOperatorControl"
 		err = common.PostProcessServiceError(err, "OperatorControl", "DeleteOperatorControl", apiReferenceLink)
 		return response, err
 	}
@@ -326,11 +325,11 @@ func (client OperatorControlClient) getOperatorControl(ctx context.Context, requ
 
 	var response GetOperatorControlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "operatorControl", "GetOperatorControl")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/OperatorControl/GetOperatorControl"
 		err = common.PostProcessServiceError(err, "OperatorControl", "GetOperatorControl", apiReferenceLink)
 		return response, err
 	}
@@ -384,11 +383,11 @@ func (client OperatorControlClient) listOperatorControls(ctx context.Context, re
 
 	var response ListOperatorControlsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "operatorControl", "ListOperatorControls")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/OperatorControl/ListOperatorControls"
 		err = common.PostProcessServiceError(err, "OperatorControl", "ListOperatorControls", apiReferenceLink)
 		return response, err
 	}
@@ -442,11 +441,11 @@ func (client OperatorControlClient) updateOperatorControl(ctx context.Context, r
 
 	var response UpdateOperatorControlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "operatorControl", "UpdateOperatorControl")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/OperatorControl/UpdateOperatorControl"
 		err = common.PostProcessServiceError(err, "OperatorControl", "UpdateOperatorControl", apiReferenceLink)
 		return response, err
 	}

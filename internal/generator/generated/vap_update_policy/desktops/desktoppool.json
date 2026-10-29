@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "desktops",
+    "apiVersion": "desktops.oracle.com/v1beta1",
+    "kind": "DesktopPool",
+    "formalSlug": "desktoppool",
+    "providerResource": "oci_desktops_desktop_pool",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "availabilityPolicy.startSchedule.cronExpression",
+      "availabilityPolicy.startSchedule.timezone",
+      "availabilityPolicy.stopSchedule.cronExpression",
+      "availabilityPolicy.stopSchedule.timezone",
+      "compartmentId",
+      "contactDetails",
+      "definedTags",
+      "description",
+      "devicePolicy.audioMode",
+      "devicePolicy.cdmMode",
+      "devicePolicy.clipboardMode",
+      "devicePolicy.isDisplayEnabled",
+      "devicePolicy.isKeyboardEnabled",
+      "devicePolicy.isPointerEnabled",
+      "devicePolicy.isPrintingEnabled",
+      "displayName",
+      "freeformTags",
+      "maximumSize",
+      "sessionLifecycleActions.disconnect.action",
+      "sessionLifecycleActions.disconnect.gracePeriodInMinutes",
+      "sessionLifecycleActions.inactivity.action",
+      "sessionLifecycleActions.inactivity.gracePeriodInMinutes",
+      "standbySize",
+      "timeStartScheduled",
+      "timeStopScheduled"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "arePrivilegedUsers",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "areVolumesPreserved",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "availabilityDomain",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "bootVolumeSizeInGbs",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "devicePolicy.isVideoInputEnabled",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "image.imageId",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "unknown",
+        "detail": "Argument Reference documents the field but does not include an explicit update cue."
+      },
+      {
+        "fieldPath": "image.imageName",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "unknown",
+        "detail": "Argument Reference documents the field but does not include an explicit update cue."
+      },
+      {
+        "fieldPath": "image.operatingSystem",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "unknown",
+        "detail": "Argument Reference documents the field but does not include an explicit update cue."
+      },
+      {
+        "fieldPath": "isStorageEnabled",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "networkConfiguration",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "networkConfiguration.subnetId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "networkConfiguration.vcnId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "nsgIds",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "privateAccessDetails",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "privateAccessDetails.nsgIds",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "privateAccessDetails.privateIp",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "privateAccessDetails.subnetId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "sessionLifecycleActions",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "shapeConfig",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "shapeConfig.baselineOcpuUtilization",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "shapeConfig.memoryInGbs",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "shapeConfig.ocpus",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "shapeName",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "storageBackupPolicyId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "storageSizeInGbs",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "useDedicatedVmHost",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      }
+    ]
+  }
+}

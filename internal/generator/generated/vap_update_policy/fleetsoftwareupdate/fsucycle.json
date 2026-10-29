@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "fleetsoftwareupdate",
+    "apiVersion": "fleetsoftwareupdate.oracle.com/v1beta1",
+    "kind": "FsuCycle",
+    "formalSlug": "fsucycle",
+    "providerResource": "oci_fleet_software_update_fsu_cycle",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "batchingStrategy.type",
+      "compartmentId",
+      "definedTags",
+      "diagnosticsCollection.logCollectionMode",
+      "displayName",
+      "freeformTags",
+      "goalVersionDetails.components.componentType",
+      "goalVersionDetails.components.goalVersionDetails.goalType",
+      "goalVersionDetails.components.goalVersionDetails.goalVersion",
+      "goalVersionDetails.components.homePolicy",
+      "goalVersionDetails.components.newHomePrefix",
+      "goalVersionDetails.homePolicy",
+      "goalVersionDetails.newHomePrefix",
+      "goalVersionDetails.softwareImageId",
+      "goalVersionDetails.type",
+      "goalVersionDetails.version",
+      "isIgnoreMissingPatches",
+      "isIgnorePatches",
+      "isKeepPlacement",
+      "maxDrainTimeoutInSeconds",
+      "type",
+      "upgradeDetails.collectionType",
+      "upgradeDetails.isIgnorePostUpgradeErrors",
+      "upgradeDetails.isIgnorePrerequisites",
+      "upgradeDetails.isRecompileInvalidObjects",
+      "upgradeDetails.isTimeZoneUpgrade"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "applyActionSchedule",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "applyActionSchedule.timeToStart",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "applyActionSchedule.type",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "batchingStrategy.isForceRolling",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "batchingStrategy.isWaitForBatchResume",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "batchingStrategy.percentage",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "fsuCollectionId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "goalVersionDetails.components.goalVersionDetails.goalSoftwareImageId",
+        "decision": "unknown",
+        "mergeCase": "unresolvedJoin",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "stageActionSchedule",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "stageActionSchedule.timeToStart",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "stageActionSchedule.type",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "upgradeDetails.maxDrainTimeoutInSeconds",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
+      }
+    ]
+  }
+}

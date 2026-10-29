@@ -35,6 +35,12 @@ type PipelineSpec struct {
 	// The subnet must be a private subnet.
 	// +kubebuilder:validation:Optional
 	SubnetId string `json:"subnetId,omitempty"`
+	// The Minimum number of OCPUs to be made available for this Deployment.
+	// +kubebuilder:validation:Optional
+	CpuCoreCount int `json:"cpuCoreCount,omitempty"`
+	// Indicates if auto scaling is enabled for the Deployment's CPU core count.
+	// +kubebuilder:validation:Optional
+	IsAutoScalingEnabled bool `json:"isAutoScalingEnabled,omitempty"`
 	// An object's Display Name.
 	// +kubebuilder:validation:Required
 	DisplayName string `json:"displayName"`
@@ -98,6 +104,24 @@ type PipelineProcessOptionsInitialDataLoad struct {
 	// Action upon existing tables in target when initial Data Load is set i.e., isInitialLoad=true.
 	// +kubebuilder:validation:Optional
 	ActionOnExistingTable string `json:"actionOnExistingTable,omitempty"`
+	// Type of Initial load, which can be objectStorage or dbLink.
+	// +kubebuilder:validation:Optional
+	InitialLoadType string `json:"initialLoadType,omitempty"`
+	// Directory path of ADB wallet locally available in Non-ADB target DB. Required for ADB to non-ADB DBLink type initial load only. If not provided the default wallet path "/u01/targetwallet" will be used.
+	// +kubebuilder:validation:Optional
+	AdbWalletPath string `json:"adbWalletPath,omitempty"`
+	// Directory path of ObjectStorage wallet locally available in Non-ADB source DB. Required for Object Storage type initial load only if source DB is Non-ADB type.
+	// +kubebuilder:validation:Optional
+	SourceWalletPath string `json:"sourceWalletPath,omitempty"`
+	// Directory path of ObjectStorage wallet locally available in Non-ADB target DB. Required for Object Storage type initial load only if target DB is Non-ADB type.
+	// +kubebuilder:validation:Optional
+	TargetWalletPath string `json:"targetWalletPath,omitempty"`
+	// Namespace that serves as a container of the ObjectStorage bucket. Required only for Objectstorage Initial load.
+	// +kubebuilder:validation:Optional
+	NamespaceName string `json:"namespaceName,omitempty"`
+	// Name of the ObjectStorage bucket. Required only for Objectstorage Initial load.
+	// +kubebuilder:validation:Optional
+	BucketName string `json:"bucketName,omitempty"`
 }
 
 // PipelineProcessOptionsReplicateSchemaChange defines nested fields for Pipeline.ProcessOptions.ReplicateSchemaChange.

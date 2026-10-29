@@ -92,6 +92,10 @@ spec:
                 description: A user-friendly name. Does not have to be unique, and
                   it's changeable. Avoid entering confidential information.
                 type: string
+              email:
+                description: Atlassian account email used for Bitbucket Cloud API
+                  token authentication.
+                type: string
               freeformTags:
                 additionalProperties:
                   type: string
@@ -120,9 +124,6 @@ spec:
                 type: object
               secretId:
                 description: The secret ocid which is used to authorize the user.
-                type: string
-              username:
-                description: The username for the user of the Bitbucket cloud repository.
                 type: string
             type: object
           status:
@@ -157,6 +158,10 @@ spec:
                 description: A user-friendly name. Does not have to be unique, and
                   it's changeable. Avoid entering confidential information.
                 type: string
+              email:
+                description: Atlassian account email used for Bitbucket Cloud API
+                  token authentication.
+                type: string
               freeformTags:
                 additionalProperties:
                   type: string
@@ -169,6 +174,11 @@ spec:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the configuration source provider.
                 type: string
+              isMigrationRequired:
+                description: Indicates whether this configuration source provider
+                  uses legacy Bitbucket Cloud username/app-password credentials and
+                  must be migrated.
+                type: boolean
               jsonData:
                 type: string
               lifecycleState:

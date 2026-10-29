@@ -86,6 +86,9 @@ type Backup struct {
 	// List of status for Backup Copy
 	CopyStatus []BackupCopyStatusDetails `mandatory:"false" json:"copyStatus"`
 
+	// The OCID of the master encryption key for the backup.
+	KmsKeyId *string `mandatory:"false" json:"kmsKeyId"`
+
 	// System tags for this resource. Each key is predefined and scoped to a namespace.
 	// Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
 	SystemTags map[string]map[string]interface{} `mandatory:"false" json:"systemTags"`
@@ -120,18 +123,21 @@ type BackupSourceTypeEnum string
 const (
 	BackupSourceTypeScheduled BackupSourceTypeEnum = "SCHEDULED"
 	BackupSourceTypeManual    BackupSourceTypeEnum = "MANUAL"
+	BackupSourceTypePitr      BackupSourceTypeEnum = "PITR"
 	BackupSourceTypeCopied    BackupSourceTypeEnum = "COPIED"
 )
 
 var mappingBackupSourceTypeEnum = map[string]BackupSourceTypeEnum{
 	"SCHEDULED": BackupSourceTypeScheduled,
 	"MANUAL":    BackupSourceTypeManual,
+	"PITR":      BackupSourceTypePitr,
 	"COPIED":    BackupSourceTypeCopied,
 }
 
 var mappingBackupSourceTypeEnumLowerCase = map[string]BackupSourceTypeEnum{
 	"scheduled": BackupSourceTypeScheduled,
 	"manual":    BackupSourceTypeManual,
+	"pitr":      BackupSourceTypePitr,
 	"copied":    BackupSourceTypeCopied,
 }
 
@@ -149,6 +155,7 @@ func GetBackupSourceTypeEnumStringValues() []string {
 	return []string{
 		"SCHEDULED",
 		"MANUAL",
+		"PITR",
 		"COPIED",
 	}
 }

@@ -371,7 +371,21 @@ func dereferenceTenancyAttachmentRuntimeBody[T any](current *T) (T, error) {
 }
 
 func tenancyAttachmentFromSummary(summary resourceanalyticssdk.TenancyAttachmentSummary) resourceanalyticssdk.TenancyAttachment {
-	return resourceanalyticssdk.TenancyAttachment(summary)
+	return resourceanalyticssdk.TenancyAttachment{
+		Id:                          summary.Id,
+		ResourceAnalyticsInstanceId: summary.ResourceAnalyticsInstanceId,
+		TenancyId:                   summary.TenancyId,
+		IsReportingTenancy:          summary.IsReportingTenancy,
+		DataPopulationStatus:        summary.DataPopulationStatus,
+		TimeCreated:                 summary.TimeCreated,
+		LifecycleState:              summary.LifecycleState,
+		Description:                 summary.Description,
+		TimeDataPopulationStarted:   summary.TimeDataPopulationStarted,
+		TimeDataPopulationEnded:     summary.TimeDataPopulationEnded,
+		TimeUpdated:                 summary.TimeUpdated,
+		LifecycleDetails:            summary.LifecycleDetails,
+		SystemTags:                  summary.SystemTags,
+	}
 }
 
 func tenancyAttachmentStringDrift(spec string, current *string) bool {

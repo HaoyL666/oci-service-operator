@@ -30,7 +30,9 @@ type DatabaseRegistrationSpec struct {
 	Username string `json:"username"`
 	// The password Oracle GoldenGate uses to connect the associated system of the given technology.
 	// It must conform to the specific security requirements including length, case sensitivity, and so on.
-	// Deprecated: This field is deprecated and replaced by "passwordSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "passwordSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Required
 	Password string `json:"password"`
 	// Credential store alias.
@@ -69,7 +71,9 @@ type DatabaseRegistrationSpec struct {
 	SessionMode string `json:"sessionMode,omitempty"`
 	// The wallet contents Oracle GoldenGate uses to make connections to a database.
 	// This attribute is expected to be base64 encoded.
-	// Deprecated: This field is deprecated and replaced by "walletSecretId". This field will be removed after February 15 2026.
+	// Deprecated: This field is deprecated and replaced by "walletSecretId".
+	// This change follows the GoldenGate "Plain Text Fields in Connections" deprecation:
+	// https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate
 	// +kubebuilder:validation:Optional
 	Wallet string `json:"wallet,omitempty"`
 	// Refers to the customer's vault OCID.
@@ -163,6 +167,9 @@ type DatabaseRegistrationStatus struct {
 	// If provided, it references a key that customers will be required to ensure the policies are established
 	// to permit GoldenGate to use this Secret.
 	SecretId string `json:"secretId,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the connection being
+	// referenced as the successor resource of the deprecated database registration.
+	ConnectionId string `json:"connectionId,omitempty"`
 }
 
 // +kubebuilder:object:root=true

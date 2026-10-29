@@ -48,11 +48,11 @@ ConfigurationSourceProviderSpec defines the desired state of ConfigurationSource
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | Description of the configuration source provider. Avoid entering confidential information. | `string` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
+| `email` | Atlassian account email used for Bitbucket Cloud API token authentication. | `string` | No | - | - |
 | `freeformTags` | Free-form tags associated with the resource. Each tag is a key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | [`privateServerConfigDetails`](#kind-configurationsourceprovider-spec-privateserverconfigdetails) | ConfigurationSourceProviderPrivateServerConfigDetails defines nested fields for ConfigurationSourceProvider.PrivateServerConfigDetails. | `object` | No | - | - |
 | `secretId` | The secret ocid which is used to authorize the user. | `string` | No | - | - |
-| `username` | The username for the user of the Bitbucket cloud repository. | `string` | No | - | - |
 
 <a id="kind-configurationsourceprovider-spec-privateserverconfigdetails"></a>
 #### Spec.privateServerConfigDetails
@@ -79,8 +79,10 @@ ConfigurationSourceProviderStatus defines the observed state of ConfigurationSou
 | `definedTags` | Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Operations": {"CostCenter": "42"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | Description of the configuration source provider. | `string` | No | - | - |
 | `displayName` | A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information. | `string` | No | - | - |
+| `email` | Atlassian account email used for Bitbucket Cloud API token authentication. | `string` | No | - | - |
 | `freeformTags` | Free-form tags associated with the resource. Each tag is a key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the configuration source provider. | `string` | No | - | - |
+| `isMigrationRequired` | Indicates whether this configuration source provider uses legacy Bitbucket Cloud username/app-password credentials and must be migrated. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `lifecycleState` | The current lifecycle state of the configuration source provider. For more information about configuration source provider lifecycle states in Resource Manager, see Key Concepts (https://docs.oracle.com/iaas/Content/ResourceManager/Concepts/resourcemanager.htm#concepts__CSPStates). | `string` | No | - | - |
 | [`privateServerConfigDetails`](#kind-configurationsourceprovider-status-privateserverconfigdetails) | ConfigurationSourceProviderPrivateServerConfigDetails defines nested fields for ConfigurationSourceProvider.PrivateServerConfigDetails. | `object` | No | - | - |

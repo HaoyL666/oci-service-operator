@@ -443,6 +443,24 @@ func (in *RecoveryServiceSubnetSpec) DeepCopyInto(out *RecoveryServiceSubnetSpec
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
+	if in.SecurityAttributes != nil {
+		in, out := &in.SecurityAttributes, &out.SecurityAttributes
+		*out = make(map[string]shared.MapValue, len(*in))
+		for key, val := range *in {
+			var outVal map[string]string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = make(shared.MapValue, len(*in))
+				for key, val := range *in {
+					(*out)[key] = val
+				}
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.FreeformTags != nil {
 		in, out := &in.FreeformTags, &out.FreeformTags
 		*out = make(map[string]string, len(*in))
@@ -493,6 +511,24 @@ func (in *RecoveryServiceSubnetStatus) DeepCopyInto(out *RecoveryServiceSubnetSt
 		in, out := &in.NsgIds, &out.NsgIds
 		*out = make([]string, len(*in))
 		copy(*out, *in)
+	}
+	if in.SecurityAttributes != nil {
+		in, out := &in.SecurityAttributes, &out.SecurityAttributes
+		*out = make(map[string]shared.MapValue, len(*in))
+		for key, val := range *in {
+			var outVal map[string]string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = make(shared.MapValue, len(*in))
+				for key, val := range *in {
+					(*out)[key] = val
+				}
+			}
+			(*out)[key] = outVal
+		}
 	}
 	if in.FreeformTags != nil {
 		in, out := &in.FreeformTags, &out.FreeformTags

@@ -153,11 +153,12 @@ ConnectionSpec defines the desired state of Connection.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `accessKeyId` | Access key ID to access the Amazon Kinesis. | `string` | No | - | - |
-| `accountKey` | Azure storage account key. This property is required when 'authenticationType' is set to 'SHARED_KEY'. e.g.: pa3WbhVATzj56xD4DH1VjOUhApRGEGHvOo58eQJVWIzX+j8j4CUVFcTjpIqDSRaSa1Wo2LbWY5at+AStEgLOIQ== Deprecated: This field is deprecated and replaced by "accountKeySecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `accessKeyId` | Access key ID to access the Amazon Kinesis. Note: Despite the "Id" suffix, this value is not an OCI OCID. | `string` | No | - | - |
+| `accountKey` | Azure storage account key. This property is required when 'authenticationType' is set to 'SHARED_KEY'. e.g.: pa3WbhVATzj56xD4DH1VjOUhApRGEGHvOo58eQJVWIzX+j8j4CUVFcTjpIqDSRaSa1Wo2LbWY5at+AStEgLOIQ== Deprecated: This field is deprecated and replaced by "accountKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `accountKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the account key is stored. Note: When provided, 'accountKey' field must not be provided. | `string` | No | - | - |
 | `accountName` | Sets the Azure storage account name. | `string` | No | - | - |
 | [`additionalAttributes`](#kind-connection-spec-additionalattributes) | An array of name-value pair attribute entries. Used as additional parameters in connection string. | `list[object]` | No | - | - |
+| [`authDetails`](#kind-connection-spec-authdetails) | ConnectionAuthDetails defines nested fields for Connection.AuthDetails. | `object` | No | - | - |
 | `authenticationMode` | Authentication mode. It can be provided at creation of Oracle Autonomous Database Serverless connections, when a databaseId is provided. The default value is MTLS. | `string` | No | - | - |
 | `authenticationType` | Used authentication mechanism to access Schema Registry. | `string` | No | - | - |
 | `azureAuthorityHost` | The endpoint used for authentication with Microsoft Entra ID (formerly Azure Active Directory). Default value: https://login.microsoftonline.com When connecting to a non-public Azure Cloud, the endpoint must be provided, eg: * Azure China: https://login.chinacloudapi.cn/ * Azure US Government: https://login.microsoftonline.us/ | `string` | No | - | - |
@@ -165,7 +166,7 @@ ConnectionSpec defines the desired state of Connection.
 | [`bootstrapServers`](#kind-connection-spec-bootstrapservers) | Kafka bootstrap. Equivalent of bootstrap.servers configuration property in Kafka: list of KafkaBootstrapServer objects specified by host/port. Used for establishing the initial connection to the Kafka cluster. Example: `"server1.example.com:9092,server2.example.com:9092"` | `list[object]` | No | - | - |
 | [`catalog`](#kind-connection-spec-catalog) | ConnectionCatalog defines nested fields for Connection.Catalog. | `object` | No | - | - |
 | `clientId` | Azure client ID of the application. This property is required when 'authenticationType' is set to 'AZURE_ACTIVE_DIRECTORY'. e.g.: 06ecaabf-8b80-4ec8-a0ec-20cbf463703d | `string` | No | - | - |
-| `clientSecret` | Azure client secret (aka application password) for authentication. This property is required when 'authenticationType' is set to 'AZURE_ACTIVE_DIRECTORY'. e.g.: dO29Q~F5-VwnA.lZdd11xFF_t5NAXCaGwDl9NbT1 Deprecated: This field is deprecated and replaced by "clientSecretSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `clientSecret` | Azure client secret (aka application password) for authentication. This property is required when 'authenticationType' is set to 'AZURE_ACTIVE_DIRECTORY'. e.g.: dO29Q~F5-VwnA.lZdd11xFF_t5NAXCaGwDl9NbT1 Deprecated: This field is deprecated and replaced by "clientSecretSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `clientSecretSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the client secret is stored. Note: When provided, 'clientSecret' field must not be provided. | `string` | No | - | - |
 | `clusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Kafka cluster being referenced from OCI Streaming with Apache Kafka. | `string` | No | - | - |
 | `clusterPlacementGroupId` | The OCID(/Content/General/Concepts/identifiers.htm) of the cluster placement group for the resource. Only applicable for multicloud subscriptions. The cluster placement group id must be provided when a multicloud subscription id is provided. Otherwise the cluster placement group must not be provided. | `string` | No | - | - |
@@ -183,7 +184,7 @@ ConnectionSpec defines the desired state of Connection.
 | `deploymentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the deployment being referenced. | `string` | No | - | - |
 | `description` | Metadata about this specific object. | `string` | No | - | - |
 | `displayName` | An object's Display Name. | `string` | Yes | - | - |
-| `doesUseSecretIds` | Indicates that sensitive attributes are provided via Secrets. | `boolean` | No | - | - |
+| `doesUseSecretIds` | Indicates that sensitive attributes are provided via Secrets. Deprecated: This field is deprecated. Sensitive attributes should be provided using the corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text attributes. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate When set to `true`, all sensitive information must be provided as OCI Vault secrets using the corresponding `*SecretId` attributes of the connection (for example, `passwordSecretId`). Plain-text sensitive attributes (for example, `password`) must not be used. This ensures that sensitive information remains stored and managed in the customer's OCI Vault rather than by the GoldenGate service. When set to false, sensitive information must be provided in the corresponding plain-text attributes (for example, `password`) rather than in secret OCID attributes. In this mode, the sensitive information is stored by the GoldenGate service. If `vaultId` and `keyId` are not specified, the GoldenGate service uses Oracle-managed encryption keys to encrypt the stored data. If `vaultId` and `keyId` are provided, the specified customer-managed key is used. | `boolean` | No | - | - |
 | `endpoint` | The endpoint URL of the Amazon Kinesis service. e.g.: 'https://kinesis.us-east-1.amazonaws.com' If not provided, GoldenGate will default to 'https://kinesis.<region>.amazonaws.com'. | `string` | No | - | - |
 | `fingerprint` | Fingerprint required by TLS security protocol. Eg.: '6152b2dfbff200f973c5074a5b91d06ab3b472c07c09a1ea57bb7fd406cdce9c' | `string` | No | - | - |
 | `freeformTags` | A simple key-value pair that is applied without any predefined name, type, or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
@@ -191,52 +192,55 @@ ConnectionSpec defines the desired state of Connection.
 | `jndiConnectionFactory` | The Connection Factory can be looked up using this name. e.g.: 'ConnectionFactory' | `string` | No | - | - |
 | `jndiInitialContextFactory` | The implementation of javax.naming.spi.InitialContextFactory interface that the client uses to obtain initial naming context. e.g.: 'org.apache.activemq.jndi.ActiveMQInitialContextFactory' | `string` | No | - | - |
 | `jndiProviderUrl` | The URL that Java Message Service will use to contact the JNDI provider. e.g.: 'tcp://myjms.host.domain:61616?jms.prefetchPolicy.all=1000' | `string` | No | - | - |
-| `jndiSecurityCredentials` | The password associated to the principal. Deprecated: This field is deprecated and replaced by "jndiSecurityCredentialsSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `jndiSecurityCredentials` | The password associated to the principal. Deprecated: This field is deprecated and replaced by "jndiSecurityCredentialsSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `jndiSecurityCredentialsSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the security credentials are stored associated to the principal. Note: When provided, 'jndiSecurityCredentials' field must not be provided. | `string` | No | - | - |
 | `jndiSecurityPrincipal` | Specifies the identity of the principal (user) to be authenticated. e.g.: 'admin2' | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
-| `keyId` | Refers to the customer's master key OCID. If provided, it references a key to manage secrets. Customers must add policies to permit GoldenGate to use this key. | `string` | No | - | - |
-| `keyStore` | The base64 encoded content of the KeyStore file. Deprecated: This field is deprecated and replaced by "keyStoreSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
-| `keyStorePassword` | The KeyStore password. Deprecated: This field is deprecated and replaced by "keyStorePasswordSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `keyId` | References the OCI Vault key in the OCI Vault identified by `vaultId`. Deprecated: This field is deprecated for GoldenGate connections. Sensitive attributes should be provided using the corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text attributes encrypted with `vaultId` and `keyId`. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate The GoldenGate service uses this key to encrypt sensitive information (for example, `password`) that is provided in plain-text connection attributes through the API. This field is applicable only when `doesUseSecretIds` is set to `false`. If both `vaultId` and `keyId` are provided, the GoldenGate service uses the specified customer-managed key to encrypt the sensitive data. If neither `vaultId` nor `keyId` is provided, the GoldenGate service uses Oracle-managed encryption keys. | `string` | No | - | - |
+| `keyStore` | The base64 encoded content of the KeyStore file. Deprecated: This field is deprecated and replaced by "keyStoreSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
+| `keyStorePassword` | The KeyStore password. Deprecated: This field is deprecated and replaced by "keyStorePasswordSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `keyStorePasswordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the kafka Ssl KeyStore password is stored. Note: When provided, 'keyStorePassword' field must not be provided. | `string` | No | - | - |
 | `keyStoreSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the KeyStore file. Note: When provided, 'keyStore' field must not be provided. | `string` | No | - | - |
 | [`locks`](#kind-connection-spec-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
+| `maxInputChars` | Maximum number of input characters supported by this AI model connection. | `integer` | No | - | - |
+| `modelKey` | AI model identifier. | `string` | No | - | - |
 | `nsgIds` | An array of Network Security Group OCIDs used to define network access for either Deployments or Connections. | `list[string]` | No | - | - |
-| `password` | The password Oracle GoldenGate uses to connect the associated system of the given technology. It must conform to the specific security requirements including length, case sensitivity, and so on. Deprecated: This field is deprecated and replaced by "passwordSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `password` | The password Oracle GoldenGate uses to connect the associated system of the given technology. It must conform to the specific security requirements including length, case sensitivity, and so on. Deprecated: This field is deprecated and replaced by "passwordSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `passwordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the password is stored. The password Oracle GoldenGate uses to connect the associated system of the given technology. It must conform to the specific security requirements including length, case sensitivity, and so on. If secretId is used plaintext field must not be provided. Note: When provided, 'password' field must not be provided. | `string` | No | - | - |
 | `port` | The port of an endpoint usually specified for a connection. | `integer` | No | - | - |
-| `privateIp` | Deprecated: this field will be removed in future versions. Either specify the private IP in the connectionString or host field, or make sure the host name is resolvable in the target VCN. The private IP address of the connection's endpoint in the customer's VCN, typically a database endpoint or a big data endpoint (e.g. Kafka bootstrap server). In case the privateIp is provided, the subnetId must also be provided. In case the privateIp (and the subnetId) is not provided it is assumed the datasource is publicly accessible. In case the connection is accessible only privately, the lack of privateIp will result in not being able to access the connection. | `string` | No | - | - |
-| `privateKeyFile` | The base64 encoded content of the private key file (PEM file) corresponding to the API key of the fingerprint. See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm Deprecated: This field is deprecated and replaced by "privateKeyFileSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `privateIp` | This property is not available when creating connections. For existing deprecated connections having this value set, the value cannot be updated; set it to empty. For deprecated connections created with this field in the past, either the private IP had to be specified in the connectionString or host field, or the host name had to be resolvable in the target VCN. | `string` | No | - | - |
+| `privateKeyFile` | The base64 encoded content of the private key file (PEM file) corresponding to the API key of the fingerprint. See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm Deprecated: This field is deprecated and replaced by "privateKeyFileSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `privateKeyFileSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the private key file (PEM file) corresponding to the API key of the fingerprint. See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm Note: When provided, 'privateKeyFile' field must not be provided. | `string` | No | - | - |
-| `privateKeyPassphrase` | The passphrase of the private key. Deprecated: This field is deprecated and replaced by "privateKeyPassphraseSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `privateKeyPassphrase` | The passphrase of the private key. Deprecated: This field is deprecated and replaced by "privateKeyPassphraseSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `privateKeyPassphraseSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the passphrase of the private key. Note: When provided, 'privateKeyPassphrase' field must not be provided. | `string` | No | - | - |
 | `producerProperties` | The base64 encoded content of the producer.properties file. | `string` | No | - | - |
+| `providerType` | AI Provider type used by the AI Model Connection. | `string` | No | - | - |
 | `publicKeyFingerprint` | The fingerprint of the API Key of the user specified by the userId. See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm | `string` | No | - | - |
 | `redisClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Redis cluster. | `string` | No | - | - |
 | `region` | The name of the AWS region. If not provided, GoldenGate will default to 'us-west-1'. Note: this property will become mandatory after July 30, 2026. | `string` | No | - | - |
-| `routingMethod` | Controls the network traffic direction to the target: SHARED_SERVICE_ENDPOINT: Traffic flows through the Goldengate Service's network to public hosts. Cannot be used for private targets. SHARED_DEPLOYMENT_ENDPOINT: Network traffic flows from the assigned deployment's private endpoint through the deployment's subnet. DEDICATED_ENDPOINT: A dedicated private endpoint is created in the target VCN subnet for the connection. The subnetId is required when DEDICATED_ENDPOINT networking is selected. | `string` | No | - | - |
-| `sasToken` | Credential that uses a shared access signature (SAS) to authenticate to an Azure Service. This property is required when 'authenticationType' is set to 'SHARED_ACCESS_SIGNATURE'. e.g.: ?sv=2020-06-08&ss=bfqt&srt=sco&sp=rwdlacupyx&se=2020-09-10T20:27:28Z&st=2022-08-05T12:27:28Z&spr=https&sig=C1IgHsiLBmTSStYkXXGLTP8it0xBrArcgCqOsZbXwIQ%3D Deprecated: This field is deprecated and replaced by "sasTokenSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `routingMethod` | Controls the network traffic direction to the target: SHARED_DEPLOYMENT_ENDPOINT: Network traffic flows from the assigned deployment's private endpoint through the deployment's subnet. DEDICATED_ENDPOINT: A dedicated private endpoint is created in the target VCN subnet for the connection. The subnetId is required when DEDICATED_ENDPOINT networking is selected. SHARED_SERVICE_ENDPOINT: Traffic flows through the Goldengate Service's network to public hosts. Cannot be used for private targets. Deprecated: SHARED_SERVICE_ENDPOINT is deprecated. Use another supported routingMethod value, or update existing connections to use a supported routing method. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
+| `sasToken` | Credential that uses a shared access signature (SAS) to authenticate to an Azure Service. This property is required when 'authenticationType' is set to 'SHARED_ACCESS_SIGNATURE'. e.g.: ?sv=2020-06-08&ss=bfqt&srt=sco&sp=rwdlacupyx&se=2020-09-10T20:27:28Z&st=2022-08-05T12:27:28Z&spr=https&sig=C1IgHsiLBmTSStYkXXGLTP8it0xBrArcgCqOsZbXwIQ%3D Deprecated: This field is deprecated and replaced by "sasTokenSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `sasTokenSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the sas token is stored. Note: When provided, 'sasToken' field must not be provided. | `string` | No | - | - |
-| `secretAccessKey` | Secret access key to access the Amazon Kinesis. Deprecated: This field is deprecated and replaced by "secretAccessKeySecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `secretAccessKey` | Secret access key to access the Amazon Kinesis. Deprecated: This field is deprecated and replaced by "secretAccessKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `secretAccessKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the secret access key is stored. Note: When provided, 'secretAccessKey' field must not be provided. | `string` | No | - | - |
 | `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `securityProtocol` | Security protocol for PostgreSQL. | `string` | No | - | - |
 | `servers` | Comma separated list of Redis server addresses, specified as host:port entries, where :port is optional. If port is not specified, it defaults to 6379. Used for establishing the initial connection to the Redis cluster. Example: `"server1.example.com:6379,server2.example.com:6379"` | `string` | No | - | - |
-| `serviceAccountKeyFile` | The base64 encoded content of the service account key file containing the credentials required to use Google PubSub. Deprecated: This field is deprecated and replaced by "serviceAccountKeyFileSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `serviceAccountKeyFile` | The base64 encoded content of the service account key file containing the credentials required to use Google PubSub. Deprecated: This field is deprecated and replaced by "serviceAccountKeyFileSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `serviceAccountKeyFileSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the content of the service account key file is stored, which contains the credentials required to use Google PubSub. Note: When provided, 'serviceAccountKeyFile' field must not be provided. | `string` | No | - | - |
-| `sessionMode` | The mode of the database connection session to be established by the data client. 'REDIRECT' - for a RAC database, 'DIRECT' - for a non-RAC database. Connection to a RAC database involves a redirection received from the SCAN listeners to the database node to connect to. By default the mode would be DIRECT. | `string` | No | - | - |
+| `sessionMode` | Specifies the session mode for the database connection. Use REDIRECT only for RAC databases with SCAN listeners that return IP addresses. For RAC databases with SCAN listeners that return FQDNs, and for all other Oracle database technologies, use DIRECT. In RAC deployments, SCAN listeners redirects a connection to a specific database node, identified by either IP address or FQDN. It is recommended to configure RAC with FQDN-based SCAN listeners. The default is DIRECT, except when databaseId is provided and the discovered database relies on the SCAN listener. In this case, the default is REDIRECT. Deprecated: Defaulting to the REDIRECT session mode will be removed after April 21, 2027. | `string` | No | - | - |
 | `shouldUseJndi` | If set to true, Java Naming and Directory Interface (JNDI) properties should be provided. | `boolean` | No | - | - |
 | `shouldUseResourcePrincipal` | Specifies that the user intends to authenticate to the instance using a resource principal. Default: false | `boolean` | No | - | - |
 | `shouldValidateServerCertificate` | If set to true, the driver validates the certificate that is sent by the database server. | `boolean` | No | - | - |
 | `sslCa` | The base64 encoded certificate of the trusted certificate authorities (Trusted CA) for PostgreSQL. The supported file formats are .pem and .crt. It is not included in GET responses if the `view=COMPACT` query parameter is specified. | `string` | No | - | - |
 | `sslCert` | The base64 encoded certificate of the PostgreSQL server. The supported file formats are .pem and .crt. It is not included in GET responses if the `view=COMPACT` query parameter is specified. | `string` | No | - | - |
-| `sslClientKeystash` | The base64 encoded keystash file which contains the encrypted password to the key database file. This property is not supported for IBM Db2 for i, as client TLS mode is not available. Deprecated: This field is deprecated and replaced by "sslClientKeystashSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `sslClientKeystash` | The base64 encoded keystash file which contains the encrypted password to the key database file. This property is not supported for IBM Db2 for i, as client TLS mode is not available. Deprecated: This field is deprecated and replaced by "sslClientKeystashSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `sslClientKeystashSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the keystash file is stored, which contains the encrypted password to the key database file. This property is not supported for IBM Db2 for i, as client TLS mode is not available. Note: When provided, 'sslClientKeystash' field must not be provided. | `string` | No | - | - |
-| `sslClientKeystoredb` | The base64 encoded keystore file created at the client containing the server certificate / CA root certificate. This property is not supported for IBM Db2 for i, as client TLS mode is not available. Deprecated: This field is deprecated and replaced by "sslClientKeystoredbSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `sslClientKeystoredb` | The base64 encoded keystore file created at the client containing the server certificate / CA root certificate. This property is not supported for IBM Db2 for i, as client TLS mode is not available. Deprecated: This field is deprecated and replaced by "sslClientKeystoredbSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `sslClientKeystoredbSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the keystore file stored, which created at the client containing the server certificate / CA root certificate. This property is not supported for IBM Db2 for i, as client TLS mode is not available. Note: When provided, 'sslClientKeystoredb' field must not be provided. | `string` | No | - | - |
 | `sslCrl` | The base64 encoded list of certificates revoked by the trusted certificate authorities (Trusted CA). It is not included in GET responses if the `view=COMPACT` query parameter is specified. | `string` | No | - | - |
-| `sslKey` | The base64 encoded private key of the PostgreSQL server. The supported file formats are .pem and .crt. Deprecated: This field is deprecated and replaced by "sslKeySecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
-| `sslKeyPassword` | The password for the cert inside the KeyStore. In case it differs from the KeyStore password, it should be provided. Deprecated: This field is deprecated and replaced by "sslKeyPasswordSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `sslKey` | The base64 encoded private key of the PostgreSQL server. The supported file formats are .pem and .crt. Deprecated: This field is deprecated and replaced by "sslKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
+| `sslKeyPassword` | The password for the cert inside the KeyStore. In case it differs from the KeyStore password, it should be provided. Deprecated: This field is deprecated and replaced by "sslKeyPasswordSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `sslKeyPasswordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password for the cert inside the KeyStore. In case it differs from the KeyStore password, it should be provided. Note: When provided, 'sslKeyPassword' field must not be provided. | `string` | No | - | - |
 | `sslKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the private key of the PostgreSQL server. The supported file formats are .pem and .crt. Note: When provided, 'sslKey' field must not be provided. | `string` | No | - | - |
 | `sslMode` | SSL modes for PostgreSQL. | `string` | No | - | - |
@@ -250,19 +254,19 @@ ConnectionSpec defines the desired state of Connection.
 | `tenancyId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the related OCI tenancy. | `string` | No | - | - |
 | `tenantId` | Azure tenant ID of the application. e.g.: 14593954-d337-4a61-a364-9f758c64f97f | `string` | No | - | - |
 | `tlsCaFile` | Database Certificate - The base64 encoded content of a .pem file, containing the server public key (for 1 and 2-way SSL). It is not included in GET responses if the `view=COMPACT` query parameter is specified. | `string` | No | - | - |
-| `tlsCertificateKeyFile` | Client Certificate - The base64 encoded content of a .pem file, containing the client public key (for 2-way SSL). Deprecated: This field is deprecated and replaced by "tlsCertificateKeyFileSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
-| `tlsCertificateKeyFilePassword` | Client Certificate key file password. Deprecated: This field is deprecated and replaced by "tlsCertificateKeyFilePasswordSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `tlsCertificateKeyFile` | Client Certificate - The base64 encoded content of a .pem file, containing the client public key (for 2-way SSL). Deprecated: This field is deprecated and replaced by "tlsCertificateKeyFileSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
+| `tlsCertificateKeyFilePassword` | Client Certificate key file password. Deprecated: This field is deprecated and replaced by "tlsCertificateKeyFilePasswordSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `tlsCertificateKeyFilePasswordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password of the tls certificate key file. Note: When provided, 'tlsCertificateKeyFilePassword' field must not be provided. | `string` | No | - | - |
 | `tlsCertificateKeyFileSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the certificate key file of the mtls connection. - The content of a .pem file containing the client private key (for 2-way SSL). Note: When provided, 'tlsCertificateKeyFile' field must not be provided. | `string` | No | - | - |
-| `trustStore` | The base64 encoded content of the TrustStore file. Deprecated: This field is deprecated and replaced by "trustStoreSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
-| `trustStorePassword` | The TrustStore password. Deprecated: This field is deprecated and replaced by "trustStorePasswordSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `trustStore` | The base64 encoded content of the TrustStore file. Deprecated: This field is deprecated and replaced by "trustStoreSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
+| `trustStorePassword` | The TrustStore password. Deprecated: This field is deprecated and replaced by "trustStorePasswordSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `trustStorePasswordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the kafka Ssl TrustStore password is stored. Note: When provided, 'trustStorePassword' field must not be provided. | `string` | No | - | - |
 | `trustStoreSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the TrustStore file. Note: When provided, 'trustStore' field must not be provided. | `string` | No | - | - |
 | `url` | Kafka Schema Registry URL. e.g.: 'https://server1.us.oracle.com:8081' | `string` | No | - | - |
 | `userId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI user who will access the Object Storage. The user must have write access to the bucket they want to connect to. If the user is not provided, backend will default to the user who is calling the API endpoint. | `string` | No | - | - |
 | `username` | The username Oracle GoldenGate uses to connect the associated system of the given technology. This username must already exist and be available by the system/application to be connected to and must conform to the case sensitivty requirments defined in it. | `string` | No | - | - |
-| `vaultId` | Refers to the customer's vault OCID. If provided, it references a vault where GoldenGate can manage secrets. Customers must add policies to permit GoldenGate to manage secrets contained within this vault. | `string` | No | - | - |
-| `wallet` | The wallet contents Oracle GoldenGate uses to make connections to a database. This attribute is expected to be base64 encoded. Deprecated: This field is deprecated and replaced by "walletSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `vaultId` | References the OCI Vault that contains the customer-managed encryption key identified by `keyId`. Deprecated: This field is deprecated for GoldenGate connections. Sensitive attributes should be provided using the corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text attributes encrypted with `vaultId` and `keyId`. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate This field is applicable only when `doesUseSecretIds` is set to `false`. If `vaultId` is provided, `keyId` must also be provided. | `string` | No | - | - |
+| `wallet` | The wallet contents Oracle GoldenGate uses to make connections to a database. This attribute is expected to be base64 encoded. Deprecated: This field is deprecated and replaced by "walletSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `walletSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the wallet file is stored. The wallet contents Oracle GoldenGate uses to make connections to a database. Note: When provided, 'wallet' field must not be provided. | `string` | No | - | - |
 
 <a id="kind-connection-spec-additionalattributes"></a>
@@ -277,6 +281,25 @@ ConnectionAdditionalAttribute defines nested fields for Connection.AdditionalAtt
 | `name` | The name of the property entry. | `string` | Yes | - | - |
 | `value` | The value of the property entry. | `string` | Yes | - | - |
 
+<a id="kind-connection-spec-authdetails"></a>
+#### Spec.authDetails
+
+[Back to Connection spec](#kind-connection-spec)
+
+ConnectionAuthDetails defines nested fields for Connection.AuthDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `apiKey` | API key for the AI model connection. Deprecated: This field is deprecated and replaced by "apiKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
+| `apiKeySecretId` | API key secret OCID for the AI model connection. | `string` | No | - | - |
+| `authType` | - | `string` | No | - | - |
+| `baseUrl` | Base URL of the AI model endpoint. If not specified, the default base URL for the selected AI provider will be used. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `keyFingerprint` | OCI Generative AI key fingerprint. | `string` | No | - | - |
+| `region` | The name of the region. e.g.: us-ashburn-1 If the region is not provided, backend will default to the default region. | `string` | No | - | - |
+| `tenancyId` | OCI Generative AI tenancy OCID. If this value is not provided, or is updated to an empty value, it defaults to the tenancy OCID of the user who is executing the operation. | `string` | No | - | - |
+| `userId` | OCI Generative AI user OCID. If this value is not provided, or is updated to an empty value, it defaults to the OCID of the user who is executing the operation. | `string` | No | - | - |
+
 <a id="kind-connection-spec-bootstrapservers"></a>
 #### Spec.bootstrapServers[]
 
@@ -288,7 +311,6 @@ ConnectionBootstrapServer defines nested fields for Connection.BootstrapServer.
 | --- | --- | --- | --- | --- | --- |
 | `host` | The name or address of a host. | `string` | Yes | - | - |
 | `port` | The port of an endpoint usually specified for a connection. | `integer` | No | - | - |
-| `privateIp` | Deprecated: this field will be removed in future versions. Either specify the private IP in the connectionString or host field, or make sure the host name is resolvable in the target VCN. The private IP address of the connection's endpoint in the customer's VCN, typically a database endpoint or a big data endpoint (e.g. Kafka bootstrap server). In case the privateIp is provided, the subnetId must also be provided. In case the privateIp (and the subnetId) is not provided it is assumed the datasource is publicly accessible. In case the connection is accessible only privately, the lack of privateIp will result in not being able to access the connection. | `string` | No | - | - |
 
 <a id="kind-connection-spec-catalog"></a>
 #### Spec.catalog
@@ -302,11 +324,13 @@ ConnectionCatalog defines nested fields for Connection.Catalog.
 | `branch` | The active branch of the Nessie catalog from which Iceberg reads and writes table metadata. | `string` | No | - | - |
 | `catalogType` | - | `string` | No | - | - |
 | `clientId` | The OAuth client ID used for authentication. | `string` | No | - | - |
-| `clientSecretSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password Oracle GoldenGate uses to connect to Snowflake platform. | `string` | No | - | - |
+| `clientSecret` | Client secret required to connect to Polaris. | `string` | No | - | - |
+| `clientSecretSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password Oracle GoldenGate uses to connect to Polaris. | `string` | No | - | - |
 | `glueId` | The AWS Glue Catalog ID where Iceberg tables are registered. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `name` | The catalog name within Polaris where Iceberg tables are registered. | `string` | No | - | - |
 | `principalRole` | The Snowflake role used to access Polaris. | `string` | No | - | - |
+| `properties` | The base64 encoded content of the configuration file containing additional properties for the REST catalog. | `string` | No | - | - |
 | `propertiesSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the configuration file containing additional properties for the REST catalog. See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm | `string` | No | - | - |
 | `uri` | The URL endpoint for the Polaris API. e.g.: 'https://<your-snowflake-account>.snowflakecomputing.com/polaris/api/catalog' | `string` | No | - | - |
 
@@ -331,7 +355,8 @@ ConnectionStorage defines nested fields for Connection.Storage.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `accessKeyId` | Access key ID to access the Amazon S3 bucket. | `string` | No | - | - |
+| `accessKeyId` | Access key ID to access the Amazon S3 bucket. Note: Despite the "Id" suffix, this value is not an OCI OCID. | `string` | No | - | - |
+| `accountKey` | Azure storage account key. This property is required when 'authenticationType' is set to 'SHARED_KEY'. e.g.: pa3WbhVATzj56xD4DH1VjOUhApRGEGHvOo58eQJVWIzX+j8j4CUVFcTjpIqDSRaSa1Wo2LbWY5at+AStEgLOIQ== Deprecated: This field is deprecated and replaced by "accountKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `accountKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the account key is stored. | `string` | No | - | - |
 | `accountName` | Sets the Azure storage account name. | `string` | No | - | - |
 | `bucket` | Google Cloud Storage bucket where Iceberg stores metadata and data files. | `string` | No | - | - |
@@ -341,7 +366,9 @@ ConnectionStorage defines nested fields for Connection.Storage.
 | `projectId` | The Google Cloud Project where the bucket exists. | `string` | No | - | - |
 | `region` | The AMAZON region where the S3 bucket is hosted. e.g.: 'us-east-2' | `string` | No | - | - |
 | `schemeType` | The scheme of the storage. | `string` | No | - | - |
+| `secretAccessKey` | Secret access key to access the Amazon S3 bucket. Deprecated: This field is deprecated and replaced by "secretAccessKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `secretAccessKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the Secret Access Key is stored. | `string` | No | - | - |
+| `serviceAccountKeyFile` | The base64 encoded content of the service account key file containing the credentials required to use Google Cloud Storage. Deprecated: This field is deprecated and replaced by "serviceAccountKeyFileSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `serviceAccountKeyFileSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the content of the service account key file is stored, which contains the credentials required to use Google Cloud Storage. | `string` | No | - | - |
 | `storageType` | - | `string` | No | - | - |
 
@@ -352,10 +379,11 @@ ConnectionStatus defines the observed state of Connection.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `accessKeyId` | Access key ID to access the Amazon S3 bucket. e.g.: "this-is-not-the-secret" | `string` | No | - | - |
+| `accessKeyId` | Access key ID to access the Amazon S3 bucket. Note: Despite the "Id" suffix, this value is not an OCI OCID. | `string` | No | - | - |
 | `accountKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the account key is stored. Note: When provided, 'accountKey' field must not be provided. | `string` | No | - | - |
 | `accountName` | Sets the Azure storage account name. | `string` | No | - | - |
 | [`additionalAttributes`](#kind-connection-status-additionalattributes) | An array of name-value pair attribute entries. Used as additional parameters in connection string. | `list[object]` | No | - | - |
+| [`authDetails`](#kind-connection-status-authdetails) | ConnectionAuthDetails defines nested fields for Connection.AuthDetails. | `object` | No | - | - |
 | `authenticationMode` | Authentication mode. It can be provided at creation of Oracle Autonomous Database Serverless connections, when a databaseId is provided. The default value is MTLS. | `string` | No | - | - |
 | `authenticationType` | Authentication type for Elasticsearch. | `string` | No | - | - |
 | `azureAuthorityHost` | The endpoint used for authentication with Microsoft Entra ID (formerly Azure Active Directory). Default value: https://login.microsoftonline.com When connecting to a non-public Azure Cloud, the endpoint must be provided, eg: * Azure China: https://login.chinacloudapi.cn/ * Azure US Government: https://login.microsoftonline.us/ | `string` | No | - | - |
@@ -380,7 +408,7 @@ ConnectionStatus defines the observed state of Connection.
 | `deploymentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the deployment being referenced. | `string` | No | - | - |
 | `description` | Metadata about this specific object. | `string` | No | - | - |
 | `displayName` | An object's Display Name. | `string` | No | - | - |
-| `doesUseSecretIds` | Indicates that sensitive attributes are provided via Secrets. | `boolean` | No | - | - |
+| `doesUseSecretIds` | Indicates that sensitive attributes are provided via Secrets. Deprecated: This field is deprecated. Sensitive attributes should be provided using the corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text attributes. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate When set to `true`, all sensitive information must be provided as OCI Vault secrets using the corresponding `*SecretId` attributes of the connection (for example, `passwordSecretId`). Plain-text sensitive attributes (for example, `password`) must not be used. This ensures that sensitive information remains stored and managed in the customer's OCI Vault rather than by the GoldenGate service. When set to false, sensitive information must be provided in the corresponding plain-text attributes (for example, `password`) rather than in secret OCID attributes. In this mode, the sensitive information is stored by the GoldenGate service. If `vaultId` and `keyId` are not specified, the GoldenGate service uses Oracle-managed encryption keys to encrypt the stored data. If `vaultId` and `keyId` are provided, the specified customer-managed key is used. | `boolean` | No | - | - |
 | `endpoint` | The Amazon Endpoint for S3. e.g.: 'https://my-bucket.s3.us-east-1.amazonaws.com' If not provided, GoldenGate will default to 'https://s3.<region>.amazonaws.com'. | `string` | No | - | - |
 | `fingerprint` | Fingerprint required by TLS security protocol. Eg.: '6152b2dfbff200f973c5074a5b91d06ab3b472c07c09a1ea57bb7fd406cdce9c' | `string` | No | - | - |
 | `freeformTags` | A simple key-value pair that is applied without any predefined name, type, or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
@@ -393,30 +421,33 @@ ConnectionStatus defines the observed state of Connection.
 | `jndiSecurityCredentialsSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the security credentials are stored associated to the principal. Note: When provided, 'jndiSecurityCredentials' field must not be provided. | `string` | No | - | - |
 | `jndiSecurityPrincipal` | Specifies the identity of the principal (user) to be authenticated. e.g.: 'admin2' | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
-| `keyId` | Refers to the customer's master key OCID. If provided, it references a key to manage secrets. Customers must add policies to permit GoldenGate to use this key. | `string` | No | - | - |
+| `keyId` | References the OCI Vault key in the OCI Vault identified by `vaultId`. Deprecated: This field is deprecated for GoldenGate connections. Sensitive attributes should be provided using the corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text attributes encrypted with `vaultId` and `keyId`. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate The GoldenGate service uses this key to encrypt sensitive information (for example, `password`) that is provided in plain-text connection attributes through the API. This field is applicable only when `doesUseSecretIds` is set to `false`. If both `vaultId` and `keyId` are provided, the GoldenGate service uses the specified customer-managed key to encrypt the sensitive data. If neither `vaultId` nor `keyId` is provided, the GoldenGate service uses Oracle-managed encryption keys. | `string` | No | - | - |
 | `keyStorePasswordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the kafka KeyStore password is stored. Note: When provided, 'keyStorePassword' field must not be provided. | `string` | No | - | - |
 | `keyStoreSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the content of the KeyStore file is stored. Note: When provided, 'keyStore' field must not be provided. | `string` | No | - | - |
 | `lifecycleDetails` | Describes the object's current state in detail. For example, it can be used to provide actionable information for a resource in a Failed state. | `string` | No | - | - |
 | `lifecycleState` | Possible lifecycle states for connection. | `string` | No | - | - |
 | [`locks`](#kind-connection-status-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
+| `maxInputChars` | Maximum number of input characters supported by this AI model connection. | `integer` | No | - | - |
+| `modelKey` | AI model identifier. | `string` | No | - | - |
 | `nsgIds` | An array of Network Security Group OCIDs used to define network access for either Deployments or Connections. | `list[string]` | No | - | - |
 | `passwordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the password is stored. The password Oracle GoldenGate uses to connect the associated system of the given technology. It must conform to the specific security requirements including length, case sensitivity, and so on. If secretId is used plaintext field must not be provided. Note: When provided, 'password' field must not be provided. | `string` | No | - | - |
 | `port` | The port of an endpoint usually specified for a connection. | `integer` | No | - | - |
-| `privateIp` | Deprecated: this field will be removed in future versions. Either specify the private IP in the connectionString or host field, or make sure the host name is resolvable in the target VCN. The private IP address of the connection's endpoint in the customer's VCN, typically a database endpoint or a big data endpoint (e.g. Kafka bootstrap server). In case the privateIp is provided, the subnetId must also be provided. In case the privateIp (and the subnetId) is not provided it is assumed the datasource is publicly accessible. In case the connection is accessible only privately, the lack of privateIp will result in not being able to access the connection. | `string` | No | - | - |
+| `privateIp` | This property is not available when creating connections. For existing deprecated connections having this value set, the value cannot be updated; set it to empty. For deprecated connections created with this field in the past, either the private IP had to be specified in the connectionString or host field, or the host name had to be resolvable in the target VCN. | `string` | No | - | - |
 | `privateKeyFileSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the private key file (PEM file) corresponding to the API key of the fingerprint. See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm Note: When provided, 'privateKeyFile' field must not be provided. | `string` | No | - | - |
 | `privateKeyPassphraseSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the passphrase of the private key. Note: When provided, 'privateKeyPassphrase' field must not be provided. | `string` | No | - | - |
 | `producerProperties` | The base64 encoded content of the producer.properties file. | `string` | No | - | - |
+| `providerType` | AI Provider type used by the AI Model Connection. | `string` | No | - | - |
 | `publicKeyFingerprint` | The fingerprint of the API Key of the user specified by the userId. See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm | `string` | No | - | - |
 | `redisClusterId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Redis cluster. | `string` | No | - | - |
 | `region` | The name of the AWS region where the bucket is created. If not provided, GoldenGate will default to 'us-west-2'. Note: this property will become mandatory after May 20, 2026. | `string` | No | - | - |
-| `routingMethod` | Controls the network traffic direction to the target: SHARED_SERVICE_ENDPOINT: Traffic flows through the Goldengate Service's network to public hosts. Cannot be used for private targets. SHARED_DEPLOYMENT_ENDPOINT: Network traffic flows from the assigned deployment's private endpoint through the deployment's subnet. DEDICATED_ENDPOINT: A dedicated private endpoint is created in the target VCN subnet for the connection. The subnetId is required when DEDICATED_ENDPOINT networking is selected. | `string` | No | - | - |
+| `routingMethod` | Controls the network traffic direction to the target: SHARED_DEPLOYMENT_ENDPOINT: Network traffic flows from the assigned deployment's private endpoint through the deployment's subnet. DEDICATED_ENDPOINT: A dedicated private endpoint is created in the target VCN subnet for the connection. The subnetId is required when DEDICATED_ENDPOINT networking is selected. SHARED_SERVICE_ENDPOINT: Traffic flows through the Goldengate Service's network to public hosts. Cannot be used for private targets. Deprecated: SHARED_SERVICE_ENDPOINT is deprecated. Use another supported routingMethod value, or update existing connections to use a supported routing method. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `sasTokenSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the sas token is stored. Note: When provided, 'sasToken' field must not be provided. | `string` | No | - | - |
 | `secretAccessKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the Secret Access Key is stored. Note: When provided, 'secretAccessKey' field must not be provided. | `string` | No | - | - |
 | `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `securityProtocol` | Kafka security protocol. | `string` | No | - | - |
 | `servers` | Comma separated list of Elasticsearch server addresses, specified as host:port entries, where :port is optional. If port is not specified, it defaults to 9200. Used for establishing the initial connection to the Elasticsearch cluster. Example: `"server1.example.com:4000,server2.example.com:4000"` | `string` | No | - | - |
 | `serviceAccountKeyFileSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the content of the service account key file is stored, which contains the credentials required to use Google BigQuery. Note: When provided, 'serviceAccountKeyFile' field must not be provided. | `string` | No | - | - |
-| `sessionMode` | The mode of the database connection session to be established by the data client. 'REDIRECT' - for a RAC database, 'DIRECT' - for a non-RAC database. Connection to a RAC database involves a redirection received from the SCAN listeners to the database node to connect to. By default the mode would be DIRECT. | `string` | No | - | - |
+| `sessionMode` | Specifies the session mode for the database connection. Use REDIRECT only for RAC databases with SCAN listeners that return IP addresses. For RAC databases with SCAN listeners that return FQDNs, and for all other Oracle database technologies, use DIRECT. In RAC deployments, SCAN listeners redirects a connection to a specific database node, identified by either IP address or FQDN. It is recommended to configure RAC with FQDN-based SCAN listeners. The default is DIRECT, except when databaseId is provided and the discovered database relies on the SCAN listener. In this case, the default is REDIRECT. Deprecated: Defaulting to the REDIRECT session mode will be removed after April 21, 2027. | `string` | No | - | - |
 | `shouldUseJndi` | If set to true, Java Naming and Directory Interface (JNDI) properties should be provided. | `boolean` | No | - | - |
 | `shouldUseResourcePrincipal` | Specifies that the user intends to authenticate to the instance using a resource principal. Applicable only for OCI Streaming connections. Only available from 23.9.0.0.0 GoldenGate versions. Note: When specified, 'username'/'password'/'passwordSecretId' fields must not be provided. Default: false | `boolean` | No | - | - |
 | `shouldValidateServerCertificate` | If set to true, the driver validates the certificate that is sent by the database server. | `boolean` | No | - | - |
@@ -449,7 +480,7 @@ ConnectionStatus defines the observed state of Connection.
 | `url` | Kafka Schema Registry URL. e.g.: 'https://server1.us.oracle.com:8081' | `string` | No | - | - |
 | `userId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the OCI user who will access the Object Storage. The user must have write access to the bucket they want to connect to. If the user is not provided, backend will default to the user who is calling the API endpoint. | `string` | No | - | - |
 | `username` | The username Oracle GoldenGate uses to connect the associated system of the given technology. This username must already exist and be available by the system/application to be connected to and must conform to the case sensitivty requirments defined in it. | `string` | No | - | - |
-| `vaultId` | Refers to the customer's vault OCID. If provided, it references a vault where GoldenGate can manage secrets. Customers must add policies to permit GoldenGate to manage secrets contained within this vault. | `string` | No | - | - |
+| `vaultId` | References the OCI Vault that contains the customer-managed encryption key identified by `keyId`. Deprecated: This field is deprecated for GoldenGate connections. Sensitive attributes should be provided using the corresponding Secret OCID attributes of the connection (for example, `passwordSecretId`) instead of plain-text attributes encrypted with `vaultId` and `keyId`. This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate This field is applicable only when `doesUseSecretIds` is set to `false`. If `vaultId` is provided, `keyId` must also be provided. | `string` | No | - | - |
 | `walletSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the wallet file is stored. The wallet contents Oracle GoldenGate uses to make connections to a database. Note: When provided, 'wallet' field must not be provided. | `string` | No | - | - |
 
 <a id="kind-connection-status-additionalattributes"></a>
@@ -464,6 +495,25 @@ ConnectionAdditionalAttribute defines nested fields for Connection.AdditionalAtt
 | `name` | The name of the property entry. | `string` | Yes | - | - |
 | `value` | The value of the property entry. | `string` | Yes | - | - |
 
+<a id="kind-connection-status-authdetails"></a>
+#### Status.authDetails
+
+[Back to Connection status](#kind-connection-status)
+
+ConnectionAuthDetails defines nested fields for Connection.AuthDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `apiKey` | API key for the AI model connection. Deprecated: This field is deprecated and replaced by "apiKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
+| `apiKeySecretId` | API key secret OCID for the AI model connection. | `string` | No | - | - |
+| `authType` | - | `string` | No | - | - |
+| `baseUrl` | Base URL of the AI model endpoint. If not specified, the default base URL for the selected AI provider will be used. | `string` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `keyFingerprint` | OCI Generative AI key fingerprint. | `string` | No | - | - |
+| `region` | The name of the region. e.g.: us-ashburn-1 If the region is not provided, backend will default to the default region. | `string` | No | - | - |
+| `tenancyId` | OCI Generative AI tenancy OCID. If this value is not provided, or is updated to an empty value, it defaults to the tenancy OCID of the user who is executing the operation. | `string` | No | - | - |
+| `userId` | OCI Generative AI user OCID. If this value is not provided, or is updated to an empty value, it defaults to the OCID of the user who is executing the operation. | `string` | No | - | - |
+
 <a id="kind-connection-status-bootstrapservers"></a>
 #### Status.bootstrapServers[]
 
@@ -475,7 +525,6 @@ ConnectionBootstrapServer defines nested fields for Connection.BootstrapServer.
 | --- | --- | --- | --- | --- | --- |
 | `host` | The name or address of a host. | `string` | Yes | - | - |
 | `port` | The port of an endpoint usually specified for a connection. | `integer` | No | - | - |
-| `privateIp` | Deprecated: this field will be removed in future versions. Either specify the private IP in the connectionString or host field, or make sure the host name is resolvable in the target VCN. The private IP address of the connection's endpoint in the customer's VCN, typically a database endpoint or a big data endpoint (e.g. Kafka bootstrap server). In case the privateIp is provided, the subnetId must also be provided. In case the privateIp (and the subnetId) is not provided it is assumed the datasource is publicly accessible. In case the connection is accessible only privately, the lack of privateIp will result in not being able to access the connection. | `string` | No | - | - |
 
 <a id="kind-connection-status-catalog"></a>
 #### Status.catalog
@@ -489,11 +538,13 @@ ConnectionCatalog defines nested fields for Connection.Catalog.
 | `branch` | The active branch of the Nessie catalog from which Iceberg reads and writes table metadata. | `string` | No | - | - |
 | `catalogType` | - | `string` | No | - | - |
 | `clientId` | The OAuth client ID used for authentication. | `string` | No | - | - |
-| `clientSecretSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password Oracle GoldenGate uses to connect to Snowflake platform. | `string` | No | - | - |
+| `clientSecret` | Client secret required to connect to Polaris. | `string` | No | - | - |
+| `clientSecretSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the password Oracle GoldenGate uses to connect to Polaris. | `string` | No | - | - |
 | `glueId` | The AWS Glue Catalog ID where Iceberg tables are registered. | `string` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `name` | The catalog name within Polaris where Iceberg tables are registered. | `string` | No | - | - |
 | `principalRole` | The Snowflake role used to access Polaris. | `string` | No | - | - |
+| `properties` | The base64 encoded content of the configuration file containing additional properties for the REST catalog. | `string` | No | - | - |
 | `propertiesSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret that stores the content of the configuration file containing additional properties for the REST catalog. See documentation: https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm | `string` | No | - | - |
 | `uri` | The URL endpoint for the Polaris API. e.g.: 'https://<your-snowflake-account>.snowflakecomputing.com/polaris/api/catalog' | `string` | No | - | - |
 
@@ -588,7 +639,8 @@ ConnectionStorage defines nested fields for Connection.Storage.
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
-| `accessKeyId` | Access key ID to access the Amazon S3 bucket. | `string` | No | - | - |
+| `accessKeyId` | Access key ID to access the Amazon S3 bucket. Note: Despite the "Id" suffix, this value is not an OCI OCID. | `string` | No | - | - |
+| `accountKey` | Azure storage account key. This property is required when 'authenticationType' is set to 'SHARED_KEY'. e.g.: pa3WbhVATzj56xD4DH1VjOUhApRGEGHvOo58eQJVWIzX+j8j4CUVFcTjpIqDSRaSa1Wo2LbWY5at+AStEgLOIQ== Deprecated: This field is deprecated and replaced by "accountKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `accountKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the account key is stored. | `string` | No | - | - |
 | `accountName` | Sets the Azure storage account name. | `string` | No | - | - |
 | `bucket` | Google Cloud Storage bucket where Iceberg stores metadata and data files. | `string` | No | - | - |
@@ -598,7 +650,9 @@ ConnectionStorage defines nested fields for Connection.Storage.
 | `projectId` | The Google Cloud Project where the bucket exists. | `string` | No | - | - |
 | `region` | The AMAZON region where the S3 bucket is hosted. e.g.: 'us-east-2' | `string` | No | - | - |
 | `schemeType` | The scheme of the storage. | `string` | No | - | - |
+| `secretAccessKey` | Secret access key to access the Amazon S3 bucket. Deprecated: This field is deprecated and replaced by "secretAccessKeySecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `secretAccessKeySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the Secret Access Key is stored. | `string` | No | - | - |
+| `serviceAccountKeyFile` | The base64 encoded content of the service account key file containing the credentials required to use Google Cloud Storage. Deprecated: This field is deprecated and replaced by "serviceAccountKeyFileSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 | `serviceAccountKeyFileSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the content of the service account key file is stored, which contains the credentials required to use Google Cloud Storage. | `string` | No | - | - |
 | `storageType` | - | `string` | No | - | - |
 
@@ -633,6 +687,7 @@ ConnectionAssignmentStatus defines the observed state of ConnectionAssignment.
 | `aliasName` | Credential store alias. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment being referenced. | `string` | No | - | - |
 | `connectionId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the connection being referenced. | `string` | No | - | - |
+| `connectionType` | The connection type. | `string` | No | - | - |
 | `deploymentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the deployment being referenced. | `string` | No | - | - |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the connection assignment being referenced. | `string` | No | - | - |
 | `lifecycleState` | Possible lifecycle states for connection assignments. | `string` | No | - | - |
@@ -728,13 +783,13 @@ DatabaseRegistrationSpec defines the desired state of DatabaseRegistration.
 | `freeformTags` | A simple key-value pair that is applied without any predefined name, type, or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `ipAddress` | The private IP address in the customer's VCN of the customer's endpoint, typically a database. | `string` | No | - | - |
 | `keyId` | Refers to the customer's master key OCID. If provided, it references a key to manage secrets. Customers must add policies to permit GoldenGate to use this key. | `string` | No | - | - |
-| `password` | The password Oracle GoldenGate uses to connect the associated system of the given technology. It must conform to the specific security requirements including length, case sensitivity, and so on. Deprecated: This field is deprecated and replaced by "passwordSecretId". This field will be removed after February 15 2026. | `string` | Yes | - | - |
+| `password` | The password Oracle GoldenGate uses to connect the associated system of the given technology. It must conform to the specific security requirements including length, case sensitivity, and so on. Deprecated: This field is deprecated and replaced by "passwordSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | Yes | - | - |
 | `secretCompartmentId` | The OCID of the compartment where the GoldenGate Secret will be created. If provided, it references a key to manage secrets. Customers must add policies to permit GoldenGate to use this key. | `string` | No | - | - |
 | `sessionMode` | The mode of the database connection session to be established by the data client. 'REDIRECT' - for a RAC database, 'DIRECT' - for a non-RAC database. Connection to a RAC database involves a redirection received from the SCAN listeners to the database node to connect to. By default the mode would be DIRECT. | `string` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the target subnet of the dedicated connection. | `string` | No | - | - |
 | `username` | The username Oracle GoldenGate uses to connect the associated system of the given technology. This username must already exist and be available by the system/application to be connected to and must conform to the case sensitivty requirments defined in it. | `string` | Yes | - | - |
 | `vaultId` | Refers to the customer's vault OCID. If provided, it references a vault where GoldenGate can manage secrets. Customers must add policies to permit GoldenGate to manage secrets contained within this vault. | `string` | No | - | - |
-| `wallet` | The wallet contents Oracle GoldenGate uses to make connections to a database. This attribute is expected to be base64 encoded. Deprecated: This field is deprecated and replaced by "walletSecretId". This field will be removed after February 15 2026. | `string` | No | - | - |
+| `wallet` | The wallet contents Oracle GoldenGate uses to make connections to a database. This attribute is expected to be base64 encoded. Deprecated: This field is deprecated and replaced by "walletSecretId". This change follows the GoldenGate "Plain Text Fields in Connections" deprecation: https://docs.oracle.com/en-us/iaas/Content/servicechanges.htm#servicechanges_topic-GoldenGate | `string` | No | - | - |
 
 <a id="kind-databaseregistration-status"></a>
 ### Status
@@ -745,6 +800,7 @@ DatabaseRegistrationStatus defines the observed state of DatabaseRegistration.
 | --- | --- | --- | --- | --- | --- |
 | `aliasName` | Credential store alias. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment being referenced. | `string` | No | - | - |
+| `connectionId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the connection being referenced as the successor resource of the deprecated database registration. | `string` | No | - | - |
 | `connectionString` | Connect descriptor or Easy Connect Naming method used to connect to a database. | `string` | No | - | - |
 | `databaseId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the database being referenced. | `string` | No | - | - |
 | `definedTags` | Tags defined for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
@@ -856,6 +912,7 @@ DeploymentSpec defines the desired state of Deployment.
 | `deploymentBackupId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup being referenced. | `string` | No | - | - |
 | `deploymentType` | The type of deployment, which can be any one of the Allowed values. NOTE: Use of the value 'OGG' is maintained for backward compatibility purposes. Its use is discouraged in favor of 'DATABASE_ORACLE'. | `string` | No | - | - |
 | `description` | Metadata about this specific object. | `string` | No | - | - |
+| `disasterRecoveryStatus` | Indicates if disaster recovery is enabled for a deployment. If not specified, disaster recovery is ENABLED when no clusterPlacementGroupId is provided, and DISABLED when a clusterPlacementGroupId is provided. | `string` | No | - | - |
 | `displayName` | An object's Display Name. | `string` | Yes | - | - |
 | `environmentType` | Specifies whether the deployment is used in a production or development/testing environment. | `string` | No | - | - |
 | `faultDomain` | The fault domain of a placement. | `string` | No | - | - |
@@ -865,7 +922,7 @@ DeploymentSpec defines the desired state of Deployment.
 | `isByolCpuCoreCountLimitEnabled` | Flag to allow to configure the 'Bring Your Own License' (BYOL) license type CPU limit. If enabled, the exact number of CPUs must be provided via byolCpuCoreCountLimit. | `boolean` | No | - | - |
 | `isPublic` | True if this object is publicly available. | `boolean` | No | - | - |
 | `licenseModel` | The Oracle license model that applies to a Deployment. | `string` | No | - | - |
-| `loadBalancerSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy. Can be provided only for public deployments. If provided, the loadbalancer will be created in this subnet instead of the service tenancy. For backward compatibility, this is an optional property. It will become mandatory for public deployments after October 1, 2024. | `string` | No | - | - |
+| `loadBalancerSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy used to host the public load balancer of the deployment. Rules: - Create: Mandatory when isPublic is true. Must be a public, regional subnet in the same VCN as subnetId. - Update: - For public deployments, this property must be present and is immutable once set (cannot be changed to a different subnet). - Legacy exception: a public deployment created without this property may continue to be updated without providing it; once set, it becomes immutable. Validation: - Must reference a public subnet. - Must be a regional subnet. - Must be in the same VCN as subnetId. | `string` | No | - | - |
 | [`locks`](#kind-deployment-spec-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
 | [`maintenanceConfiguration`](#kind-deployment-spec-maintenanceconfiguration) | DeploymentMaintenanceConfiguration defines nested fields for Deployment.MaintenanceConfiguration. | `object` | No | - | - |
 | [`maintenanceWindow`](#kind-deployment-spec-maintenancewindow) | DeploymentMaintenanceWindow defines nested fields for Deployment.MaintenanceWindow. | `object` | No | - | - |
@@ -945,10 +1002,11 @@ DeploymentOggData defines nested fields for Deployment.OggData.
 | `adminUsername` | The GoldenGate deployment console username. | `string` | No | - | - |
 | `certificate` | The base64 encoded content of the PEM file containing the SSL certificate. | `string` | No | - | - |
 | `credentialStore` | The type of credential store for OGG. | `string` | No | - | - |
-| `deploymentName` | The name given to the GoldenGate service deployment. The name must be 1 to 32 characters long, must contain only alphanumeric characters and must start with a letter. | `string` | Yes | - | - |
+| `deploymentName` | The name given to the GoldenGate service deployment. The name must contain only alphanumeric characters and must start with a letter. For standby deployment the deployment name is inherited from primary. | `string` | No | - | - |
 | [`groupToRolesMapping`](#kind-deployment-spec-oggdata-grouptorolesmapping) | DeploymentOggDataGroupToRolesMapping defines nested fields for Deployment.OggData.GroupToRolesMapping. | `object` | No | - | - |
 | `identityDomainId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Identity Domain when IAM credential store is used. | `string` | No | - | - |
 | `key` | The base64 encoded content of the PEM file containing the private key. | `string` | No | - | - |
+| `keySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the deployment ssl private key is stored in PEM format. | `string` | No | - | - |
 | `oggVersion` | Version of OGG | `string` | No | - | - |
 | `passwordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the deployment password is stored. | `string` | No | - | - |
 
@@ -988,7 +1046,7 @@ DeploymentStatus defines the observed state of Deployment.
 | `availabilityDomain` | The availability domain of a placement. | `string` | No | - | - |
 | [`backupSchedule`](#kind-deployment-status-backupschedule) | DeploymentBackupSchedule defines nested fields for Deployment.BackupSchedule. | `object` | No | - | - |
 | `byolCpuCoreCountLimit` | The maximum number of CPUs allowed with a 'Bring Your Own License' (BYOL) license type. Any CPU usage above this limit is considered as License Included and billed. | `integer` | No | - | - |
-| `category` | The deployment category defines the broad separation of the deployment type into three categories. Currently the separation is 'DATA_REPLICATION', 'STREAM_ANALYTICS' and 'DATA_TRANSFORMS'. | `string` | No | - | - |
+| `category` | The deployment category defines the broad separation of the deployment type into four categories. Currently the separation is 'DATA_REPLICATION', 'STREAM_ANALYTICS', 'DATA_TRANSFORMS' and 'DATA_VERIFICATION'. | `string` | No | - | - |
 | `clusterPlacementGroupId` | The OCID(/Content/General/Concepts/identifiers.htm) of the cluster placement group for the resource. Only applicable for multicloud subscriptions. The cluster placement group id must be provided when a multicloud subscription id is provided. Otherwise the cluster placement group must not be provided. | `string` | No | - | - |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment being referenced. | `string` | No | - | - |
 | `cpuCoreCount` | The Minimum number of OCPUs to be made available for this Deployment. | `integer` | No | - | - |
@@ -999,6 +1057,7 @@ DeploymentStatus defines the observed state of Deployment.
 | `deploymentType` | The type of deployment, which can be any one of the Allowed values. NOTE: Use of the value 'OGG' is maintained for backward compatibility purposes. Its use is discouraged in favor of 'DATABASE_ORACLE'. | `string` | No | - | - |
 | `deploymentUrl` | The URL of a resource. | `string` | No | - | - |
 | `description` | Metadata about this specific object. | `string` | No | - | - |
+| `disasterRecoveryStatus` | Indicates if disaster recovery is enabled for a deployment. If not specified, disaster recovery is ENABLED when no clusterPlacementGroupId is provided, and DISABLED when a clusterPlacementGroupId is provided. | `string` | No | - | - |
 | `displayName` | An object's Display Name. | `string` | No | - | - |
 | `environmentType` | Specifies whether the deployment is used in a production or development/testing environment. | `string` | No | - | - |
 | `faultDomain` | The fault domain of a placement. | `string` | No | - | - |
@@ -1014,10 +1073,10 @@ DeploymentStatus defines the observed state of Deployment.
 | `isStorageUtilizationLimitExceeded` | Deprecated: This field is not updated and will be removed in future versions. If storage utilization exceeds the limit, the respective warning message will appear in deployment messages, which can be accessed through /messages?deploymentId=. Indicator will be true if the amount of storage being utilized exceeds the allowable storage utilization limit. Exceeding the limit may be an indication of a misconfiguration of the deployment's GoldenGate service. | `boolean` | No | - | - |
 | `licenseModel` | The Oracle license model that applies to a Deployment. | `string` | No | - | - |
 | `lifecycleDetails` | Describes the object's current state in detail. For example, it can be used to provide actionable information for a resource in a Failed state. | `string` | No | - | - |
-| `lifecycleState` | Possible lifecycle states. | `string` | No | - | - |
+| `lifecycleState` | Possible lifecycle states for a Deployment. | `string` | No | - | - |
 | `lifecycleSubState` | Possible GGS lifecycle sub-states. | `string` | No | - | - |
 | `loadBalancerId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the loadbalancer in the customer's subnet. The loadbalancer of the public deployment created in the customer subnet. | `string` | No | - | - |
-| `loadBalancerSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy. Can be provided only for public deployments. If provided, the loadbalancer will be created in this subnet instead of the service tenancy. For backward compatibility, this is an optional property. It will become mandatory for public deployments after October 1, 2024. | `string` | No | - | - |
+| `loadBalancerSubnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a public subnet in the customer tenancy used to host the public load balancer of the deployment. Rules: - Create: Mandatory when isPublic is true. Must be a public, regional subnet in the same VCN as subnetId. - Update: - For public deployments, this property must be present and is immutable once set (cannot be changed to a different subnet). - Legacy exception: a public deployment created without this property may continue to be updated without providing it; once set, it becomes immutable. Validation: - Must reference a public subnet. - Must be a regional subnet. - Must be in the same VCN as subnetId. | `string` | No | - | - |
 | [`locks`](#kind-deployment-status-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
 | [`maintenanceConfiguration`](#kind-deployment-status-maintenanceconfiguration) | DeploymentMaintenanceConfiguration defines nested fields for Deployment.MaintenanceConfiguration. | `object` | No | - | - |
 | [`maintenanceWindow`](#kind-deployment-status-maintenancewindow) | DeploymentMaintenanceWindow defines nested fields for Deployment.MaintenanceWindow. | `object` | No | - | - |
@@ -1042,7 +1101,6 @@ DeploymentStatus defines the observed state of Deployment.
 | `timeOggVersionSupportedUntil` | The time until OGG version is supported. After this date has passed OGG version will not be available anymore. The format is defined by RFC3339 (https://tools.ietf.org/html/rfc3339), such as `2016-08-25T21:10:29.600Z`. | `string` | No | - | - |
 | `timeRoleChanged` | The time of the last role change. The format is defined by RFC3339 (https://tools.ietf.org/html/rfc3339), such as `2016-08-25T21:10:29.600Z`. | `string` | No | - | - |
 | `timeUpdated` | The time the resource was last updated. The format is defined by RFC3339 (https://tools.ietf.org/html/rfc3339), such as `2016-08-25T21:10:29.600Z`. | `string` | No | - | - |
-| `timeUpgradeRequired` | Note: Deprecated: Use timeOfNextMaintenance instead, or related upgrade records to check, when deployment will be forced to upgrade to a newer version. Old description: The date the existing version in use will no longer be considered as usable and an upgrade will be required. This date is typically 6 months after the version was released for use by GGS. The format is defined by RFC3339 (https://tools.ietf.org/html/rfc3339), such as `2016-08-25T21:10:29.600Z`. | `string` | No | - | - |
 
 <a id="kind-deployment-status-backupschedule"></a>
 #### Status.backupSchedule
@@ -1139,10 +1197,11 @@ DeploymentOggData defines nested fields for Deployment.OggData.
 | `adminUsername` | The GoldenGate deployment console username. | `string` | No | - | - |
 | `certificate` | The base64 encoded content of the PEM file containing the SSL certificate. | `string` | No | - | - |
 | `credentialStore` | The type of credential store for OGG. | `string` | No | - | - |
-| `deploymentName` | The name given to the GoldenGate service deployment. The name must be 1 to 32 characters long, must contain only alphanumeric characters and must start with a letter. | `string` | Yes | - | - |
+| `deploymentName` | The name given to the GoldenGate service deployment. The name must contain only alphanumeric characters and must start with a letter. For standby deployment the deployment name is inherited from primary. | `string` | No | - | - |
 | [`groupToRolesMapping`](#kind-deployment-status-oggdata-grouptorolesmapping) | DeploymentOggDataGroupToRolesMapping defines nested fields for Deployment.OggData.GroupToRolesMapping. | `object` | No | - | - |
 | `identityDomainId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Identity Domain when IAM credential store is used. | `string` | No | - | - |
 | `key` | The base64 encoded content of the PEM file containing the private key. | `string` | No | - | - |
+| `keySecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the deployment ssl private key is stored in PEM format. | `string` | No | - | - |
 | `oggVersion` | Version of OGG | `string` | No | - | - |
 | `passwordSecretId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Secret where the deployment password is stored. | `string` | No | - | - |
 
@@ -1294,7 +1353,7 @@ DeploymentBackupStatus defines the observed state of DeploymentBackup.
 | `isAutomatic` | True if this object is automatically created | `boolean` | No | - | - |
 | `isMetadataOnly` | Parameter to allow users to create backup without trails | `boolean` | No | - | - |
 | `lifecycleDetails` | Describes the object's current state in detail. For example, it can be used to provide actionable information for a resource in a Failed state. | `string` | No | - | - |
-| `lifecycleState` | Possible lifecycle states. | `string` | No | - | - |
+| `lifecycleState` | Possible lifecycle states for a Deployment Backup. | `string` | No | - | - |
 | [`locks`](#kind-deploymentbackup-status-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
 | `namespaceName` | Name of namespace that serves as a container for all of your buckets | `string` | No | - | - |
 | `objectName` | Name of the object to be uploaded to object storage | `string` | No | - | - |
@@ -1397,10 +1456,12 @@ PipelineSpec defines the desired state of Pipeline.
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `compartmentId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment being referenced. | `string` | Yes | - | - |
+| `cpuCoreCount` | The Minimum number of OCPUs to be made available for this Deployment. | `integer` | No | - | - |
 | `definedTags` | Tags defined for this resource. Each key is predefined and scoped to a namespace. Example: `{"foo-namespace": {"bar-key": "value"}}` | `map[string, map[string, string]]` | No | - | - |
 | `description` | Metadata about this specific object. | `string` | No | - | - |
 | `displayName` | An object's Display Name. | `string` | Yes | - | - |
 | `freeformTags` | A simple key-value pair that is applied without any predefined name, type, or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
+| `isAutoScalingEnabled` | Indicates if auto scaling is enabled for the Deployment's CPU core count. | `boolean` | No | - | - |
 | `jsonData` | - | `string` | No | - | - |
 | `licenseModel` | The Oracle license model that applies to a Deployment. | `string` | Yes | - | - |
 | [`locks`](#kind-pipeline-spec-locks) | Locks associated with this resource. | `list[object]` | No | - | - |
@@ -1462,7 +1523,13 @@ PipelineProcessOptionsInitialDataLoad defines nested fields for Pipeline.Process
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `actionOnExistingTable` | Action upon existing tables in target when initial Data Load is set i.e., isInitialLoad=true. | `string` | No | - | - |
+| `adbWalletPath` | Directory path of ADB wallet locally available in Non-ADB target DB. Required for ADB to non-ADB DBLink type initial load only. If not provided the default wallet path "/u01/targetwallet" will be used. | `string` | No | - | - |
+| `bucketName` | Name of the ObjectStorage bucket. Required only for Objectstorage Initial load. | `string` | No | - | - |
+| `initialLoadType` | Type of Initial load, which can be objectStorage or dbLink. | `string` | No | - | - |
 | `isInitialLoad` | If ENABLED, then existing source data is also synchronized to the target when creating or updating the pipeline. | `string` | Yes | - | - |
+| `namespaceName` | Namespace that serves as a container of the ObjectStorage bucket. Required only for Objectstorage Initial load. | `string` | No | - | - |
+| `sourceWalletPath` | Directory path of ObjectStorage wallet locally available in Non-ADB source DB. Required for Object Storage type initial load only if source DB is Non-ADB type. | `string` | No | - | - |
+| `targetWalletPath` | Directory path of ObjectStorage wallet locally available in Non-ADB target DB. Required for Object Storage type initial load only if target DB is Non-ADB type. | `string` | No | - | - |
 
 <a id="kind-pipeline-spec-processoptions-replicateschemachange"></a>
 ##### Spec.processOptions.replicateSchemaChange
@@ -1611,7 +1678,13 @@ PipelineProcessOptionsInitialDataLoad defines nested fields for Pipeline.Process
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
 | `actionOnExistingTable` | Action upon existing tables in target when initial Data Load is set i.e., isInitialLoad=true. | `string` | No | - | - |
+| `adbWalletPath` | Directory path of ADB wallet locally available in Non-ADB target DB. Required for ADB to non-ADB DBLink type initial load only. If not provided the default wallet path "/u01/targetwallet" will be used. | `string` | No | - | - |
+| `bucketName` | Name of the ObjectStorage bucket. Required only for Objectstorage Initial load. | `string` | No | - | - |
+| `initialLoadType` | Type of Initial load, which can be objectStorage or dbLink. | `string` | No | - | - |
 | `isInitialLoad` | If ENABLED, then existing source data is also synchronized to the target when creating or updating the pipeline. | `string` | Yes | - | - |
+| `namespaceName` | Namespace that serves as a container of the ObjectStorage bucket. Required only for Objectstorage Initial load. | `string` | No | - | - |
+| `sourceWalletPath` | Directory path of ObjectStorage wallet locally available in Non-ADB source DB. Required for Object Storage type initial load only if source DB is Non-ADB type. | `string` | No | - | - |
+| `targetWalletPath` | Directory path of ObjectStorage wallet locally available in Non-ADB target DB. Required for Object Storage type initial load only if target DB is Non-ADB type. | `string` | No | - | - |
 
 <a id="kind-pipeline-status-processoptions-replicateschemachange"></a>
 ##### Status.processOptions.replicateSchemaChange

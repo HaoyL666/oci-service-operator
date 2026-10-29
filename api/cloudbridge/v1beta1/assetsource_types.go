@@ -39,6 +39,9 @@ type AssetSourceSpec struct {
 	// Example: `{orcl-cloud: {free-tier-retain: true}}`
 	// +kubebuilder:validation:Optional
 	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
+	// Specifies if this is the Source or Destination point for migration - different assets may be discovered depending on setting.
+	// +kubebuilder:validation:Optional
+	EnvironmentType string `json:"environmentType,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for the resource.
 	// +kubebuilder:validation:Required
 	CompartmentId string `json:"compartmentId"`
@@ -66,6 +69,9 @@ type AssetSourceSpec struct {
 	// Flag indicating whether real-time metrics are collected for assets, originating from this asset source.
 	// +kubebuilder:validation:Optional
 	AreRealtimeMetricsCollected bool `json:"areRealtimeMetricsCollected,omitempty"`
+	// Endpoint for OLVM asset discovery and replication in the form of ```https://<host>:<port>```
+	// +kubebuilder:validation:Optional
+	OlvmEndpoint string `json:"olvmEndpoint,omitempty"`
 	// AWS region information, from where the resources are discovered.
 	// +kubebuilder:validation:Optional
 	AwsRegion string `json:"awsRegion,omitempty"`
@@ -125,6 +131,8 @@ type AssetSourceStatus struct {
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{orcl-cloud: {free-tier-retain: true}}`
 	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
+	// Specifies if this is the Source or Destination point for migration - different assets may be discovered depending on setting.
+	EnvironmentType string `json:"environmentType,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the resource.
 	Id string `json:"id,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment for the resource.
@@ -155,6 +163,8 @@ type AssetSourceStatus struct {
 	AreHistoricalMetricsCollected bool `json:"areHistoricalMetricsCollected,omitempty"`
 	// Flag indicating whether real-time metrics are collected for assets, originating from this asset source.
 	AreRealtimeMetricsCollected bool `json:"areRealtimeMetricsCollected,omitempty"`
+	// Endpoint for OLVM asset discovery and replication in the form of ```https://<host>:<port>```
+	OlvmEndpoint string `json:"olvmEndpoint,omitempty"`
 	// AWS region information, from where the resources are discovered.
 	AwsRegion string `json:"awsRegion,omitempty"`
 	// The key of customer's aws account to be discovered/migrated.

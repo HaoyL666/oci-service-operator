@@ -30,7 +30,7 @@ type DatabaseToolsConnectionSpec struct {
 	// Specifies whether this connection is supported by the Database Tools Runtime.
 	// +kubebuilder:validation:Optional
 	RuntimeSupport string `json:"runtimeSupport,omitempty"`
-	// Specifies the identity used by the Database Tools service to issue requests to other OCI services (e.g., Secrets in Vault).
+	// Specifies the identity used when accessing OCI resources at runtime. AUTHENTICATED_PRINCIPAL to use the caller’s identity (On-Behalf-Of token), or RESOURCE_PRINCIPAL to use the connection’s resource principal (RPST).
 	// +kubebuilder:validation:Optional
 	RuntimeIdentity string `json:"runtimeIdentity,omitempty"`
 	// A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information.
@@ -66,6 +66,9 @@ type DatabaseToolsConnectionSpec struct {
 	PrivateEndpointId string `json:"privateEndpointId,omitempty"`
 	// +kubebuilder:validation:Optional
 	ProxyClient DatabaseToolsConnectionProxyClient `json:"proxyClient,omitempty,omitzero"`
+	// Specifies the authentication type used by the Database Tools service to authenticate with the database.
+	// +kubebuilder:validation:Optional
+	AuthenticationType string `json:"authenticationType,omitempty"`
 }
 
 // DatabaseToolsConnectionLock defines nested fields for DatabaseToolsConnection.Lock.
@@ -199,13 +202,13 @@ type DatabaseToolsConnectionStatus struct {
 	RuntimeSupport string `json:"runtimeSupport,omitempty"`
 	// Specifies the Database Tools Runtime endpoint.
 	RuntimeEndpoint string `json:"runtimeEndpoint,omitempty"`
-	// Specifies the identity used by the Database Tools service to issue requests to other OCI services (e.g., Secrets in Vault).
+	// Specifies the identity used when accessing OCI resources at runtime. AUTHENTICATED_PRINCIPAL to use the caller’s identity (On-Behalf-Of token), or RESOURCE_PRINCIPAL to use the connection’s resource principal (RPST).
 	RuntimeIdentity string `json:"runtimeIdentity,omitempty"`
 	Type            string `json:"type,omitempty"`
 	// The connect descriptor or Easy Connect Naming method used to connect to the database.
 	ConnectionString string                                 `json:"connectionString,omitempty"`
 	RelatedResource  DatabaseToolsConnectionRelatedResource `json:"relatedResource,omitempty"`
-	// The database user name.
+	// The database user name. When authenticationType is TOKEN, if provided, userName must be in square brackets (for example, [proxyClient]).
 	UserName     string                              `json:"userName,omitempty"`
 	UserPassword DatabaseToolsConnectionUserPassword `json:"userPassword,omitempty"`
 	// The advanced connection properties key-value pair (for example, `oracle.net.ssl_server_dn_match`).
@@ -216,6 +219,8 @@ type DatabaseToolsConnectionStatus struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database Tools private endpoint used to access the database in the customer VCN.
 	PrivateEndpointId string                             `json:"privateEndpointId,omitempty"`
 	ProxyClient       DatabaseToolsConnectionProxyClient `json:"proxyClient,omitempty"`
+	// Specifies the authentication type used to connect to the database.
+	AuthenticationType string `json:"authenticationType,omitempty"`
 	// The JDBC URL used to connect to the Generic JDBC database system.
 	Url string `json:"url,omitempty"`
 }

@@ -55,6 +55,11 @@ spec:
           status:
             description: NetworkAnchorStatus defines the observed state of NetworkAnchor.
             properties:
+              cidrBlocks:
+                description: An Azure/GCP/AWS cidrBlocks
+                items:
+                  type: string
+                type: array
               cloudServiceProviderMetadataItem:
                 description: NetworkAnchorCloudServiceProviderMetadataItem defines
                   nested fields for NetworkAnchor.CloudServiceProviderMetadataItem.

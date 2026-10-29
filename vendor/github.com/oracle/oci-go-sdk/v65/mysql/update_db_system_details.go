@@ -97,7 +97,7 @@ type UpdateDbSystemDetails struct {
 	// between 8 and 32 characters long, and must contain at least 1
 	// numeric character, 1 lowercase character, 1 uppercase character, and
 	// 1 special (nonalphanumeric) character.
-	AdminPassword *string `mandatory:"false" json:"adminPassword"`
+	AdminPassword *string `mandatory:"false" json:"adminPassword" sensitive:"true"`
 
 	// Expands the DB System's storage to the specified value. Only supports values larger than the current DB System's
 	// storage size.
@@ -121,6 +121,15 @@ type UpdateDbSystemDetails struct {
 	// value, Oracle automatically assigns a private IP address from the subnet. This should
 	// be a "dotted-quad" style IPv4 address.
 	IpAddress *string `mandatory:"false" json:"ipAddress"`
+
+	// Whether to allocate an IPv6 address for the DB system in an IPv6 enabled subnet.
+	// When provided you may optionally
+	// provide an IPv6 prefix (ipv6AddressIpv6SubnetCidrPairDetails) of your choice to assign the IPv6
+	// address from. If ipv6AddressIpv6SubnetCidrPairDetails is not provided then an IPv6 prefix is
+	// chosen for you.
+	IsIpv6Enabled *bool `mandatory:"false" json:"isIpv6Enabled"`
+
+	Ipv6AddressIpv6SubnetCidrPairDetails *Ipv6AddressIpv6SubnetCidrPairDetails `mandatory:"false" json:"ipv6AddressIpv6SubnetCidrPairDetails"`
 
 	// The port for primary endpoint of the DB System to listen on.
 	Port *int `mandatory:"false" json:"port"`

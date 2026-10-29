@@ -24,10 +24,10 @@ type CreateStandbyDetails struct {
 
 	// The administrator password of the primary database in this Data Guard association.
 	// **The password MUST be the same as the primary admin password.**
-	DatabaseAdminPassword *string `mandatory:"true" json:"databaseAdminPassword"`
+	DatabaseAdminPassword *string `mandatory:"true" json:"databaseAdminPassword" sensitive:"true"`
 
 	// The TDE wallet password of the source database specified by 'sourceDatabaseId'.
-	SourceTdeWalletPassword *string `mandatory:"true" json:"sourceTdeWalletPassword"`
+	SourceTdeWalletPassword *string `mandatory:"true" json:"sourceTdeWalletPassword" sensitive:"true"`
 
 	// The protection mode of this Data Guard. For more information, see
 	// Oracle Data Guard Protection Modes (http://docs.oracle.com/database/122/SBYDB/oracle-data-guard-protection-modes.htm#SBYDB02000)
@@ -65,6 +65,10 @@ type CreateStandbyDetails struct {
 	// Defined tags for this resource. Each key is predefined and scoped to a namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	DefinedTags map[string]map[string]interface{} `mandatory:"false" json:"definedTags"`
+
+	AutoFailoverConfiguration *AutoFailoverConfiguration `mandatory:"false" json:"autoFailoverConfiguration"`
+
+	DataSafeRegistrationDetails *DataSafeRegistrationRequestDetails `mandatory:"false" json:"dataSafeRegistrationDetails"`
 }
 
 func (m CreateStandbyDetails) String() string {
@@ -99,6 +103,8 @@ func (m *CreateStandbyDetails) UnmarshalJSON(data []byte) (e error) {
 		StorageSizeDetails                 *DatabaseStorageSizeDetails            `json:"storageSizeDetails"`
 		FreeformTags                       map[string]string                      `json:"freeformTags"`
 		DefinedTags                        map[string]map[string]interface{}      `json:"definedTags"`
+		AutoFailoverConfiguration          *AutoFailoverConfiguration             `json:"autoFailoverConfiguration"`
+		DataSafeRegistrationDetails        *DataSafeRegistrationRequestDetails    `json:"dataSafeRegistrationDetails"`
 		SourceDatabaseId                   *string                                `json:"sourceDatabaseId"`
 		DatabaseAdminPassword              *string                                `json:"databaseAdminPassword"`
 		SourceTdeWalletPassword            *string                                `json:"sourceTdeWalletPassword"`
@@ -132,6 +138,10 @@ func (m *CreateStandbyDetails) UnmarshalJSON(data []byte) (e error) {
 	m.FreeformTags = model.FreeformTags
 
 	m.DefinedTags = model.DefinedTags
+
+	m.AutoFailoverConfiguration = model.AutoFailoverConfiguration
+
+	m.DataSafeRegistrationDetails = model.DataSafeRegistrationDetails
 
 	m.SourceDatabaseId = model.SourceDatabaseId
 

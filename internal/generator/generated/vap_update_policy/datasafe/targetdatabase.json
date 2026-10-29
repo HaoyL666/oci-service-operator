@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "datasafe",
+    "apiVersion": "datasafe.oracle.com/v1beta1",
+    "kind": "TargetDatabase",
+    "formalSlug": "targetdatabase",
+    "providerResource": "oci_data_safe_target_database",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "compartmentId",
+      "connectionOption.connectionType",
+      "connectionOption.datasafePrivateEndpointId",
+      "connectionOption.onPremConnectorId",
+      "credentials.password",
+      "credentials.userName",
+      "databaseDetails.autonomousDatabaseId",
+      "databaseDetails.databaseType",
+      "databaseDetails.dbSystemId",
+      "databaseDetails.infrastructureType",
+      "databaseDetails.instanceId",
+      "databaseDetails.ipAddresses",
+      "databaseDetails.listenerPort",
+      "databaseDetails.pluggableDatabaseId",
+      "databaseDetails.serviceName",
+      "databaseDetails.vmClusterId",
+      "definedTags",
+      "description",
+      "displayName",
+      "freeformTags",
+      "tlsConfig.certificateStoreType",
+      "tlsConfig.keyStoreContent",
+      "tlsConfig.status",
+      "tlsConfig.storePassword"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "peerTargetDatabaseDetails",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.autonomousDatabaseId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.databaseType",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.dbSystemId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.infrastructureType",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.instanceId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.ipAddresses",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.listenerPort",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.pluggableDatabaseId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.serviceName",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.databaseDetails.vmClusterId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.dataguardAssociationId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.description",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.displayName",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.tlsConfig",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.tlsConfig.certificateStoreType",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.tlsConfig.keyStoreContent",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.tlsConfig.status",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.tlsConfig.storePassword",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "peerTargetDatabaseDetails.tlsConfig.trustStoreContent",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "tlsConfig.trustStoreContent",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
+      }
+    ]
+  }
+}

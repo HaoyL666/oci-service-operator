@@ -47,6 +47,8 @@ type ApplicationSpec struct {
 	SyslogUrl string `json:"syslogUrl,omitempty"`
 	// +kubebuilder:validation:Optional
 	TraceConfig ApplicationTraceConfig `json:"traceConfig,omitempty,omitzero"`
+	// +kubebuilder:validation:Optional
+	Logging ApplicationLogging `json:"logging,omitempty,omitzero"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
@@ -73,6 +75,13 @@ type ApplicationTraceConfig struct {
 	// The OCID of the collector (e.g. an APM Domain) trace events will be sent to.
 	// +kubebuilder:validation:Optional
 	DomainId string `json:"domainId,omitempty"`
+}
+
+// ApplicationLogging defines nested fields for Application.Logging.
+type ApplicationLogging struct {
+	// Specify the format of log lines emitted by functions in this application.
+	// +kubebuilder:validation:Optional
+	LineFormat string `json:"lineFormat,omitempty"`
 }
 
 // ApplicationImagePolicyConfigKeyDetail defines nested fields for Application.ImagePolicyConfig.KeyDetail.
@@ -124,6 +133,7 @@ type ApplicationStatus struct {
 	// Example: `tcp://logserver.myserver:1234`
 	SyslogUrl   string                 `json:"syslogUrl,omitempty"`
 	TraceConfig ApplicationTraceConfig `json:"traceConfig,omitempty"`
+	Logging     ApplicationLogging     `json:"logging,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace.
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`

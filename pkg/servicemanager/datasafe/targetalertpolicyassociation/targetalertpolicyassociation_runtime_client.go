@@ -598,6 +598,7 @@ func projectTargetAlertPolicyAssociationStatus(resource *datasafev1beta1.TargetA
 		TimeCreated:      projected.TimeCreated,
 		TimeUpdated:      projected.TimeUpdated,
 		LifecycleState:   projected.LifecycleState,
+		TargetType:       projected.TargetType,
 		DisplayName:      projected.DisplayName,
 		Description:      projected.Description,
 		PolicyId:         projected.PolicyId,
@@ -619,6 +620,7 @@ type targetAlertPolicyAssociationStatusProjection struct {
 	CompartmentId    string
 	TimeCreated      string
 	TimeUpdated      string
+	TargetType       string
 	LifecycleState   string
 	DisplayName      string
 	Description      string
@@ -652,6 +654,7 @@ func targetAlertPolicyAssociationStatusProjectionFromResource(resource *datasafe
 		TimeUpdated:      resource.Status.TimeUpdated,
 		LifecycleState:   strings.TrimSpace(resource.Status.LifecycleState),
 		DisplayName:      strings.TrimSpace(resource.Status.DisplayName),
+		TargetType:       strings.TrimSpace(resource.Status.TargetType),
 		Description:      strings.TrimSpace(resource.Status.Description),
 		PolicyId:         strings.TrimSpace(resource.Status.PolicyId),
 		TargetId:         strings.TrimSpace(resource.Status.TargetId),
@@ -727,6 +730,7 @@ func targetAlertPolicyAssociationSummaryFromResponse(response any) (datasafesdk.
 
 func targetAlertPolicyAssociationStatusProjectionFromSDK(current datasafesdk.TargetAlertPolicyAssociation) targetAlertPolicyAssociationStatusProjection {
 	return targetAlertPolicyAssociationStatusProjection{
+		TargetType:       string(current.TargetType),
 		Id:               targetAlertPolicyAssociationStringValue(current.Id),
 		CompartmentId:    targetAlertPolicyAssociationStringValue(current.CompartmentId),
 		TimeCreated:      targetAlertPolicyAssociationSDKTimeString(current.TimeCreated),
@@ -752,6 +756,7 @@ func targetAlertPolicyAssociationStatusProjectionFromSummary(current datasafesdk
 		TimeUpdated:      targetAlertPolicyAssociationSDKTimeString(current.TimeUpdated),
 		LifecycleState:   string(current.LifecycleState),
 		DisplayName:      targetAlertPolicyAssociationStringValue(current.DisplayName),
+		TargetType:       string(current.TargetType),
 		Description:      targetAlertPolicyAssociationStringValue(current.Description),
 		PolicyId:         targetAlertPolicyAssociationStringValue(current.PolicyId),
 		TargetId:         targetAlertPolicyAssociationStringValue(current.TargetId),

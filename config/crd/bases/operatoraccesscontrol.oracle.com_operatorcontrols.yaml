@@ -95,6 +95,10 @@ spec:
                   Whether all the operator actions have been pre-approved. If yes, all access requests associated with a resource governed by this operator control
                   will be auto-approved.
                 type: boolean
+              notificationTopicId:
+                description: The OCID of the OCI Notification topic to publish messages
+                  related to this operator control.
+                type: string
               numberOfApprovers:
                 description: Number of approvers required to approve an access request.
                 type: integer
@@ -189,6 +193,10 @@ spec:
                 type: string
               lifecycleState:
                 description: The current lifecycle state of the operator control.
+                type: string
+              notificationTopicId:
+                description: The OCID of the OCI Notification topic to publish messages
+                  related to this operator control.
                 type: string
               numberOfApprovers:
                 description: Number of approvers required to approve an access request.

@@ -41,9 +41,6 @@ type LaunchDbSystemBase interface {
 	// To get a list of shapes, use the ListDbSystemShapes operation.
 	GetShape() *string
 
-	// The public key portion of the key pair to use for SSH access to the DB system. Multiple public keys can be provided. The length of the combined keys cannot exceed 40,000 characters.
-	GetSshPublicKeys() []string
-
 	// The hostname for the DB system. The hostname must begin with an alphabetic character, and
 	// can contain alphanumeric characters and hyphens (-). The maximum length of the hostname is 16 characters for bare metal and virtual machine DB systems, and 12 characters for Exadata DB systems.
 	// The maximum length of the combined hostname and domain is 63 characters.
@@ -91,6 +88,9 @@ type LaunchDbSystemBase interface {
 
 	// If true, Sparse Diskgroup is configured for Exadata dbsystem. If False, Sparse diskgroup is not configured.
 	GetSparseDiskgroup() *bool
+
+	// The public key portion of the key pair to use for SSH access to the DB system. Multiple public keys can be provided. The length of the combined keys cannot exceed 40,000 characters.
+	GetSshPublicKeys() []string
 
 	// A domain name used for the DB system. If the Oracle-provided Internet and VCN
 	// Resolver is enabled for the specified subnet, the domain name for the subnet is used
@@ -167,6 +167,9 @@ type LaunchDbSystemBase interface {
 
 	// The number of compute servers for the DB system.
 	GetComputeCount() *int
+
+	// If true, the caller acknowledges selecting or applying an older DB, Grid Infrastructure, or operating system software version that is outside the latest default version window.
+	GetIsOlderVersionAcknowledged() *bool
 }
 
 type launchdbsystembase struct {
@@ -180,6 +183,7 @@ type launchdbsystembase struct {
 	DbSystemOptions              *DbSystemOptions                                   `mandatory:"false" json:"dbSystemOptions"`
 	StorageVolumePerformanceMode LaunchDbSystemBaseStorageVolumePerformanceModeEnum `mandatory:"false" json:"storageVolumePerformanceMode,omitempty"`
 	SparseDiskgroup              *bool                                              `mandatory:"false" json:"sparseDiskgroup"`
+	SshPublicKeys                []string                                           `mandatory:"false" json:"sshPublicKeys"`
 	Domain                       *string                                            `mandatory:"false" json:"domain"`
 	CpuCoreCount                 *int                                               `mandatory:"false" json:"cpuCoreCount"`
 	ClusterName                  *string                                            `mandatory:"false" json:"clusterName"`
@@ -198,11 +202,11 @@ type launchdbsystembase struct {
 	DataCollectionOptions        *DataCollectionOptions                             `mandatory:"false" json:"dataCollectionOptions"`
 	ComputeModel                 LaunchDbSystemBaseComputeModelEnum                 `mandatory:"false" json:"computeModel,omitempty"`
 	ComputeCount                 *int                                               `mandatory:"false" json:"computeCount"`
+	IsOlderVersionAcknowledged   *bool                                              `mandatory:"false" json:"isOlderVersionAcknowledged"`
 	CompartmentId                *string                                            `mandatory:"true" json:"compartmentId"`
 	AvailabilityDomain           *string                                            `mandatory:"true" json:"availabilityDomain"`
 	SubnetId                     *string                                            `mandatory:"true" json:"subnetId"`
 	Shape                        *string                                            `mandatory:"true" json:"shape"`
-	SshPublicKeys                []string                                           `mandatory:"true" json:"sshPublicKeys"`
 	Hostname                     *string                                            `mandatory:"true" json:"hostname"`
 	Source                       string                                             `json:"source"`
 }
@@ -222,7 +226,6 @@ func (m *launchdbsystembase) UnmarshalJSON(data []byte) error {
 	m.AvailabilityDomain = s.Model.AvailabilityDomain
 	m.SubnetId = s.Model.SubnetId
 	m.Shape = s.Model.Shape
-	m.SshPublicKeys = s.Model.SshPublicKeys
 	m.Hostname = s.Model.Hostname
 	m.FaultDomains = s.Model.FaultDomains
 	m.DisplayName = s.Model.DisplayName
@@ -233,6 +236,7 @@ func (m *launchdbsystembase) UnmarshalJSON(data []byte) error {
 	m.DbSystemOptions = s.Model.DbSystemOptions
 	m.StorageVolumePerformanceMode = s.Model.StorageVolumePerformanceMode
 	m.SparseDiskgroup = s.Model.SparseDiskgroup
+	m.SshPublicKeys = s.Model.SshPublicKeys
 	m.Domain = s.Model.Domain
 	m.CpuCoreCount = s.Model.CpuCoreCount
 	m.ClusterName = s.Model.ClusterName
@@ -251,6 +255,7 @@ func (m *launchdbsystembase) UnmarshalJSON(data []byte) error {
 	m.DataCollectionOptions = s.Model.DataCollectionOptions
 	m.ComputeModel = s.Model.ComputeModel
 	m.ComputeCount = s.Model.ComputeCount
+	m.IsOlderVersionAcknowledged = s.Model.IsOlderVersionAcknowledged
 	m.Source = s.Model.Source
 
 	return err
@@ -334,6 +339,11 @@ func (m launchdbsystembase) GetStorageVolumePerformanceMode() LaunchDbSystemBase
 // GetSparseDiskgroup returns SparseDiskgroup
 func (m launchdbsystembase) GetSparseDiskgroup() *bool {
 	return m.SparseDiskgroup
+}
+
+// GetSshPublicKeys returns SshPublicKeys
+func (m launchdbsystembase) GetSshPublicKeys() []string {
+	return m.SshPublicKeys
 }
 
 // GetDomain returns Domain
@@ -426,6 +436,11 @@ func (m launchdbsystembase) GetComputeCount() *int {
 	return m.ComputeCount
 }
 
+// GetIsOlderVersionAcknowledged returns IsOlderVersionAcknowledged
+func (m launchdbsystembase) GetIsOlderVersionAcknowledged() *bool {
+	return m.IsOlderVersionAcknowledged
+}
+
 // GetCompartmentId returns CompartmentId
 func (m launchdbsystembase) GetCompartmentId() *string {
 	return m.CompartmentId
@@ -444,11 +459,6 @@ func (m launchdbsystembase) GetSubnetId() *string {
 // GetShape returns Shape
 func (m launchdbsystembase) GetShape() *string {
 	return m.Shape
-}
-
-// GetSshPublicKeys returns SshPublicKeys
-func (m launchdbsystembase) GetSshPublicKeys() []string {
-	return m.SshPublicKeys
 }
 
 // GetHostname returns Hostname

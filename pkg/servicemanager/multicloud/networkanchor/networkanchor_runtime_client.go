@@ -398,7 +398,6 @@ func (target networkAnchorBindTarget) listRequest() multicloudsdk.ListNetworkAnc
 		NetworkAnchorOciVcnId:    stringPtrOrNil(target.ociVCNID),
 		NetworkAnchorOciSubnetId: stringPtrOrNil(target.ociSubnetID),
 		Id:                       stringPtrOrNil(target.id),
-		CompartmentIdInSubtree:   target.compartmentIDInSubtree,
 		ShouldFetchVcnName:       target.shouldFetchVCNName,
 		Limit:                    common.Int(100),
 	}

@@ -43,6 +43,9 @@ type OperatorControlSpec struct {
 	// Number of approvers required to approve an access request.
 	// +kubebuilder:validation:Optional
 	NumberOfApprovers int `json:"numberOfApprovers,omitempty"`
+	// The OCID of the OCI Notification topic to publish messages related to this operator control.
+	// +kubebuilder:validation:Optional
+	NotificationTopicId string `json:"notificationTopicId,omitempty"`
 	// List of emailId.
 	// +kubebuilder:validation:Optional
 	EmailIdList []string `json:"emailIdList,omitempty"`
@@ -82,6 +85,8 @@ type OperatorControlStatus struct {
 	// Whether all the operator actions have been pre-approved. If yes, all access requests associated with a resource governed by this operator control
 	// will be auto-approved.
 	IsFullyPreApproved bool `json:"isFullyPreApproved,omitempty"`
+	// The OCID of the OCI Notification topic to publish messages related to this operator control.
+	NotificationTopicId string `json:"notificationTopicId,omitempty"`
 	// List of emailId.
 	EmailIdList []string `json:"emailIdList,omitempty"`
 	// resourceType for which the OperatorControl is applicable

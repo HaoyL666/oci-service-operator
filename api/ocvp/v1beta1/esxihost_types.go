@@ -60,6 +60,9 @@ type EsxiHostSpec struct {
 	// ListSupportedVmwareSoftwareVersions.
 	// +kubebuilder:validation:Optional
 	EsxiSoftwareVersion string `json:"esxiSoftwareVersion,omitempty"`
+	// The initial fault domain host distribution mode for the ESXi host.
+	// +kubebuilder:validation:Optional
+	InitialFaultDomainHostDistribution string `json:"initialFaultDomainHostDistribution,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Byol Allocation for VCF (VMware Cloud Foundation) deployment.
 	// +kubebuilder:validation:Optional
 	VcfByolAllocationId string `json:"vcfByolAllocationId,omitempty"`
@@ -173,6 +176,10 @@ type EsxiHostStatus struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the ESXi host that
 	// is newly created to upgrade the original host.
 	UpgradedReplacementEsxiHostId string `json:"upgradedReplacementEsxiHostId,omitempty"`
+	// The fault domain of the ESXi host.
+	ComputeFaultDomain string `json:"computeFaultDomain,omitempty"`
+	// The initial fault domain host distribution mode for the ESXi host.
+	InitialFaultDomainHostDistribution string `json:"initialFaultDomainHostDistribution,omitempty"`
 	// The OCPU count of the ESXi host.
 	HostOcpuCount float32 `json:"hostOcpuCount,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Capacity Reservation.

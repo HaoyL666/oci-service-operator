@@ -309,11 +309,412 @@ spec:
                   primaryKeyCompatibility:
                     description: Primary key compatibility option
                     type: string
-                required:
-                - jobMode
                 type: object
               jsonData:
                 type: string
+              migrationSettings:
+                description: MigrationSettings defines nested fields for Migration.MigrationSettings.
+                properties:
+                  advancedParameters:
+                    description: List of Migration Parameter objects.
+                    items:
+                      description: MigrationSettingsAdvancedParameter defines nested
+                        fields for Migration.MigrationSettings.AdvancedParameter.
+                      properties:
+                        dataType:
+                          description: Parameter data type.
+                          type: string
+                        name:
+                          description: Parameter name.
+                          type: string
+                        value:
+                          description: |-
+                            If a STRING data type then the value should be an array of characters,
+                            if a INTEGER data type then the value should be an integer value,
+                            if a FLOAT data type then the value should be an float value,
+                            if a BOOLEAN data type then the value should be TRUE or FALSE.
+                          type: string
+                      required:
+                      - dataType
+                      - name
+                      - value
+                      type: object
+                    type: array
+                  advisorSettings:
+                    description: MigrationSettingsAdvisorSettings defines nested fields
+                      for Migration.MigrationSettings.AdvisorSettings.
+                    properties:
+                      isIgnoreErrors:
+                        description: True to not interrupt migration execution due
+                          to Pre-Migration Advisor errors. Default is false.
+                        type: boolean
+                      isSkipAdvisor:
+                        description: True to skip the Pre-Migration Advisor execution.
+                          Default is false.
+                        type: boolean
+                    type: object
+                  bulkIncludeExcludeData:
+                    description: |-
+                      Specifies the database objects to be excluded from the migration in bulk.
+                      The definition accepts input in a CSV format, newline separated for each entry.
+                      More details can be found in the documentation.
+                    type: string
+                  dataTransferMediumDetails:
+                    description: MigrationSettingsDataTransferMediumDetails defines
+                      nested fields for Migration.MigrationSettings.DataTransferMediumDetails.
+                    properties:
+                      accessKeyId:
+                        description: |-
+                          AWS access key credentials identifier
+                          Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
+                        type: string
+                      jsonData:
+                        type: string
+                      name:
+                        description: |-
+                          Name of database link from OCI database to on-premise database. ODMS will create link,
+                          if the link does not already exist.
+                        type: string
+                      objectStorageBucket:
+                        description: MigrationSettingsDataTransferMediumDetailsObjectStorageBucket
+                          defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.ObjectStorageBucket.
+                        properties:
+                          bucketName:
+                            description: Bucket name.
+                            type: string
+                          namespaceName:
+                            description: Namespace name of the object store bucket.
+                            type: string
+                        required:
+                        - bucketName
+                        - namespaceName
+                        type: object
+                      region:
+                        description: |-
+                          AWS region code where the S3 bucket is located.
+                          Region code should match the documented available regions:
+                          https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
+                        type: string
+                      secretAccessKey:
+                        description: |-
+                          AWS secret access key credentials
+                          Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
+                        type: string
+                      sharedStorageMountTargetId:
+                        description: OCID of the shared storage mount target
+                        type: string
+                      source:
+                        description: MigrationSettingsDataTransferMediumDetailsSource
+                          defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Source.
+                        properties:
+                          jsonData:
+                            type: string
+                          kind:
+                            type: string
+                          ociHome:
+                            description: Path to the OCI CLI installation in the node.
+                            type: string
+                          walletLocation:
+                            description: Directory path to OCI SSL wallet location
+                              on Db server node.
+                            type: string
+                        type: object
+                      target:
+                        description: MigrationSettingsDataTransferMediumDetailsTarget
+                          defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Target.
+                        properties:
+                          jsonData:
+                            type: string
+                          kind:
+                            type: string
+                          ociHome:
+                            description: Path to the OCI CLI installation in the node.
+                            type: string
+                          walletLocation:
+                            description: Directory path to OCI SSL wallet location
+                              on Db server node.
+                            type: string
+                        type: object
+                      type:
+                        type: string
+                    type: object
+                  excludeObjects:
+                    description: Database objects to exclude from migration, cannot
+                      be specified alongside 'includeObjects'
+                    items:
+                      description: MigrationSettingsExcludeObject defines nested fields
+                        for Migration.MigrationSettings.ExcludeObject.
+                      properties:
+                        isOmitExcludedTableFromReplication:
+                          description: |-
+                            Whether an excluded table should be omitted from replication. Only valid for database objects
+                            that have are of type TABLE and object status EXCLUDE.
+                          type: boolean
+                        objectName:
+                          description: Name of the object (regular expression is allowed)
+                          type: string
+                        owner:
+                          description: Owner of the object (regular expression is
+                            allowed)
+                          type: string
+                        type:
+                          description: |-
+                            Type of object to exclude.
+                            If not specified, matching owners and object names of type TABLE would be excluded.
+                          type: string
+                      required:
+                      - objectName
+                      - owner
+                      type: object
+                    type: array
+                  ggsDetails:
+                    description: MigrationSettingsGgsDetails defines nested fields
+                      for Migration.MigrationSettings.GgsDetails.
+                    properties:
+                      acceptableLag:
+                        description: ODMS will monitor GoldenGate end-to-end latency
+                          until the lag time is lower than the specified value in
+                          seconds.
+                        type: integer
+                      extract:
+                        description: MigrationSettingsGgsDetailsExtract defines nested
+                          fields for Migration.MigrationSettings.GgsDetails.Extract.
+                        properties:
+                          longTransDuration:
+                            description: |-
+                              Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running.
+                              If not specified, Extract will not generate a warning on long-running transactions.
+                            type: integer
+                          performanceProfile:
+                            description: Extract performance.
+                            type: string
+                        type: object
+                      replicat:
+                        description: MigrationSettingsGgsDetailsReplicat defines nested
+                          fields for Migration.MigrationSettings.GgsDetails.Replicat.
+                        properties:
+                          performanceProfile:
+                            description: Replicat performance.
+                            type: string
+                        type: object
+                    type: object
+                  hubDetails:
+                    description: MigrationSettingsHubDetails defines nested fields
+                      for Migration.MigrationSettings.HubDetails.
+                    properties:
+                      acceptableLag:
+                        description: ODMS will monitor GoldenGate end-to-end latency
+                          until the lag time is lower than the specified value in
+                          seconds.
+                        type: integer
+                      computeId:
+                        description: The OCID of the resource being referenced.
+                        type: string
+                      extract:
+                        description: MigrationSettingsHubDetailsExtract defines nested
+                          fields for Migration.MigrationSettings.HubDetails.Extract.
+                        properties:
+                          longTransDuration:
+                            description: |-
+                              Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running.
+                              If not specified, Extract will not generate a warning on long-running transactions.
+                            type: integer
+                          performanceProfile:
+                            description: Extract performance.
+                            type: string
+                        type: object
+                      keyId:
+                        description: The OCID of the resource being referenced.
+                        type: string
+                      replicat:
+                        description: MigrationSettingsHubDetailsReplicat defines nested
+                          fields for Migration.MigrationSettings.HubDetails.Replicat.
+                        properties:
+                          performanceProfile:
+                            description: Replicat performance.
+                            type: string
+                        type: object
+                      restAdminCredentials:
+                        description: MigrationSettingsHubDetailsRestAdminCredentials
+                          defines nested fields for Migration.MigrationSettings.HubDetails.RestAdminCredentials.
+                        properties:
+                          password:
+                            description: Administrator password
+                            type: string
+                          username:
+                            description: Administrator username
+                            type: string
+                        required:
+                        - password
+                        - username
+                        type: object
+                      url:
+                        description: Endpoint URL.
+                        type: string
+                      vaultId:
+                        description: The OCID of the resource being referenced.
+                        type: string
+                    required:
+                    - keyId
+                    - restAdminCredentials
+                    - url
+                    - vaultId
+                    type: object
+                  includeObjects:
+                    description: Database objects to include from migration, cannot
+                      be specified alongside 'excludeObjects'
+                    items:
+                      description: MigrationSettingsIncludeObject defines nested fields
+                        for Migration.MigrationSettings.IncludeObject.
+                      properties:
+                        isOmitExcludedTableFromReplication:
+                          description: |-
+                            Whether an excluded table should be omitted from replication. Only valid for database objects
+                            that have are of type TABLE and object status EXCLUDE.
+                          type: boolean
+                        objectName:
+                          description: Name of the object (regular expression is allowed)
+                          type: string
+                        owner:
+                          description: Owner of the object (regular expression is
+                            allowed)
+                          type: string
+                        type:
+                          description: |-
+                            Type of object to exclude.
+                            If not specified, matching owners and object names of type TABLE would be excluded.
+                          type: string
+                      required:
+                      - objectName
+                      - owner
+                      type: object
+                    type: array
+                  initialLoadSettings:
+                    description: MigrationSettingsInitialLoadSettings defines nested
+                      fields for Migration.MigrationSettings.InitialLoadSettings.
+                    properties:
+                      dataPumpParameters:
+                        description: MigrationSettingsInitialLoadSettingsDataPumpParameters
+                          defines nested fields for Migration.MigrationSettings.InitialLoadSettings.DataPumpParameters.
+                        properties:
+                          estimate:
+                            description: Estimate size of dumps that will be generated.
+                            type: string
+                          excludeParameters:
+                            description: Exclude paratemers for Export and Import.
+                            items:
+                              type: string
+                            type: array
+                          exportParallelismDegree:
+                            description: Maximum number of worker processes that can
+                              be used for a Data Pump Export job.
+                            type: integer
+                          importParallelismDegree:
+                            description: |-
+                              Maximum number of worker processes that can be used for a Data Pump Import job.
+                              For an Autonomous Database, ODMS will automatically query its CPU core count and set this property.
+                            type: integer
+                          isCluster:
+                            description: Set to false to force Data Pump worker process
+                              to run on one instance.
+                            type: boolean
+                          tableExistsAction:
+                            description: 'IMPORT: Specifies the action to be performed
+                              when data is loaded into a preexisting table.'
+                            type: string
+                        type: object
+                      exportDirectoryObject:
+                        description: MigrationSettingsInitialLoadSettingsExportDirectoryObject
+                          defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ExportDirectoryObject.
+                        properties:
+                          name:
+                            description: Name of directory object in database
+                            type: string
+                          path:
+                            description: Absolute path of directory on database server
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      importDirectoryObject:
+                        description: MigrationSettingsInitialLoadSettingsImportDirectoryObject
+                          defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ImportDirectoryObject.
+                        properties:
+                          name:
+                            description: Name of directory object in database
+                            type: string
+                          path:
+                            description: Absolute path of directory on database server
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      jobMode:
+                        description: Oracle Job Mode
+                        type: string
+                      metadataRemaps:
+                        description: Defines remapping to be applied to objects as
+                          they are processed.
+                        items:
+                          description: MigrationSettingsInitialLoadSettingsMetadataRemap
+                            defines nested fields for Migration.MigrationSettings.InitialLoadSettings.MetadataRemap.
+                          properties:
+                            newValue:
+                              description: Specifies the new value that oldValue should
+                                be translated into.
+                              type: string
+                            oldValue:
+                              description: Specifies the value which needs to be reset.
+                              type: string
+                            type:
+                              description: Type of remap. Refer to METADATA_REMAP
+                                Procedure  (https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_DATAPUMP.html#GUID-0FC32790-91E6-4781-87A3-229DE024CB3D)
+                              type: string
+                          required:
+                          - newValue
+                          - oldValue
+                          - type
+                          type: object
+                        type: array
+                      tablespaceDetails:
+                        description: MigrationSettingsInitialLoadSettingsTablespaceDetails
+                          defines nested fields for Migration.MigrationSettings.InitialLoadSettings.TablespaceDetails.
+                        properties:
+                          blockSizeInKBs:
+                            description: Size of Oracle database blocks in KB.
+                            type: string
+                          extendSizeInMBs:
+                            description: Size of extend in MB. Can only be specified
+                              if 'isBigFile' property is set to true.
+                            type: integer
+                          isAutoCreate:
+                            description: True to auto-create tablespace in the target
+                              Database.
+                            type: boolean
+                          isBigFile:
+                            description: True set tablespace to big file.
+                            type: boolean
+                          jsonData:
+                            type: string
+                          remapTarget:
+                            description: Name of tablespace at target to which the
+                              source database tablespace need to be remapped.
+                            type: string
+                          targetType:
+                            type: string
+                        type: object
+                    type: object
+                  jsonData:
+                    type: string
+                  migrationMethod:
+                    type: string
+                  sourceContainerDatabaseConnectionId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                  sourceStandbyDatabaseConnectionId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                type: object
               sourceContainerDatabaseConnectionId:
                 description: The OCID of the resource being referenced.
                 type: string
@@ -537,8 +938,6 @@ spec:
                   primaryKeyCompatibility:
                     description: Primary key compatibility option
                     type: string
-                required:
-                - jobMode
                 type: object
               jsonData:
                 type: string
@@ -549,6 +948,335 @@ spec:
               lifecycleState:
                 description: The current state of the Migration resource.
                 type: string
+              migrationSettings:
+                description: MigrationSettingsObservedState defines nested fields
+                  for Migration.MigrationSettings.
+                properties:
+                  advancedParameters:
+                    description: List of Migration Parameter objects.
+                    items:
+                      description: MigrationSettingsAdvancedParameter defines nested
+                        fields for Migration.MigrationSettings.AdvancedParameter.
+                      properties:
+                        dataType:
+                          description: Parameter data type.
+                          type: string
+                        name:
+                          description: Parameter name.
+                          type: string
+                        value:
+                          description: |-
+                            If a STRING data type then the value should be an array of characters,
+                            if a INTEGER data type then the value should be an integer value,
+                            if a FLOAT data type then the value should be an float value,
+                            if a BOOLEAN data type then the value should be TRUE or FALSE.
+                          type: string
+                      required:
+                      - dataType
+                      - name
+                      - value
+                      type: object
+                    type: array
+                  advisorSettings:
+                    description: MigrationSettingsAdvisorSettings defines nested fields
+                      for Migration.MigrationSettings.AdvisorSettings.
+                    properties:
+                      isIgnoreErrors:
+                        description: True to not interrupt migration execution due
+                          to Pre-Migration Advisor errors. Default is false.
+                        type: boolean
+                      isSkipAdvisor:
+                        description: True to skip the Pre-Migration Advisor execution.
+                          Default is false.
+                        type: boolean
+                    type: object
+                  dataTransferMediumDetails:
+                    description: MigrationSettingsDataTransferMediumDetails defines
+                      nested fields for Migration.MigrationSettings.DataTransferMediumDetails.
+                    properties:
+                      accessKeyId:
+                        description: |-
+                          AWS access key credentials identifier
+                          Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
+                        type: string
+                      jsonData:
+                        type: string
+                      name:
+                        description: |-
+                          Name of database link from OCI database to on-premise database. ODMS will create link,
+                          if the link does not already exist.
+                        type: string
+                      objectStorageBucket:
+                        description: MigrationSettingsDataTransferMediumDetailsObjectStorageBucket
+                          defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.ObjectStorageBucket.
+                        properties:
+                          bucketName:
+                            description: Bucket name.
+                            type: string
+                          namespaceName:
+                            description: Namespace name of the object store bucket.
+                            type: string
+                        required:
+                        - bucketName
+                        - namespaceName
+                        type: object
+                      region:
+                        description: |-
+                          AWS region code where the S3 bucket is located.
+                          Region code should match the documented available regions:
+                          https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
+                        type: string
+                      secretAccessKey:
+                        description: |-
+                          AWS secret access key credentials
+                          Details: https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
+                        type: string
+                      sharedStorageMountTargetId:
+                        description: OCID of the shared storage mount target
+                        type: string
+                      source:
+                        description: MigrationSettingsDataTransferMediumDetailsSource
+                          defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Source.
+                        properties:
+                          jsonData:
+                            type: string
+                          kind:
+                            type: string
+                          ociHome:
+                            description: Path to the OCI CLI installation in the node.
+                            type: string
+                          walletLocation:
+                            description: Directory path to OCI SSL wallet location
+                              on Db server node.
+                            type: string
+                        type: object
+                      target:
+                        description: MigrationSettingsDataTransferMediumDetailsTarget
+                          defines nested fields for Migration.MigrationSettings.DataTransferMediumDetails.Target.
+                        properties:
+                          jsonData:
+                            type: string
+                          kind:
+                            type: string
+                          ociHome:
+                            description: Path to the OCI CLI installation in the node.
+                            type: string
+                          walletLocation:
+                            description: Directory path to OCI SSL wallet location
+                              on Db server node.
+                            type: string
+                        type: object
+                      type:
+                        type: string
+                    type: object
+                  ggsDetails:
+                    description: MigrationSettingsGgsDetails defines nested fields
+                      for Migration.MigrationSettings.GgsDetails.
+                    properties:
+                      acceptableLag:
+                        description: ODMS will monitor GoldenGate end-to-end latency
+                          until the lag time is lower than the specified value in
+                          seconds.
+                        type: integer
+                      extract:
+                        description: MigrationSettingsGgsDetailsExtract defines nested
+                          fields for Migration.MigrationSettings.GgsDetails.Extract.
+                        properties:
+                          longTransDuration:
+                            description: |-
+                              Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running.
+                              If not specified, Extract will not generate a warning on long-running transactions.
+                            type: integer
+                          performanceProfile:
+                            description: Extract performance.
+                            type: string
+                        type: object
+                      replicat:
+                        description: MigrationSettingsGgsDetailsReplicat defines nested
+                          fields for Migration.MigrationSettings.GgsDetails.Replicat.
+                        properties:
+                          performanceProfile:
+                            description: Replicat performance.
+                            type: string
+                        type: object
+                    type: object
+                  hubDetails:
+                    description: MigrationSettingsHubDetailsObservedState defines
+                      nested fields for Migration.MigrationSettings.HubDetails.
+                    properties:
+                      acceptableLag:
+                        description: ODMS will monitor GoldenGate end-to-end latency
+                          until the lag time is lower than the specified value in
+                          seconds.
+                        type: integer
+                      computeId:
+                        description: The OCID of the resource being referenced.
+                        type: string
+                      extract:
+                        description: MigrationSettingsHubDetailsExtract defines nested
+                          fields for Migration.MigrationSettings.HubDetails.Extract.
+                        properties:
+                          longTransDuration:
+                            description: |-
+                              Length of time (in seconds) that a transaction can be open before Extract generates a warning message that the transaction is long-running.
+                              If not specified, Extract will not generate a warning on long-running transactions.
+                            type: integer
+                          performanceProfile:
+                            description: Extract performance.
+                            type: string
+                        type: object
+                      keyId:
+                        description: The OCID of the resource being referenced.
+                        type: string
+                      replicat:
+                        description: MigrationSettingsHubDetailsReplicat defines nested
+                          fields for Migration.MigrationSettings.HubDetails.Replicat.
+                        properties:
+                          performanceProfile:
+                            description: Replicat performance.
+                            type: string
+                        type: object
+                      restAdminCredentials:
+                        description: MigrationSettingsHubDetailsRestAdminCredentialsObservedState
+                          defines nested fields for Migration.MigrationSettings.HubDetails.RestAdminCredentials.
+                        properties:
+                          username:
+                            description: Administrator username
+                            type: string
+                        type: object
+                      url:
+                        description: Endpoint URL.
+                        type: string
+                      vaultId:
+                        description: The OCID of the resource being referenced.
+                        type: string
+                    type: object
+                  initialLoadSettings:
+                    description: MigrationSettingsInitialLoadSettings defines nested
+                      fields for Migration.MigrationSettings.InitialLoadSettings.
+                    properties:
+                      dataPumpParameters:
+                        description: MigrationSettingsInitialLoadSettingsDataPumpParameters
+                          defines nested fields for Migration.MigrationSettings.InitialLoadSettings.DataPumpParameters.
+                        properties:
+                          estimate:
+                            description: Estimate size of dumps that will be generated.
+                            type: string
+                          excludeParameters:
+                            description: Exclude paratemers for Export and Import.
+                            items:
+                              type: string
+                            type: array
+                          exportParallelismDegree:
+                            description: Maximum number of worker processes that can
+                              be used for a Data Pump Export job.
+                            type: integer
+                          importParallelismDegree:
+                            description: |-
+                              Maximum number of worker processes that can be used for a Data Pump Import job.
+                              For an Autonomous Database, ODMS will automatically query its CPU core count and set this property.
+                            type: integer
+                          isCluster:
+                            description: Set to false to force Data Pump worker process
+                              to run on one instance.
+                            type: boolean
+                          tableExistsAction:
+                            description: 'IMPORT: Specifies the action to be performed
+                              when data is loaded into a preexisting table.'
+                            type: string
+                        type: object
+                      exportDirectoryObject:
+                        description: MigrationSettingsInitialLoadSettingsExportDirectoryObject
+                          defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ExportDirectoryObject.
+                        properties:
+                          name:
+                            description: Name of directory object in database
+                            type: string
+                          path:
+                            description: Absolute path of directory on database server
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      importDirectoryObject:
+                        description: MigrationSettingsInitialLoadSettingsImportDirectoryObject
+                          defines nested fields for Migration.MigrationSettings.InitialLoadSettings.ImportDirectoryObject.
+                        properties:
+                          name:
+                            description: Name of directory object in database
+                            type: string
+                          path:
+                            description: Absolute path of directory on database server
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      jobMode:
+                        description: Oracle Job Mode
+                        type: string
+                      metadataRemaps:
+                        description: Defines remapping to be applied to objects as
+                          they are processed.
+                        items:
+                          description: MigrationSettingsInitialLoadSettingsMetadataRemap
+                            defines nested fields for Migration.MigrationSettings.InitialLoadSettings.MetadataRemap.
+                          properties:
+                            newValue:
+                              description: Specifies the new value that oldValue should
+                                be translated into.
+                              type: string
+                            oldValue:
+                              description: Specifies the value which needs to be reset.
+                              type: string
+                            type:
+                              description: Type of remap. Refer to METADATA_REMAP
+                                Procedure  (https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_DATAPUMP.html#GUID-0FC32790-91E6-4781-87A3-229DE024CB3D)
+                              type: string
+                          required:
+                          - newValue
+                          - oldValue
+                          - type
+                          type: object
+                        type: array
+                      tablespaceDetails:
+                        description: MigrationSettingsInitialLoadSettingsTablespaceDetails
+                          defines nested fields for Migration.MigrationSettings.InitialLoadSettings.TablespaceDetails.
+                        properties:
+                          blockSizeInKBs:
+                            description: Size of Oracle database blocks in KB.
+                            type: string
+                          extendSizeInMBs:
+                            description: Size of extend in MB. Can only be specified
+                              if 'isBigFile' property is set to true.
+                            type: integer
+                          isAutoCreate:
+                            description: True to auto-create tablespace in the target
+                              Database.
+                            type: boolean
+                          isBigFile:
+                            description: True set tablespace to big file.
+                            type: boolean
+                          jsonData:
+                            type: string
+                          remapTarget:
+                            description: Name of tablespace at target to which the
+                              source database tablespace need to be remapped.
+                            type: string
+                          targetType:
+                            type: string
+                        type: object
+                    type: object
+                  jsonData:
+                    type: string
+                  migrationMethod:
+                    type: string
+                  sourceContainerDatabaseConnectionId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                  sourceStandbyDatabaseConnectionId:
+                    description: The OCID of the resource being referenced.
+                    type: string
+                type: object
               sourceContainerDatabaseConnectionId:
                 description: The OCID of the resource being referenced.
                 type: string

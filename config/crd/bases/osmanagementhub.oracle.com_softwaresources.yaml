@@ -202,6 +202,9 @@ spec:
                 type: boolean
               jsonData:
                 type: string
+              originDisplayName:
+                description: The display name of the software source to be replicated
+                type: string
               originSoftwareSourceId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the vendor software source in the root compartment that is being

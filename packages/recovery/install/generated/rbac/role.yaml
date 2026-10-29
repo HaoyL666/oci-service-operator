@@ -1,0 +1,45 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - recovery.oracle.com
+  resources:
+  - protecteddatabases
+  - protectionpolicies
+  - recoveryservicesubnets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - recovery.oracle.com
+  resources:
+  - protecteddatabases/finalizers
+  - protectionpolicies/finalizers
+  - recoveryservicesubnets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - recovery.oracle.com
+  resources:
+  - protecteddatabases/status
+  - protectionpolicies/status
+  - recoveryservicesubnets/status
+  verbs:
+  - get
+  - patch
+  - update

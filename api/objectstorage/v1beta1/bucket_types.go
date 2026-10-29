@@ -57,6 +57,10 @@ type BucketSpec struct {
 	// Management service to generate a data encryption key or to encrypt or decrypt a data encryption key.
 	// +kubebuilder:validation:Optional
 	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// Specifies whether Object Storage should use intermediate cached Bucket Encryption Keys with server-side
+	// encryption using KMS (SSE-KMS) for new objects in the bucket. This reduces calls to OCI Vault Key Management
+	// Service (KMS). Existing objects are not affected.
+	IsBucketKeyEnabled bool `json:"isBucketKeyEnabled,omitempty"`
 	// Set the versioning status on the bucket. By default, a bucket is created with versioning `Disabled`. Use this option to enable versioning during bucket creation. Objects in a version enabled bucket are protected from overwrites and deletions. Previous versions of the same object will be available in the bucket.
 	// +kubebuilder:validation:Optional
 	Versioning string `json:"versioning,omitempty"`
@@ -66,6 +70,12 @@ type BucketSpec struct {
 	// tiers based on the access pattern of the objects.
 	// +kubebuilder:validation:Optional
 	AutoTiering string `json:"autoTiering,omitempty"`
+	// The bucket scope determines weather the bucket name must be unique within the tenancy and region (essentially the namespace) or across all tenancies in the region. The bucket scope also determines if the bucket supports S3 virtual-hosted style URL's or not.
+	// Allowed values:
+	// NAMESPACE: Only supports path-style bucket access, bucket name only needs to be unique within the tenancy and region.
+	// REGION: Supports both path-style and virtual-hosted URL style access, bucket name needs to be unique across all tenancies in the region.
+	// +kubebuilder:validation:Optional
+	BucketScope string `json:"bucketScope,omitempty"`
 	// The Object Storage namespace in which the bucket lives.
 	// +kubebuilder:validation:Optional
 	Namespace string `json:"namespace,omitempty"`
@@ -115,6 +125,10 @@ type BucketStatus struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of a master encryption key used to call the Key Management
 	// service to generate a data encryption key or to encrypt or decrypt a data encryption key.
 	KmsKeyId string `json:"kmsKeyId,omitempty"`
+	// Specifies whether Object Storage should use intermediate cached Bucket Encryption Keys with server-side
+	// encryption using KMS (SSE-KMS) for new objects in the bucket. This reduces calls to OCI Vault Key Management
+	// Service (KMS). Existing objects are not affected.
+	IsBucketKeyEnabled bool `json:"isBucketKeyEnabled,omitempty"`
 	// The entity tag (ETag) for the live object lifecycle policy on the bucket.
 	ObjectLifecyclePolicyEtag string `json:"objectLifecyclePolicyEtag,omitempty"`
 	// The approximate number of objects in the bucket. Count statistics are reported periodically. You will see a
@@ -138,6 +152,11 @@ type BucketStatus struct {
 	// For auto tiering `InfrequentAccess`, objects are transitioned automatically between the 'Standard'
 	// and 'InfrequentAccess' tiers based on the access pattern of the objects.
 	AutoTiering string `json:"autoTiering,omitempty"`
+	// The bucket scope determines weather the bucket name must be unique within the tenancy and region (essentially the namespace) or across all tenancies in the region. The bucket scope also determines if the bucket supports S3 virtual-hosted style URL's or not.
+	// Allowed values:
+	// NAMESPACE: Only supports path-style bucket access, bucket name only needs to be unique within the tenancy and region.
+	// REGION: Supports both path-style and virtual-hosted URL style access, bucket name needs to be unique across all tenancies in the region.
+	BucketScope string `json:"bucketScope,omitempty"`
 }
 
 // +kubebuilder:object:root=true

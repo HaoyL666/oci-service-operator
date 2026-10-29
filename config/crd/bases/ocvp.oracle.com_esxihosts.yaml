@@ -123,6 +123,10 @@ spec:
                   The compute shape name of the ESXi host.
                   ListSupportedHostShapes.
                 type: string
+              initialFaultDomainHostDistribution:
+                description: The initial fault domain host distribution mode for the
+                  ESXi host.
+                type: string
               isVsanByolEnabled:
                 description: Indicates whether this host embedded VMware vSAN with
                   BYOL Allocation.
@@ -169,6 +173,9 @@ spec:
                 type: string
               computeAvailabilityDomain:
                 description: The availability domain of the ESXi host.
+                type: string
+              computeFaultDomain:
+                description: The fault domain of the ESXi host.
                 type: string
               computeInstanceId:
                 description: |-
@@ -260,6 +267,10 @@ spec:
               id:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the ESXi host.
+                type: string
+              initialFaultDomainHostDistribution:
+                description: The initial fault domain host distribution mode for the
+                  ESXi host.
                 type: string
               isBillingContinuationInProgress:
                 description: Indicates whether this host is in the progress of billing

@@ -60,7 +60,7 @@ func newDistributedDbServiceClientFromBaseClient(baseClient common.BaseClient, c
 	common.ConfigCircuitBreakerFromGlobalVar(&baseClient)
 
 	client = DistributedDbServiceClient{BaseClient: baseClient}
-	client.BasePath = "20250101"
+	client.BasePath = "20260101"
 	err = client.setConfigurationProvider(configProvider)
 	return
 }
@@ -141,11 +141,11 @@ func (client DistributedDbServiceClient) addDistributedDatabaseGdsControlNode(ct
 
 	var response AddDistributedDatabaseGdsControlNodeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "AddDistributedDatabaseGdsControlNode")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/AddDistributedDatabaseGdsControlNode"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/AddDistributedDatabaseGdsControlNode"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "AddDistributedDatabaseGdsControlNode", apiReferenceLink)
 		return response, err
 	}
@@ -204,11 +204,11 @@ func (client DistributedDbServiceClient) changeDistributedDatabaseCompartment(ct
 
 	var response ChangeDistributedDatabaseCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "ChangeDistributedDatabaseCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/ChangeDistributedDatabaseCompartment"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/ChangeDistributedDatabaseCompartment"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "ChangeDistributedDatabaseCompartment", apiReferenceLink)
 		return response, err
 	}
@@ -267,12 +267,75 @@ func (client DistributedDbServiceClient) changeDistributedDbBackupConfig(ctx con
 
 	var response ChangeDistributedDbBackupConfigResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "ChangeDistributedDbBackupConfig")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/ChangeDistributedDbBackupConfig"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/ChangeDistributedDbBackupConfig"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "ChangeDistributedDbBackupConfig", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ConfigureDistributedDatabaseAutoResourceManagement Configure autoResourceManagement options for the Globally distributed database.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/distributeddatabase/ConfigureDistributedDatabaseAutoResourceManagement.go.html to see an example of how to use ConfigureDistributedDatabaseAutoResourceManagement API.
+// A default retry strategy applies to this operation ConfigureDistributedDatabaseAutoResourceManagement()
+func (client DistributedDbServiceClient) ConfigureDistributedDatabaseAutoResourceManagement(ctx context.Context, request ConfigureDistributedDatabaseAutoResourceManagementRequest) (response ConfigureDistributedDatabaseAutoResourceManagementResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.configureDistributedDatabaseAutoResourceManagement, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ConfigureDistributedDatabaseAutoResourceManagementResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ConfigureDistributedDatabaseAutoResourceManagementResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ConfigureDistributedDatabaseAutoResourceManagementResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ConfigureDistributedDatabaseAutoResourceManagementResponse")
+	}
+	return
+}
+
+// configureDistributedDatabaseAutoResourceManagement implements the OCIOperation interface (enables retrying operations)
+func (client DistributedDbServiceClient) configureDistributedDatabaseAutoResourceManagement(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/distributedDatabases/{distributedDatabaseId}/actions/configureAutoResourceManagement", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ConfigureDistributedDatabaseAutoResourceManagementResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "ConfigureDistributedDatabaseAutoResourceManagement")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/ConfigureDistributedDatabaseAutoResourceManagement"
+		err = common.PostProcessServiceError(err, "DistributedDbService", "ConfigureDistributedDatabaseAutoResourceManagement", apiReferenceLink)
 		return response, err
 	}
 
@@ -330,11 +393,11 @@ func (client DistributedDbServiceClient) configureDistributedDatabaseGsms(ctx co
 
 	var response ConfigureDistributedDatabaseGsmsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "ConfigureDistributedDatabaseGsms")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/ConfigureDistributedDatabaseGsms"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/ConfigureDistributedDatabaseGsms"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "ConfigureDistributedDatabaseGsms", apiReferenceLink)
 		return response, err
 	}
@@ -397,11 +460,11 @@ func (client DistributedDbServiceClient) configureDistributedDatabaseSharding(ct
 
 	var response ConfigureDistributedDatabaseShardingResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "ConfigureDistributedDatabaseSharding")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/ConfigureDistributedDatabaseSharding"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/ConfigureDistributedDatabaseSharding"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "ConfigureDistributedDatabaseSharding", apiReferenceLink)
 		return response, err
 	}
@@ -460,7 +523,7 @@ func (client DistributedDbServiceClient) createDistributedDatabase(ctx context.C
 
 	var response CreateDistributedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "CreateDistributedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -473,9 +536,7 @@ func (client DistributedDbServiceClient) createDistributedDatabase(ctx context.C
 	return response, err
 }
 
-// DeleteDistributedDatabase Terminate the given Globally distributed databases.
-// For an EXADB_XS based distributed database, if the parameter mustDeleteInfra is set to true,
-// then the VmCluster and DbStorageVault associated with each shard and catalog will also be deleted.
+// DeleteDistributedDatabase Terminate the given Globally distributed database.
 //
 // # See also
 //
@@ -525,142 +586,12 @@ func (client DistributedDbServiceClient) deleteDistributedDatabase(ctx context.C
 
 	var response DeleteDistributedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "DeleteDistributedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/DeleteDistributedDatabase"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/DeleteDistributedDatabase"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "DeleteDistributedDatabase", apiReferenceLink)
-		return response, err
-	}
-
-	err = common.UnmarshalResponse(httpResponse, &response)
-	return response, err
-}
-
-// DownloadDistributedDatabaseGsmCertificateSigningRequest Generate the common certificate signing request for GSMs. Download the <globaldb-prefix>.csr file from
-// API response. Users can use this .csr file to generate the CA signed certificate, and as a next step
-// use 'uploadSignedCertificateAndGenerateWallet' API to upload the CA signed certificate to GSM, and
-// generate wallets for the GSM instances of the Globally distributed database.
-//
-// # See also
-//
-// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/distributeddatabase/DownloadDistributedDatabaseGsmCertificateSigningRequest.go.html to see an example of how to use DownloadDistributedDatabaseGsmCertificateSigningRequest API.
-// A default retry strategy applies to this operation DownloadDistributedDatabaseGsmCertificateSigningRequest()
-func (client DistributedDbServiceClient) DownloadDistributedDatabaseGsmCertificateSigningRequest(ctx context.Context, request DownloadDistributedDatabaseGsmCertificateSigningRequestRequest) (response DownloadDistributedDatabaseGsmCertificateSigningRequestResponse, err error) {
-	var ociResponse common.OCIResponse
-	policy := common.DefaultRetryPolicy()
-	if client.RetryPolicy() != nil {
-		policy = *client.RetryPolicy()
-	}
-	if request.RetryPolicy() != nil {
-		policy = *request.RetryPolicy()
-	}
-
-	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
-		request.OpcRetryToken = common.String(common.RetryToken())
-	}
-
-	ociResponse, err = common.Retry(ctx, request, client.downloadDistributedDatabaseGsmCertificateSigningRequest, policy)
-	if err != nil {
-		if ociResponse != nil {
-			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
-				opcRequestId := httpResponse.Header.Get("opc-request-id")
-				response = DownloadDistributedDatabaseGsmCertificateSigningRequestResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
-			} else {
-				response = DownloadDistributedDatabaseGsmCertificateSigningRequestResponse{}
-			}
-		}
-		return
-	}
-	if convertedResponse, ok := ociResponse.(DownloadDistributedDatabaseGsmCertificateSigningRequestResponse); ok {
-		response = convertedResponse
-	} else {
-		err = fmt.Errorf("failed to convert OCIResponse into DownloadDistributedDatabaseGsmCertificateSigningRequestResponse")
-	}
-	return
-}
-
-// downloadDistributedDatabaseGsmCertificateSigningRequest implements the OCIOperation interface (enables retrying operations)
-func (client DistributedDbServiceClient) downloadDistributedDatabaseGsmCertificateSigningRequest(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
-
-	httpRequest, err := request.HTTPRequest(http.MethodPost, "/distributedDatabases/{distributedDatabaseId}/actions/downloadGsmCertificateSigningRequest", binaryReqBody, extraHeaders)
-	if err != nil {
-		return nil, err
-	}
-
-	var response DownloadDistributedDatabaseGsmCertificateSigningRequestResponse
-	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
-	response.RawResponse = httpResponse
-	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/DownloadDistributedDatabaseGsmCertificateSigningRequest"
-		err = common.PostProcessServiceError(err, "DistributedDbService", "DownloadDistributedDatabaseGsmCertificateSigningRequest", apiReferenceLink)
-		return response, err
-	}
-
-	err = common.UnmarshalResponse(httpResponse, &response)
-	return response, err
-}
-
-// GenerateDistributedDatabaseGsmCertificateSigningRequest Generate the certificate signing request for GSM instances of the Globally distributed database. Once certificate signing
-// request is generated, then customers can download the certificate signing request using
-// 'downloadGsmCertificateSigningRequest' api call.
-//
-// # See also
-//
-// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/distributeddatabase/GenerateDistributedDatabaseGsmCertificateSigningRequest.go.html to see an example of how to use GenerateDistributedDatabaseGsmCertificateSigningRequest API.
-// A default retry strategy applies to this operation GenerateDistributedDatabaseGsmCertificateSigningRequest()
-func (client DistributedDbServiceClient) GenerateDistributedDatabaseGsmCertificateSigningRequest(ctx context.Context, request GenerateDistributedDatabaseGsmCertificateSigningRequestRequest) (response GenerateDistributedDatabaseGsmCertificateSigningRequestResponse, err error) {
-	var ociResponse common.OCIResponse
-	policy := common.DefaultRetryPolicy()
-	if client.RetryPolicy() != nil {
-		policy = *client.RetryPolicy()
-	}
-	if request.RetryPolicy() != nil {
-		policy = *request.RetryPolicy()
-	}
-
-	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
-		request.OpcRetryToken = common.String(common.RetryToken())
-	}
-
-	ociResponse, err = common.Retry(ctx, request, client.generateDistributedDatabaseGsmCertificateSigningRequest, policy)
-	if err != nil {
-		if ociResponse != nil {
-			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
-				opcRequestId := httpResponse.Header.Get("opc-request-id")
-				response = GenerateDistributedDatabaseGsmCertificateSigningRequestResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
-			} else {
-				response = GenerateDistributedDatabaseGsmCertificateSigningRequestResponse{}
-			}
-		}
-		return
-	}
-	if convertedResponse, ok := ociResponse.(GenerateDistributedDatabaseGsmCertificateSigningRequestResponse); ok {
-		response = convertedResponse
-	} else {
-		err = fmt.Errorf("failed to convert OCIResponse into GenerateDistributedDatabaseGsmCertificateSigningRequestResponse")
-	}
-	return
-}
-
-// generateDistributedDatabaseGsmCertificateSigningRequest implements the OCIOperation interface (enables retrying operations)
-func (client DistributedDbServiceClient) generateDistributedDatabaseGsmCertificateSigningRequest(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
-
-	httpRequest, err := request.HTTPRequest(http.MethodPost, "/distributedDatabases/{distributedDatabaseId}/actions/generateGsmCertificateSigningRequest", binaryReqBody, extraHeaders)
-	if err != nil {
-		return nil, err
-	}
-
-	var response GenerateDistributedDatabaseGsmCertificateSigningRequestResponse
-	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
-	defer common.CloseBodyIfValid(httpResponse)
-	response.RawResponse = httpResponse
-	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/GenerateDistributedDatabaseGsmCertificateSigningRequest"
-		err = common.PostProcessServiceError(err, "DistributedDbService", "GenerateDistributedDatabaseGsmCertificateSigningRequest", apiReferenceLink)
 		return response, err
 	}
 
@@ -718,10 +649,10 @@ func (client DistributedDbServiceClient) generateDistributedDatabaseWallet(ctx c
 
 	var response GenerateDistributedDatabaseWalletResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "GenerateDistributedDatabaseWallet")
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/GenerateDistributedDatabaseWallet"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/GenerateDistributedDatabaseWallet"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "GenerateDistributedDatabaseWallet", apiReferenceLink)
 		return response, err
 	}
@@ -775,11 +706,11 @@ func (client DistributedDbServiceClient) getDistributedDatabase(ctx context.Cont
 
 	var response GetDistributedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "GetDistributedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/GetDistributedDatabase"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/GetDistributedDatabase"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "GetDistributedDatabase", apiReferenceLink)
 		return response, err
 	}
@@ -834,12 +765,71 @@ func (client DistributedDbServiceClient) getDistributedDatabaseRaftMetric(ctx co
 
 	var response GetDistributedDatabaseRaftMetricResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "GetDistributedDatabaseRaftMetric")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/GetDistributedDatabaseRaftMetric"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/GetDistributedDatabaseRaftMetric"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "GetDistributedDatabaseRaftMetric", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetDistributedDatabaseRuChangeLog Operation to retrieve move RU invocation history and status for the Globally distributed database.
+// Results are ordered by created timestamp in descending order.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/distributeddatabase/GetDistributedDatabaseRuChangeLog.go.html to see an example of how to use GetDistributedDatabaseRuChangeLog API.
+// A default retry strategy applies to this operation GetDistributedDatabaseRuChangeLog()
+func (client DistributedDbServiceClient) GetDistributedDatabaseRuChangeLog(ctx context.Context, request GetDistributedDatabaseRuChangeLogRequest) (response GetDistributedDatabaseRuChangeLogResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getDistributedDatabaseRuChangeLog, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetDistributedDatabaseRuChangeLogResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetDistributedDatabaseRuChangeLogResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetDistributedDatabaseRuChangeLogResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetDistributedDatabaseRuChangeLogResponse")
+	}
+	return
+}
+
+// getDistributedDatabaseRuChangeLog implements the OCIOperation interface (enables retrying operations)
+func (client DistributedDbServiceClient) getDistributedDatabaseRuChangeLog(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/distributedDatabases/{distributedDatabaseId}/ruChangeLog", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetDistributedDatabaseRuChangeLogResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "GetDistributedDatabaseRuChangeLog")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/GetDistributedDatabaseRuChangeLog"
+		err = common.PostProcessServiceError(err, "DistributedDbService", "GetDistributedDatabaseRuChangeLog", apiReferenceLink)
 		return response, err
 	}
 
@@ -892,11 +882,11 @@ func (client DistributedDbServiceClient) listDistributedDatabases(ctx context.Co
 
 	var response ListDistributedDatabasesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "ListDistributedDatabases")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabaseCollection/ListDistributedDatabases"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabaseCollection/ListDistributedDatabases"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "ListDistributedDatabases", apiReferenceLink)
 		return response, err
 	}
@@ -955,11 +945,11 @@ func (client DistributedDbServiceClient) moveDistributedDatabaseReplicationUnit(
 
 	var response MoveDistributedDatabaseReplicationUnitResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "MoveDistributedDatabaseReplicationUnit")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/MoveDistributedDatabaseReplicationUnit"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/MoveDistributedDatabaseReplicationUnit"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "MoveDistributedDatabaseReplicationUnit", apiReferenceLink)
 		return response, err
 	}
@@ -971,8 +961,6 @@ func (client DistributedDbServiceClient) moveDistributedDatabaseReplicationUnit(
 // PatchDistributedDatabase Patch operation to add, remove or update shards to the Globally distributed database topology. In single patch
 // operation, multiple shards can be either added, or removed or updated. Combination of inserts, update
 // and remove in single operation is not allowed.
-// For an EXADB_XS based distributed database, removing a shard with the parameter mustDeleteInfra set to true
-// will also delete the associated VmCluster and DbStorageVault.
 //
 // # See also
 //
@@ -1022,11 +1010,11 @@ func (client DistributedDbServiceClient) patchDistributedDatabase(ctx context.Co
 
 	var response PatchDistributedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "PatchDistributedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/PatchDistributedDatabase"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/PatchDistributedDatabase"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "PatchDistributedDatabase", apiReferenceLink)
 		return response, err
 	}
@@ -1085,11 +1073,11 @@ func (client DistributedDbServiceClient) recreateFailedDistributedDatabaseResour
 
 	var response RecreateFailedDistributedDatabaseResourceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "RecreateFailedDistributedDatabaseResource")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/RecreateFailedDistributedDatabaseResource"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/RecreateFailedDistributedDatabaseResource"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "RecreateFailedDistributedDatabaseResource", apiReferenceLink)
 		return response, err
 	}
@@ -1148,11 +1136,11 @@ func (client DistributedDbServiceClient) rotateDistributedDatabasePasswords(ctx 
 
 	var response RotateDistributedDatabasePasswordsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "RotateDistributedDatabasePasswords")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/RotateDistributedDatabasePasswords"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/RotateDistributedDatabasePasswords"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "RotateDistributedDatabasePasswords", apiReferenceLink)
 		return response, err
 	}
@@ -1161,7 +1149,70 @@ func (client DistributedDbServiceClient) rotateDistributedDatabasePasswords(ctx 
 	return response, err
 }
 
-// StartDistributedDatabase Start the shards, catalog and GSMs of Globally distributed database.
+// ScaleDistributedDatabaseGsms Scale global service manager(GSM aka shard manager) instances for the Globally distributed database.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/distributeddatabase/ScaleDistributedDatabaseGsms.go.html to see an example of how to use ScaleDistributedDatabaseGsms API.
+// A default retry strategy applies to this operation ScaleDistributedDatabaseGsms()
+func (client DistributedDbServiceClient) ScaleDistributedDatabaseGsms(ctx context.Context, request ScaleDistributedDatabaseGsmsRequest) (response ScaleDistributedDatabaseGsmsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.scaleDistributedDatabaseGsms, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ScaleDistributedDatabaseGsmsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ScaleDistributedDatabaseGsmsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ScaleDistributedDatabaseGsmsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ScaleDistributedDatabaseGsmsResponse")
+	}
+	return
+}
+
+// scaleDistributedDatabaseGsms implements the OCIOperation interface (enables retrying operations)
+func (client DistributedDbServiceClient) scaleDistributedDatabaseGsms(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/distributedDatabases/{distributedDatabaseId}/actions/scaleGsms", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ScaleDistributedDatabaseGsmsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "ScaleDistributedDatabaseGsms")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/ScaleDistributedDatabaseGsms"
+		err = common.PostProcessServiceError(err, "DistributedDbService", "ScaleDistributedDatabaseGsms", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// StartDistributedDatabase Start the shards, catalog, GSMs and GDSCTL instances of Globally distributed database.
 //
 // # See also
 //
@@ -1211,11 +1262,11 @@ func (client DistributedDbServiceClient) startDistributedDatabase(ctx context.Co
 
 	var response StartDistributedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "StartDistributedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/StartDistributedDatabase"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/StartDistributedDatabase"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "StartDistributedDatabase", apiReferenceLink)
 		return response, err
 	}
@@ -1224,7 +1275,7 @@ func (client DistributedDbServiceClient) startDistributedDatabase(ctx context.Co
 	return response, err
 }
 
-// StopDistributedDatabase Stop the shards, catalog and GSM instances for the Globally distributed database.
+// StopDistributedDatabase Stop the shards, catalog, GSMs and GDSCTL instances for the Globally distributed database.
 //
 // # See also
 //
@@ -1274,11 +1325,11 @@ func (client DistributedDbServiceClient) stopDistributedDatabase(ctx context.Con
 
 	var response StopDistributedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "StopDistributedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/StopDistributedDatabase"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/StopDistributedDatabase"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "StopDistributedDatabase", apiReferenceLink)
 		return response, err
 	}
@@ -1332,77 +1383,12 @@ func (client DistributedDbServiceClient) updateDistributedDatabase(ctx context.C
 
 	var response UpdateDistributedDatabaseResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "UpdateDistributedDatabase")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/UpdateDistributedDatabase"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/UpdateDistributedDatabase"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "UpdateDistributedDatabase", apiReferenceLink)
-		return response, err
-	}
-
-	err = common.UnmarshalResponse(httpResponse, &response)
-	return response, err
-}
-
-// UploadDistributedDatabaseSignedCertificateAndGenerateWallet Upload the CA signed certificate to the GSM instances and generate wallets for GSM instances of the
-// Globally distributed database. Customer shall provide the CA signed certificate key details by adding the certificate
-// in request body.
-//
-// # See also
-//
-// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/distributeddatabase/UploadDistributedDatabaseSignedCertificateAndGenerateWallet.go.html to see an example of how to use UploadDistributedDatabaseSignedCertificateAndGenerateWallet API.
-// A default retry strategy applies to this operation UploadDistributedDatabaseSignedCertificateAndGenerateWallet()
-func (client DistributedDbServiceClient) UploadDistributedDatabaseSignedCertificateAndGenerateWallet(ctx context.Context, request UploadDistributedDatabaseSignedCertificateAndGenerateWalletRequest) (response UploadDistributedDatabaseSignedCertificateAndGenerateWalletResponse, err error) {
-	var ociResponse common.OCIResponse
-	policy := common.DefaultRetryPolicy()
-	if client.RetryPolicy() != nil {
-		policy = *client.RetryPolicy()
-	}
-	if request.RetryPolicy() != nil {
-		policy = *request.RetryPolicy()
-	}
-
-	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
-		request.OpcRetryToken = common.String(common.RetryToken())
-	}
-
-	ociResponse, err = common.Retry(ctx, request, client.uploadDistributedDatabaseSignedCertificateAndGenerateWallet, policy)
-	if err != nil {
-		if ociResponse != nil {
-			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
-				opcRequestId := httpResponse.Header.Get("opc-request-id")
-				response = UploadDistributedDatabaseSignedCertificateAndGenerateWalletResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
-			} else {
-				response = UploadDistributedDatabaseSignedCertificateAndGenerateWalletResponse{}
-			}
-		}
-		return
-	}
-	if convertedResponse, ok := ociResponse.(UploadDistributedDatabaseSignedCertificateAndGenerateWalletResponse); ok {
-		response = convertedResponse
-	} else {
-		err = fmt.Errorf("failed to convert OCIResponse into UploadDistributedDatabaseSignedCertificateAndGenerateWalletResponse")
-	}
-	return
-}
-
-// uploadDistributedDatabaseSignedCertificateAndGenerateWallet implements the OCIOperation interface (enables retrying operations)
-func (client DistributedDbServiceClient) uploadDistributedDatabaseSignedCertificateAndGenerateWallet(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
-
-	httpRequest, err := request.HTTPRequest(http.MethodPost, "/distributedDatabases/{distributedDatabaseId}/actions/uploadSignedCertificateAndGenerateWallet", binaryReqBody, extraHeaders)
-	if err != nil {
-		return nil, err
-	}
-
-	var response UploadDistributedDatabaseSignedCertificateAndGenerateWalletResponse
-	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
-	defer common.CloseBodyIfValid(httpResponse)
-	response.RawResponse = httpResponse
-	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/UploadDistributedDatabaseSignedCertificateAndGenerateWallet"
-		err = common.PostProcessServiceError(err, "DistributedDbService", "UploadDistributedDatabaseSignedCertificateAndGenerateWallet", apiReferenceLink)
 		return response, err
 	}
 
@@ -1460,11 +1446,11 @@ func (client DistributedDbServiceClient) validateDistributedDatabaseNetwork(ctx 
 
 	var response ValidateDistributedDatabaseNetworkResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "distributedDbService", "ValidateDistributedDatabaseNetwork")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20250101/DistributedDatabase/ValidateDistributedDatabaseNetwork"
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/globally-distributed-database/20260101/DistributedDatabase/ValidateDistributedDatabaseNetwork"
 		err = common.PostProcessServiceError(err, "DistributedDbService", "ValidateDistributedDatabaseNetwork", apiReferenceLink)
 		return response, err
 	}

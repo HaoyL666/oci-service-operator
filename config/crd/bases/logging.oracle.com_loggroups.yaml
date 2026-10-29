@@ -229,6 +229,15 @@ spec:
                     format: date-time
                     type: string
                 type: object
+              systemTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  Usage of system tag keys. These predefined keys are scoped to namespaces.
+                  Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
+                type: object
               timeCreated:
                 description: Time the resource was created.
                 type: string

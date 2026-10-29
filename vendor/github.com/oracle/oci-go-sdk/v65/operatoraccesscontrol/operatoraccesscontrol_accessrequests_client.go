@@ -2,11 +2,10 @@
 // This software is dual-licensed to you under the Universal Permissive License (UPL) 1.0 as shown at https://oss.oracle.com/licenses/upl or Apache License 2.0 as shown at http://www.apache.org/licenses/LICENSE-2.0. You may choose either license.
 // Code generated. DO NOT EDIT.
 
-// OperatorAccessControl API
+// Operator Access Control API
 //
 // Operator Access Control enables you to control the time duration and the actions an Oracle operator can perform on your Exadata Cloud@Customer infrastructure.
 // Using logging service, you can view a near real-time audit report of all actions performed by an Oracle operator.
-// Use the table of contents and search tool to explore the OperatorAccessControl API.
 //
 
 package operatoraccesscontrol
@@ -143,11 +142,11 @@ func (client AccessRequestsClient) approveAccessRequest(ctx context.Context, req
 
 	var response ApproveAccessRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "ApproveAccessRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/ApproveAccessRequest"
 		err = common.PostProcessServiceError(err, "AccessRequests", "ApproveAccessRequest", apiReferenceLink)
 		return response, err
 	}
@@ -201,11 +200,11 @@ func (client AccessRequestsClient) getAccessRequest(ctx context.Context, request
 
 	var response GetAccessRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "GetAccessRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/GetAccessRequest"
 		err = common.PostProcessServiceError(err, "AccessRequests", "GetAccessRequest", apiReferenceLink)
 		return response, err
 	}
@@ -259,11 +258,11 @@ func (client AccessRequestsClient) getAuditLogReport(ctx context.Context, reques
 
 	var response GetAuditLogReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "GetAuditLogReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AuditLogReport/GetAuditLogReport"
 		err = common.PostProcessServiceError(err, "AccessRequests", "GetAuditLogReport", apiReferenceLink)
 		return response, err
 	}
@@ -322,11 +321,11 @@ func (client AccessRequestsClient) interactionRequest(ctx context.Context, reque
 
 	var response InteractionRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "InteractionRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/InteractionRequest"
 		err = common.PostProcessServiceError(err, "AccessRequests", "InteractionRequest", apiReferenceLink)
 		return response, err
 	}
@@ -380,11 +379,11 @@ func (client AccessRequestsClient) listAccessRequestHistories(ctx context.Contex
 
 	var response ListAccessRequestHistoriesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "ListAccessRequestHistories")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/ListAccessRequestHistories"
 		err = common.PostProcessServiceError(err, "AccessRequests", "ListAccessRequestHistories", apiReferenceLink)
 		return response, err
 	}
@@ -438,11 +437,11 @@ func (client AccessRequestsClient) listAccessRequests(ctx context.Context, reque
 
 	var response ListAccessRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "ListAccessRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/ListAccessRequests"
 		err = common.PostProcessServiceError(err, "AccessRequests", "ListAccessRequests", apiReferenceLink)
 		return response, err
 	}
@@ -496,11 +495,11 @@ func (client AccessRequestsClient) listInteractions(ctx context.Context, request
 
 	var response ListInteractionsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "ListInteractions")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/ListInteractions"
 		err = common.PostProcessServiceError(err, "AccessRequests", "ListInteractions", apiReferenceLink)
 		return response, err
 	}
@@ -559,11 +558,11 @@ func (client AccessRequestsClient) rejectAccessRequest(ctx context.Context, requ
 
 	var response RejectAccessRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "RejectAccessRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/RejectAccessRequest"
 		err = common.PostProcessServiceError(err, "AccessRequests", "RejectAccessRequest", apiReferenceLink)
 		return response, err
 	}
@@ -622,11 +621,11 @@ func (client AccessRequestsClient) reviewAccessRequest(ctx context.Context, requ
 
 	var response ReviewAccessRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "ReviewAccessRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/ReviewAccessRequest"
 		err = common.PostProcessServiceError(err, "AccessRequests", "ReviewAccessRequest", apiReferenceLink)
 		return response, err
 	}
@@ -685,11 +684,11 @@ func (client AccessRequestsClient) revokeAccessRequest(ctx context.Context, requ
 
 	var response RevokeAccessRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "accessRequests", "RevokeAccessRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
-		apiReferenceLink := ""
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/operatoraccesscontrol/20200630/AccessRequest/RevokeAccessRequest"
 		err = common.PostProcessServiceError(err, "AccessRequests", "RevokeAccessRequest", apiReferenceLink)
 		return response, err
 	}

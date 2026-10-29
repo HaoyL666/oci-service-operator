@@ -17,7 +17,7 @@ type TargetAlertPolicyAssociationSpec struct {
 	// The OCID of the alert policy.
 	// +kubebuilder:validation:Required
 	PolicyId string `json:"policyId"`
-	// The OCID of the target.
+	// The OCID of the target or target database group.
 	// +kubebuilder:validation:Required
 	TargetId string `json:"targetId"`
 	// The OCID of the compartment where the target-alert policy association is created.
@@ -32,6 +32,9 @@ type TargetAlertPolicyAssociationSpec struct {
 	// Describes the target-alert policy association.
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
+	// The resource type that is represented by the alert policy association. Default is considered as TARGET_DATABASE.
+	// +kubebuilder:validation:Optional
+	TargetType string `json:"targetType,omitempty"`
 	// Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm)
 	// Example: `{"Department": "Finance"}`
 	// +kubebuilder:validation:Optional
@@ -55,13 +58,15 @@ type TargetAlertPolicyAssociationStatus struct {
 	TimeUpdated string `json:"timeUpdated,omitempty"`
 	// The current state of the target-alert policy association.
 	LifecycleState string `json:"lifecycleState,omitempty"`
+	// The resource type that is represented by the target alert policy association.
+	TargetType string `json:"targetType,omitempty"`
 	// The display name of the target-alert policy association.
 	DisplayName string `json:"displayName,omitempty"`
 	// Describes the target-alert policy association.
 	Description string `json:"description,omitempty"`
 	// The OCID of the alert policy.
 	PolicyId string `json:"policyId,omitempty"`
-	// The OCID of the target on which alert policy is to be applied.
+	// The OCID of the target or target database group on which alert policy is to be applied.
 	TargetId string `json:"targetId,omitempty"`
 	// Indicates if the target-alert policy association is enabled or disabled by user.
 	IsEnabled bool `json:"isEnabled,omitempty"`

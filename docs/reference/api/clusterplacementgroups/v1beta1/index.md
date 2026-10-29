@@ -68,8 +68,25 @@ ClusterPlacementGroupCapabilitiesItem defines nested fields for ClusterPlacement
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`additionalDetails`](#kind-clusterplacementgroup-spec-capabilities-items-additionaldetails) | ClusterPlacementGroupCapabilitiesItemAdditionalDetails defines nested fields for ClusterPlacementGroup.Capabilities.Item.AdditionalDetails. | `object` | No | - | - |
 | `name` | The type of resource. | `string` | Yes | - | - |
 | `service` | The service that the resource is part of. | `string` | Yes | - | - |
+
+<a id="kind-clusterplacementgroup-spec-capabilities-items-additionaldetails"></a>
+###### Spec.capabilities.items[].additionalDetails
+
+[Back to ClusterPlacementGroup spec](#kind-clusterplacementgroup-spec)
+
+ClusterPlacementGroupCapabilitiesItemAdditionalDetails defines nested fields for ClusterPlacementGroup.Capabilities.Item.AdditionalDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `count` | The number of instances or size of the resource. | `integer` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `memoryInGBs` | The amount of memory (in GBs) needed in the instance. | `number` | No | - | - |
+| `nvmes` | The number of NVMe drives to use for storage. | `integer` | No | - | - |
+| `ocpus` | The number of OCPUs needed in the instance. | `number` | No | - | - |
+| `serviceType` | - | `string` | No | - | - |
 
 <a id="kind-clusterplacementgroup-spec-placementinstruction"></a>
 #### Spec.placementInstruction
@@ -127,8 +144,25 @@ ClusterPlacementGroupCapabilitiesItem defines nested fields for ClusterPlacement
 
 | Field | Description | Type | Required | Default | Enum |
 | --- | --- | --- | --- | --- | --- |
+| [`additionalDetails`](#kind-clusterplacementgroup-status-capabilities-items-additionaldetails) | ClusterPlacementGroupCapabilitiesItemAdditionalDetails defines nested fields for ClusterPlacementGroup.Capabilities.Item.AdditionalDetails. | `object` | No | - | - |
 | `name` | The type of resource. | `string` | Yes | - | - |
 | `service` | The service that the resource is part of. | `string` | Yes | - | - |
+
+<a id="kind-clusterplacementgroup-status-capabilities-items-additionaldetails"></a>
+###### Status.capabilities.items[].additionalDetails
+
+[Back to ClusterPlacementGroup status](#kind-clusterplacementgroup-status)
+
+ClusterPlacementGroupCapabilitiesItemAdditionalDetails defines nested fields for ClusterPlacementGroup.Capabilities.Item.AdditionalDetails.
+
+| Field | Description | Type | Required | Default | Enum |
+| --- | --- | --- | --- | --- | --- |
+| `count` | The number of instances or size of the resource. | `integer` | No | - | - |
+| `jsonData` | - | `string` | No | - | - |
+| `memoryInGBs` | The amount of memory (in GBs) needed in the instance. | `number` | No | - | - |
+| `nvmes` | The number of NVMe drives to use for storage. | `integer` | No | - | - |
+| `ocpus` | The number of OCPUs needed in the instance. | `number` | No | - | - |
+| `serviceType` | - | `string` | No | - | - |
 
 <a id="kind-clusterplacementgroup-status-placementinstruction"></a>
 #### Status.placementInstruction

@@ -1459,6 +1459,7 @@ OperationsInsightsPrivateEndpointSpec defines the desired state of OperationsIns
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `isUsedForRacDbs` | This flag was previously used to create a private endpoint with scan proxy. Setting this to true will now create a private endpoint with a DNS proxy causing `isProxyEnabled` flag to be true; this is used exclusively for full feature support for dedicated Autonomous Databases. | `boolean` | Yes | - | - |
 | `nsgIds` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the network security groups that the private endpoint belongs to. | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The Subnet OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Private service accessed database. | `string` | Yes | - | - |
 | `vcnId` | The VCN OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Private service accessed database. | `string` | Yes | - | - |
 
@@ -1481,6 +1482,7 @@ OperationsInsightsPrivateEndpointStatus defines the observed state of Operations
 | `nsgIds` | The OCIDs of the network security groups that the private endpoint belongs to. | `list[string]` | No | - | - |
 | `privateEndpointStatusDetails` | A message describing the status of the private endpoint connection of this resource. For example, it can be used to provide actionable information about the validity of the private endpoint connection. | `string` | No | - | - |
 | `privateIp` | The private IP addresses assigned to the private endpoint. All IP addresses will be concatenated if it is RAC DBs. | `string` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | [`status`](#kind-operationsinsightsprivateendpoint-status-status) | - | `object` | Yes | - | - |
 | `subnetId` | The OCID of the subnet. | `string` | No | - | - |
 | `systemTags` | System tags for this resource. Each key is predefined and scoped to a namespace. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No | - | - |

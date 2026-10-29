@@ -9,14 +9,5 @@ states:
   - active
   - updating
   - terminating
-repoAuthored:
-  providerLifecycle: {createPending: ["OPERATION_PENDING"], updatePending: ["OPERATION_PENDING"], deletePending: ["OPERATION_PENDING"]}
-  listLookup:
-    filters: ["odaInstanceId","currentPackageId"]
-    matchRule: exact parent and current package identity match; duplicate matches fail
-  mutation:
-    mutable: ["currentPackageId","parameterValues","freeformTags","definedTags"]
-    forceNew: []
-  followUp: {create: read-after-write, update: read-after-write, delete: confirm-delete}
 notes:
-  - "The package ID is both the nested request identity and a mutable version target; status records the currently imported package after reread."
+  - Scaffold metadata only; replace with controller-specific runtime states before promotion.

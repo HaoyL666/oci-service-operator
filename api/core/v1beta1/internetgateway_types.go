@@ -67,6 +67,9 @@ type InternetGatewayStatus struct {
 	// Whether the gateway is enabled. When the gateway is disabled, traffic is not
 	// routed to/from the Internet, regardless of route rules.
 	IsEnabled bool `json:"isEnabled,omitempty"`
+	// Usage of system tag keys. These predefined keys are scoped to namespaces.
+	// Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }`
+	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 	// The date and time the internet gateway was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeCreated string `json:"timeCreated,omitempty"`

@@ -63,8 +63,12 @@ spec:
                   type: string
                 description: The advanced connection properties key-value pair.
                 type: object
+              authenticationType:
+                description: Specifies the authentication type used by the Database
+                  Tools service to authenticate with the database.
+                type: string
               compartmentId:
-                description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment containing the Database Tools connection.
                 type: string
               connectionString:
@@ -108,7 +112,7 @@ spec:
                         jsonData:
                           type: string
                         secretId:
-                          description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                             of the secret containing the key store.
                           type: string
                         valueType:
@@ -121,7 +125,7 @@ spec:
                         jsonData:
                           type: string
                         secretId:
-                          description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                             of the secret containing the key store password.
                           type: string
                         valueType:
@@ -158,7 +162,7 @@ spec:
                   type: object
                 type: array
               privateEndpointId:
-                description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the Database Tools private endpoint used to access the database
                   in the customer VCN.
                 type: string
@@ -187,7 +191,7 @@ spec:
                       jsonData:
                         type: string
                       secretId:
-                        description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                        description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                           of the secret containing the user password.
                         type: string
                       valueType:
@@ -202,13 +206,19 @@ spec:
                     description: The resource entity type.
                     type: string
                   identifier:
-                    description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                    description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                       of the related resource.
                     type: string
                 required:
                 - entityType
                 - identifier
                 type: object
+              runtimeIdentity:
+                description: Specifies the identity used when accessing OCI resources
+                  at runtime. AUTHENTICATED_PRINCIPAL to use the caller’s identity
+                  (On-Behalf-Of token), or RESOURCE_PRINCIPAL to use the connection’s
+                  resource principal (RPST).
+                type: string
               runtimeSupport:
                 description: Specifies whether this connection is supported by the
                   Database Tools Runtime.
@@ -220,7 +230,7 @@ spec:
                   system.
                 type: string
               userName:
-                description: The user name.
+                description: The database user name.
                 type: string
               userPassword:
                 description: DatabaseToolsConnectionUserPassword defines nested fields
@@ -229,7 +239,7 @@ spec:
                   jsonData:
                     type: string
                   secretId:
-                    description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                    description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                       of the secret containing the user password.
                     type: string
                   valueType:
@@ -249,8 +259,12 @@ spec:
                 description: The advanced connection properties key-value pair (for
                   example, `oracle.net.ssl_server_dn_match`).
                 type: object
+              authenticationType:
+                description: Specifies the authentication type used to connect to
+                  the database.
+                type: string
               compartmentId:
-                description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the compartment containing the Database Tools connection.
                 type: string
               connectionString:
@@ -278,7 +292,7 @@ spec:
                   Example: `{"bar-key": "value"}`
                 type: object
               id:
-                description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the Database Tools connection.
                 type: string
               jsonData:
@@ -298,7 +312,7 @@ spec:
                         jsonData:
                           type: string
                         secretId:
-                          description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                             of the secret containing the key store.
                           type: string
                         valueType:
@@ -311,7 +325,7 @@ spec:
                         jsonData:
                           type: string
                         secretId:
-                          description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                             of the secret containing the key store password.
                           type: string
                         valueType:
@@ -356,7 +370,7 @@ spec:
                   type: object
                 type: array
               privateEndpointId:
-                description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the Database Tools private endpoint used to access the database
                   in the customer VCN.
                 type: string
@@ -385,7 +399,7 @@ spec:
                       jsonData:
                         type: string
                       secretId:
-                        description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                        description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                           of the secret containing the user password.
                         type: string
                       valueType:
@@ -400,13 +414,22 @@ spec:
                     description: The resource entity type.
                     type: string
                   identifier:
-                    description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                    description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                       of the related resource.
                     type: string
                 required:
                 - entityType
                 - identifier
                 type: object
+              runtimeEndpoint:
+                description: Specifies the Database Tools Runtime endpoint.
+                type: string
+              runtimeIdentity:
+                description: Specifies the identity used when accessing OCI resources
+                  at runtime. AUTHENTICATED_PRINCIPAL to use the caller’s identity
+                  (On-Behalf-Of token), or RESOURCE_PRINCIPAL to use the connection’s
+                  resource principal (RPST).
+                type: string
               runtimeSupport:
                 description: Specifies whether this connection is supported by the
                   Database Tools Runtime.
@@ -525,7 +548,7 @@ spec:
                   RFC3339 formatted datetime string.
                 type: string
               timeUpdated:
-                description: The time the DatabaseToolsConnection was updated. An
+                description: The time the Database Tools connection was updated. An
                   RFC3339 formatted datetime string.
                 type: string
               type:
@@ -535,7 +558,8 @@ spec:
                   system.
                 type: string
               userName:
-                description: The database user name.
+                description: The database user name. When authenticationType is TOKEN,
+                  if provided, userName must be in square brackets (for example, [proxyClient]).
                 type: string
               userPassword:
                 description: DatabaseToolsConnectionUserPassword defines nested fields
@@ -544,7 +568,7 @@ spec:
                   jsonData:
                     type: string
                   secretId:
-                    description: The OCID (https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm)
+                    description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                       of the secret containing the user password.
                     type: string
                   valueType:

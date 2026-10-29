@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "surface": "generator-vap-update-policy-input",
+  "contractVersion": "v1alpha1",
+  "metadata": {
+    "sourceSurface": "generator-mutability-overlay",
+    "providerSourceRef": "terraform-provider-oci",
+    "providerRevision": "eb653febb1bab4cc6650a96d404a8baf36fdf671",
+    "terraformDocsVersion": "7.22.0"
+  },
+  "target": {
+    "service": "fleetappsmanagement",
+    "apiVersion": "fleetappsmanagement.oracle.com/v1beta1",
+    "kind": "PlatformConfiguration",
+    "formalSlug": "platformconfiguration",
+    "providerResource": "oci_fleet_apps_management_platform_configuration",
+    "specPathPrefix": "spec"
+  },
+  "update": {
+    "allowInPlacePaths": [
+      "configCategoryDetails.compatibleProducts.displayName",
+      "configCategoryDetails.compatibleProducts.id",
+      "configCategoryDetails.components",
+      "configCategoryDetails.configCategory",
+      "configCategoryDetails.credentials.displayName",
+      "configCategoryDetails.credentials.id",
+      "configCategoryDetails.instanceId",
+      "configCategoryDetails.instanceName",
+      "configCategoryDetails.patchTypes.displayName",
+      "configCategoryDetails.patchTypes.id",
+      "configCategoryDetails.products.displayName",
+      "configCategoryDetails.products.id",
+      "configCategoryDetails.subCategoryDetails.components",
+      "configCategoryDetails.subCategoryDetails.credentials.displayName",
+      "configCategoryDetails.subCategoryDetails.credentials.id",
+      "configCategoryDetails.subCategoryDetails.patchTypes.displayName",
+      "configCategoryDetails.subCategoryDetails.patchTypes.id",
+      "configCategoryDetails.subCategoryDetails.subCategory",
+      "configCategoryDetails.subCategoryDetails.versions",
+      "configCategoryDetails.versions",
+      "description"
+    ],
+    "denyRules": [
+      {
+        "fieldPath": "compartmentId",
+        "decision": "replacementRequired",
+        "mergeCase": "replacementRequired",
+        "docsEvidenceState": "notDocumented",
+        "detail": "AST forceNew remains authoritative; docs overlay was not applied to this field."
+      },
+      {
+        "fieldPath": "configCategoryDetails.isCompliancePolicyRequiredForSoftlink",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "configCategoryDetails.isSoftlink",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "configCategoryDetails.linkProductId",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "definedTags",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      },
+      {
+        "fieldPath": "displayName",
+        "decision": "unknown",
+        "mergeCase": "unknown",
+        "docsEvidenceState": "ambiguous",
+        "detail": "Argument Reference contains conflicting or conditional update guidance."
+      },
+      {
+        "fieldPath": "freeformTags",
+        "decision": "unknown",
+        "mergeCase": "astOnlyCandidate",
+        "docsEvidenceState": "notDocumented",
+        "detail": "No explicit Terraform docs update signal was found for this AST updateCandidate field."
+      }
+    ]
+  }
+}

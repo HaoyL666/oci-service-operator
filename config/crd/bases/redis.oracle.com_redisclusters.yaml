@@ -56,6 +56,10 @@ spec:
           spec:
             description: RedisClusterSpec defines the desired state of RedisCluster.
             properties:
+              backupId:
+                description: The ID of the OCI Cache Backup from which this cluster
+                  was created.Mutually exclusive with 'importFromObjectStorageDetails'.
+                type: string
               clusterMode:
                 description: Specifies whether the cluster is sharded or non-sharded.
                 type: string
@@ -83,6 +87,36 @@ spec:
                   Simple key-value pair that is applied without any predefined name, type or scope. Exists for cross-compatibility only.
                   Example: `{"bar-key": "value"}`
                 type: object
+              importFromObjectStorageDetails:
+                description: RedisClusterImportFromObjectStorageDetails defines nested
+                  fields for RedisCluster.ImportFromObjectStorageDetails.
+                properties:
+                  bucketName:
+                    description: The Object Storage bucket name.
+                    type: string
+                  namespaceName:
+                    description: The Object Storage namespace name.
+                    type: string
+                  objects:
+                    description: The list of objects to import from the specified
+                      bucket.
+                    items:
+                      description: RedisClusterImportFromObjectStorageDetailsObject
+                        defines nested fields for RedisCluster.ImportFromObjectStorageDetails.Object.
+                      properties:
+                        objectName:
+                          description: The name of the object in the bucket (for example,
+                            'customerA/exports/backup_ocid/dump.rdb').
+                          type: string
+                      required:
+                      - objectName
+                      type: object
+                    type: array
+                required:
+                - bucketName
+                - namespaceName
+                - objects
+                type: object
               nodeCount:
                 description: The number of nodes per shard in the cluster when clusterMode
                   is SHARDED. This is the total number of nodes when clusterMode is
@@ -103,6 +137,10 @@ spec:
               ociCacheConfigSetId:
                 description: The ID of the corresponding OCI Cache Config Set for
                   the cluster.
+                type: string
+              primaryClusterId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle)
+                  of the primary cluster from which data will be replicated.
                 type: string
               securityAttributes:
                 additionalProperties:
@@ -136,8 +174,48 @@ spec:
           status:
             description: RedisClusterStatus defines the observed state of RedisCluster.
             properties:
+              backupId:
+                description: The ID of the OCI Cache Backup from which this cluster
+                  was created.
+                type: string
               clusterMode:
                 description: Specifies whether the cluster is sharded or non-sharded.
+                type: string
+              clusterReplicationTopology:
+                description: RedisClusterClusterReplicationTopology defines nested
+                  fields for RedisCluster.ClusterReplicationTopology.
+                properties:
+                  primaryCluster:
+                    description: RedisClusterClusterReplicationTopologyPrimaryCluster
+                      defines nested fields for RedisCluster.ClusterReplicationTopology.PrimaryCluster.
+                    properties:
+                      ociCacheClusterId:
+                        description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle)
+                          of the OCI Cache cluster.
+                        type: string
+                      region:
+                        description: The OCI region to which the cluster belongs.
+                        type: string
+                    type: object
+                  secondaryClusters:
+                    description: The list of secondary clusters that replicate data
+                      from the primary cluster.
+                    items:
+                      description: RedisClusterClusterReplicationTopologySecondaryCluster
+                        defines nested fields for RedisCluster.ClusterReplicationTopology.SecondaryCluster.
+                      properties:
+                        ociCacheClusterId:
+                          description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle)
+                            of the OCI Cache cluster.
+                          type: string
+                        region:
+                          description: The OCI region to which the cluster belongs.
+                          type: string
+                      type: object
+                    type: array
+                type: object
+              clusterRole:
+                description: The current role of the cluster.
                 type: string
               compartmentId:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle)
@@ -175,6 +253,36 @@ spec:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle)
                   of the cluster.
                 type: string
+              importFromObjectStorageDetails:
+                description: RedisClusterImportFromObjectStorageDetails defines nested
+                  fields for RedisCluster.ImportFromObjectStorageDetails.
+                properties:
+                  bucketName:
+                    description: The Object Storage bucket name.
+                    type: string
+                  namespaceName:
+                    description: The Object Storage namespace name.
+                    type: string
+                  objects:
+                    description: The list of objects to import from the specified
+                      bucket.
+                    items:
+                      description: RedisClusterImportFromObjectStorageDetailsObject
+                        defines nested fields for RedisCluster.ImportFromObjectStorageDetails.Object.
+                      properties:
+                        objectName:
+                          description: The name of the object in the bucket (for example,
+                            'customerA/exports/backup_ocid/dump.rdb').
+                          type: string
+                      required:
+                      - objectName
+                      type: object
+                    type: array
+                required:
+                - bucketName
+                - namespaceName
+                - objects
+                type: object
               lifecycleDetails:
                 description: A message describing the current state in more detail.
                   For example, the message might provide actionable information for
@@ -227,6 +335,10 @@ spec:
               ociCacheConfigSetId:
                 description: The ID of the corresponding OCI Cache Config Set for
                   the cluster.
+                type: string
+              primaryClusterId:
+                description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm#Oracle)
+                  of the primary cluster in CRR.
                 type: string
               primaryEndpointIpAddress:
                 description: The private IP address of the API endpoint for the cluster's

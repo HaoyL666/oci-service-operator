@@ -124,6 +124,11 @@ spec:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the environment.
                 type: string
+              environmentType:
+                description: Specifies if this is the Source or Destination point
+                  for migration - different assets may be discovered depending on
+                  setting.
+                type: string
               freeformTags:
                 additionalProperties:
                   type: string
@@ -141,6 +146,10 @@ spec:
                   for assets, originating from this asset source.
                 type: boolean
               jsonData:
+                type: string
+              olvmEndpoint:
+                description: Endpoint for OLVM asset discovery and replication in
+                  the form of ```https://<host>:<port>```
                 type: string
               replicationCredentials:
                 description: AssetSourceReplicationCredentials defines nested fields
@@ -253,6 +262,11 @@ spec:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)
                   of the environment.
                 type: string
+              environmentType:
+                description: Specifies if this is the Source or Destination point
+                  for migration - different assets may be discovered depending on
+                  setting.
+                type: string
               freeformTags:
                 additionalProperties:
                   type: string
@@ -280,6 +294,10 @@ spec:
                 type: string
               lifecycleState:
                 description: The current state of the asset source.
+                type: string
+              olvmEndpoint:
+                description: Endpoint for OLVM asset discovery and replication in
+                  the form of ```https://<host>:<port>```
                 type: string
               replicationCredentials:
                 description: AssetSourceReplicationCredentials defines nested fields

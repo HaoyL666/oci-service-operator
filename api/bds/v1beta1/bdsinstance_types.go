@@ -49,6 +49,9 @@ type BdsInstanceSpec struct {
 	// Pre-authenticated URL of the script in Object Store that is downloaded and executed.
 	// +kubebuilder:validation:Optional
 	BootstrapScriptUrl string `json:"bootstrapScriptUrl,omitempty"`
+	// Optional BDS capacity reservation configurations to associate with the cluster during creation.
+	// +kubebuilder:validation:Optional
+	BdsCapacityReservationConfigurations []BdsInstanceBdsCapacityReservationConfiguration `json:"bdsCapacityReservationConfigurations,omitempty"`
 	// The user-defined kerberos realm name.
 	// +kubebuilder:validation:Optional
 	KerberosRealmName string `json:"kerberosRealmName,omitempty"`
@@ -112,11 +115,21 @@ type BdsInstanceNetworkConfig struct {
 	CidrBlock string `json:"cidrBlock,omitempty"`
 }
 
+// BdsInstanceBdsCapacityReservationConfiguration defines nested fields for BdsInstance.BdsCapacityReservationConfiguration.
+type BdsInstanceBdsCapacityReservationConfiguration struct {
+	// A user-friendly name for the BDS capacity reservation configuration.
+	// +kubebuilder:validation:Required
+	DisplayName string `json:"displayName"`
+	// The OCID of the BDS capacity reservation to associate with the BDS cluster.
+	// +kubebuilder:validation:Required
+	BdsCapacityReservationId string `json:"bdsCapacityReservationId"`
+}
+
 // BdsInstanceBdsClusterVersionSummary defines nested fields for BdsInstance.BdsClusterVersionSummary.
 type BdsInstanceBdsClusterVersionSummary struct {
 	// BDS version to be used for cluster creation
-	// +kubebuilder:validation:Required
-	BdsVersion string `json:"bdsVersion"`
+	// +kubebuilder:validation:Optional
+	BdsVersion string `json:"bdsVersion,omitempty"`
 	// ODH version to be used for cluster creation
 	// +kubebuilder:validation:Optional
 	OdhVersion string `json:"odhVersion,omitempty"`
@@ -216,10 +229,12 @@ type BdsInstanceStatus struct {
 	// The secretId for the clusterAdminPassword.
 	SecretId string `json:"secretId,omitempty"`
 	// Boolean flag specifying whether or not to persist the provided secret OCID and reuse it for future operations.
-	IsSecretReused  bool                       `json:"isSecretReused,omitempty"`
-	NetworkConfig   BdsInstanceNetworkConfig   `json:"networkConfig,omitempty"`
-	ClusterDetails  BdsInstanceClusterDetails  `json:"clusterDetails,omitempty"`
-	CloudSqlDetails BdsInstanceCloudSqlDetails `json:"cloudSqlDetails,omitempty"`
+	IsSecretReused bool                      `json:"isSecretReused,omitempty"`
+	NetworkConfig  BdsInstanceNetworkConfig  `json:"networkConfig,omitempty"`
+	ClusterDetails BdsInstanceClusterDetails `json:"clusterDetails,omitempty"`
+	// The list of BDS capacity reservation configurations associated with the cluster.
+	BdsCapacityReservationConfigurations []BdsInstanceBdsCapacityReservationConfiguration `json:"bdsCapacityReservationConfigurations,omitempty"`
+	CloudSqlDetails                      BdsInstanceCloudSqlDetails                       `json:"cloudSqlDetails,omitempty"`
 	// The user who created the cluster.
 	CreatedBy string `json:"createdBy,omitempty"`
 	// The time the cluster was created, shown as an RFC 3339 formatted datetime string.

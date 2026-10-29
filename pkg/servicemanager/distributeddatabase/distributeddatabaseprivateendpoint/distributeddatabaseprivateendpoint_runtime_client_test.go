@@ -57,7 +57,6 @@ func TestBuildDistributedDatabasePrivateEndpointUpdateBodySupportsClearingOption
 	currentSpec := newTestDistributedDatabasePrivateEndpointResource().Spec
 	resource := newTestDistributedDatabasePrivateEndpointResource()
 	resource.Spec.Description = ""
-	resource.Spec.NsgIds = []string{}
 	resource.Spec.FreeformTags = map[string]string{}
 	resource.Spec.DefinedTags = map[string]shared.MapValue{}
 
@@ -76,9 +75,6 @@ func TestBuildDistributedDatabasePrivateEndpointUpdateBodySupportsClearingOption
 	}
 	if details.Description == nil || *details.Description != "" {
 		t.Fatalf("Description = %#v, want explicit empty string clear", details.Description)
-	}
-	if details.NsgIds == nil || len(details.NsgIds) != 0 {
-		t.Fatalf("NsgIds = %#v, want explicit empty slice clear", details.NsgIds)
 	}
 	if details.FreeformTags == nil || len(details.FreeformTags) != 0 {
 		t.Fatalf("FreeformTags = %#v, want explicit empty map clear", details.FreeformTags)
@@ -99,7 +95,6 @@ func TestBuildDistributedDatabasePrivateEndpointUpdateBodySupportsClearingOption
 
 	for _, want := range []string{
 		`"description":""`,
-		`"nsgIds":[]`,
 		`"freeformTags":{}`,
 		`"definedTags":{}`,
 	} {
@@ -133,9 +128,8 @@ func newTestDistributedDatabasePrivateEndpointResource() *distributeddatabasev1b
 			SubnetId:      "ocid1.subnet.oc1..exampleuniqueID",
 			DisplayName:   "ddb-private-endpoint",
 			Description:   "private endpoint for distributed database",
-			NsgIds: []string{
-				"ocid1.networksecuritygroup.oc1..nsg1",
-				"ocid1.networksecuritygroup.oc1..nsg2",
+			VcnNsgIds: []distributeddatabasev1beta1.DistributedDatabasePrivateEndpointVcnNsgId{
+				{VcnId: "ocid1.vcn.oc1..exampleuniqueID", NsgIds: []string{"ocid1.networksecuritygroup.oc1..nsg1", "ocid1.networksecuritygroup.oc1..nsg2"}},
 			},
 			FreeformTags: map[string]string{
 				"managed-by": "oci-service-operator",
@@ -166,7 +160,7 @@ func observedDistributedDatabasePrivateEndpointFromSpec(
 		LifecycleState: state,
 		Description:    common.String(spec.Description),
 		PrivateIp:      common.String("10.0.0.10"),
-		NsgIds:         append([]string(nil), spec.NsgIds...),
+		VcnNsgIds:      []distributeddatabasesdk.VcnNsgIdsDetails{{VcnId: common.String(spec.VcnNsgIds[0].VcnId), NsgIds: append([]string(nil), spec.VcnNsgIds[0].NsgIds...)}},
 		LifecycleDetails: common.String(
 			"ready",
 		),

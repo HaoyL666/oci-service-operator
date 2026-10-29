@@ -717,6 +717,13 @@ func (in *MulticloudResourceStatus) DeepCopyInto(out *MulticloudResourceStatus) 
 			(*out)[key] = val
 		}
 	}
+	if in.ResourceAdditionalProperties != nil {
+		in, out := &in.ResourceAdditionalProperties, &out.ResourceAdditionalProperties
+		*out = make(map[string]shared.JSONValue, len(*in))
+		for key, val := range *in {
+			(*out)[key] = *val.DeepCopy()
+		}
+	}
 	if in.FreeformTags != nil {
 		in, out := &in.FreeformTags, &out.FreeformTags
 		*out = make(map[string]string, len(*in))
@@ -1171,6 +1178,11 @@ func (in *NetworkAnchorStatus) DeepCopyInto(out *NetworkAnchorStatus) {
 		for key, val := range *in {
 			(*out)[key] = val
 		}
+	}
+	if in.CidrBlocks != nil {
+		in, out := &in.CidrBlocks, &out.CidrBlocks
+		*out = make([]string, len(*in))
+		copy(*out, *in)
 	}
 }
 

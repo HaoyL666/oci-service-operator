@@ -841,6 +841,7 @@ OdaPrivateEndpointSpec defines the desired state of OdaPrivateEndpoint.
 | `displayName` | User-defined name for the ODA private endpoint. Avoid entering confidential information. You can change this value. | `string` | No | - | - |
 | `freeformTags` | Simple key-value pair that is applied without any predefined name, type, or scope. Example: `{"bar-key": "value"}` | `map[string, string]` | No | - | - |
 | `nsgIds` | List of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of network security groups (https://docs.oracle.com/iaas/Content/Network/Concepts/networksecuritygroups.htm) | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet that the private endpoint belongs to. | `string` | Yes | - | - |
 
 <a id="kind-odaprivateendpoint-status"></a>
@@ -858,6 +859,7 @@ OdaPrivateEndpointStatus defines the observed state of OdaPrivateEndpoint.
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that was assigned when the ODA private endpoint was created. | `string` | No | - | - |
 | `lifecycleState` | The current state of the ODA private endpoint. | `string` | No | - | - |
 | `nsgIds` | List of OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of network security groups (https://docs.oracle.com/iaas/Content/Network/Concepts/networksecuritygroups.htm) | `list[string]` | No | - | - |
+| `securityAttributes` | Security attributes for this resource. Each key is predefined and scoped to a namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Oracle-ZPR": {"MaxEgressCount": {"value": "42", "mode": "enforce"}}}` | `map[string, map[string, string]]` | No | - | - |
 | [`status`](#kind-odaprivateendpoint-status-status) | - | `object` | Yes | - | - |
 | `subnetId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subnet that the private endpoint belongs to. | `string` | No | - | - |
 | `timeCreated` | When the resource was created. A date-time string as described in RFC 3339 (https://tools.ietf.org/rfc/rfc3339), section 14.29. | `string` | No | - | - |

@@ -58,6 +58,9 @@ type LogGroupStatus struct {
 	// predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
+	// Usage of system tag keys. These predefined keys are scoped to namespaces.
+	// Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
+	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 	// Time the resource was created.
 	TimeCreated string `json:"timeCreated,omitempty"`
 	// Time the resource was last modified.

@@ -263,6 +263,144 @@ func TestIsFunctionsNotFoundTreatsAll404sAsMissing(t *testing.T) {
 		})
 	}
 }
+func TestFunctionsApplicationFindApplicationPaginatesAndForwardsPageToken(t *testing.T) {
+	t.Parallel()
+
+	resource := testApplicationResource()
+	listCalls := 0
+	getCalls := 0
+	manager := &FunctionsApplicationServiceManager{ociClient: &fakeFunctionsManagementClient{
+		listApplicationsFn: func(_ context.Context, request ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error) {
+			listCalls++
+			if request.CompartmentId == nil || *request.CompartmentId != resource.Spec.CompartmentId {
+				t.Fatalf("ListApplicationsRequest.CompartmentId = %v, want %q", request.CompartmentId, resource.Spec.CompartmentId)
+			}
+			if request.DisplayName == nil || *request.DisplayName != resource.Spec.DisplayName {
+				t.Fatalf("ListApplicationsRequest.DisplayName = %v, want %q", request.DisplayName, resource.Spec.DisplayName)
+			}
+			if request.Limit == nil || *request.Limit != 50 {
+				t.Fatalf("ListApplicationsRequest.Limit = %v, want 50", request.Limit)
+			}
+			switch listCalls {
+			case 1:
+				if request.Page != nil {
+					t.Fatalf("first ListApplicationsRequest.Page = %q, want nil", *request.Page)
+				}
+				return ocifunctions.ListApplicationsResponse{
+					Items: []ocifunctions.ApplicationSummary{{
+						Id:             common.String("ocid1.application.oc1..other"),
+						DisplayName:    common.String("other-app"),
+						LifecycleState: ocifunctions.ApplicationLifecycleStateActive,
+					}},
+					OpcNextPage: common.String("page-2"),
+				}, nil
+			case 2:
+				if request.Page == nil || *request.Page != "page-2" {
+					t.Fatalf("second ListApplicationsRequest.Page = %v, want page-2", request.Page)
+				}
+				return ocifunctions.ListApplicationsResponse{Items: []ocifunctions.ApplicationSummary{{
+					Id:             common.String("ocid1.application.oc1..target"),
+					DisplayName:    common.String(resource.Spec.DisplayName),
+					LifecycleState: ocifunctions.ApplicationLifecycleStateActive,
+				}}}, nil
+			default:
+				t.Fatalf("ListApplications() calls = %d, want 2", listCalls)
+				return ocifunctions.ListApplicationsResponse{}, nil
+			}
+		},
+		getApplicationFn: func(_ context.Context, request ocifunctions.GetApplicationRequest) (ocifunctions.GetApplicationResponse, error) {
+			getCalls++
+			if request.ApplicationId == nil || *request.ApplicationId != "ocid1.application.oc1..target" {
+				t.Fatalf("GetApplicationRequest.ApplicationId = %v, want target OCID", request.ApplicationId)
+			}
+			return ocifunctions.GetApplicationResponse{Application: ocifunctions.Application{
+				Id:          common.String("ocid1.application.oc1..target"),
+				DisplayName: common.String(resource.Spec.DisplayName),
+			}}, nil
+		},
+	}}
+
+	application, err := manager.FindApplication(context.Background(), resource)
+	if err != nil {
+		t.Fatalf("FindApplication() error = %v", err)
+	}
+	if application == nil || application.Id == nil || *application.Id != "ocid1.application.oc1..target" {
+		t.Fatalf("FindApplication() = %#v, want target application", application)
+	}
+	if listCalls != 2 {
+		t.Fatalf("ListApplications() calls = %d, want 2", listCalls)
+	}
+	if getCalls != 1 {
+		t.Fatalf("GetApplication() calls = %d, want 1", getCalls)
+	}
+}
+
+func TestFunctionsApplicationFindApplicationRejectsDuplicateOrRepeatedPage(t *testing.T) {
+	t.Parallel()
+
+	resource := testApplicationResource()
+	testCases := []struct {
+		name      string
+		respond   func(int, ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error)
+		wantError string
+		wantCalls int
+	}{
+		{
+			name: "duplicate active matches",
+			respond: func(_ int, _ ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error) {
+				return ocifunctions.ListApplicationsResponse{Items: []ocifunctions.ApplicationSummary{
+					{Id: common.String("ocid1.application.oc1..first"), DisplayName: common.String(resource.Spec.DisplayName), LifecycleState: ocifunctions.ApplicationLifecycleStateActive},
+					{Id: common.String("ocid1.application.oc1..second"), DisplayName: common.String(resource.Spec.DisplayName), LifecycleState: ocifunctions.ApplicationLifecycleStateActive},
+				}}, nil
+			},
+			wantError: "ambiguous Functions application lookup",
+			wantCalls: 1,
+		},
+		{
+			name: "repeated page token",
+			respond: func(call int, request ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error) {
+				if call == 2 && (request.Page == nil || *request.Page != "page-2") {
+					t.Fatalf("second ListApplicationsRequest.Page = %v, want page-2", request.Page)
+				}
+				return ocifunctions.ListApplicationsResponse{OpcNextPage: common.String("page-2")}, nil
+			},
+			wantError: "repeated page token",
+			wantCalls: 2,
+		},
+	}
+
+	for _, testCase := range testCases {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			listCalls := 0
+			getCalls := 0
+			manager := &FunctionsApplicationServiceManager{ociClient: &fakeFunctionsManagementClient{
+				listApplicationsFn: func(_ context.Context, request ocifunctions.ListApplicationsRequest) (ocifunctions.ListApplicationsResponse, error) {
+					listCalls++
+					return testCase.respond(listCalls, request)
+				},
+				getApplicationFn: func(context.Context, ocifunctions.GetApplicationRequest) (ocifunctions.GetApplicationResponse, error) {
+					getCalls++
+					return ocifunctions.GetApplicationResponse{}, nil
+				},
+			}}
+
+			application, err := manager.FindApplication(context.Background(), resource)
+			if err == nil || !strings.Contains(err.Error(), testCase.wantError) {
+				t.Fatalf("FindApplication() error = %v, want %q", err, testCase.wantError)
+			}
+			if application != nil {
+				t.Fatalf("FindApplication() = %#v, want nil", application)
+			}
+			if listCalls != testCase.wantCalls {
+				t.Fatalf("ListApplications() calls = %d, want %d", listCalls, testCase.wantCalls)
+			}
+			if getCalls != 0 {
+				t.Fatalf("GetApplication() calls = %d, want 0", getCalls)
+			}
+		})
+	}
+}
 
 func TestFunctionsApplicationCreateOrUpdateTracked404FallsBackToCreate(t *testing.T) {
 	t.Parallel()
@@ -350,7 +488,7 @@ func TestFunctionsApplicationCreateOrUpdateUpdatesMutableConfig(t *testing.T) {
 					CompartmentId:  common.String("ocid1.compartment.oc1..example"),
 					DisplayName:    common.String("sample-app"),
 					SubnetIds:      []string{"ocid1.subnet.oc1..example"},
-					Config:         map[string]string{"mode": "old"},
+					Config:         map[string]string{"mode": map[bool]string{true: "new", false: "old"}[updateCalls > 0]},
 					Shape:          ocifunctions.ApplicationShapeX86,
 					LifecycleState: ocifunctions.ApplicationLifecycleStateActive,
 				},
@@ -369,15 +507,6 @@ func TestFunctionsApplicationCreateOrUpdateUpdatesMutableConfig(t *testing.T) {
 			}
 			return ocifunctions.UpdateApplicationResponse{
 				OpcRequestId: common.String("opc-update-app-1"),
-				Application: ocifunctions.Application{
-					Id:             common.String("ocid1.application.oc1..tracked"),
-					CompartmentId:  common.String("ocid1.compartment.oc1..example"),
-					DisplayName:    common.String("sample-app"),
-					SubnetIds:      []string{"ocid1.subnet.oc1..example"},
-					Config:         map[string]string{"mode": "new"},
-					Shape:          ocifunctions.ApplicationShapeX86,
-					LifecycleState: ocifunctions.ApplicationLifecycleStateActive,
-				},
 			}, nil
 		},
 	}
@@ -895,7 +1024,10 @@ func TestFunctionsFunctionCreateOrUpdateUpdatesMutableFields(t *testing.T) {
 			}
 			current := testFunction(existingID, ocifunctions.FunctionLifecycleStateActive)
 			current.MemoryInMBs = common.Int64(128)
-			current.Image = common.String("phx.ocir.io/tenant/functions/sample-function:0.9.0")
+			if updateCalls > 0 {
+				current.MemoryInMBs = common.Int64(256)
+				current.LifecycleState = ocifunctions.FunctionLifecycleStateUpdating
+			}
 			return ocifunctions.GetFunctionResponse{Function: current}, nil
 		},
 		updateFunctionFn: func(_ context.Context, req ocifunctions.UpdateFunctionRequest) (ocifunctions.UpdateFunctionResponse, error) {
@@ -906,14 +1038,10 @@ func TestFunctionsFunctionCreateOrUpdateUpdatesMutableFields(t *testing.T) {
 			if req.UpdateFunctionDetails.MemoryInMBs == nil || *req.UpdateFunctionDetails.MemoryInMBs != 256 {
 				t.Fatalf("UpdateFunctionDetails.MemoryInMBs = %v, want 256", req.UpdateFunctionDetails.MemoryInMBs)
 			}
-			if got := safeFunctionsString(req.UpdateFunctionDetails.Image); got != "phx.ocir.io/tenant/functions/sample-function:1.0.0" {
-				t.Fatalf("UpdateFunctionDetails.Image = %q, want desired image", got)
+			if req.UpdateFunctionDetails.SourceDetails != nil {
+				t.Fatalf("UpdateFunctionDetails.SourceDetails = %#v, want omitted on mutable-only update", req.UpdateFunctionDetails.SourceDetails)
 			}
-			updated := testFunction(existingID, ocifunctions.FunctionLifecycleStateUpdating)
-			return ocifunctions.UpdateFunctionResponse{
-				OpcRequestId: common.String("opc-update-function-1"),
-				Function:     updated,
-			}, nil
+			return ocifunctions.UpdateFunctionResponse{OpcRequestId: common.String("opc-update-function-1")}, nil
 		},
 	}
 
@@ -957,6 +1085,10 @@ func TestFunctionsFunctionCreateOrUpdateUpdatesTraceConfigToFalse(t *testing.T) 
 			}
 			current := testFunction(existingID, ocifunctions.FunctionLifecycleStateActive)
 			current.TraceConfig = &ocifunctions.FunctionTraceConfig{IsEnabled: common.Bool(true)}
+			if updateCalls > 0 {
+				current.TraceConfig = &ocifunctions.FunctionTraceConfig{IsEnabled: common.Bool(false)}
+				current.LifecycleState = ocifunctions.FunctionLifecycleStateUpdating
+			}
 			return ocifunctions.GetFunctionResponse{Function: current}, nil
 		},
 		updateFunctionFn: func(_ context.Context, req ocifunctions.UpdateFunctionRequest) (ocifunctions.UpdateFunctionResponse, error) {
@@ -970,19 +1102,14 @@ func TestFunctionsFunctionCreateOrUpdateUpdatesTraceConfigToFalse(t *testing.T) 
 			if *req.UpdateFunctionDetails.TraceConfig.IsEnabled {
 				t.Fatalf("UpdateFunctionDetails.TraceConfig.IsEnabled = true, want false")
 			}
-			if req.UpdateFunctionDetails.Image != nil {
-				t.Fatalf("UpdateFunctionDetails.Image = %q, want omitted unchanged image", safeFunctionsString(req.UpdateFunctionDetails.Image))
+			if req.UpdateFunctionDetails.SourceDetails != nil {
+				t.Fatalf("UpdateFunctionDetails.SourceDetails = %#v, want omitted on mutable-only update", req.UpdateFunctionDetails.SourceDetails)
 			}
 			if req.UpdateFunctionDetails.MemoryInMBs != nil {
 				t.Fatalf("UpdateFunctionDetails.MemoryInMBs = %d, want omitted unchanged memory", *req.UpdateFunctionDetails.MemoryInMBs)
 			}
 
-			updated := testFunction(existingID, ocifunctions.FunctionLifecycleStateUpdating)
-			updated.TraceConfig = &ocifunctions.FunctionTraceConfig{IsEnabled: common.Bool(false)}
-			return ocifunctions.UpdateFunctionResponse{
-				OpcRequestId: common.String("opc-update-function-trace"),
-				Function:     updated,
-			}, nil
+			return ocifunctions.UpdateFunctionResponse{OpcRequestId: common.String("opc-update-function-trace")}, nil
 		},
 	}
 
@@ -1497,7 +1624,10 @@ func testFunctionResource() *functionsv1beta1.Function {
 			DisplayName:   "sample-function",
 			ApplicationId: "ocid1.application.oc1..example",
 			MemoryInMBs:   256,
-			Image:         "phx.ocir.io/tenant/functions/sample-function:1.0.0",
+			SourceDetails: functionsv1beta1.FunctionSourceDetails{
+				SourceType:   "PRE_BUILT_FUNCTIONS",
+				PbfListingId: "ocid1.fnprebuiltlisting.oc1..sample",
+			},
 		},
 	}
 }
@@ -1508,7 +1638,7 @@ func testFunction(id string, lifecycleState ocifunctions.FunctionLifecycleStateE
 		DisplayName:    common.String("sample-function"),
 		ApplicationId:  common.String("ocid1.application.oc1..example"),
 		CompartmentId:  common.String("ocid1.compartment.oc1..example"),
-		Image:          common.String("phx.ocir.io/tenant/functions/sample-function:1.0.0"),
+		SourceDetails:  ocifunctions.PreBuiltFunctionSourceDetails{PbfListingId: common.String("ocid1.fnprebuiltlisting.oc1..sample")},
 		MemoryInMBs:    common.Int64(256),
 		LifecycleState: lifecycleState,
 	}
@@ -1520,7 +1650,7 @@ func testFunctionSummary(id string, lifecycleState ocifunctions.FunctionLifecycl
 		DisplayName:    common.String("sample-function"),
 		ApplicationId:  common.String("ocid1.application.oc1..example"),
 		CompartmentId:  common.String("ocid1.compartment.oc1..example"),
-		Image:          common.String("phx.ocir.io/tenant/functions/sample-function:1.0.0"),
+		SourceDetails:  ocifunctions.PreBuiltFunctionSourceDetails{PbfListingId: common.String("ocid1.fnprebuiltlisting.oc1..sample")},
 		MemoryInMBs:    common.Int64(256),
 		LifecycleState: lifecycleState,
 	}

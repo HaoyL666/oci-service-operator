@@ -28,6 +28,7 @@ type UpdateLaunchOptions struct {
 	// * `ISCSI` - ISCSI attached block storage device.
 	// * `PARAVIRTUALIZED` - Paravirtualized disk. This is the default for boot volumes and remote block
 	// storage volumes on platform images.
+	// * `NVME` - NVMe attached remote block storage device.
 	// Before you change the boot volume attachment type, detach all block volumes and VNICs except for
 	// the boot volume and the primary VNIC.
 	// If the instance is running when you change the boot volume attachment type, it will be rebooted.
@@ -40,6 +41,7 @@ type UpdateLaunchOptions struct {
 	// * `VFIO` - Direct attached Virtual Function network controller. This is the networking type
 	// when you launch an instance using hardware-assisted (SR-IOV) networking.
 	// * `PARAVIRTUALIZED` - VM instances launch with paravirtualized devices using VirtIO drivers.
+	// * `ACCELERATEDPV` - VM instances launch with accelerated paravirtualized networking type.
 	// Before you change the networking type, detach all VNICs and block volumes except for the primary
 	// VNIC and the boot volume.
 	// The image must have paravirtualized drivers installed. For more information, see
@@ -90,16 +92,19 @@ type UpdateLaunchOptionsBootVolumeTypeEnum string
 const (
 	UpdateLaunchOptionsBootVolumeTypeIscsi           UpdateLaunchOptionsBootVolumeTypeEnum = "ISCSI"
 	UpdateLaunchOptionsBootVolumeTypeParavirtualized UpdateLaunchOptionsBootVolumeTypeEnum = "PARAVIRTUALIZED"
+	UpdateLaunchOptionsBootVolumeTypeNvme            UpdateLaunchOptionsBootVolumeTypeEnum = "NVME"
 )
 
 var mappingUpdateLaunchOptionsBootVolumeTypeEnum = map[string]UpdateLaunchOptionsBootVolumeTypeEnum{
 	"ISCSI":           UpdateLaunchOptionsBootVolumeTypeIscsi,
 	"PARAVIRTUALIZED": UpdateLaunchOptionsBootVolumeTypeParavirtualized,
+	"NVME":            UpdateLaunchOptionsBootVolumeTypeNvme,
 }
 
 var mappingUpdateLaunchOptionsBootVolumeTypeEnumLowerCase = map[string]UpdateLaunchOptionsBootVolumeTypeEnum{
 	"iscsi":           UpdateLaunchOptionsBootVolumeTypeIscsi,
 	"paravirtualized": UpdateLaunchOptionsBootVolumeTypeParavirtualized,
+	"nvme":            UpdateLaunchOptionsBootVolumeTypeNvme,
 }
 
 // GetUpdateLaunchOptionsBootVolumeTypeEnumValues Enumerates the set of values for UpdateLaunchOptionsBootVolumeTypeEnum
@@ -116,6 +121,7 @@ func GetUpdateLaunchOptionsBootVolumeTypeEnumStringValues() []string {
 	return []string{
 		"ISCSI",
 		"PARAVIRTUALIZED",
+		"NVME",
 	}
 }
 
@@ -132,16 +138,19 @@ type UpdateLaunchOptionsNetworkTypeEnum string
 const (
 	UpdateLaunchOptionsNetworkTypeVfio            UpdateLaunchOptionsNetworkTypeEnum = "VFIO"
 	UpdateLaunchOptionsNetworkTypeParavirtualized UpdateLaunchOptionsNetworkTypeEnum = "PARAVIRTUALIZED"
+	UpdateLaunchOptionsNetworkTypeAcceleratedpv   UpdateLaunchOptionsNetworkTypeEnum = "ACCELERATEDPV"
 )
 
 var mappingUpdateLaunchOptionsNetworkTypeEnum = map[string]UpdateLaunchOptionsNetworkTypeEnum{
 	"VFIO":            UpdateLaunchOptionsNetworkTypeVfio,
 	"PARAVIRTUALIZED": UpdateLaunchOptionsNetworkTypeParavirtualized,
+	"ACCELERATEDPV":   UpdateLaunchOptionsNetworkTypeAcceleratedpv,
 }
 
 var mappingUpdateLaunchOptionsNetworkTypeEnumLowerCase = map[string]UpdateLaunchOptionsNetworkTypeEnum{
 	"vfio":            UpdateLaunchOptionsNetworkTypeVfio,
 	"paravirtualized": UpdateLaunchOptionsNetworkTypeParavirtualized,
+	"acceleratedpv":   UpdateLaunchOptionsNetworkTypeAcceleratedpv,
 }
 
 // GetUpdateLaunchOptionsNetworkTypeEnumValues Enumerates the set of values for UpdateLaunchOptionsNetworkTypeEnum
@@ -158,6 +167,7 @@ func GetUpdateLaunchOptionsNetworkTypeEnumStringValues() []string {
 	return []string{
 		"VFIO",
 		"PARAVIRTUALIZED",
+		"ACCELERATEDPV",
 	}
 }
 

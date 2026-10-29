@@ -116,6 +116,14 @@ spec:
                 required:
                 - isPolicyEnabled
                 type: object
+              logging:
+                description: ApplicationLogging defines nested fields for Application.Logging.
+                properties:
+                  lineFormat:
+                    description: Specify the format of log lines emitted by functions
+                      in this application.
+                    type: string
+                type: object
               networkSecurityGroupIds:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)s
                   of the Network Security Groups to add the application to.
@@ -237,6 +245,14 @@ spec:
               lifecycleState:
                 description: The current state of the application.
                 type: string
+              logging:
+                description: ApplicationLogging defines nested fields for Application.Logging.
+                properties:
+                  lineFormat:
+                    description: Specify the format of log lines emitted by functions
+                      in this application.
+                    type: string
+                type: object
               networkSecurityGroupIds:
                 description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm)s
                   of the Network Security Groups to add the application to.

@@ -43,6 +43,7 @@ This summary shows the top-level `spec` fields. Use [the full API reference](../
 | `esxiSoftwareVersion` | The ESXi software bundle to install on the ESXi hosts in the Cluster. Only versions under the same vmwareSoftwareVersion and have been validate by Oracle Cloud VMware Solution will be accepted. To get a list of the available versions, use ListSupportedVmwareSoftwareVersions. | `string` | No |
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No |
 | `initialCommitment` | The billing option selected during Cluster creation. ListSupportedCommitments. | `string` | No |
+| `initialFaultDomainHostDistribution` | The initial fault domain host distribution mode for the Cluster. | `string` | No |
 | `initialHostOcpuCount` | The initial OCPU count of the Cluster's ESXi hosts. | `number` | No |
 | `initialHostShapeName` | The initial compute shape of the Cluster's ESXi hosts. ListSupportedHostShapes. | `string` | No |
 | `initialVcfByolAllocationId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation. | `string` | No |
@@ -73,6 +74,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `freeformTags` | Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). Example: `{"Department": "Finance"}` | `map[string, string]` | No |
 | `id` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Cluster. | `string` | No |
 | `initialCommitment` | The billing option selected during Cluster creation. ListSupportedCommitments. | `string` | No |
+| `initialFaultDomainHostDistribution` | The initial fault domain host distribution mode for the Cluster. | `string` | No |
 | `initialHostOcpuCount` | The initial OCPU count of the Cluster's ESXi hosts. | `number` | No |
 | `initialHostShapeName` | The initial compute shape of the Cluster's ESXi hosts. ListSupportedHostShapes. | `string` | No |
 | `initialVcfByolAllocationId` | The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the initial VMware BYOL Allocation used to deploy VMware Cloud Foundation. | `string` | No |

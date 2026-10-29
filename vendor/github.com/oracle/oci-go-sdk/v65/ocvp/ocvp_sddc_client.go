@@ -142,7 +142,7 @@ func (client SddcClient) cancelDowngradeHcx(ctx context.Context, request common.
 
 	var response CancelDowngradeHcxResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "CancelDowngradeHcx")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -207,7 +207,7 @@ func (client SddcClient) changeSddcCompartment(ctx context.Context, request comm
 
 	var response ChangeSddcCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "ChangeSddcCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -273,7 +273,7 @@ func (client SddcClient) createSddc(ctx context.Context, request common.OCIReque
 
 	var response CreateSddcResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "CreateSddc")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -335,7 +335,7 @@ func (client SddcClient) deleteSddc(ctx context.Context, request common.OCIReque
 
 	var response DeleteSddcResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "DeleteSddc")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -402,12 +402,75 @@ func (client SddcClient) downgradeHcx(ctx context.Context, request common.OCIReq
 
 	var response DowngradeHcxResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "DowngradeHcx")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/vmware/20230701/Sddc/DowngradeHcx"
 		err = common.PostProcessServiceError(err, "Sddc", "DowngradeHcx", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GenerateVmwareBinaryDownloadInfo Generate the VMware binary download information.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/ocvp/GenerateVmwareBinaryDownloadInfo.go.html to see an example of how to use GenerateVmwareBinaryDownloadInfo API.
+// A default retry strategy applies to this operation GenerateVmwareBinaryDownloadInfo()
+func (client SddcClient) GenerateVmwareBinaryDownloadInfo(ctx context.Context, request GenerateVmwareBinaryDownloadInfoRequest) (response GenerateVmwareBinaryDownloadInfoResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.generateVmwareBinaryDownloadInfo, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GenerateVmwareBinaryDownloadInfoResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GenerateVmwareBinaryDownloadInfoResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GenerateVmwareBinaryDownloadInfoResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GenerateVmwareBinaryDownloadInfoResponse")
+	}
+	return
+}
+
+// generateVmwareBinaryDownloadInfo implements the OCIOperation interface (enables retrying operations)
+func (client SddcClient) generateVmwareBinaryDownloadInfo(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/sddcs/{sddcId}/actions/generateVmwareBinaryDownloadInfo", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GenerateVmwareBinaryDownloadInfoResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "GenerateVmwareBinaryDownloadInfo")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/vmware/20230701/Sddc/GenerateVmwareBinaryDownloadInfo"
+		err = common.PostProcessServiceError(err, "Sddc", "GenerateVmwareBinaryDownloadInfo", apiReferenceLink)
 		return response, err
 	}
 
@@ -460,7 +523,7 @@ func (client SddcClient) getSddc(ctx context.Context, request common.OCIRequest,
 
 	var response GetSddcResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "GetSddc")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -519,7 +582,7 @@ func (client SddcClient) listSddcs(ctx context.Context, request common.OCIReques
 
 	var response ListSddcsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "ListSddcs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -577,7 +640,7 @@ func (client SddcClient) listSupportedCommitments(ctx context.Context, request c
 
 	var response ListSupportedCommitmentsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "ListSupportedCommitments")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -635,7 +698,7 @@ func (client SddcClient) listSupportedHostShapes(ctx context.Context, request co
 
 	var response ListSupportedHostShapesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "ListSupportedHostShapes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -694,7 +757,7 @@ func (client SddcClient) listSupportedVmwareSoftwareVersions(ctx context.Context
 
 	var response ListSupportedVmwareSoftwareVersionsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "ListSupportedVmwareSoftwareVersions")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -757,7 +820,7 @@ func (client SddcClient) refreshHcxLicenseStatus(ctx context.Context, request co
 
 	var response RefreshHcxLicenseStatusResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "RefreshHcxLicenseStatus")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -820,12 +883,75 @@ func (client SddcClient) retrievePassword(ctx context.Context, request common.OC
 
 	var response RetrievePasswordResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "RetrievePassword")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/vmware/20230701/Sddc/RetrievePassword"
 		err = common.PostProcessServiceError(err, "Sddc", "RetrievePassword", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// RetrieveVmwareBinaries Retrieve the list of available VMware binaries for the SDDC.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/ocvp/RetrieveVmwareBinaries.go.html to see an example of how to use RetrieveVmwareBinaries API.
+// A default retry strategy applies to this operation RetrieveVmwareBinaries()
+func (client SddcClient) RetrieveVmwareBinaries(ctx context.Context, request RetrieveVmwareBinariesRequest) (response RetrieveVmwareBinariesResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.DefaultRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.retrieveVmwareBinaries, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = RetrieveVmwareBinariesResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = RetrieveVmwareBinariesResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(RetrieveVmwareBinariesResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into RetrieveVmwareBinariesResponse")
+	}
+	return
+}
+
+// retrieveVmwareBinaries implements the OCIOperation interface (enables retrying operations)
+func (client SddcClient) retrieveVmwareBinaries(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/sddcs/{sddcId}/actions/retrieveVmwareBinaries", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response RetrieveVmwareBinariesResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "RetrieveVmwareBinaries")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/vmware/20230701/Sddc/RetrieveVmwareBinaries"
+		err = common.PostProcessServiceError(err, "Sddc", "RetrieveVmwareBinaries", apiReferenceLink)
 		return response, err
 	}
 
@@ -882,7 +1008,7 @@ func (client SddcClient) updateSddc(ctx context.Context, request common.OCIReque
 
 	var response UpdateSddcResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "UpdateSddc")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -945,7 +1071,7 @@ func (client SddcClient) upgradeHcx(ctx context.Context, request common.OCIReque
 
 	var response UpgradeHcxResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "sddc", "UpgradeHcx")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

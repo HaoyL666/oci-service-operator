@@ -60,6 +60,7 @@ This summary shows the top-level `status` fields. Use [the full API reference](.
 | `logType` | The logType that the log object is for, whether custom or service. | `string` | No |
 | `retentionDuration` | Log retention duration in 30-day increments (30, 60, 90 and so on until 180). | `integer` | No |
 | [`status`](../../reference/api/logging/v1beta1/index.md#kind-log-status-status) | - | `object` | Yes |
+| `systemTags` | Usage of system tag keys. These predefined keys are scoped to namespaces. Example: `{"orcl-cloud": {"free-tier-retained": "true"}}` | `map[string, map[string, string]]` | No |
 | `tenancyId` | The OCID of the tenancy. | `string` | No |
 | `timeCreated` | Time the resource was created. | `string` | No |
 | `timeLastModified` | Time the resource was last modified. | `string` | No |

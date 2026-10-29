@@ -40,7 +40,7 @@ observe --> retryable : OCI state in PROVISIONING,\nUPDATING, DELETING
 observe --> failed : unresolved OCI error or non-success state
 evaluate_ready --> reject_unsupported_drift : force-new or conflicting\ndrift detected
 reject_unsupported_drift --> ready : wait for spec or live state change
-evaluate_ready --> apply_update : supported mutable drift for\ncontent, definedTags,\ndescription (+2 more)
+evaluate_ready --> apply_update : supported mutable drift for\ndisplay_name
 apply_update --> ready : update path completes
 evaluate_ready --> ready : no supported drift remains
 ready --> ready : no supported drift remains
@@ -68,31 +68,21 @@ kind: DigitalTwinRelationship
 archetype: generated-service-manager
 status/finalizer: required /
 retain-until-confirmed-delete
-requeue: terminating
+requeue: provisioning, updating, terminating
 provider states: create PROVISIONING; update
 UPDATING; delete DELETING
-follow-up: create=read-after-write;
-update=read-after-write; delete=confirm-delete
-supported drift: content, definedTags,
-description, displayName (+1 more)
+supported drift: display_name
 reject before mutate: force-new fields
-contentPath, iotDomainId,
-sourceDigitalTwinInstanceId,
-targetDigitalTwinInstanceId
+compartment_id
 create-only fields: none
 list lookup:
 scaffold_iot_digitaltwinrelationship filters
-contentPath, id, iotDomainId,
-sourceDigitalTwinInstanceId (+1 more); exact
-resource identity match; duplicate matches fail
+compartment_id, state
 conflicts: none
 open gaps: none
-The runtime uses its declared lifecycle-state
-contract for DigitalTwinRelationship
-reconciliation.
-The credential-free mock exercises SDK request
-serialization, response projection, mutation
-when supported, and confirmed deletion.
+Scaffold metadata only; replace with
+controller-specific runtime states before
+promotion.
 end note
 note right of delete_pending
 delete policy: required

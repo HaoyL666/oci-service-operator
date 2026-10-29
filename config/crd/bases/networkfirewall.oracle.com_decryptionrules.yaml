@@ -66,14 +66,14 @@ spec:
                 description: DecryptionRuleCondition defines nested fields for DecryptionRule.Condition.
                 properties:
                   destinationAddress:
-                    description: An array of IP address list names to be evaluated
-                      against the traffic destination address.
+                    description: An array of address list names to be evaluated against
+                      the traffic destination address.
                     items:
                       type: string
                     type: array
                   sourceAddress:
-                    description: An array of IP address list names to be evaluated
-                      against the traffic source address.
+                    description: An array of address list names to be evaluated against
+                      the traffic source address.
                     items:
                       type: string
                     type: array
@@ -107,6 +107,11 @@ spec:
                 description: The name of a mapped secret. Its `type` must match that
                   of the specified decryption profile.
                 type: string
+              secrets:
+                description: An array of mapped secrets.
+                items:
+                  type: string
+                type: array
             required:
             - action
             - condition
@@ -126,14 +131,14 @@ spec:
                 description: DecryptionRuleCondition defines nested fields for DecryptionRule.Condition.
                 properties:
                   destinationAddress:
-                    description: An array of IP address list names to be evaluated
-                      against the traffic destination address.
+                    description: An array of address list names to be evaluated against
+                      the traffic destination address.
                     items:
                       type: string
                     type: array
                   sourceAddress:
-                    description: An array of IP address list names to be evaluated
-                      against the traffic source address.
+                    description: An array of address list names to be evaluated against
+                      the traffic source address.
                     items:
                       type: string
                     type: array
@@ -167,6 +172,11 @@ spec:
                 description: The priority order in which this rule should be evaluated.
                 format: int64
                 type: integer
+              secrets:
+                description: An array of mapped secrets.
+                items:
+                  type: string
+                type: array
               status:
                 properties:
                   async:

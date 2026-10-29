@@ -49,10 +49,8 @@ type HostedApplication struct {
 
 	ScalingConfig *ScalingConfig `mandatory:"false" json:"scalingConfig"`
 
-	// A list of storageConfigs managed by the OCI GenAI Platform and attached to the application.
+	// A list of managed storage configurations for the application.
 	StorageConfigs []StorageConfig `mandatory:"false" json:"storageConfigs"`
-
-	InboundAuthConfig *InboundAuthConfig `mandatory:"false" json:"inboundAuthConfig"`
 
 	NetworkingConfig *NetworkingConfig `mandatory:"false" json:"networkingConfig"`
 
@@ -73,6 +71,17 @@ type HostedApplication struct {
 	// System tags for this resource. Each key is predefined and scoped to a namespace.
 	// Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
 	SystemTags map[string]map[string]interface{} `mandatory:"false" json:"systemTags"`
+
+	InboundAuthConfig *InboundAuthConfig `mandatory:"false" json:"inboundAuthConfig"`
+
+	// Fully qualified domain name for invoking the hosted application over the dual-stack endpoint.
+	// This value is output-only and is present only after the service has generated an application DNS label.
+	ApplicationEndpoint *string `mandatory:"false" json:"applicationEndpoint"`
+
+	// A list of hosted application path patterns that can be accessed without
+	// inbound authentication. Values can be exact paths such as `/health` or `/callback`,
+	// or wildcard paths such as `/assets/*` or `/public/*`.
+	PublicAccessPathPatterns []string `mandatory:"false" json:"publicAccessPathPatterns"`
 }
 
 func (m HostedApplication) String() string {

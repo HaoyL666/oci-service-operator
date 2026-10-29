@@ -28,17 +28,16 @@ type CreateHostedApplicationDetails struct {
 	// The compartment OCID for the Hosted Application.
 	CompartmentId *string `mandatory:"true" json:"compartmentId"`
 
+	InboundAuthConfig *InboundAuthConfig `mandatory:"true" json:"inboundAuthConfig"`
+
 	// The description for the Hosted Application.
 	Description *string `mandatory:"false" json:"description"`
 
 	ScalingConfig *ScalingConfig `mandatory:"false" json:"scalingConfig"`
 
-	InboundAuthConfig *InboundAuthConfig `mandatory:"false" json:"inboundAuthConfig"`
-
 	NetworkingConfig *NetworkingConfig `mandatory:"false" json:"networkingConfig"`
 
-	// The list of storage configuration for the Hosted Application.
-	// Defines a list of service-managed storage back-ends.
+	// A list of managed storage configurations for the application.
 	StorageConfigs []StorageConfig `mandatory:"false" json:"storageConfigs"`
 
 	// The list of environment variables for the Hosted Application.
@@ -54,6 +53,11 @@ type CreateHostedApplicationDetails struct {
 	// For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	DefinedTags map[string]map[string]interface{} `mandatory:"false" json:"definedTags"`
+
+	// A list of hosted application path patterns that can be accessed without
+	// inbound authentication. Values can be exact paths such as `/health` or `/callback`,
+	// or wildcard paths such as `/assets/*` or `/public/*`.
+	PublicAccessPathPatterns []string `mandatory:"false" json:"publicAccessPathPatterns"`
 }
 
 func (m CreateHostedApplicationDetails) String() string {

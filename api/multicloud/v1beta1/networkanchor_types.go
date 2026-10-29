@@ -143,6 +143,8 @@ type NetworkAnchorStatus struct {
 	CspNetworkAnchorId string `json:"cspNetworkAnchorId,omitempty"`
 	// CSP network anchor Uri
 	NetworkAnchorUri string `json:"networkAnchorUri,omitempty"`
+	// An Azure/GCP/AWS cidrBlocks
+	CidrBlocks []string `json:"cidrBlocks,omitempty"`
 }
 
 // +kubebuilder:object:root=true

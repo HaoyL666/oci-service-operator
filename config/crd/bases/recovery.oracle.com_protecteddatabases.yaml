@@ -149,6 +149,11 @@ spec:
           status:
             description: ProtectedDatabaseStatus defines the observed state of ProtectedDatabase.
             properties:
+              backupCloudLocation:
+                description: Indicates the cloud service environment where the protected
+                  database is provisioned. For example, Oracle Cloud or Microsoft
+                  Azure.
+                type: string
               changeRate:
                 description: The percentage of data changes that exist in the database
                   between successive incremental backups.

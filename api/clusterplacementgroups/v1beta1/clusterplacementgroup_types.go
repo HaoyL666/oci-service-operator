@@ -53,6 +53,26 @@ type ClusterPlacementGroupPlacementInstruction struct {
 	Value string `json:"value"`
 }
 
+// ClusterPlacementGroupCapabilitiesItemAdditionalDetails defines nested fields for ClusterPlacementGroup.Capabilities.Item.AdditionalDetails.
+type ClusterPlacementGroupCapabilitiesItemAdditionalDetails struct {
+	// +kubebuilder:validation:Optional
+	JsonData string `json:"jsonData,omitempty"`
+	// +kubebuilder:validation:Optional
+	ServiceType string `json:"serviceType,omitempty"`
+	// The amount of memory (in GBs) needed in the instance.
+	// +kubebuilder:validation:Optional
+	MemoryInGBs float32 `json:"memoryInGBs,omitempty"`
+	// The number of OCPUs needed in the instance.
+	// +kubebuilder:validation:Optional
+	Ocpus float32 `json:"ocpus,omitempty"`
+	// The number of NVMe drives to use for storage.
+	// +kubebuilder:validation:Optional
+	Nvmes int `json:"nvmes,omitempty"`
+	// The number of instances or size of the resource.
+	// +kubebuilder:validation:Optional
+	Count int `json:"count,omitempty"`
+}
+
 // ClusterPlacementGroupCapabilitiesItem defines nested fields for ClusterPlacementGroup.Capabilities.Item.
 type ClusterPlacementGroupCapabilitiesItem struct {
 	// The service that the resource is part of.
@@ -61,6 +81,8 @@ type ClusterPlacementGroupCapabilitiesItem struct {
 	// The type of resource.
 	// +kubebuilder:validation:Required
 	Name string `json:"name"`
+	// +kubebuilder:validation:Optional
+	AdditionalDetails ClusterPlacementGroupCapabilitiesItemAdditionalDetails `json:"additionalDetails,omitempty,omitzero"`
 }
 
 // ClusterPlacementGroupCapabilities defines nested fields for ClusterPlacementGroup.Capabilities.

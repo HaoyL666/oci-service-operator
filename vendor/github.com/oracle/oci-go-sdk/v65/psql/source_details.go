@@ -55,8 +55,16 @@ func (m *sourcedetails) UnmarshalPolymorphicJSON(data []byte) (interface{}, erro
 		mm := BackupSourceDetails{}
 		err = json.Unmarshal(data, &mm)
 		return mm, err
+	case "DB_SYSTEM":
+		mm := PrimaryDbSystemSourceDetails{}
+		err = json.Unmarshal(data, &mm)
+		return mm, err
 	case "NONE":
 		mm := NoneSourceDetails{}
+		err = json.Unmarshal(data, &mm)
+		return mm, err
+	case "POINT_IN_TIME_DB_SYSTEM":
+		mm := PointInTimeDbSystemSourceDetails{}
 		err = json.Unmarshal(data, &mm)
 		return mm, err
 	default:
@@ -86,18 +94,24 @@ type SourceDetailsSourceTypeEnum string
 
 // Set of constants representing the allowable values for SourceDetailsSourceTypeEnum
 const (
-	SourceDetailsSourceTypeBackup SourceDetailsSourceTypeEnum = "BACKUP"
-	SourceDetailsSourceTypeNone   SourceDetailsSourceTypeEnum = "NONE"
+	SourceDetailsSourceTypeBackup              SourceDetailsSourceTypeEnum = "BACKUP"
+	SourceDetailsSourceTypeNone                SourceDetailsSourceTypeEnum = "NONE"
+	SourceDetailsSourceTypePointInTimeDbSystem SourceDetailsSourceTypeEnum = "POINT_IN_TIME_DB_SYSTEM"
+	SourceDetailsSourceTypeDbSystem            SourceDetailsSourceTypeEnum = "DB_SYSTEM"
 )
 
 var mappingSourceDetailsSourceTypeEnum = map[string]SourceDetailsSourceTypeEnum{
-	"BACKUP": SourceDetailsSourceTypeBackup,
-	"NONE":   SourceDetailsSourceTypeNone,
+	"BACKUP":                  SourceDetailsSourceTypeBackup,
+	"NONE":                    SourceDetailsSourceTypeNone,
+	"POINT_IN_TIME_DB_SYSTEM": SourceDetailsSourceTypePointInTimeDbSystem,
+	"DB_SYSTEM":               SourceDetailsSourceTypeDbSystem,
 }
 
 var mappingSourceDetailsSourceTypeEnumLowerCase = map[string]SourceDetailsSourceTypeEnum{
-	"backup": SourceDetailsSourceTypeBackup,
-	"none":   SourceDetailsSourceTypeNone,
+	"backup":                  SourceDetailsSourceTypeBackup,
+	"none":                    SourceDetailsSourceTypeNone,
+	"point_in_time_db_system": SourceDetailsSourceTypePointInTimeDbSystem,
+	"db_system":               SourceDetailsSourceTypeDbSystem,
 }
 
 // GetSourceDetailsSourceTypeEnumValues Enumerates the set of values for SourceDetailsSourceTypeEnum
@@ -114,6 +128,8 @@ func GetSourceDetailsSourceTypeEnumStringValues() []string {
 	return []string{
 		"BACKUP",
 		"NONE",
+		"POINT_IN_TIME_DB_SYSTEM",
+		"DB_SYSTEM",
 	}
 }
 

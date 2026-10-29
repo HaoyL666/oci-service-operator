@@ -17,8 +17,10 @@ type IotDomainGroupSpec struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment corresponding to the resource.
 	// +kubebuilder:validation:Required
 	CompartmentId string `json:"compartmentId"`
-	// Type of the domain group. LIGHTWEIGHT uses fewer resources and has a higher Recovery Time Objective (RTO),
-	// making it suitable for development and testing. STANDARD is recommended for production.
+	// Type of domain group. DEVELOPMENT uses fewer resources and has a higher Recovery Time Objective (RTO),
+	// making it suitable for development and testing. PRODUCTION is recommended for production workloads.
+	// LIGHTWEIGHT and STANDARD are deprecated aliases for DEVELOPMENT and PRODUCTION respectively and will be removed
+	// in a future release.
 	// +kubebuilder:validation:Optional
 	Type string `json:"type,omitempty"`
 	// A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information.
@@ -46,8 +48,10 @@ type IotDomainGroupStatus struct {
 	Id string `json:"id,omitempty"`
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the compartment corresponding to the resource.
 	CompartmentId string `json:"compartmentId,omitempty"`
-	// Type of the domain group. LIGHTWEIGHT uses fewer resources and has a higher Recovery Time Objective (RTO),
-	// making it suitable for development and testing. STANDARD is recommended for production.
+	// Type of domain group. DEVELOPMENT uses fewer resources and has a higher Recovery Time Objective (RTO),
+	// making it suitable for development and testing. PRODUCTION is recommended for production workloads.
+	// LIGHTWEIGHT and STANDARD are deprecated aliases for DEVELOPMENT and PRODUCTION respectively and will be removed
+	// in a future release.
 	Type string `json:"type,omitempty"`
 	// A user-friendly name. Does not have to be unique, and it's changeable. Avoid entering confidential information.
 	DisplayName string `json:"displayName,omitempty"`

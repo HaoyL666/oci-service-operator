@@ -91,6 +91,68 @@ func (client *BdsClient) ConfigurationProvider() *common.ConfigurationProvider {
 	return client.config
 }
 
+// ActivateBdsCapacityReservationConfiguration Activates the BDS capacity reservation configuration identified by the given ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/ActivateBdsCapacityReservationConfiguration.go.html to see an example of how to use ActivateBdsCapacityReservationConfiguration API.
+func (client BdsClient) ActivateBdsCapacityReservationConfiguration(ctx context.Context, request ActivateBdsCapacityReservationConfigurationRequest) (response ActivateBdsCapacityReservationConfigurationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.activateBdsCapacityReservationConfiguration, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ActivateBdsCapacityReservationConfigurationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ActivateBdsCapacityReservationConfigurationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ActivateBdsCapacityReservationConfigurationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ActivateBdsCapacityReservationConfigurationResponse")
+	}
+	return
+}
+
+// activateBdsCapacityReservationConfiguration implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) activateBdsCapacityReservationConfiguration(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/bdsInstances/{bdsInstanceId}/bdsCapacityReservationConfigurations/{bdsCapacityReservationConfigurationId}/actions/activate", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ActivateBdsCapacityReservationConfigurationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ActivateBdsCapacityReservationConfiguration")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservationConfiguration/ActivateBdsCapacityReservationConfiguration"
+		err = common.PostProcessServiceError(err, "Bds", "ActivateBdsCapacityReservationConfiguration", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
 // ActivateBdsMetastoreConfiguration Activate specified metastore configuration.
 //
 // # See also
@@ -140,7 +202,7 @@ func (client BdsClient) activateBdsMetastoreConfiguration(ctx context.Context, r
 
 	var response ActivateBdsMetastoreConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ActivateBdsMetastoreConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -202,7 +264,7 @@ func (client BdsClient) activateIamUserSyncConfiguration(ctx context.Context, re
 
 	var response ActivateIamUserSyncConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ActivateIamUserSyncConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -264,7 +326,7 @@ func (client BdsClient) activateUpstConfiguration(ctx context.Context, request c
 
 	var response ActivateUpstConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ActivateUpstConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -326,7 +388,7 @@ func (client BdsClient) addAutoScalingConfiguration(ctx context.Context, request
 
 	var response AddAutoScalingConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "AddAutoScalingConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -388,7 +450,7 @@ func (client BdsClient) addBlockStorage(ctx context.Context, request common.OCIR
 
 	var response AddBlockStorageResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "AddBlockStorage")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -450,7 +512,7 @@ func (client BdsClient) addCloudSql(ctx context.Context, request common.OCIReque
 
 	var response AddCloudSqlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "AddCloudSql")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -512,7 +574,7 @@ func (client BdsClient) addKafka(ctx context.Context, request common.OCIRequest,
 
 	var response AddKafkaResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "AddKafka")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -574,7 +636,7 @@ func (client BdsClient) addMasterNodes(ctx context.Context, request common.OCIRe
 
 	var response AddMasterNodesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "AddMasterNodes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -636,7 +698,7 @@ func (client BdsClient) addUtilityNodes(ctx context.Context, request common.OCIR
 
 	var response AddUtilityNodesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "AddUtilityNodes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -698,7 +760,7 @@ func (client BdsClient) addWorkerNodes(ctx context.Context, request common.OCIRe
 
 	var response AddWorkerNodesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "AddWorkerNodes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -760,7 +822,7 @@ func (client BdsClient) backupNode(ctx context.Context, request common.OCIReques
 
 	var response BackupNodeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "BackupNode")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -822,7 +884,7 @@ func (client BdsClient) bdsInstanceResetPassword(ctx context.Context, request co
 
 	var response BdsInstanceResetPasswordResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "BdsInstanceResetPassword")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -884,12 +946,74 @@ func (client BdsClient) certificateServiceInfo(ctx context.Context, request comm
 
 	var response CertificateServiceInfoResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CertificateServiceInfo")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsInstance/CertificateServiceInfo"
 		err = common.PostProcessServiceError(err, "Bds", "CertificateServiceInfo", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ChangeBdsCapacityReservationCompartment Moves a BDS capacity reservation into a different compartment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/ChangeBdsCapacityReservationCompartment.go.html to see an example of how to use ChangeBdsCapacityReservationCompartment API.
+func (client BdsClient) ChangeBdsCapacityReservationCompartment(ctx context.Context, request ChangeBdsCapacityReservationCompartmentRequest) (response ChangeBdsCapacityReservationCompartmentResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.changeBdsCapacityReservationCompartment, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ChangeBdsCapacityReservationCompartmentResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ChangeBdsCapacityReservationCompartmentResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ChangeBdsCapacityReservationCompartmentResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ChangeBdsCapacityReservationCompartmentResponse")
+	}
+	return
+}
+
+// changeBdsCapacityReservationCompartment implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) changeBdsCapacityReservationCompartment(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/bdsCapacityReservations/{bdsCapacityReservationId}/actions/changeCompartment", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ChangeBdsCapacityReservationCompartmentResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ChangeBdsCapacityReservationCompartment")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservation/ChangeBdsCapacityReservationCompartment"
+		err = common.PostProcessServiceError(err, "Bds", "ChangeBdsCapacityReservationCompartment", apiReferenceLink)
 		return response, err
 	}
 
@@ -946,7 +1070,7 @@ func (client BdsClient) changeBdsInstanceCompartment(ctx context.Context, reques
 
 	var response ChangeBdsInstanceCompartmentResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ChangeBdsInstanceCompartment")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1008,7 +1132,7 @@ func (client BdsClient) changeShape(ctx context.Context, request common.OCIReque
 
 	var response ChangeShapeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ChangeShape")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1070,7 +1194,7 @@ func (client BdsClient) createBdsApiKey(ctx context.Context, request common.OCIR
 
 	var response CreateBdsApiKeyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateBdsApiKey")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1132,12 +1256,136 @@ func (client BdsClient) createBdsCapacityReport(ctx context.Context, request com
 
 	var response CreateBdsCapacityReportResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateBdsCapacityReport")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReport/CreateBdsCapacityReport"
 		err = common.PostProcessServiceError(err, "Bds", "CreateBdsCapacityReport", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateBdsCapacityReservation Creates a reusable BDS capacity reservation resource.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/CreateBdsCapacityReservation.go.html to see an example of how to use CreateBdsCapacityReservation API.
+func (client BdsClient) CreateBdsCapacityReservation(ctx context.Context, request CreateBdsCapacityReservationRequest) (response CreateBdsCapacityReservationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createBdsCapacityReservation, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateBdsCapacityReservationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateBdsCapacityReservationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateBdsCapacityReservationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateBdsCapacityReservationResponse")
+	}
+	return
+}
+
+// createBdsCapacityReservation implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) createBdsCapacityReservation(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/bdsCapacityReservations", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateBdsCapacityReservationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateBdsCapacityReservation")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservation/CreateBdsCapacityReservation"
+		err = common.PostProcessServiceError(err, "Bds", "CreateBdsCapacityReservation", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// CreateBdsCapacityReservationConfiguration Creates a configuration between the specified BDS cluster and a BDS capacity reservation.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/CreateBdsCapacityReservationConfiguration.go.html to see an example of how to use CreateBdsCapacityReservationConfiguration API.
+func (client BdsClient) CreateBdsCapacityReservationConfiguration(ctx context.Context, request CreateBdsCapacityReservationConfigurationRequest) (response CreateBdsCapacityReservationConfigurationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.createBdsCapacityReservationConfiguration, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = CreateBdsCapacityReservationConfigurationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = CreateBdsCapacityReservationConfigurationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(CreateBdsCapacityReservationConfigurationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into CreateBdsCapacityReservationConfigurationResponse")
+	}
+	return
+}
+
+// createBdsCapacityReservationConfiguration implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) createBdsCapacityReservationConfiguration(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/bdsInstances/{bdsInstanceId}/bdsCapacityReservationConfigurations", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response CreateBdsCapacityReservationConfigurationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateBdsCapacityReservationConfiguration")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservationConfiguration/CreateBdsCapacityReservationConfiguration"
+		err = common.PostProcessServiceError(err, "Bds", "CreateBdsCapacityReservationConfiguration", apiReferenceLink)
 		return response, err
 	}
 
@@ -1194,7 +1442,7 @@ func (client BdsClient) createBdsCertificateConfiguration(ctx context.Context, r
 
 	var response CreateBdsCertificateConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateBdsCertificateConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1256,7 +1504,7 @@ func (client BdsClient) createBdsInstance(ctx context.Context, request common.OC
 
 	var response CreateBdsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateBdsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1318,7 +1566,7 @@ func (client BdsClient) createBdsMetastoreConfiguration(ctx context.Context, req
 
 	var response CreateBdsMetastoreConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateBdsMetastoreConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1380,7 +1628,7 @@ func (client BdsClient) createIdentityConfiguration(ctx context.Context, request
 
 	var response CreateIdentityConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateIdentityConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1442,7 +1690,7 @@ func (client BdsClient) createNodeBackupConfiguration(ctx context.Context, reque
 
 	var response CreateNodeBackupConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateNodeBackupConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1504,7 +1752,7 @@ func (client BdsClient) createNodeReplaceConfiguration(ctx context.Context, requ
 
 	var response CreateNodeReplaceConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateNodeReplaceConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1566,12 +1814,74 @@ func (client BdsClient) createResourcePrincipalConfiguration(ctx context.Context
 
 	var response CreateResourcePrincipalConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "CreateResourcePrincipalConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsInstance/CreateResourcePrincipalConfiguration"
 		err = common.PostProcessServiceError(err, "Bds", "CreateResourcePrincipalConfiguration", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeactivateBdsCapacityReservationConfiguration Deactivates the BDS capacity reservation configuration identified by the given ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/DeactivateBdsCapacityReservationConfiguration.go.html to see an example of how to use DeactivateBdsCapacityReservationConfiguration API.
+func (client BdsClient) DeactivateBdsCapacityReservationConfiguration(ctx context.Context, request DeactivateBdsCapacityReservationConfigurationRequest) (response DeactivateBdsCapacityReservationConfigurationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.deactivateBdsCapacityReservationConfiguration, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeactivateBdsCapacityReservationConfigurationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeactivateBdsCapacityReservationConfigurationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeactivateBdsCapacityReservationConfigurationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeactivateBdsCapacityReservationConfigurationResponse")
+	}
+	return
+}
+
+// deactivateBdsCapacityReservationConfiguration implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) deactivateBdsCapacityReservationConfiguration(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/bdsInstances/{bdsInstanceId}/bdsCapacityReservationConfigurations/{bdsCapacityReservationConfigurationId}/actions/deactivate", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeactivateBdsCapacityReservationConfigurationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeactivateBdsCapacityReservationConfiguration")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservationConfiguration/DeactivateBdsCapacityReservationConfiguration"
+		err = common.PostProcessServiceError(err, "Bds", "DeactivateBdsCapacityReservationConfiguration", apiReferenceLink)
 		return response, err
 	}
 
@@ -1628,7 +1938,7 @@ func (client BdsClient) deactivateIamUserSyncConfiguration(ctx context.Context, 
 
 	var response DeactivateIamUserSyncConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeactivateIamUserSyncConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1690,7 +2000,7 @@ func (client BdsClient) deactivateUpstConfiguration(ctx context.Context, request
 
 	var response DeactivateUpstConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeactivateUpstConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1747,12 +2057,126 @@ func (client BdsClient) deleteBdsApiKey(ctx context.Context, request common.OCIR
 
 	var response DeleteBdsApiKeyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteBdsApiKey")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsApiKey/DeleteBdsApiKey"
 		err = common.PostProcessServiceError(err, "Bds", "DeleteBdsApiKey", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteBdsCapacityReservation Deletes the BDS capacity reservation identified by the given ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/DeleteBdsCapacityReservation.go.html to see an example of how to use DeleteBdsCapacityReservation API.
+func (client BdsClient) DeleteBdsCapacityReservation(ctx context.Context, request DeleteBdsCapacityReservationRequest) (response DeleteBdsCapacityReservationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteBdsCapacityReservation, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteBdsCapacityReservationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteBdsCapacityReservationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteBdsCapacityReservationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteBdsCapacityReservationResponse")
+	}
+	return
+}
+
+// deleteBdsCapacityReservation implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) deleteBdsCapacityReservation(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/bdsCapacityReservations/{bdsCapacityReservationId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteBdsCapacityReservationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteBdsCapacityReservation")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservation/DeleteBdsCapacityReservation"
+		err = common.PostProcessServiceError(err, "Bds", "DeleteBdsCapacityReservation", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteBdsCapacityReservationConfiguration Deletes the BDS capacity reservation configuration identified by the given ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/DeleteBdsCapacityReservationConfiguration.go.html to see an example of how to use DeleteBdsCapacityReservationConfiguration API.
+func (client BdsClient) DeleteBdsCapacityReservationConfiguration(ctx context.Context, request DeleteBdsCapacityReservationConfigurationRequest) (response DeleteBdsCapacityReservationConfigurationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteBdsCapacityReservationConfiguration, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteBdsCapacityReservationConfigurationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteBdsCapacityReservationConfigurationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteBdsCapacityReservationConfigurationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteBdsCapacityReservationConfigurationResponse")
+	}
+	return
+}
+
+// deleteBdsCapacityReservationConfiguration implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) deleteBdsCapacityReservationConfiguration(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/bdsInstances/{bdsInstanceId}/bdsCapacityReservationConfigurations/{bdsCapacityReservationConfigurationId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteBdsCapacityReservationConfigurationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteBdsCapacityReservationConfiguration")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservationConfiguration/DeleteBdsCapacityReservationConfiguration"
+		err = common.PostProcessServiceError(err, "Bds", "DeleteBdsCapacityReservationConfiguration", apiReferenceLink)
 		return response, err
 	}
 
@@ -1809,7 +2233,7 @@ func (client BdsClient) deleteBdsCertificateConfiguration(ctx context.Context, r
 
 	var response DeleteBdsCertificateConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteBdsCertificateConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1866,7 +2290,7 @@ func (client BdsClient) deleteBdsInstance(ctx context.Context, request common.OC
 
 	var response DeleteBdsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteBdsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1923,7 +2347,7 @@ func (client BdsClient) deleteBdsMetastoreConfiguration(ctx context.Context, req
 
 	var response DeleteBdsMetastoreConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteBdsMetastoreConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -1980,7 +2404,7 @@ func (client BdsClient) deleteIdentityConfiguration(ctx context.Context, request
 
 	var response DeleteIdentityConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteIdentityConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2037,7 +2461,7 @@ func (client BdsClient) deleteNodeBackup(ctx context.Context, request common.OCI
 
 	var response DeleteNodeBackupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteNodeBackup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2094,7 +2518,7 @@ func (client BdsClient) deleteNodeBackupConfiguration(ctx context.Context, reque
 
 	var response DeleteNodeBackupConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DeleteNodeBackupConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2156,7 +2580,7 @@ func (client BdsClient) disableCertificate(ctx context.Context, request common.O
 
 	var response DisableCertificateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "DisableCertificate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2218,7 +2642,7 @@ func (client BdsClient) enableCertificate(ctx context.Context, request common.OC
 
 	var response EnableCertificateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "EnableCertificate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2280,7 +2704,7 @@ func (client BdsClient) executeBootstrapScript(ctx context.Context, request comm
 
 	var response ExecuteBootstrapScriptResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ExecuteBootstrapScript")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2342,7 +2766,7 @@ func (client BdsClient) forceRefreshResourcePrincipal(ctx context.Context, reque
 
 	var response ForceRefreshResourcePrincipalResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ForceRefreshResourcePrincipal")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2404,7 +2828,7 @@ func (client BdsClient) generateBdsCertificate(ctx context.Context, request comm
 
 	var response GenerateBdsCertificateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GenerateBdsCertificate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2461,7 +2885,7 @@ func (client BdsClient) getAutoScalingConfiguration(ctx context.Context, request
 
 	var response GetAutoScalingConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetAutoScalingConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2518,12 +2942,126 @@ func (client BdsClient) getBdsApiKey(ctx context.Context, request common.OCIRequ
 
 	var response GetBdsApiKeyResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetBdsApiKey")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsApiKey/GetBdsApiKey"
 		err = common.PostProcessServiceError(err, "Bds", "GetBdsApiKey", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetBdsCapacityReservation Returns information about the BDS capacity reservation identified by the given ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/GetBdsCapacityReservation.go.html to see an example of how to use GetBdsCapacityReservation API.
+func (client BdsClient) GetBdsCapacityReservation(ctx context.Context, request GetBdsCapacityReservationRequest) (response GetBdsCapacityReservationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getBdsCapacityReservation, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetBdsCapacityReservationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetBdsCapacityReservationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetBdsCapacityReservationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetBdsCapacityReservationResponse")
+	}
+	return
+}
+
+// getBdsCapacityReservation implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) getBdsCapacityReservation(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/bdsCapacityReservations/{bdsCapacityReservationId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetBdsCapacityReservationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetBdsCapacityReservation")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservation/GetBdsCapacityReservation"
+		err = common.PostProcessServiceError(err, "Bds", "GetBdsCapacityReservation", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetBdsCapacityReservationConfiguration Returns information about the BDS capacity reservation configuration identified by the given ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/GetBdsCapacityReservationConfiguration.go.html to see an example of how to use GetBdsCapacityReservationConfiguration API.
+func (client BdsClient) GetBdsCapacityReservationConfiguration(ctx context.Context, request GetBdsCapacityReservationConfigurationRequest) (response GetBdsCapacityReservationConfigurationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getBdsCapacityReservationConfiguration, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetBdsCapacityReservationConfigurationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetBdsCapacityReservationConfigurationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetBdsCapacityReservationConfigurationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetBdsCapacityReservationConfigurationResponse")
+	}
+	return
+}
+
+// getBdsCapacityReservationConfiguration implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) getBdsCapacityReservationConfiguration(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/bdsInstances/{bdsInstanceId}/bdsCapacityReservationConfigurations/{bdsCapacityReservationConfigurationId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetBdsCapacityReservationConfigurationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetBdsCapacityReservationConfiguration")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservationConfiguration/GetBdsCapacityReservationConfiguration"
+		err = common.PostProcessServiceError(err, "Bds", "GetBdsCapacityReservationConfiguration", apiReferenceLink)
 		return response, err
 	}
 
@@ -2575,7 +3113,7 @@ func (client BdsClient) getBdsCertificateConfiguration(ctx context.Context, requ
 
 	var response GetBdsCertificateConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetBdsCertificateConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2632,7 +3170,7 @@ func (client BdsClient) getBdsInstance(ctx context.Context, request common.OCIRe
 
 	var response GetBdsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetBdsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2689,7 +3227,7 @@ func (client BdsClient) getBdsMetastoreConfiguration(ctx context.Context, reques
 
 	var response GetBdsMetastoreConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetBdsMetastoreConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2746,7 +3284,7 @@ func (client BdsClient) getIdentityConfiguration(ctx context.Context, request co
 
 	var response GetIdentityConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetIdentityConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2803,7 +3341,7 @@ func (client BdsClient) getNodeBackup(ctx context.Context, request common.OCIReq
 
 	var response GetNodeBackupResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetNodeBackup")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2860,7 +3398,7 @@ func (client BdsClient) getNodeBackupConfiguration(ctx context.Context, request 
 
 	var response GetNodeBackupConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetNodeBackupConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2917,7 +3455,7 @@ func (client BdsClient) getNodeReplaceConfiguration(ctx context.Context, request
 
 	var response GetNodeReplaceConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetNodeReplaceConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -2979,7 +3517,7 @@ func (client BdsClient) getOsPatchDetails(ctx context.Context, request common.OC
 
 	var response GetOsPatchDetailsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetOsPatchDetails")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3036,7 +3574,7 @@ func (client BdsClient) getResourcePrincipalConfiguration(ctx context.Context, r
 
 	var response GetResourcePrincipalConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetResourcePrincipalConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3098,7 +3636,7 @@ func (client BdsClient) getSoftwareUpdate(ctx context.Context, request common.OC
 
 	var response GetSoftwareUpdateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetSoftwareUpdate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3155,7 +3693,7 @@ func (client BdsClient) getWorkRequest(ctx context.Context, request common.OCIRe
 
 	var response GetWorkRequestResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "GetWorkRequest")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3217,7 +3755,7 @@ func (client BdsClient) installOsPatch(ctx context.Context, request common.OCIRe
 
 	var response InstallOsPatchResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "InstallOsPatch")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3279,7 +3817,7 @@ func (client BdsClient) installPatch(ctx context.Context, request common.OCIRequ
 
 	var response InstallPatchResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "InstallPatch")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3341,7 +3879,7 @@ func (client BdsClient) installSoftwareUpdates(ctx context.Context, request comm
 
 	var response InstallSoftwareUpdatesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "InstallSoftwareUpdates")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3398,7 +3936,7 @@ func (client BdsClient) listAutoScalingConfigurations(ctx context.Context, reque
 
 	var response ListAutoScalingConfigurationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListAutoScalingConfigurations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3455,12 +3993,183 @@ func (client BdsClient) listBdsApiKeys(ctx context.Context, request common.OCIRe
 
 	var response ListBdsApiKeysResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListBdsApiKeys")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsApiKey/ListBdsApiKeys"
 		err = common.PostProcessServiceError(err, "Bds", "ListBdsApiKeys", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListBdsCapacityReservationAssociatedConfigurations Returns a list of BDS capacity reservation configurations associated with the specified BDS capacity reservation.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/ListBdsCapacityReservationAssociatedConfigurations.go.html to see an example of how to use ListBdsCapacityReservationAssociatedConfigurations API.
+func (client BdsClient) ListBdsCapacityReservationAssociatedConfigurations(ctx context.Context, request ListBdsCapacityReservationAssociatedConfigurationsRequest) (response ListBdsCapacityReservationAssociatedConfigurationsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listBdsCapacityReservationAssociatedConfigurations, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListBdsCapacityReservationAssociatedConfigurationsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListBdsCapacityReservationAssociatedConfigurationsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListBdsCapacityReservationAssociatedConfigurationsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListBdsCapacityReservationAssociatedConfigurationsResponse")
+	}
+	return
+}
+
+// listBdsCapacityReservationAssociatedConfigurations implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) listBdsCapacityReservationAssociatedConfigurations(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/bdsCapacityReservations/{bdsCapacityReservationId}/associatedConfigurations", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListBdsCapacityReservationAssociatedConfigurationsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListBdsCapacityReservationAssociatedConfigurations")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservationConfiguration/ListBdsCapacityReservationAssociatedConfigurations"
+		err = common.PostProcessServiceError(err, "Bds", "ListBdsCapacityReservationAssociatedConfigurations", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListBdsCapacityReservationConfigurations Returns a list of BDS capacity reservation configurations for the specified BDS cluster.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/ListBdsCapacityReservationConfigurations.go.html to see an example of how to use ListBdsCapacityReservationConfigurations API.
+func (client BdsClient) ListBdsCapacityReservationConfigurations(ctx context.Context, request ListBdsCapacityReservationConfigurationsRequest) (response ListBdsCapacityReservationConfigurationsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listBdsCapacityReservationConfigurations, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListBdsCapacityReservationConfigurationsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListBdsCapacityReservationConfigurationsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListBdsCapacityReservationConfigurationsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListBdsCapacityReservationConfigurationsResponse")
+	}
+	return
+}
+
+// listBdsCapacityReservationConfigurations implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) listBdsCapacityReservationConfigurations(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/bdsInstances/{bdsInstanceId}/bdsCapacityReservationConfigurations", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListBdsCapacityReservationConfigurationsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListBdsCapacityReservationConfigurations")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservationConfiguration/ListBdsCapacityReservationConfigurations"
+		err = common.PostProcessServiceError(err, "Bds", "ListBdsCapacityReservationConfigurations", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// ListBdsCapacityReservations Returns a list of BDS capacity reservations in a compartment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/ListBdsCapacityReservations.go.html to see an example of how to use ListBdsCapacityReservations API.
+func (client BdsClient) ListBdsCapacityReservations(ctx context.Context, request ListBdsCapacityReservationsRequest) (response ListBdsCapacityReservationsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listBdsCapacityReservations, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListBdsCapacityReservationsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListBdsCapacityReservationsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListBdsCapacityReservationsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListBdsCapacityReservationsResponse")
+	}
+	return
+}
+
+// listBdsCapacityReservations implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) listBdsCapacityReservations(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/bdsCapacityReservations", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListBdsCapacityReservationsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListBdsCapacityReservations")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservation/ListBdsCapacityReservations"
+		err = common.PostProcessServiceError(err, "Bds", "ListBdsCapacityReservations", apiReferenceLink)
 		return response, err
 	}
 
@@ -3512,7 +4221,7 @@ func (client BdsClient) listBdsCertificateConfigurations(ctx context.Context, re
 
 	var response ListBdsCertificateConfigurationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListBdsCertificateConfigurations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3569,7 +4278,7 @@ func (client BdsClient) listBdsClusterVersions(ctx context.Context, request comm
 
 	var response ListBdsClusterVersionsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListBdsClusterVersions")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3626,7 +4335,7 @@ func (client BdsClient) listBdsInstances(ctx context.Context, request common.OCI
 
 	var response ListBdsInstancesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListBdsInstances")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3683,7 +4392,7 @@ func (client BdsClient) listBdsMetastoreConfigurations(ctx context.Context, requ
 
 	var response ListBdsMetastoreConfigurationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListBdsMetastoreConfigurations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3740,7 +4449,7 @@ func (client BdsClient) listIdentityConfigurations(ctx context.Context, request 
 
 	var response ListIdentityConfigurationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListIdentityConfigurations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3797,7 +4506,7 @@ func (client BdsClient) listNodeBackupConfigurations(ctx context.Context, reques
 
 	var response ListNodeBackupConfigurationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListNodeBackupConfigurations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3854,7 +4563,7 @@ func (client BdsClient) listNodeBackups(ctx context.Context, request common.OCIR
 
 	var response ListNodeBackupsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListNodeBackups")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3911,7 +4620,7 @@ func (client BdsClient) listNodeReplaceConfigurations(ctx context.Context, reque
 
 	var response ListNodeReplaceConfigurationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListNodeReplaceConfigurations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -3973,7 +4682,7 @@ func (client BdsClient) listOsPatches(ctx context.Context, request common.OCIReq
 
 	var response ListOsPatchesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListOsPatches")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4030,7 +4739,7 @@ func (client BdsClient) listPatchHistories(ctx context.Context, request common.O
 
 	var response ListPatchHistoriesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListPatchHistories")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4087,7 +4796,7 @@ func (client BdsClient) listPatches(ctx context.Context, request common.OCIReque
 
 	var response ListPatchesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListPatches")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4144,7 +4853,7 @@ func (client BdsClient) listResourcePrincipalConfigurations(ctx context.Context,
 
 	var response ListResourcePrincipalConfigurationsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListResourcePrincipalConfigurations")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4206,7 +4915,7 @@ func (client BdsClient) listSoftwareUpdates(ctx context.Context, request common.
 
 	var response ListSoftwareUpdatesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListSoftwareUpdates")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4263,7 +4972,7 @@ func (client BdsClient) listWorkRequestErrors(ctx context.Context, request commo
 
 	var response ListWorkRequestErrorsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListWorkRequestErrors")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4320,7 +5029,7 @@ func (client BdsClient) listWorkRequestLogs(ctx context.Context, request common.
 
 	var response ListWorkRequestLogsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListWorkRequestLogs")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4377,7 +5086,7 @@ func (client BdsClient) listWorkRequests(ctx context.Context, request common.OCI
 
 	var response ListWorkRequestsResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ListWorkRequests")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4439,7 +5148,7 @@ func (client BdsClient) refreshConfidentialApplication(ctx context.Context, requ
 
 	var response RefreshConfidentialApplicationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RefreshConfidentialApplication")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4501,7 +5210,7 @@ func (client BdsClient) refreshUpstTokenExchangeKeytab(ctx context.Context, requ
 
 	var response RefreshUpstTokenExchangeKeytabResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RefreshUpstTokenExchangeKeytab")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4563,7 +5272,7 @@ func (client BdsClient) removeAutoScalingConfiguration(ctx context.Context, requ
 
 	var response RemoveAutoScalingConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RemoveAutoScalingConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4625,7 +5334,7 @@ func (client BdsClient) removeCloudSql(ctx context.Context, request common.OCIRe
 
 	var response RemoveCloudSqlResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RemoveCloudSql")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4687,7 +5396,7 @@ func (client BdsClient) removeKafka(ctx context.Context, request common.OCIReque
 
 	var response RemoveKafkaResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RemoveKafka")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4744,7 +5453,7 @@ func (client BdsClient) removeNode(ctx context.Context, request common.OCIReques
 
 	var response RemoveNodeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RemoveNode")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4806,7 +5515,7 @@ func (client BdsClient) removeNodeReplaceConfiguration(ctx context.Context, requ
 
 	var response RemoveNodeReplaceConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RemoveNodeReplaceConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4868,7 +5577,7 @@ func (client BdsClient) removeNodes(ctx context.Context, request common.OCIReque
 
 	var response RemoveNodesResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RemoveNodes")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4925,7 +5634,7 @@ func (client BdsClient) removeResourcePrincipalConfiguration(ctx context.Context
 
 	var response RemoveResourcePrincipalConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RemoveResourcePrincipalConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -4987,7 +5696,7 @@ func (client BdsClient) renewBdsCertificate(ctx context.Context, request common.
 
 	var response RenewBdsCertificateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RenewBdsCertificate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5049,7 +5758,7 @@ func (client BdsClient) renewCertificate(ctx context.Context, request common.OCI
 
 	var response RenewCertificateResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RenewCertificate")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5111,7 +5820,7 @@ func (client BdsClient) replaceNode(ctx context.Context, request common.OCIReque
 
 	var response ReplaceNodeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "ReplaceNode")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5173,7 +5882,7 @@ func (client BdsClient) restartNode(ctx context.Context, request common.OCIReque
 
 	var response RestartNodeResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "RestartNode")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5235,7 +5944,7 @@ func (client BdsClient) setDefaultBdsCertificateConfiguration(ctx context.Contex
 
 	var response SetDefaultBdsCertificateConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "SetDefaultBdsCertificateConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5292,7 +6001,7 @@ func (client BdsClient) startBdsInstance(ctx context.Context, request common.OCI
 
 	var response StartBdsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "StartBdsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5349,7 +6058,7 @@ func (client BdsClient) stopBdsInstance(ctx context.Context, request common.OCIR
 
 	var response StopBdsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "StopBdsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5406,7 +6115,7 @@ func (client BdsClient) testBdsMetastoreConfiguration(ctx context.Context, reque
 
 	var response TestBdsMetastoreConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "TestBdsMetastoreConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5463,7 +6172,7 @@ func (client BdsClient) testBdsObjectStorageConnection(ctx context.Context, requ
 
 	var response TestBdsObjectStorageConnectionResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "TestBdsObjectStorageConnection")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5525,12 +6234,136 @@ func (client BdsClient) updateAutoScalingConfiguration(ctx context.Context, requ
 
 	var response UpdateAutoScalingConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateAutoScalingConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsInstance/UpdateAutoScalingConfiguration"
 		err = common.PostProcessServiceError(err, "Bds", "UpdateAutoScalingConfiguration", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateBdsCapacityReservation Updates the BDS capacity reservation identified by the given ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/UpdateBdsCapacityReservation.go.html to see an example of how to use UpdateBdsCapacityReservation API.
+func (client BdsClient) UpdateBdsCapacityReservation(ctx context.Context, request UpdateBdsCapacityReservationRequest) (response UpdateBdsCapacityReservationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.updateBdsCapacityReservation, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateBdsCapacityReservationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateBdsCapacityReservationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateBdsCapacityReservationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateBdsCapacityReservationResponse")
+	}
+	return
+}
+
+// updateBdsCapacityReservation implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) updateBdsCapacityReservation(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/bdsCapacityReservations/{bdsCapacityReservationId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateBdsCapacityReservationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateBdsCapacityReservation")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservation/UpdateBdsCapacityReservation"
+		err = common.PostProcessServiceError(err, "Bds", "UpdateBdsCapacityReservation", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// UpdateBdsCapacityReservationConfiguration Updates the BDS capacity reservation configuration identified by the given ID.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/bds/UpdateBdsCapacityReservationConfiguration.go.html to see an example of how to use UpdateBdsCapacityReservationConfiguration API.
+func (client BdsClient) UpdateBdsCapacityReservationConfiguration(ctx context.Context, request UpdateBdsCapacityReservationConfigurationRequest) (response UpdateBdsCapacityReservationConfigurationResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.updateBdsCapacityReservationConfiguration, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UpdateBdsCapacityReservationConfigurationResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UpdateBdsCapacityReservationConfigurationResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UpdateBdsCapacityReservationConfigurationResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UpdateBdsCapacityReservationConfigurationResponse")
+	}
+	return
+}
+
+// updateBdsCapacityReservationConfiguration implements the OCIOperation interface (enables retrying operations)
+func (client BdsClient) updateBdsCapacityReservationConfiguration(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPut, "/bdsInstances/{bdsInstanceId}/bdsCapacityReservationConfigurations/{bdsCapacityReservationConfigurationId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UpdateBdsCapacityReservationConfigurationResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateBdsCapacityReservationConfiguration")
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/bigdata/20190531/BdsCapacityReservationConfiguration/UpdateBdsCapacityReservationConfiguration"
+		err = common.PostProcessServiceError(err, "Bds", "UpdateBdsCapacityReservationConfiguration", apiReferenceLink)
 		return response, err
 	}
 
@@ -5582,7 +6415,7 @@ func (client BdsClient) updateBdsInstance(ctx context.Context, request common.OC
 
 	var response UpdateBdsInstanceResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateBdsInstance")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5639,7 +6472,7 @@ func (client BdsClient) updateBdsMetastoreConfiguration(ctx context.Context, req
 
 	var response UpdateBdsMetastoreConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateBdsMetastoreConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5701,7 +6534,7 @@ func (client BdsClient) updateIdentityConfiguration(ctx context.Context, request
 
 	var response UpdateIdentityConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateIdentityConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5763,7 +6596,7 @@ func (client BdsClient) updateNodeBackupConfiguration(ctx context.Context, reque
 
 	var response UpdateNodeBackupConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateNodeBackupConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5825,7 +6658,7 @@ func (client BdsClient) updateNodeReplaceConfiguration(ctx context.Context, requ
 
 	var response UpdateNodeReplaceConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateNodeReplaceConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {
@@ -5887,7 +6720,7 @@ func (client BdsClient) updateResourcePrincipalConfiguration(ctx context.Context
 
 	var response UpdateResourcePrincipalConfigurationResponse
 	var httpResponse *http.Response
-	httpResponse, err = client.Call(ctx, &httpRequest)
+	httpResponse, err = client.CallWithServiceAndOperationName(ctx, &httpRequest, "bds", "UpdateResourcePrincipalConfiguration")
 	defer common.CloseBodyIfValid(httpResponse)
 	response.RawResponse = httpResponse
 	if err != nil {

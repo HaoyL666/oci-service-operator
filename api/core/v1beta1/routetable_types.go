@@ -106,6 +106,9 @@ type RouteTableStatus struct {
 	// predefined name, type, or namespace. For more information, see Resource Tags (https://docs.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).
 	// Example: `{"Department": "Finance"}`
 	FreeformTags map[string]string `json:"freeformTags,omitempty"`
+	// Usage of system tag keys. These predefined keys are scoped to namespaces.
+	// Example: `{ "orcl-cloud": { "free-tier-retained": "true" } }`
+	SystemTags map[string]shared.MapValue `json:"systemTags,omitempty"`
 	// The date and time the route table was created, in the format defined by RFC3339 (https://tools.ietf.org/html/rfc3339).
 	// Example: `2016-08-25T21:10:29.600Z`
 	TimeCreated string `json:"timeCreated,omitempty"`

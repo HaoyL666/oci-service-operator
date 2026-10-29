@@ -109,6 +109,9 @@ spec:
                 description: Unique identifier of the associated offer that is immutable
                   on creation
                 type: string
+              offerType:
+                description: The type of the offer.
+                type: string
               sellerCompartmentId:
                 description: OCID of the seller's tenancy (root compartment).
                 type: string
@@ -211,6 +214,15 @@ spec:
                   updatedAt:
                     format: date-time
                     type: string
+                type: object
+              systemTags:
+                additionalProperties:
+                  additionalProperties:
+                    type: string
+                  type: object
+                description: |-
+                  System tags for this resource. Each key is predefined and scoped to a namespace.
+                  Example: `{"orcl-cloud": {"free-tier-retained": "true"}}`
                 type: object
               timeCreated:
                 description: The time the the Offer was created. An RFC3339 formatted

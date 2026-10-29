@@ -3,15 +3,11 @@ schemaVersion: 1
 surface: repo-authored-semantics
 service: datasafe
 slug: alertpolicyrule
-gaps:
-- category: seed-corpus
-  status: open
-  stopCondition: Close when the placeholder provider import is replaced by reviewed
-    provider facts or the resource is explicitly promoted as an SDK-owned formal contract.
+gaps: []
 ---
 
 # Logic Gaps
 
-This scaffold row tracks the published AlertPolicyRule API shape and reviewed
-runtime lifecycle. Provider facts remain placeholders until a scoped formal
-import is available; complete that import before promotion.
+This scaffold row tracks the published AlertPolicyRule API shape for datasafe. Replace this
+placeholder with repo-authored semantics and explicit stop conditions before
+adding formalSpec or promoting runtime ownership.

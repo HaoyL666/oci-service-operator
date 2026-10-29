@@ -20,7 +20,7 @@ type ProfileSpec struct {
 	// +kubebuilder:validation:Optional
 	Description string `json:"description,omitempty"`
 	// description: The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the management station to associate
-	// with an instance once registered. This is required when creating a profile for non-OCI instances.
+	// with an instance once registered. This is used when creating a profile for non-OCI instances.
 	// +kubebuilder:validation:Optional
 	ManagementStationId string `json:"managementStationId,omitempty"`
 	// The type of instance to register.
@@ -39,7 +39,7 @@ type ProfileSpec struct {
 	// Example: `{"Operations": {"CostCenter": "42"}}`
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]shared.MapValue `json:"definedTags,omitempty"`
-	// A user-friendly name. Does not have to be unique and you can change the name later. Avoid entering
+	// A user-friendly name. Must be unique and you can change the name later. Avoid entering
 	// confidential information.
 	// +kubebuilder:validation:Required
 	DisplayName string `json:"displayName"`
@@ -48,9 +48,6 @@ type ProfileSpec struct {
 	CompartmentId string `json:"compartmentId"`
 	// +kubebuilder:validation:Optional
 	ProfileType string `json:"profileType,omitempty"`
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the managed instance group that the instance will join after registration.
-	// +kubebuilder:validation:Optional
-	ManagedInstanceGroupId string `json:"managedInstanceGroupId,omitempty"`
 	// The vendor of the operating system for the instance.
 	// +kubebuilder:validation:Optional
 	VendorName string `json:"vendorName,omitempty"`
@@ -60,6 +57,9 @@ type ProfileSpec struct {
 	// The architecture type.
 	// +kubebuilder:validation:Optional
 	ArchType string `json:"archType,omitempty"`
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the managed instance group that the instance will join after registration.
+	// +kubebuilder:validation:Optional
+	ManagedInstanceGroupId string `json:"managedInstanceGroupId,omitempty"`
 	// The list of software source OCIDs (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) that the registration profile will use.
 	// +kubebuilder:validation:Optional
 	SoftwareSourceIds []string `json:"softwareSourceIds,omitempty"`
