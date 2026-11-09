@@ -1,0 +1,128 @@
+name: Compare PR90 Bundle Format
+
+on:
+  push:
+    branches:
+      - validation/pr90-bundle-format-control-20261109
+    paths:
+      - .github/workflows/compare-pr90-bundle-format.yml
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@885d1462b80bc1c1c7f0b00334ad271f09369c55
+        with:
+          version: v0.20.1
+
+      - name: Prepare isolated comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pr90-bundle-control"
+          docker version > "$RUNNER_TEMP/pr90-bundle-control/docker-version.txt"
+          docker info > "$RUNNER_TEMP/pr90-bundle-control/docker-info.txt"
+          docker run --detach --name pr90-control-registry --publish 127.0.0.1:5019:5000 registry:3.0.0
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:5019/v2/; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:5019/v2/
+          cat > "$RUNNER_TEMP/compare-pr90-bundle.sh" <<'SCRIPT'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          variant=$1
+          source_dir=$2
+          out="$RUNNER_TEMP/pr90-bundle-control/$variant"
+          image="localhost:5019/pr90-bundle:$variant"
+          mkdir -p "$out"
+          cd "$source_dir"
+          git rev-parse HEAD > "$out/source.txt"
+          go version > "$out/go-version.txt"
+          make package-bundle-olm GROUP=queue CONTROLLER_IMG=ghcr.io/oracle/oci-service-operator-queue:v2.0.0-alpha VERSION=0.0.0-pr90-control 2>&1 | tee "$out/generate.log"
+          cp bundle.Dockerfile "$out/bundle.Dockerfile"
+          make bundle-build BUNDLE_IMG="$image" 2>&1 | tee "$out/build.log"
+          docker image inspect "$image" > "$out/local-image-inspect.json"
+          make bundle-push BUNDLE_IMG="$image" 2>&1 | tee "$out/push.log"
+          curl --fail --silent --show-error \
+            --header 'Accept: application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json' \
+            "http://127.0.0.1:5019/v2/pr90-bundle/manifests/$variant" > "$out/registry-manifest.json"
+          if docker pull --platform linux/arm64 "$image" > "$out/arm64-pull.log" 2>&1; then
+            echo 0 > "$out/arm64-pull-exit.txt"
+          else
+            echo "$?" > "$out/arm64-pull-exit.txt"
+          fi
+          SCRIPT
+
+      - name: Check out exact PR base
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
+        with:
+          ref: 69dae04eeab88e83c84ced35575bb29467acdb53
+          path: baseline
+          persist-credentials: false
+
+      - name: Set up baseline Go
+        uses: actions/setup-go@6edd4406fa81c3da01a34fa6f6343087c207a568
+        with:
+          go-version: '1.25'
+          cache: false
+
+      - name: Build and test baseline bundle
+        shell: bash
+        run: bash "$RUNNER_TEMP/compare-pr90-bundle.sh" baseline "$GITHUB_WORKSPACE/baseline"
+
+      - name: Check out exact PR head
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
+        with:
+          ref: 3be9300c1b95a50d739c5842baf8260defd7b465
+          path: pr
+          persist-credentials: false
+
+      - name: Set up PR Go
+        uses: actions/setup-go@6edd4406fa81c3da01a34fa6f6343087c207a568
+        with:
+          go-version: '1.26.10'
+          cache: false
+
+      - name: Build and test PR bundle
+        shell: bash
+        run: bash "$RUNNER_TEMP/compare-pr90-bundle.sh" pr "$GITHUB_WORKSPACE/pr"
+
+      - name: Compare results
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"]) / "pr90-bundle-control"
+          results = {}
+          for variant in ("baseline", "pr"):
+              d = root / variant
+              manifest = json.loads((d / "registry-manifest.json").read_text())
+              results[variant] = {
+                  "source": (d / "source.txt").read_text().strip(),
+                  "go": (d / "go-version.txt").read_text().strip(),
+                  "media_type": manifest["mediaType"],
+                  "platforms": [m.get("platform") for m in manifest.get("manifests", [])],
+                  "arm64_pull_exit": int((d / "arm64-pull-exit.txt").read_text()),
+                  "arm64_pull_log": (d / "arm64-pull.log").read_text(),
+              }
+          results["same_arm64_result"] = results["baseline"]["arm64_pull_exit"] == results["pr"]["arm64_pull_exit"]
+          (root / "comparison.json").write_text(json.dumps(results, indent=2) + "\n")
+          print(json.dumps(results, indent=2))
+          assert results["same_arm64_result"], "Baseline and PR differ in ARM64 bundle pull behavior"
+          PY
+
+      - name: Upload comparison evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pr90-bundle-format-comparison
+          path: /home/runner/work/_temp/pr90-bundle-control
+          retention-days: 3
