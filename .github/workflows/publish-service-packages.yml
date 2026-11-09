@@ -96,7 +96,7 @@ jobs:
           IFS=',' read -r -a services <<< "${{ steps.packages.outputs.packages_batch }}"
           for service in "${services[@]}"; do
             [ -n "${service}" ] || continue
-            image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}:${{ inputs.version }}"
+            image="${GHCR_REGORG,,}/oci-service-operator-${service}:${{ inputs.version }}"
             IMAGE="$image" \
             CONTROLLER_MAIN="./cmd/manager/${service}" \
             PLATFORMS="linux_amd64" \
@@ -144,7 +144,7 @@ jobs:
           IFS=',' read -r -a services <<< "${{ steps.packages.outputs.packages_batch }}"
           for service in "${services[@]}"; do
             [ -n "${service}" ] || continue
-            image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}:${{ inputs.version }}"
+            image="${GHCR_REGORG,,}/oci-service-operator-${service}:${{ inputs.version }}"
             IMAGE="$image" \
             CONTROLLER_MAIN="./cmd/manager/${service}" \
             PLATFORMS="linux_arm64" \
@@ -228,8 +228,8 @@ jobs:
 
           for service in "${services[@]}"; do
             [ -n "${service}" ] || continue
-            image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}:${{ inputs.version }}"
-            bundle_image="${{ env.GHCR_REGORG }}/oci-service-operator-${service}-bundle:${{ inputs.version }}"
+            image="${GHCR_REGORG,,}/oci-service-operator-${service}:${{ inputs.version }}"
+            bundle_image="${GHCR_REGORG,,}/oci-service-operator-${service}-bundle:${{ inputs.version }}"
 
             refs=()
             for platform in "${platform_list[@]}"; do
